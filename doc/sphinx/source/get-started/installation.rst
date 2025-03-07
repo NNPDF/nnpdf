@@ -47,13 +47,12 @@ While the fitting code is currently not available, it can be installed directly 
 
   python -m venv environment_nnpdf
   . environment_nnpdf/bin/activate
-  python -m pip install git+https://github.com/NNPDF/nnpdf.git@4.0.9
+  python -m pip install git+https://github.com/NNPDF/nnpdf.git@4.0.10
 
 
 .. warning::
 
-   When you install using pip, non-python codes such as LHAPDF and pandoc won't be installed automatically and neeed to be manually installed in the environment.
-
+   When you install using pip, non-python codes such as LHAPDF and pandoc won't be installed automatically and neeed to be manually installed in the environment. If using python 3.9, make sure it is newer than ``3.9.2`` (see issue `here <https://github.com/NNPDF/reportengine/pull/69>`_)
 
 .. _bootstrap-installation:
 
