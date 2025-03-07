@@ -6,9 +6,7 @@ either a Linux-based operating system or macOS.
 The code can be installed either with :ref:`conda <condainstall>` or with :ref:`pip <pip>`,
 the former offering a "batteries included" approach where non-python software
 such as LHAPDF and pandoc will be installed automatically.
-
-If you don't have a recent version of conda installed, please use the
-following :ref:`bootstrap-installation`
+We also made available an automatic installation of conda, see :ref:`bootstrap-installation`
 to install conda as well as set up relevant channels.
 
 If you plan to contribute to the development of NNPDF, please see :ref:`Source`.

@@ -41,3 +41,15 @@ jobs:
       shell: bash -l {0}
       run: |
         conda build -q conda-recipe --package-format=1
+    - name: Build and upload sphinx documentation to NNPDF server
+      if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master'
+      shell: bash -l {0}
+      run: |
+        KEY=$( mktemp )
+        echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
+        conda install nnpdf --yes
+        cd doc/sphinx
+        make html
+        scp -r -i "$KEY" -o StrictHostKeyChecking=no\
+          build/html/* \
+          dummy@packages.nnpdf.science:~/sphinx-docs/

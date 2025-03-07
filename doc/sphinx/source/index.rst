@@ -20,7 +20,7 @@ The NNPDF code
 The scientific output of the collaboration is freely available to the
 public through the arXiv, journal repositories, and software
 repositories. Along with this online documentation, we release the
-`NNPDF code <https://github.com/NNPDF/nnpdf>`_. 
+`NNPDF code <https://github.com/NNPDF/nnpdf>`_.
 The code is made available as an open-source package together with user-friendly examples and an extensive documentation presented here.
 
 The code can be used to produce the ingredients needed for PDF fits, to run the fits themselves, and to analyse the results. This is the first framework used to produce a global PDF fit made publicly  available, enabling for detailed external validation and reproducibility of the NNPDF4.0 analysis. Moreover, the code enables the user to explore a number of phenomenological applications, such as the assessment of the impact of new experimental data on PDFs, the effect of changes in theory settings on the resulting PDFs and a fast quantitative comparison between theoretical predictions and experimental data over a broad range of observables.
@@ -145,6 +145,7 @@ Contents
    :maxdepth: 2
 
    get-started/index
+   tutorials/index
    n3fit/index
    vp/index
    data/index
@@ -155,7 +156,6 @@ Contents
    ci/index
    serverconf/index
    external-code/index
-   tutorials/index
 
 Bibliography
 ============
