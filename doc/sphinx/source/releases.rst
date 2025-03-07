@@ -26,6 +26,7 @@ significant releases since the code was made public are:
     EKO is now the only evolution code supported. C++ and cmake have been removed.
     Closure tests done with old version (pre-4.0) of the code can be converted to the new version
     but won't work out of the box.
+    Further releases of the ``4.0.X`` series will be only bugfixes upon 4.0.10.
 `Version 4.0.9 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.9>`_
     Release for 4.0 `N3LO <https://arxiv.org/abs/2402.18635>`_;
     last release fully backwards-compatible with 4.0 pipeline. 4.0 runcards will still work but
