@@ -141,6 +141,10 @@ class SetupFitConfig(Config):
             )
 
         if file_content.get('closuretest') is not None:
+            # Use faketheoryid to create the L0 data to be stored into the filter folder
+            # (L1 data is stored if fakedata is True)
+            if 'faketheoryid' in file_content['theory']:
+                file_content['theory']['theoryid'] = file_content['theory']['faketheoryid']
             filter_action = 'datacuts::closuretest::theory::fitting filter'
             check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
