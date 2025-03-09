@@ -135,6 +135,7 @@ class SetupFitConfig(Config):
             file_content = yaml_safe.load(o)
         except error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
+
         if not isinstance(file_content, dict):
             raise ConfigError(
                 f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'."
@@ -150,28 +151,43 @@ class SetupFitConfig(Config):
         else:
             filter_action = 'datacuts::theory::fitting filter'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
+
+        # The settings for these actions depend on the presence of closuretest
         SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
-        if (thconfig := file_content.get('theorycovmatconfig')) is not None:
-            if thconfig.get('point_prescription') is not None:
-                raise ConfigError(
-                    "`point_prescription` has been removed in favor of a list of "
-                    "`point_prescriptions`. The options that can be included in the list are found "
-                    "in pointprescriptions.yaml. E.g. \n"
-                    "`point_prescriptions: ['9 point', '3 point']`"
-                )
+
+        # Check theory covariance matrix configuration
+        thconfig = file_content.get('theorycovmatconfig', {})
+        if thconfig.get('point_prescription') is not None:
+            raise ConfigError(
+                "`point_prescription` has been removed in favor of a list of "
+                "`point_prescriptions`. The options that can be included in the list are found "
+                "in pointprescriptions.yaml. E.g. \n"
+                "`point_prescriptions: ['9 point', '3 point']`"
+            )
+        if thconfig:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )
-        if file_content.get('fiatlux') is not None:
+
+
+        # Check fiatlux configuration
+        fiatlux = file_content.get('fiatlux')
+        if fiatlux is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset')
-            if file_content.get('fiatlux')["additional_errors"]:
+            if fiatlux.get("additional_errors"):
                 SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
+
+        # Check positivity bound
         if file_content.get('positivity_bound') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
+
+        # Sets default values if they are not present in the runcard
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
 
+        # Update file content with fixed configuration
         file_content.update(SETUPFIT_FIXED_CONFIG)
+
         return cls(file_content, *args, **kwargs)
 
 
