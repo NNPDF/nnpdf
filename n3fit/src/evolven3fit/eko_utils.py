@@ -174,30 +174,27 @@ def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
     if op_card_dict is None:
         op_card_dict = {}
 
-	# Taken from cards.py https://github.com/NNPDF/eko/blob/master/src/ekobox/cards.py
-	# 7735fdb
+    # Taken from cards.py https://github.com/NNPDF/eko/blob/master/src/ekobox/cards.py
+    # 7735fdb
     op_card = dict(
-    	init=(1.65, 4),
-    	mugrid=[(100.0, 5)],
-    	xgrid=np.geomspace(1e-7, 1.0, 50).tolist(),
-    	configs=dict(
+        init=(1.65, 4),
+        mugrid=[(100.0, 5)],
+        xgrid=np.geomspace(1e-7, 1.0, 50).tolist(),
+        configs=dict(
             # These three values might be set by op_card_dict
-    		ev_op_iterations=10,
-    		n_integration_cores=1,
-    		polarized=False,
+            ev_op_iterations=10,
+            n_integration_cores=1,
+            polarized=False,
             #
-    		ev_op_max_order=[10, 0],
-    		interpolation_polynomial_degree=4,
-    		interpolation_is_log=True,
-    		scvar_method=None,
-    		inversion_method=None,
-    		evolution_method="iterate-exact",
-    		time_like=False,
-    	),
-    	debug=dict(
-    		skip_singlet=False,
-    		skip_non_singlet=False,
-    	),
+            ev_op_max_order=[10, 0],
+            interpolation_polynomial_degree=4,
+            interpolation_is_log=True,
+            scvar_method=None,
+            inversion_method=None,
+            evolution_method="iterate-exact",
+            time_like=False,
+        ),
+        debug=dict(skip_singlet=False, skip_non_singlet=False),
     )
 
     op_card["init"] = (mu0, theory["nf0"])
