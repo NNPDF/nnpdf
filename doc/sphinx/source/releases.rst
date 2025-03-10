@@ -20,8 +20,7 @@ developments and to mark versions used to produce main results. The
 significant releases since the code was made public are:
 
 `Version 4.0.10 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.10>`_
-    Last release of the 4.0 era. Runcards for 4.0 work in this release will work
-    but are no longer used the old tools, commondata or theories.
+    Last release of the 4.0 era. Runcards for 4.0 will still run using new tools, data and theory.
     The new commondata and theory pipeline has been fully adopted.
     EKO is now the only evolution code supported. C++ and cmake have been removed.
     Closure tests done with old version (pre-4.0) of the code can be converted to the new version
