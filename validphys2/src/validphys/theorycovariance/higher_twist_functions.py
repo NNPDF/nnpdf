@@ -29,7 +29,6 @@ import numpy.typing as npt
 
 from validphys.convolution import central_fk_predictions
 from validphys.core import PDF, DataSetSpec
-from validphys.process_options import _Process
 
 GEV_CM2_CONV = 3.893793e10
 GF = 1.1663787e-05  # Fermi's constant [GeV^-2]
@@ -48,6 +47,7 @@ NC_SIGMARED_P_EP = [
 NC_SIGMARED_P_EAVG = ['HERA_NC_318GEV_EAVG_CHARM-SIGMARED', 'HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED']
 
 
+# TODO This function will be deleted in the future
 def step_function(a: npt.ArrayLike, y_shift: npt.ArrayLike, bin_edges: npt.ArrayLike) -> np.ndarray:
     """
     This function defines the step function used to construct the prior. The bins of the step
@@ -81,6 +81,7 @@ def step_function(a: npt.ArrayLike, y_shift: npt.ArrayLike, bin_edges: npt.Array
     return res
 
 
+# TODO This function will be deleted in the future
 def cubic_spline_function(
     a: npt.ArrayLike, y_shift: npt.ArrayLike, nodes: npt.ArrayLike
 ) -> np.ndarray:
@@ -826,7 +827,8 @@ def construct_pars_combs(parameters_dict):
     return combinations
 
 
-def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, power_corr_dict: dict):
+# TODO `pc_func_type` will be removed
+def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_type: str):
     """
     Computes the shifts due to power corrections for a single dataset given
     the set of parameters that model the power corrections. The result is
@@ -846,33 +848,23 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, power_corr_dict: dict):
     """
 
     exp_name = dataset_sp.name
-    cd_table = dataset_sp.load_commondata().commondata_table
-    process_type = cd_table['process'].iloc[0]
-    if isinstance(process_type, _Process):
-        process_type = process_type.name
+    process_type = dataset_sp.commondata.metadata.process_type.name
+    cuts = dataset_sp.cuts.load()
 
-    pc_func_type = power_corr_dict['func_type']
-    power_corr_dict_copy = power_corr_dict.copy()
-    power_corr_dict_copy.pop('func_type', None)
-    pars_combs = construct_pars_combs(power_corr_dict_copy)
+    pars_combs = construct_pars_combs(pc_dict)
     deltas = defaultdict(list)
 
     pc_func = None
     if process_type.startswith('DIS'):
-        pc2_p_nodes = power_corr_dict["H2p"]['nodes']
-        pcL_p_nodes = power_corr_dict["HLp"]['nodes']
-        pc3_p_nodes = power_corr_dict["H3p"]['nodes']
-        pc2_d_nodes = power_corr_dict["H2d"]['nodes']
-        pcL_d_nodes = power_corr_dict["HLd"]['nodes']
-        pc3_d_nodes = power_corr_dict["H3d"]['nodes']
-
-        # TODO
-        # AFter the data re-implementation the name of the variables
-        # in the commondata table will change as indicated in the metadata.
-        # When this happens, this part must be updated.
-        x = cd_table['kin1'].to_numpy()
-        q2 = cd_table['kin2'].to_numpy()
-        y = cd_table['kin3'].to_numpy()
+        pc2_p_nodes = pc_dict["H2p"]['nodes']
+        pcL_p_nodes = pc_dict["HLp"]['nodes']
+        pc3_p_nodes = pc_dict["H3p"]['nodes']
+        pc2_d_nodes = pc_dict["H2d"]['nodes']
+        pcL_d_nodes = pc_dict["HLd"]['nodes']
+        pc3_d_nodes = pc_dict["H3d"]['nodes']
+        x = dataset_sp.commondata.metadata.load_kinematics()['x'].to_numpy().reshape(-1)[cuts]
+        q2 = dataset_sp.commondata.metadata.load_kinematics()['Q2'].to_numpy().reshape(-1)[cuts]
+        y = dataset_sp.commondata.metadata.load_kinematics()['y'].to_numpy().reshape(-1)[cuts]
 
         # F2 ratio
         if exp_name == "NMC_NC_NOTFIXED_EM-F2":
@@ -1050,21 +1042,52 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, power_corr_dict: dict):
             )
 
     elif process_type == 'JET':
-        pc_jet_nodes = power_corr_dict["Hj"]['nodes']
-
-        # TODO
-        # AFter the data re-implementation the name of the variables
-        # in the commondata table will change as indicated in the metadata.
-        # When this happens, this part must be updated.
-        eta = cd_table['kin1'].to_numpy()
-        pT = cd_table['kin2'].to_numpy()
+        pc_jet_nodes = pc_dict["Hj"]['nodes']
+        eta = dataset_sp.commondata.metadata.load_kinematics()['y'].to_numpy().reshape(-1)[cuts]
+        pT = dataset_sp.commondata.metadata.load_kinematics()['pT'].to_numpy().reshape(-1)[cuts]
 
         pc_func = JET_pc(dataset_sp, pdf, pc_jet_nodes, pT, eta, pc_func_type)
         for pars_pc in pars_combs:
             deltas[pars_pc['label']] = pc_func(pars_pc['comb']['Hj'])
 
     elif process_type == 'DIJET':
-        raise RuntimeError(f"No implementation for {exp_name} yet.")
+
+        if dataset_sp.commondata.metadata.experiment == 'ATLAS':
+            pc_jet_nodes = pc_dict["H2j_ATLAS"]['nodes']
+            eta_star = (
+                dataset_sp.commondata.metadata.load_kinematics()['ystar']
+                .to_numpy()
+                .reshape(-1)[cuts]
+            )
+            m_jj = (
+                dataset_sp.commondata.metadata.load_kinematics()['m_jj']
+                .to_numpy()
+                .reshape(-1)[cuts]
+            )
+            pc_func = JET_pc(dataset_sp, pdf, pc_jet_nodes, m_jj, eta_star, pc_func_type)
+            for pars_pc in pars_combs:
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_ATLAS'])
+
+        elif dataset_sp.commondata.metadata.experiment == 'CMS':
+            pc_jet_nodes = pc_dict["H2j_CMS"]['nodes']
+            eta_diff = (
+                dataset_sp.commondata.metadata.load_kinematics()['ydiff']
+                .to_numpy()
+                .reshape(-1)[cuts]
+            )
+            m_jj = (
+                dataset_sp.commondata.metadata.load_kinematics()['m_jj']
+                .to_numpy()
+                .reshape(-1)[cuts]
+            )
+            pc_func = JET_pc(dataset_sp, pdf, pc_jet_nodes, m_jj, eta_diff, pc_func_type)
+            for pars_pc in pars_combs:
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_CMS'])
+
+        else:
+            raise ValueError(
+                f"{dataset_sp.commondata.metadata.experiment} is not implemented for DIJET."
+            )
 
     else:
         raise RuntimeError(f"{process_type} has not been implemented.")
