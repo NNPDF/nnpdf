@@ -1795,13 +1795,15 @@ class CoreConfig(configparser.Config):
         if not fakedata:
             return validphys.filters.filter_real_data
         else:
+            # TODO we don't want to sample from the theory covmat for L1 data,
+            # but we do want to use the theory covmat for L2 data
             if theorycovmatconfig is not None and theorycovmatconfig.get(
-                "use_thcovmat_in_sampling"
+                "use_thcovmat_in_fakedata_sampling"
             ):
                 # NOTE: By the time we run theory covmat closure tests,
                 # hopefully the generation of pseudodata will be done in python.
                 raise ConfigError(
-                    "Generating closure test data which samples from the theory "
+                    "Generating L1 closure test data which samples from the theory "
                     "covariance matrix has not been implemented yet."
                 )
             elif inconsistent_fakedata:
