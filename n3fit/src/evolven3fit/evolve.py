@@ -11,7 +11,6 @@ import eko
 from eko import basis_rotation, runner
 from eko.interpolation import XGrid
 from eko.io import manipulate
-from eko import basis_rotation, runner
 from validphys.utils import yaml_safe
 
 from . import eko_utils, utils
