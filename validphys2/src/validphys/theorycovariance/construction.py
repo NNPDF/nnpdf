@@ -439,7 +439,7 @@ def theory_covmat_custom_per_prescription(covs_pt_prescrip, procs_index, combine
 
 
 @table
-def fromfile_covmat(covmatpath, procs_data, procs_index):
+def fromfile_covmat(covmatpath, groups_data_by_process, procs_index):
     """Reads a general theory covariance matrix from file. Then
     1: Applies cuts to match experiment covariance matrix
     2: Expands dimensions to match experiment covariance matrix
@@ -453,7 +453,7 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     # Reordering covmat to match exp order in runcard
     # Datasets in exp covmat
     dslist = []
-    for group in procs_data:
+    for group in groups_data_by_process:
         for ds in group.datasets:
             dslist.append(ds.name)
     # Datasets in filecovmat in exp covmat order
@@ -468,7 +468,7 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     # ------------- #
     # Loading cuts to apply to covariance matrix
     indextuples = []
-    for group in procs_data:
+    for group in groups_data_by_process:
         for ds in group.datasets:
             # Load cuts for each dataset in the covmat
             if ds.name in filecovmat.index.get_level_values(1):
@@ -534,7 +534,7 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
 
 
 @table
-def user_covmat(procs_data, procs_index, loaded_user_covmat_path):
+def user_covmat(groups_data_by_process, procs_index, loaded_user_covmat_path):
     """
     General theory covariance matrix provided by the user.
     Useful for testing the impact of externally produced
@@ -544,7 +544,7 @@ def user_covmat(procs_data, procs_index, loaded_user_covmat_path):
     ``user_covmat_path`` in ``theorycovmatconfig`` in the
     runcard. For more information see documentation.
     """
-    return fromfile_covmat(loaded_user_covmat_path, procs_data, procs_index)
+    return fromfile_covmat(loaded_user_covmat_path, groups_data_by_process, procs_index)
 
 
 @table
@@ -633,4 +633,3 @@ def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
 
 
 each_dataset_results = collect(results, ("group_dataset_inputs_by_process", "data"))
-groups_data_by_process = collect("data", ("group_dataset_inputs_by_process",))
