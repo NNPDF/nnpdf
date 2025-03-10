@@ -4,6 +4,7 @@ Tools for constructing theory covariance matrices and computing their chi2s.
 """
 
 from collections import defaultdict, namedtuple
+import dataclasses
 import logging
 
 import numpy as np
@@ -13,6 +14,7 @@ from reportengine import collect
 from reportengine.table import table
 
 pass
+from validphys.checks import check_pc_parameters
 from validphys.core import PDF
 from validphys.results import results, results_central
 from validphys.theorycovariance.higher_twist_functions import compute_deltas_pc
@@ -49,7 +51,14 @@ def theory_covmat_dataset(results, results_central_bytheoryids, point_prescripti
     return thcovmat
 
 
-ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes", "data", "data_spec"))
+@dataclasses.dataclass(frozen=True)
+class ProcessInfo:
+    """Dataclass containing the information needed to construct the theory covariance matrix."""
+
+    preds: dict
+    namelist: dict
+    sizes: dict
+    data_spec: dict
 
 
 def combine_by_type(each_dataset_results_central_bytheory, groups_data_by_process):
@@ -87,11 +96,7 @@ def combine_by_type(each_dataset_results_central_bytheory, groups_data_by_proces
             data_spec[exp_set.name] = exp_set
 
     process_info = ProcessInfo(
-        preds=theories_by_process,
-        namelist=ordered_names,
-        sizes=dataset_size,
-        data=None,
-        data_spec=data_spec,
+        preds=theories_by_process, namelist=ordered_names, sizes=dataset_size, data_spec=data_spec
     )
     return process_info
 
@@ -341,33 +346,36 @@ def covs_pt_prescrip_mhou(combine_by_type, point_prescription):
     running_index = 0
 
     covmats = defaultdict(list)
-    if point_prescription != 'power corrections':
-        start_proc = defaultdict(list)
-        for name in process_info.preds:
-            size = len(process_info.preds[name][0])
-            start_proc[name] = running_index
-            running_index += size
+    print(point_prescription)
+    start_proc = defaultdict(list)
+    for name in process_info.preds:
+        size = len(process_info.preds[name][0])
+        start_proc[name] = running_index
+        running_index += size
 
-        for name1 in process_info.preds:
-            for name2 in process_info.preds:
-                central1, *others1 = process_info.preds[name1]
-                deltas1 = list(other - central1 for other in others1)
-                central2, *others2 = process_info.preds[name2]
-                deltas2 = list(other - central2 for other in others2)
-                s = compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2, deltas2)
-                start_locs = (start_proc[name1], start_proc[name2])
-                covmats[start_locs] = s
+    for name1 in process_info.preds:
+        for name2 in process_info.preds:
+            central1, *others1 = process_info.preds[name1]
+            deltas1 = list(other - central1 for other in others1)
+            central2, *others2 = process_info.preds[name2]
+            deltas2 = list(other - central2 for other in others2)
+            s = compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2, deltas2)
+            start_locs = (start_proc[name1], start_proc[name2])
+            covmats[start_locs] = s
 
     return covmats
 
 
+# TODO `pc_func_type`will be removed in the future
+@check_pc_parameters
 def covs_pt_prescrip_pc(
     combine_by_type,
     point_prescription,
     pdf: PDF,
-    power_corr_dict,
+    pc_parameters,
     pc_included_procs,
     pc_excluded_exps,
+    pc_func_type,
 ):
     """Produces the sub-matrices of the theory covariance matrix for power
     corrections. Sub-matrices correspond to applying power corrected shifts
@@ -392,8 +400,8 @@ def covs_pt_prescrip_pc(
                 proc not in pc_included_procs for proc in [process_type1, process_type2]
             )
             if not (is_excluded_exp or is_included_proc):
-                deltas1 = compute_deltas_pc(data_spec1, pdf, power_corr_dict)
-                deltas2 = compute_deltas_pc(data_spec2, pdf, power_corr_dict)
+                deltas1 = compute_deltas_pc(data_spec1, pdf, pc_parameters, pc_func_type)
+                deltas2 = compute_deltas_pc(data_spec2, pdf, pc_parameters, pc_func_type)
                 s = compute_covs_pt_prescrip(
                     point_prescription, exp_name1, deltas1, exp_name2, deltas2
                 )
