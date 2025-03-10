@@ -112,14 +112,14 @@ def evolve_fit(
         info["XMax"] = float(x_grid[-1])
         # Save the PIDs in the info file in the same order as in the evolution
         info["Flavors"] = basis_rotation.flavor_basis_pids
-        info["NumFlavors"] = 5  # TODO: Maximum number in evol
+        info.setdefault("NumFlavors", 5)
         dump_info_file(usr_path, info)
 
         # Read the information from all the sorted replicas into what eko wants
         n_replicas = len(initial_PDFs_dict)
         all_replicas = []
         for rep_idx in range(1, n_replicas + 1):
-            # swap photon postion to match eko.basis_roation.flavor_basis_pids
+            # swap photon position to match eko.basis_rotation.flavor_basis_pids
             pdfgrid = np.array(initial_PDFs_dict[f"replica_{rep_idx}"]["pdfgrid"])
             pdfgrid = np.append(pdfgrid[:, -1].reshape(x_grid.size, 1), pdfgrid[:, :-1], axis=1)
             # and divide by x

@@ -26,7 +26,6 @@ import logging
 import numpy as np
 import numpy.linalg as la
 
-from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
 from validphys.covmats import covmat_from_systematics, sqrt_covmat
@@ -239,9 +238,13 @@ class N3PDF(PDF):
         otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
         """
         # If no replica is explicitly requested, get the preprocessing layer for the first model
+        # remember replicas start counting at one
         if replica is None:
             replica = 1
-        # Replicas start counting in 1 so:
+
+        # Keep the import here to avoid loading the backend when it is not necessary
+        from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
+
         preprocessing_layer = self._models[replica - 1].get_layer(PREPROCESSING_LAYER_ALL_REPLICAS)
 
         alphas_and_betas = None

@@ -29,6 +29,11 @@ EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
 NFREF_DEFAULT = 5
 
 
+def _eko_theory_from_nnpdf_theory(nnpdf_theory):
+    """Takes an NNPDF theory and returns an eko theory"""
+    return runcards.Legacy(nnpdf_theory, {}).new_theory
+
+
 def construct_eko_cards(
     nnpdf_theory,
     q_fin,
@@ -53,9 +58,7 @@ def construct_eko_cards(
     # eko needs a value for Qedref and for max nf alphas
     theory["Qedref"] = theory["Qref"]
     theory["MaxNfAs"] = theory["MaxNfPdf"]
-
-    # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
-    theory_card = runcards.Legacy(theory, {}).new_theory
+    theory_card = _eko_theory_from_nnpdf_theory(theory)
 
     # construct mugrid
 
@@ -125,9 +128,7 @@ def construct_eko_photon_cards(
     # Now make sure the Legacy class still gets a Qedref, which is equal to Qref
     theory["Qedref"] = theory["Qref"]
     theory["MaxNfAs"] = theory["MaxNfPdf"]
-
-    # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
-    theory_card = runcards.Legacy(theory, {}).new_theory
+    theory_card = _eko_theory_from_nnpdf_theory(theory)
 
     # The photon needs to be evolved down to Q0
     q_fin = theory["Q0"]
