@@ -1,0 +1,22 @@
+name: Install nnpdf using pip under a conda environment
+
+inputs:
+  python-version:
+    required: true
+    description: "Python version to use"
+    default: "3.12"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: ./.github/actions/prepare_environment
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Install host requirements
+      shell: bash -l {0}
+      run: |
+        conda install lhapdf pandoc
+    - name: Install package with test extras
+      shell: bash -l {0}
+      run: |
+        pip install -e .[qed,tests]

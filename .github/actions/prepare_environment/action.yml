@@ -1,0 +1,24 @@
+name: Prepare environment
+
+inputs:
+  python-version:
+    required: true
+    description: "Python version to use"
+    default: "3.12"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: conda-incubator/setup-miniconda@v3
+      with:
+        python-version: ${{ inputs.python-version }}
+        use-mamba: true
+        channels: https://packages.nnpdf.science/public,conda-forge
+        show-channel-urls: true
+        auto-update-conda: true
+        activate-environment: test
+        conda-remove-defaults: true
+    - name: Add NETRC
+      shell: bash -l {0}
+      run: |
+        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
