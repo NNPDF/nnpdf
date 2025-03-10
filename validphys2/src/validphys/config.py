@@ -1832,41 +1832,10 @@ class CoreConfig(configparser.Config):
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
 
+    # TODO: to be removed once we are sure the the triangular
+    # function for the prior is the only one of interest
     def produce_pc_func_type(self, theorycovmatconfig=None):
         return theorycovmatconfig.get('func_type', 'step')
-
-    # @configparser.explicit_node
-    def produce_power_corr_dict(self, pc_parameters=None, pc_func_type=None):
-        """The parameters for the power corrections are given as a list.
-        This function converts this list into a dictionary with the keys
-        being the names of the types of power corrections (e.g. `H2p`, `H2d`,...).
-        """
-        if pc_parameters is None:
-            return None
-
-        pc_parameters_by_type = {}
-        # Loop over the parameterization for the power corrections in the runcard
-        for par in pc_parameters:
-            # Check that the length of shifts is one less than the length of nodes.
-            if (len(par['yshift']) != len(par['nodes']) - 1) and pc_func_type not in [
-                'cubic',
-                'linear',
-            ]:
-                raise ValueError(
-                    f"The length of nodes does not match that of the list in {par['ht']}."
-                    f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
-                )
-            elif (len(par['yshift']) != len(par['nodes'])) and pc_func_type in ['cubic', 'linear']:
-                raise ValueError(
-                    f"The length of nodes does not match that of the list in {par['ht']}."
-                    f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
-                )
-
-            # Store parameters for each power correction
-            pc_parameters_by_type[par['ht']] = {'yshift': par['yshift'], 'nodes': par['nodes']}
-
-        pc_parameters_by_type['func_type'] = pc_func_type
-        return pc_parameters_by_type
 
     @configparser.explicit_node
     def produce_covs_pt_prescrip(self, point_prescription):
