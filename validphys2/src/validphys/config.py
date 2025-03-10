@@ -1826,7 +1826,9 @@ class CoreConfig(configparser.Config):
     # TODO: to be removed once we are sure the the triangular
     # function for the prior is the only one of interest
     def produce_pc_func_type(self, theorycovmatconfig=None):
-        return theorycovmatconfig.get('func_type', 'step')
+        if theorycovmatconfig is None:
+            raise ValueError("theorycovmatconfig is defined in the runcard.")
+        return theorycovmatconfig.get('func_type', 'linear')
 
     @configparser.explicit_node
     def produce_covs_pt_prescrip(self, point_prescription):
