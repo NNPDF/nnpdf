@@ -346,7 +346,6 @@ def covs_pt_prescrip_mhou(combine_by_type, point_prescription):
     running_index = 0
 
     covmats = defaultdict(list)
-    print(point_prescription)
     start_proc = defaultdict(list)
     for name in process_info.preds:
         size = len(process_info.preds[name][0])

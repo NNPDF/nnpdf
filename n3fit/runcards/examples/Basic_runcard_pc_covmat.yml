@@ -8,85 +8,20 @@ description: NNPDF4.0 ht with TCM - DIS (NC & CC) only
 dataset_inputs:
 - {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, frac: 0.75, variant: legacy_dw}
-- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, frac: 0.75, variant: legacy_dw}
-- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
 - {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
-- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_300GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, frac: 0.75, variant: legacy}
-- {dataset: DYE866_Z0_800GEV_PXSEC, frac: 0.75, variant: legacy}
-- {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, frac: 0.75, variant: legacy}
-- {dataset: DYE906_Z0_120GEV_DW_PDXSECRATIO, frac: 0.75, cfac: [ACC], variant: legacy}
 - {dataset: CDF_Z0_1P96TEV_ZRAP, frac: 0.75, variant: legacy}
-- {dataset: D0_Z0_1P96TEV_ZRAP, frac: 0.75, variant: legacy}
-- {dataset: D0_WPWM_1P96TEV_ASY, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_WPWM_7TEV_36PB_ETA, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0_7TEV_36PB_ETA, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0_7TEV_LOMASS_M, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0_7TEV_46FB_CC-Y, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
-- {dataset: ATLAS_WPWM_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
-- {dataset: ATLAS_WJ_8TEV_WP-PT, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_WJ_8TEV_WM-PT, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, variant: legacy_10}
 - {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, variant: legacy_10}
-- {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, frac: 0.75, variant: legacy}
 - {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, variant: legacy_decorrelated}
 - {dataset: ATLAS_2JET_7TEV_R06_M12Y, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_PH_13TEV_XSEC, frac: 0.75, cfac: [EWK], variant: legacy}
-- {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM, frac: 0.75, variant: legacy}
-- {dataset: CMS_WPWM_7TEV_ELECTRON_ASY, frac: 0.75}
-- {dataset: CMS_WPWM_7TEV_MUON_ASY, frac: 0.75, variant: legacy}
-- {dataset: CMS_Z0_7TEV_DIMUON_2D, frac: 0.75}
-- {dataset: CMS_WPWM_8TEV_MUON_Y, frac: 0.75, variant: legacy}
-- {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [NRM], variant: legacy_10}
 - {dataset: CMS_2JET_7TEV_M12Y, frac: 0.75}
 - {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_13TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_13TEV_2L_DIF_YT, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YTTBAR, frac: 0.75, variant: legacy}
-- {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC, frac: 0.75, variant: legacy}
-- {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, frac: 0.75, variant: legacy}
-- {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 0.75, variant: legacy}
-- {dataset: LHCB_Z0_7TEV_DIELECTRON_Y, frac: 0.75}
-- {dataset: LHCB_Z0_8TEV_DIELECTRON_Y, frac: 0.75}
-- {dataset: LHCB_WPWM_7TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
-- {dataset: LHCB_Z0_7TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
-- {dataset: LHCB_WPWM_8TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
-- {dataset: LHCB_Z0_8TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
-- {dataset: LHCB_Z0_13TEV_DIMUON-Y, frac: 0.75}
 - {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75}
 
 ################################################################################
@@ -103,18 +38,22 @@ theory:
 theorycovmatconfig:
   point_prescriptions: ["9 point", "power corrections"]
   pc_parameters:
-  - {ht: H2p, yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0], nodes: [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
-  - {ht: H2d, yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0], nodes: [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
-  - {ht: HLp, yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0], nodes: [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
-  - {ht: HLd, yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0], nodes: [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
-  - {ht: H3p, yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0], nodes: [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
-  - {ht: H3d, yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0], nodes: [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
-  pc_included_procs: ["DIS NC", "DIS CC"]
+    H2p: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    H2d: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    HLp: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    HLd: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    H3p: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    H3d: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    Hj: {yshift: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25, 2.75]}
+    H2j_ATLAS: {yshift: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25, 2.75]}
+    H2j_CMS: {yshift: [2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25]}
+  pc_included_procs: ["JETS", "DIJET", "DIS NC", "DIS CC"]
   pc_excluded_exps: [HERA_NC_318GEV_EAVG_CHARM-SIGMARED,
                      HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED,]
   pdf: 210619-n3fit-001
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true
+resample_negative_pseudodata: false
 
 # For fits <= 4.0 multiplicative and additive uncertainties were sampled separately
 # and thus the flag `separate_multiplicative` needs to be set to True
@@ -136,7 +75,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 6.073e-6
     learning_rate: 2.621e-3
     optimizer_name: Nadam
-  epochs: 17000
+  epochs: 3000
   positivity:
     initial: 184.8
     multiplier:
