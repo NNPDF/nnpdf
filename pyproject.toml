@@ -152,7 +152,15 @@ addopts = "--disable-warnings"
 
 [tool.coverage.run]
 omit = [
+    "*/local*",
+    "*/rule*",
     "deprecated_functions.py",
     "*/nnpdf_data/commondata/*",
     "*/nnpdf_data/filter_utils/*",
+]
+[tool.coverage.paths]
+cipaths = [ # In order to combine files from both the ubuntu and macos runners
+    "./", # CI working directory
+    "/Users/runner/work/nnpdf/nnpdf",
+    "/home/runner/work/nnpdf/nnpdf"
 ]
