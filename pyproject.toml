@@ -84,6 +84,7 @@ seaborn = "*"
 # tests
 pytest = {version = "*", optional = true}
 pytest-mpl = {version = "*", optional = true}
+pytest-cov = {version = ">=6", optional = true}
 hypothesis = {version = "*", optional = true}
 # docs
 sphinxcontrib-bibtex = {version = "*", optional = true}
@@ -102,7 +103,7 @@ pymongo = {version = "<4", optional = true}
 
 # Optional dependencies
 [tool.poetry.extras]
-tests = ["pytest", "pytest-mpl", "hypothesis"]
+tests = ["pytest", "pytest-mpl", "hypothesis", "pytest-cov"]
 docs = ["sphinxcontrib-bibtex", "sphinx-rtd-theme", "sphinx", "tabulate"]
 qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
@@ -148,3 +149,10 @@ force_sort_within_sections = true
 
 [tool.pytest.ini_options]
 addopts = "--disable-warnings"
+
+[tool.coverage.run]
+omit = [
+    "deprecated_functions.py",
+    "*/nnpdf_data/commondata/*",
+    "*/nnpdf_data/filter_utils/*",
+]
