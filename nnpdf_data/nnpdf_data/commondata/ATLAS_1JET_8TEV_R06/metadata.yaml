@@ -65,6 +65,9 @@ implemented_observables:
     decorrelated:
       data_uncertainties:
       - uncertainties_decorrelated.yaml
+    double_decorrelated:
+      data_uncertainties:
+      - uncertainties_double_decorrelated.yaml
     legacy_decorrelated:
       theory:
         conversion_factor: 1.0

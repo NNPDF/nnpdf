@@ -81,16 +81,19 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
         dfs.append(df)
 
     df_unc = pd.concat([df for df in dfs], axis=0)
-
+    
     # statistical errors fully uncorrelated
     stat_errors = df_unc["stat"].to_numpy()
 
     # luminosity errors
     lum_errors = df_unc["syst_lumi"].to_numpy()
 
-    A_corr = df_unc.drop(["stat", "syst_lumi"], axis=1).to_numpy() / np.sqrt(2.0)
-
-    # error definition
+    # uncorrelated systematic uncertainties (JES_EtaIntercalibraiton)
+    A_unc = df_unc.filter(regex='syst_JES_EtaIntercalibration_Stat', axis=1).to_numpy() / np.sqrt(2.0)
+    
+    # correlated systematic uncertainties
+    A_cor = df_unc.drop(["stat", "syst_lumi"], axis=1).to_numpy() / np.sqrt(2.0)
+    
     error_definition = {
         f"{col}": {
             "description": f"correlated systematic {col}",
@@ -98,8 +101,18 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
             "type": "CORR",
         }
         for col in df_unc.drop(["stat", "syst_lumi"], axis=1).columns
+
     }
 
+#    error_definition = {
+#        f"{col}": {
+#            "description": f"uncorrelated systematic {col}",
+#            "treatment": "ADD",
+#            "type": "UNCORR",
+#        }
+#        for col in df_unc.filter(regex='syst_JES_EtaIntercalibration_Stat', axis=1).columns
+#    }
+    
     error_definition["luminosity_uncertainty"] = {
         "description": "luminosity uncertainty",
         "treatment": "MULT",
@@ -108,18 +121,18 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
 
     error_definition["statistical_uncertainty"] = {
         "description": "statistical uncertainty",
-        "treatment": "MULT",
+        "treatment": "ADD",
         "type": "UNCORR",
     }
 
     # store error in dict
     error = []
-    for n in range(A_corr.shape[0]):
+    for n in range(A_cor.shape[0]):
         error_value = {}
         for col, m in zip(
-            df_unc.drop(["stat", "syst_lumi"], axis=1).columns, range(A_corr.shape[1])
+            df_unc.drop(["stat", "syst_lumi"], axis=1).columns, range(A_cor.shape[1])
         ):
-            error_value[f"{col}"] = float(A_corr[n, m])
+            error_value[f"{col}"] = float(A_cor[n, m])
 
         error_value["luminosity_uncertainty"] = float(lum_errors[n])
         error_value["statistical_uncertainty"] = float(stat_errors[n])

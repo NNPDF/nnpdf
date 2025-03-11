@@ -1,0 +1,23 @@
+meta:
+  title: Test new Datasets
+  author: Mark N. Costantini
+  keywords: [example]
+
+dataset_inputs:
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, cfac: [QCD]}
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, variant: "decorrelated", cfac: [QCD]}
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, variant: "double_decorrelated", cfac: [QCD]}
+
+pdf: NNPDF40_nnlo_as_01180
+
+theoryid: 200
+
+use_cuts: internal
+
+template_text: |
+  Chi2 report
+  -----------
+  {@groups_chi2_table@}
+
+actions_:
+  - report(main=true)

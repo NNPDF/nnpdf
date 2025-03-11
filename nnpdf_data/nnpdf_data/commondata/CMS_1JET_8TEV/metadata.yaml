@@ -52,6 +52,9 @@ implemented_observables:
   data_uncertainties:
   - uncertainties.yaml
   variants:
+    decorrelated:
+      data_uncertainties:
+      - uncertainties_decorrelated.yaml
     legacy:
       theory: &id002
         conversion_factor: 1.0
