@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 260
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: HERA I+II inclusive NC $e^+p$ 575 GeV
     y_label: $10^{qbin} F_2(x,Q^2)$
     result_transform: qbinEMC

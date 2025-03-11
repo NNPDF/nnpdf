@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 27
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: HERA comb. $\sigma_{b\bar b}^{\rm red}$
     y_label: $10^{qbin} \sigma_{b\bar b}^{\rm red}(x,Q^2)$
     result_transform: qbinexp
@@ -78,7 +77,6 @@ implemented_observables:
   npoints: []
   ndata: 52
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: HERA comb. $\sigma_{c\bar c}^{\rm red}$
     y_label: $10^{qbin} \sigma_{c\bar c}^{\rm red}(x,Q^2)$
     result_transform: qbinexp

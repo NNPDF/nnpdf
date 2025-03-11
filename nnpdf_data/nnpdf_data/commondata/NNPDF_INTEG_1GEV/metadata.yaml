@@ -26,7 +26,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    theory_reference: Ball:2013lla
     dataset_label: 'polarized integrability: $x \delta g$ PDF $Q^2=1$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -59,7 +58,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    theory_reference: Ball:2013lla
     dataset_label: 'polarized integrability: $x \delta \Sigma$ PDF $Q^2=1$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -92,7 +90,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    theory_reference: Ball:2013lla
     dataset_label: 'polarized integrability: $x \delta V$ PDF $Q^2=1$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -125,7 +122,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    theory_reference: Ball:2013lla
     dataset_label: 'polarized integrability: $x \delta V_3$ PDF $Q^2=1$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -158,7 +154,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xT_8$ PDF, Q=Q_0'
     plot_x: x
   kinematic_coverage: [x, Q2]
@@ -189,7 +184,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xT_3$ PDF, Q=Q_0'
     plot_x: x
   kinematic_coverage: [x, Q2]
