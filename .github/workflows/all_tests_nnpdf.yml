@@ -119,4 +119,4 @@ jobs:
     - name: Merge and show
       run: |
         coverage combine reports/**/.coverage
-        coverage report
+        coverage report -i
