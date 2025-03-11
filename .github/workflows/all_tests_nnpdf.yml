@@ -30,7 +30,15 @@ jobs:
       - name: Test n3fit and validphys
         shell: bash -l {0}
         run: |
-          pytest --mpl --pyargs validphys n3fit --mpl-default-tolerance 18
+          pytest --cov=${PWD} --cov-config=pyproject.toml --mpl --pyargs validphys n3fit --mpl-default-tolerance 18
+      - name: Keep coverage file
+        if: startsWith(matrix.python-version, '3.12')
+        uses: actions/upload-artifact@v4
+        with:
+          include-hidden-files: true
+          name: coverage-package-${{ matrix.os }}
+          path: .coverage
+
 
   regression_tests:
     runs-on: ubuntu-latest
@@ -40,7 +48,13 @@ jobs:
       - name: Run regression tests
         shell: bash -l {0}
         run: |
-          pytest extra_tests/regression_checks.py
+          pytest --cov=${PWD} --cov-config=pyproject.toml extra_tests/regression_checks.py
+      - name: Keep coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          include-hidden-files: true
+          name: coverage-regression
+          path: .coverage
 
   conda_tests:
     strategy:
@@ -87,3 +101,22 @@ jobs:
       run: |
         cd n3fit/runcards/examples
         n3fit Basic_runcard.yml 4
+
+  full_coverage:
+    needs: [run_package_tests, regression_tests]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ./.github/actions/install_conda_pip
+      with:
+        nnpdf-extras: ""
+    - name: Install coverage
+      run: pip install coverage
+    - name: Download reports
+      uses: actions/download-artifact@v4
+      with:
+        path: reports
+    - name: Merge and show
+      run: |
+        coverage combine reports/**/.coverage
+        coverage report
