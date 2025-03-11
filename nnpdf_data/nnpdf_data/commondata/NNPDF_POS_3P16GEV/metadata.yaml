@@ -22,7 +22,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xu$ PDF $Q^2=10$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -55,7 +54,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{u}$ PDF $Q^2=10$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -88,7 +86,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xd$ PDF $Q^2=10$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -121,7 +118,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{d}$ PDF $Q^2=10$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -154,7 +150,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xs$ PDF $Q^2=10$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -187,7 +182,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{s}$ PDF $Q^2=10$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -220,7 +214,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xg$ PDF $Q^2=10$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
