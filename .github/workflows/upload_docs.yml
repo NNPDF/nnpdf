@@ -1,9 +1,6 @@
 name: Deploy docs
 
-on:
-  push:
-    branches:
-      - merge_workflows
+on: [push]
 
 env:
   NETRC_FILE: ${{ secrets.NETRC_FILE }}
@@ -22,12 +19,13 @@ jobs:
         run: |
           cd doc/sphinx
           make html
-#       - name: Upload documentation
-#         shell: bash -l {0}
-#         run: |
-#           cd doc/sphinx
-#           KEY=$( mktemp )
-#           echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
-#           scp -r -i "$KEY" -o StrictHostKeyChecking=no\
-#             build/html/* \
-#             dummy@packages.nnpdf.science:~/sphinx-docs/
+      - name: Upload documentation
+        shell: bash -l {0}
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cd doc/sphinx
+          KEY=$( mktemp )
+          echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
+          scp -r -i "$KEY" -o StrictHostKeyChecking=no\
+            build/html/* \
+            dummy@packages.nnpdf.science:~/sphinx-docs/
