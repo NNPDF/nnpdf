@@ -6,7 +6,6 @@ env:
   # https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
   PYTHONHASHSEED: "0"
   NETRC_FILE: ${{ secrets.NETRC_FILE }}
-  NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
 
 jobs:
   run_package_tests:

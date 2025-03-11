@@ -103,7 +103,7 @@ pymongo = {version = "<4", optional = true}
 # Optional dependencies
 [tool.poetry.extras]
 tests = ["pytest", "pytest-mpl", "hypothesis"]
-docs = ["sphinxcontrib", "sphinx-rtd-theme", "sphinx", "tabulate"]
+docs = ["sphinxcontrib-bibtex", "sphinx-rtd-theme", "sphinx", "tabulate"]
 qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 torch = ["torch"]

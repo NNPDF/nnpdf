@@ -5,6 +5,11 @@ inputs:
     required: true
     description: "Python version to use"
     default: "3.12"
+  nnpdf-extras:
+    required: true
+    description: "Which extras to install"
+    default: "[qed,tests]"
+
 
 runs:
   using: "composite"
@@ -19,4 +24,4 @@ runs:
     - name: Install package with test extras
       shell: bash -l {0}
       run: |
-        pip install -e .[qed,tests]
+        pip install -e .${{ inputs.nnpdf-extras }}
