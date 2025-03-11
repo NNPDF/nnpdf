@@ -19,11 +19,18 @@ The code is tagged to contextualize the versioning, mark significant
 developments and to mark versions used to produce main results. The
 significant releases since the code was made public are:
 
+`Version 4.0.10 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.10>`_
+    Last release of the 4.0 era. Runcards for 4.0 will still run using new tools, data and theory.
+    The new commondata and theory pipeline has been fully adopted.
+    EKO is now the only evolution code supported. C++ and cmake have been removed.
+    Closure tests done with old version (pre-4.0) of the code can be converted to the new version
+    but won't work out of the box.
+    Further releases of the ``4.0.X`` series will be only bugfixes upon 4.0.10.
 `Version 4.0.9 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.9>`_
     Release for 4.0 `N3LO <https://arxiv.org/abs/2402.18635>`_;
     last release fully backwards-compatible with 4.0 pipeline. 4.0 runcards will still work but
     external tools, and data and theory not used in the 4.0 family of fits will no longer be
-    guaranteed to work from 4.0.10 onwards Last release compatible with the old commondata format
+    guaranteed to work from 4.0.10 onwards. Last release compatible with the old commondata format
     and that accepts apfel as evolution code.
 `Version 4.0.8 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.8>`_
     Release for the `QED <https://arxiv.org/abs/2401.08749>`_ and `MHOU <https://arxiv.org/abs/2401.10319>`_ papers.

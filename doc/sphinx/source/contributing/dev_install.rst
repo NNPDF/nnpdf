@@ -12,7 +12,7 @@ While we recommend that you install ``nnpdf`` in the most comfortable way for yo
 installing some of the dependencies such as LHAPDF might be challenging.
 Below we describe how to prepare a development environment using conda.
 
-1. Setup a conda environment with a recent python version supported by NNPDF (see `here <https://github.com/NNPDF/nnpdf/blob/master/pyproject.toml>`_).
+1. Setup a conda environment with a recent python version supported by NNPDF (for 4.0.10, this corresponds to ``python>=3.9.2,<3.13``).
 
 .. code::
 
