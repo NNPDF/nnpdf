@@ -8,7 +8,7 @@
     For instance: np_to_tensor is just a call to K.constant
 """
 
-from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
+from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform, RandomNormal
 from keras.layers import Layer
 
 # Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
@@ -16,6 +16,7 @@ initializers = {
     "random_uniform": (RandomUniform, {"minval": -0.5, "maxval": 0.5}),
     "glorot_uniform": (glorot_uniform, {}),
     "glorot_normal": (glorot_normal, {}),
+    "random_normal": (RandomNormal, {"mean": 0.0, "stddev": 0.05}),
 }
 
 
