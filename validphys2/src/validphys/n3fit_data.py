@@ -288,12 +288,7 @@ def fitting_data_dict(
 
     if diagonal_basis:
         log.info("working in diagonal basis.")
-        eig, v = np.linalg.eigh(covmat)
-        dt_trans = v.T
-    else:
-        dt_trans = None
-        dt_trans_tr = None
-        dt_trans_vl = None
+        eig_vals, eig_vec = np.linalg.eigh(covmat)
 
     # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
     # Here we want to have the data both in training and validation,
@@ -310,6 +305,7 @@ def fitting_data_dict(
                 zero_tr.append(idx)
         idx += dlen
 
+    # TODO: remove zero_vl and zero_tr because we perform the split at the overall covmat level
     tr_mask = np.concatenate(tr_masks)
     vl_mask = ~tr_mask
 
@@ -321,13 +317,17 @@ def fitting_data_dict(
     data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
 
     if diagonal_basis:
-        expdata = np.matmul(dt_trans, expdata)
-        # make a 1d array of the diagonal
-        covmat_tr = eig[tr_mask]
+
+        # perform the training validation split in the diagonal basis
+        covmat_tr = np.where(eig_vals, ~tr_mask, 0)
         invcovmat_tr = 1.0 / covmat_tr
 
-        covmat_vl = eig[vl_mask]
-        invcovmat_vl = 1.0 / covmat_vl
+        covmat_val = np.where(eig_vals, ~vl_mask, 0)
+        invcovmat_val = 1.0 / covmat_tr
+
+        # rotate back to the original basis
+        invcovmat_tr = eig_vec @ invcovmat_tr @ eig_vec.T
+        invcovmat_val = eig_vec @ invcovmat_val @ eig_vec.T
 
         # prepare a masking rotation
         dt_trans_tr = dt_trans[tr_mask]
