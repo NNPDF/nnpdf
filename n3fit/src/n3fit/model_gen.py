@@ -73,6 +73,7 @@ class ObservableWrapper:
         """Generates the corresponding loss function depending on the values the wrapper
         was initialized with"""
         if self.invcovmat is not None:
+            # TODO: JtH: what is this for?
             if self.rotation:
                 # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
                 invcovmat_matrix = (
@@ -271,6 +272,16 @@ def observable_generator(
     else:
         obsrot = None
 
+    if spec_dict.get("data_transformation_tr") is not None:
+        obsrot_tr = ObsRotation(spec_dict.get("data_transformation_tr"))
+    else:
+        obsrot_tr = None
+
+    if spec_dict.get("data_transformation_vl") is not None:
+        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"))
+    else:
+        obsrot_vl = None
+
     if spec_dict["positivity"]:
         out_positivity = ObservableWrapper(
             spec_name,
@@ -297,8 +308,9 @@ def observable_generator(
         dataset_xsizes,
         invcovmat=invcovmat_tr,
         data=training_data,
-        rotation=obsrot,
+        rotation=obsrot_tr,
     )
+
     out_vl = ObservableWrapper(
         f"{spec_name}_val",
         model_observables,
@@ -306,8 +318,10 @@ def observable_generator(
         dataset_xsizes,
         invcovmat=invcovmat_vl,
         data=validation_data,
-        rotation=obsrot,
+        rotation=obsrot_vl,
     )
+
+    # TODO: JtH does this need to be rotated too?
     out_exp = ObservableWrapper(
         f"{spec_name}_exp",
         model_observables,
