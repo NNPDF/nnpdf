@@ -295,8 +295,8 @@ def fitting_data_dict(
         tr_mask = np.concatenate(tr_masks)
         vl_mask = ~tr_mask
 
-        invcovmat_tr = 1.0 / eig_vals[tr_mask]
-        invcovmat_vl = 1.0 / eig_vals[vl_mask]
+        invcovmat_tr = np.diag(1.0 / eig_vals[tr_mask])
+        invcovmat_vl = np.diag(1.0 / eig_vals[vl_mask])
 
         ndata_tr = invcovmat_tr.shape[0]
         ndata_vl = invcovmat_vl.shape[0]
