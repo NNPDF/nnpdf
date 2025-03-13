@@ -157,6 +157,7 @@ omit = [
     "deprecated_functions.py",
     "*/nnpdf_data/commondata/*",
     "*/nnpdf_data/filter_utils/*",
+    "*test_*.py"
 ]
 [tool.coverage.paths]
 cipaths = [ # In order to combine files from both the ubuntu and macos runners
