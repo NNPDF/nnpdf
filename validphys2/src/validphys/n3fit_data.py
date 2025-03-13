@@ -234,7 +234,7 @@ def fitting_data_dict(
     tr_masks,
     kfold_masks,
     fittable_datasets_masked,
-    diagonal_basis=None,
+    diagonal_basis=True,
 ):
     """
     Provider which takes  the information from validphys ``data``.
@@ -289,54 +289,47 @@ def fitting_data_dict(
     if diagonal_basis:
         log.info("working in diagonal basis.")
         eig_vals, eig_vec = np.linalg.eigh(covmat)
+        expdata = eig_vec.T @ expdata
 
-    # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
-    # Here we want to have the data both in training and validation,
-    # but set to 0 the data, so that it doesn't affect the chi2 value.
-    zero_tr = []
-    zero_vl = []
-    idx = 0
-    for data_mask in tr_masks:
-        dlen = len(data_mask)
-        if dlen == 1:
-            if data_mask[0]:
-                zero_vl.append(idx)
-            else:
-                zero_tr.append(idx)
-        idx += dlen
+        # we no longer care about the training validation split per dataset, so concatenate
+        tr_mask = np.concatenate(tr_masks)
+        vl_mask = ~tr_mask
 
-    # TODO: remove zero_vl and zero_tr because we perform the split at the overall covmat level
-    tr_mask = np.concatenate(tr_masks)
-    vl_mask = ~tr_mask
+        invcovmat_tr = 1.0 / eig_vals[tr_mask]
+        invcovmat_vl = 1.0 / eig_vals[vl_mask]
 
-    # Now set to true the masks
-    tr_mask[zero_tr] = True
-    vl_mask[zero_vl] = True
-    # And prepare the index to 0 the (inverse) covmat
-    data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
-    data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
+        ndata_tr = invcovmat_tr.shape[0]
+        ndata_vl = invcovmat_vl.shape[0]
 
-    if diagonal_basis:
+        # we don't rotate the fktables at this stage because the x grids are not of the same length for all datasets
+        # we will rotate them once they have been convoluted with the PDFs
 
-        # perform the training validation split in the diagonal basis
-        covmat_tr = np.where(eig_vals, ~tr_mask, 0)
-        invcovmat_tr = 1.0 / covmat_tr
-
-        covmat_val = np.where(eig_vals, ~vl_mask, 0)
-        invcovmat_val = 1.0 / covmat_tr
-
-        # rotate back to the original basis
-        invcovmat_tr = eig_vec @ invcovmat_tr @ eig_vec.T
-        invcovmat_val = eig_vec @ invcovmat_val @ eig_vec.T
-
-        # prepare a masking rotation
-        dt_trans_tr = dt_trans[tr_mask]
-        dt_trans_vl = dt_trans[vl_mask]
-
-        # TODO: check the effect of this when diagonalization
-        invcovmat_tr[data_zero_tr] = 0.0
-        invcovmat_vl[data_zero_vl] = 0.0
     else:
+        # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
+        # Here we want to have the data both in training and validation,
+        # but set to 0 the data, so that it doesn't affect the chi2 value.
+        zero_tr = []
+        zero_vl = []
+        idx = 0
+        for data_mask in tr_masks:
+            dlen = len(data_mask)
+            if dlen == 1:
+                if data_mask[0]:
+                    zero_vl.append(idx)
+                else:
+                    zero_tr.append(idx)
+            idx += dlen
+
+        tr_mask = np.concatenate(tr_masks)
+        vl_mask = ~tr_mask
+
+        # Now set to true the masks
+        tr_mask[zero_tr] = True
+        vl_mask[zero_vl] = True
+        # And prepare the index to 0 the (inverse) covmat
+        data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
+        data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
+
         covmat_tr = covmat[tr_mask].T[tr_mask]
         covmat_vl = covmat[vl_mask].T[vl_mask]
 
@@ -354,12 +347,12 @@ def fitting_data_dict(
         invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
         invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
 
-    ndata_tr = np.count_nonzero(tr_mask)
-    ndata_vl = np.count_nonzero(vl_mask)
+        ndata_tr = np.count_nonzero(tr_mask)
+        ndata_vl = np.count_nonzero(vl_mask)
 
-    # And subtract them for ndata
-    ndata_tr -= len(data_zero_tr)
-    ndata_vl -= len(data_zero_vl)
+        # And subtract them for ndata
+        ndata_tr -= len(data_zero_tr)
+        ndata_vl -= len(data_zero_vl)
 
     expdata_tr = expdata[tr_mask].reshape(1, -1)
     expdata_vl = expdata[vl_mask].reshape(1, -1)
@@ -394,9 +387,6 @@ def fitting_data_dict(
         "positivity": False,
         "count_chi2": True,
         "folds": folds,
-        "data_transformation_tr": dt_trans_tr,
-        "data_transformation_vl": dt_trans_vl,
-        "data_transformation": dt_trans,
     }
     return dict_out
 
