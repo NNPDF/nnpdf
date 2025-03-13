@@ -74,18 +74,19 @@ class ObservableWrapper:
         was initialized with"""
         if self.invcovmat is not None:
             # TODO: JtH: what is this for?
-            if self.rotation:
-                # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
-                invcovmat_matrix = (
-                    np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
-                )
-                if self.covmat is not None:
-                    covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
-                else:
-                    covmat_matrix = self.covmat
-            else:
-                covmat_matrix = self.covmat
-                invcovmat_matrix = self.invcovmat
+            # if self.rotation:
+            #     import pdb; pdb.set_trace()
+            #     # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
+            #     invcovmat_matrix = (
+            #         np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+            #     )
+            #     if self.covmat is not None:
+            #         covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
+            #     else:
+            #         covmat_matrix = self.covmat
+            # else:
+            covmat_matrix = self.covmat
+            invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
                 invcovmat_matrix, self.data, mask, covmat=covmat_matrix, name=self.name
             )
@@ -114,8 +115,7 @@ class ObservableWrapper:
 
         if self.rotation is not None:
             ret = self.rotation(ret)
-
-        if self.trvl_mask_layer is not None:
+        elif self.trvl_mask_layer is not None:  # TODO: JtH no mask needed once diagonalised, right?
             ret = self.trvl_mask_layer(ret)
 
         return ret
@@ -321,7 +321,7 @@ def observable_generator(
         rotation=obsrot_vl,
     )
 
-    # TODO: JtH does this need to be rotated too?
+    # experimental data has already been rotated (if any)
     out_exp = ObservableWrapper(
         f"{spec_name}_exp",
         model_observables,
