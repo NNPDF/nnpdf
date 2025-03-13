@@ -301,7 +301,8 @@ def fitting_data_dict(
         ndata_tr = invcovmat_tr.shape[0]
         ndata_vl = invcovmat_vl.shape[0]
 
-        # rotation matrix such
+        # rotation matrix to rotate the predictions
+        # TODO: JtH: why doesn't it need to be square?
         rot_tr = eig_vec[tr_mask]
         rot_vl = eig_vec[vl_mask]
 
@@ -374,6 +375,7 @@ def fitting_data_dict(
     # which contains the instructions on how to generate each observable for the fit
     # plus the information that glue all of them together (covmat, ndata, etc)
     # TODO: for consistency with the rest of validphys a FittableGroup should be created
+
     dict_out = {
         "datasets": fittable_datasets,
         "name": str(data),
