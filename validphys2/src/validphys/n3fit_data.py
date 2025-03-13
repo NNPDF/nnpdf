@@ -301,6 +301,10 @@ def fitting_data_dict(
         ndata_tr = invcovmat_tr.shape[0]
         ndata_vl = invcovmat_vl.shape[0]
 
+        # rotation matrix such
+        rot_tr = eig_vec[tr_mask]
+        rot_vl = eig_vec[vl_mask]
+
         # we don't rotate the fktables at this stage because the x grids are not of the same length for all datasets
         # we will rotate them once they have been convoluted with the PDFs
 
@@ -387,6 +391,8 @@ def fitting_data_dict(
         "positivity": False,
         "count_chi2": True,
         "folds": folds,
+        "data_transformation_tr": rot_tr if diagonal_basis else None,
+        "data_transformation_vl": rot_vl if diagonal_basis else None,
     }
     return dict_out
 
