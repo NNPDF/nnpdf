@@ -141,11 +141,12 @@ class SetupFitConfig(Config):
                 f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'."
             )
 
-        if file_content.get('closuretest') is not None:
+        closuredict = file_content.get('closuretest')
+        if closuredict is not None:
             # Use faketheoryid to create the L0 data to be stored into the filter folder
             # (L1 data is stored if fakedata is True)
-            if 'faketheoryid' in file_content['theory']:
-                file_content['theory']['theoryid'] = file_content['theory']['faketheoryid']
+            if 'faketheoryid' in closuredict:
+                file_content['theory']['theoryid'] = closuredict['faketheoryid']
             filter_action = 'datacuts::closuretest::theory::fitting filter'
             check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
@@ -168,7 +169,6 @@ class SetupFitConfig(Config):
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )
-
 
         # Check fiatlux configuration
         fiatlux = file_content.get('fiatlux')
