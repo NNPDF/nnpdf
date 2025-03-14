@@ -1,4 +1,19 @@
-name: Prepare environment
+name: Prepare a conda environment for NNPDF installation
+
+# This composite action prepares a conda environment with a set of shared settings
+# that all NNPDF workflows should utilize.
+# see https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action
+
+# Use it as a step of your workflow as:
+# - uses: ./.github/actions/install_conda_pip
+#
+# It is possible to modify the python version of the default environment with
+#         with:
+#           python-version: "3.12"
+#
+# Remember that these actions are only available after checking out the repository,
+# which should always be the first step!
+# - uses: actions/checkout@v4
 
 inputs:
   python-version:
@@ -16,7 +31,7 @@ runs:
         channels: https://packages.nnpdf.science/public,conda-forge
         show-channel-urls: true
         auto-update-conda: true
-        activate-environment: test
+        activate-environment: nnpdf_environment
         conda-remove-defaults: true
     - name: Add NETRC
       shell: bash -l {0}

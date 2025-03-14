@@ -1,5 +1,9 @@
 name: All tests NNPDF
 
+# This workflow collects all tests for the NNPDF framework
+# the environment and installation steps are shared as they are using
+# the custom actions in .github/actions/
+
 on: [push]
 
 env:
@@ -16,7 +20,7 @@ jobs:
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
-      fail-fast: false
+      fail-fast: false # continue even if some jobs failed
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -46,7 +50,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-        with:
+        with: # conda requires fetching the history of the repo to prepare the package name
           fetch-tags: true
           fetch-depth: 0
       - uses: ./.github/actions/prepare_environment
