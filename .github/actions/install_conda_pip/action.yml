@@ -1,0 +1,46 @@
+name: Install nnpdf using pip under a conda environment
+
+# This composite action installs NNPDF using pip
+# under a conda environment which is used to install lhapdf and pandoc
+# see https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action
+
+# Use it as a step of your workflow as:
+# - uses: ./.github/actions/install_conda_pip
+#
+# It is possible to modify the python version of the default environment with
+#         with:
+#           python-version: "3.12"
+#
+# And the extras to be installed with. The string nnpdf-extras will be passed to pip directly.
+#         with:
+#           nnpdf-extras: "[qed,tests]"
+#
+# Remember that these actions are only available after checking out the repository,
+# which should always be the first step!
+# - uses: actions/checkout@v4
+
+inputs:
+  python-version:
+    required: true
+    description: "Python version to use"
+    default: "3.12"
+  nnpdf-extras:
+    required: true
+    description: "Which extras to install"
+    default: "[qed,tests]"
+
+
+runs:
+  using: "composite"
+  steps:
+    - uses: ./.github/actions/prepare_environment
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Install host requirements
+      shell: bash -l {0}
+      run: |
+        conda install lhapdf pandoc
+    - name: Install package with test extras
+      shell: bash -l {0}
+      run: |
+        pip install -e .${{ inputs.nnpdf-extras }}

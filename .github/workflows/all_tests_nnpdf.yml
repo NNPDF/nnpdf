@@ -1,0 +1,89 @@
+name: All tests NNPDF
+
+# This workflow collects all tests for the NNPDF framework
+# the environment and installation steps are shared as they are using
+# the custom actions in .github/actions/
+
+on: [push]
+
+env:
+  # https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
+  PYTHONHASHSEED: "0"
+  NETRC_FILE: ${{ secrets.NETRC_FILE }}
+
+jobs:
+  run_package_tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-14]
+        python-version: ["3.9", "3.12"]
+        include:
+          - os: ubuntu-latest
+            CONDA_OS: linux-64
+      fail-fast: false # continue even if some jobs failed
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Test n3fit and validphys
+        shell: bash -l {0}
+        run: |
+          pytest --mpl --pyargs validphys n3fit --mpl-default-tolerance 18
+
+  regression_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install_conda_pip
+      - name: Run regression tests
+        shell: bash -l {0}
+        run: |
+          pytest extra_tests/regression_checks.py
+
+  conda_tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-14]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with: # conda requires fetching the history of the repo to prepare the package name
+          fetch-tags: true
+          fetch-depth: 0
+      - uses: ./.github/actions/prepare_environment
+        with:
+          python-version: "3.12"
+      - name: Build recipe
+        shell: bash -l {0}
+        run: |
+          conda install conda-build --yes
+          conda build -q conda-recipe --package-format=1
+      - name: Keep conda package as artifact
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ env.CONDA_PREFIX }}/conda-bld/noarch/*.tar.bz2
+
+  run_pytorch:
+    runs-on: ubuntu-latest
+    env:
+      KERAS_BACKEND: torch
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install nnpdf without LHAPDF
+      shell: bash -l {0}
+      run: |
+        pip install .[nolha,torch]
+        # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
+        lhapdf-management update --init
+    - name: Test we can run one runcard
+      shell: bash -l {0}
+      run: |
+        cd n3fit/runcards/examples
+        n3fit Basic_runcard.yml 4
