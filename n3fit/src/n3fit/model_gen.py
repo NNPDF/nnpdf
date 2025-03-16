@@ -73,18 +73,6 @@ class ObservableWrapper:
         """Generates the corresponding loss function depending on the values the wrapper
         was initialized with"""
         if self.invcovmat is not None:
-            # TODO: JtH: what is this for?
-            # if self.rotation:
-            #     import pdb; pdb.set_trace()
-            #     # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
-            #     invcovmat_matrix = (
-            #         np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
-            #     )
-            #     if self.covmat is not None:
-            #         covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
-            #     else:
-            #         covmat_matrix = self.covmat
-            # else:
             covmat_matrix = self.covmat
             invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
@@ -113,9 +101,14 @@ class ObservableWrapper:
         # Finally concatenate all observables (so that experiments are one single entity)
         ret = op.concatenate(output_layers, axis=-1)
 
+        # rotate the predictions to the diagonal basis if rotation is provided.
+        # The rotation already performs the masking (i.e. training/validation split)
+        # because the rotation matrix has shape (n_tr/vl, n_dat)
         if self.rotation is not None:
             ret = self.rotation(ret)
-        elif self.trvl_mask_layer is not None:  # TODO: JtH no mask needed once diagonalised, right?
+        elif (
+            self.trvl_mask_layer is not None
+        ):  # mask needs to be applied if no rotation is provided
             ret = self.trvl_mask_layer(ret)
 
         return ret
