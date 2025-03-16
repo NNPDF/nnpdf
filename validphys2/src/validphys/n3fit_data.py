@@ -234,7 +234,7 @@ def fitting_data_dict(
     tr_masks,
     kfold_masks,
     fittable_datasets_masked,
-    diagonal_basis=True,
+    diagonal_basis=False,
 ):
     """
     Provider which takes  the information from validphys ``data``.
@@ -301,13 +301,12 @@ def fitting_data_dict(
         ndata_tr = invcovmat_tr.shape[0]
         ndata_vl = invcovmat_vl.shape[0]
 
-        # rotation matrix to rotate the predictions
-        # TODO: JtH: why doesn't it need to be square?
-        rot_tr = eig_vec[tr_mask]
-        rot_vl = eig_vec[vl_mask]
+        # rotation matrix to rotate the predictions into the diagonal basis, and select either training or validation
+        # the actual rotation will be done once the FK tables have been convoluted with the PDFs, because the x grids
+        # are not of the same length for all datasets
 
-        # we don't rotate the fktables at this stage because the x grids are not of the same length for all datasets
-        # we will rotate them once they have been convoluted with the PDFs
+        rot_tr = eig_vec[tr_mask]  # shape = (ndata_tr, ndata)
+        rot_vl = eig_vec[vl_mask]  # shape = (ndata_vl, ndata)
 
     else:
         # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
