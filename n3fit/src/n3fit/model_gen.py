@@ -102,8 +102,6 @@ class ObservableWrapper:
         ret = op.concatenate(output_layers, axis=-1)
 
         # rotate the predictions to the diagonal basis if rotation is provided.
-        # The rotation already performs the masking (i.e. training/validation split)
-        # because the rotation matrix has shape (n_tr/vl, n_dat)
         if self.rotation is not None:
             ret = self.rotation(ret)
 
