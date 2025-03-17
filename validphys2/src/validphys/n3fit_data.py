@@ -288,8 +288,9 @@ def fitting_data_dict(
 
     if diagonal_basis:
         log.info("working in diagonal basis.")
-        eig_vals, eig_vec = np.linalg.eigh(covmat)
-        expdata = eig_vec.T @ expdata
+        eig_vals, u_trans = np.linalg.eigh(covmat)
+        u = u_trans.T
+        expdata = u @ expdata
 
         # we no longer care about the training validation split per dataset, so concatenate
         tr_mask = np.concatenate(tr_masks)
@@ -300,13 +301,6 @@ def fitting_data_dict(
 
         ndata_tr = invcovmat_tr.shape[0]
         ndata_vl = invcovmat_vl.shape[0]
-
-        # rotation matrix to rotate the predictions into the diagonal basis, and select either training or validation
-        # the actual rotation will be done once the FK tables have been convoluted with the PDFs, because the x grids
-        # are not of the same length for all datasets
-
-        rot_tr = eig_vec[tr_mask]  # shape = (ndata_tr, ndata)
-        rot_vl = eig_vec[vl_mask]  # shape = (ndata_vl, ndata)
 
     else:
         # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
@@ -392,8 +386,7 @@ def fitting_data_dict(
         "positivity": False,
         "count_chi2": True,
         "folds": folds,
-        "data_transformation_tr": rot_tr if diagonal_basis else None,
-        "data_transformation_vl": rot_vl if diagonal_basis else None,
+        "data_transformation": u if diagonal_basis else None,
     }
     return dict_out
 
