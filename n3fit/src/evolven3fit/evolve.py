@@ -12,6 +12,9 @@ import psutil
 import eko
 from eko import basis_rotation, runner
 from validphys.utils import yaml_safe
+import tempfile
+import shutil
+import os
 
 from . import eko_utils, utils
 
@@ -110,34 +113,44 @@ def evolve_fit(
         x_grid_obj = eko.interpolation.XGrid(x_grid)
         eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
 
-    with eko.EKO.read(eko_path) as eko_op:
-        # Read the cards directly from the eko to make sure they are consistent
-        theory = eko_op.theory_card
-        op = eko_op.operator_card
-        # And dump them to the log
-        _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
-        _logger.debug(f"Operator card: {json.dumps(op.raw)}")
+    scratch_dir = os.environ.get('_CONDOR_SCRATCH_DIR')
+    _logger.info(f"SCRATCHDIR : {scratch_dir}")
+    # Ensure the scratch directory is set
+    if scratch_dir is None:
+        raise EnvironmentError("HTCondor scratch directory is not set.")
 
-        # Modify the info file with the fit-specific info
-        info = info_file.build(theory, op, 1, info_update={})
-        info["NumMembers"] = "REPLACE_NREP"
-        info["ErrorType"] = "replicas"
-        info["XMin"] = float(x_grid[0])
-        info["XMax"] = float(x_grid[-1])
-        # Save the PIDs in the info file in the same order as in the evolution
-        info["Flavors"] = basis_rotation.flavor_basis_pids
-        info["NumFlavors"] = theory.heavy.num_flavs_max_pdf
-        dump_info_file(usr_path, info)
 
-        def _wrap_evolve(pdf, replica):
-            evolved_blocks = evolve_exportgrid(pdf, eko_op, x_grid)
-            dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
+    with tempfile.TemporaryDirectory(dir=scratch_dir) as tempdir:
+        temp_eko_path = pathlib.Path(tempdir) / eko_path.name
+        shutil.copy(eko_path, temp_eko_path)
+        with eko.EKO.read(temp_eko_path) as eko_op:
+            # Read the cards directly from the eko to make sure they are consistent
+            theory = eko_op.theory_card
+            op = eko_op.operator_card
+            # And dump them to the log
+            _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
+            _logger.debug(f"Operator card: {json.dumps(op.raw)}")
 
-        # Choose the number of cores to be the Minimal value
-        nb_cores = min(NUM_CORES, abs(ncores))
-        Parallel(n_jobs=nb_cores)(
-            delayed(_wrap_evolve)(pdf, r) for r, pdf in initial_PDFs_dict.items()
-        )
+            # Modify the info file with the fit-specific info
+            info = info_file.build(theory, op, 1, info_update={})
+            info["NumMembers"] = "REPLACE_NREP"
+            info["ErrorType"] = "replicas"
+            info["XMin"] = float(x_grid[0])
+            info["XMax"] = float(x_grid[-1])
+            # Save the PIDs in the info file in the same order as in the evolution
+            info["Flavors"] = basis_rotation.flavor_basis_pids
+            info["NumFlavors"] = theory.heavy.num_flavs_max_pdf
+            dump_info_file(usr_path, info)
+
+            def _wrap_evolve(pdf, replica):
+                evolved_blocks = evolve_exportgrid(pdf, eko_op, x_grid)
+                dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
+
+            # Choose the number of cores to be the Minimal value
+            nb_cores = min(NUM_CORES, abs(ncores))
+            Parallel(n_jobs=nb_cores)(
+                delayed(_wrap_evolve)(pdf, r) for r, pdf in initial_PDFs_dict.items()
+            )
 
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
