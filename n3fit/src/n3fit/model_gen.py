@@ -106,9 +106,8 @@ class ObservableWrapper:
         # because the rotation matrix has shape (n_tr/vl, n_dat)
         if self.rotation is not None:
             ret = self.rotation(ret)
-        elif (
-            self.trvl_mask_layer is not None
-        ):  # mask needs to be applied if no rotation is provided
+
+        if self.trvl_mask_layer is not None:
             ret = self.trvl_mask_layer(ret)
 
         return ret
@@ -265,16 +264,6 @@ def observable_generator(
     else:
         obsrot = None
 
-    if spec_dict.get("data_transformation_tr") is not None:
-        obsrot_tr = ObsRotation(spec_dict.get("data_transformation_tr"))
-    else:
-        obsrot_tr = None
-
-    if spec_dict.get("data_transformation_vl") is not None:
-        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"))
-    else:
-        obsrot_vl = None
-
     if spec_dict["positivity"]:
         out_positivity = ObservableWrapper(
             spec_name,
@@ -301,7 +290,7 @@ def observable_generator(
         dataset_xsizes,
         invcovmat=invcovmat_tr,
         data=training_data,
-        rotation=obsrot_tr,
+        rotation=obsrot,
     )
 
     out_vl = ObservableWrapper(
@@ -311,7 +300,7 @@ def observable_generator(
         dataset_xsizes,
         invcovmat=invcovmat_vl,
         data=validation_data,
-        rotation=obsrot_vl,
+        rotation=obsrot,
     )
 
     # experimental data has already been rotated (if any)
