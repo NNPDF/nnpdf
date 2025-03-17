@@ -37,10 +37,10 @@ from ruamel.yaml import error
 from reportengine import colors
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
-from validphys.loader import FallbackLoader
+from validphys.loader import Loader, TheoryNotFound
 from validphys.utils import yaml_safe
 
-l = FallbackLoader()
+l = Loader()
 
 SETUPFIT_FIXED_CONFIG = dict(
     actions_=[
@@ -154,7 +154,10 @@ class SetupFitConfig(Config):
                 # overwrite theoryid with the faketheoryid
                 SETUPFIT_FIXED_CONFIG['theory']['theoryid'] = closuredict['faketheoryid']
                 # download theoryid since it will be used in the fit
-                l.check_theoryID(file_content['theory']['theoryid'])
+                try:
+                    l.check_theoryID(file_content['theory']['theoryid'])
+                except TheoryNotFound as e:
+                    log.warning(e)
             filter_action = 'datacuts::closuretest::theory::fitting filter'
             check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
