@@ -66,8 +66,6 @@ class Mask(MetaLayer):
             Tensor of shape (batch_size, n_replicas, n_features)
         """
         if self.mask is not None:
-            # TODO: JtH flattened indices are out of bounds: op.flatten(ret) = len(training) while self._flattened_indices.shape = training + val
-            # import pdb; pdb.set_trace()
             ret = op.gather(op.flatten(ret), self._flattened_indices)
             ret = op.reshape(ret, self.masked_output_shape)
         if self.c is not None:
