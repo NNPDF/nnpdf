@@ -83,5 +83,6 @@ maxcores: 8
 closuretest:
   filterseed: 3345348918 # Random seed to be used in filtering data partitions
   fakedata: true     # true = to use FAKEPDF to generate pseudo-data
-  fakepdf: NNPDF40_nnlo_as_01180      # Theory input for pseudo-data
+  fakepdf: NNPDF40_nnlo_as_01180      # PDF input for pseudo-data
   fakenoise: true    # true = to add random fluctuations to pseudo-data
+  faketheoryid: 708  # theory input for pseudo-data

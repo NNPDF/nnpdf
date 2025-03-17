@@ -145,7 +145,10 @@ After obtaining the fit you can proceed with the fit upload and analysis by:
 
 1.  *For members of NNPDF*, it is possible to upload the results to the nnpdf server using ``vp-upload runcard_folder`` then install the fitted set with ``vp-get fit fit_name``. Otherwise, copy or link to the results to the ``share/NNPDF/results/`` folder (usually under ``~/.local/share`` or ``${CONDA_PREFIX}/share/``.
 
-2.  Analysing the results with ``validphys``, see the :ref:`vp-guide <vp-index>`.
+2.  It is recommended to iterate a fit to achieve a higher degree of convergence/stability in the fit.
+    To read more about this, see :ref:`How to run an iterated fit <run-iterated-fit>`.
+
+3.  Analysing the results with ``validphys``, see the :ref:`vp-guide <vp-index>`.
     Consider using the ``vp-comparefits`` tool.
 
 
@@ -169,12 +172,6 @@ In order to change the backend, the environment variable ``KERAS_BACKENDD`` need
 
 The best results are obtained with ``tensorflow[and-cuda]`` installed from pip
 and running ``n3fit`` in GPU, see :ref:`parallel-label`.
-
-Iterate the fit
-~~~~~~~~~~~~~~~
-
-It may be desirable to iterate a fit to achieve a higher degree of convergence/stability in the fit.
-To read more about this, see :ref:`How to run an iterated fit <run-iterated-fit>`.
 
 QED fit
 ~~~~~~~
