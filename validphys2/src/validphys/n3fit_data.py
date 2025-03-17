@@ -234,7 +234,7 @@ def fitting_data_dict(
     tr_masks,
     kfold_masks,
     fittable_datasets_masked,
-    diagonal_basis=False,
+    diagonal_basis=None,
 ):
     """
     Provider which takes  the information from validphys ``data``.
@@ -292,7 +292,7 @@ def fitting_data_dict(
         u = u_trans.T
         expdata = u @ expdata
 
-        # we no longer care about the training validation split per dataset, so concatenate
+        # tr/vl split happens in the diagonal basis, so we do not to treat 1-point datasets separately
         tr_mask = np.concatenate(tr_masks)
         vl_mask = ~tr_mask
 
