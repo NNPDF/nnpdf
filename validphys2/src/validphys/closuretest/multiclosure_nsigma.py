@@ -1,7 +1,6 @@
 """
-This module contains the functions to compute the consistency/inconsistency sets.
+This module contains the functions used in Sec. 4 of paper: arXiv: 2503.xxxxx
 
-The problem is defined as follows:
 
 We investigate the consistency of a dataset ``A``. ``A`` is considered consistent if it is consistent
 with the assumption of Gaussianity (internal consistency) and with the rest of the datasets
@@ -110,15 +109,11 @@ def multiclosurefits_nsigma(
     MulticlosureNsigma
     """
     res_dict = {}
-    for fit, input_data, nsigma_data in zip(
-        fits, fits_data, fits_datasets_chi2_nsigma_deviation
-    ):
+    for fit, input_data, nsigma_data in zip(fits, fits_data, fits_datasets_chi2_nsigma_deviation):
         res_dict[fit.as_input()["closuretest"]["filterseed"]] = d = {}
         for ds, nsigma in zip(input_data.datasets, nsigma_data):
             d[ds.name] = nsigma
-    return MulticlosureNsigma(
-        is_weighted=is_weighted, nsigma_table=pd.DataFrame(res_dict)
-    )
+    return MulticlosureNsigma(is_weighted=is_weighted, nsigma_table=pd.DataFrame(res_dict))
 
 
 """
@@ -145,9 +140,7 @@ class NsigmaAlpha:
 
 
 def def_of_nsigma_alpha(
-    multiclosurefits_nsigma: pd.DataFrame,
-    weighted_dataset: str,
-    complement: bool = False,
+    multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str, complement: bool = False
 ) -> NsigmaAlpha:
     """
     Defines how the set 1 alpha values are computed.
@@ -177,20 +170,14 @@ def def_of_nsigma_alpha(
         # save it as set to allow for easy intersection with other sets
         set1_alpha[z_alpha] = set(df.columns[fit_idxs])
 
-    return NsigmaAlpha(
-        alpha_dict=set1_alpha, is_weighted=multiclosurefits_nsigma.is_weighted
-    )
+    return NsigmaAlpha(alpha_dict=set1_alpha, is_weighted=multiclosurefits_nsigma.is_weighted)
 
 
-def nsigma_alpha(
-    multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str
-) -> NsigmaAlpha:
+def nsigma_alpha(multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str) -> NsigmaAlpha:
     """
     Computes the set 1 alpha values.
     """
-    return def_of_nsigma_alpha(
-        multiclosurefits_nsigma, weighted_dataset, complement=False
-    )
+    return def_of_nsigma_alpha(multiclosurefits_nsigma, weighted_dataset, complement=False)
 
 
 """
@@ -199,15 +186,11 @@ Collect set 1 alpha over dataspecs.
 dataspecs_nsigma_alpha = collect("nsigma_alpha", ("dataspecs",))
 
 
-def comp_nsigma_alpha(
-    multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str
-) -> NsigmaAlpha:
+def comp_nsigma_alpha(multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str) -> NsigmaAlpha:
     """
     Computes the complement set 1 alpha values.
     """
-    return def_of_nsigma_alpha(
-        multiclosurefits_nsigma, weighted_dataset, complement=True
-    )
+    return def_of_nsigma_alpha(multiclosurefits_nsigma, weighted_dataset, complement=True)
 
 
 """
@@ -271,22 +254,8 @@ def comp_set_1_alpha(dataspecs_comp_nsigma_alpha: list) -> dict:
             return dataspec_nsigma.alpha_dict
 
 
-def comp_set_3_alpha(dataspecs_comp_nsigma_alpha: list) -> dict:
-    """
-
-    NOTE: is probably not needed and should be removed.
-
-    Returns the complement set 3 alpha values.
-    """
-    for dataspec_nsigma in dataspecs_comp_nsigma_alpha:
-        if dataspec_nsigma.is_weighted:
-            return dataspec_nsigma.alpha_dict
-
-
 def def_set_2(
-    dataspecs_multiclosurefits_nsigma: list,
-    weighted_dataset: str,
-    complement: bool = False,
+    dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str, complement: bool = False
 ) -> dict:
     """
     Defines how the set 2 alpha values are computed.
@@ -346,23 +315,7 @@ def set_2_alpha(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str) 
     Moreover if for a fit i any dataset has a n-sigma value greater than Z_{\alpha}, then
     the fit i is included in the set.
     """
-    return def_set_2(
-        dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=False
-    )
-
-
-def comp_set_2_alpha(
-    dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str
-) -> dict:
-    """
-
-    NOTE: is probably not needed and should be removed.
-
-    Computes the complement set 2 alpha values.
-    """
-    return def_set_2(
-        dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=True
-    )
+    return def_set_2(dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=False)
 
 
 def probability_inconsistent(
