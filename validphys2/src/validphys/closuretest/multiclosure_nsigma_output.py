@@ -25,7 +25,9 @@ def plot_all_alpha_sets(set_1_alpha, set_2_alpha, set_3_alpha, n_fits):
         set_3.append(len(set_3_alpha[z_alpha]) / n_fits)
 
     ax.plot(set_1_alpha.keys(), set_1, linewidth=3, label=r"$P_{\rm flag}, S_1$")
-    ax.plot(set_3_alpha.keys(), set_3, linestyle='--', linewidth=3, label=r"$P_{\rm flag}, S_2$")  # mismatch between def in paper and code
+    ax.plot(
+        set_3_alpha.keys(), set_3, linestyle='--', linewidth=3, label=r"$P_{\rm flag}, S_2$"
+    )  # mismatch between def in paper and code
     ax.plot(set_2_alpha.keys(), set_2, linestyle=':', linewidth=3, label=r"$P_{\rm flag}, S_3$")
     # ax.set_title(r"NMC $F2_d/F2_p$")
     ax.set_title(r"HERA I + II $\sigma_{e^+p}$, $E_p$=575 GeV")
@@ -57,9 +59,21 @@ def plot_1_minus_all_alpha_sets(set_1_alpha, set_2_alpha, set_3_alpha, n_fits):
         set_3.append(len(set_3_alpha[z_alpha]) / n_fits)
 
     ax.plot(set_1_alpha.keys(), 1 - np.array(set_1), linewidth=3, label=r"$P_{\rm flag}, S_1$")
-    ax.plot(set_3_alpha.keys(), 1 - np.array(set_3), linewidth=3, linestyle="--", label=r"$P_{\rm flag}, S_2$")
-    ax.plot(set_2_alpha.keys(), 1 - np.array(set_2), linewidth=3, linestyle=":", label=r"$P_{\rm flag}, S_3$")
-    
+    ax.plot(
+        set_3_alpha.keys(),
+        1 - np.array(set_3),
+        linewidth=3,
+        linestyle="--",
+        label=r"$P_{\rm flag}, S_2$",
+    )
+    ax.plot(
+        set_2_alpha.keys(),
+        1 - np.array(set_2),
+        linewidth=3,
+        linestyle=":",
+        label=r"$P_{\rm flag}, S_3$",
+    )
+
     # ax.set_title(r"NMC $F2_d/F2_p$")
     ax.set_title(r"HERA I + II $\sigma_{e^+p}$, $E_p$=575 GeV")
     # r"$S_1 = \{i | n_{\sigma}^i > Z_{\alpha} \}$"
@@ -135,8 +149,20 @@ def plot_probability_consistent(
         rates_comp_set1.append(len(comp_set_1_alpha[z_alpha]) / n_fits)
 
     ax.plot(Z_ALPHA_RANGE, rates_comp_set1, linewidth=3, label=r"$1 - P_{\rm flag}, C_1$")
-    ax.plot(Z_ALPHA_RANGE, 1 - np.array(rates_cons), linewidth=3, linestyle="--", label=r"$1 - P_{\rm flag}, C_2$")
-    ax.plot(Z_ALPHA_RANGE, 1 - np.array(rates), linewidth=3, linestyle=":", label=r"$1 - P_{\rm flag}, C_3$")
+    ax.plot(
+        Z_ALPHA_RANGE,
+        1 - np.array(rates_cons),
+        linewidth=3,
+        linestyle="--",
+        label=r"$1 - P_{\rm flag}, C_2$",
+    )
+    ax.plot(
+        Z_ALPHA_RANGE,
+        1 - np.array(rates),
+        linewidth=3,
+        linestyle=":",
+        label=r"$1 - P_{\rm flag}, C_3$",
+    )
 
     ax.set_xlabel(r"$Z$", fontsize='large')
     ax.set_ylabel(r"$1 - P_{\rm flag}$", fontsize='large')
