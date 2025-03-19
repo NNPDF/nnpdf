@@ -109,7 +109,9 @@ theory:
 trvlseed: 591866982
 nnseed: 945709987
 mcseed: 519562661
+
 genrep: true
+use_t0_sampling: true
 
 ################################################################################
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
