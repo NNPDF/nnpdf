@@ -801,9 +801,23 @@ class CoreConfig(configparser.Config):
         self, sep_mult=False, use_thcovmat_in_sampling=False, use_t0_sampling=False
     ):
         """
-        Produces the correct covmat to be used in make_replica according
-        to some options: whether to include the theory covmat and whether to
+        Produces the correct MC replica method sampling covmat to be used in
+        make_replica according to some options: whether to sample using a t0
+        covariance matrix, include the theory covmat and whether to
         separate the multiplcative errors.
+
+        Parameters
+        ----------
+        sep_mult : bool
+            Whether to separate the multiplicative errors.
+        use_thcovmat_in_sampling : bool
+            Whether to include the theory covariance matrix.
+        use_t0_sampling : bool
+            Whether to sample using a t0 covariance matrix.
+
+        Returns
+        -------
+        Callable
         """
         from validphys import covmats
 
