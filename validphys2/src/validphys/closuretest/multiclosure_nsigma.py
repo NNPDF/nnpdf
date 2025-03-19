@@ -1,7 +1,6 @@
 """
 This module contains the functions used in Sec. 4 of paper: arXiv: 2503.xxxxx
 
-
 We investigate the consistency of a dataset ``A``. ``A`` is considered consistent if it is consistent
 with the assumption of Gaussianity (internal consistency) and with the rest of the datasets
 that are not ``A`` (external consistency) and are here labeled as ``B``.
