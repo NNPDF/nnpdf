@@ -133,9 +133,7 @@ def is_weighted(fits_data: list) -> bool:
         Name of the weighted dataset.
     """
     # Extract the set of unique weighted dataset names from all fits
-    weighted_ds_sets = [
-        {ds.name for ds in data.datasets if ds.weight != 1} for data in fits_data
-    ]
+    weighted_ds_sets = [{ds.name for ds in data.datasets if ds.weight != 1} for data in fits_data]
 
     # Ensure all fits have the same set of weighted datasets
     if len(set(frozenset(ds_set) for ds_set in weighted_ds_sets)) > 1:
