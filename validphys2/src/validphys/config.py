@@ -798,7 +798,7 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_dataset_inputs_sampling_covmat(
-        self, sep_mult=False, use_thcovmat_in_sampling=False, use_t0_sampling=False
+        self, sep_mult=False, use_thcovmat_in_sampling=False, use_t0_sampling=True
     ):
         """
         Produces the correct MC replica method sampling covmat to be used in
@@ -808,11 +808,11 @@ class CoreConfig(configparser.Config):
 
         Parameters
         ----------
-        sep_mult : bool
+        sep_mult : bool, default=False
             Whether to separate the multiplicative errors.
-        use_thcovmat_in_sampling : bool
+        use_thcovmat_in_sampling : bool, default=False
             Whether to include the theory covariance matrix.
-        use_t0_sampling : bool
+        use_t0_sampling : bool, default=True
             Whether to sample using a t0 covariance matrix.
 
         Returns
