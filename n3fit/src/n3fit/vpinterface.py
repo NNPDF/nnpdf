@@ -1,20 +1,20 @@
 """
-    n3fit interface to validphys
+n3fit interface to validphys
 
-    Example
-    -------
+Example
+-------
 
-    >>> import numpy as np
-    >>> from n3fit.vpinterface import N3PDF
-    >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> from validphys.pdfgrids import xplotting_grid
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> fake_x = np.linspace(1e-3,0.8,3)
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    >>> n3pdf = N3PDF(pdf_model)
-    >>> res = xplotting_grid(n3pdf, 1.6, fake_x)
-    >>> res.grid_values.error_members().shape
-    (1, 8, 3)
+>>> import numpy as np
+>>> from n3fit.vpinterface import N3PDF
+>>> from n3fit.model_gen import pdfNN_layer_generator
+>>> from validphys.pdfgrids import xplotting_grid
+>>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+>>> fake_x = np.linspace(1e-3,0.8,3)
+>>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+>>> n3pdf = N3PDF(pdf_model)
+>>> res = xplotting_grid(n3pdf, 1.6, fake_x)
+>>> res.grid_values.error_members().shape
+(1, 8, 3)
 
 
 """
@@ -25,7 +25,6 @@ import logging
 import numpy as np
 import numpy.linalg as la
 
-from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
 from validphys.covmats import covmat_from_systematics, sqrt_covmat
@@ -225,9 +224,13 @@ class N3PDF(PDF):
         otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
         """
         # If no replica is explicitly requested, get the preprocessing layer for the first model
+        # remember replicas start counting at one
         if replica is None:
             replica = 1
-        # Replicas start counting in 1 so:
+
+        # Keep the import here to avoid loading the backend when it is not necessary
+        from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
+
         preprocessing_layer = self._models[replica - 1].get_layer(PREPROCESSING_LAYER_ALL_REPLICAS)
 
         alphas_and_betas = None
