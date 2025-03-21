@@ -4,6 +4,7 @@ import fiatlux
 import numpy as np
 import yaml
 
+from eko import basis_rotation
 from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.api import API
@@ -94,8 +95,8 @@ def test_photon():
             photon_fiatlux_qin = np.array([lux.EvaluatePhoton(x, eko.mu20).total for x in XGRID])
             photon_fiatlux_qin /= XGRID
             # construct PDFs
-            pdfs_init = np.zeros((len(eko.bases.inputpids), len(XGRID)))
-            for j, pid in enumerate(eko.bases.inputpids):
+            pdfs_init = np.zeros((len(basis_rotation.flavor_basis_pids), len(XGRID)))
+            for j, pid in enumerate(basis_rotation.flavor_basis_pids):
                 if pid == 22:
                     pdfs_init[j] = photon_fiatlux_qin
                     ph_id = j
