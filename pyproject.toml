@@ -73,7 +73,7 @@ reportengine = ">=0.32"
 psutil = "*"
 tensorflow = "*"
 keras = "^3.1"
-eko = "^0.14.1"
+eko = "^0.15.1"
 joblib = "*"
 # Hyperopt
 hyperopt = "*"
