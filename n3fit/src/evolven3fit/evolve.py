@@ -96,13 +96,39 @@ def evolve_fit(
         else:
             raise ValueError(f"dump_eko not provided and {eko_path=} not found")
 
-    with eko.EKO.edit(eko_path) as eko_op:
+    # Assume the EKO can be used with no rotation and open it in read-only mode
+    # inside a try-finally block to make sure the eko is closed at the end
+    try:
+        eko_op = eko.EKO.read(eko_path)
+
         # Read the cards directly from the eko to make sure they are consistent
         theory = eko_op.theory_card
         op = eko_op.operator_card
         # And dump them to the log
         _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
         _logger.debug(f"Operator card: {json.dumps(op.raw)}")
+
+        # Check whether it needs to be modified
+        eko_xgrid = eko_op.xgrid
+        if XGrid(x_grid) != eko_xgrid:
+            eko_op.close()
+            eko_op = eko.EKO.edit(eko_path)
+
+            # This is a workaround for EKOS created with 0.13.4
+            # in 0.13.4 the xgrid corresponds to the (internal) interpolation grid
+            if eko_op.metadata.version == "0.13.4":
+                # Prepare an "identity" rotation
+                eko_xgrid = XGrid(x_grid)
+
+            for i, elem in eko_op.items():
+                eko_op[i] = manipulate.xgrid_reshape(
+                    elem,
+                    eko_xgrid,
+                    op.configs.interpolation_polynomial_degree,
+                    targetgrid=XGrid(x_grid),
+                    inputgrid=XGrid(x_grid),
+                )
+            eko_op.xgrid = XGrid(x_grid)
 
         # Modify the info file with the fit-specific info
         info = info_file.build(theory, op, 1, info_update={})
@@ -124,17 +150,6 @@ def evolve_fit(
             pdfgrid = np.append(pdfgrid[:, -1].reshape(x_grid.size, 1), pdfgrid[:, :-1], axis=1)
             # and divide by x
             all_replicas.append(pdfgrid.T / x_grid)
-
-        # reshape the xgrid eko if necessary
-        if XGrid(x_grid) != eko_op.xgrid:
-            for _, elem in eko_op.items():
-                elem = manipulate.xgrid_reshape(
-                    elem,
-                    eko_op.xgrid,
-                    op.configs.interpolation_polynomial_degree,
-                    targetgrid=XGrid(x_grid),
-                    inputgrid=XGrid(x_grid),
-                )
 
         # output is {(Q2, nf): (replica, flavour, x)}
         all_evolved, _ = apply.apply_grids(eko_op, np.array(all_replicas))
@@ -163,9 +178,11 @@ def evolve_fit(
                 )
                 blocks.append(block)
             dump_evolved_replica(blocks, usr_path, replica + 1)
+    finally:
+        eko_op.close()
 
     # remove folder:
-    # The function dump_evolved_replica dumps the replica files in a temporary folder
+    # The function dump_evolved_replica uses a temporary folder
     # We need then to remove it after fixing the position of those replica files
     (usr_path / "nnfit" / usr_path.stem).rmdir()
 
