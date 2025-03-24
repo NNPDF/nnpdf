@@ -1,4 +1,5 @@
 from collections import defaultdict
+import dataclasses
 import json
 import logging
 import pathlib
@@ -96,39 +97,50 @@ def evolve_fit(
         else:
             raise ValueError(f"dump_eko not provided and {eko_path=} not found")
 
-    # Assume the EKO can be used with no rotation and open it in read-only mode
-    # inside a try-finally block to make sure the eko is closed at the end
-    try:
-        eko_op = eko.EKO.read(eko_path)
-
-        # Read the cards directly from the eko to make sure they are consistent
+    # Open the EKO in read-only mode, if it needs to be manipulated keep it in memory
+    with eko.EKO.read(eko_path) as eko_op:
+        # Read the cards directly fro"m the eko to make sure they are consistent
         theory = eko_op.theory_card
         op = eko_op.operator_card
         # And dump them to the log
         _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
         _logger.debug(f"Operator card: {json.dumps(op.raw)}")
 
-        # Check whether it needs to be modified
-        eko_xgrid = eko_op.xgrid
-        if XGrid(x_grid) != eko_xgrid:
-            eko_op.close()
-            eko_op = eko.EKO.edit(eko_path)
+        eko_original_xgrid = eko_op.xgrid
+        if XGrid(x_grid) != eko_original_xgrid:
+            # If the xgrid of the eko is not directly usable, construct a copy in memory
+            # by replacing the internal inventory of operators in a readonly copy
+            new_xgrid = XGrid(x_grid)
+            new_metadata = dataclasses.replace(eko_op.metadata, xgrid=new_xgrid)
 
-            # This is a workaround for EKOS created with 0.13.4
-            # in 0.13.4 the xgrid corresponds to the (internal) interpolation grid
-            if eko_op.metadata.version == "0.13.4":
-                # Prepare an "identity" rotation
-                eko_xgrid = XGrid(x_grid)
+            new_operators = {}
+            for target_key in eko_op.operators:
+                elem = eko_op[target_key.ep]
 
-            for i, elem in eko_op.items():
-                eko_op[i] = manipulate.xgrid_reshape(
+                if eko_op.metadata.version == "0.13.4":
+                    # For eko 0.13.4 xgrid is the internal interpolation so we need to check
+                    # whether the rotation is truly needed
+                    # <in practice> this means checking whether the operator shape matches the grid
+                    oplen = elem.operator.shape[-1]
+                    if oplen != len(eko_original_xgrid):
+                        # The operator and its xgrid have different shape
+                        # either prepare an identity, or this EKO is not supported
+                        if oplen != len(x_grid):
+                            raise ValueError(
+                                f"The operator at {eko_path} is not usable, version not supported"
+                            )
+                        eko_original_xgrid = XGrid(x_grid)
+
+                new_operators[target_key] = manipulate.xgrid_reshape(
                     elem,
-                    eko_xgrid,
+                    eko_original_xgrid,
                     op.configs.interpolation_polynomial_degree,
                     targetgrid=XGrid(x_grid),
                     inputgrid=XGrid(x_grid),
                 )
-            eko_op.xgrid = XGrid(x_grid)
+
+            new_inventory = dataclasses.replace(eko_op.operators, cache=new_operators)
+            eko_op = dataclasses.replace(eko_op, metadata=new_metadata, operators=new_inventory)
 
         # Modify the info file with the fit-specific info
         info = info_file.build(theory, op, 1, info_update={})
@@ -178,8 +190,6 @@ def evolve_fit(
                 )
                 blocks.append(block)
             dump_evolved_replica(blocks, usr_path, replica + 1)
-    finally:
-        eko_op.close()
 
     # remove folder:
     # The function dump_evolved_replica uses a temporary folder
