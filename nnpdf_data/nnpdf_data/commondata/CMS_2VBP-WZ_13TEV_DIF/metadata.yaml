@@ -1,0 +1,41 @@
+setname: 'CMS_2VBP-WZ_13TEV_DIF'
+
+nnpdf_metadata:
+  nnpdf31_process: "2VBP-WZ"
+  experiment: "CMS"
+
+arXiv:
+  url: "https://arxiv.org/abs/1901.03428"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1713417"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1713417"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "", label: '', units: ''}
+  observable_name: 
+  process_type: 
+  ndata: 
+  tables: []
+  kinematics:
+    variables:
+      name: {description: "", label: '', units: ''}
+    file: 
+  data_central: 
+  data_uncertainties:
+  - 
+  kinematic_coverage: [name]
+  plotting:
+    dataset_label: ''
+    x_scale: 
+    plot_x: 
+    y_label: ''
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
