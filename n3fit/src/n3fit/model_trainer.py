@@ -16,7 +16,7 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import NN_LAYER_ALL_REPLICAS, Lambda, MetaModel, callbacks, clear_backend_state
+from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
@@ -946,8 +946,12 @@ class ModelTrainer:
 
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
+            luxset_members = self.lux_params["luxset"].get_members() - 1  # -1 is for replica 0
+            # we take the MOD of the luxset_members to avoid failing due to limited number of
+            # replicas in the luxset
+            photonreplicas = tuple(r % luxset_members for r in self.replicas)
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=photonreplicas
             )
         else:
             photons = None
