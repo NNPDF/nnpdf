@@ -26,7 +26,7 @@ def plot_all_sets(set_1, set_3, set_2, n_fits):
     ax.plot(set_1.keys(), s1, linewidth=3, label=r"$P_{\rm flag}, S_1$")
     ax.plot(set_2.keys(), s2, linestyle='--', linewidth=3, label=r"$P_{\rm flag}, S_2$")
     ax.plot(set_3.keys(), s3, linestyle=':', linewidth=3, label=r"$P_{\rm flag}, S_3$")
-    ax.set_title(r"HERA I + II $\sigma_{e^+p}$, $E_p$=575 GeV")
+
     ax.set_xlabel(r"$Z$", fontsize='large')
     ax.set_ylabel(r"$P_{\rm flag}$", fontsize='large')
     ax.legend(fontsize='large')
@@ -54,7 +54,6 @@ def plot_1_minus_all_sets(set_1, set_3, set_2, n_fits):
         set_3.keys(), 1 - np.array(s3), linewidth=3, linestyle=":", label=r"$P_{\rm flag}, S_3$"
     )
 
-    ax.set_title(r"HERA I + II $\sigma_{e^+p}$, $E_p$=575 GeV")
     ax.set_xlabel(r"$Z$", fontsize='large')
     ax.set_ylabel(r"$1 - P_{\rm flag}$", fontsize='large')
     ax.legend(fontsize='large')
@@ -92,7 +91,7 @@ def plot_probability_inconsistent(probability_inconsistent, set_1, weighted_data
 
     ax.set_xlabel(r"$Z$", fontsize='large')
     ax.set_ylabel(r"$P_{\rm flag}$", fontsize='large')
-    ax.set_title(r"HERA I + II $\sigma_{e^+p}$, $E_p$=575 GeV")
+
     ax.legend(fontsize='large')
     return fig
 
@@ -127,6 +126,6 @@ def plot_probability_consistent(probability_inconsistent, comp_set_1, weighted_d
 
     ax.set_xlabel(r"$Z$", fontsize='large')
     ax.set_ylabel(r"$1 - P_{\rm flag}$", fontsize='large')
-    ax.set_title(r"HERA I + II $\sigma_{e^+p}$, $E_p$=575 GeV")
+
     ax.legend(fontsize='large')
     return fig
