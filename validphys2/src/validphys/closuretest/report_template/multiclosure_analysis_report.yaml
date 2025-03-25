@@ -19,13 +19,13 @@ use_cuts: internal
 n_fit_max: 2
 n_fit: 20
 n_rep_max: 100
-n_rep: 60
+n_rep: 100
 n_boot_multiclosure: 100
-rng_seed_mct_boot: 1234
 
 
 lambdavalues:
   - label: "LAMBDA02"
+    title: "DIS Inconsistent"
     lambda_value: 0.2
     use_t0: True
     t0pdfset: 210223-mw-000_fakepdf
@@ -38,13 +38,17 @@ lambdavalues:
 ## Templates
 template: multiclosure_template.md
 
-single_point_report:
+bias_tables:
   meta: Null
-  template: single_point_template.md
+  template: bias_tables_template.md
 
-pca_report:
+xi_tables:
   meta: Null
-  template: pca_template.md
+  template: xi_tables_template.md
+
+xi_plots:
+  meta: Null
+  template: xi_plots_template.md
 
 ratio_bias_variance_report:
   meta: Null
