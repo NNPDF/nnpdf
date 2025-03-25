@@ -17,24 +17,116 @@ version_comment: "Initial implementation"
 
 implemented_observables:
 
-- observable: {description: "", label: '', units: ''}
-  observable_name: 
-  process_type: 
-  ndata: 
-  tables: []
+- observable: {description: "fractional cross section w.r.t. rapidity of Z, in all channels", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
+  observable_name: PTZ-COMB
+  process_type: PTZ
+  ndata: 11
+  tables: [9]
   kinematics:
     variables:
-      name: {description: "", label: '', units: ''}
-    file: 
-  data_central: 
+      ptZ: {description: "pT of Z", label: '$p_{T,Z}$$', units: 'GeV'}
+    file: kinematics_ptz_comb.yaml
+  data_central: data_ptz_comb.yaml
   data_uncertainties:
-  - 
-  kinematic_coverage: [name]
+  - uncertainties_ptz_comb.yaml
+  kinematic_coverage: [ptZ]
   plotting:
-    dataset_label: ''
-    x_scale: 
-    plot_x: 
-    y_label: ''
+    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    x_scale: log
+    plot_x: ptZ
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
+
+- observable: {description: "fractional cross section w.r.t. rapidity of Z, in eee channel", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
+  observable_name: PTZ-EEE
+  process_type: PTZ
+  ndata: 11
+  tables: [7]
+  kinematics:
+    variables:
+      ptZ: {description: "pT of Z", label: '$p_{T,Z}$$', units: 'GeV'}
+    file: kinematics_ptz_eee.yaml
+  data_central: data_ptz_eee.yaml
+  data_uncertainties:
+  - uncertainties_ptz_eee.yaml
+  kinematic_coverage: [ptZ]
+  plotting:
+    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    x_scale: log
+    plot_x: ptZ
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
+
+- observable: {description: "fractional cross section w.r.t. rapidity of Z, in eem channel", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
+  observable_name: PTZ-EEM
+  process_type: PTZ
+  ndata: 11
+  tables: [7]
+  kinematics:
+    variables:
+      ptZ: {description: "pT of Z", label: '$p_{T,Z}$$', units: 'GeV'}
+    file: kinematics_ptz_eem.yaml
+  data_central: data_ptz_eem.yaml
+  data_uncertainties:
+  - uncertainties_ptz_eem.yaml
+  kinematic_coverage: [ptZ]
+  plotting:
+    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    x_scale: log
+    plot_x: ptZ
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
+
+- observable: {description: "fractional cross section w.r.t. rapidity of Z, in emm channel", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
+  observable_name: PTZ-EMM
+  process_type: PTZ
+  ndata: 11
+  tables: [8]
+  kinematics:
+    variables:
+      ptZ: {description: "pT of Z", label: '$p_{T,Z}$$', units: 'GeV'}
+    file: kinematics_ptz_emm.yaml
+  data_central: data_ptz_emm.yaml
+  data_uncertainties:
+  - uncertainties_ptz_emm.yaml
+  kinematic_coverage: [ptZ]
+  plotting:
+    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    x_scale: log
+    plot_x: ptZ
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
+
+- observable: {description: "fractional cross section w.r.t. rapidity of Z, in mmm channel", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
+  observable_name: PTZ-MMM
+  process_type: PTZ
+  ndata: 11
+  tables: [8]
+  kinematics:
+    variables:
+      ptZ: {description: "pT of Z", label: '$p_{T,Z}$$', units: 'GeV'}
+    file: kinematics_ptz_mmm.yaml
+  data_central: data_ptz_mmm.yaml
+  data_uncertainties:
+  - uncertainties_ptz_mmm.yaml
+  kinematic_coverage: [ptZ]
+  plotting:
+    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    x_scale: log
+    plot_x: ptZ
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
   theory:
     FK_tables:
     - - 
