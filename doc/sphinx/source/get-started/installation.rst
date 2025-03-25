@@ -3,11 +3,16 @@ Installing the code on Linux or macOS
 
 Installing the NNPDF code requires a system with a recent version of python and
 either a Linux-based operating system or macOS.
+At least 4 GB of storage are needed in order to download all data and theory ingredients
+necessary for a fit or most analyses.
+Some specific features such as theory uncertainties or QED fits might require more space.
+
 The code can be installed either with :ref:`conda <condainstall>` or with :ref:`pip <pip>`,
 the former offering a "batteries included" approach where non-python software
 such as LHAPDF and pandoc will be installed automatically.
 We also made available an automatic installation of conda, see :ref:`bootstrap-installation`
 to install conda as well as set up relevant channels.
+
 
 If you plan to contribute to the development of NNPDF, please see :ref:`Source`.
 
@@ -33,6 +38,7 @@ You are now ready to use the NNPDF code! Check out the :ref:`Tutorials`.
 .. note::
 
    Make sure to be using a recent version of `conda <https://docs.anaconda.com/miniconda/install/>`_. These instructions have been tested with conda 25.
+
 
 
 .. _pip:
@@ -84,7 +90,7 @@ a helper script exists to aid the configuration using conda. To obtain it use:
    each time you want to use the environment). On remote machines, the
    addition to .bashrc should read as follows
 
-   ::
+::
 
         if shopt -q login_shell; then
             . <path-to-conda>/etc/profile.d/conda.sh
@@ -147,3 +153,36 @@ This will open a bash shell with the ``nnpdf`` environment already activated, wi
 all binaries and scripts from the NNPDF framework.
 
 .. _NNPDF GitHub Packages: https://github.com/NNPDF/nnpdf/pkgs/container/nnpdf
+
+
+.. _dependencies:
+
+Dependencies and requirements
+-----------------------------
+
+The NNPDF framework would not be possible with a number of dependencies.
+These are automatically installed when using conda and the full list can be consulted in the
+`conda recipe <https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml#L20>`_ available in the repository.
+
+Below we list some of the most relevant external libraries than underpin the different aspects of this framework.
+
+::
+
+  LHAPDF
+
+  keras
+  tensorflow
+
+  numpy
+  pandas
+  scipy
+  matplotlib
+  numba
+
+
+
+
+
+
+
+

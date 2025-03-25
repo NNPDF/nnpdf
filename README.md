@@ -2,7 +2,10 @@
   <img src="doc/sphinx/source/_static/LogoNNPDF.png" height=100>
 </div>
 
-![Build status](https://github.com/NNPDF/nnpdf/actions/workflows/tests.yml/badge.svg)
+[![NNPDF test suite](https://github.com/NNPDF/nnpdf/actions/workflows/all_tests_nnpdf.yml/badge.svg)](https://github.com/NNPDF/nnpdf/actions/workflows/all_tests_nnpdf.yml)
+[![Docs](https://github.com/NNPDF/nnpdf/actions/workflows/upload_docs.yml/badge.svg)](https://github.com/NNPDF/nnpdf/actions/workflows/upload_docs.yml)
+[![Commondata](https://github.com/NNPDF/nnpdf/actions/workflows/check_newcd.yml/badge.svg)](https://github.com/NNPDF/nnpdf/actions/workflows/check_newcd.yml)
+
 [![DOI](https://zenodo.org/badge/118135201.svg)](https://zenodo.org/badge/latestdoi/118135201)
 
 # NNPDF: An open-source machine learning framework for global analyses of parton distributions
@@ -20,7 +23,7 @@ The documentation is available at <https://docs.nnpdf.science/>
 ## Install
 
 See the [NNPDF installation guide](https://docs.nnpdf.science/get-started/installation.html)
-for instructions on how to install and use the code.
+for instructions on how to install and use the code, requirements and [dependencies](https://docs.nnpdf.science/get-started/installation.html#dependencies-and-requirements)
 As a first step we recommend to follow one of the [tutorials](https://docs.nnpdf.science/tutorials/run-fit.html).
 
 We follow a rolling development model where the tip of the master branch is
@@ -62,3 +65,11 @@ for help and questions as well.
 
 If you would like contribute to the code, please follow the [Contribution
 Guidelines](https://docs.nnpdf.science/contributing/index.html).
+
+
+
+When developing locally you can test your changes with pytest, running from the root of the repository:
+
+```
+  pytest --mpl --pyargs n3fit validphys
+```
