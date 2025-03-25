@@ -53,17 +53,8 @@ The recommended resources are:
 ===================================  =================================== ==================================================================
 Resource                             ID                                  Description
 ===================================  =================================== ==================================================================
-NLO theoryid                         208                                 NNPDF4.0 NLO theory predictions with central scales
-NNLO theoryid                        162                                 Low precision NNLO theory predictions with central scales
-NLO theoryid for scale variations 1  163                                 Central scales, :math:`k_F = 1, k_R = 1`
-NLO theoryid for scale variations 2  173                                 :math:`k_F = 0.5, k_R = 0.5`
-NLO theoryid for scale variations 3  174                                 :math:`k_F = 1, k_R = 0.5`
-NLO theoryid for scale variations 4  175                                 :math:`k_F = 2, k_R = 0.5`
-NLO theoryid for scale variations 5  176                                 :math:`k_F = 0.5, k_R = 1`
-NLO theoryid for scale variations 6  177                                 :math:`k_F = 2, k_R = 1`
-NLO theoryid for scale variations 7  178                                 :math:`k_F = 0.5, k_R = 2`
-NLO theoryid for scale variations 8  179                                 :math:`k_F = 1, k_R = 2`
-NLO theoryid for scale variations 9  180                                 :math:`k_F = 2, k_R = 2`
+NLO theoryid                         40_000_001                          NNPDF4.0 NLO theory predictions with central scales
+NNLO theoryid                        40_000_000                          NNPDF4.0 NNLO theory predictions with central scales
 NLO pdf                              NNPDF40_nlo_as_01180                NNPDF4.0 NLO PDF set with 100 replicas (+ central replica)
 NNLO pdf                             NNPDF40_nnlo_as_01180               NNPDF4.0 NNLO PDF set with 100 replicas (+ central replica)
 NNLO pdf hessian                     NNPDF40_nnlo_as_01180_hessian       NNPDF4.0 NNLO hessian PDF set generated from replicas

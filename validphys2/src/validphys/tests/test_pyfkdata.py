@@ -8,7 +8,7 @@ from validphys.convolution import central_predictions, linear_predictions, predi
 from validphys.fkparser import load_fktable
 from validphys.loader import FallbackLoader as Loader
 from validphys.results import PositivityResult, ThPredictionsResult
-from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, POSITIVITIES, THEORYID, THEORYID_NEW
+from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, POSITIVITIES, THEORYID, THEORYID
 
 DS1 = DATA[2]["dataset"]  # hadronic
 DS2 = DATA[0]["dataset"]  # dis
@@ -19,11 +19,11 @@ def test_basic_loading():
     l = Loader()
     # Test both with and without cfactors, and load both DIS and hadronic
     for cfac in ((), ("QCD",)):
-        ds = l.check_dataset(DS1, theoryid=THEORYID_NEW, cfac=cfac)
+        ds = l.check_dataset(DS1, theoryid=THEORYID, cfac=cfac)
         res = load_fktable(ds.fkspecs[0])
         assert res.ndata == 50
         assert isinstance(res.sigma, pd.DataFrame)
-    ds = l.check_dataset(DS2, theoryid=THEORYID_NEW)
+    ds = l.check_dataset(DS2, theoryid=THEORYID)
     res = load_fktable(ds.fkspecs[0])
     assert res.ndata == 292
     assert isinstance(res.sigma, pd.DataFrame)
@@ -31,7 +31,7 @@ def test_basic_loading():
 
 def test_cuts():
     l = Loader()
-    ds = l.check_dataset(DS1, theoryid=THEORYID_NEW, cfac=("QCD",), variant="legacy")
+    ds = l.check_dataset(DS1, theoryid=THEORYID, cfac=("QCD",), variant="legacy")
     table = load_fktable(ds.fkspecs[0])
     # Check explicit cuts
     newtable = table.with_cuts([0, 1])
@@ -41,7 +41,7 @@ def test_cuts():
     # Check empty cuts
     assert newtable.with_cuts(None) is newtable
     # Check loaded cuts
-    ds = l.check_dataset(DS2, theoryid=THEORYID_NEW, variant="legacy")
+    ds = l.check_dataset(DS2, theoryid=THEORYID, variant="legacy")
     table = load_fktable(ds.fkspecs[0])
     newtable = table.with_cuts(ds.cuts)
     assert len(newtable.sigma.index.get_level_values(0).unique()) == len(ds.cuts.load())
@@ -67,7 +67,7 @@ def test_predictions(pdf_name):
     ]
     for daset in datasets:
         daset["variant"] = "legacy"
-        ds = l.check_dataset(**daset, theoryid=THEORYID_NEW)
+        ds = l.check_dataset(**daset, theoryid=THEORYID)
         preds = predictions(ds, pdf)
         core_predictions = ThPredictionsResult.from_convolution(pdf, ds)
         # Uses rawdata since we want to check all members for which we computed the convolution
@@ -96,13 +96,13 @@ def test_positivity(pdf_name):
     pdf = l.check_pdf(pdf_name)
     for posset in POSITIVITIES:
         # Use the loader to load the positivity dataset
-        ps = l.check_posset(setname=posset, theoryID=THEORYID_NEW, postlambda=1e6, rules=())
+        ps = l.check_posset(setname=posset, theoryID=THEORYID, postlambda=1e6, rules=())
         preds = predictions(ps, pdf)
         core_predictions = PositivityResult.from_convolution(pdf, ps)
         assert_allclose(preds.values, core_predictions.rawdata)
         # Now do the same with the API
         api_predictions = API.positivity_predictions_data_result(
-            theoryid=THEORYID_NEW,
+            theoryid=THEORYID,
             use_cuts="internal",
             pdf=pdf_name,
             posdataset={"dataset": posset, "maxlambda": 1e6},
