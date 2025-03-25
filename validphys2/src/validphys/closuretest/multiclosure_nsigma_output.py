@@ -8,12 +8,7 @@ import numpy as np
 from reportengine.figure import figure
 import matplotlib.pyplot as plt
 
-import sys
-
-sys.path.insert(0, "./")
-from multiclosure_nsigma import Z_ALPHA_RANGE
-
-# from validphys.closuretest.multiclosure_nsigma import Z_ALPHA_RANGE
+from validphys.closuretest.multiclosure_nsigma import Z_ALPHA_RANGE
 
 
 @figure
