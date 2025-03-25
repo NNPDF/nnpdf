@@ -1,45 +1,7 @@
 """
-This module contains the functions used in Sec. 4 of paper: arXiv: 2503.xxxxx
+This module contains the functions used in Sec. 4 of paper: arXiv: 2503.17447
 
-We investigate the consistency of a dataset ``A``. ``A`` is considered consistent if it is consistent
-with the assumption of Gaussianity (internal consistency) and with the rest of the datasets
-that are not ``A`` (external consistency) and are here labeled as ``B``.
-
-We first define the following sets:
-
-.. math::
-
-    1_\alpha = \\{i \\mid n_\sigma(A)^i > Z_\alpha\\} \\quad \\text{(set 1)}.
-
-    2_\alpha = \\{i \\mid n_{\sigma, wA}(B)^i - n_\sigma(B)^i > Z_\alpha\\} \\quad \\text{(set 2)}.
-
-    3_\alpha = \\{i \\mid n_{\sigma, wA}(A)^i > Z_\alpha\\} \\quad \\text{(set 3)}.
-
-Here:
-
-- ``i`` stands for the index of the fits,
-- \(n_\sigma(A)^i\) is the \(n_\sigma\) value computed for fit \(i\) and dataset \(A\),
-- \(n_{\sigma, wA}(j)^i\) is the \(n_\sigma\) value computed on dataset \(j\) for fit \(i\) in which \(A\) is weighted, and
-- \(Z_\alpha\) is the critical value for a one-sided composite hypothesis test.
-
-The set of fits for which the dataset ``A`` is considered inconsistent is defined as:
-
-.. math::
-
-    I_\alpha = (1_\alpha \cap 2_\alpha) \cup (3_\alpha).
-
-The probability of dataset ``A`` being inconsistent is defined as:
-
-.. math::
-
-    P(A \text{ inconsistent}) = \frac{|I_\alpha|}{N}, \quad N \text{ is the total number of fits.}
-
-And:
-
-.. math::
-
-    P(A \text{ consistent}) = 1 - P(\text{inconsistent}).
-
+`set_1`, `set_2`, and `set_3` correspond to \(\S_1\), \(\S_2\), and \(\S_3\) in Eq. 4.3, 4.6, and 4.7.
 """
 
 import dataclasses
@@ -124,7 +86,7 @@ dataspecs_multiclosurefits_nsigma = collect("multiclosurefits_nsigma", ("dataspe
 @dataclasses.dataclass
 class NsigmaAlpha:
     """
-    Dataclass storing the set 1 alpha values (can be used both for the set 1 and its complement).
+    Dataclass storing the set 1 values (can be used both for the set 1 and its complement).
 
     Attributes
     ----------
@@ -198,14 +160,14 @@ Collect complement set 1 alpha over dataspecs.
 dataspecs_comp_nsigma_alpha = collect("comp_nsigma_alpha", ("dataspecs",))
 
 
-def set_1_alpha(dataspecs_nsigma_alpha: list) -> dict:
+def set_1(dataspecs_nsigma_alpha: list) -> dict:
     """
     Returns the set 1 alpha values, these are defined as
 
-    1_{\alpha} = {i | n_{\sigma}^{i} > Z_{\alpha}}
+    S_1 = {j | n_{\sigma}^{j} > Z_{\alpha}}
 
-    where i is the index of the fit and n_{\sigma}^{i} is the n-sigma value computed
-    for fit i.
+    where j is the index of the fit and n_{\sigma}^{j} is the n-sigma value computed
+    for fit j.
 
     Parameters
     ----------
@@ -221,11 +183,11 @@ def set_1_alpha(dataspecs_nsigma_alpha: list) -> dict:
             return dataspec_nsigma.alpha_dict
 
 
-def set_3_alpha(dataspecs_nsigma_alpha: list) -> dict:
+def set_2(dataspecs_nsigma_alpha: list) -> dict:
     """
     Same as the set 1 alpha values, but for the weighted fits.
 
-    3_{\alpha} = {i | n_{weighted, \sigma}^{i} > Z_{\alpha}}
+    S_2 = {i | n_{weighted, \sigma}^{i} > Z_{\alpha}}
 
     where i is the index of the fit and n_{weighted, \sigma}^{i} is the n-sigma value computed
     on the weighted dataset for fit i.
@@ -244,7 +206,7 @@ def set_3_alpha(dataspecs_nsigma_alpha: list) -> dict:
             return dataspec_nsigma.alpha_dict
 
 
-def comp_set_1_alpha(dataspecs_comp_nsigma_alpha: list) -> dict:
+def comp_set_1(dataspecs_comp_nsigma_alpha: list) -> dict:
     """
     Returns the complement set 1 alpha values.
     """
@@ -253,12 +215,12 @@ def comp_set_1_alpha(dataspecs_comp_nsigma_alpha: list) -> dict:
             return dataspec_nsigma.alpha_dict
 
 
-def def_set_2(
+def def_set_3(
     dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str, complement: bool = False
 ) -> dict:
     """
-    Defines how the set 2 alpha values are computed.
-    It allows to compute both the set 2 and its complement.
+    Defines how the set 3 values are computed.
+    It allows to compute both the set 3 and its complement.
 
     Parameters
     ----------
@@ -267,7 +229,7 @@ def def_set_2(
     weighted_dataset: str
         The name of the weighted dataset.
     complement: bool, default=False
-        Whether to compute the complement set 2 alpha values.
+        Whether to compute the complement set 3 alpha values.
 
     Returns
     -------
@@ -291,7 +253,7 @@ def def_set_2(
     # (needed to properly compare fits)
     df_ref = df_ref[df_weight.columns]
 
-    set2_alpha = {}
+    set3_alpha = {}
 
     for z_alpha in Z_ALPHA_RANGE:
         if complement:
@@ -299,53 +261,48 @@ def def_set_2(
         else:
             columns_bools = np.any((df_weight - df_ref).values > z_alpha, axis=0)
 
-        set2_alpha[z_alpha] = set(df_weight.columns[columns_bools])
+        set3_alpha[z_alpha] = set(df_weight.columns[columns_bools])
 
-    return set2_alpha
+    return set3_alpha
 
 
-def set_2_alpha(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str) -> dict:
+def set_3(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str) -> dict:
     """
-    Computes the set 2 alpha values. The set 2 is defined as:
+    Computes the set 3 alpha values. The set 3 is defined as:
 
-    2_{\alpha} = {i | n_{weighted, \sigma}^{i} - n_{ref, \sigma}^{i}>  + Z_{\alpha}}
+    S_3 = {i | n_{weighted, \sigma}^{i} - n_{ref, \sigma}^{i}>  + Z_{\alpha}}
 
     where the n-sigma is computed on all datasets that are not the weighted dataset.
     Moreover if for a fit i any dataset has a n-sigma value greater than Z_{\alpha}, then
     the fit i is included in the set.
     """
-    return def_set_2(dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=False)
+    return def_set_3(dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=False)
 
 
-def probability_inconsistent(
-    set_2_alpha, set_1_alpha, set_3_alpha, comp_set_1_alpha, n_fits, weighted_dataset
-):
+def probability_inconsistent(set_1, set_2, set_3, comp_set_1, n_fits, weighted_dataset):
     """
-    The set of inconsistent fits I_alpha can be defined in different ways, two possible cases are:
+    The set of inconsistent fits can be defined in different ways, two possible cases are:
 
-    1. I_alpha_1 = (1_alpha intersect 2_alpha) union (3_alpha)
+    1. C_2: (S_1 intersect S_2) union (S_3)
 
-    2. I_alpha_2 = I_alpha_1 union (~1_alpha intersect 2_alpha)
+    2. C_3 = S_1 union (~S_1 intersect S_3)
 
     The probability of a dataset being inconsistent is defined as:
             P(inconsistent) = |I_alpha| / N
     where N is the total number of fits.
-
     """
 
-    tagged_rates_cons = []
-    tagged_rates = []
-    for z_alpha in set_2_alpha.keys():
-        set_2_inters_1 = set_2_alpha[z_alpha].intersection(set_1_alpha[z_alpha])
-        set_3 = set_3_alpha[z_alpha]
+    C_2 = []
+    C_3 = []
+    for z_alpha in set_3.keys():
+        set_3_inters_1 = set_3[z_alpha].intersection(set_1[z_alpha])
+        s2 = set_2[z_alpha]
 
-        set_tagged_fits = set_2_inters_1.union(set_3)
+        set_tagged_fits = set_3_inters_1.union(s2)
 
-        tagged_rates_cons.append(len(set_tagged_fits) / n_fits)
+        C_2.append(len(set_tagged_fits) / n_fits)
 
-        set_tagged_fits = set_tagged_fits.union(
-            comp_set_1_alpha[z_alpha].intersection(set_2_alpha[z_alpha])
-        )
-        tagged_rates.append(len(set_tagged_fits) / n_fits)
+        set_tagged_fits = set_tagged_fits.union(comp_set_1[z_alpha].intersection(set_3[z_alpha]))
+        C_3.append(len(set_tagged_fits) / n_fits)
 
-    return tagged_rates, tagged_rates_cons
+    return C_3, C_2

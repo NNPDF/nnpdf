@@ -99,9 +99,9 @@ template_text: |
   ## Probabilities
 
   #### All sets Probabilities
-  {@plot_all_alpha_sets@}
+  {@plot_all_sets@}
 
-  {@plot_1_minus_all_alpha_sets@}
+  {@plot_1_minus_all_sets@}
 
   #### Prob of being inconsistent
   {@plot_probability_inconsistent@}
