@@ -10,7 +10,7 @@ dataset_inputs:
     - { dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, variant: legacy}
     - { dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy}
 
-theoryid: 162
+theoryid: 40_000_000
 
 dataspecs:
  - pdf: NNPDF40_nnlo_as_01180

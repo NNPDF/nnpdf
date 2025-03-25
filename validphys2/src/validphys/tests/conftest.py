@@ -69,9 +69,8 @@ POSITIVITIES = ["NNPDF_POS_2P24GEV_DYU", "NNPDF_POS_2P24GEV_F2S"]
 
 PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
-THEORYID = 162
-THEORYID_NEW = 399
-THEORY_QED = 398
+THEORYID = 40_000_000
+THEORY_QED = 40_000_100
 FIT = "NNPDF40_nnlo_low_precision_240916"
 FIT_3REPLICAS = "FIT_3REPLICAS_241108"
 FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_diffcuts_241108"
@@ -79,7 +78,7 @@ FIT_ITERATED = "NNPDF40_nnlo_low_precision_240916_iterated"
 PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_241121"
 
 
-base_config = dict(pdf=PDF, use_cuts='nocuts', dataset_inputs=DATA, theoryid=THEORYID_NEW, Q=10)
+base_config = dict(pdf=PDF, use_cuts='nocuts', dataset_inputs=DATA, theoryid=THEORYID, Q=10)
 
 
 @pytest.fixture(scope='module')
@@ -107,7 +106,7 @@ def data_internal_cuts_config(data_config):
 @pytest.fixture(scope='module')
 def data_internal_cuts_new_theory_config(data_internal_cuts_config):
     config = dict(data_internal_cuts_config)
-    config["theoryid"] = THEORYID_NEW
+    config["theoryid"] = THEORYID
     return config
 
 
@@ -133,7 +132,7 @@ def single_data_categorical_internal_cuts_config(data_internal_cuts_config):
     return {
         **data_internal_cuts_config,
         'dataset_input': SINGLE_CATEGORICAL,
-        'theoryid': THEORYID_NEW,
+        'theoryid': THEORYID,
     }
 
 

@@ -14,8 +14,8 @@ pdfs:
       label: NNLO hessian
 
 theoryids:
-    - 208
-    - 162
+    - 40_000_001
+    - 40_000_000
 use_cuts : internal
 
 dataset_inputs:

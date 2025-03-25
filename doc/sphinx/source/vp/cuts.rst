@@ -74,8 +74,8 @@ The following example demonstrates the first three options:
 
   # Used for intersection cuts
   cuts_intersection_spec:
-      - theoryid: 208
-      - theoryid: 162
+      - theoryid: 40_000_001
+      - theoryid: 40_000_000
 
   dataset_input: {dataset: ATLASDY2D8TEV}
 
