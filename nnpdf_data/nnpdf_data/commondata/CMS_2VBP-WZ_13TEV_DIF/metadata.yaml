@@ -31,7 +31,7 @@ implemented_observables:
   - uncertainties_ptz_comb.yaml
   kinematic_coverage: [ptZ]
   plotting:
-    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    dataset_label: 'CMS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
@@ -54,7 +54,7 @@ implemented_observables:
   - uncertainties_ptz_eee.yaml
   kinematic_coverage: [ptZ]
   plotting:
-    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    dataset_label: 'CMS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
@@ -77,7 +77,7 @@ implemented_observables:
   - uncertainties_ptz_eem.yaml
   kinematic_coverage: [ptZ]
   plotting:
-    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    dataset_label: 'CMS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
@@ -100,7 +100,7 @@ implemented_observables:
   - uncertainties_ptz_emm.yaml
   kinematic_coverage: [ptZ]
   plotting:
-    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    dataset_label: 'CMS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
@@ -123,7 +123,7 @@ implemented_observables:
   - uncertainties_ptz_mmm.yaml
   kinematic_coverage: [ptZ]
   plotting:
-    dataset_label: 'ATLAS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
+    dataset_label: 'CMS 13TeV WZ production: $\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
