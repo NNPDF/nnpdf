@@ -17,24 +17,70 @@ version_comment: "Initial implementation"
 
 implemented_observables:
 
-- observable: {description: "", label: '', units: ''}
-  observable_name: 
-  process_type: 
-  ndata: 
-  tables: []
+- observable: {description: "fiducial differential cross section wrt pT of Z", label: '$\frac{d\sigma_{fid}}{dp_{T,Z}}$', units: '$fb/GeV$'}
+  observable_name: PTZ
+  process_type: PTZ
+  ndata: 7
+  tables: [8]
   kinematics:
     variables:
-      name: {description: "", label: '', units: ''}
-    file: 
-  data_central: 
+      ptZ: {description: "rapidity of Z", label: '$p_{T,Z}$', units: 'GeV'}
+    file: kinematics_ptz.yaml
+  data_central: data_ptz.yaml
   data_uncertainties:
-  - 
-  kinematic_coverage: [name]
+  - uncertainties_ptz.yaml
+  kinematic_coverage: [ptZ]
   plotting:
-    dataset_label: ''
-    x_scale: 
-    plot_x: 
-    y_label: ''
+    dataset_label: 'ATLAS 13TeV WZ production: $\frac{d\sigma_{fid}}{dp_{T,Z}}$'
+    x_scale: log
+    plot_x: ptZ
+    y_label: '$\frac{d\sigma_{fid}}{dp_{T,Z}}$'
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
+
+- observable: {description: "fiducial differential cross section wrt pT of W", label: '$\frac{d\sigma_{fid}}{dp_{T,W}}$', units: '$fb/GeV$'}
+  observable_name: PTW
+  process_type: PTW
+  ndata: 7
+  tables: [10]
+  kinematics:
+    variables:
+      ptW: {description: "rapidity of W", label: '$p_{T,W}$', units: 'GeV'}
+    file: kinematics_ptw.yaml
+  data_central: data_ptw.yaml
+  data_uncertainties:
+  - uncertainties_ptw.yaml
+  kinematic_coverage: [ptW]
+  plotting:
+    dataset_label: 'ATLAS 13TeV WZ production: $\frac{d\sigma_{fid}}{dp_{T,W}}$'
+    x_scale: log
+    plot_x: ptW
+    y_label: '$\frac{d\sigma_{fid}}{dp_{T,W}}$'
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
+
+- observable: {description: "fiducial differential cross section wrt transverse mass of WZ", label: '$\frac{d\sigma_{fid}}{dm_{T,WZ}}$', units: '$fb/GeV$'}
+  observable_name: MTWZ
+  process_type: MTWZ
+  ndata: 7
+  tables: [12]
+  kinematics:
+    variables:
+      mtWZ: {description: "transverse mass of WZ", label: '$m_{T,WZ}$', units: 'GeV'}
+    file: kinematics_mtwz.yaml
+  data_central: data_mtwz.yaml
+  data_uncertainties:
+  - uncertainties_mtwz.yaml
+  kinematic_coverage: [mtWZ]
+  plotting:
+    dataset_label: 'ATLAS 13TeV WZ production: $\frac{d\sigma_{fid}}{dm_{T,WZ}}$'
+    x_scale: log
+    plot_x: mtWZ
+    y_label: '$\frac{d\sigma_{fid}}{dm_{T,WZ}}$'
   theory:
     FK_tables:
     - - 
