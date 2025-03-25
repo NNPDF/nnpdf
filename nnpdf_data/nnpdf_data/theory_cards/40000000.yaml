@@ -1,5 +1,5 @@
 ID: 40_000_000
-Comments: NNLO nFONLL theory. Equivalent to 700/708. 4.0 baseline.
+Comments: NNLO QCD theory. Equivalent to 4.0 baseline, DIS use nFONLL.
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
