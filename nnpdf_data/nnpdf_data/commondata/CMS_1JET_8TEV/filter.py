@@ -91,10 +91,26 @@ def filter_CMS_1JET_8TEV_uncertainties():
         / np.sqrt(2.0)
     )
 
+    # Uncorrelated systematic ucnertainties
+    df_uncorr = (
+        df_unc[[#'AbsoluteStat+','AbsoluteStat-',
+                'RelativeStatHF+','RelativeStatHF-',
+                #'RelativeStatEC2+','RelativeStatEC2-',
+                'RelativeStatFSR+','RelativeStatFSR-']]
+        * df_unc['Sigma'].values[:, np.newaxis]
+        / 100.0
+        / np.sqrt(2.0)
+    )
+    print(df_uncorr)
+    
     # Systematic Correlated Uncertainties (Unfolding + JES)
     df_JES = (
         df_unc.iloc[:, 10:].drop(
-            ['stat', 'uncor', 'Luminosity', 'Unfolding+', 'Unfolding-'], axis=1
+            ['stat', 'uncor', 'Luminosity', 'Unfolding+', 'Unfolding-',
+             #'AbsoluteStat+','AbsoluteStat-',
+             'RelativeStatHF+','RelativeStatHF-',
+             #'RelativeStatEC2+','RelativeStatEC2-',
+             'RelativeStatFSR+','RelativeStatFSR-'], axis=1
         )
         * df_unc['Sigma'].values[:, np.newaxis]
         / 100.0
@@ -102,7 +118,7 @@ def filter_CMS_1JET_8TEV_uncertainties():
     )
     # if a pair of uncertainties has the same sign keep only the one with the
     # largest absolute value and set the other one to zero.
-
+    df_uncorr = process_err_CMS_1JET_8TEV(df_uncorr)
     df_JES = process_err_CMS_1JET_8TEV(df_JES)
 
     # # NP corrections (SKIP)
@@ -131,7 +147,7 @@ def filter_CMS_1JET_8TEV_uncertainties():
 
     error_definition["uncorrelated_uncertainty"] = {
         "description": "uncorrelated systematic uncertainty",
-        "treatment": "MULT",
+        "treatment": "ADD",
         "type": "UNCORR",
     }
 
@@ -141,6 +157,13 @@ def filter_CMS_1JET_8TEV_uncertainties():
             "treatment": "MULT",
             "type": "CORR",
         }
+
+    for col in df_uncorr.columns:
+        error_definition[f"{col}"] = {
+            "description": f"uncorrelated systematic uncertainty, {col}",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        } 
 
     for col in df_JES:
         error_definition[f"{col}"] = {
@@ -165,6 +188,10 @@ def filter_CMS_1JET_8TEV_uncertainties():
         # JES uncertainties
         for col, m in zip(df_JES.columns, range(df_JES.to_numpy().shape[1])):
             error_value[f"{col}"] = float(df_JES.to_numpy()[n, m])
+
+        # uncorrelated systematic uncertainties
+        for col, m in zip(df_uncorr.columns, range(df_uncorr.to_numpy().shape[1])):
+            error_value[f"{col}"] = float(df_uncorr.to_numpy()[n, m])    
 
         # luminosity uncertainties
         error_value["luminosity_uncertainty"] = float(lum_unc[n])
