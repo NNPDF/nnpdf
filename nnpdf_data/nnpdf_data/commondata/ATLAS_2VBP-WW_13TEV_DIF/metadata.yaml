@@ -17,24 +17,70 @@ version_comment: "Initial implementation"
 
 implemented_observables:
 
-- observable: {description: "", label: '', units: ''}
-  observable_name: 
-  process_type: 
-  ndata: 
-  tables: []
+- observable: {description: "fiducial differential cross section wrt invariant mass of e + mu", label: '$\frac{d\sigma}{dm_{e\mu}}$', units: '$fb/GeV$'}
+  observable_name: MEM
+  process_type: MEM
+  ndata: 13
+  tables: [7]
   kinematics:
     variables:
-      name: {description: "", label: '', units: ''}
-    file: 
-  data_central: 
+      m_em: {description: "invariant mass of e + mu", label: '$m_{e\mu}$', units: 'GeV'}
+    file: kinematics_mem.yaml
+  data_central: data_mem.yaml
   data_uncertainties:
-  - 
-  kinematic_coverage: [name]
+  - uncertainties_mem.yaml
+  kinematic_coverage: [m_em]
   plotting:
-    dataset_label: ''
-    x_scale: 
-    plot_x: 
-    y_label: ''
+    dataset_label: 'ATLAS 13 TeV WW production: $\frac{d\sigma}{dm_{e\mu}}$'
+    x_scale: log
+    plot_x: m_em
+    y_label: '$\frac{d\sigma}{dm_{e\mu}}$'
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
+
+- observable: {description: "fiducial differential cross section wrt pT of e + mu", label: '$\frac{d\sigma}{dp_{T,e\mu}}$', units: '$fb/GeV$'}
+  observable_name: PTEM
+  process_type: PTEM
+  ndata: 13
+  tables: [8]
+  kinematics:
+    variables:
+      pt_em: {description: "pT of e + mu", label: '$p_{T,e\mu}$', units: 'GeV'}
+    file: kinematics_ptem.yaml
+  data_central: data_ptem.yaml
+  data_uncertainties:
+  - uncertainties_ptem.yaml
+  kinematic_coverage: [pt_em]
+  plotting:
+    dataset_label: 'ATLAS 13 TeV WW production: $\frac{d\sigma}{dp_{T,e\mu}}$'
+    x_scale: log
+    plot_x: pt_em
+    y_label: '$\frac{d\sigma}{dp_{T,e\mu}}$'
+  theory:
+    FK_tables:
+    - - 
+    operation: 'null'
+
+- observable: {description: "fiducial differential cross section wrt absolute rapidity of e + mu", label: '$\frac{d\sigma}{d|y_{e\mu}|}$', units: '$fb$'}
+  observable_name: YEM
+  process_type: YEM
+  ndata: 13
+  tables: [9]
+  kinematics:
+    variables:
+      y_em: {description: "absolute rapidity of e + mu", label: '$|y_{e\mu}|$', units: ''}
+    file: kinematics_yem.yaml
+  data_central: data_yem.yaml
+  data_uncertainties:
+  - uncertainties_yem.yaml
+  kinematic_coverage: [y_em]
+  plotting:
+    dataset_label: 'ATLAS 13 TeV WW production: $\frac{d\sigma}{d|y_{e\mu}|}$'
+    x_scale: linear
+    plot_x: y_em
+    y_label: '$\frac{d\sigma}{d|y_{e\mu}|}$'
   theory:
     FK_tables:
     - - 
