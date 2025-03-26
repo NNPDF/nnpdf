@@ -5,6 +5,9 @@ name: All tests NNPDF
 # the custom actions in .github/actions/
 
 on: [push]
+concurrency:
+  group: ${{ github.head_ref }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   # https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
@@ -79,6 +82,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
+          name: nnpdf-package-${{ github.job }}-${{ strategy.job-index }}.tar.bz2
           path: ${{ env.CONDA_PREFIX }}/conda-bld/noarch/*.tar.bz2
 
   run_pytorch:
