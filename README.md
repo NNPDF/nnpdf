@@ -66,8 +66,6 @@ for help and questions as well.
 If you would like contribute to the code, please follow the [Contribution
 Guidelines](https://docs.nnpdf.science/contributing/index.html).
 
-
-
 When developing locally you can test your changes with pytest, running from the root of the repository:
 
 ```
