@@ -35,10 +35,10 @@ implemented_observables:
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
-  theory:
-    FK_tables:
-    - - 
-    operation: 'null'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
 
 - observable: {description: "fractional cross section w.r.t. rapidity of Z, in eee channel", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
   observable_name: PTZ-EEE
@@ -58,10 +58,10 @@ implemented_observables:
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
-  theory:
-    FK_tables:
-    - - 
-    operation: 'null'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
 
 - observable: {description: "fractional cross section w.r.t. rapidity of Z, in eem channel", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
   observable_name: PTZ-EEM
@@ -81,10 +81,10 @@ implemented_observables:
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
-  theory:
-    FK_tables:
-    - - 
-    operation: 'null'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
 
 - observable: {description: "fractional cross section w.r.t. rapidity of Z, in emm channel", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
   observable_name: PTZ-EMM
@@ -104,10 +104,10 @@ implemented_observables:
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
-  theory:
-    FK_tables:
-    - - 
-    operation: 'null'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
 
 - observable: {description: "fractional cross section w.r.t. rapidity of Z, in mmm channel", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$', units: ''}
   observable_name: PTZ-MMM
@@ -127,7 +127,7 @@ implemented_observables:
     x_scale: log
     plot_x: ptZ
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_{T,Z)}$'
-  theory:
-    FK_tables:
-    - - 
-    operation: 'null'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
