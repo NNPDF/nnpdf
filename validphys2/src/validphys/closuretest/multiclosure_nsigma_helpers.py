@@ -11,7 +11,7 @@ import logging
 from reportengine import collect
 
 from validphys.core import DataSetSpec, PDF
-from validphys.coredata import CommonData
+from nnpdf_data.coredata import CommonData
 from validphys.calcutils import calc_chi2
 from validphys import convolution
 
@@ -63,7 +63,7 @@ def central_member_chi2(
         The square root of the covariance matrix.
     dataset: DataSetSpec
         The dataset.
-    loaded_commondata_with_cuts: validphys.coredata.CommonData
+    loaded_commondata_with_cuts: nnpdf_data.coredata.CommonData
 
     Returns
     -------
