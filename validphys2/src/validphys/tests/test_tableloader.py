@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import os
+import pytest
 
 from validphys.loader import FallbackLoader as Loader
 from validphys import tableloader
@@ -60,7 +62,11 @@ def test_min_combination():
     )
 
 
+@pytest.mark.skipif(not os.environ.get("CI", False), reason="Check only in the CI, with access to the server")
 def test_extrasum_slice():
+    """Download a VP output file and checks its properties.
+    Can only be run with access to the NNPDF server 
+    """ 
     l = Loader()
     f = l.check_vp_output_file('ljzWOixPQfmq5dA1-EUocg==/tables/fits_chi2_table.csv')
     d, l = tableloader.load_adapted_fits_chi2_table(f)

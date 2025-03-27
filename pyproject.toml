@@ -60,7 +60,7 @@ vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
 
 [tool.poetry.dependencies]
 # Generic dependencies (i.e., validphys)
-python = "^3.9"
+python = ">=3.9"
 matplotlib = "^3.9"
 pineappl = "^0.8.2"
 pandas = "*"
@@ -82,7 +82,7 @@ seaborn = "*"
 # a3b2bbc3ced97675ac3a71df45f55ba = "*"
 # Optional dependencies
 # tests
-pytest = {version = "*", optional = true}
+pytest = {version = ">=7", optional = true}
 pytest-mpl = {version = "*", optional = true}
 pytest-cov = {version = ">=6", optional = true}
 hypothesis = {version = "*", optional = true}
@@ -148,7 +148,10 @@ known_first_party = ["validphys", "eko", "n3fit", "nnpdf_data", "reportengine"]
 force_sort_within_sections = true
 
 [tool.pytest.ini_options]
-addopts = "--disable-warnings"
+minversion = 7
+addopts = ["--disable-warnings", "--strict-config"]
+xfail_strict = true
+log_cli_level = "WARNING"
 
 [tool.coverage.run]
 omit = [
@@ -165,3 +168,18 @@ cipaths = [ # In order to combine files from both the ubuntu and macos runners
     "/Users/runner/work/nnpdf/nnpdf",
     "/home/runner/work/nnpdf/nnpdf"
 ]
+
+[tool.repo-review]
+select = ["PY", "GH", "PP", "PC"]
+
+[tool.repo-review.ignore]
+"PY004" = "Using doc/ as folder"
+"PY005" = "Tests are in <package>/src/*/tests"
+"PY007" = ""
+"PP303" = ""
+"PP307" = "False positive"
+"PP308" = ""
+"GH200" = ""
+"PC190" = ""
+"PC160" = ""
+"PC901" = "No autocommit coming from the CI in pre-commit is set"

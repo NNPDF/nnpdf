@@ -74,7 +74,7 @@ the same bundled PDF as before, but with the name ``bundled_pdf``:
   │   ├── bundled_pdf_0001.dat
   │   ├── bundled_pdf_0002.dat
 
-.. note ::
+.. note::
 
   Despite adding additional replicas, the central replica in the bundled
   PDF set is **not** recomputed: it is identical to that of the baseline.
