@@ -74,7 +74,7 @@ def determine_vetoes(
             nsigma_discard_arclength,
         )
 
-    # Positivity veto
+    # Veto on convergence & positivity
     convergence_mask = np.array([replica.has_converged for replica in fitinfos], dtype=bool)
     vetoes = {"Convergence check": convergence_mask}
     total_mask = convergence_mask.copy()

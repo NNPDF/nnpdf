@@ -1,5 +1,5 @@
-# A CI script with github workflow to test the new commondata
-name: CommonData
+# A CI script with github workflow to test the commondata
+name: Test CommonData
 
 on:
   push:
