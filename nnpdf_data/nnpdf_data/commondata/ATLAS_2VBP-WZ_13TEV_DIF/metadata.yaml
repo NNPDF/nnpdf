@@ -43,7 +43,7 @@ implemented_observables:
 - observable: {description: "fiducial differential cross section wrt pT of W", label: '$\frac{d\sigma_{fid}}{dp_{T,W}}$', units: '$fb/GeV$'}
   observable_name: PTW
   process_type: PTW
-  ndata: 7
+  ndata: 6
   tables: [10]
   kinematics:
     variables:
@@ -66,7 +66,7 @@ implemented_observables:
 - observable: {description: "fiducial differential cross section wrt transverse mass of WZ", label: '$\frac{d\sigma_{fid}}{dm_{T,WZ}}$', units: '$fb/GeV$'}
   observable_name: MTWZ
   process_type: MTWZ
-  ndata: 7
+  ndata: 6
   tables: [12]
   kinematics:
     variables:
