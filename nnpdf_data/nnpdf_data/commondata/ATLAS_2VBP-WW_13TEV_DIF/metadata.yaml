@@ -35,16 +35,16 @@ implemented_observables:
     x_scale: log
     plot_x: m_em
     y_label: '$\frac{d\sigma}{dm_{e\mu}}$'
-  theory:
-    FK_tables:
-    - - 
-    operation: 'null'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
 
 - observable: {description: "fiducial differential cross section wrt pT of e + mu", label: '$\frac{d\sigma}{dp_{T,e\mu}}$', units: '$fb/GeV$'}
   observable_name: PTEM
   process_type: PTEM
-  ndata: 13
-  tables: [8]
+  ndata: 15
+  tables: [10]
   kinematics:
     variables:
       pt_em: {description: "pT of e + mu", label: '$p_{T,e\mu}$', units: 'GeV'}
@@ -58,16 +58,16 @@ implemented_observables:
     x_scale: log
     plot_x: pt_em
     y_label: '$\frac{d\sigma}{dp_{T,e\mu}}$'
-  theory:
-    FK_tables:
-    - - 
-    operation: 'null'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
 
 - observable: {description: "fiducial differential cross section wrt absolute rapidity of e + mu", label: '$\frac{d\sigma}{d|y_{e\mu}|}$', units: '$fb$'}
   observable_name: YEM
   process_type: YEM
-  ndata: 13
-  tables: [9]
+  ndata: 11
+  tables: [13]
   kinematics:
     variables:
       y_em: {description: "absolute rapidity of e + mu", label: '$|y_{e\mu}|$', units: ''}
@@ -81,7 +81,7 @@ implemented_observables:
     x_scale: linear
     plot_x: y_em
     y_label: '$\frac{d\sigma}{d|y_{e\mu}|}$'
-  theory:
-    FK_tables:
-    - - 
-    operation: 'null'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
