@@ -554,7 +554,7 @@ class BandPDFPlotter(PDFPlotter):
         # Ignore spurious normalization warnings
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', RuntimeWarning)
-            err68down, err68up = stats.errorbar68()
+            errstddown, errstdup = stats.errorbarstd()
 
         # http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
         hatch = next(hatchit)
@@ -565,12 +565,12 @@ class BandPDFPlotter(PDFPlotter):
             handles.append(cvline)
             return [cv, cv]
         alpha = 0.5
-        ax.fill_between(xgrid, err68up, err68down, color=color, alpha=alpha, zorder=1)
+        ax.fill_between(xgrid, errstdup, errstddown, color=color, alpha=alpha, zorder=1)
 
         ax.fill_between(
             xgrid,
-            err68up,
-            err68down,
+            errstdup,
+            errstddown,
             facecolor='None',
             alpha=alpha,
             edgecolor=color,
@@ -578,9 +578,9 @@ class BandPDFPlotter(PDFPlotter):
             zorder=1,
         )
         if isinstance(stats, MCStats) and self.show_mc_errors:
-            errorstdup, errorstddown = stats.errorbarstd()
-            ax.plot(xgrid, errorstdup, linestyle='--', color=color)
-            ax.plot(xgrid, errorstddown, linestyle='--', color=color)
+            error68up, error68down = stats.errorbar68()
+            ax.plot(xgrid, error68up, linestyle='--', color=color)
+            ax.plot(xgrid, error68down, linestyle='--', color=color)
             label = (
                 rf"{pdf.label} ($68\%$ c.l.+$1\sigma$)" if self.legend_stat_labels else pdf.label
             )
@@ -592,7 +592,7 @@ class BandPDFPlotter(PDFPlotter):
         handles.append(handle)
         labels.append(label)
 
-        return [err68down, err68up]
+        return [errstddown, errstdup]
 
     def legend(self, flstate):
         return flstate.ax.legend(
