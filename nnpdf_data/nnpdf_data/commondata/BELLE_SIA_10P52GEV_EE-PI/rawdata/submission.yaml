@@ -1,0 +1,29 @@
+---
+additional_resources:
+- {description: Rivet analysis, location: 'http://rivet.hepforge.org/analyses#BELLE_2013_I1216515'}
+comment: |
+  KEK-KEKB. Precise measurements of inclusive differential cross sections of charged pions and kaons produced  in E+ E- collisions at a centre-of-mass energy of 10.52 GeV. The analysis is based on a data sample of   integrated luminosity of 68.0 fb-1 collected from the asymmmetric KEKB collider with beam energies   3.5 on 8 GeV operating 60 MeV below the upsilon(4s) resonance, resulting in 113M q-qbar events. The   cross sections are tabulated as a function of the fractional hadron energy Z. As reported in the paper,  all weakly produced pions and kaons are included in the cross section values, and all decayed pions and   kaons are recovered. An initial state radiation restriction is also part of the data results given    here, as also reported in the PRL paper: Only events with less than 0.5% * sqrt(s) ISR energy   loss are accepted in the analysis.
+dateupdated: 13/01/2014 16:16:54
+modifications:
+- {action: Encoded, date: 27 JUN 2013, who: Mike Whalley}
+record_ids:
+- {id: 1216515, type: inspire}
+- {id: 5292, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Measured charged-integrated differential cross sections  for charged pion and kaon production as a function of the   fractional hadron energy Z (=2*Eh/sqrt(s)).
+keywords:
+- name: reactions
+  values: [E+ E- --> PI+ X, E+ E- --> PI- X, E+ E- --> K+ X, E+ E- --> K- X]
+- name: observables
+  values: [DSIG/DZ]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [10.52]
+location: Data from F 2
+name: Table 1
+
