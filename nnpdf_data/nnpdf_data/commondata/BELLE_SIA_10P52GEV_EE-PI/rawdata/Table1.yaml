@@ -1,0 +1,981 @@
+dependent_variables:
+- header: {name: D(SIG)/DZ, units: FB}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '10.52'}
+  values:
+  - errors:
+    - {label: stat, symerror: 7000.0}
+    - asymerror: {minus: -384400.0, plus: 384600.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 20377900.0
+  - errors:
+    - {label: stat, symerror: 6600.0}
+    - asymerror: {minus: -356000.0, plus: 356200.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 18324600.0
+  - errors:
+    - {label: stat, symerror: 6300.0}
+    - asymerror: {minus: -331700.0, plus: 331800.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 16509300.0
+  - errors:
+    - {label: stat, symerror: 5900.0}
+    - asymerror: {minus: -296300.0, plus: 296400.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 14878900.0
+  - errors:
+    - {label: stat, symerror: 5600.0}
+    - asymerror: {minus: -276800.0, plus: 276900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 13443500.0
+  - errors:
+    - {label: stat, symerror: 5400.0}
+    - asymerror: {minus: -256900.0, plus: 257000.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 12193600.0
+  - errors:
+    - {label: stat, symerror: 5100.0}
+    - asymerror: {minus: -242700.0, plus: 242800.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 11080800.0
+  - errors:
+    - {label: stat, symerror: 4900.0}
+    - asymerror: {minus: -222800.0, plus: 222900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 10083500.0
+  - errors:
+    - {label: stat, symerror: 4600.0}
+    - asymerror: {minus: -207000.0, plus: 207100.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 9178800.0
+  - errors:
+    - {label: stat, symerror: 4400.0}
+    - {label: sys, symerror: 190600.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 8366100.0
+  - errors:
+    - {label: stat, symerror: 4200.0}
+    - {label: sys, symerror: 187600.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 7639600.0
+  - errors:
+    - {label: stat, symerror: 4000.0}
+    - {label: sys, symerror: 177400.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 6989300.0
+  - errors:
+    - {label: stat, symerror: 3800.0}
+    - asymerror: {minus: -165100.0, plus: 165200.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 6402000.0
+  - errors:
+    - {label: stat, symerror: 3700.0}
+    - {label: sys, symerror: 155300.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 5860500.0
+  - errors:
+    - {label: stat, symerror: 3500.0}
+    - asymerror: {minus: -149200.0, plus: 149300.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 5371500.0
+  - errors:
+    - {label: stat, symerror: 3400.0}
+    - asymerror: {minus: -133900.0, plus: 134000.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 4924500.0
+  - errors:
+    - {label: stat, symerror: 3200.0}
+    - asymerror: {minus: -124100.0, plus: 124200.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 4522700.0
+  - errors:
+    - {label: stat, symerror: 3100.0}
+    - {label: sys, symerror: 117700.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 4151300.0
+  - errors:
+    - {label: stat, symerror: 2900.0}
+    - asymerror: {minus: -108600.0, plus: 108700.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 3813500.0
+  - errors:
+    - {label: stat, symerror: 2800.0}
+    - asymerror: {minus: -104100.0, plus: 104200.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 3504300.0
+  - errors:
+    - {label: stat, symerror: 2700.0}
+    - asymerror: {minus: -95500.0, plus: 95600.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 3224600.0
+  - errors:
+    - {label: stat, symerror: 2600.0}
+    - {label: sys, symerror: 89500.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2971500.0
+  - errors:
+    - {label: stat, symerror: 2500.0}
+    - asymerror: {minus: -83900.0, plus: 84000.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2738300.0
+  - errors:
+    - {label: stat, symerror: 2400.0}
+    - {label: sys, symerror: 79400.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2529600.0
+  - errors:
+    - {label: stat, symerror: 2300.0}
+    - {label: sys, symerror: 76500.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2337800.0
+  - errors:
+    - {label: stat, symerror: 2200.0}
+    - {label: sys, symerror: 68300.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2157800.0
+  - errors:
+    - {label: stat, symerror: 2100.0}
+    - {label: sys, symerror: 65500.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1997000.0
+  - errors:
+    - {label: stat, symerror: 2000.0}
+    - {label: sys, symerror: 57800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1843200.0
+  - errors:
+    - {label: stat, symerror: 2000.0}
+    - {label: sys, symerror: 57800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1707600.0
+  - errors:
+    - {label: stat, symerror: 1900.0}
+    - {label: sys, symerror: 53100.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1581700.0
+  - errors:
+    - {label: stat, symerror: 1800.0}
+    - {label: sys, symerror: 49200.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1464800.0
+  - errors:
+    - {label: stat, symerror: 1700.0}
+    - {label: sys, symerror: 47800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1356800.0
+  - errors:
+    - {label: stat, symerror: 1700.0}
+    - {label: sys, symerror: 44100.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1256500.0
+  - errors:
+    - {label: stat, symerror: 1600.0}
+    - {label: sys, symerror: 40800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1163000.0
+  - errors:
+    - {label: stat, symerror: 1600.0}
+    - {label: sys, symerror: 39400.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1078600.0
+  - errors:
+    - {label: stat, symerror: 1500.0}
+    - {label: sys, symerror: 38800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1001000.0
+  - errors:
+    - {label: stat, symerror: 1400.0}
+    - {label: sys, symerror: 35400.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 927300.0
+  - errors:
+    - {label: stat, symerror: 1400.0}
+    - {label: sys, symerror: 32800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 859800.0
+  - errors:
+    - {label: stat, symerror: 1300.0}
+    - {label: sys, symerror: 32600.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 797300.0
+  - errors:
+    - {label: stat, symerror: 1300.0}
+    - {label: sys, symerror: 29500.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 740500.0
+  - errors:
+    - {label: stat, symerror: 1200.0}
+    - {label: sys, symerror: 27800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 687200.0
+  - errors:
+    - {label: stat, symerror: 1200.0}
+    - asymerror: {minus: -26800.0, plus: 26900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 637600.0
+  - errors:
+    - {label: stat, symerror: 1200.0}
+    - {label: sys, symerror: 24000.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 593600.0
+  - errors:
+    - {label: stat, symerror: 1100.0}
+    - {label: sys, symerror: 23700.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 551200.0
+  - errors:
+    - {label: stat, symerror: 1100.0}
+    - asymerror: {minus: -21600.0, plus: 21700.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 511700.0
+  - errors:
+    - {label: stat, symerror: 1000.0}
+    - {label: sys, symerror: 19600.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 473700.0
+  - errors:
+    - {label: stat, symerror: 1000.0}
+    - asymerror: {minus: -20200.0, plus: 20300.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 441500.0
+  - errors:
+    - {label: stat, symerror: 970.0}
+    - asymerror: {minus: -19450.0, plus: 19470.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 410230.0
+  - errors:
+    - {label: stat, symerror: 940.0}
+    - asymerror: {minus: -20530.0, plus: 20550.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 380410.0
+  - errors:
+    - {label: stat, symerror: 910.0}
+    - asymerror: {minus: -16160.0, plus: 16210.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 353890.0
+  - errors:
+    - {label: stat, symerror: 880.0}
+    - asymerror: {minus: -16880.0, plus: 16930.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 328410.0
+  - errors:
+    - {label: stat, symerror: 850.0}
+    - asymerror: {minus: -16800.0, plus: 16850.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 303220.0
+  - errors:
+    - {label: stat, symerror: 820.0}
+    - asymerror: {minus: -14980.0, plus: 15040.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 281260.0
+  - errors:
+    - {label: stat, symerror: 790.0}
+    - asymerror: {minus: -15260.0, plus: 15310.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 259430.0
+  - errors:
+    - {label: stat, symerror: 760.0}
+    - asymerror: {minus: -14360.0, plus: 14410.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 240480.0
+  - errors:
+    - {label: stat, symerror: 740.0}
+    - asymerror: {minus: -13540.0, plus: 13590.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 221800.0
+  - errors:
+    - {label: stat, symerror: 710.0}
+    - asymerror: {minus: -12790.0, plus: 12850.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 203640.0
+  - errors:
+    - {label: stat, symerror: 680.0}
+    - asymerror: {minus: -11910.0, plus: 11970.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 187850.0
+  - errors:
+    - {label: stat, symerror: 660.0}
+    - asymerror: {minus: -10950.0, plus: 11010.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 172180.0
+  - errors:
+    - {label: stat, symerror: 630.0}
+    - asymerror: {minus: -10730.0, plus: 10790.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 157720.0
+  - errors:
+    - {label: stat, symerror: 610.0}
+    - asymerror: {minus: -10840.0, plus: 10890.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 144660.0
+  - errors:
+    - {label: stat, symerror: 590.0}
+    - asymerror: {minus: -11190.0, plus: 11240.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 131550.0
+  - errors:
+    - {label: stat, symerror: 570.0}
+    - asymerror: {minus: -8810.0, plus: 8860.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 119620.0
+  - errors:
+    - {label: stat, symerror: 540.0}
+    - asymerror: {minus: -10500.0, plus: 10530.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 108230.0
+  - errors:
+    - {label: stat, symerror: 520.0}
+    - asymerror: {minus: -8060.0, plus: 8090.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 96720.0
+  - errors:
+    - {label: stat, symerror: 490.0}
+    - asymerror: {minus: -8270.0, plus: 8290.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 86090.0
+  - errors:
+    - {label: stat, symerror: 470.0}
+    - asymerror: {minus: -7900.0, plus: 7910.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 76140.0
+  - errors:
+    - {label: stat, symerror: 450.0}
+    - {label: sys, symerror: 7260.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 67380.0
+  - errors:
+    - {label: stat, symerror: 420.0}
+    - {label: sys, symerror: 6960.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 58110.0
+  - errors:
+    - {label: stat, symerror: 390.0}
+    - asymerror: {minus: -7710.0, plus: 7700.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 49150.0
+  - errors:
+    - {label: stat, symerror: 370.0}
+    - asymerror: {minus: -6380.0, plus: 6370.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 42000.0
+  - errors:
+    - {label: stat, symerror: 350.0}
+    - asymerror: {minus: -5010.0, plus: 4990.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 34970.0
+  - errors:
+    - {label: stat, symerror: 330.0}
+    - asymerror: {minus: -6160.0, plus: 6140.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 29460.0
+  - errors:
+    - {label: stat, symerror: 320.0}
+    - asymerror: {minus: -4820.0, plus: 4800.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 24700.0
+  - errors:
+    - {label: stat, symerror: 290.0}
+    - asymerror: {minus: -5420.0, plus: 5400.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 19150.0
+  - errors:
+    - {label: stat, symerror: 280.0}
+    - asymerror: {minus: -3760.0, plus: 3740.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 13760.0
+  - errors:
+    - {label: stat, symerror: 290.0}
+    - asymerror: {minus: -4930.0, plus: 4910.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 9910.0
+  - errors:
+    - {label: stat, symerror: 540.0}
+    - asymerror: {minus: -6480.0, plus: 6430.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 11700.0
+- header: {name: D(SIG)/DZ, units: FB}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '10.52'}
+  values:
+  - errors:
+    - {label: stat, symerror: 4000.0}
+    - asymerror: {minus: -143200.0, plus: 143100.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 6373800.0
+  - errors:
+    - {label: stat, symerror: 3900.0}
+    - {label: sys, symerror: 139700.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 5981600.0
+  - errors:
+    - {label: stat, symerror: 3700.0}
+    - {label: sys, symerror: 128100.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 5591300.0
+  - errors:
+    - {label: stat, symerror: 3600.0}
+    - {label: sys, symerror: 121200.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 5234300.0
+  - errors:
+    - {label: stat, symerror: 3500.0}
+    - {label: sys, symerror: 118600.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 4906600.0
+  - errors:
+    - {label: stat, symerror: 3300.0}
+    - asymerror: {minus: -116500.0, plus: 116400.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 4578400.0
+  - errors:
+    - {label: stat, symerror: 3200.0}
+    - asymerror: {minus: -107400.0, plus: 107300.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 4256800.0
+  - errors:
+    - {label: stat, symerror: 3100.0}
+    - {label: sys, symerror: 101300.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 3947500.0
+  - errors:
+    - {label: stat, symerror: 3000.0}
+    - asymerror: {minus: -91100.0, plus: 91200.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 3658900.0
+  - errors:
+    - {label: stat, symerror: 2900.0}
+    - asymerror: {minus: -90600.0, plus: 90700.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 3396000.0
+  - errors:
+    - {label: stat, symerror: 2700.0}
+    - asymerror: {minus: -85800.0, plus: 85900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 3158300.0
+  - errors:
+    - {label: stat, symerror: 2600.0}
+    - {label: sys, symerror: 85800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2948000.0
+  - errors:
+    - {label: stat, symerror: 2600.0}
+    - {label: sys, symerror: 78500.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2752200.0
+  - errors:
+    - {label: stat, symerror: 2500.0}
+    - asymerror: {minus: -75700.0, plus: 75800.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2566100.0
+  - errors:
+    - {label: stat, symerror: 2400.0}
+    - asymerror: {minus: -71800.0, plus: 71900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2396000.0
+  - errors:
+    - {label: stat, symerror: 2300.0}
+    - {label: sys, symerror: 68800.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2238900.0
+  - errors:
+    - {label: stat, symerror: 2200.0}
+    - asymerror: {minus: -64200.0, plus: 64300.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 2091700.0
+  - errors:
+    - {label: stat, symerror: 2100.0}
+    - {label: sys, symerror: 62900.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1948700.0
+  - errors:
+    - {label: stat, symerror: 2100.0}
+    - {label: sys, symerror: 60300.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1814700.0
+  - errors:
+    - {label: stat, symerror: 2000.0}
+    - {label: sys, symerror: 56400.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1690600.0
+  - errors:
+    - {label: stat, symerror: 1900.0}
+    - asymerror: {minus: -52900.0, plus: 53000.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1580400.0
+  - errors:
+    - {label: stat, symerror: 1900.0}
+    - asymerror: {minus: -53000.0, plus: 53100.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1480200.0
+  - errors:
+    - {label: stat, symerror: 1800.0}
+    - {label: sys, symerror: 51000.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1389000.0
+  - errors:
+    - {label: stat, symerror: 1700.0}
+    - {label: sys, symerror: 48500.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1300000.0
+  - errors:
+    - {label: stat, symerror: 1700.0}
+    - {label: sys, symerror: 46500.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1214500.0
+  - errors:
+    - {label: stat, symerror: 1600.0}
+    - {label: sys, symerror: 44200.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1133800.0
+  - errors:
+    - {label: stat, symerror: 1600.0}
+    - {label: sys, symerror: 40600.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 1058800.0
+  - errors:
+    - {label: stat, symerror: 1500.0}
+    - asymerror: {minus: -40100.0, plus: 40000.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 986000.0
+  - errors:
+    - {label: stat, symerror: 1500.0}
+    - asymerror: {minus: -37200.0, plus: 37100.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 919300.0
+  - errors:
+    - {label: stat, symerror: 1400.0}
+    - asymerror: {minus: -36200.0, plus: 36100.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 857400.0
+  - errors:
+    - {label: stat, symerror: 1400.0}
+    - {label: sys, symerror: 31900.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 799900.0
+  - errors:
+    - {label: stat, symerror: 1300.0}
+    - asymerror: {minus: -31000.0, plus: 30900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 748600.0
+  - errors:
+    - {label: stat, symerror: 1300.0}
+    - asymerror: {minus: -30000.0, plus: 29900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 700500.0
+  - errors:
+    - {label: stat, symerror: 1200.0}
+    - asymerror: {minus: -27300.0, plus: 27200.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 656100.0
+  - errors:
+    - {label: stat, symerror: 1200.0}
+    - asymerror: {minus: -25700.0, plus: 25600.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 613500.0
+  - errors:
+    - {label: stat, symerror: 1200.0}
+    - asymerror: {minus: -23700.0, plus: 23600.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 573800.0
+  - errors:
+    - {label: stat, symerror: 1100.0}
+    - asymerror: {minus: -23000.0, plus: 22900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 535000.0
+  - errors:
+    - {label: stat, symerror: 1100.0}
+    - asymerror: {minus: -20500.0, plus: 20400.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 497900.0
+  - errors:
+    - {label: stat, symerror: 1000.0}
+    - asymerror: {minus: -19400.0, plus: 19300.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 462800.0
+  - errors:
+    - {label: stat, symerror: 1000.0}
+    - {label: sys, symerror: 20700.0}
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 430600.0
+  - errors:
+    - {label: stat, symerror: 970.0}
+    - asymerror: {minus: -16430.0, plus: 16370.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 401150.0
+  - errors:
+    - {label: stat, symerror: 940.0}
+    - asymerror: {minus: -15590.0, plus: 15540.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 372270.0
+  - errors:
+    - {label: stat, symerror: 910.0}
+    - asymerror: {minus: -13600.0, plus: 13550.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 345980.0
+  - errors:
+    - {label: stat, symerror: 880.0}
+    - asymerror: {minus: -14260.0, plus: 14200.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 321090.0
+  - errors:
+    - {label: stat, symerror: 850.0}
+    - asymerror: {minus: -13050.0, plus: 12940.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 297350.0
+  - errors:
+    - {label: stat, symerror: 810.0}
+    - asymerror: {minus: -13410.0, plus: 13270.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 274740.0
+  - errors:
+    - {label: stat, symerror: 780.0}
+    - asymerror: {minus: -13850.0, plus: 13660.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 253780.0
+  - errors:
+    - {label: stat, symerror: 760.0}
+    - asymerror: {minus: -12190.0, plus: 11920.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 234660.0
+  - errors:
+    - {label: stat, symerror: 730.0}
+    - asymerror: {minus: -12920.0, plus: 12620.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 216680.0
+  - errors:
+    - {label: stat, symerror: 700.0}
+    - asymerror: {minus: -11820.0, plus: 11450.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 199080.0
+  - errors:
+    - {label: stat, symerror: 680.0}
+    - asymerror: {minus: -12710.0, plus: 12330.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 184190.0
+  - errors:
+    - {label: stat, symerror: 650.0}
+    - asymerror: {minus: -12780.0, plus: 12390.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 169000.0
+  - errors:
+    - {label: stat, symerror: 630.0}
+    - asymerror: {minus: -11800.0, plus: 11370.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 155880.0
+  - errors:
+    - {label: stat, symerror: 610.0}
+    - asymerror: {minus: -11670.0, plus: 11220.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 143140.0
+  - errors:
+    - {label: stat, symerror: 580.0}
+    - asymerror: {minus: -11970.0, plus: 11550.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 131190.0
+  - errors:
+    - {label: stat, symerror: 560.0}
+    - asymerror: {minus: -11360.0, plus: 10940.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 119890.0
+  - errors:
+    - {label: stat, symerror: 540.0}
+    - asymerror: {minus: -11160.0, plus: 10750.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 110040.0
+  - errors:
+    - {label: stat, symerror: 510.0}
+    - asymerror: {minus: -10310.0, plus: 9890.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 99730.0
+  - errors:
+    - {label: stat, symerror: 500.0}
+    - asymerror: {minus: -9380.0, plus: 8950.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 91040.0
+  - errors:
+    - {label: stat, symerror: 480.0}
+    - asymerror: {minus: -9530.0, plus: 9140.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 82870.0
+  - errors:
+    - {label: stat, symerror: 460.0}
+    - asymerror: {minus: -9240.0, plus: 8870.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 74810.0
+  - errors:
+    - {label: stat, symerror: 440.0}
+    - asymerror: {minus: -8540.0, plus: 8170.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 67540.0
+  - errors:
+    - {label: stat, symerror: 420.0}
+    - asymerror: {minus: -8240.0, plus: 7900.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 60800.0
+  - errors:
+    - {label: stat, symerror: 400.0}
+    - asymerror: {minus: -7510.0, plus: 7160.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 54310.0
+  - errors:
+    - {label: stat, symerror: 370.0}
+    - asymerror: {minus: -7180.0, plus: 6870.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 47390.0
+  - errors:
+    - {label: stat, symerror: 360.0}
+    - asymerror: {minus: -6980.0, plus: 6690.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 42180.0
+  - errors:
+    - {label: stat, symerror: 340.0}
+    - asymerror: {minus: -6490.0, plus: 6210.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 36980.0
+  - errors:
+    - {label: stat, symerror: 320.0}
+    - asymerror: {minus: -5970.0, plus: 5700.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 32380.0
+  - errors:
+    - {label: stat, symerror: 310.0}
+    - asymerror: {minus: -5390.0, plus: 5120.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 27870.0
+  - errors:
+    - {label: stat, symerror: 280.0}
+    - asymerror: {minus: -5320.0, plus: 5090.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 23400.0
+  - errors:
+    - {label: stat, symerror: 270.0}
+    - asymerror: {minus: -4810.0, plus: 4590.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 20030.0
+  - errors:
+    - {label: stat, symerror: 260.0}
+    - asymerror: {minus: -4830.0, plus: 4620.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 17000.0
+  - errors:
+    - {label: stat, symerror: 240.0}
+    - asymerror: {minus: -4220.0, plus: 4010.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 14240.0
+  - errors:
+    - {label: stat, symerror: 240.0}
+    - asymerror: {minus: -4010.0, plus: 3810.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 11750.0
+  - errors:
+    - {label: stat, symerror: 220.0}
+    - asymerror: {minus: -3750.0, plus: 3560.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 8810.0
+  - errors:
+    - {label: stat, symerror: 210.0}
+    - asymerror: {minus: -3590.0, plus: 3400.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 6370.0
+  - errors:
+    - {label: stat, symerror: 220.0}
+    - asymerror: {minus: -3690.0, plus: 3500.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 4670.0
+  - errors:
+    - {label: stat, symerror: 440.0}
+    - asymerror: {minus: -7720.0, plus: 7340.0}
+      label: sys
+    - {label: 'sys,normalization uncertainty', symerror: 1.4%}
+    value: 5920.0
+independent_variables:
+- header: {name: Z}
+  values:
+  - {high: 0.21, low: 0.2}
+  - {high: 0.22, low: 0.21}
+  - {high: 0.23, low: 0.22}
+  - {high: 0.24, low: 0.23}
+  - {high: 0.25, low: 0.24}
+  - {high: 0.26, low: 0.25}
+  - {high: 0.27, low: 0.26}
+  - {high: 0.28, low: 0.27}
+  - {high: 0.29, low: 0.28}
+  - {high: 0.3, low: 0.29}
+  - {high: 0.31, low: 0.3}
+  - {high: 0.32, low: 0.31}
+  - {high: 0.33, low: 0.32}
+  - {high: 0.34, low: 0.33}
+  - {high: 0.35, low: 0.34}
+  - {high: 0.36, low: 0.35}
+  - {high: 0.37, low: 0.36}
+  - {high: 0.38, low: 0.37}
+  - {high: 0.39, low: 0.38}
+  - {high: 0.4, low: 0.39}
+  - {high: 0.41, low: 0.4}
+  - {high: 0.42, low: 0.41}
+  - {high: 0.43, low: 0.42}
+  - {high: 0.44, low: 0.43}
+  - {high: 0.45, low: 0.44}
+  - {high: 0.46, low: 0.45}
+  - {high: 0.47, low: 0.46}
+  - {high: 0.48, low: 0.47}
+  - {high: 0.49, low: 0.48}
+  - {high: 0.5, low: 0.49}
+  - {high: 0.51, low: 0.5}
+  - {high: 0.52, low: 0.51}
+  - {high: 0.53, low: 0.52}
+  - {high: 0.54, low: 0.53}
+  - {high: 0.55, low: 0.54}
+  - {high: 0.56, low: 0.55}
+  - {high: 0.57, low: 0.56}
+  - {high: 0.58, low: 0.57}
+  - {high: 0.59, low: 0.58}
+  - {high: 0.6, low: 0.59}
+  - {high: 0.61, low: 0.6}
+  - {high: 0.62, low: 0.61}
+  - {high: 0.63, low: 0.62}
+  - {high: 0.64, low: 0.63}
+  - {high: 0.65, low: 0.64}
+  - {high: 0.66, low: 0.65}
+  - {high: 0.67, low: 0.66}
+  - {high: 0.68, low: 0.67}
+  - {high: 0.69, low: 0.68}
+  - {high: 0.7, low: 0.69}
+  - {high: 0.71, low: 0.7}
+  - {high: 0.72, low: 0.71}
+  - {high: 0.73, low: 0.72}
+  - {high: 0.74, low: 0.73}
+  - {high: 0.75, low: 0.74}
+  - {high: 0.76, low: 0.75}
+  - {high: 0.77, low: 0.76}
+  - {high: 0.78, low: 0.77}
+  - {high: 0.79, low: 0.78}
+  - {high: 0.8, low: 0.79}
+  - {high: 0.81, low: 0.8}
+  - {high: 0.82, low: 0.81}
+  - {high: 0.83, low: 0.82}
+  - {high: 0.84, low: 0.83}
+  - {high: 0.85, low: 0.84}
+  - {high: 0.86, low: 0.85}
+  - {high: 0.87, low: 0.86}
+  - {high: 0.88, low: 0.87}
+  - {high: 0.89, low: 0.88}
+  - {high: 0.9, low: 0.89}
+  - {high: 0.91, low: 0.9}
+  - {high: 0.92, low: 0.91}
+  - {high: 0.93, low: 0.92}
+  - {high: 0.94, low: 0.93}
+  - {high: 0.95, low: 0.94}
+  - {high: 0.96, low: 0.95}
+  - {high: 0.97, low: 0.96}
+  - {high: 0.98, low: 0.97}
