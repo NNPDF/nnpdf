@@ -1,4 +1,4 @@
-setname: 'BELLE_SIA-KA_10P52GEV_EE-KA'
+setname: 'BELLE_SIA-PI_10P52GEV_EE-PISUM'
 
 nnpdf_metadata:
   nnpdf31_process: "SIA"
@@ -31,7 +31,7 @@ implemented_observables:
   - uncertainties.yaml
   kinematic_coverage: [name]
   plotting:
-    dataset_label: 'BELLE SIA 10.52 GeV Kaon production: $\frac{d\sigma}{dz}$'
+    dataset_label: 'BELLE SIA 10.52 GeV Pion production: $\frac{d\sigma}{dz}$'
     x_scale: linear
     plot_x: z
     y_label: '$\frac{d\sigma}{dz}$'
