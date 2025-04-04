@@ -1,0 +1,193 @@
+---
+additional_resources:
+- {description: Rivet analysis, location: 'http://rivet.hepforge.org/analyses#SLD_2004_S5693039'}
+comment: |
+  SLAC-SLC. Measurement of the cross sections for identified stable charged particle production in Z0 decays resulting from E+ E- interactions. The data comprises identified overall charged PI+-, K+- and P PBAR distributions from 400000 hadronic events collected in SLC runs between 1996 and 1998 and supercedes the previous measurements reported in PR D59 (1990) 052001. The data are analysed forall hadronic Z0 decays and for decays into light all, c and b quarks separately .
+dateupdated: 16/10/2003 00:00:00
+modifications:
+- {action: Encoded, date: 16 Oct 2003, who: Mike Whalley}
+record_ids:
+- {id: 630327, type: inspire}
+- {id: 5126, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Production rates of all stable charged particles. The statistical and systematic errors are shown separately for the momentum distribution. They are combined in quadrature for the other two distributions. The first DSYS error is due tothe uncertainty in the track finding efficiency and the second DSYS error is th e rest of the systematic error.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP, DN/DX]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 2,F 1
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  The charged pion fraction and differential production rate per hadronic Z0 decay.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX, N]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 3,F 2
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  The charged kaon fraction and differential production rate per hadronic Z0 decay.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX, N]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 4,F 2
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: |
+  The proton plus antiproton fraction and differential production rate per hadronic Z0 decay.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX, N]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 5,F 2
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: |
+  Differential production rates of charged pions per Z0 decay into light (u,d,s) and c and b quarks. The errors are combined statistical and systematic.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 6,F 6
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: |
+  Differential production rates of charged kaons per Z0 decay into light (u,d,s) and c and b quarks. The errors are combined statistical and systematic.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 7,F 7
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: |
+  Differential production rates of charged protons plus antiprotons per Z0 decay into light (u,d,s) and c and b quarks. The errors are combined statistical and systematic.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 8,F 7
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: |
+  Differential production rates of stable charged particles per Z0 decay intolight (u,d,s) and c and b quarks. The errors are combined statistical and syste matic.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 9,F 8
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: |
+  Differential production rate for positive and negative charged pions into light quark jets from hadronic Z0 decays. Also shown are the normalization differences. The ratios are defined as:-. R(Q=PI+)=(1/2N(Q=Z0))*D(N(QUARK --> PI+) + N(QUARKBAR --> PI-))/DX. R(Q=PI-)=(1/2N(Q=Z0))*D(N(QUARK --> PI-) + N(QUARKBAR --> PI+))/DX.
+keywords:
+- name: reactions
+  values: [E+ E- --> JET X, E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, Jet Production,
+    E+ E- Scattering]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 12,F 13
+name: Table 9
+
+---
+data_file: Table10.yaml
+description: |
+  Differential production rate for positive and negative charged kaons into light quark jets from hadronic Z0 decays. Also shown are the normalization differences. The ratios are defined as:-. R(Q=K+)=(1/2N(Q=Z0))*D(N(QUARK --> K+) + N(QUARKBAR --> K-))/DX. R(Q=K-)=(1/2N(Q=Z0))*D(N(QUARK --> K-) + N(QUARKBAR --> K+))/DX.
+keywords:
+- name: reactions
+  values: [E+ E- --> JET X, E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, Jet Production,
+    E+ E- Scattering, Strange production]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 13,F 13
+name: Table 10
+
+---
+data_file: Table11.yaml
+description: |
+  Differential production rate for positive and negative protons into light quark jets from hadronic Z0 decays. Also shown are the normalization differences.The ratios are defined as:-. R(Q=P+)=(1/2N(Q=Z0))*D(N(QUARK --> P+) + N(QUARKBAR --> PBAR))/DX. R(Q=PBAR)=(1/2N(Q=Z0))*D(N(QUARK --> PBAR) + N(QUARKBAR --> P+))/DX.
+keywords:
+- name: reactions
+  values: [E+ E- --> JET X, E+ E- --> PBAR X, E+ E- --> P+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DX]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, Jet Production,
+    E+ E- Scattering]
+- name: cmenergies
+  values: [91.28]
+location: Data from T 13,F 13
+name: Table 11
+
