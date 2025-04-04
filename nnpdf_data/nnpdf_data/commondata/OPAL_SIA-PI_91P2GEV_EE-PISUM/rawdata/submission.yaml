@@ -1,0 +1,79 @@
+---
+additional_resources:
+- {description: Rivet analysis, location: 'http://rivet.hepforge.org/analyses#OPAL_1994_S2927284'}
+comment: |
+  CERN-LEP. Measurement of the inclusive production rates of charged pions, charged kaons, and proton / antiprotons in hadronic Z0 events. The data were collected in 1992 and correspond to 766016 after selection.
+dateupdated: 01/09/1994 00:00:00
+modifications:
+- {action: Encoded, date: 1 SEP 1994, who: Mike Whalley}
+record_ids:
+- {id: 372772, type: inspire}
+- {id: 1733, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Normalised momentum distribution for charged pion production.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> ZO]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 3
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  Normalised momentum distribution for charged kaon production.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Cross Section, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 4
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  Normalised momentum distribution for proton / antiproton production.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 5
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: |
+  Total charged particle rate per hadronic event. Statistical and systematic errors added in quadrature.
+keywords:
+- name: reactions
+  values: [E+ E- --> HADRONS, E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X, E+
+      E- --> PI- X, E+ E- --> PI+ X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Exclusive, Inclusive, Exclusive, Integrated Cross Section, Cross Section,
+    E+ E- Scattering, Strange production, R measurement]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 6
+name: Table 4
+
