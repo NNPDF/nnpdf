@@ -29,7 +29,6 @@ class TheoryCard:
     ModEv: Literal["EXA", "TRN"]  # DGLAP evolution solution method (e.g. EXA or TRN)
     XIR: float  # Renormalization scale over the hard scattering scale ratio
     XIF: float  # Factorization scale over the hard scattering scale ratio
-    XIA: float = None  # Fragmentation scale over the hard scattering scale ratio
     NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
     QED: int  # Max order of alpha_qed in the evolution
     Q0: float  # [GeV] Parametrization scale for the fit (and the photon)
@@ -55,6 +54,7 @@ class TheoryCard:
     alphas: float  # Value of alpha_s at the scale Qref
     alphaqed: float  # Values of alpha QED at the scale Qref
     Qref: float  # [GeV] Reference scale for alphas and alphaqed
+    XIA: float = None  # Fragmentation scale over the hard scattering scale ratio
     nfref: Optional[int] = None  # nf at Qref (its default depend on Qref)
     MaxNfPdf: Optional[int] = 5  # Used by pineko and the photon module to define the thresholds
     ## Fit theory parameters default
