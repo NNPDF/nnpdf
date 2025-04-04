@@ -1,0 +1,209 @@
+---
+comment: |
+  DESY-PETRA, TASSO COLLABORATION. NUMERICAL VALUES FOR DATA ON FIGURES SUPPLIED BY P. JOOS AND ADDED TO RECORD 23 OCT 1980. SCALING VARIABLE IS X(P=3,RF=CM,DEF=2*E(P=3)/SQRT(S)). BETA IS P(P=3)/E(P=3).
+dateupdated: 08/08/1980 00:00:00
+modifications:
+- {action: Encoded, date: 08 AUG 1980, who: BJR}
+record_ids:
+- {id: 153656, type: inspire}
+- {id: 1117, type: red}
+
+---
+data_file: Table1.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [12.0-27.0]
+location: Data from P 447
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP, DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [12.0]
+location: Data from F 2,3
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP, DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [12.0]
+location: Data from F 2,3
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP, DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [12.0]
+location: Data from F 2,3
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP, DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [30.0]
+location: Data from F 2,3
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP, DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [30.0]
+location: Data from F 2,3
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP, DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [30.0]
+location: Data from F 2,3
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [12.0]
+location: Data from F 2C
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [12.0]
+location: Data from F 2C
+name: Table 9
+
+---
+data_file: Table10.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [12.0]
+location: Data from F 2C
+name: Table 10
+
+---
+data_file: Table11.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [30.0]
+location: Data from F 2C
+name: Table 11
+
+---
+data_file: Table12.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [30.0]
+location: Data from F 2C
+name: Table 12
+
+---
+data_file: Table13.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [30.0]
+location: Data from F 2C
+name: Table 13
+
