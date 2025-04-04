@@ -1,0 +1,288 @@
+---
+comment: |
+  DESY-PETRA. Measurement of inclusive pion, kaon and proton cross sections at CM energies of 34 and 44 GeV by the TASSO Collaboration.
+  CORR. FOR INITIAL STATE RADIATION, NO REF.
+dateupdated: 23/10/1990 00:00:00
+modifications:
+- {action: Encoded, date: 23 OCT 1990, who: HMD}
+- {action: Modified, date: 23 OCT 1990, who: Mike Whalley}
+- {action: Modified, date: 23 OCT 1990, who: OPY}
+record_ids:
+- {id: 267755, type: inspire}
+- {id: 1499, type: red}
+
+---
+data_file: Table1.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 1a
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 1a
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 1a
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [44.0]
+location: Data from T 1b
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [44.0]
+location: Data from T 1b
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [44.0]
+location: Data from T 1b
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 2a
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 2a
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 2a
+name: Table 9
+
+---
+data_file: Table10.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [44.0]
+location: Data from T 2b
+name: Table 10
+
+---
+data_file: Table11.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [44.0]
+location: Data from T 2b
+name: Table 11
+
+---
+data_file: Table12.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [44.0]
+location: Data from T 2b
+name: Table 12
+
+---
+data_file: Table13.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI0 X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [44.0]
+location: Data from T 3
+name: Table 13
+
+---
+data_file: Table14.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X, E+ E- --> PI0 X, E+ E-
+      --> PI- X, E+ E- --> PI+ X, E+ E- --> P X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, E+ E- Scattering, Strange production]
+- name: cmenergies
+  values: [34.0-44.0]
+location: Data from P 5 (C=PREPRINT)
+name: Table 14
+
+---
+data_file: Table15.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0-44.0]
+location: Data from P 197
+name: Table 15
+
+---
+data_file: Table16.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, E+ E- Scattering, Strange production]
+- name: cmenergies
+  values: [34.0]
+location: Data from P 197
+name: Table 16
+
+---
+data_file: Table17.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from P 197
+name: Table 17
+
+---
+data_file: Table18.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI0 X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, E+ E- Scattering]
+- name: cmenergies
+  values: [44.0]
+location: Data from P 197
+name: Table 18
+
