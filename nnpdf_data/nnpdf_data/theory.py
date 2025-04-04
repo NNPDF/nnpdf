@@ -1,5 +1,5 @@
 """
-This module provides an unique source and definition for all the possible parameters
+This module provides a unique source and definition for all the possible parameters
 that a theory card can contain.
 """
 
@@ -29,6 +29,7 @@ class TheoryCard:
     ModEv: Literal["EXA", "TRN"]  # DGLAP evolution solution method (e.g. EXA or TRN)
     XIR: float  # Renormalization scale over the hard scattering scale ratio
     XIF: float  # Factorization scale over the hard scattering scale ratio
+    XIA: float = None  # Fragmentation scale over the hard scattering scale ratio
     NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
     QED: int  # Max order of alpha_qed in the evolution
     Q0: float  # [GeV] Parametrization scale for the fit (and the photon)
