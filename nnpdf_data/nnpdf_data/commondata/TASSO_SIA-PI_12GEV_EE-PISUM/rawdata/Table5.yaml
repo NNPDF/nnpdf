@@ -1,0 +1,130 @@
+dependent_variables:
+- header: {name: D(SIG)/DP(P=3), units: NB/GEV}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  values:
+  - errors:
+    - {symerror: 1.05}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 4.11
+  - errors:
+    - {symerror: 1.06}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 4.51
+  - errors:
+    - {symerror: 0.87}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 3.41
+  - errors:
+    - {symerror: 0.8}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 3.11
+  - errors:
+    - {symerror: 0.56}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 2.64
+  - errors:
+    - {symerror: 0.33}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 1.49
+  - errors:
+    - {symerror: 0.39}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 1.54
+  - errors:
+    - {symerror: 0.272}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.808
+  - errors:
+    - {symerror: 0.256}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.733
+- header: {name: (S/BETA)*D(SIG)/DX, units: MUB/GEV**2}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  values:
+  - errors:
+    - {symerror: 16.8}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 65.7
+  - errors:
+    - {symerror: 16.4}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 69.7
+  - errors:
+    - {symerror: 11.1}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 51.5
+  - errors:
+    - {symerror: 11.7}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 45.6
+  - errors:
+    - {symerror: 8.1}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 38.2
+  - errors:
+    - {symerror: 4.7}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 21.1
+  - errors:
+    - {symerror: 5.5}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 21.5
+  - errors:
+    - {symerror: 3.8}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 11.2
+  - errors:
+    - {symerror: 3.6}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 10.2
+- header: {name: (E(P=3)/(4*PI*P(P=3)**2))*D(SIG)/DP(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  values:
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.224}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.951
+  - {value: '-'}
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.076}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.359
+  - errors:
+    - {symerror: 0.033}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.15
+  - errors:
+    - {symerror: 0.031}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.124
+  - errors:
+    - {symerror: 0.018}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.054
+  - errors:
+    - {symerror: 0.015}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.042
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {value: 0.35}
+  - {value: 0.4}
+  - {value: 0.45}
+  - {value: 0.55}
+  - {value: 0.6}
+  - {value: 0.8}
+  - {value: 1.0}
+  - {value: 1.2}
+  - {value: 1.4}
