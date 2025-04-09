@@ -288,10 +288,8 @@ def fitting_data_dict(
     if diagonal_basis:
         log.info("working in diagonal basis.")
 
-        # sort the eigenvalues and eigenvectors for reproducibility
+        # no need to sort the eigenvalues explicitly, eigh returns eigvals in ascending order by default
         eig_vals, u_trans = np.linalg.eigh(covmat)
-        sorted_idx = np.argsort(eig_vals)
-        eig_vals, u_trans = eig_vals[sorted_idx], u_trans[:, sorted_idx]
 
         # rotate the experimental data
         u = u_trans.T
