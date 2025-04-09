@@ -235,6 +235,7 @@ def fitting_data_dict(
     kfold_masks,
     fittable_datasets_masked,
     diagonal_basis=None,
+    diagonal_frac=1.0,
 ):
     """
     Provider which takes  the information from validphys ``data``.
@@ -279,21 +280,27 @@ def fitting_data_dict(
     # TODO: Plug in the python data loading when available. Including but not
     # limited to: central values, ndata, replica generation, covmat construction
     expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
-
     expdata = make_replica
-    tr_masks = tr_masks.masks
     covmat = dataset_inputs_fitting_covmat  # t0 covmat, or theory covmat or whatever was decided by the runcard
     inv_true = np.linalg.inv(covmat)
     fittable_datasets = fittable_datasets_masked
 
     if diagonal_basis:
         log.info("working in diagonal basis.")
+
+        # sort the eigenvalues and eigenvectors for reproducibility
         eig_vals, u_trans = np.linalg.eigh(covmat)
+        sorted_idx = np.argsort(eig_vals)
+        eig_vals, u_trans = eig_vals[sorted_idx], u_trans[:, sorted_idx]
+
+        # rotate the experimental data
         u = u_trans.T
         expdata = u @ expdata
 
         # tr/vl split happens in the diagonal basis, so we do not to treat 1-point datasets separately
-        tr_mask = np.concatenate(tr_masks)
+        # randomly assign diagonal_frac of the data to training
+        ndata = len(eig_vals)
+        tr_mask = np.random.random(ndata) < diagonal_frac
         vl_mask = ~tr_mask
 
         invcovmat_tr = np.diag(1.0 / eig_vals[tr_mask])
@@ -306,6 +313,10 @@ def fitting_data_dict(
         # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
         # Here we want to have the data both in training and validation,
         # but set to 0 the data, so that it doesn't affect the chi2 value.
+
+        tr_mask = np.concatenate(tr_masks.masks)
+        vl_mask = ~tr_mask
+
         zero_tr = []
         zero_vl = []
         idx = 0
