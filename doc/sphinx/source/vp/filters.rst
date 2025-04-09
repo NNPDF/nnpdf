@@ -307,6 +307,33 @@ append a list of filter rules to the rules obtained by the mechanisms described 
 The value of ``added_filter_rules`` should be a list of rules with the same format as ``filter_rules``.
 
 
+.. _drop_filter_rules::
+
+Dropping filter rules for selected datasets
+-------------------------------------------
+
+Sometimes it might be necessary to drop the filter rules for a dataset while keeping all other rules intact.
+This is possible with the ``drop_filter_rules`` key, which will drop all dataset-scoped rules applying to a given dataset.
+Since ``drop_filter_rules`` is applied before ``added_filter_rules`` it can be utilized to reset the rules for a given dataset
+while keeping all other internal rules.
+
+.. code:: yaml
+
+    use_cuts: "internal"
+    pdf: "NNPDF40_nnlo_as_01180"
+
+    dataset_inputs:
+      - { dataset: ATLAS_Z0J_8TEV_PT-Y }
+      - { dataset: ATLAS_Z0J_8TEV_PT-M }
+
+    theoryid: 40_000_000
+
+    drop_internal_rules:
+      - ATLAS_Z0J_8TEV_PT-Y
+
+    actions_:
+      - groups_chi2_table
+
 
 Examples
 --------
@@ -345,13 +372,13 @@ less than NNLO (i.e LO or NLO). I check what the process type of
 
 .. code:: ipython
 
-   In [1]: from validphys.loader import Loader                                                                                                                                   
+   In [1]: from validphys.loader import Loader
 
-   In [2]: l = Loader()                                                                                                                                                          
+   In [2]: l = Loader()
 
-   In [3]: cd = l.check_commondata("CMSDY2D12")                                                                                                                                  
+   In [3]: cd = l.check_commondata("CMSDY2D12")
 
-   In [4]: cd.process_type                                                                                                                                                       
+   In [4]: cd.process_type
    Out[4]: 'EWK_RAP'
 
 Then cross check this against ``NNPDF.CommonData.kinLabels`` to see that

@@ -1407,7 +1407,13 @@ class CoreConfig(configparser.Config):
         """
         return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
 
-    @functools.lru_cache
+    def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
+        """Turns drop_internal_rules into a tuple for internal caching."""
+        if drop_internal_rules is None:
+            return tuple()
+        return tuple(drop_internal_rules)
+
+    @functools.cache
     def produce_rules(
         self,
         theoryid,
@@ -1417,8 +1423,20 @@ class CoreConfig(configparser.Config):
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
         added_filter_rules: (tuple, type(None)) = None,
+        drop_internal_rules: tuple = tuple(),
     ):
-        """Produce filter rules based on the user defined input and defaults."""
+        """Produce filter rules based on the user defined input and defaults.
+
+        It is possible to overwrite or extend the internal rules from the runcard
+        using the following variables:
+
+        ``filter_rules``: tuple(rules)
+            Drop all internal rules and take these instead
+        ``added_filter_rules``: tuple(rules)
+            Extended internal rules with these
+        ``drop_internal_rules``: tuple(dataset names)
+            Drop internal dataset-specific rules, it is applied before ``added_filter_rules``
+        """
 
         theory_parameters = theoryid.get_description()
 
@@ -1432,15 +1450,20 @@ class CoreConfig(configparser.Config):
                 filter_rules = default_filter_rules_input()
 
         try:
-            rule_list = [
-                Rule(
-                    initial_data=rule,
-                    defaults=defaults,
-                    theory_parameters=theory_parameters,
-                    loader=self.loader,
+            rule_list = []
+            for rule in filter_rules:
+                # Don't load rules that are to be dropped
+                if rule.dataset in drop_internal_rules:
+                    continue
+
+                rule_list.append(
+                    Rule(
+                        initial_data=rule,
+                        defaults=defaults,
+                        theory_parameters=theory_parameters,
+                        loader=self.loader,
+                    )
                 )
-                for rule in filter_rules
-            ]
         except RuleProcessingError as e:
             raise ConfigError(f"Error Processing filter rules: {e}") from e
 
