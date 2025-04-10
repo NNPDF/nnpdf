@@ -101,12 +101,12 @@ class ObservableWrapper:
         # Finally concatenate all observables (so that experiments are one single entity)
         ret = op.concatenate(output_layers, axis=-1)
 
+        if self.trvl_mask_layer is not None:
+            ret = self.trvl_mask_layer(ret)
+
         # rotate the predictions to the diagonal basis if rotation is provided.
         if self.rotation is not None:
             ret = self.rotation(ret)
-
-        if self.trvl_mask_layer is not None:
-            ret = self.trvl_mask_layer(ret)
 
         return ret
 
@@ -257,10 +257,15 @@ def observable_generator(
             vl_mask_layer = Mask(validation_mask_array, name=f"vlmask_{spec_name}")
 
     # Make rotations of the final data (if any)
+    obsrot = None
+    obsrot_tr = None
+    obsrot_vl = None
     if spec_dict.get("data_transformation") is not None:
         obsrot = ObsRotation(spec_dict.get("data_transformation"))
-    else:
-        obsrot = None
+    if spec_dict.get("data_transformation_tr") is not None:
+        obsrot_tr = ObsRotation(spec_dict.get("data_transformation_tr"))
+    if spec_dict.get("data_transformation_vl") is not None:
+        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"))
 
     if spec_dict["positivity"]:
         out_positivity = ObservableWrapper(
@@ -288,7 +293,7 @@ def observable_generator(
         dataset_xsizes,
         invcovmat=invcovmat_tr,
         data=training_data,
-        rotation=obsrot,
+        rotation=obsrot_tr,
     )
 
     out_vl = ObservableWrapper(
@@ -298,7 +303,7 @@ def observable_generator(
         dataset_xsizes,
         invcovmat=invcovmat_vl,
         data=validation_data,
-        rotation=obsrot,
+        rotation=obsrot_vl,
     )
 
     # experimental data has already been rotated (if any)

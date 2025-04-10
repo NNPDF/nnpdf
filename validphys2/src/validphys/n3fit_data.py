@@ -236,6 +236,7 @@ def fitting_data_dict(
     fittable_datasets_masked,
     diagonal_basis=None,
     diagonal_frac=1.0,
+    exercise_juan=False,
 ):
     """
     Provider which takes  the information from validphys ``data``.
@@ -281,6 +282,7 @@ def fitting_data_dict(
     # limited to: central values, ndata, replica generation, covmat construction
     expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
     expdata = make_replica
+    tr_masks = tr_masks.masks
     covmat = dataset_inputs_fitting_covmat  # t0 covmat, or theory covmat or whatever was decided by the runcard
     inv_true = np.linalg.inv(covmat)
     fittable_datasets = fittable_datasets_masked
@@ -307,14 +309,13 @@ def fitting_data_dict(
         ndata_tr = invcovmat_tr.shape[0]
         ndata_vl = invcovmat_vl.shape[0]
 
+        expdata_tr = expdata[tr_mask].reshape(1, -1)
+        expdata_vl = expdata[vl_mask].reshape(1, -1)
+
     else:
         # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
         # Here we want to have the data both in training and validation,
         # but set to 0 the data, so that it doesn't affect the chi2 value.
-
-        tr_mask = np.concatenate(tr_masks.masks)
-        vl_mask = ~tr_mask
-
         zero_tr = []
         zero_vl = []
         idx = 0
@@ -347,10 +348,28 @@ def fitting_data_dict(
         covmat_tr[data_zero_tr, data_zero_tr] = 1.0
         covmat_vl[data_zero_vl, data_zero_vl] = 1.0
 
-        invcovmat_tr = np.linalg.inv(covmat_tr)
-        invcovmat_vl = np.linalg.inv(covmat_vl)
+        # exercise Juan: diagoanlise training and validation separately
+        if exercise_juan:
+            eig_vals_tr, u_trans_tr = np.linalg.eigh(covmat_tr)
+            eig_vals_vl, u_trans_vl = np.linalg.eigh(covmat_vl)
+
+            u_tr = u_trans_tr.T
+            u_vl = u_trans_vl.T
+
+            invcovmat_tr = np.diag(1.0 / eig_vals_tr)
+            invcovmat_vl = np.diag(1.0 / eig_vals_vl)
+
+            expdata_tr = (u_tr @ expdata[tr_mask]).reshape(1, -1)
+            expdata_vl = (u_vl @ expdata[vl_mask]).reshape(1, -1)
+        else:
+            expdata_tr = expdata[tr_mask].reshape(1, -1)
+            expdata_vl = expdata[vl_mask].reshape(1, -1)
+
+            invcovmat_tr = np.linalg.inv(covmat_tr)
+            invcovmat_vl = np.linalg.inv(covmat_vl)
 
         # Set to 0 the points in the diagonal that were left as 1
+        # TODO: makes no sense after diagonalisation
         invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
         invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
 
@@ -360,9 +379,6 @@ def fitting_data_dict(
         # And subtract them for ndata
         ndata_tr -= len(data_zero_tr)
         ndata_vl -= len(data_zero_vl)
-
-    expdata_tr = expdata[tr_mask].reshape(1, -1)
-    expdata_vl = expdata[vl_mask].reshape(1, -1)
 
     # Now save a dictionary of training/validation/experimental folds
     # for training and validation we need to apply the tr/vl masks
@@ -396,6 +412,8 @@ def fitting_data_dict(
         "count_chi2": True,
         "folds": folds,
         "data_transformation": u if diagonal_basis else None,
+        "data_transformation_tr": u_tr if exercise_juan else None,
+        "data_transformation_vl": u_vl if exercise_juan else None,
     }
     return dict_out
 
