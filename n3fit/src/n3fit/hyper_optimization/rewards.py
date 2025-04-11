@@ -1,34 +1,34 @@
 """
-    Target functions to minimize during hyperparameter scan
+Target functions to minimize during hyperparameter scan
 
-    These are implemented in the HyperLoss class which incorporates
-    various statistics (average, standard deviation, best/worst case)
-    both across multiple replicas of a model and across different folds.
+These are implemented in the HyperLoss class which incorporates
+various statistics (average, standard deviation, best/worst case)
+both across multiple replicas of a model and across different folds.
 
-    Key functionalities include:
-    - Support for different loss types such as Chi-square (chi2) and phi-square (phi2).
-    - Calculation of statistical measures (average, best_worst, std) over replicas and folds.
-    - Incorporation of penalties into the loss computation.
-    - Detailed tracking and storage of loss metrics for further analysis.
+Key functionalities include:
+- Support for different loss types such as Chi-square (chi2) and phi-square (phi2).
+- Calculation of statistical measures (average, best_worst, std) over replicas and folds.
+- Incorporation of penalties into the loss computation.
+- Detailed tracking and storage of loss metrics for further analysis.
 
-    New statistics can be added directly in this class as staticmethods and
-    via `IMPLEMENTED_STATS`; their name in the runcard must
-    match the name in the module
+New statistics can be added directly in this class as staticmethods and
+via `IMPLEMENTED_STATS`; their name in the runcard must
+match the name in the module
 
-    Example
-    -------
-    >>> import numpy as np
-    >>> from n3fit.hyper_optimization.rewards import HyperLoss
-    >>> losses = np.array([1.0, 2.0, 3.0])
-    >>> loss_average = HyperLoss(fold_statistic="average")
-    >>> loss_best_worst = HyperLoss(fold_statistic="best_worst")
-    >>> loss_std = HyperLoss(fold_statistic="std")
-    >>> print(f"{loss_average.reduce_over_folds.__name__} {loss_average.reduce_over_folds(losses)}")
-    >>> print(f"{loss_best_worst.reduce_over_folds.__name__} {loss_best_worst.reduce_over_folds(losses)}")
-    >>> print(f"{loss_std.reduce_over_folds.__name__} {loss_std.reduce_over_folds(losses)}")
-    _average 2.0
-    _best_worst 3.0
-    _std 0.816496580927726
+Example
+-------
+>>> import numpy as np
+>>> from n3fit.hyper_optimization.rewards import HyperLoss
+>>> losses = np.array([1.0, 2.0, 3.0])
+>>> loss_average = HyperLoss(fold_statistic="average")
+>>> loss_best_worst = HyperLoss(fold_statistic="best_worst")
+>>> loss_std = HyperLoss(fold_statistic="std")
+>>> print(f"{loss_average.reduce_over_folds.__name__} {loss_average.reduce_over_folds(losses)}")
+>>> print(f"{loss_best_worst.reduce_over_folds.__name__} {loss_best_worst.reduce_over_folds(losses)}")
+>>> print(f"{loss_std.reduce_over_folds.__name__} {loss_std.reduce_over_folds(losses)}")
+_average 2.0
+_best_worst 3.0
+_std 0.816496580927726
 """
 
 import logging
@@ -36,7 +36,6 @@ from typing import Callable
 
 import numpy as np
 
-from n3fit.backends import MetaModel
 from n3fit.vpinterface import N3PDF, compute_phi
 from validphys.core import DataGroupSpec
 from validphys.pdfgrids import distance_grids, xplotting_grid
@@ -385,11 +384,12 @@ class HyperLoss:
 
         if self.loss_type == "chi2":
             return selected_statistic
-
         elif self.loss_type == "phi2":
             # In case of phi2, calculate the inverse of the applied statistics
             # This is only used when calculating statistics over folds
             return lambda x: np.reciprocal(selected_statistic(x))
+        else:
+            raise ValueError(f"{self.loss_type} is not a valid hyperopt loss.")
 
 
 def fit_distance(pdfs_per_fold=None, **_kwargs):

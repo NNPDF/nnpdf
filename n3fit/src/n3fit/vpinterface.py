@@ -1,20 +1,20 @@
 """
-    n3fit interface to validphys
+n3fit interface to validphys
 
-    Example
-    -------
+Example
+-------
 
-    >>> import numpy as np
-    >>> from n3fit.vpinterface import N3PDF
-    >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> from validphys.pdfgrids import xplotting_grid
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> fake_x = np.linspace(1e-3,0.8,3)
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    >>> n3pdf = N3PDF(pdf_model)
-    >>> res = xplotting_grid(n3pdf, 1.6, fake_x)
-    >>> res.grid_values.error_members().shape
-    (1, 8, 3)
+>>> import numpy as np
+>>> from n3fit.vpinterface import N3PDF
+>>> from n3fit.model_gen import pdfNN_layer_generator
+>>> from validphys.pdfgrids import xplotting_grid
+>>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+>>> fake_x = np.linspace(1e-3,0.8,3)
+>>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+>>> n3pdf = N3PDF(pdf_model)
+>>> res = xplotting_grid(n3pdf, 1.6, fake_x)
+>>> res.grid_values.error_members().shape
+(1, 8, 3)
 
 
 """
@@ -386,7 +386,7 @@ def compute_phi(n3pdf, experimental_data):
 
             # calculate phi and store phi**2
             phi, ndat = phi_data(chi2)
-            sum_phi += np.sqrt(ndat) * phi
+            sum_phi += ndat * phi**2
             ndat_tot += ndat
 
-    return sum_phi / np.sqrt(ndat_tot)
+    return np.sqrt(sum_phi / ndat_tot)
