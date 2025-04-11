@@ -93,9 +93,9 @@ def filter_CMS_1JET_8TEV_uncertainties():
 
     # Uncorrelated systematic ucnertainties
     df_uncorr = (
-        df_unc[[#'AbsoluteStat+','AbsoluteStat-',
+        df_unc[['AbsoluteStat+','AbsoluteStat-',
                 'RelativeStatHF+','RelativeStatHF-',
-                #'RelativeStatEC2+','RelativeStatEC2-',
+                'RelativeStatEC2+','RelativeStatEC2-',
                 'RelativeStatFSR+','RelativeStatFSR-']]
         * df_unc['Sigma'].values[:, np.newaxis]
         / 100.0
@@ -107,9 +107,9 @@ def filter_CMS_1JET_8TEV_uncertainties():
     df_JES = (
         df_unc.iloc[:, 10:].drop(
             ['stat', 'uncor', 'Luminosity', 'Unfolding+', 'Unfolding-',
-             #'AbsoluteStat+','AbsoluteStat-',
+             'AbsoluteStat+','AbsoluteStat-',
              'RelativeStatHF+','RelativeStatHF-',
-             #'RelativeStatEC2+','RelativeStatEC2-',
+             'RelativeStatEC2+','RelativeStatEC2-',
              'RelativeStatFSR+','RelativeStatFSR-'], axis=1
         )
         * df_unc['Sigma'].values[:, np.newaxis]
