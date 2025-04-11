@@ -1129,7 +1129,7 @@ class ModelTrainer:
                     "trvl_losses_phi": np.array(trvl_phi_per_fold),
                     "experimental_losses": l_exper,
                     "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
-                    "hyper_losses_phi": np.array(self._hyper_loss.phi_vector),
+                    "hyper_losses_phi": np.array(self._hyper_loss.phi2_vector),
                     "penalties": {
                         name: np.array(values)
                         for name, values in self._hyper_loss.penalties.items()
