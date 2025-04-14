@@ -256,7 +256,7 @@ def observable_generator(
         else:
             vl_mask_layer = Mask(validation_mask_array, name=f"vlmask_{spec_name}")
 
-    # Make rotations of the final data (if any)
+    # get rotation matrix to diagonal basis
     if spec_dict.get("data_transformation") is not None:
         obsrot = ObsRotation(spec_dict.get("data_transformation"))
     else:
@@ -301,7 +301,7 @@ def observable_generator(
         rotation=obsrot,
     )
 
-    # experimental data has already been rotated (if any)
+    # experimental data has already been rotated if diagonal basis is requested
     out_exp = ObservableWrapper(
         f"{spec_name}_exp",
         model_observables,
