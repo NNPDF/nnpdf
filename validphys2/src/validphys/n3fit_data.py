@@ -295,8 +295,6 @@ def fitting_data_dict(
 
         # keep only directions with positive eigenvalues.
         pos_eig_vals_mask = eig_vals > 0
-        # pos_eig_vals_idx = np.argwhere(eig_vals > 0).reshape(-1)
-        eig_vals = eig_vals[pos_eig_vals_mask]
 
         # rotate the experimental data and remove negative modes
         u = u_trans.T
