@@ -291,20 +291,25 @@ def fitting_data_dict(
 
         # no need to sort the eigenvalues explicitly, eigh returns eigvals in ascending order by default
         eig_vals, u_trans = np.linalg.eigh(covmat)
+        ndata = len(eig_vals)
 
         # keep only directions with positive eigenvalues.
-        pos_eig_vals_idx = np.argwhere(eig_vals > 0).reshape(-1)
-        eig_vals = eig_vals[pos_eig_vals_idx]
+        pos_eig_vals_mask = eig_vals > 0
+        # pos_eig_vals_idx = np.argwhere(eig_vals > 0).reshape(-1)
+        eig_vals = eig_vals[pos_eig_vals_mask]
 
-        # rotate the experimental data
+        # rotate the experimental data and remove negative modes
         u = u_trans.T
         expdata = u @ expdata
-        expdata = expdata[pos_eig_vals_idx]
+        expdata = expdata[pos_eig_vals_mask]
 
         # perform training validation split
-        ndata_eff = len(pos_eig_vals_idx)
-        tr_mask = np.random.random(ndata_eff) < diagonal_frac
+        tr_mask = np.random.random(ndata) < diagonal_frac
         vl_mask = ~tr_mask
+
+        # exclude the negative modes from both training and validaiton
+        tr_mask[~pos_eig_vals_mask] = False
+        vl_mask[~pos_eig_vals_mask] = False
 
         covmat = np.diag(eig_vals)
         invcovmat = np.diag(1 / eig_vals)
