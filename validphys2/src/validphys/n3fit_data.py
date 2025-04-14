@@ -281,6 +281,7 @@ def fitting_data_dict(
     # limited to: central values, ndata, replica generation, covmat construction
     expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
     expdata = make_replica
+    tr_masks = tr_masks.masks
     covmat = dataset_inputs_fitting_covmat  # t0 covmat, or theory covmat or whatever was decided by the runcard
     inv_true = np.linalg.inv(covmat)
     fittable_datasets = fittable_datasets_masked
@@ -291,18 +292,25 @@ def fitting_data_dict(
         # no need to sort the eigenvalues explicitly, eigh returns eigvals in ascending order by default
         eig_vals, u_trans = np.linalg.eigh(covmat)
 
+        # keep only directions with positive eigenvalues.
+        pos_eig_vals_idx = np.argwhere(eig_vals > 0).reshape(-1)
+        eig_vals = eig_vals[pos_eig_vals_idx]
+
         # rotate the experimental data
         u = u_trans.T
         expdata = u @ expdata
+        expdata = expdata[pos_eig_vals_idx]
 
-        # tr/vl split happens in the diagonal basis, so we do not to treat 1-point datasets separately
-        # randomly assign diagonal_frac of the data to training
-        ndata = len(eig_vals)
-        tr_mask = np.random.random(ndata) < diagonal_frac
+        # perform training validation split
+        ndata_eff = len(pos_eig_vals_idx)
+        tr_mask = np.random.random(ndata_eff) < diagonal_frac
         vl_mask = ~tr_mask
 
-        invcovmat_tr = np.diag(1.0 / eig_vals[tr_mask])
-        invcovmat_vl = np.diag(1.0 / eig_vals[vl_mask])
+        covmat = np.diag(eig_vals)
+        invcovmat = np.diag(1 / eig_vals)
+
+        invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
+        invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
 
         ndata_tr = invcovmat_tr.shape[0]
         ndata_vl = invcovmat_vl.shape[0]
@@ -311,9 +319,6 @@ def fitting_data_dict(
         # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
         # Here we want to have the data both in training and validation,
         # but set to 0 the data, so that it doesn't affect the chi2 value.
-
-        tr_mask = np.concatenate(tr_masks.masks)
-        vl_mask = ~tr_mask
 
         zero_tr = []
         zero_vl = []
