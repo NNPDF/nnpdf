@@ -798,7 +798,7 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_dataset_inputs_sampling_covmat(
-        self, sep_mult=False, use_thcovmat_in_sampling=False
+        self, sep_mult=False, use_thcovmat_in_sampling=False,
     ):
         """
         Produces the correct covmat to be used in make_replica according
@@ -809,14 +809,15 @@ class CoreConfig(configparser.Config):
 
         if use_thcovmat_in_sampling:
             if sep_mult:
-                return covmats.dataset_inputs_total_covmat_separate
+                return covmats.dataset_inputs_t0_total_covmat_separate
             else:
-                return covmats.dataset_inputs_total_covmat
+                return covmats.dataset_inputs_t0_total_covmat
         else:
             if sep_mult:
-                return covmats.dataset_inputs_exp_covmat_separate
+                return covmats.dataset_inputs_t0_exp_covmat_separate
             else:
-                return covmats.dataset_inputs_exp_covmat
+                return covmats.dataset_inputs_t0_exp_covmat
+
 
     def produce_loaded_theory_covmat(
         self,
