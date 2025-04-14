@@ -33,6 +33,7 @@ def performfit(
     parameters,
     replica_path,
     output_path,
+    t0theoryid=None,
     save=None,
     load=None,
     hyperscanner=None,
@@ -181,24 +182,44 @@ def performfit(
 
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
-        the_model_trainer = ModelTrainer(
-            experiments_data,
-            exp_info,
-            posdatasets_fitting_pos_dict,
-            integdatasets_fitting_integ_dict,
-            basis,
-            fitbasis,
-            nnseeds,
-            positivity_bound,
-            debug=debug,
-            kfold_parameters=kfold_parameters,
-            max_cores=maxcores,
-            model_file=load,
-            sum_rules=sum_rules,
-            theoryid=theoryid,
-            lux_params=fiatlux,
-            replicas=replica_idxs,
-        )
+        if t0theoryid is not None:
+            the_model_trainer = ModelTrainer(
+                experiments_data,
+                exp_info,
+                posdatasets_fitting_pos_dict,
+                integdatasets_fitting_integ_dict,
+                basis,
+                fitbasis,
+                nnseeds,
+                positivity_bound,
+                debug=debug,
+                kfold_parameters=kfold_parameters,
+                max_cores=maxcores,
+                model_file=load,
+                sum_rules=sum_rules,
+                theoryid=t0theoryid,
+                lux_params=fiatlux,
+                replicas=replica_idxs,
+            )
+        else:
+            the_model_trainer = ModelTrainer(
+                experiments_data,
+                exp_info,
+                posdatasets_fitting_pos_dict,
+                integdatasets_fitting_integ_dict,
+                basis,
+                fitbasis,
+                nnseeds,
+                positivity_bound,
+                debug=debug,
+                kfold_parameters=kfold_parameters,
+                max_cores=maxcores,
+                model_file=load,
+                sum_rules=sum_rules,
+                theoryid=theoryid,
+                lux_params=fiatlux,
+                replicas=replica_idxs,
+            )
 
         # This is just to give a descriptive name to the fit function
         pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
