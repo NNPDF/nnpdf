@@ -299,7 +299,6 @@ def fitting_data_dict(
         # rotate the experimental data and remove negative modes
         u = u_trans.T
         expdata = u @ expdata
-        expdata = expdata[pos_eig_vals_mask]
 
         # perform training validation split
         tr_mask = np.random.random(ndata) < diagonal_frac
