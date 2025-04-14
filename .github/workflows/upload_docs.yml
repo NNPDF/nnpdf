@@ -1,0 +1,31 @@
+name: Deploy docs
+
+on: [push]
+
+env:
+  NETRC_FILE: ${{ secrets.NETRC_FILE }}
+  NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
+
+jobs:
+  deploy_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install_conda_pip
+        with:
+          nnpdf-extras: "[qed,docs]"
+      - name: Build sphinx documentation
+        shell: bash -l {0}
+        run: |
+          cd doc/sphinx
+          make html
+      - name: Upload documentation
+        shell: bash -l {0}
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cd doc/sphinx
+          KEY=$( mktemp )
+          echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
+          scp -r -i "$KEY" -o StrictHostKeyChecking=no\
+            build/html/* \
+            dummy@packages.nnpdf.science:~/sphinx-docs/

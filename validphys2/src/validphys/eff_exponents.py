@@ -605,12 +605,6 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
             # For older runcards the seeds are inside the `fitting` namespace
             fitting_data[seed] = random.randrange(0, maxint)
 
-    # Next "closuretest" section of runcard
-    if "closuretest" in filtermap:
-        closuretest_data = filtermap["closuretest"]
-        if "filterseed" in closuretest_data:
-            closuretest_data["filterseed"] = random.randrange(0, maxint)
-
     if "fiatlux" in filtermap:
         filtermap['fiatlux']['luxset'] = fit.name
 

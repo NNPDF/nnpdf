@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 21
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: EMC $F_2^c$
     y_label: $F_2^c(x,Q^2)$
     y_scale: log

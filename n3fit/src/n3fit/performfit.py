@@ -15,7 +15,6 @@ log = logging.getLogger(__name__)
 # All information defining the NN should come here in the "parameters" dict
 @n3fit.checks.can_run_multiple_replicas
 @n3fit.checks.check_multireplica_qed
-@n3fit.checks.check_fiatlux_pdfs_id
 @n3fit.checks.check_polarized_configs
 def performfit(
     *,

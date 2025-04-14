@@ -59,13 +59,16 @@ Before you've made any changes, a typical ``closuretest`` section will be as fol
     filterseed  : 0   # Random seed to be used in filtering data partitions
     fakedata    : False
     fakepdf     : MMHT2014nnlo68cl
+    faketheoryid: 41_000_000
     fakenoise   : False
 
-Setting ``fakedata`` to ``True`` will cause closure test pseudodata to be generated
-and subsequently fitted. The PDf which the pseudodata will be generated from
-is specified by the ``fakepdf`` key. It is strongly advised to set the ``fakepdf``
-and ``t0pdfset``, found under ``datacuts`` to be the same PDF, unless specifically
-testing the impact of the t0 procedure.
+Setting ``fakedata`` to ``True`` will cause closure test pseudodata to be
+generated and subsequently fitted. The PDF which the pseudodata will be
+generated from is specified by the ``fakepdf`` key and the theory is specified
+by the ``faketheoryid`` key. It is strongly advised to set the ``fakepdf`` and
+``t0pdfset`` found under ``datacuts`` to be the same PDF, as well as setting
+``t0theoryid`` found under ``theory`` and ``faketheoryid`` to be the same
+theoryid, unless specifically testing the impact of the t0 procedure.
 
 The ``fakenoise`` key specifies whether or not the level 1 shift η will be
 add to the pseudodata during the filtering step, this is require for
@@ -79,6 +82,7 @@ An example of a typical level 1 or level 2 ``closuretest`` specification is give
     filterseed  : 0   # Random seed to be used in filtering data partitions
     fakedata    : True
     fakepdf     : MMHT2014nnlo68cl
+    faketheoryid: 41_000_000
     fakenoise   : True
 
 Note that it is *critical* that two closure tests which are to be compared have
@@ -89,13 +93,18 @@ example a `report <https://vp.nnpdf.science/mbcTUd6-TQmQFvaGd37bkg==/>`_
 comparing two level 2 closure tests with identical settings apart from
 ``filterseed``.
 
-There are still some relevant settings to the closure test. For the above example
-we would choose that the t0 set was the same as the underlying law:
+There are still some relevant settings to the closure test. For the above
+example we would choose that the t0 pdf and the t0 theoryid are the same as the
+underlying law:
 
 .. code:: yaml
 
   datacuts:
     t0pdfset     : MMHT2014nnlo68cl # PDF set to generate t0 covmat
+    ...
+
+  theory:
+    t0theoryid   : 41_000_000 # theoryID to generate t0 covmat
     ...
 
 Finally we need to specify whether or not MC replicas will be generated in the

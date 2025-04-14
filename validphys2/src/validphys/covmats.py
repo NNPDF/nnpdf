@@ -35,7 +35,7 @@ def covmat_from_systematics(
     _central_values=None,
 ):
     """Take the statistical uncertainty and systematics table from
-    a :py:class:`validphys.coredata.CommonData` object and
+    a :py:class:`nnpdf_data.coredata.CommonData` object and
     construct the covariance matrix accounting for correlations between
     systematics.
 
@@ -72,7 +72,7 @@ def covmat_from_systematics(
     Parameters
     ----------
 
-    loaded_commondata_with_cuts : validphys.coredata.CommonData
+    loaded_commondata_with_cuts : nnpdf_data.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
     dataset_input: validphys.core.DataSetInput
@@ -131,7 +131,7 @@ def dataset_inputs_covmat_from_systematics(
     _list_of_central_values=None,
     _only_additive=False,
 ):
-    """Given a list containing :py:class:`validphys.coredata.CommonData` s,
+    """Given a list containing :py:class:`nnpdf_data.coredata.CommonData` s,
     construct the full covariance matrix.
 
     This is similar to :py:meth:`covmat_from_systematics`
@@ -142,7 +142,7 @@ def dataset_inputs_covmat_from_systematics(
 
     Parameters
     ----------
-    dataset_inputs_loaded_cd_with_cuts : list[validphys.coredata.CommonData]
+    dataset_inputs_loaded_cd_with_cuts : list[nnpdf_data.coredata.CommonData]
         list of CommonData objects.
     data_input: list[validphys.core.DataSetInput]
         Settings for each dataset, each element contains the weight for the
@@ -265,7 +265,7 @@ def t0_covmat_from_systematics(
 
     Parameters
     ----------
-    loaded_commondata_with_cuts: validphys.coredata.CommonData
+    loaded_commondata_with_cuts: nnpdf_data.coredata.CommonData
         commondata object for which to generate the covmat.
     dataset_input: validphys.core.DataSetInput
         Dataset settings, contains the weight for the current dataset.
@@ -307,7 +307,7 @@ def dataset_inputs_t0_covmat_from_systematics(
 
     Parameters
     ----------
-    dataset_inputs_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
+    dataset_inputs_loaded_cd_with_cuts: list[nnpdf_data.coredata.CommonData]
         The CommonData for all datasets defined in ``dataset_inputs``.
     data_input: list[validphys.core.DataSetInput]
         Settings for each dataset, each element contains the weight for the
@@ -483,7 +483,7 @@ def generate_exp_covmat(
 
     Parameters
     ----------
-        dataset_inputs: list[validphys.coredata.CommonData]
+        dataset_inputs: list[nnpdf_data.coredata.CommonData]
             list of CommonData objects.
         data: list[validphys.core.DataSetInput]
             Settings for each dataset, each element contains the weight for the

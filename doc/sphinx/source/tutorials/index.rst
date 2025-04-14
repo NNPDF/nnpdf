@@ -16,7 +16,6 @@ Running fits
    ./run-qed-fit.rst
    ./polarized_fits.rst
    ./general_th_covmat.rst
-   ./thcov_tutorial.rst
 
 Analysing results
 -----------------
@@ -44,7 +43,6 @@ Special PDF sets
 .. toctree ::
    :maxdepth: 1
 
-   ./reproduce
    ./bundle-pdfs.rst
    ./mc2hessian.rst
    ./hessian2mc.rst

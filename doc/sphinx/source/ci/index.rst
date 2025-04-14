@@ -7,8 +7,8 @@ The NNPDF code base makes use of externally hosted services, to aid development
 and testing. These are typically called *Continuous integration (CI)* or
 *Continuous deployment* services. Their main task is to execute automated tests
 on the code and produce :ref:`binary builds <conda>` which allow it to be
-automatically deployed. The services are configured so that they react to
-:ref:`git <git>` pushes to the GitHub server.
+automatically deployed. The tests automatically run upon ``git push`` to any branch
+in the GitHub server (see :ref:`git <gitsection>`).
 
 Currently we are using actively `GitHub Actions <https://help.github.com/en/actions>`_.
 In the past, the `Travis CI <https://travis-ci.com/>`_ service was used, but owing to timeout failures on Mac we have decided to move the CI to GitHub Actions.
@@ -34,13 +34,13 @@ Our CI service works roughly as follows:
         We use `Conda-build <https://docs.conda.io/projects/conda-build/en/latest/>`_ to do much of the heavy lifting for these actions.
  3. The CI service reports whether it has *succeeded* or *failed* to the GitHub,
     server, which displays that information next to the relevant pull request or
-    commit. Some logs are generated, which can aid in determining the cause of errors. 
+    commit. Some logs are generated, which can aid in determining the cause of errors.
  4. Generate docker images for tag releases with ready-to-run NNPDF installation.
 
 The progress reports of the various jobs at GitHub Actions, as well as the
 corresponding logs are available at https://github.com/NNPDF/nnpdf/actions, upon logging in
 with an authorized GitHub account.
-	  
+
 
 Configuration of GitHub Actions
 -------------------------------
@@ -52,7 +52,7 @@ Secrets stored in the GitHub Actions configuration
 
 To build and upload the packages GitHub Actions needs to be able to access some
 secrets, which should not be stored in the git repository. These are represented
-as environment variables, under the 
+as environment variables, under the
 `secrets for the NNPDF repository <https://github.com/NNPDF/nnpdf/settings/secrets>`_. The secrets are encoded
 using ``base64`` for simplicity. To use
 them, do something like::
@@ -109,4 +109,3 @@ Our GitHub Action service implements:
 
 The progress reports of the various jobs at `GitHub Actions <https://github.com/NNPDF/actions>`_, upon logging in
 with an authorized GitHub account.
-

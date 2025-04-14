@@ -60,7 +60,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
     plot_x: x
   kinematic_coverage:
@@ -94,7 +93,6 @@ implemented_observables:
   npoints: []
   ndata: 17
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
     plot_x: x
   kinematic_coverage:
@@ -128,7 +126,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
     plot_x: x
   kinematic_coverage:
@@ -162,7 +159,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $s+\bar{s}$ structure function $F_2^s$'
     plot_x: x
   kinematic_coverage:
@@ -196,7 +192,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
     plot_x: y
   kinematic_coverage:
@@ -230,7 +225,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xc$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -263,7 +257,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xd$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -297,7 +290,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{s}$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -331,7 +323,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{u}$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -441,7 +432,6 @@ implemented_observables:
   npoints: []
   ndata: 17
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
     plot_x: x
   kinematic_coverage:
@@ -475,7 +465,6 @@ implemented_observables:
   npoints: []
   ndata: 17
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: CC DIS $\bar{c}$ structure function $F_2^{W^+,c}$'
     plot_x: x
   kinematic_coverage:
@@ -509,7 +498,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $u+\bar{u}$ structure function $F_2^u$'
     plot_x: x
   kinematic_coverage:
@@ -543,7 +531,6 @@ implemented_observables:
   npoints: []
   ndata: 19
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
     plot_x: x
   kinematic_coverage:
@@ -577,7 +564,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{d}$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -611,7 +597,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xg$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -645,7 +630,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xs$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -679,7 +663,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xu$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -713,7 +696,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Ball:2013lla
     dataset_label: 'polarized positivity: $x \delta g$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -752,7 +734,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Altarelli:1998gn
     dataset_label: 'polarized positivity for d: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -791,7 +772,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Altarelli:1998gn
     dataset_label: 'polarized positivity: $x \delta \bar{d}$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -830,7 +810,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Altarelli:1998gn
     dataset_label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -871,7 +850,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Altarelli:1998gn
     dataset_label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -910,7 +888,6 @@ implemented_observables:
   npoints: []
   ndata: 20
   plotting:
-    theory_reference: Altarelli:1998gn
     dataset_label: 'polarized positivity: $x \delta \bar{u}$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
