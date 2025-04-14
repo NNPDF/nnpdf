@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-    setup-fit - prepare and apply data cuts before fit
-    setup-fit constructs the fit [results] folder where data used by nnfit
-    will be stored.
+setup-fit - prepare and apply data cuts before fit
+setup-fit constructs the fit [results] folder where data used by nnfit
+will be stored.
 """
 
 # Implementation notes
@@ -191,6 +191,8 @@ class SetupFitConfig(Config):
         # Check positivity bound
         if file_content.get('positivity_bound') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
+
+        # Sets default values if they are not present in the runcard
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
 
