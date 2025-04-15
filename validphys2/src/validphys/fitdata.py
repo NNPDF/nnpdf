@@ -115,7 +115,7 @@ class FitInfo:
 
     @property
     def has_converged(self):
-        """Uses the positivity flag as a proxy for convergence.
+        """Uses the positivity flag as a proxy for convergence. Where convergence is defined mainly through the two constraints: the validation loss being smaller than the threshold and the positivity criterion being satisfied. 
         When a fit does not reach convergence, the positivity flag is never flipped to true."""
         return self.pos_flag
 
