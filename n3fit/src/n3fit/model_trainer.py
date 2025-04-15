@@ -200,6 +200,7 @@ class ModelTrainer:
                 loss_type=loss_type,
                 replica_statistic=replica_statistic,
                 fold_statistic=fold_statistic,
+                reduce_proportion=kfold_parameters.get("reduce_proportion", 0.85),
                 penalties_in_loss=kfold_parameters.get("penalties_in_loss", False),
             )
 

@@ -20,6 +20,7 @@ Example
 """
 
 from collections.abc import Iterable
+from functools import cached_property
 import logging
 
 import numpy as np
@@ -206,9 +207,22 @@ class N3PDF(PDF):
 
         super().__init__(name)
         self._stats_class = N3Stats
-        self._lhapdf_set = N3LHAPDFSet(self.name, self._models, Q=Q)
+        self._Q = Q
         # Since there is no info file, create a fake `_info` dictionary
         self._info = {"ErrorType": "replicas", "NumMembers": len(self._models)}
+
+    def select_models(self, indexes):
+        """Given a list of indexes, return a ``N3PDF`` class with the same
+        settings as this one and the subset of models."""
+        # TODO: once the PDF class is moved to a dataclass as per a very old issue, this can simply use dataclass.replace
+        new_models = [self._models[i] for i in indexes]
+        return self.__class__(
+            new_models, fit_basis=self.fit_basis, name=f"{self.name}_reduced", Q=self._Q
+        )
+
+    @cached_property
+    def _lhapdf_set(self):
+        return N3LHAPDFSet(self.name, self._models, Q=self._Q)
 
     def load(self):
         """If the function needs an LHAPDF object, return a N3LHAPDFSet"""
