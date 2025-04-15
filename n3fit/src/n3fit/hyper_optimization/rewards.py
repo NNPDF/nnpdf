@@ -126,8 +126,8 @@ def _std(fold_losses: np.ndarray, axis: int = 0, **kwargs) -> float:
 
 
 IMPLEMENTED_STATS = {
+    "average_best": _average,  # NB: all averages are average best now
     "average": _average,
-    "average_best": _average_best,
     "best_worst": _best_worst,
     "std": _std,
 }
@@ -160,10 +160,12 @@ class HyperLoss:
             Options are "chi2" and "phi2".
         replica_statistic: str
             the statistic over the replicas to use, for per replica losses.
-            Options are "average", "best_worst", and "std".
+            Options are ``average``, ``best_worst`` and ``_std``.
         fold_statistic: str
             the statistic over the folds to use.
-            Options are "average", "best_worst", and "std".
+            Options are ``average``, ``best_worst`` and ``_std``.
+        reduce_proportion: float (default 0.85)
+            Proportion of replicas to select when computing statistics.
         penalties_in_loss: bool
             whether the penalties should be included in the output of ``compute_loss``
     """
@@ -173,23 +175,21 @@ class HyperLoss:
         loss_type: str = None,
         replica_statistic: str = None,
         fold_statistic: str = None,
+        reduce_proportion: float = 0.85,
         penalties_in_loss: bool = False,
     ):
         self._default_loss = "chi2"
         self._penalties_in_loss = penalties_in_loss
+        self._proportion = reduce_proportion
 
         self.loss_type = self._parse_loss(loss_type)
-        self.reduce_over_replicas = self._parse_statistic(
-            replica_statistic, "replica_statistic", default="average_best"
-        )
-        self.reduce_over_folds = self._parse_statistic(
-            fold_statistic, "fold_statistic", default="average"
-        )
 
         self.phi2_vector = []
         self.chi2_matrix = []
-
         self.penalties = {}
+
+        self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica")
+        self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold")
 
     def compute_loss(
         self,
@@ -245,8 +245,17 @@ class HyperLoss:
         >>> pdf = N3PDF(pdf_model.split_replicas())
         >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf, experimental_data)
         """
+        if np.isnan(validation_loss).any():
+            log.warning(f"{np.isnan(validation_loss).sum()} replicas have NaNs losses")
+
+        # Before starting, select the best replicas according to the proportion set in the __init__
+        num_best = int(np.ceil(self._proportion * len(validation_loss)))
+        best_indexes = np.argsort(validation_loss, axis=0)[:num_best]
+        best_validation_losses = validation_loss[best_indexes]
+
         # calculate phi for a given k-fold using vpinterface and validphys
-        phi2_per_fold = compute_phi(pdf_object, experimental_data) ** 2
+        pdf_object_reduced = pdf_object.select_models(best_indexes)
+        phi2_per_fold = compute_phi(pdf_object_reduced, experimental_data) ** 2
 
         # update hyperopt metrics
         # these are saved in the `phi2_vector` and `chi2_matrix` attributes, excluding penalties
@@ -264,16 +273,18 @@ class HyperLoss:
         if self.loss_type == "chi2":
             # calculate statistics of chi2 over replicas for a given k-fold_statistic
 
-            # Construct the final loss as a sum of
+            # Construct the final loss as a sum of:
             # 1. The validation chi2
             # 2. The distance to 2 for the kfold chi2
-            # If a proportion allow as a keyword argument, use 80% and 10%
-            # as a proxy of
+            # In the hyperopt paper we used 80% and 10% respectively, as a proxy for:
             # "80% of the replicas should be good, but only a small % has to cover the folds"
-            # The values of 80% and 10% are completely empirical and should be investigated further
+            # Currently take reduce_proportion for a) and 1.0 - reduce_proportion for b)
+            validation_loss_average = self.reduce_over_replicas(best_validation_losses)
 
-            validation_loss_average = self.reduce_over_replicas(validation_loss, proportion=0.8)
-            kfold_loss_average = self.reduce_over_replicas(kfold_loss, proportion=0.1)
+            nselect = int(np.ceil((1.0 - self._proportion) * len(kfold_loss)))
+            best_kfold_losses = np.sort(kfold_loss, axis=0)[:nselect]
+            kfold_loss_average = self.reduce_over_replicas(best_kfold_losses)
+
             loss = validation_loss_average + (max(kfold_loss_average, 2.0) - 2.0)
         elif self.loss_type == "phi2":
             loss = phi2_per_fold
@@ -347,16 +358,17 @@ class HyperLoss:
 
         return loss_type
 
-    def _parse_statistic(self, statistic: str, name: str, default: str) -> Callable:
+    def _parse_statistic(self, statistic: str, target: str, default: str = "average") -> Callable:
         """
         Parse the statistic and return the default if None.
+
 
         Parameters
         ----------
             statistic: str
                 The statistic to parse.
-            name: str
-                The name of the statistic.
+            target: str
+                The target of the statistic (either replica or fold)
 
         Returns
         -------
@@ -376,9 +388,9 @@ class HyperLoss:
 
         if statistic not in IMPLEMENTED_STATS:
             valid_options = ", ".join(IMPLEMENTED_STATS.keys())
-            raise ValueError(f"Invalid {name} '{statistic}'. Valid options are: {valid_options}")
+            raise ValueError(f"Invalid {target} '{statistic}'. Valid options are: {valid_options}")
 
-        log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
+        log.info(f"Using '{statistic}' as the {target} for hyperoptimization")
 
         selected_statistic = IMPLEMENTED_STATS[statistic]
 
@@ -388,8 +400,8 @@ class HyperLoss:
             # In case of phi2, calculate the inverse of the applied statistics
             # This is only used when calculating statistics over folds
             return lambda x: np.reciprocal(selected_statistic(x))
-        else:
-            raise ValueError(f"{self.loss_type} is not a valid hyperopt loss.")
+
+        raise ValueError(f"{self.loss_type} is not a valid hyperopt loss.")
 
 
 def fit_distance(pdfs_per_fold=None, **_kwargs):
