@@ -5,6 +5,8 @@ name: All tests NNPDF
 # the custom actions in .github/actions/
 
 on: [push]
+# Define a group based on on branch name (github.head_ref) and .... (github.ref) 
+# use this group to identify which processes to cancel due to cancel-in-progress
 concurrency:
   group: ${{ github.head_ref }}-${{ github.ref }}
   cancel-in-progress: true

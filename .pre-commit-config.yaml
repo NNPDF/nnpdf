@@ -24,11 +24,10 @@ repos:
         args: ['--settings-path=./pyproject.toml']
 
 -   repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.10.0  # Use the ref you want to point at
+    rev: v1.10.0
     hooks:
     -   id: python-check-blanket-noqa
     -   id: python-check-blanket-type-ignore
-#     -   id: rst-backticks # too many false positive but many true positives as well
     -   id: rst-directive-colons
     -   id: rst-inline-touching-normal
     -   id: text-unicode-replacement-char
