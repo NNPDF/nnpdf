@@ -300,26 +300,12 @@ The loss function was then computed as
 .. math::
     L_{\rm hyperopt} = \frac{1}{2} (L_{\rm validation} + L_{\rm testing})
 
-The group of datasets that were left out followed the algorithm :ref:`mentioned above<hyperextrapolation-label>` with only one fold:
-
-
-* NMC
-* BCDMSP
-* BCDMSD
-* HERACOMBNCEP460
-* H1HERAF2B
-* D0ZRap
-* CDFR2KT
-* D0WMASY
-* ATLASZHIGHMASS49FB
-* CMSZDIFF12
-* ATLASTTBARTOT
-
-These were chosen attending to their `process type` as defined in their :ref:`commondata files <exp_data_files>`.
+While the group of datasets that were left out followed the algorithm :ref:`mentioned above<hyperextrapolation-label>` but
+with only one fold leaving out a dataset per type of process.
 
 
 Changing the hyperoptimization target
------------------------------------
+-------------------------------------
 
 Beyond the usual :math:`\chi2`-based optimization figures above, it is possible to utilize other measures as the target for hyperoptimization.
 
@@ -401,7 +387,8 @@ In NNPDF, this hyperoptimisation metrics is selected via the following generic r
 
         kfold:
           loss_type: chi2
-          replica_statistic: average_best
+          replica_statistic: average
+          reduce_proportion: 0.85
           fold_statistic: average
           penalties_in_loss: False
           partitions:
@@ -414,9 +401,9 @@ In NNPDF, this hyperoptimisation metrics is selected via the following generic r
 
 
 The key ``replica_statistic`` defines how to combine all replicas when perform a multireplica hyperopt.
-With ``average`` a simple average will be taken, ``average_best`` instead will take the 90% best replicas,
-mimicking what is done in a real post-fit selection.
-
+In this case, the ``average`` across replicas.
+In order to mimic a real PDF fit, the ``reduce_proportion`` key is used to select the best ``reduce_proportion`` replicas of the set. If set to ``1.0`` all replicas will be used.
+It defaults to 0.85 (or the 85% best replicas).
 The ``fold_statistic`` instead defines how to combine the loss of the different folds.
 While the values for the ``penalties`` are always saved during the hyperopt run, by default they are not
 considered by the hyoperoptimizaton algorithm.

@@ -43,34 +43,6 @@ from validphys.pdfgrids import distance_grids, xplotting_grid
 log = logging.getLogger(__name__)
 
 
-def _average_best(fold_losses: np.ndarray, proportion: float = 0.05, axis: int = 0) -> float:
-    """
-    Compute the average of the input array along the specified axis, among the best `proportion`
-    of replicas.
-
-    Parameters
-    ----------
-        fold_losses: np.ndarray
-            Per replica losses for a single fold.
-        proportion: float
-            The proportion of best replicas to take into account (rounded up).
-        axis: int, optional
-            Axis along which the mean is computed. Default is 0.
-
-    Returns
-    -------
-        float: The average along the specified axis.
-    """
-    # TODO: use directly `validphys.fitveto.determine_vetoes`
-    num_best = int(np.ceil(proportion * len(fold_losses)))
-
-    if np.isnan(fold_losses).any():
-        log.warning(f"{np.isnan(fold_losses).sum()} replicas have NaNs losses")
-    sorted_losses = np.sort(fold_losses, axis=axis)
-    best_losses = sorted_losses[:num_best]
-    return _average(best_losses, axis=axis)
-
-
 def _average(fold_losses: np.ndarray, axis: int = 0, **kwargs) -> float:
     """
     Compute the average of the input array along the specified axis.
@@ -384,7 +356,7 @@ class HyperLoss:
         """
         if statistic is None:
             statistic = default
-            log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
+            log.warning(f"No {target} selected in HyperLoss, defaulting to {statistic}")
 
         if statistic not in IMPLEMENTED_STATS:
             valid_options = ", ".join(IMPLEMENTED_STATS.keys())
