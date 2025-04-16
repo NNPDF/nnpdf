@@ -60,6 +60,7 @@ class Uploader:
 
     upload_host = _profile_key('upload_host')
     _profile = Loader().nnprofile
+    _macos_compatibility = False
 
     def get_relative_path(self, output_path):
         """Return the relative path to the ``target_dir``."""
@@ -100,12 +101,26 @@ class Uploader:
         """Check that the rsync command exists"""
         if not shutil.which('rsync'):
             raise BadSSH("Could not find the rsync command. Please make sure it is installed.")
+        if shutil.which("sw_vers") and not self._macos_compatibility:
+            # In Mac 15.4 Sequoia rsync was swapped by openrsync and permissions work differently
+            # we need to swap permissions in the output file manually
+            cmd = ("sw_vers", "--productVersion")
+            macV = subprocess.run(cmd, capture_output=True, text=True).stdout.strip()
+            if macV >= "15.4":
+                self._macos_compatibility = True
 
     def upload_output(self, output_path):
         """Rsync ``output_path`` to the server and print the resulting URL. If
         specific_file is given"""
+        pout = pathlib.Path(output_path)
         # Set the date to now
-        pathlib.Path(output_path).touch()
+        pout.touch()
+        if self._macos_compatibility:
+            # Set the permission of the upload folder/file to ug+rwx,o+rx
+            pout.chmod(0o775)
+            for p in pout.rglob("*"):
+                p.chmod(0o775)
+
         randname = self.get_relative_path(output_path)
         newdir = self.target_dir + randname
 
@@ -113,11 +128,11 @@ class Uploader:
             'rsync',
             '-aLz',
             '--chmod=ug=rwx,o=rx',
-            f"{output_path}/",
+            f"{pout.as_posix()}/",
             f"{self.upload_host}:{newdir}",
         )
 
-        log.info(f"Uploading output ({output_path}) to {self.upload_host}")
+        log.info(f"Uploading output ({pout}) to {self.upload_host}")
         try:
             subprocess.run(rsync_command, check=True)
         except subprocess.CalledProcessError as e:
@@ -132,8 +147,8 @@ class Uploader:
     def check_upload(self):
         """Check that it looks possible to upload something.
         Raise an UploadError if not."""
-        self.check_rsync()
         self.check_auth()
+        self.check_rsync()
 
     @contextlib.contextmanager
     def upload_context(self, output):
