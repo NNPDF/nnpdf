@@ -40,7 +40,7 @@ Closure tests
 
 Special PDF sets
 ----------------
-.. toctree ::
+.. toctree::
    :maxdepth: 1
 
    ./bundle-pdfs.rst
@@ -49,7 +49,7 @@ Special PDF sets
 
 Miscellaneous
 -------------
-.. toctree ::
+.. toctree::
    :maxdepth: 1
 
    ./list-resources.rst

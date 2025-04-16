@@ -5,6 +5,11 @@ name: All tests NNPDF
 # the custom actions in .github/actions/
 
 on: [push]
+# Define a group based on on branch name (github.head_ref) and .... (github.ref)
+# use this group to identify which processes to cancel due to cancel-in-progress
+concurrency:
+  group: ${{ github.head_ref }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   # https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
@@ -79,7 +84,9 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ env.CONDA_PREFIX }}/conda-bld/noarch/*.tar.bz2
+          # Uploads package to the workflow, download url available in the action's log
+          name: nnpdf-package-${{ github.job }}-${{ strategy.job-index }}.tar.bz2
+          path: ${{ env.CONDA }}/envs/*/conda-bld/noarch/*.tar.bz2
 
   run_pytorch:
     runs-on: ubuntu-latest

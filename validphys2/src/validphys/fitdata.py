@@ -3,6 +3,7 @@ Utilities for loading data from fit folders
 """
 
 from collections import OrderedDict, defaultdict, namedtuple
+from dataclasses import dataclass
 from io import StringIO
 import json
 import logging
@@ -89,10 +90,34 @@ def check_replica_files(replica_path, prefix):
     return valid
 
 
-FitInfo = namedtuple(
-    "FitInfo",
-    ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths', 'integnumbers'),
-)
+@dataclass
+class FitInfo:
+    """Hold various metadata about the replicas of a fit
+
+    Parameter
+    ---------
+    nite: best (stop) epoch of the replica
+    training: Value of the training error function
+    validation: Value of the validation error function
+    chi2: Value of the experimental chi2
+    pos_flag: State of the positivity pass flag
+    arclengths: Array of the arc-length of each parton
+    integrability: Array of values for the integrability checks
+    """
+
+    nite: int
+    training: float
+    validation: float
+    chi2: float
+    pos_flag: bool
+    arclengths: np.ndarray
+    integnumbers: np.ndarray
+
+    @property
+    def has_converged(self):
+        """Uses the positivity flag as a proxy for convergence. Where convergence is defined mainly through the two constraints: the validation loss being smaller than the threshold and the positivity criterion being satisfied. 
+        When a fit does not reach convergence, the positivity flag is never flipped to true."""
+        return self.pos_flag
 
 
 def _old_load_fitinfo(old_fitinfo):
