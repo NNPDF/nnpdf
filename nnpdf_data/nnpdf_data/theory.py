@@ -1,5 +1,5 @@
 """
-This module provides an unique source and definition for all the possible parameters
+This module provides a unique source and definition for all the possible parameters
 that a theory card can contain.
 """
 
@@ -54,6 +54,7 @@ class TheoryCard:
     alphas: float  # Value of alpha_s at the scale Qref
     alphaqed: float  # Values of alpha QED at the scale Qref
     Qref: float  # [GeV] Reference scale for alphas and alphaqed
+    XIA: float = 1.0  # Fragmentation scale over the hard scattering scale ratio
     nfref: Optional[int] = None  # nf at Qref (its default depend on Qref)
     MaxNfPdf: Optional[int] = 5  # Used by pineko and the photon module to define the thresholds
     ## Fit theory parameters default
