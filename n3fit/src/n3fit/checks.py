@@ -432,7 +432,9 @@ def check_consistent_parallel(parameters, parallel_models):
     if not parallel_models:
         return
     if parameters.get("layer_type") not in ("dense"):
-        raise CheckError("Parallelization has only been tested with layer_type=='dense'")
+        raise CheckError(
+            "Parallelization has only been tested with layer_type=='dense', set `parallel_models: false`"
+        )
 
 
 @make_argcheck
