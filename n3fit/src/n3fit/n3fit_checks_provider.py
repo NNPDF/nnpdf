@@ -27,7 +27,7 @@ def n3fit_checks_action(
     hyperopt=None,
     kfold=None,
     tensorboard=None,
-    parallel_models=False,
+    parallel_models=True,
     double_precision=False,
 ):
     return

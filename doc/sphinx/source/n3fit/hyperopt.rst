@@ -344,9 +344,6 @@ hyperopt configuration dictionary).
             - HERA_NC_251GEV_EP-SIGMARED
           - datasets:
 
-        parallel_models: true
-        same_trvl_per_replica: true
-
 We can run this hyperparameter scan for 10 parallel replicas for 20 trials with:
 
 .. code-block:: bash
