@@ -84,12 +84,12 @@ class PDF(TupleComp):
     --------
     >>> from validphys.api import API
     >>> from validphys.convolution import predictions
-    >>> args = {"dataset_input":{"dataset": "ATLASTTBARTOT"}, "theoryid":162, "use_cuts":"internal"}
+    >>> args = { "dataset_input": {"dataset": "CMS_WPWM_7TEV_MUON_ASY"}, "theoryid":40_000_000, "use_cuts":"internal"}
     >>> ds = API.dataset(**args)
     >>> pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
     >>> preds = predictions(ds, pdf)
     >>> preds.shape
-    (3, 100)
+    (11, 100)
     """
 
     def __init__(self, name, boundary=None):

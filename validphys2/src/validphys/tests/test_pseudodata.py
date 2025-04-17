@@ -15,7 +15,7 @@ import pytest
 from validphys.api import API
 from validphys.covmats import dataset_t0_predictions
 from validphys.loader import Loader
-from validphys.tests.conftest import FIT, PDF, PSEUDODATA_FIT, SINGLE_DATASET, THEORYID_NEW
+from validphys.tests.conftest import FIT, PDF, PSEUDODATA_FIT, SINGLE_DATASET, THEORYID
 
 
 def test_read_fit_pseudodata():
@@ -94,12 +94,12 @@ def test_level0_commondata_wc():
     l = Loader()
 
     datasetspec = l.check_dataset(
-        name=dataset['dataset'], variant=dataset['variant'], theoryid=THEORYID_NEW
+        name=dataset['dataset'], variant=dataset['variant'], theoryid=THEORYID
     )
     t0set = l.check_pdf(pdfname)
 
     l0_cd = API.level0_commondata_wc(
-        dataset_inputs=[dataset], use_cuts="internal", theoryid=THEORYID_NEW, fakepdf=pdfname
+        dataset_inputs=[dataset], use_cuts="internal", theoryid=THEORYID, fakepdf=pdfname
     )
     l0_vals = l0_cd[0].central_values
     assert_allclose(
