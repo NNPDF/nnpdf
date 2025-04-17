@@ -100,9 +100,7 @@ def test_couplings_exa():
             dict(
                 alphas=theory["alphas"],
                 alphaem=theory["alphaqed"],
-                scale=theory["Qref"],
-                num_flavs_ref=None,
-                max_num_flavs=theory["MaxNfPdf"],
+                ref=(theory["Qref"], theory["MaxNfPdf"]),
                 em_running=True,
             )
         )
