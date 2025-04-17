@@ -436,16 +436,6 @@ def check_consistent_parallel(parameters, parallel_models):
 
 
 @make_argcheck
-def can_run_multiple_replicas(replicas, parallel_models):
-    """Warns the user if trying to run just one replica in parallel"""
-    if not parallel_models:
-        return
-    if len(replicas) == 1:
-        log.warning("parallel_models is set to true for only one replica")
-        return
-
-
-@make_argcheck
 def check_deprecated_options(fitting):
     """Checks whether the runcard is using deprecated options"""
     options_outside = ["trvlseed", "nnseed", "mcseed", "save", "load", "genrep", "parameters"]
@@ -460,6 +450,7 @@ def check_deprecated_options(fitting):
     for option in nnfit_options:
         if option in fitting:
             log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
+
 
 @make_argcheck
 def check_multireplica_qed(replicas, fiatlux):

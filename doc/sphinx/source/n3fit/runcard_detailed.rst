@@ -340,23 +340,14 @@ as well as a detailed analysis of the amount of time that TensorFlow spent on ea
 Running fits in parallel
 ------------------------
 
-It is possible to run fits in parallel with ``n3fit`` by setting the ``parallel_models``
-flag in the runcard to ``true`` when running a range of replicas.
+When running more than one replicas, they will run in parallel by default.
+It is possible to run the fits sequentially as well
+by setting the ``parallel_models`` flag in the runcard to ``false`` when running a range of replicas.
 Running in parallel can be quite hard on memory and it is only advantageous when
 fitting on a GPU, where one can find a speed up equal to the number of models run
 in parallel (each model being a different replica).
 Running in parallel models produces the exact same pseudodata as the sequential runs.
 Note that numerical differences might be generated during the training
-
-In other words, in order to run several replicas in parallel in a machine
-(be it a big CPU or, most likely, a GPU)
-it is necessary to modify the ``n3fit`` runcard by adding the following
-top-level option:
-
-.. code-block:: yaml
-
-  parallel_models: true
-
 
 Once this is done, the user can run ``n3fit`` with a
 replica range to be parallelized (in this case from replica 1 to replica 4).
