@@ -235,6 +235,7 @@ def fitting_data_dict(
     kfold_masks,
     fittable_datasets_masked,
     diagonal_basis=None,
+    diagonal_frac=1.0,
 ):
     """
     Provider which takes  the information from validphys ``data``.
@@ -279,7 +280,6 @@ def fitting_data_dict(
     # TODO: Plug in the python data loading when available. Including but not
     # limited to: central values, ndata, replica generation, covmat construction
     expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
-
     expdata = make_replica
     tr_masks = tr_masks.masks
     covmat = dataset_inputs_fitting_covmat  # t0 covmat, or theory covmat or whatever was decided by the runcard
@@ -288,55 +288,62 @@ def fitting_data_dict(
 
     if diagonal_basis:
         log.info("working in diagonal basis.")
-        eig, v = np.linalg.eigh(covmat)
-        dt_trans = v.T
+
+        # no need to sort the eigenvalues explicitly, eigh returns eigvals in ascending order by default
+        eig_vals, u_trans = np.linalg.eigh(covmat)
+        ndata = len(eig_vals)
+
+        # keep only directions with positive eigenvalues.
+        pos_eig_vals_mask = eig_vals > 0
+
+        # rotate the experimental data and remove negative modes
+        u = u_trans.T
+        expdata = u @ expdata
+
+        # perform training validation split
+        tr_mask = np.random.random(ndata) < diagonal_frac
+        vl_mask = ~tr_mask
+
+        # exclude the negative modes from both training and validaiton
+        tr_mask[~pos_eig_vals_mask] = False
+        vl_mask[~pos_eig_vals_mask] = False
+
+        covmat = np.diag(eig_vals)
+        invcovmat = np.diag(1 / eig_vals)
+
+        invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
+        invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
+
+        ndata_tr = invcovmat_tr.shape[0]
+        ndata_vl = invcovmat_vl.shape[0]
+
     else:
-        dt_trans = None
-        dt_trans_tr = None
-        dt_trans_vl = None
+        # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
+        # Here we want to have the data both in training and validation,
+        # but set to 0 the data, so that it doesn't affect the chi2 value.
 
-    # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
-    # Here we want to have the data both in training and validation,
-    # but set to 0 the data, so that it doesn't affect the chi2 value.
-    zero_tr = []
-    zero_vl = []
-    idx = 0
-    for data_mask in tr_masks:
-        dlen = len(data_mask)
-        if dlen == 1:
-            if data_mask[0]:
-                zero_vl.append(idx)
-            else:
-                zero_tr.append(idx)
-        idx += dlen
+        zero_tr = []
+        zero_vl = []
+        idx = 0
+        for data_mask in tr_masks:
+            dlen = len(data_mask)
+            if dlen == 1:
+                if data_mask[0]:
+                    zero_vl.append(idx)
+                else:
+                    zero_tr.append(idx)
+            idx += dlen
 
-    tr_mask = np.concatenate(tr_masks)
-    vl_mask = ~tr_mask
+        tr_mask = np.concatenate(tr_masks)
+        vl_mask = ~tr_mask
 
-    # Now set to true the masks
-    tr_mask[zero_tr] = True
-    vl_mask[zero_vl] = True
-    # And prepare the index to 0 the (inverse) covmat
-    data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
-    data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
+        # Now set to true the masks
+        tr_mask[zero_tr] = True
+        vl_mask[zero_vl] = True
+        # And prepare the index to 0 the (inverse) covmat
+        data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
+        data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
 
-    if diagonal_basis:
-        expdata = np.matmul(dt_trans, expdata)
-        # make a 1d array of the diagonal
-        covmat_tr = eig[tr_mask]
-        invcovmat_tr = 1.0 / covmat_tr
-
-        covmat_vl = eig[vl_mask]
-        invcovmat_vl = 1.0 / covmat_vl
-
-        # prepare a masking rotation
-        dt_trans_tr = dt_trans[tr_mask]
-        dt_trans_vl = dt_trans[vl_mask]
-
-        # TODO: check the effect of this when diagonalization
-        invcovmat_tr[data_zero_tr] = 0.0
-        invcovmat_vl[data_zero_vl] = 0.0
-    else:
         covmat_tr = covmat[tr_mask].T[tr_mask]
         covmat_vl = covmat[vl_mask].T[vl_mask]
 
@@ -354,12 +361,12 @@ def fitting_data_dict(
         invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
         invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
 
-    ndata_tr = np.count_nonzero(tr_mask)
-    ndata_vl = np.count_nonzero(vl_mask)
+        ndata_tr = np.count_nonzero(tr_mask)
+        ndata_vl = np.count_nonzero(vl_mask)
 
-    # And subtract them for ndata
-    ndata_tr -= len(data_zero_tr)
-    ndata_vl -= len(data_zero_vl)
+        # And subtract them for ndata
+        ndata_tr -= len(data_zero_tr)
+        ndata_vl -= len(data_zero_vl)
 
     expdata_tr = expdata[tr_mask].reshape(1, -1)
     expdata_vl = expdata[vl_mask].reshape(1, -1)
@@ -377,6 +384,7 @@ def fitting_data_dict(
     # which contains the instructions on how to generate each observable for the fit
     # plus the information that glue all of them together (covmat, ndata, etc)
     # TODO: for consistency with the rest of validphys a FittableGroup should be created
+
     dict_out = {
         "datasets": fittable_datasets,
         "name": str(data),
@@ -394,9 +402,7 @@ def fitting_data_dict(
         "positivity": False,
         "count_chi2": True,
         "folds": folds,
-        "data_transformation_tr": dt_trans_tr,
-        "data_transformation_vl": dt_trans_vl,
-        "data_transformation": dt_trans,
+        "data_transformation": u if diagonal_basis else None,
     }
     return dict_out
 
