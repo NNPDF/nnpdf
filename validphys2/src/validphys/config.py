@@ -1685,13 +1685,14 @@ class CoreConfig(configparser.Config):
         """Load the default grouping of data"""
         # slightly superfluous, only one default at present but perhaps
         # somebody will want to add to this at some point e.g for th. uncertainties
-        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL"}
+        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL", "diagonal_basis": "ALL"}
         return allowed[spec]
 
     def produce_processed_data_grouping(
         self,
         use_thcovmat_in_fitting=False,
         use_thcovmat_in_sampling=False,
+        diagonal_basis=False,
         data_grouping=None,
         data_grouping_recorded_spec_=None,
     ):
@@ -1711,6 +1712,8 @@ class CoreConfig(configparser.Config):
             data_grouping = self.parse_data_grouping("standard_report")
             if use_thcovmat_in_fitting or use_thcovmat_in_sampling:
                 data_grouping = self.parse_data_grouping("thcovmat_fit")
+            if diagonal_basis:
+                data_grouping = self.parse_data_grouping("diagonal_basis")
         if data_grouping_recorded_spec_ is not None:
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)
