@@ -98,7 +98,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         if self.normalize_to is not None:
             return f"Ratio to {self.normalize_pdf.label}"
 
-        base_str = f"x{parton_name}(x)"
+        base_str = f"z{parton_name}(z)"
         # Ask the xplotting grid if it has something to add:
         final_str = self.firstgrid.process_label(base_str)
 
@@ -163,7 +163,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
             if self.ymax is not None:
                 ax.set_ylim(ymax=self.ymax)
 
-            ax.set_xlabel('$x$')
+            ax.set_xlabel('$z$')
             ax.set_xlim(self.firstgrid.xgrid[0])
 
             ax.set_ylabel(self.get_ylabel(parton_name))

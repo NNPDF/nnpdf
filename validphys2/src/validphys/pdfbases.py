@@ -692,6 +692,24 @@ POLARIZED_FLAVOURPC = LinearBasis.from_mapping(
                'c': r'\Delta c', 'cbar': r'\Delta \bar{c}', 'g': r'\Delta g',}
 )
 
+FF_FLAVOURPC = LinearBasis.from_mapping(
+    {
+        r'D_u': {'u': 1},
+        r'D_\bar{u}': {'ubar': 1},
+        r'D_d': {'d': 1},
+        r'D_\bar{d}': {'dbar': 1},
+        r'D_s': {'s': 1},
+        r'D_\bar{s}': {'sbar': 1},
+        r'D_c': {'c': 1},
+        r'D_\bar{c}': {'cbar': 1},
+        r'D_g': {'g': 1},
+    },
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', ),
+    aliases = {'u': r'D_u', 'ubar': r'D_\bar{u}', 'd': r'D_d',
+               'dbar': r'D_\bar{d}', 's': r'D_s', 'sbar': r'D_\bar{s}',
+               'c': r'D_c', 'cbar': r'D_\bar{c}', 'g': r'D_g',}
+)
+
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
 'u_{v}': {'u':1, 'ubar':-1},
