@@ -102,23 +102,29 @@ def replica_luxseed(replica, luxseed):
     return replica_nnseed(replica, luxseed)
 
 
-class _TrMasks(TupleComp):
+class _Masks(TupleComp):
     """Class holding the training validation mask for a group of datasets
     If the same group of dataset receives the same trvlseed then the mask
     will be the same.
     This class holds said information so it can be reused easily, i.e.,
     ``group_name`` and ``seed`` define the ``masks``.
+
+    In case of the diagonal basis, the ``rotation`` is a tuple of the eigenvalues and
+    eigenvectors of the fitting covariance matrix.
     """
 
-    def __init__(self, group_name, seed, masks=None):
-        self.masks = masks
+    def __init__(self, group_name, seed, tr_masks, vl_masks, diagonal_basis=False, rotation=None):
+
+        self.tr_masks = tr_masks
+        self.vl_masks = vl_masks
+        if diagonal_basis:
+            self.eig_vals, self.u = rotation
         super().__init__(group_name, seed)
 
-    def __iter__(self):
-        yield from self.masks
 
-
-def tr_masks(data, replica_trvlseed, diagonal_basis=False, diagonal_frac=1.0):
+def masks(
+    data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_basis=False, diagonal_frac=1.0
+):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
     dataset. Each array has length equal to N_data, the datapoints which
@@ -131,31 +137,49 @@ def tr_masks(data, replica_trvlseed, diagonal_basis=False, diagonal_frac=1.0):
     nameseed += replica_trvlseed
     # TODO: update this to new random infrastructure.
     rng = np.random.Generator(np.random.PCG64(nameseed))
-    trmask_partial = []
-    ndata_tot = 0
 
-    for dataset in data.datasets:
-        # TODO: python commondata will not require this rubbish.
-        # all data if cuts are None
-        cuts = dataset.cuts
-        ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
-        ndata_tot += ndata
-        if diagonal_basis:
-            continue
-        frac = dataset.frac
-        # We do this so that a given dataset will always have the same number of points masked
-        trmax = int(ndata * frac)
-        if trmax == 0:
-            # If that number is 0, then get 1 point with probability frac
-            trmax = int(rng.random() < frac)
-        mask = np.concatenate([np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)])
-        rng.shuffle(mask)
-        trmask_partial.append(mask)
     if diagonal_basis:
-        tr_mask = np.random.random(ndata_tot) < diagonal_frac
-        return _TrMasks(str(data), replica_trvlseed, [tr_mask])
+
+        # diagonalise the covariance matrix
+        covmat = dataset_inputs_fitting_covmat
+        eig_vals, u_trans = np.linalg.eigh(covmat)
+        ndata = len(eig_vals)
+
+        tr_mask = np.random.random(ndata) < diagonal_frac
+        vl_mask = ~tr_mask
+        tr_mask[eig_vals < 0] = False
+        vl_mask[eig_vals < 0] = False
+        return _Masks(
+            str(data),
+            replica_trvlseed,
+            [tr_mask],
+            [vl_mask],
+            diagonal_basis=True,
+            rotation=[eig_vals, u_trans.T],
+        )
     else:
-        return _TrMasks(str(data), replica_trvlseed, trmask_partial)
+        trmask_partial = []
+        vlmask_partial = []
+        for dataset in data.datasets:
+            # TODO: python commondata will not require this rubbish.
+            # all data if cuts are None
+            cuts = dataset.cuts
+            ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
+
+            frac = dataset.frac
+            # We do this so that a given dataset will always have the same number of points masked
+            trmax = int(ndata * frac)
+            if trmax == 0:
+                # If that number is 0, then get 1 point with probability frac
+                trmax = int(rng.random() < frac)
+            tr_mask = np.concatenate(
+                [np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)]
+            )
+            rng.shuffle(tr_mask)
+            vl_mask = ~tr_mask
+            trmask_partial.append(tr_mask)
+            vlmask_partial.append(vl_mask)
+        return _Masks(str(data), replica_trvlseed, trmask_partial, vlmask_partial)
 
 
 def kfold_masks(kpartitions, data):
@@ -240,7 +264,7 @@ def fitting_data_dict(
     make_replica,
     dataset_inputs_loaded_cd_with_cuts,
     dataset_inputs_fitting_covmat,
-    tr_masks,
+    masks,
     kfold_masks,
     fittable_datasets_masked,
     diagonal_basis=False,
@@ -290,7 +314,7 @@ def fitting_data_dict(
     # limited to: central values, ndata, replica generation, covmat construction
     expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
     expdata = make_replica
-    tr_masks = tr_masks.masks
+
     covmat = dataset_inputs_fitting_covmat  # t0 covmat, or theory covmat or whatever was decided by the runcard
     # TODO: use cholesky decomposition to get the inverse of the covariance matrix
     inv_true = np.linalg.inv(covmat)
@@ -299,25 +323,16 @@ def fitting_data_dict(
     if diagonal_basis:
         log.info("working in diagonal basis.")
 
-        # no need to sort the eigenvalues explicitly, eigh returns eigvals in ascending order by default
-        eig_vals, u_trans = np.linalg.eigh(covmat)
-        ndata = len(eig_vals)
-
         # keep only directions with positive eigenvalues.
+        eig_vals = masks.eig_vals
         pos_eig_vals_mask = eig_vals > 0
 
         # rotate the experimental data and remove negative modes
-        u = u_trans.T
+        u = masks.u
         expdata = u @ expdata
 
-        # perform training validation split
-        tr_mask = tr_masks[0]
-        vl_mask = ~tr_mask
-
-        # TODO: this is not yet written to the result dir
-        # exclude the negative modes from both training and validaiton
-        tr_mask[~pos_eig_vals_mask] = False
-        vl_mask[~pos_eig_vals_mask] = False
+        tr_mask = masks.tr_masks[0]
+        vl_mask = masks.vl_masks[0]
 
         covmat = np.diag(eig_vals)
         invcovmat = np.diag(1 / eig_vals)
@@ -336,7 +351,7 @@ def fitting_data_dict(
         zero_tr = []
         zero_vl = []
         idx = 0
-        for data_mask in tr_masks:
+        for data_mask in masks.tr_masks:
             dlen = len(data_mask)
             if dlen == 1:
                 if data_mask[0]:
@@ -345,7 +360,7 @@ def fitting_data_dict(
                     zero_tr.append(idx)
             idx += dlen
 
-        tr_mask = np.concatenate(tr_masks)
+        tr_mask = np.concatenate(masks.tr_masks)
         vl_mask = ~tr_mask
 
         # Now set to true the masks
@@ -475,7 +490,7 @@ def pseudodata_table(replica_pseudodata):
 
 @_per_replica
 @table
-def training_pseudodata(replica_pseudodata, replica_training_mask):
+def training_pseudodata(replica_pseudodata, replica_mask):
     """Save the training data for the given replica.
     Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
@@ -484,12 +499,12 @@ def training_pseudodata(replica_pseudodata, replica_training_mask):
     --------
     :py:func:`validphys.n3fit_data.validation_pseudodata`
     """
-    return replica_pseudodata.loc[replica_training_mask.values]
+    return replica_pseudodata.loc[replica_mask[0].values]
 
 
 @_per_replica
 @table
-def validation_pseudodata(replica_pseudodata, replica_training_mask):
+def validation_pseudodata(replica_pseudodata, replica_mask):
     """Save the training data for the given replica.
     Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
@@ -498,11 +513,11 @@ def validation_pseudodata(replica_pseudodata, replica_training_mask):
     --------
     :py:func:`validphys.n3fit_data.validation_pseudodata`
     """
-    return replica_pseudodata.loc[~replica_training_mask.values]
+    return replica_pseudodata.loc[replica_mask[1].values]
 
 
-exps_tr_masks = collect("tr_masks", ("group_dataset_inputs_by_metadata",))
-replicas_exps_tr_masks = collect("exps_tr_masks", ("replicas",))
+exps_masks = collect("masks", ("group_dataset_inputs_by_metadata",))
+replicas_exps_masks = collect("exps_tr_masks", ("replicas",))
 
 
 @table
@@ -511,7 +526,7 @@ def replica_training_mask_table(replica_training_mask):
     return replica_training_mask
 
 
-def replica_training_mask(exps_tr_masks, replica, experiments_index, diagonal_basis=False):
+def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
     """Save the boolean mask used to split data into training and validation
     for a given replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
@@ -558,7 +573,75 @@ def replica_training_mask(exps_tr_masks, replica, experiments_index, diagonal_ba
     [345 rows x 1 columns]
     """
 
-    all_masks = np.concatenate([ds_mask for exp_masks in exps_tr_masks for ds_mask in exp_masks])
+    all_tr_masks = np.concatenate(
+        [ds_mask for exp_masks in exps_masks for ds_mask in exp_masks.tr_masks]
+    )
+    all_vl_masks = np.concatenate(
+        [ds_mask for exp_masks in exps_masks for ds_mask in exp_masks.vl_masks]
+    )
+
+    index = (
+        [f"eigenmode {i}" for i in range(len(all_tr_masks))]
+        if diagonal_basis
+        else experiments_index
+    )
+
+    df_tr = pd.DataFrame(all_tr_masks, columns=[f"replica {replica}"], index=index)
+    df_vl = pd.DataFrame(all_vl_masks, columns=[f"replica {replica}"], index=index)
+
+    return df_tr, df_vl
+
+
+def replica_validation_mask(exps_tr_masks, replica, experiments_index, diagonal_basis=False):
+    """Save the boolean mask used to split data into training and validation
+    for a given replica as a pandas DataFrame, indexed by
+    :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
+    the training and validation data used in a fit.
+
+    Parameters
+    ----------
+    exps_tr_masks: list[list[np.array]]
+        Result of :py:func:`tr_masks` collected over experiments, which creates
+        the nested structure. The outer list is
+        len(group_dataset_inputs_by_experiment) and the inner-most list has an
+        array for each dataset in that particular experiment - as defined by the
+        metadata. The arrays should be 1-D boolean arrays which can be used as
+        masks.
+    replica: int
+        The index of the replica.
+    experiments_index: pd.MultiIndex
+        Index returned by :py:func:`validphys.results.experiments_index`.
+
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> ds_inp = [
+    ...     {'dataset': 'NMC', 'frac': 0.75},
+    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
+    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
+    ... ]
+    >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
+                         replica 1
+    group dataset    id
+    NMC   NMC        0        True
+                    1        True
+                    2       False
+                    3        True
+                    4        True
+    ...                        ...
+    CMS   CMSZDIFF12 45       True
+                    46       True
+                    47       True
+                    48      False
+                    49       True
+
+    [345 rows x 1 columns]
+    """
+
+    all_masks = np.concatenate(
+        [ds_mask for exp_masks in exps_masks for ds_mask.vl_masks in exp_masks]
+    )
     if diagonal_basis:
         return pd.DataFrame(
             all_masks,
@@ -569,7 +652,7 @@ def replica_training_mask(exps_tr_masks, replica, experiments_index, diagonal_ba
         return pd.DataFrame(all_masks, columns=[f"replica {replica}"], index=experiments_index)
 
 
-replicas_training_mask = collect("replica_training_mask", ("replicas",))
+replicas_mask = collect("replica_mask", ("replicas",))
 
 
 @table
@@ -578,7 +661,7 @@ def training_mask_table(training_mask):
     return training_mask
 
 
-def training_mask(replicas_training_mask):
+def training_mask(replicas_mask):
     """Save the boolean mask used to split data into training and validation
     for each replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
