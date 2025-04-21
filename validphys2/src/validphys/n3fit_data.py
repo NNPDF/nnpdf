@@ -123,7 +123,12 @@ class _Masks(TupleComp):
 
 
 def masks(
-    data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_basis=False, diagonal_frac=1.0
+    data,
+    replica_trvlseed,
+    dataset_inputs_fitting_covmat,
+    diagonal_basis=False,
+    diagonal_frac=1.0,
+    covmat_min=0,
 ):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
@@ -147,8 +152,8 @@ def masks(
 
         tr_mask = np.random.random(ndata) < diagonal_frac
         vl_mask = ~tr_mask
-        tr_mask[eig_vals < 0] = False
-        vl_mask[eig_vals < 0] = False
+        tr_mask[eig_vals < covmat_min] = False
+        vl_mask[eig_vals < covmat_min] = False
         return _Masks(
             str(data),
             replica_trvlseed,
