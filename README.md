@@ -23,12 +23,14 @@ The documentation is available at <https://docs.nnpdf.science/>
 ## Install
 
 See the [NNPDF installation guide](https://docs.nnpdf.science/get-started/installation.html)
-for instructions on how to install and use the code, requirements and [dependencies](https://docs.nnpdf.science/get-started/installation.html#dependencies-and-requirements)
+for instructions on how to install and use the code,
+using either [conda](https://docs.nnpdf.science/get-started/installation.html#installation-using-conda) or [pip](https://docs.nnpdf.science/get-started/installation.html#installation-using-pip),
+requirements and [dependencies](https://docs.nnpdf.science/get-started/installation.html#dependencies-and-requirements)
 As a first step we recommend to follow one of the [tutorials](https://docs.nnpdf.science/tutorials/run-fit.html).
 
-We follow a rolling development model where the tip of the master branch is
-expected to be stable, tested and correct. For more information see our
-[releases and compatibility policy](https://docs.nnpdf.science/releases.html).
+While we aim to keep the tip of the master branch always stable, tested and correct,
+runs of the code intended for publication should use one the [released](https://github.com/NNPDF/nnpdf/releases) versions.
+
 
 ## Cite
 
@@ -52,10 +54,9 @@ This code is described in the following [paper](https://inspirehep.net/literatur
 }
 ```
 
-If you use the code to produce new results in a scientific publication, please
-follow the [Citation Policy](https://docs.nnpdf.science/get-started/cite.html),
-particularly in regards to the papers relevant for QCD NNLO and EW NLO
-calculations incorporated in the NNPDF dataset.
+If you use the code to produce new results in a scientific publication,
+we ask you to please cite this paper, the [zenodo entry](https://doi.org/10.5281/zenodo.5362228) and 
+follow the [Citation Policy](https://docs.nnpdf.science/get-started/cite.html).
 
 ## Contribute
 
@@ -71,3 +72,9 @@ When developing locally you can test your changes with pytest, running from the 
 ```
   pytest --mpl --pyargs n3fit validphys
 ```
+
+## License
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
+
+© Copyright 2021-2025, the NNPDF collaboration
