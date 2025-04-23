@@ -1071,7 +1071,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
         eta = dataset_sp.commondata.metadata.load_kinematics()['y'].to_numpy().reshape(-1)[cuts]
         pT = dataset_sp.commondata.metadata.load_kinematics()['pT'].to_numpy().reshape(-1)[cuts]
 
-        pc_func = JET_pc_single_par(dataset_sp, pdf, pc_jet_nodes, pT, eta, pc_func_type)
+        pc_func = JET_pc(dataset_sp, pdf, pc_jet_nodes, pT, eta, pc_func_type)
         for pars_pc in pars_combs:
             deltas[pars_pc['label']] = pc_func(pars_pc['comb']['Hj'])
 
@@ -1089,7 +1089,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
                 .to_numpy()
                 .reshape(-1)[cuts]
             )
-            pc_func = JET_pc_single_par(dataset_sp, pdf, pc_jet_nodes, m_jj, eta_star, pc_func_type)
+            pc_func = JET_pc(dataset_sp, pdf, pc_jet_nodes, m_jj, eta_star, pc_func_type)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_ATLAS'])
 
@@ -1105,7 +1105,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
                 .to_numpy()
                 .reshape(-1)[cuts]
             )
-            pc_func = JET_pc_single_par(dataset_sp, pdf, pc_jet_nodes, m_jj, eta_diff, pc_func_type)
+            pc_func = JET_pc(dataset_sp, pdf, pc_jet_nodes, m_jj, eta_diff, pc_func_type)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_CMS'])
 
