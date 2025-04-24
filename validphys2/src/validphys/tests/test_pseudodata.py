@@ -42,7 +42,8 @@ def test_read_pdf_pseudodata():
 
 
 def test_recreate_fit_pseudodata():
-    fit_pseudodata = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
+    CONFIG = {"fit": PSEUDODATA_FIT, "use_t0_sampling": False}
+    fit_pseudodata = API.recreate_fit_pseudodata(**CONFIG)
 
     nrep = API.num_fitted_replicas(fit=PSEUDODATA_FIT)
     assert nrep == len(fit_pseudodata)
@@ -53,7 +54,8 @@ def test_recreate_fit_pseudodata():
 
 
 def test_recreate_pdf_pseudodata():
-    pdf_pseudodata = API.recreate_pdf_pseudodata(fit=PSEUDODATA_FIT)
+    CONFIG = {"fit": PSEUDODATA_FIT, "use_t0_sampling": False}
+    pdf_pseudodata = API.recreate_pdf_pseudodata(**CONFIG)
 
     pdf = API.pdf(pdf=PSEUDODATA_FIT)
     # -1 because we ignore replica 0
@@ -74,8 +76,9 @@ def test_no_savepseudodata():
 
 
 def test_read_matches_recreate():
-    reads = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
-    recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
+    CONFIG = {"fit": PSEUDODATA_FIT, "use_t0_sampling": False}
+    reads = API.read_fit_pseudodata(**CONFIG)
+    recreates = API.recreate_fit_pseudodata(**CONFIG)
     for read, recreate in zip(reads, recreates):
         # We ignore the absolute ordering of the dataframes and just check
         # that they contain identical elements.
