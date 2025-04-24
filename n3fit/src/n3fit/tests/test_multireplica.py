@@ -14,7 +14,7 @@ def test_replica_split():
     pdf_model = generate_pdf_model(
         nodes=[8],
         activations=["linear"],
-        seed=34,
+        seed_list=[34] * num_replicas,
         flav_info=fake_fl,
         fitbasis="FLAVOUR",
         num_replicas=num_replicas,

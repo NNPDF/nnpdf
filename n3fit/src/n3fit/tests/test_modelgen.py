@@ -1,13 +1,13 @@
 """
-    Test for the model generation
+Test for the model generation
 
-    These tests check that the generated NN are as expected
-    It checks that both the number of layers and the shape
-    of the weights of the layers are what is expected
+These tests check that the generated NN are as expected
+It checks that both the number of layers and the shape
+of the weights of the layers are what is expected
 """
 
 from n3fit.backends import NN_PREFIX
-from n3fit.model_gen import generate_nn
+from n3fit.model_gen import _generate_nn
 
 INSIZE = 16
 OUT_SIZES = (4, 3)
@@ -27,7 +27,7 @@ COMMON_ARGS = {
 
 
 def test_generate_dense_network():
-    nn = generate_nn("dense", **COMMON_ARGS)
+    nn = _generate_nn("dense", **COMMON_ARGS)
 
     # The number of layers should be input layer + len(OUT_SIZES)
     assert len(nn.layers) == len(OUT_SIZES) + 1
@@ -38,7 +38,7 @@ def test_generate_dense_network():
 
 
 def test_generate_dense_per_flavour_network():
-    nn = generate_nn("dense_per_flavour", **COMMON_ARGS).get_layer(f"{NN_PREFIX}_0")
+    nn = _generate_nn("dense_per_flavour", **COMMON_ARGS).get_layer(f"{NN_PREFIX}_0")
 
     # The number of layers should be input + BASIS_SIZE*len(OUT_SIZES) + concatenate
     assert len(nn.layers) == BASIS_SIZE * len(OUT_SIZES) + 2

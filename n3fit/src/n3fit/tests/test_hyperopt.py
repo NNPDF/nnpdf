@@ -29,7 +29,7 @@ def generate_pdf(seed, num_replicas):
     pdf_model = generate_pdf_model(
         nodes=[8],
         activations=["linear"],
-        seed=seed,
+        seed_list=seed,
         num_replicas=num_replicas,
         flav_info=fake_fl,
         fitbasis="FLAVOUR",

@@ -1,6 +1,7 @@
 """
-    Test the penalties for n3fit hyperopt
+Test the penalties for n3fit hyperopt
 """
+
 from types import SimpleNamespace
 
 from n3fit.hyper_optimization.penalties import integrability, patience, saturation
@@ -14,7 +15,7 @@ def test_saturation():
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
     pdf_model = generate_pdf_model(
-        nodes=[8], activations=["linear"], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR"
+        nodes=[8], activations=["linear"], seed_list=[0], flav_info=fake_fl, fitbasis="FLAVOUR"
     )
     assert isinstance(saturation(pdf_model, 5)[0], float)
 
@@ -35,6 +36,6 @@ def test_integrability_numbers():
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
     pdf_model = generate_pdf_model(
-        nodes=[8], activations=["linear"], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR"
+        nodes=[8], activations=["linear"], seed_list=[0], flav_info=fake_fl, fitbasis="FLAVOUR"
     )
     assert isinstance(integrability(pdf_model), float)

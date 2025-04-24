@@ -4,7 +4,7 @@ Library of functions which generate the NN objects
 Contains:
     # observable_generator:
         Generates the output layers as functions
-    # pdfNN_layer_generator:
+    # _pdfNN_layer_generator:
         Generates the PDF NN layer to be fitted
 
 
@@ -323,6 +323,56 @@ def observable_generator(
     return layer_info
 
 
+@dataclass
+class _ReplicaSettings:
+    """Dataclass which hold all necessary replica-dependent information of a PDF.
+
+    Parameters
+    ----------
+        seed: int
+            seed for the initialization of the neural network
+        nodes: list[int]
+            nodes of each of the layers, starting at the first hidden layer
+        activations: list[str]
+            list of activation functions, should be of equal length as nodes
+        architecture: str
+            select the architecture of the neural network used for the replica,
+            e.g. ``dense`` or ``dense_per_flavour``
+        initializer: str
+            initializer to be used for this replica
+        dropout: float
+            rate of dropout for each layer
+        regularizer: str
+            name of the regularizer to use for this replica (if any)
+        regularizer_args: dict
+            options to pass down to the regularizer (if any)
+    """
+
+    seed: int
+    nodes: list[int]
+    activations: list[str]
+    architecture: str
+    initializer: str
+    dropout_rate: float = 0.0
+    regularizer: str = None
+    regularizer_args: dict = None
+
+    def __post_init__(self):
+        """Apply checks to the input"""
+        # TODO: this check cannot be enabled yet
+        #         if len(self.nodes) != len(self.activations):
+        #             raise ValueError(
+        #                 f"nodes and activations do not match ({self.nodes} vs {self.activations}"
+        #             )
+        if self.regularizer_args is not None and self.regularizer is None:
+            raise ValueError(
+                "Regularizer arguments have been provided but not regularizer is selected"
+            )
+
+
+# TODO:
+#   1. Decide whether the sampling occurs in this function or before entering here
+#      at the moment, it occurs here.
 def generate_pdf_model(
     nodes: list[int] = None,
     activations: list[str] = None,
@@ -331,7 +381,7 @@ def generate_pdf_model(
     flav_info: dict = None,
     fitbasis: str = "NN31IC",
     out: int = 14,
-    seed: int = None,
+    seed_list: list[int] = None,
     dropout: float = 0.0,
     regularizer: str = None,
     regularizer_args: dict = None,
@@ -341,35 +391,85 @@ def generate_pdf_model(
     photons: Photon = None,
 ):
     """
-    Wrapper around pdfNN_layer_generator to allow the generation of single replica models.
+    Generation of the full PDF model which will be used to determine the full PDF.
+    The full PDF model can have any number of replicas, which can be trained in parallel,
+    the limitations of the determination means that there are certain traits that all replicas
+    must share, while others are fre per-PDF.
+
+    In its most general form, the output of this function is a :py:class:`n3fit.backend.MetaModel`
+    with the following architecture:
+
+        <input layer>
+            in the standard PDF fit this includes only the (x) grid of the NN
+
+        [ list of a separate architecture per replica ]
+            which can be, but is not necessary, equal for all replicas
+
+        <preprocessing factors>
+            postprocessing of the network output by a variation x^{alpha}*(1-x)^{beta}
+
+        <normalization>
+            physical sum rules, requires an integral over the PDF
+
+        <rotation to FK-basis>
+            regardless of the physical basis in which the PDF and preprocessing factors are applied
+            the output is rotated to the 14-flavour general basis used in FkTables following
+            PineaAPPL's convention
+
+        [<output layer>]
+            14 flavours per value of x per replica
+            note that, depending on the fit basis (and fitting scale)
+            the output of the PDF will contain repeated values
+
+
+    This function defines how the PDFs will be generated.
+    In the case of identical PDF models (``identical_models = True``, default) the same
+    settings will be used for all replicas.
+    Otherwise, the sampling routines will be used.
+
 
     Parameters:
     -----------
-        see model_gen.pdfNN_layer_generator
+        <TODO> to be filled
 
     Returns
     -------
         pdf_model: MetaModel
-            pdf model, with `single_replica_generator` attached in a list as an attribute
+            pdf model, with `single_replica_generator` attached as an attribute
     """
-    joint_args = {
-        "nodes": nodes,
-        "activations": activations,
-        "initializer_name": initializer_name,
-        "layer_type": layer_type,
+    if len(seed_list) != num_replicas:
+        # TODO: remove this error, remove the num_replicas argument
+        raise ValueError("This should not happen")
+
+    num_replicas = len(seed_list)
+
+    # Separate the settings which may be different for each replica
+    # from those that are guaranteed to be equal for all replicas
+
+    all_replicas = []
+    for seed in seed_list:
+        tmp = _ReplicaSettings(
+            seed=seed,
+            nodes=nodes,
+            activations=activations,
+            initializer=initializer_name,
+            architecture=layer_type,
+            dropout_rate=dropout,
+            regularizer=regularizer,
+            regularizer_args=regularizer_args,
+        )
+        all_replicas.append(tmp)
+
+    shared_config = {
         "flav_info": flav_info,
         "fitbasis": fitbasis,
         "out": out,
-        "dropout": dropout,
-        "regularizer": regularizer,
-        "regularizer_args": regularizer_args,
         "impose_sumrule": impose_sumrule,
         "scaler": scaler,
+        "photons": photons,
     }
 
-    pdf_model = pdfNN_layer_generator(
-        **joint_args, seed=seed, num_replicas=num_replicas, photons=photons
-    )
+    pdf_model = _pdfNN_layer_generator(all_replicas, **shared_config)
 
     # Note that the photons are passed unchanged to the single replica generator
     # computing the photon requires running fiatlux which takes 30' per replica
@@ -377,30 +477,33 @@ def generate_pdf_model(
     # In order to enable it `single_replica_generator` must take the index of the replica
     # to select the appropiate photon as all of them will be computed and fixed before the fit
 
-    # this is necessary to be able to convert back to single replica models after training
-    single_replica_generator = lambda: pdfNN_layer_generator(
-        **joint_args, seed=0, num_replicas=1, photons=photons, replica_axis=False
-    )
+    def single_replica_generator(replica_idx=0):
+        """Generate one single replica from the entire batch.
+        The select index is relative to the batch, not the entire PDF determination.
+
+        This function is necessary to separate all the different models after training.
+        """
+        settings = all_replicas[replica_idx]
+        # TODO:
+        # In principle we want to recover the initial replica exactly,
+        # however, for the regression tests to pass
+        # _in the polarized case and only in the polarized case_ this line is necessary
+        # it most likely has to do with numerical precision, but panicking might be in order
+        settings.seed = 0
+        return _pdfNN_layer_generator([settings], **shared_config, replica_axis=False)
+
     pdf_model.single_replica_generator = single_replica_generator
 
     return pdf_model
 
 
-def pdfNN_layer_generator(
-    nodes: list[int] = None,
-    activations: list[str] = None,
-    initializer_name: str = "glorot_normal",
-    layer_type: str = "dense",
+def _pdfNN_layer_generator(
+    replicas_settings: list[_ReplicaSettings],
     flav_info: dict = None,
     fitbasis: str = "NN31IC",
     out: int = 14,
-    seed: int = None,
-    dropout: float = 0.0,
-    regularizer: str = None,
-    regularizer_args: dict = None,
     impose_sumrule: str = None,
     scaler: Callable = None,
-    num_replicas: int = 1,
     photons: Photon = None,
     replica_axis: bool = True,
 ):  # pylint: disable=too-many-locals
@@ -459,14 +562,16 @@ def pdfNN_layer_generator(
 
     >>> import numpy as np
     >>> from n3fit.vpinterface import N3PDF
-    >>> from n3fit.model_gen import pdfNN_layer_generator
+    >>> from n3fit.model_gen import _pdfNN_layer_generator
     >>> from validphys.pdfgrids import xplotting_grid
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
     >>> fake_x = np.linspace(1e-3,0.8,3)
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=[2,3], flav_info=fake_fl, num_replicas=2)
+    >>> pdf_model = _pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=[2,3], flav_info=fake_fl, num_replicas=2)
 
     Parameters
     ----------
+        seed: list(int)
+            seed for the initialization of the Neural Network
         nodes: list(int)
             list of the number of nodes per layer of the PDF NN. Default: [15,8]
         activation: list
@@ -482,8 +587,6 @@ def pdfNN_layer_generator(
             to be used by Preprocessing
         out: int
             number of output flavours of the model (default 14)
-        seed: list(int)
-            seed to initialize the NN
         dropout: float
             rate of dropout layer by layer
         impose_sumrule: str
@@ -507,22 +610,23 @@ def pdfNN_layer_generator(
        pdf_model: n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, replicas, xgrid, out)
     """
-    # Parse the input configuration
-    if seed is None:
-        seed = num_replicas * [None]
-    elif isinstance(seed, int):
-        seed = num_replicas * [seed]
+    # TODO: at the moment nothing changes, just the signature of the function
+    seed = [i.seed for i in replicas_settings]
+    nodes = replicas_settings[0].nodes
+    activations = replicas_settings[0].activations
+    layer_type = replicas_settings[0].architecture
+    initializer_name = replicas_settings[0].initializer
+    num_replicas = len(replicas_settings)
+    dropout = replicas_settings[0].dropout_rate
+    regularizer = replicas_settings[0].regularizer
+    regularizer_args = replicas_settings[0].regularizer_args
 
-    if nodes is None:
-        nodes = [15, 8]
     ln = len(nodes)
 
     if impose_sumrule is None:
         impose_sumrule = "All"
 
-    if activations is None:
-        activations = ["tanh", "linear"]
-    elif callable(activations):
+    if callable(activations):
         # hyperopt passes down a function to generate dynamically the list of
         # activations functions
         activations = activations(ln)
@@ -602,7 +706,7 @@ def pdfNN_layer_generator(
         large_x=not subtract_one,
     )
 
-    nn_replicas = generate_nn(
+    nn_replicas = _generate_nn(
         layer_type=layer_type,
         nodes_in=nn_input_dimensions,
         nodes=nodes,
@@ -685,14 +789,14 @@ def pdfNN_layer_generator(
     return pdf_model
 
 
-def generate_nn(
+def _generate_nn(
     layer_type: str,
     nodes_in: int,
     nodes: list[int],
     activations: list[str],
     initializer_name: str,
-    replica_seeds: list[int],
     dropout: float,
+    replica_seeds: list[int],
     regularizer: str,
     regularizer_args: dict,
     last_layer_nodes: int,
