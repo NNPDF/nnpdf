@@ -16,7 +16,7 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import NN_LAYER_ALL_REPLICAS, Lambda, MetaModel, callbacks, clear_backend_state
+from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
@@ -200,6 +200,7 @@ class ModelTrainer:
                 loss_type=loss_type,
                 replica_statistic=replica_statistic,
                 fold_statistic=fold_statistic,
+                reduce_proportion=kfold_parameters.get("reduce_proportion", 0.85),
                 penalties_in_loss=kfold_parameters.get("penalties_in_loss", False),
             )
 
@@ -946,8 +947,12 @@ class ModelTrainer:
 
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
+            luxset_members = self.lux_params["luxset"].get_members() - 1  # -1 is for replica 0
+            # we take the MOD of the luxset_members to avoid failing due to limited number of
+            # replicas in the luxset
+            photonreplicas = tuple(r % luxset_members for r in self.replicas)
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=photonreplicas
             )
         else:
             photons = None
@@ -1060,7 +1065,8 @@ class ModelTrainer:
                 # Compute per replica hyper losses
                 hyper_loss = self._hyper_loss.compute_loss(
                     penalties=penalties,
-                    experimental_loss=experimental_loss,
+                    kfold_loss=experimental_loss,
+                    validation_loss=validation_loss,
                     pdf_object=vplike_pdf,
                     experimental_data=experimental_data,
                     fold_idx=k,
@@ -1124,7 +1130,7 @@ class ModelTrainer:
                     "trvl_losses_phi": np.array(trvl_phi_per_fold),
                     "experimental_losses": l_exper,
                     "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
-                    "hyper_losses_phi": np.array(self._hyper_loss.phi_vector),
+                    "hyper_losses_phi": np.array(self._hyper_loss.phi2_vector),
                     "penalties": {
                         name: np.array(values)
                         for name, values in self._hyper_loss.penalties.items()

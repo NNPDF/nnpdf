@@ -31,6 +31,7 @@ view: html
 
 MakeTheoryCSV:
 	python make_theory_csv.py source/theories.csv
+	python make_theory_csv.py source/theories_central.csv --zero-only
 
 # modules need to be manually removed, see https://github.com/sphinx-doc/sphinx/issues/1999
 clean:
