@@ -1,5 +1,5 @@
 """
-    Test the n3fit-validphys interface
+Test the n3fit-validphys interface
 """
 
 from hypothesis import example, given, settings
@@ -22,7 +22,7 @@ def generate_n3pdf(layers=1, members=1, name="n3fit"):
     pdf_model = generate_pdf_model(
         nodes=nodes,
         activations=activations,
-        seed=np.random.randint(100),
+        seed_list=[np.random.randint(100)] * members,
         flav_info=fake_fl,
         num_replicas=members,
         fitbasis="FLAVOUR",

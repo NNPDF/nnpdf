@@ -705,7 +705,7 @@ class ModelTrainer:
             layer_type=layer_type,
             flav_info=self.flavinfo,
             fitbasis=self.fitbasis,
-            seed=seed,
+            seed_list=seed,
             initializer_name=initializer,
             dropout=dropout,
             regularizer=regularizer,
