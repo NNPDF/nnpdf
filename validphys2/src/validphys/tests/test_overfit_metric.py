@@ -10,6 +10,7 @@ from validphys.tests.conftest import FIT_3REPLICAS
 config = {
     "fit": FIT_3REPLICAS,
     "use_t0": True,
+    "use_t0_sampling": False,
     "use_cuts": "fromfit",
     "theory": {"from_": "fit"},
     "theoryid": {"from_": "theory"},
