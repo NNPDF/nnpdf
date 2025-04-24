@@ -85,6 +85,7 @@ def make_table_comp(loader_func, tolerance=1e-8):
 def test_mcreplica(data_config):
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA
+    config["use_t0_sampling"] = False
     seed = 123456
     # Use no cuts because if filter rules change in the
     # future then this test will end up failing
@@ -223,6 +224,7 @@ def test_datasetchi2(data_singleexp_witht0_config):
 def test_art_rep_generation(data_config):
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA
+    config["use_t0_sampling"] = False
     config["mcseed"] = 123456
     config["genrep"] = True
     config["nreplica"] = 1
