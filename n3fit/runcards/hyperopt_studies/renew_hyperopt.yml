@@ -158,7 +158,8 @@ hyperscan_config:
 
 kfold:
       loss_type: chi2
-      replica_statistic: average_best
+      replica_statistic: average
+      reduce_proportion: 0.85
       fold_statistic: average
       penalties_in_loss: True
       penalties:

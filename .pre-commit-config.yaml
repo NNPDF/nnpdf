@@ -18,7 +18,16 @@ repos:
         args: ['--config=./pyproject.toml']
 
 -   repo: https://github.com/pycqa/isort
-    rev: '6.0.0'
+    rev: '6.0.1'
     hooks:
     -   id: isort
         args: ['--settings-path=./pyproject.toml']
+
+-   repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+    -   id: python-check-blanket-noqa
+    -   id: python-check-blanket-type-ignore
+    -   id: rst-directive-colons
+    -   id: rst-inline-touching-normal
+    -   id: text-unicode-replacement-char

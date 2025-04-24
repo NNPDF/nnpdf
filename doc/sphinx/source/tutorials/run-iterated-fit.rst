@@ -35,7 +35,7 @@ instead wishes to overwrite this file, the ``--force`` option can be specified, 
 The script automatically makes the following amendments to the fit runcard:
 
 * The :math:`t_0` PDF set is set to the input fit
-* The random seeds ``seed``, ``trvlseed``, ``nnseed``, ``mcseed`` and ``filterseed`` are updated,
+* The random seeds ``seed``, ``trvlseed``, ``nnseed`` and ``mcseed`` are updated,
   as long as they exist in the input fit runcard
 * The preprocessing exponents are updated, and in particular are set to the effective exponents at
   the end of the input fit

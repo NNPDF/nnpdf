@@ -4,7 +4,7 @@ fitveto.py
 Module for the determination of passing fit replicas.
 
 Current active vetoes:
-   Positivity - Replicas with FitInfo.is_positive == False
+   Convergence - Replicas with FitInfo.has_converged == False
    ChiSquared - Replicas with ChiSquared > nsigma_discard_chi2*StandardDev + Average
    ArclengthX - Replicas with ArcLengthX > nsigma_discard_arclength*StandardDev + Average
    Integrability - Replicas with IntegrabilityNumbers < integ_threshold
@@ -74,10 +74,10 @@ def determine_vetoes(
             nsigma_discard_arclength,
         )
 
-    # Positivity veto
-    posmask = np.array([replica.is_positive for replica in fitinfos], dtype=bool)
-    vetoes = {"Positivity": posmask}
-    total_mask = posmask.copy()
+    # Veto on convergence & positivity
+    convergence_mask = np.array([replica.has_converged for replica in fitinfos], dtype=bool)
+    vetoes = {"Convergence check": convergence_mask}
+    total_mask = convergence_mask.copy()
 
     # Integrability veto
     if len(fitinfos[0].integnumbers) == 0:
