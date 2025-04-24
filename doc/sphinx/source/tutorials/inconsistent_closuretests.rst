@@ -8,7 +8,9 @@ or underestimated for a given dataset. In this case, the measured experimental v
 may deviate from the true value by an amount that is not reflected by the experimental covariance matrix. 
 This will then generate tensions between this dataset and the rest of the data. 
 We call such a dataset “inconsistent”. It is interesting to ask how the NNPDF methodology behaves in such case,
-and whether the inconsistency can be detected.
+and whether the inconsistency can be detected. For more details and a thorough review on the topic,
+see the paper `arXiv:2503.17447 <https://arxiv.org/pdf/2503.17447>`_.
+
 
 In order to study this situation in a closure test, we model the inconsistency as follow. 
 We separate off the uncorrelated and correlated parts of the experimental covariance matrix 
