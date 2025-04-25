@@ -43,7 +43,6 @@ def test_commondata_unchanged(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
-    config["use_t0_sampling"] = False
     ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
 
     # keep a copy of all dataframes/series pre make replica
@@ -76,7 +75,7 @@ def test_pseudodata_seeding(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
-    config["use_t0_sampling"] = False
+
     rep_1 = API.make_replica(**config)
     rep_2 = API.make_replica(**config)
     np.testing.assert_allclose(rep_1, rep_2)
@@ -90,7 +89,6 @@ def test_pseudodata_has_correct_ndata(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
-    config["use_t0_sampling"] = False
     ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
     rep = API.make_replica(**config)
     ndata = np.sum([cd.ndata for cd in ld_cds])
@@ -106,7 +104,6 @@ def test_genrep_off(data_config, dataset_inputs, use_cuts):
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
     config["genrep"] = False
-    config["use_t0_sampling"] = False
 
     # `make_replica` reorders the data according to the groups in the exp covmat
     not_replica = API.make_replica(**config)

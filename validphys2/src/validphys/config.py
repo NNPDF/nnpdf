@@ -274,6 +274,11 @@ class CoreConfig(configparser.Config):
         mcseed = runcard["mcseed"]
         genrep = runcard["genrep"]
 
+        # default for new fits is True
+        use_t0_sampling = runcard.get("use_t0_sampling", True)
+        use_t0 = use_t0_sampling
+        t0pdfset = self.parse_t0pdfset(runcard["datacuts"].get("t0pdfset")) if use_t0 else None
+
         return {
             "dataset_inputs": data_input,
             "theoryid": theoryid,
@@ -281,6 +286,9 @@ class CoreConfig(configparser.Config):
             "mcseed": mcseed,
             "trvlseed": trvlseed,
             "genrep": genrep,
+            "use_t0_sampling": use_t0_sampling,
+            "use_t0": use_t0,
+            "t0pdfset": t0pdfset,
         }
 
     def produce_fitcontext(self, fitinputcontext, fitpdf):
