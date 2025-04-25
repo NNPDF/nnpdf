@@ -712,7 +712,6 @@ class ModelTrainer:
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
-            num_replicas=len(self.replicas),
             photons=photons,
         )
         return pdf_model

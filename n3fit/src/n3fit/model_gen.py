@@ -414,7 +414,7 @@ def generate_pdf_model(
         [ list of a separate architecture per replica ]
             which can be, but is not necessary, equal for all replicas
 
-        <preprocessing factors>
+        [ <preprocessing factors> ]
             postprocessing of the network output by a variation x^{alpha}*(1-x)^{beta}
 
         <normalization>
@@ -468,29 +468,18 @@ def generate_pdf_model(
             Function to apply to the input. If given the input to the model
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
             When None, instead turn the x point into a (x, log(x)) pair
-        num_replicas: int
-            How many models should be trained in parallel.
         photons: :py:class:`validphys.photon.compute.Photon`
             If given, gives the AddPhoton layer a function to compute a photon which will be added at the
             index 0 of the 14-size FK basis
             This same function will also be used to compute the MSR component for the photon
-
-
 
     Returns
     -------
         pdf_model: MetaModel
             pdf model, with `single_replica_generator` attached as an attribute
     """
-    if len(seed_list) != num_replicas:
-        # TODO: remove this error, remove the num_replicas argument
-        raise ValueError("This should not happen")
-
-    num_replicas = len(seed_list)
-
     # Separate the settings which may be different for each replica
     # from those that are guaranteed to be equal for all replicas
-
     all_replicas = []
     for seed in seed_list:
         tmp = _ReplicaSettings(
@@ -643,44 +632,44 @@ def _pdfNN_layer_generator(
        pdf_model: n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, replicas, xgrid, out)
     """
-    # TODO: at the moment nothing changes, just the signature of the function
-    seed = [i.seed for i in replicas_settings]
+    all_seed = [i.seed for i in replicas_settings]
     num_replicas = len(replicas_settings)
 
     if impose_sumrule is None:
         impose_sumrule = "All"
 
-    # Process input options. There are 2 options:
-    # 1. Scale the input
-    # 2. Concatenate log(x) to the input
-    use_feature_scaling = scaler is not None
-
-    # When scaler is active we also want to do the subtraction of large x
-    # TODO: make it its own option (i.e., one could want to use this without using scaler)
-    subtract_one = use_feature_scaling
-
-    # Feature scaling happens before the pdf model and changes x->(scaler(x), x),
-    # so it adds an input dimension
-    pdf_input_dimensions = 2 if use_feature_scaling else 1
-    # Adding of logs happens inside, but before the NN and adds a dimension there
-    nn_input_dimensions = 1 if use_feature_scaling else 2
-
-    # Define the main input
+    ## Process the input data (x grid)
+    # There a currently two options:
+    # 1. Append log(x) to the input
+    # 2. Scale the input
     do_nothing = lambda x: x
-    if use_feature_scaling:
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name="scaledx_x")
-        process_input = do_nothing
-        extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name="x_scaled")
-        extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name="pdf_input")
-    else:  # add log(x)
+    model_input = {}
+
+    if scaler is None:  # add log(x)
+        use_feature_scaling = subtract_one = False
+        # The PDF itself receives only x
+        pdf_input_dimensions = 1
+        # But the NN will see (x, log(x))
+        nn_input_dimensions = 2
+
         pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name="pdf_input")
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name="x_logx")
         extract_original = do_nothing
         extract_nn_input = do_nothing
+    else:
+        use_feature_scaling = subtract_one = True
+        # The NN will only receive x
+        nn_input_dimensions = 1
+        # But the PDF itself will receive both (x, scaler(x))
+        pdf_input_dimensions = 2
 
-    model_input = {"pdf_input": pdf_input}
+        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name="scaledx_x")
+        process_input = do_nothing
+        extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name="x_scaled")
+        extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name="pdf_input")
 
     if subtract_one:
+        # TODO: make it its own option, even though now it only activates in the scaler if above
         input_x_eq_1 = [1.0]
         if use_feature_scaling:
             input_x_eq_1 = scaler(input_x_eq_1)[0]
@@ -689,37 +678,9 @@ def _pdfNN_layer_generator(
         layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1), name="x_eq_1")
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
-    # the layer that multiplies the NN output by the preprocessing factor
-    apply_preprocessing_factor = Lambda(op.op_multiply, name="prefactor_times_NN")
+    model_input["pdf_input"] = pdf_input
 
-    # Photon layer
-    layer_photon = AddPhoton(photons=photons, name="add_photon")
-
-    # Basis rotation
-    basis_rotation = FlavourToEvolution(
-        flav_info=flav_info, fitbasis=fitbasis, name="pdf_evolution_basis"
-    )
-
-    # Evolution layer
-    layer_evln = FkRotation(output_dim=out, name="pdf_FK_basis")
-
-    # Normalization and sum rules
-    if impose_sumrule:
-        sumrule_layer, integrator_input = generate_msr_model_and_grid(
-            fitbasis=fitbasis, mode=impose_sumrule, scaler=scaler, replica_seeds=seed
-        )
-        model_input["xgrid_integration"] = integrator_input
-    else:
-        sumrule_layer = lambda x: x
-
-    compute_preprocessing_factor = Preprocessing(
-        flav_info=flav_info,
-        name=PREPROCESSING_LAYER_ALL_REPLICAS,
-        replica_seeds=seed,
-        large_x=not subtract_one,
-    )
-
-    # Create the actual NeuralNetwork PDF
+    ## Create the actual NeuralNetwork PDF
     # loop over the settings for all replicas and generate a list of NN per replica
     # which will be then stack together and built into a single (input -> output) MetaModel
     # all PDFs _must_ share the same input layer
@@ -735,7 +696,21 @@ def _pdfNN_layer_generator(
     nn_pdfs = Lambda(lambda nns: op.stack(nns, axis=1), name=f"stack_replicas")(list_of_nn_pdfs)
     nn_replicas = MetaModel({'NN_input': x_input}, nn_pdfs, name=NN_LAYER_ALL_REPLICAS)
 
-    # The NN subtracted by NN(1), if applicable
+    ## Preprocessing factors:
+    # the layer that multiplies the NN output by the preprocessing factor
+    # This includes
+    #       - x^{a}(1-x)^{b}
+    #       - NN(x) - N(1.0)
+    apply_preprocessing_factor = Lambda(op.op_multiply, name="prefactor_times_NN")
+
+    compute_preprocessing_factor = Preprocessing(
+        flav_info=flav_info,
+        name=PREPROCESSING_LAYER_ALL_REPLICAS,
+        replica_seeds=all_seed,
+        large_x=not subtract_one,
+    )
+
+    # The NN subtracted by NN(1), if applicable, otherwise do nothing
     def nn_subtracted(x):
         NNs_x = nn_replicas(x)
 
@@ -745,6 +720,21 @@ def _pdfNN_layer_generator(
             NNs_x = subtract_one_layer([NNs_x, NNs_x_1])
 
         return NNs_x
+
+    ## Unnormalized PDF
+    #   updf_r(x) = FkRotation( NN_r(input(x)) * preprocessing_layer_r(x) )
+    #       with _r: replica index
+    #       input: whatever processing is applied to the input
+    # The preprocessing_layer and weights is specific to each replica
+    # The final PDF will be in the 14 flavours evolution basis used in the FkTables
+
+    # Basis rotation
+    basis_rotation = FlavourToEvolution(
+        flav_info=flav_info, fitbasis=fitbasis, name="pdf_evolution_basis"
+    )
+
+    # Evolution layer
+    layer_evln = FkRotation(output_dim=out, name="pdf_FK_basis")
 
     def compute_unnormalized_pdf(x):
         # Preprocess the input grid
@@ -761,20 +751,31 @@ def _pdfNN_layer_generator(
         # Apply the preprocessing factor
         pref_NNs_x = apply_preprocessing_factor([preprocessing_factors_x, NNs_x])
 
-        # Apply basis rotation if needed
+        # Transform to FK basis, this is the full evolution basis
+        # Rotate to the 9f evolution basis first before expanding up to 14f
+        # TODO: make these two steps into one
         if not basis_rotation.is_identity():
             pref_NNs_x = basis_rotation(pref_NNs_x)
-
-        # Transform to FK basis
         PDFs_unnormalized = layer_evln(pref_NNs_x)
 
         return PDFs_unnormalized
 
     PDFs_unnormalized = compute_unnormalized_pdf(pdf_input)
 
+    ## Normalization and sum rules, produces normalized PDF
+    #   pdf_r(x) = updf_r(x) * Normalization(updf_r(integration_xgrid))
+    # The normalization layer is shared across replicas (but evaluated at each replica separately)
+    #
     if impose_sumrule:
+        sumrule_layer, integrator_input = generate_msr_model_and_grid(
+            fitbasis=fitbasis, mode=impose_sumrule, scaler=scaler, replica_seeds=all_seed
+        )
+        model_input["xgrid_integration"] = integrator_input
+
+        # We need a second unnormalized PDF evaluated on the integrated grid
         PDFs_integration_grid = compute_unnormalized_pdf(integrator_input)
 
+        # Photon contribution to the sum rule
         if photons:
             # add batch and flavor dimensions
             ph_tensor = op.numpy_to_tensor(photons.integral)
@@ -782,7 +783,7 @@ def _pdfNN_layer_generator(
         else:
             photon_integrals = op.numpy_to_tensor(np.zeros((1, num_replicas, 1)))
 
-        PDFs_normalized = sumrule_layer(
+        PDFs = sumrule_layer(
             {
                 "pdf_x": PDFs_unnormalized,
                 "pdf_xgrid_integration": PDFs_integration_grid,
@@ -791,18 +792,21 @@ def _pdfNN_layer_generator(
                 "photon_integral": photon_integrals,
             }
         )
-        PDFs = PDFs_normalized
     else:
         PDFs = PDFs_unnormalized
+        sumrule_layer = lambda x: x
 
+    ## Include the photon in the PDF for QED-enabled fits
+    # (by default the entry corresponding to the photon is set to 0)
     if photons:
+        layer_photon = AddPhoton(photons=photons, name="add_photon")
         PDFs = layer_photon(PDFs)
 
+    # Return a PDF without a replica axis, to extract single replicas from an ensemble
     if not replica_axis:
         PDFs = Lambda(lambda pdfs: pdfs[:, 0], name="remove_replica_axis")(PDFs)
 
-    pdf_model = MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
-    return pdf_model
+    return MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
 
 
 # TODO: is there a way of keeping sincronized the input of this function and _ReplicaSettings
@@ -893,7 +897,7 @@ def _generate_nn(
         previous_layer = layer(previous_layer)
 
         # Add dropout if any to the second to last layer
-        if dropout_rate > 0 and layer_idx == (len(hidden_layers) - 1):
+        if dropout_rate > 0 and layer_idx == (len(hidden_layers) - 2):
             dropout_l = base_layer_selector("dropout", rate=dropout_rate)
             previous_layer = dropout_l(previous_layer)
 

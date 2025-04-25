@@ -6,16 +6,16 @@ Example
 
 >>> import numpy as np
 >>> from n3fit.vpinterface import N3PDF
->>> from n3fit.model_gen import pdfNN_layer_generator
+>>> from n3fit.model_gen import generate_pdf_model
 >>> from validphys.pdfgrids import xplotting_grid
->>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+>>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 's', 'sbar', 'g']]
 >>> fake_x = np.linspace(1e-3,0.8,3)
->>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
->>> n3pdf = N3PDF(pdf_model)
+>>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed_list=np.arange(4), flav_info=fake_fl, fitbasis='FLAVOUR')
+>>> n3pdf = N3PDF(pdf_model.split_replicas())
 >>> res = xplotting_grid(n3pdf, 1.6, fake_x)
 >>> res.grid_values.error_members().shape
-(1, 8, 3)
-
+(4, 8, 3)
+# (nreplicas, flavours, x-grid)
 
 """
 
@@ -376,7 +376,7 @@ def compute_phi(n3pdf, experimental_data):
     >>> from n3fit.model_gen import generate_pdf_model
     >>> from validphys.loader import Loader
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-    >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=[0,1], flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> n3pdf = N3PDF(pdf_model.split_replicas())
     >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=399, cuts="internal")
     >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])

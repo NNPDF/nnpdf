@@ -17,7 +17,6 @@ def test_replica_split():
         seed_list=[34] * num_replicas,
         flav_info=fake_fl,
         fitbasis="FLAVOUR",
-        num_replicas=num_replicas,
     )
     rng = np.random.default_rng(seed=34)
     eps = 1e-9
