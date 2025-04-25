@@ -11,7 +11,7 @@ dataspecs:
     fits:
       - {id: 241227_dis_ict_lam0_weighted_hera575_fs_828872, label: "DIS weighted HERA 575, fs: 1"}
       - {id: 241227_dis_ict_lam0_weighted_hera575_fs_239494, label: "DIS weighted HERA 575, fs: 2"}
-      - {id: 241227_dis_ict_lam0_weighted_hera575_fs_444227, label: "DIS weighted HERA 575, fs: 3"}      
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_444227, label: "DIS weighted HERA 575, fs: 3"}      
       # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_623856, label: "DIS weighted HERA 575, fs: 4"}
       # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_227492, label: "DIS weighted HERA 575, fs: 5"}
       # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_745924, label: "DIS weighted HERA 575, fs: 6"}
@@ -40,7 +40,7 @@ dataspecs:
     fits:
       - {id: 8_6_2023_21_55_4_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_828872, label: "DIS lambda 0, fs: 1"}
       - {id: 8_6_2023_21_38_13_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_239494, label: "DIS lambda 0, fs: 2"}
-      - {id: 8_6_2023_21_41_39_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_444227, label: "DIS lambda 0, fs: 3"}
+      # - {id: 8_6_2023_21_41_39_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_444227, label: "DIS lambda 0, fs: 3"}
       # - {id: 8_6_2023_21_42_26_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_623856, label: "DIS lambda 0, fs: 4"}
       # - {id: 8_6_2023_21_43_13_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_227492, label: "DIS lambda 0, fs: 5"}
       # - {id: 8_6_2023_21_44_1_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_745924, label: "DIS lambda 0, fs: 6"}

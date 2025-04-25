@@ -11,9 +11,9 @@ import pandas as pd
 
 from nnpdf_data.coredata import CommonData
 from reportengine import collect
-from validphys import convolution
 from validphys.calcutils import calc_chi2
-from validphys.core import PDF, DataSetSpec
+from validphys.convolution import central_predictions
+from validphys.core import DataSetSpec
 
 log = logging.getLogger(__name__)
 
@@ -27,23 +27,6 @@ class CentralChi2Data:
     @property
     def reduced(self):
         return self.value / self.ndata
-
-
-def central_predictions(dataset: DataSetSpec, pdf: PDF) -> pd.DataFrame:
-    """
-    Computes the central prediction (central PDF member) for a dataset.
-
-    Parameters
-    ----------
-    dataset: validphys.core.DataSetSpec
-    pdf: validphys.core.PDF
-
-    Returns
-    -------
-    pd.DataFrame
-        index is datapoints, column is the central prediction.
-    """
-    return convolution.central_predictions(dataset, pdf)
 
 
 def central_member_chi2(
