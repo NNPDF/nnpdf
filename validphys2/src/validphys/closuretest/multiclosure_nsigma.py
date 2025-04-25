@@ -1,27 +1,26 @@
-"""
+r"""
 This module contains the functions used in Sec. 4 of paper: arXiv: 2503.17447
 
 `set_1`, `set_2`, and `set_3` correspond to \(\S_1\), \(\S_2\), and \(\S_3\) in Eq. 4.3, 4.6, and 4.7.
 """
 
 import dataclasses
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 from scipy.stats import norm
 
 import reportengine
 from reportengine import collect
-
 from validphys.closuretest.closure_checks import (
     check_fits_areclosures,
     check_fits_underlying_law_match,
 )
 
-
+Z_ALPHA_RANGE = norm.ppf(1 - np.linspace(0, 0.5, 100))
 """
 Quantile range for computing the true positive rate and true negative rate.
 """
-Z_ALPHA_RANGE = norm.ppf(1 - np.linspace(0, 0.5, 100))
 
 
 @dataclasses.dataclass
@@ -77,10 +76,10 @@ def multiclosurefits_nsigma(
     return MulticlosureNsigma(is_weighted=is_weighted, nsigma_table=pd.DataFrame(res_dict))
 
 
+dataspecs_multiclosurefits_nsigma = collect("multiclosurefits_nsigma", ("dataspecs",))
 """
 Collect the multiclosurefits_nsigma over dataspecs.
 """
-dataspecs_multiclosurefits_nsigma = collect("multiclosurefits_nsigma", ("dataspecs",))
 
 
 @dataclasses.dataclass
@@ -141,10 +140,10 @@ def nsigma_alpha(multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str) -
     return def_of_nsigma_alpha(multiclosurefits_nsigma, weighted_dataset, complement=False)
 
 
+dataspecs_nsigma_alpha = collect("nsigma_alpha", ("dataspecs",))
 """
 Collect set 1 alpha over dataspecs.
 """
-dataspecs_nsigma_alpha = collect("nsigma_alpha", ("dataspecs",))
 
 
 def comp_nsigma_alpha(multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str) -> NsigmaAlpha:
@@ -154,14 +153,14 @@ def comp_nsigma_alpha(multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: s
     return def_of_nsigma_alpha(multiclosurefits_nsigma, weighted_dataset, complement=True)
 
 
+dataspecs_comp_nsigma_alpha = collect("comp_nsigma_alpha", ("dataspecs",))
 """
 Collect complement set 1 alpha over dataspecs.
 """
-dataspecs_comp_nsigma_alpha = collect("comp_nsigma_alpha", ("dataspecs",))
 
 
 def set_1(dataspecs_nsigma_alpha: list) -> dict:
-    """
+    r"""
     Returns the set 1 alpha values, these are defined as
 
     S_1 = {j | n_{\sigma}^{j} > Z_{\alpha}}
@@ -184,7 +183,7 @@ def set_1(dataspecs_nsigma_alpha: list) -> dict:
 
 
 def set_2(dataspecs_nsigma_alpha: list) -> dict:
-    """
+    r"""
     Same as the set 1 alpha values, but for the weighted fits.
 
     S_2 = {i | n_{weighted, \sigma}^{i} > Z_{\alpha}}
@@ -267,7 +266,7 @@ def def_set_3(
 
 
 def set_3(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str) -> dict:
-    """
+    r"""
     Computes the set 3 alpha values. The set 3 is defined as:
 
     S_3 = {i | n_{weighted, \sigma}^{i} - n_{ref, \sigma}^{i}>  + Z_{\alpha}}

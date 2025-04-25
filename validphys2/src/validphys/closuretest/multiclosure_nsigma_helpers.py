@@ -4,16 +4,16 @@ context of a multi-closure test.
 """
 
 import dataclasses
-import pandas as pd
-import numpy as np
 import logging
 
-from reportengine import collect
+import numpy as np
+import pandas as pd
 
-from validphys.core import DataSetSpec, PDF
 from nnpdf_data.coredata import CommonData
-from validphys.calcutils import calc_chi2
+from reportengine import collect
 from validphys import convolution
+from validphys.calcutils import calc_chi2
+from validphys.core import PDF, DataSetSpec
 
 log = logging.getLogger(__name__)
 
@@ -96,24 +96,24 @@ def chi2_nsigma_deviation(central_member_chi2: CentralChi2Data) -> float:
     return diff / np.sqrt(2 * central_member_chi2.ndata)
 
 
+datasets_chi2_nsigma_deviation = collect("chi2_nsigma_deviation", ("data_input",))
 """
 Collect the n_sigma values over list of ``dataset_input``.
 """
-datasets_chi2_nsigma_deviation = collect("chi2_nsigma_deviation", ("data_input",))
 
 
-"""
-Collects over fits and for all datasets the n_sigma values.
-"""
 fits_datasets_chi2_nsigma_deviation = collect(
     "datasets_chi2_nsigma_deviation", ("fits", "fitcontext")
 )
+"""
+Collects over fits and for all datasets the n_sigma values.
+"""
 
 
+fits_data = collect("data", ("fits", "fitinputcontext"))
 """
 Collects the data for each fit.
 """
-fits_data = collect("data", ("fits", "fitinputcontext"))
 
 
 def is_weighted(fits_data: list) -> bool:
@@ -129,8 +129,7 @@ def is_weighted(fits_data: list) -> bool:
 
     Returns
     -------
-    str or None
-        Name of the weighted dataset.
+    bool
     """
     # Extract the set of unique weighted dataset names from all fits
     weighted_ds_sets = [{ds.name for ds in data.datasets if ds.weight != 1} for data in fits_data]

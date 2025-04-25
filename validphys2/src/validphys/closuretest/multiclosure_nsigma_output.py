@@ -4,10 +4,10 @@ Module for plotting the results of the multiclosure_nsigma.py script.
 Can be used to reproduce the plots in Sec. 4 of arXiv: 2503.17447
 """
 
-import numpy as np
-from reportengine.figure import figure
 import matplotlib.pyplot as plt
+import numpy as np
 
+from reportengine.figure import figure
 from validphys.closuretest.multiclosure_nsigma import Z_ALPHA_RANGE
 
 

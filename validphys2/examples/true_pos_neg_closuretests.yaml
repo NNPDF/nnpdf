@@ -5,6 +5,7 @@ meta:
 
 weighted_dataset: HERACOMBNCEP575
 
+# NOTE: the commented fits are the ones needed to reproduce the plots in the paper.
 dataspecs:  
   - speclabel: "DIS Inconsistent fits, weighted HERA 575"
     fits:
