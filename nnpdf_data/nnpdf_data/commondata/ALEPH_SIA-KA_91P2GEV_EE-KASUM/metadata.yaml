@@ -1,0 +1,41 @@
+setname: 'ALEPH SIA-KA_91P2GEV_EE-KASUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-KA"
+  experiment: "ALEPH"
+
+arXiv:
+  url: "N/A"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/382179"
+hepdata:
+  url: "https://www.hepdata.net/record/ins382179"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "normalized x-sec differential wrt $x_p$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$', units: ''}
+  observable_name: XP
+  process_type: SIA_XP
+  ndata: 39
+  tables: [1]
+  kinematics:
+    variables:
+      xp: {description: "hadron 3-momentum scaled to beam 3-momentum", label: '$x_p$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [xp]
+  plotting:
+    dataset_label: 'ALEPH SIA PI- + PI+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
+    x_scale: log
+    plot_x: xp
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
