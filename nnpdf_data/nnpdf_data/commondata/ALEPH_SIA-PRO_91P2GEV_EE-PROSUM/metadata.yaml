@@ -1,4 +1,4 @@
-setname: 'ALEPH SIA-PRO_91P2GEV_EE-PROSUM'
+setname: 'ALEPH_SIA-PRO_91P2GEV_EE-PROSUM'
 
 nnpdf_metadata:
   nnpdf31_process: "SIA-PRO"
@@ -31,7 +31,7 @@ implemented_observables:
   - uncertainties.yaml
   kinematic_coverage: [xp]
   plotting:
-    dataset_label: 'ALEPH SIA PI- + PI+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
+    dataset_label: 'ALEPH SIA P + PBAR : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
     x_scale: log
     plot_x: xp
     y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'

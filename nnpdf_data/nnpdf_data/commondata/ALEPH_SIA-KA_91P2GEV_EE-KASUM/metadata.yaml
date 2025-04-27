@@ -1,4 +1,4 @@
-setname: 'ALEPH SIA-KA_91P2GEV_EE-KASUM'
+setname: 'ALEPH_SIA-KA_91P2GEV_EE-KASUM'
 
 nnpdf_metadata:
   nnpdf31_process: "SIA-KA"
@@ -31,7 +31,7 @@ implemented_observables:
   - uncertainties.yaml
   kinematic_coverage: [xp]
   plotting:
-    dataset_label: 'ALEPH SIA PI- + PI+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
+    dataset_label: 'ALEPH SIA KA- + KA+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
     x_scale: log
     plot_x: xp
     y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
