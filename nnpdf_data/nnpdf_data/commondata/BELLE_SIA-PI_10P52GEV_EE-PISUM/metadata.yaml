@@ -1,7 +1,7 @@
 setname: 'BELLE_SIA-PI_10P52GEV_EE-PISUM'
 
 nnpdf_metadata:
-  nnpdf31_process: "SIA"
+  nnpdf31_process: "SIA-PI"
   experiment: "BELLE"
 
 arXiv:
@@ -19,7 +19,7 @@ implemented_observables:
 
 - observable: {description: "differential x-sec wrt z", label: '$\frac{d\sigma}{dz}$', units: '$fb$'}
   observable_name: Z
-  process_type: Z
+  process_type: SIA_Z
   ndata: 78
   tables: [1]
   kinematics:
@@ -29,9 +29,9 @@ implemented_observables:
   data_central: data.yaml
   data_uncertainties:
   - uncertainties.yaml
-  kinematic_coverage: [name]
+  kinematic_coverage: [z]
   plotting:
-    dataset_label: 'BELLE SIA 10.52 GeV Pion production: $\frac{d\sigma}{dz}$'
+    dataset_label: 'BELLE SIA 10.52 GeV PI- + PI+ production: $\frac{d\sigma}{dz}$'
     x_scale: linear
     plot_x: z
     y_label: '$\frac{d\sigma}{dz}$'

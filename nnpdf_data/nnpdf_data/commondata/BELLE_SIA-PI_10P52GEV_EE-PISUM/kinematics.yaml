@@ -1,0 +1,313 @@
+bins:
+- z:
+    min: 0.2
+    mid: null
+    max: 0.21
+- z:
+    min: 0.21
+    mid: null
+    max: 0.22
+- z:
+    min: 0.22
+    mid: null
+    max: 0.23
+- z:
+    min: 0.23
+    mid: null
+    max: 0.24
+- z:
+    min: 0.24
+    mid: null
+    max: 0.25
+- z:
+    min: 0.25
+    mid: null
+    max: 0.26
+- z:
+    min: 0.26
+    mid: null
+    max: 0.27
+- z:
+    min: 0.27
+    mid: null
+    max: 0.28
+- z:
+    min: 0.28
+    mid: null
+    max: 0.29
+- z:
+    min: 0.29
+    mid: null
+    max: 0.3
+- z:
+    min: 0.3
+    mid: null
+    max: 0.31
+- z:
+    min: 0.31
+    mid: null
+    max: 0.32
+- z:
+    min: 0.32
+    mid: null
+    max: 0.33
+- z:
+    min: 0.33
+    mid: null
+    max: 0.34
+- z:
+    min: 0.34
+    mid: null
+    max: 0.35
+- z:
+    min: 0.35
+    mid: null
+    max: 0.36
+- z:
+    min: 0.36
+    mid: null
+    max: 0.37
+- z:
+    min: 0.37
+    mid: null
+    max: 0.38
+- z:
+    min: 0.38
+    mid: null
+    max: 0.39
+- z:
+    min: 0.39
+    mid: null
+    max: 0.4
+- z:
+    min: 0.4
+    mid: null
+    max: 0.41
+- z:
+    min: 0.41
+    mid: null
+    max: 0.42
+- z:
+    min: 0.42
+    mid: null
+    max: 0.43
+- z:
+    min: 0.43
+    mid: null
+    max: 0.44
+- z:
+    min: 0.44
+    mid: null
+    max: 0.45
+- z:
+    min: 0.45
+    mid: null
+    max: 0.46
+- z:
+    min: 0.46
+    mid: null
+    max: 0.47
+- z:
+    min: 0.47
+    mid: null
+    max: 0.48
+- z:
+    min: 0.48
+    mid: null
+    max: 0.49
+- z:
+    min: 0.49
+    mid: null
+    max: 0.5
+- z:
+    min: 0.5
+    mid: null
+    max: 0.51
+- z:
+    min: 0.51
+    mid: null
+    max: 0.52
+- z:
+    min: 0.52
+    mid: null
+    max: 0.53
+- z:
+    min: 0.53
+    mid: null
+    max: 0.54
+- z:
+    min: 0.54
+    mid: null
+    max: 0.55
+- z:
+    min: 0.55
+    mid: null
+    max: 0.56
+- z:
+    min: 0.56
+    mid: null
+    max: 0.57
+- z:
+    min: 0.57
+    mid: null
+    max: 0.58
+- z:
+    min: 0.58
+    mid: null
+    max: 0.59
+- z:
+    min: 0.59
+    mid: null
+    max: 0.6
+- z:
+    min: 0.6
+    mid: null
+    max: 0.61
+- z:
+    min: 0.61
+    mid: null
+    max: 0.62
+- z:
+    min: 0.62
+    mid: null
+    max: 0.63
+- z:
+    min: 0.63
+    mid: null
+    max: 0.64
+- z:
+    min: 0.64
+    mid: null
+    max: 0.65
+- z:
+    min: 0.65
+    mid: null
+    max: 0.66
+- z:
+    min: 0.66
+    mid: null
+    max: 0.67
+- z:
+    min: 0.67
+    mid: null
+    max: 0.68
+- z:
+    min: 0.68
+    mid: null
+    max: 0.69
+- z:
+    min: 0.69
+    mid: null
+    max: 0.7
+- z:
+    min: 0.7
+    mid: null
+    max: 0.71
+- z:
+    min: 0.71
+    mid: null
+    max: 0.72
+- z:
+    min: 0.72
+    mid: null
+    max: 0.73
+- z:
+    min: 0.73
+    mid: null
+    max: 0.74
+- z:
+    min: 0.74
+    mid: null
+    max: 0.75
+- z:
+    min: 0.75
+    mid: null
+    max: 0.76
+- z:
+    min: 0.76
+    mid: null
+    max: 0.77
+- z:
+    min: 0.77
+    mid: null
+    max: 0.78
+- z:
+    min: 0.78
+    mid: null
+    max: 0.79
+- z:
+    min: 0.79
+    mid: null
+    max: 0.8
+- z:
+    min: 0.8
+    mid: null
+    max: 0.81
+- z:
+    min: 0.81
+    mid: null
+    max: 0.82
+- z:
+    min: 0.82
+    mid: null
+    max: 0.83
+- z:
+    min: 0.83
+    mid: null
+    max: 0.84
+- z:
+    min: 0.84
+    mid: null
+    max: 0.85
+- z:
+    min: 0.85
+    mid: null
+    max: 0.86
+- z:
+    min: 0.86
+    mid: null
+    max: 0.87
+- z:
+    min: 0.87
+    mid: null
+    max: 0.88
+- z:
+    min: 0.88
+    mid: null
+    max: 0.89
+- z:
+    min: 0.89
+    mid: null
+    max: 0.9
+- z:
+    min: 0.9
+    mid: null
+    max: 0.91
+- z:
+    min: 0.91
+    mid: null
+    max: 0.92
+- z:
+    min: 0.92
+    mid: null
+    max: 0.93
+- z:
+    min: 0.93
+    mid: null
+    max: 0.94
+- z:
+    min: 0.94
+    mid: null
+    max: 0.95
+- z:
+    min: 0.95
+    mid: null
+    max: 0.96
+- z:
+    min: 0.96
+    mid: null
+    max: 0.97
+- z:
+    min: 0.97
+    mid: null
+    max: 0.98
