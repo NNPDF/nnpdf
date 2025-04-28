@@ -281,7 +281,6 @@ def fitting_data_dict(
     kfold_masks,
     fittable_datasets_masked,
     diagonal_basis=False,
-    diagonal_frac=1.0,
 ):
     """
     Provider which takes  the information from validphys ``data``.
@@ -347,7 +346,6 @@ def fitting_data_dict(
 
         # construct the covariance matrix in the diagonal basis
         covmat = np.diag(eig_vals)
-        invcovmat = np.diag(1 / eig_vals)
         invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
         invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
 
