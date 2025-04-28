@@ -1,5 +1,5 @@
 """
-    Fit action controller
+Fit action controller
 """
 
 # Backend-independent imports
@@ -13,7 +13,6 @@ log = logging.getLogger(__name__)
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
-@n3fit.checks.can_run_multiple_replicas
 @n3fit.checks.check_multireplica_qed
 @n3fit.checks.check_polarized_configs
 def performfit(
@@ -42,7 +41,7 @@ def performfit(
     debug=False,
     maxcores=None,
     double_precision=False,
-    parallel_models=False,
+    parallel_models=True,
 ):
     """
     This action will (upon having read a validcard) process a full PDF fit

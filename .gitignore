@@ -58,6 +58,9 @@ compile_commands.json
 CTestTestfile.cmake
 build
 
+## Theory docs
+doc/sphinx/source/theories_central.csv
+
 ### JupyterNotebook ###
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
