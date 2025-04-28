@@ -238,8 +238,8 @@ Consider the example:
 	fit: NNPDF40_nlo_as_01180
 
 	theoryids:
-	    - 208
-	    - 162
+	    - 40_000_001
+	    - 40_000_000
 
 	With_cuts:
 	    use_cuts : "nocuts"

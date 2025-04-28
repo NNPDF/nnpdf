@@ -16,7 +16,7 @@ in the :py:mod:`validphys.fkparser` module. For example::
     from validphys.fkparser import load_fktable
     from validphys.loader import Loader
     l = Loader()
-    fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=162, cfac=('QCD',))
+    fk = l.check_fktable(setname="LHCB_Z0_13TEV_DIMUON-Y", theoryID=40_000_000)
     res = load_fktable(fk)
 
 results in an :py:mod:`validphys.coredata.FKTableData` object containing all
@@ -37,8 +37,8 @@ terms of PDF and dataset objects that can be obtained directly from
     from validphys.convolution import predictions
 
     inp = {
-        'dataset_input': {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
-        'theoryid': 162,
+        'dataset_input': {'dataset': 'LHCB_Z0_13TEV_DIMUON-Y'},
+        'theoryid': 40_000_000,
         'use_cuts': 'internal',
         'pdf': 'NNPDF40_nnlo_as_01180'
     }
@@ -62,7 +62,7 @@ datasets using the `Dask <https://dask.org/>`_ library::
     inp = {
         'fit': 'NNPDF40_nlo_as_01180',
         'use_cuts': 'internal',
-        'theoryid': 162,
+        'theoryid': 40_000_000,
         'pdf': 'NNPDF40_nnlo_as_01180',
         'experiments': {'from_': 'fit'}
     }
@@ -94,8 +94,8 @@ The previous example can be simpler using ``central_predictions``::
     from validphys.convolution import central_predictions
 
     inp = {
-        'dataset_input': {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
-        'theoryid': 162,
+        'dataset_input': {'dataset': 'LHCB_Z0_13TEV_DIMUON-Y'},
+        'theoryid': 40_000_000,
         'use_cuts': 'internal',
         'pdf': 'NNPDF40_nnlo_as_01180'
     }
@@ -122,7 +122,7 @@ central replica is the same as the mean of the replica predictions::
 
     l = Loader()
     pdf = l.check_pdf('NNPDF40_nnlo_as_01180')
-    ds = l.check_dataset('ATLASTTBARTOT', theoryid=162, cfac=('QCD',))
+    ds = l.check_dataset('LHCB_Z0_13TEV_DIMUON-Y', theoryid=40_000_000)
 
     # "Exact" predictions
     p = predictions(ds, pdf).T
@@ -155,7 +155,7 @@ with the standard pandas machinery::
     from validphys.api import API
     from nnpdf_data.commondataparser import load_commondata
     # define dataset settings
-    ds_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
+    ds_input={'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM'), 'variant':'sys_10'}
     # first get the CommonDataSpec
     cd = API.commondata(dataset_input=ds_input)
     lcd = load_commondata(cd)
@@ -168,11 +168,11 @@ a new instance of the class with cuts applied::
     from validphys.api import API
     from nnpdf_data.commondataparser import load_commondata
     # define dataset and additional settings
-    ds_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
+    ds_input={'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM'), 'variant':'sys_10'}
     inp = {
         "dataset_input": ds_input,
         "use_cuts": "internal",
-        "theoryid": 162
+        "theoryid": 40_000_000
     }
     # first get the CommonDataSpec
     cd = API.commondata(**inp)
@@ -203,9 +203,9 @@ the functions can be called in scripts directly::
     from validphys.covmats import covmat_from_systematics
 
     inp = {
-        "dataset_input": {"dataset":"NMC"},
+        "dataset_input": {"dataset":"NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
         "use_cuts": "internal",
-        "theoryid": 162
+        "theoryid": 40_000_000
     }
     lcd = API.loaded_commondata_with_cuts(**inp)
     cov = covmat_from_systematics(lcd)
@@ -218,11 +218,11 @@ and takes into account correlations between datasets::
     from validphys.covmats import dataset_inputs_covmat_from_systematics
     inp = {
         "dataset_inputs": [
-            {"dataset":"NMC"},
-            {"dataset":"NMCPD"},
+            {"dataset":"NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy_dw"}
+            {"dataset":"NMC_NC_NOTFIXED_EM-F2", "variant": "legacy_dw"}
         ],
         "use_cuts": "internal",
-        "theoryid": 162
+        "theoryid": 40_000_000
     }
     lcds = API.dataset_inputs_loaded_cd_with_cuts(**inp)
     total_ndata = np.sum([lcd.ndata for lcd in lcds])
@@ -235,19 +235,19 @@ from the API::
     from validphys.api import API
 
     inp = {
-        "dataset_input": {"dataset":"NMC"},
+        "dataset_input": {"dataset":"NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy_dw"},
         "use_cuts": "internal",
-        "theoryid": 162
+        "theoryid": 40_000_000
     }
     # single dataset covmat
     cov = API.covmat_from_systematics(**inp)
     inp = {
         "dataset_inputs": [
-            {"dataset":"NMC"},
-            {"dataset":"NMCPD"},
+            {"dataset":"NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy_dw"}
+            {"dataset":"NMC_NC_NOTFIXED_EM-F2", "variant": "legacy_dw"}
         ],
         "use_cuts": "internal",
-        "theoryid": 162
+        "theoryid": 40_000_000
     }
     total_cov = API.dataset_inputs_covmat_from_systematics(**inp)
 
