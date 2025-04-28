@@ -1,0 +1,115 @@
+meta:
+  title: Inconsistency classification probabilities
+  author: Lazy Person
+  keywords: [nsigma, chi2, multiclosure test, inconsistent]
+
+weighted_dataset: HERACOMBNCEP575
+
+# NOTE: the commented fits are the ones needed to reproduce the plots in the paper.
+dataspecs:  
+  - speclabel: "DIS Inconsistent fits, weighted HERA 575"
+    fits:
+      - {id: 241227_dis_ict_lam0_weighted_hera575_fs_828872, label: "DIS weighted HERA 575, fs: 1"}
+      - {id: 241227_dis_ict_lam0_weighted_hera575_fs_239494, label: "DIS weighted HERA 575, fs: 2"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_444227, label: "DIS weighted HERA 575, fs: 3"}      
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_623856, label: "DIS weighted HERA 575, fs: 4"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_227492, label: "DIS weighted HERA 575, fs: 5"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_745924, label: "DIS weighted HERA 575, fs: 6"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_724387, label: "DIS weighted HERA 575, fs: 7"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_78994, label: "DIS weighted HERA 575, fs: 8"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_96000, label: "DIS weighted HERA 575, fs: 9"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_997788, label: "DIS weighted HERA 575, fs: 10"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_143862, label: "DIS weighted HERA 575, fs: 11"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_852153, label: "DIS weighted HERA 575, fs: 12"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_219029, label: "DIS weighted HERA 575, fs: 13"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_261213, label: "DIS weighted HERA 575, fs: 14"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_193336, label: "DIS weighted HERA 575, fs: 15"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_352812, label: "DIS weighted HERA 575, fs: 16"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_944815, label: "DIS weighted HERA 575, fs: 17"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_847399, label: "DIS weighted HERA 575, fs: 18"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_562031, label: "DIS weighted HERA 575, fs: 19"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_220528, label: "DIS weighted HERA 575, fs: 20"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_30137, label: "DIS weighted HERA 575, fs: 21"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_680245, label: "DIS weighted HERA 575, fs: 22"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_331227, label: "DIS weighted HERA 575, fs: 23"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_592002, label: "DIS weighted HERA 575, fs: 24"}
+      # - {id: 241227_dis_ict_lam0_weighted_hera575_fs_955177, label: "DIS weighted HERA 575, fs: 25"}
+
+
+  - speclabel: "DIS Inconsistent fits"
+    fits:
+      - {id: 8_6_2023_21_55_4_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_828872, label: "DIS lambda 0, fs: 1"}
+      - {id: 8_6_2023_21_38_13_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_239494, label: "DIS lambda 0, fs: 2"}
+      # - {id: 8_6_2023_21_41_39_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_444227, label: "DIS lambda 0, fs: 3"}
+      # - {id: 8_6_2023_21_42_26_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_623856, label: "DIS lambda 0, fs: 4"}
+      # - {id: 8_6_2023_21_43_13_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_227492, label: "DIS lambda 0, fs: 5"}
+      # - {id: 8_6_2023_21_44_1_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_745924, label: "DIS lambda 0, fs: 6"}
+      # - {id: 8_6_2023_21_44_50_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_724387, label: "DIS lambda 0, fs: 7"}
+      # - {id: 8_6_2023_21_45_39_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_78994, label: "DIS lambda 0, fs: 8"}
+      # - {id: 8_6_2023_21_46_26_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_96000, label: "DIS lambda 0, fs: 9"}
+      # - {id: 8_6_2023_21_47_14_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_997788, label: "DIS lambda 0, fs: 10"}
+      # - {id: 8_6_2023_21_48_55_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_143862, label: "DIS lambda 0, fs: 11"}
+      # - {id: 8_6_2023_21_48_5_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_852153, label: "DIS lambda 0, fs: 12"}
+      # - {id: 8_6_2023_21_49_44_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_219029, label: "DIS lambda 0, fs: 13"}
+      # - {id: 8_6_2023_21_50_32_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_261213, label: "DIS lambda 0, fs: 14"}
+      # - {id: 8_6_2023_21_51_23_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_193336, label: "DIS lambda 0, fs: 15"}
+      # - {id: 8_6_2023_21_52_11_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_352812, label: "DIS lambda 0, fs: 16"}
+      # - {id: 8_6_2023_21_53_47_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_944815, label: "DIS lambda 0, fs: 17"}
+      # - {id: 8_6_2023_21_56_2_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_847399, label: "DIS lambda 0, fs: 18"}
+      # - {id: 8_6_2023_21_56_52_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_562031, label: "DIS lambda 0, fs: 19"}
+      # - {id: 8_6_2023_21_57_55_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_220528, label: "DIS lambda 0, fs: 20"}
+      # - {id: 8_6_2023_21_59_2_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_30137, label: "DIS lambda 0, fs: 21"}
+      # - {id: 8_6_2023_22_0_10_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_680245, label: "DIS lambda 0, fs: 22"}
+      # - {id: 8_6_2023_22_1_12_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_331227, label: "DIS lambda 0, fs: 23"}
+      # - {id: 8_6_2023_22_2_12_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_592002, label: "DIS lambda 0, fs: 24"}
+      # - {id: 8_6_2023_22_3_6_mnc_dis_pt1_type2_inconsistent_HERANC_commit_a6f0b1539_filterseed_955177, label: "DIS lambda 0, fs: 25"}
+  
+  # - speclabel: "DIS Inconsistent fits, weighted NMC"
+  #   fits: 
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_828872, label: "DIS weighted NMC, fs 1"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_239494, label: "DIS weighted NMC, fs 2"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_444227, label: "DIS weighted NMC, fs 3"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_623856, label: "DIS weighted NMC, fs 4"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_227492, label: "DIS weighted NMC, fs 5"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_745924, label: "DIS weighted NMC, fs 6"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_724387, label: "DIS weighted NMC, fs 7"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_78994, label: "DIS weighted NMC, fs 8"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_96000, label: "DIS weighted NMC, fs 9"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_997788, label: "DIS weighted NMC, fs 10"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_143862, label: "DIS weighted NMC, fs 11"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_852153, label: "DIS weighted NMC, fs 12"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_219029, label: "DIS weighted NMC, fs 13"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_261213, label: "DIS weighted NMC, fs 14"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_193336, label: "DIS weighted NMC, fs 15"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_352812, label: "DIS weighted NMC, fs 16"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_944815, label: "DIS weighted NMC, fs 17"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_847399, label: "DIS weighted NMC, fs 18"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_562031, label: "DIS weighted NMC, fs 19"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_220528, label: "DIS weighted NMC, fs 20"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_30137, label: "DIS weighted NMC, fs 21"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_680245, label: "DIS weighted NMC, fs 22"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_331227, label: "DIS weighted NMC, fs 23"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_592002, label: "DIS weighted NMC, fs 24"}
+  #     - {id: 241227_dis_ict_lam0_weighted_NMC_fs_955177, label: "DIS weighted NMC, fs 25"}
+
+use_cuts: internal
+use_fitcommondata: true
+use_weights_in_covmat: false
+
+template_text: |
+  ## Probabilities
+
+  #### All sets Probabilities
+  {@plot_all_sets@}
+
+  {@plot_1_minus_all_sets@}
+
+  #### Prob of being inconsistent
+  {@plot_probability_inconsistent@}
+
+  #### Prob of being consistent
+  {@plot_probability_consistent@}
+
+
+actions_:
+- report(main=True)
