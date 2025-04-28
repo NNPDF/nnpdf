@@ -13,6 +13,9 @@ from validphys.closuretest.multiclosure_pdf_output import *
 from validphys.closuretest.multiclosure_preprocessing import *
 from validphys.closuretest.multiclosure_pseudodata import *
 from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent_output import *
+# TODO: 
+# select the functions to be exposed from the previous modules
+# and make sure they are flagged smh as closure_test providers
 from validphys.closuretest.multiclosure_nsigma_helpers import (
     central_member_chi2,
     chi2_nsigma_deviation,
