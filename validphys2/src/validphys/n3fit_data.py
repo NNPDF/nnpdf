@@ -113,12 +113,16 @@ class _Masks(TupleComp):
     eigenvectors of the fitting covariance matrix.
     """
 
-    def __init__(self, group_name, seed, tr_masks, vl_masks, diagonal_basis=False, rotation=None):
+    def __init__(
+        self, group_name, seed, tr_masks, vl_masks, diagonal_basis=False, eig_vals=None, u=None
+    ):
 
         self.tr_masks = tr_masks
         self.vl_masks = vl_masks
         if diagonal_basis:
-            self.eig_vals, self.u = rotation
+            self.eig_vals = eig_vals
+            self.u = u
+
         super().__init__(group_name, seed)
 
 
@@ -145,13 +149,16 @@ def masks(
 
     if diagonal_basis:
 
-        # diagonalise the covariance matrix
+        # diagonalise the covariance matrix, eigenvalues appear in ascending order
         covmat = dataset_inputs_fitting_covmat
         eig_vals, u_trans = np.linalg.eigh(covmat)
         ndata = len(eig_vals)
 
+        # construct training mask by selecting a fraction of the eigenvalues
         tr_mask = np.random.random(ndata) < diagonal_frac
         vl_mask = ~tr_mask
+
+        # discard the eigenvalues below covmat_min
         tr_mask[eig_vals < covmat_min] = False
         vl_mask[eig_vals < covmat_min] = False
         return _Masks(
@@ -160,7 +167,8 @@ def masks(
             [tr_mask],
             [vl_mask],
             diagonal_basis=True,
-            rotation=[eig_vals, u_trans.T],
+            eig_vals=eig_vals,
+            u=u_trans.T,
         )
     else:
         trmask_partial = []
@@ -328,23 +336,22 @@ def fitting_data_dict(
     if diagonal_basis:
         log.info("working in diagonal basis.")
 
-        # keep only directions with positive eigenvalues.
+        # get the eigenvalues of the fit covariance matrix (in ascending order)
         eig_vals = masks.eig_vals
-        pos_eig_vals_mask = eig_vals > 0
 
-        # rotate the experimental data and remove negative modes
+        # rotate the experimental data to the diagonal basis and obtain training/validation masks
         u = masks.u
         expdata = u @ expdata
-
         tr_mask = masks.tr_masks[0]
         vl_mask = masks.vl_masks[0]
 
+        # construct the covariance matrix in the diagonal basis
         covmat = np.diag(eig_vals)
         invcovmat = np.diag(1 / eig_vals)
-
         invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
         invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
 
+        # obtain the number of data points in the training/validation sets
         ndata_tr = invcovmat_tr.shape[0]
         ndata_vl = invcovmat_vl.shape[0]
 
