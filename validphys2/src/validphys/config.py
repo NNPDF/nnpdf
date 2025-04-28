@@ -274,7 +274,7 @@ class CoreConfig(configparser.Config):
         mcseed = runcard["mcseed"]
         genrep = runcard["genrep"]
 
-        # default for new fits is True
+        # The default for >= 4.1.X is `True`, the key didn't exist for 4.0.Y
         use_t0_sampling = runcard.get("use_t0_sampling", True)
         use_t0 = use_t0_sampling
         t0pdfset = self.parse_t0pdfset(runcard["datacuts"].get("t0pdfset")) if use_t0 else None
