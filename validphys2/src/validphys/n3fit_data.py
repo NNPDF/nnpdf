@@ -151,7 +151,12 @@ def masks(
 
         # diagonalise the covariance matrix, eigenvalues appear in ascending order
         covmat = dataset_inputs_fitting_covmat
-        eig_vals, u_trans = np.linalg.eigh(covmat)
+
+        # convert covmat to correlation
+        diag_inv_sqrt = np.diag(1 / np.sqrt(np.diag(covmat)))
+        cormat = diag_inv_sqrt @ covmat @ diag_inv_sqrt
+        eig_vals, u_trans = np.linalg.eigh(cormat)
+        u_trans = diag_inv_sqrt @ u_trans
         ndata = len(eig_vals)
 
         # construct training mask by selecting a fraction of the eigenvalues
@@ -345,7 +350,7 @@ def fitting_data_dict(
         vl_mask = masks.vl_masks[0]
 
         # construct the covariance matrix in the diagonal basis
-        covmat = np.diag(eig_vals)
+        cormat = np.diag(eig_vals)
         invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
         invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
 
