@@ -1,0 +1,41 @@
+setname: 'TOPAZ_SIA-PI_58GEV_EE-PISUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-PI"
+  experiment: "TOPAZ"
+
+arXiv:
+  url: "https://arxiv.org/abs/hep-ex/9412015"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/381900"
+hepdata:
+  url: "https://www.hepdata.net/record/ins381900"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "normalized x-sec differential wrt $\xi$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{d\xi}$', units: ''}
+  observable_name: XI
+  process_type: SIA_XI
+  ndata: 17
+  tables: [2]
+  kinematics:
+    variables:
+      xi: {description: "ln(1/x_p)", label: '$\xi$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [xi]
+  plotting:
+    dataset_label: 'TOPAZ 58 GEV SIA PI- + PI+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{d\xi}$'
+    x_scale: linear
+    plot_x: xi
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{d\xi}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
