@@ -1,0 +1,15 @@
+definitions:
+  error:
+    definition: all uncertainties added in quadrature
+    treatment: ADD
+    type: UNCORR
+bins:
+- error: 0.04
+- error: 0.05
+- error: 0.04
+- error: 0.21
+- error: 0.22
+- error: 0.04
+- error: 0.03
+- error: 0.03
+- error: 0.02
