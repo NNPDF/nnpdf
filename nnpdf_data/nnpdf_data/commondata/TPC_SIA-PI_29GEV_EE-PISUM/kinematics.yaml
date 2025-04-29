@@ -1,0 +1,101 @@
+bins:
+- z:
+    min: 0.01
+    mid: null
+    max: 0.015
+- z:
+    min: 0.015
+    mid: null
+    max: 0.02
+- z:
+    min: 0.02
+    mid: null
+    max: 0.025
+- z:
+    min: 0.025
+    mid: null
+    max: 0.03
+- z:
+    min: 0.03
+    mid: null
+    max: 0.035
+- z:
+    min: 0.035
+    mid: null
+    max: 0.04
+- z:
+    min: 0.04
+    mid: null
+    max: 0.045
+- z:
+    min: 0.045
+    mid: null
+    max: 0.05
+- z:
+    min: 0.05
+    mid: null
+    max: 0.055
+- z:
+    min: 0.055
+    mid: null
+    max: 0.06
+- z:
+    min: 0.06
+    mid: null
+    max: 0.065
+- z:
+    min: 0.065
+    mid: null
+    max: 0.07
+- z:
+    min: 0.09
+    mid: null
+    max: 0.1
+- z:
+    min: 0.1
+    mid: null
+    max: 0.11
+- z:
+    min: 0.16
+    mid: null
+    max: 0.18
+- z:
+    min: 0.18
+    mid: null
+    max: 0.2
+- z:
+    min: 0.2
+    mid: null
+    max: 0.22
+- z:
+    min: 0.22
+    mid: null
+    max: 0.25
+- z:
+    min: 0.25
+    mid: null
+    max: 0.3
+- z:
+    min: 0.3
+    mid: null
+    max: 0.35
+- z:
+    min: 0.35
+    mid: null
+    max: 0.4
+- z:
+    min: 0.4
+    mid: null
+    max: 0.5
+- z:
+    min: 0.5
+    mid: null
+    max: 0.6
+- z:
+    min: 0.6
+    mid: null
+    max: 0.7
+- z:
+    min: 0.7
+    mid: null
+    max: 0.9
