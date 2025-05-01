@@ -156,7 +156,7 @@ def masks(
         diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
         cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
         eig_vals, u_trans = np.linalg.eigh(cormat)
-        u_trans = diag_inv_sqrt @ u_trans
+        u_trans = np.einsum("i, ik -> ik", diag_inv_sqrt, u_trans)
         ndata = len(eig_vals)
 
         # construct training mask by selecting a fraction of the eigenvalues
