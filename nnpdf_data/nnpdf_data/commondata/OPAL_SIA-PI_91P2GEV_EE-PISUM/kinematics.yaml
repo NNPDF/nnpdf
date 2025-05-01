@@ -1,0 +1,205 @@
+bins:
+- ph:
+    min: 0.227
+    mid: 2.33000000e-01
+    max: 0.239
+- ph:
+    min: 0.239
+    mid: 0.245
+    max: 0.251
+- ph:
+    min: 0.251
+    mid: 0.257
+    max: 0.263
+- ph:
+    min: 0.263
+    mid: 0.27
+    max: 0.276
+- ph:
+    min: 0.276
+    mid: 2.83000000e-01
+    max: 0.29
+- ph:
+    min: 0.29
+    mid: 0.298
+    max: 0.305
+- ph:
+    min: 0.305
+    mid: 0.313
+    max: 0.32
+- ph:
+    min: 0.32
+    mid: 0.328
+    max: 0.336
+- ph:
+    min: 0.336
+    mid: 0.345
+    max: 0.353
+- ph:
+    min: 0.353
+    mid: 0.362
+    max: 0.371
+- ph:
+    min: 0.371
+    mid: 0.381
+    max: 0.39
+- ph:
+    min: 0.39
+    mid: 0.4
+    max: 0.41
+- ph:
+    min: 0.41
+    mid: 0.42
+    max: 0.431
+- ph:
+    min: 0.431
+    mid: 0.442
+    max: 0.453
+- ph:
+    min: 0.453
+    mid: 0.464
+    max: 0.476
+- ph:
+    min: 0.476
+    mid: 0.488
+    max: 0.5
+- ph:
+    min: 0.5
+    mid: 0.513
+    max: 0.525
+- ph:
+    min: 0.525
+    mid: 0.539
+    max: 0.552
+- ph:
+    min: 0.552
+    mid: 5.66000000e-01
+    max: 0.58
+- ph:
+    min: 0.58
+    mid: 0.595
+    max: 0.61
+- ph:
+    min: 0.61
+    mid: 0.625
+    max: 0.641
+- ph:
+    min: 0.641
+    mid: 0.657
+    max: 0.673
+- ph:
+    min: 0.673
+    mid: 0.691
+    max: 0.708
+- ph:
+    min: 0.708
+    mid: 0.726
+    max: 0.744
+- ph:
+    min: 0.744
+    mid: 0.763
+    max: 0.782
+- ph:
+    min: 0.782
+    mid: 0.802
+    max: 0.822
+- ph:
+    min: 0.822
+    mid: 0.843
+    max: 0.864
+- ph:
+    min: 2.02
+    mid: 2.07000000e+00
+    max: 2.12
+- ph:
+    min: 2.12
+    mid: 2.17
+    max: 2.23
+- ph:
+    min: 2.23
+    mid: 2.28
+    max: 2.34
+- ph:
+    min: 2.34
+    mid: 2.4
+    max: 2.46
+- ph:
+    min: 2.46
+    mid: 2.52
+    max: 2.59
+- ph:
+    min: 2.59
+    mid: 2.65
+    max: 2.72
+- ph:
+    min: 2.72
+    mid: 2.79
+    max: 2.86
+- ph:
+    min: 2.86
+    mid: 2.93
+    max: 3.01
+- ph:
+    min: 3.01
+    mid: 3.08
+    max: 3.16
+- ph:
+    min: 3.16
+    mid: 3.24
+    max: 3.32
+- ph:
+    min: 3.32
+    mid: 3.41
+    max: 3.49
+- ph:
+    min: 3.49
+    mid: 3.58
+    max: 3.67
+- ph:
+    min: 3.67
+    mid: 3.76
+    max: 3.86
+- ph:
+    min: 3.86
+    mid: 3.96
+    max: 4.06
+- ph:
+    min: 4.06
+    mid: 4.48
+    max: 4.95
+- ph:
+    min: 4.95
+    mid: 5.47
+    max: 6.05
+- ph:
+    min: 6.05
+    mid: 6.68
+    max: 7.39
+- ph:
+    min: 7.39
+    mid: 8.15
+    max: 9.02
+- ph:
+    min: 9.02
+    mid: 9.95
+    max: 11.02
+- ph:
+    min: 11.02
+    mid: 12.14
+    max: 13.46
+- ph:
+    min: 13.46
+    mid: 14.82
+    max: 16.44
+- ph:
+    min: 16.44
+    mid: 18.08
+    max: 20.08
+- ph:
+    min: 20.08
+    mid: 23.81
+    max: 29.95
+- ph:
+    min: 29.95
+    mid: 33.97
+    max: 45.6
