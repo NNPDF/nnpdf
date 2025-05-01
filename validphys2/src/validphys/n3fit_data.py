@@ -153,8 +153,8 @@ def masks(
         covmat = dataset_inputs_fitting_covmat
 
         # convert covmat to correlation
-        diag_inv_sqrt = np.diag(1 / np.sqrt(np.diag(covmat)))
-        cormat = diag_inv_sqrt @ covmat @ diag_inv_sqrt
+        diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
+        cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
         eig_vals, u_trans = np.linalg.eigh(cormat)
         u_trans = diag_inv_sqrt @ u_trans
         ndata = len(eig_vals)
@@ -395,8 +395,29 @@ def fitting_data_dict(
         covmat_tr[data_zero_tr, data_zero_tr] = 1.0
         covmat_vl[data_zero_vl, data_zero_vl] = 1.0
 
-        invcovmat_tr = np.linalg.inv(covmat_tr)
-        invcovmat_vl = np.linalg.inv(covmat_vl)
+        diag_inv_sqrt_covmat_tr = 1 / np.sqrt(np.diag(covmat_tr))
+        diag_inv_sqrt_covmat_vl = 1 / np.sqrt(np.diag(covmat_vl))
+        cormat_tr = np.einsum(
+            "i, ij, j -> ij", diag_inv_sqrt_covmat_tr, covmat_tr, diag_inv_sqrt_covmat_tr
+        )
+        cormat_vl = np.einsum(
+            "i, ij, j -> ij", diag_inv_sqrt_covmat_vl, covmat_vl, diag_inv_sqrt_covmat_vl
+        )
+        invcovmat_tr = np.einsum(
+            "i, ij, j -> ij",
+            diag_inv_sqrt_covmat_tr,
+            np.linalg.inv(cormat_tr),
+            diag_inv_sqrt_covmat_tr,
+        )
+        invcovmat_vl = np.einsum(
+            "i, ij, j -> ij",
+            diag_inv_sqrt_covmat_vl,
+            np.linalg.inv(cormat_vl),
+            diag_inv_sqrt_covmat_vl,
+        )
+
+        # invcovmat_tr = np.linalg.inv(covmat_tr)
+        # invcovmat_vl = np.linalg.inv(covmat_vl)
 
         # Set to 0 the points in the diagonal that were left as 1
         invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
