@@ -1,0 +1,149 @@
+bins:
+- ph:
+    min: 0.406
+    mid: 0.414
+    max: 0.421
+- ph:
+    min: 0.421
+    mid: 0.429
+    max: 0.438
+- ph:
+    min: 0.438
+    mid: 0.447
+    max: 0.456
+- ph:
+    min: 0.456
+    mid: 0.465
+    max: 0.475
+- ph:
+    min: 0.475
+    mid: 0.485
+    max: 0.495
+- ph:
+    min: 0.495
+    mid: 0.506
+    max: 0.517
+- ph:
+    min: 0.517
+    mid: 0.529
+    max: 0.541
+- ph:
+    min: 0.541
+    mid: 5.53000000e-01
+    max: 0.565
+- ph:
+    min: 0.565
+    mid: 0.579
+    max: 0.592
+- ph:
+    min: 0.592
+    mid: 0.606
+    max: 0.62
+- ph:
+    min: 0.62
+    mid: 0.635
+    max: 0.65
+- ph:
+    min: 0.65
+    mid: 0.665
+    max: 0.681
+- ph:
+    min: 0.681
+    mid: 0.698
+    max: 0.714
+- ph:
+    min: 0.714
+    mid: 0.732
+    max: 0.75
+- ph:
+    min: 0.75
+    mid: 0.768
+    max: 0.787
+- ph:
+    min: 0.787
+    mid: 0.806
+    max: 0.826
+- ph:
+    min: 0.826
+    mid: 0.846
+    max: 0.867
+- ph:
+    min: 0.867
+    mid: 0.889
+    max: 0.911
+- ph:
+    min: 0.911
+    mid: 0.933
+    max: 0.957
+- ph:
+    min: 0.957
+    mid: 0.98
+    max: 1.005
+- ph:
+    min: 1.005
+    mid: 1.03
+    max: 1.056
+- ph:
+    min: 1.056
+    mid: 1.082
+    max: 1.109
+- ph:
+    min: 1.109
+    mid: 1.137
+    max: 1.166
+- ph:
+    min: 1.166
+    mid: 1.195
+    max: 1.225
+- ph:
+    min: 1.225
+    mid: 1.256
+    max: 1.287
+- ph:
+    min: 1.287
+    mid: 1.32000000e+00
+    max: 1.353
+- ph:
+    min: 1.353
+    mid: 1.387
+    max: 1.422
+- ph:
+    min: 4.05
+    mid: 4.47
+    max: 4.95
+- ph:
+    min: 4.95
+    mid: 5.46
+    max: 6.04
+- ph:
+    min: 6.04
+    mid: 6.67
+    max: 7.38
+- ph:
+    min: 7.38
+    mid: 8.14
+    max: 9.01
+- ph:
+    min: 9.01
+    mid: 9.94
+    max: 11.01
+- ph:
+    min: 11.01
+    mid: 12.12
+    max: 13.44
+- ph:
+    min: 13.44
+    mid: 14.8
+    max: 16.42
+- ph:
+    min: 16.42
+    mid: 18.05
+    max: 20.05
+- ph:
+    min: 20.05
+    mid: 23.78
+    max: 29.9
+- ph:
+    min: 29.9
+    mid: 33.92
+    max: 45.6
