@@ -1,0 +1,42 @@
+definitions:
+  error:
+    definition: total uncertainty added in quadrature
+    treatment: ADD
+    type: UNCORR
+bins:
+- error: 2.94
+- error: 1.89
+- error: 1.86
+- error: 1.16
+- error: 1.01
+- error: 0.87
+- error: 0.76
+- error: 0.72
+- error: 0.67
+- error: 0.63
+- error: 0.59
+- error: 0.58
+- error: 0.55
+- error: 0.55
+- error: 0.42
+- error: 0.41
+- error: 0.43
+- error: 0.36
+- error: 0.5
+- error: 0.71
+- error: 0.235
+- error: 0.163
+- error: 0.136
+- error: 0.116
+- error: 0.101
+- error: 0.089
+- error: 0.069
+- error: 0.054
+- error: 0.041
+- error: 0.033
+- error: 0.028
+- error: 0.018
+- error: 0.017
+- error: 0.007
+- error: 0.005
+- error: 0.002
