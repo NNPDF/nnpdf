@@ -1,0 +1,41 @@
+setname: 'TASSO_SIA-PI_44GEV_EE-PISUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-PI"
+  experiment: "TASSO"
+
+arXiv:
+  url: "N/A"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/267755"
+hepdata:
+  url: "https://www.hepdata.net/record/ins267755"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+# - observable: {description: "", label: '$$', units: '$$'}
+#   observable_name: 
+#   process_type: 
+#   ndata: 
+#   tables: []
+#   kinematics:
+#     variables:
+#       name: {description: "", label: '$$', units: '$$'}
+#     file: 
+#   data_central: 
+#   data_uncertainties:
+#   - 
+#   kinematic_coverage: [name]
+#   plotting:
+#     dataset_label: ''
+#     x_scale: 
+#     plot_x: 
+#     y_label: ''
+#   theory:
+#     FK_tables:
+#     - - 
+#     operation: 'null'
