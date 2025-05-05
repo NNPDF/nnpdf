@@ -17,7 +17,7 @@ version_comment: "Initial implementation"
 
 implemented_observables:
 
-- observable: {description: "normalized x-sec differential wrt $p_h (prompt)$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: ''}
+- observable: {description: "normalized x-sec differential wrt $p_h$ (prompt)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: ''}
   observable_name: PH-PROMPT
   process_type: SIA_PH
   ndata: 45
@@ -40,7 +40,7 @@ implemented_observables:
   #   - - 
   #   operation: 'null'
 
-- observable: {description: "normalized x-sec differential wrt $p_h (conventional)$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: ''}
+- observable: {description: "normalized x-sec differential wrt $p_h$ (conventional)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: ''}
   observable_name: PH-CONVENTIONAL
   process_type: SIA_PH
   ndata: 45
