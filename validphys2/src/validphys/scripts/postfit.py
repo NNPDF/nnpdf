@@ -62,6 +62,16 @@ def set_lhapdf_info(info_path, nrep):
         f.truncate()
 
 
+def idx(path):
+    """
+    Get the index of the replica from the path.
+    """
+    # get the final folder name, e.g. "replica_12"
+    name = os.path.basename(os.path.normpath(path))
+    # extract the number
+    return int(re.search(r"replica_(\d+)", name).group(1))
+
+
 class PostfitError(Exception):
     """Exception raised when postfit cannot succeed and knows why"""
 
@@ -82,7 +92,8 @@ def filter_replicas(
     # This glob defines what is considered a valid replica
     # all the following code uses paths from this glob
     # We sort the paths so that the selection of replicas is deterministic
-    all_replicas = sorted(glob(f"{nnfit_path}/replica_*/"))
+    paths = glob(f"{nnfit_path}/replica_*/")
+    all_replicas = sorted(paths, key=idx)
     valid_paths = [path for path in all_replicas if fitdata.check_replica_files(path, fitname)]
     log.info(f"{len(all_replicas)} total replicas found")
     log.info(f"{len(valid_paths)} valid replicas found")
