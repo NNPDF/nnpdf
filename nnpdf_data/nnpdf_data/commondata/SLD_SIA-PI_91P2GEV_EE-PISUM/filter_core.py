@@ -1,5 +1,6 @@
 import yaml
 
+from nnpdf_data.filter_utils.utils import percentage_to_absolute as pta
 from nnpdf_data.filter_utils.utils import prettify_float
 
 yaml.add_representer(float, prettify_float)
@@ -29,6 +30,7 @@ def magic1(table, ndat, var_name):
         error_value = {}
         error_value['stat'] = values[i]['errors'][0]['symerror']
         error_value['sys'] = values[i]['errors'][1]['symerror']
+        error_value['sys_norm'] = pta(1, data_central_value)
 
         kin.append(kin_value)
         data_central.append(data_central_value)
@@ -42,6 +44,11 @@ def magic1(table, ndat, var_name):
     }
     error_definition['sys'] = {
         'definition': 'systematic uncertainty',
+        'treatment': 'ADD',
+        'type': 'UNCORR',
+    }
+    error_definition['sys_norm'] = {
+        'definition': 'systematic uncertainty (normalization)',
         'treatment': 'MULT',
         'type': 'CORR',
     }
@@ -77,14 +84,17 @@ def magic2(table, ndat, var_name):
         data_central_uds_value = values_uds[i]['value']
         error_uds_value = {}
         error_uds_value['error'] = values_uds[i]['errors'][0]['symerror']
+        error_uds_value['sys_norm'] = pta(1, data_central_uds_value)
 
         data_central_c_value = values_c[i]['value']
         error_c_value = {}
         error_c_value['error'] = values_c[i]['errors'][0]['symerror']
+        error_c_value['sys_norm'] = pta(1, data_central_c_value)
 
         data_central_b_value = values_b[i]['value']
         error_b_value = {}
         error_b_value['error'] = values_b[i]['errors'][0]['symerror']
+        error_b_value['sys_norm'] = pta(1, data_central_b_value)
 
         kin_uds.append(kin_value)
         data_central_uds.append(data_central_uds_value)
@@ -103,6 +113,11 @@ def magic2(table, ndat, var_name):
         'definition': 'total uncertainty added in quadrature',
         'treatment': 'ADD',
         'type': 'UNCORR',
+    }
+    error_definition['sys_norm'] = {
+        'definition': 'systematic uncertainty (normalization)',
+        'treatment': 'MULT',
+        'type': 'CORR',
     }
 
     data_central_uds_yaml = {'data_central': data_central_uds}
