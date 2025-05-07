@@ -38,8 +38,8 @@ def magic(table, ndat, var_name):
     }
     error_definition['sys'] = {
         'definition': 'systematic uncertainty',
-        'treatment': 'MULT',
-        'type': 'CORR',
+        'treatment': 'ADD',
+        'type': 'UNCORR',
     }
 
     data_central_yaml = {'data_central': data_central}

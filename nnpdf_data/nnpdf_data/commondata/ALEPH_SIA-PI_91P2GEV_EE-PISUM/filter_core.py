@@ -29,8 +29,8 @@ def magic(table, ndat, var_name):
         data_central_value = values[i]['value']
         error_value = {}
         error_value['stat'] = values[i]['errors'][0]['symerror']
-        error_value['sys_1'] = values[i]['errors'][1]['symerror']
-        error_value['sys_2'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
+        error_value['sys'] = values[i]['errors'][1]['symerror']
+        error_value['sys_norm'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
 
         kin.append(kin_value)
         data_central.append(data_central_value)
@@ -42,13 +42,13 @@ def magic(table, ndat, var_name):
         'treatment': 'ADD',
         'type': 'UNCORR',
     }
-    error_definition['sys_1'] = {
-        'definition': 'systematic uncertainty 1',
-        'treatment': 'MULT',
-        'type': 'CORR',
+    error_definition['sys'] = {
+        'definition': 'systematic uncertainty',
+        'treatment': 'ADD',
+        'type': 'UNCORR',
     }
-    error_definition['sys_2'] = {
-        'definition': 'systematic uncertainty 2',
+    error_definition['sys_norm'] = {
+        'definition': 'systematic uncertainty (normalization)',
         'treatment': 'MULT',
         'type': 'CORR',
     }

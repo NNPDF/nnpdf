@@ -47,8 +47,8 @@ def magic(table, ndat, var_name, index):
     }
     error_definition['sys'] = {
         'definition': 'systematic uncertainty',
-        'treatment': 'MULT',
-        'type': 'CORR',
+        'treatment': 'ADD',
+        'type': 'UNCORR',
     }
     error_definition['sys,norm'] = {
         'definition': 'systematic uncertainty (normalization)',
