@@ -25,6 +25,8 @@ from validphys.tableloader import (
     sane_load,
 )
 from validphys.tests.test_covmats import CORR_DATA
+from validphys.tests.conftest import PDF
+
 
 log = logging.getLogger(__name__)
 
@@ -89,6 +91,20 @@ def test_mcreplica(data_config):
     seed = 123456
     # Use no cuts because if filter rules change in the
     # future then this test will end up failing
+    rep = API.indexed_make_replica(**config, replica_mcseed=seed)
+    return rep
+
+
+@make_table_comp(parse_data_cv)
+def test_mcreplica_t0sampling(data_config):
+    config = dict(data_config)
+    config["dataset_inputs"] = CORR_DATA
+    config["use_t0_sampling"] = True
+    config["use_cuts"] = "internal"  # needed for dataset_t0_predictions
+    config["use_t0"] = True
+    config["t0pdfset"] = PDF
+
+    seed = 123456
     rep = API.indexed_make_replica(**config, replica_mcseed=seed)
     return rep
 
