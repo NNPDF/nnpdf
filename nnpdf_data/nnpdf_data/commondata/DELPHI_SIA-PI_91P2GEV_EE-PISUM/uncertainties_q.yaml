@@ -5,8 +5,8 @@ definitions:
     type: UNCORR
   sys:
     definition: systematic uncertainty
-    treatment: MULT
-    type: CORR
+    treatment: ADD
+    type: UNCORR
 bins:
 - stat: 0.039
   sys: 0.239
