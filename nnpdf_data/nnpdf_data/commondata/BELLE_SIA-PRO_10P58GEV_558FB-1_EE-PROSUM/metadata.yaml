@@ -20,7 +20,7 @@ implemented_observables:
 - observable: {description: "differential x-sec wrt z", label: '$\frac{d\sigma}{dz}$', units: '$fb$'}
   observable_name: Z
   process_type: SIA_Z
-  ndata: 36
+  ndata: 29
   kinematics:
     variables:
       z: {description: "fractional hadron momentum", label: '$z$', units: ''}
@@ -42,7 +42,7 @@ implemented_observables:
 - observable: {description: "differential x-sec wrt z (weak decay subtracted)", label: '$\frac{d\sigma}{dz}$', units: '$fb$'}
   observable_name: Z-STRONG
   process_type: SIA_Z
-  ndata: 36
+  ndata: 29
   kinematics:
     variables:
       z: {description: "fractional hadron momentum", label: '$z$', units: ''}
