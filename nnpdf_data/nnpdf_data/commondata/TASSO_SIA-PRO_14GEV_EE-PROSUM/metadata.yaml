@@ -17,24 +17,24 @@ version_comment: "Initial implementation"
 
 implemented_observables:
 
-# - observable: {description: "", label: '$$', units: '$$'}
-#   observable_name: 
-#   process_type: 
-#   ndata: 
-#   tables: []
-#   kinematics:
-#     variables:
-#       name: {description: "", label: '$$', units: '$$'}
-#     file: 
-#   data_central: 
-#   data_uncertainties:
-#   - 
-#   kinematic_coverage: [name]
-#   plotting:
-#     dataset_label: ''
-#     x_scale: 
-#     plot_x: 
-#     y_label: ''
+- observable: {description: "x-sec differential wrt z times s/beta", label: '$\frac{s}{\beta}\frac{d\sigma}{dz}$', units: '$$'}
+  observable_name: Z
+  process_type: SIA_Z
+  ndata: 9
+  tables: [24]
+  kinematics:
+    variables:
+      z: {description: "fractional hadron momentum", label: '$z$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [z]
+  plotting:
+    dataset_label: ' TASSO SIA 14 GeV P + PBAR production: $\frac{s}{\beta}\frac{d\sigma}{dz}$'
+    x_scale: linear
+    plot_x: z
+    y_label: '$\frac{s}{\beta}\frac{d\sigma}{dz}$'
 #   theory:
 #     FK_tables:
 #     - - 
