@@ -1,0 +1,41 @@
+setname: 'BELLE_SIA-PI_10P52GEV_68FB-1_EE-PISUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-PI"
+  experiment: "BELLE"
+
+arXiv:
+  url: "https://arxiv.org/abs/1301.6183"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1216515"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1216515"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "differential x-sec wrt z", label: '$\frac{d\sigma}{dz}$', units: '$fb$'}
+  observable_name: Z
+  process_type: SIA_Z
+  ndata: 78
+  tables: [1]
+  kinematics:
+    variables:
+      z: {description: "fractional hadron momentum", label: '$z$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [z]
+  plotting:
+    dataset_label: 'BELLE SIA 10.52 GeV PI- + PI+ production: $\frac{d\sigma}{dz}$'
+    x_scale: linear
+    plot_x: z
+    y_label: '$\frac{d\sigma}{dz}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
