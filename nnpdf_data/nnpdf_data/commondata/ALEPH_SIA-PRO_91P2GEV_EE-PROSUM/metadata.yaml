@@ -20,8 +20,8 @@ implemented_observables:
 - observable: {description: "normalized x-sec differential wrt $x_p$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$', units: ''}
   observable_name: XP
   process_type: SIA_XP
-  ndata: 39
-  tables: [1]
+  ndata: 26
+  tables: [3]
   kinematics:
     variables:
       xp: {description: "hadron 3-momentum scaled to beam 3-momentum", label: '$x_p$', units: ''}
