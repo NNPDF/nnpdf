@@ -17,7 +17,7 @@ version_comment: "Initial implementation"
 
 implemented_observables:
 
-- observable: {description: "normalized x-sec differential wrt $\xi$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{d\xi}$', units: ''}
+- observable: {description: 'normalized x-sec differential wrt $\xi$', label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{d\xi}$', units: ''}
   observable_name: XI
   process_type: SIA_XI
   ndata: 12
