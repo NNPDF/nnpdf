@@ -17,24 +17,24 @@ version_comment: "Initial implementation"
 
 implemented_observables:
 
-# - observable: {description: "", label: '$$', units: '$$'}
-#   observable_name: 
-#   process_type: 
-#   ndata: 
-#   tables: []
-#   kinematics:
-#     variables:
-#       name: {description: "", label: '$$', units: '$$'}
-#     file: 
-#   data_central: 
-#   data_uncertainties:
-#   - 
-#   kinematic_coverage: [name]
-#   plotting:
-#     dataset_label: ''
-#     x_scale: 
-#     plot_x: 
-#     y_label: ''
+- observable: {description: "x-sec differential wrt $p_h$", label: '$\frac{d\sigma^h}{dp_h}$', units: '$$'}
+  observable_name: PH
+  process_type: SIA_PH
+  ndata: 9
+  tables: [5]
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'TASSO SIA 30 GeV PI- + PI+ : $\frac{d\sigma^h}{dp_h}$'
+    x_scale: linear
+    plot_x: ph
+    y_label: '$\frac{d\sigma^h}{dp_h}$'
 #   theory:
 #     FK_tables:
 #     - - 
