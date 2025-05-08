@@ -14,6 +14,7 @@ import pytest
 from validphys.api import API
 from validphys.tests.conftest import DATA
 from validphys.tests.test_covmats import CORR_DATA
+from validphys.tests.conftest import PDF
 
 SEED = 123456
 
@@ -75,9 +76,33 @@ def test_pseudodata_seeding(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
+
     rep_1 = API.make_replica(**config)
     rep_2 = API.make_replica(**config)
     np.testing.assert_allclose(rep_1, rep_2)
+
+
+@pytest.mark.parametrize("dataset_inputs", [DATA, CORR_DATA])
+def test_pseudodata_t0_and_not(data_config, dataset_inputs):
+    """
+    Check that using t0-sampling produces different pseudodata to not using
+    t0-sampling.
+    """
+    config = dict(data_config)
+    config["dataset_inputs"] = dataset_inputs
+    config["use_cuts"] = "internal"
+    config["replica_mcseed"] = SEED
+    config["use_t0"] = True
+    config["t0pdfset"] = PDF
+
+    config2 = deepcopy(config)
+    config2["use_t0_sampling"] = True
+
+    rep_1 = API.make_replica(**config)
+    rep_2 = API.make_replica(**config2)
+
+    # Check that the two replicas are different
+    assert not np.allclose(rep_1, rep_2)
 
 
 @pytest.mark.parametrize("use_cuts", ["nocuts", "internal"])

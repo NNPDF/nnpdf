@@ -79,7 +79,14 @@ FIT_ITERATED = "NNPDF40_nnlo_low_precision_240916_iterated"
 PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_241121"
 
 
-base_config = dict(pdf=PDF, use_cuts='nocuts', dataset_inputs=DATA, theoryid=THEORYID_NEW, Q=10)
+base_config = dict(
+    pdf=PDF,
+    use_cuts='nocuts',
+    use_t0_sampling=False,
+    dataset_inputs=DATA,
+    theoryid=THEORYID_NEW,
+    Q=10,
+)
 
 
 @pytest.fixture(scope='module')
