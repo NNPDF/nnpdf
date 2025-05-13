@@ -99,7 +99,7 @@ def evolve_fit(
 
     # Open the EKO in read-only mode, if it needs to be manipulated keep it in memory
     with eko.EKO.read(eko_path) as eko_op:
-        # Read the cards directly fro"m the eko to make sure they are consistent
+        # Read the cards directly from the eko to make sure they are consistent
         theory = eko_op.theory_card
         op = eko_op.operator_card
         # And dump them to the log

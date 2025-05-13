@@ -186,7 +186,7 @@ def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
             ev_op_iterations=10,
             n_integration_cores=1,
             polarized=False,
-            #
+            # ... but these we fix here
             ev_op_max_order=[10, 0],
             interpolation_polynomial_degree=4,
             interpolation_is_log=True,
