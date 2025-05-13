@@ -104,7 +104,7 @@ def test_all_datasets(dataset_name, data_internal_cuts_new_theory_config):
         # First check that if legacy_theory exists by itself, it is because legacy_data also exists
         if "legacy_data" not in main_cd.metadata.variants:
             raise KeyError(
-                f"Variant 'legadcy_data' must exist whenever 'legacy_theory' does, it doesn't for {dataset_name}"
+                f"Variant 'legacy_data' must exist whenever 'legacy_theory' does, it doesn't for {dataset_name}"
             )
 
         # Check that legacy_theory + legacy_data == legacy

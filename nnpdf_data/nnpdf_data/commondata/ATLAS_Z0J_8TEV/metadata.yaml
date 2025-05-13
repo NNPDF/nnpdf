@@ -129,6 +129,9 @@ implemented_observables:
     sys_10:
       data_uncertainties:
       - uncertainties_sys_10_PT-M.yaml
+    legacy_data:
+      data_uncertainties:
+      - uncertainties_legacy_PT-M.yaml
     legacy:
       theory: *legtheo
       data_uncertainties:
