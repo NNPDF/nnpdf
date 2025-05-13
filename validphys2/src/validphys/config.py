@@ -274,6 +274,11 @@ class CoreConfig(configparser.Config):
         mcseed = runcard["mcseed"]
         genrep = runcard["genrep"]
 
+        # The default for >= 4.1.X is `True`, the key didn't exist for 4.0.Y
+        use_t0_sampling = runcard.get("use_t0_sampling", True)
+        use_t0 = use_t0_sampling
+        t0pdfset = self.parse_t0pdfset(runcard["datacuts"].get("t0pdfset")) if use_t0 else None
+
         return {
             "dataset_inputs": data_input,
             "theoryid": theoryid,
@@ -281,6 +286,9 @@ class CoreConfig(configparser.Config):
             "mcseed": mcseed,
             "trvlseed": trvlseed,
             "genrep": genrep,
+            "use_t0_sampling": use_t0_sampling,
+            "use_t0": use_t0,
+            "t0pdfset": t0pdfset,
         }
 
     def produce_fitcontext(self, fitinputcontext, fitpdf):
@@ -798,25 +806,52 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_dataset_inputs_sampling_covmat(
-        self, sep_mult=False, use_thcovmat_in_sampling=False
+        self, sep_mult=False, use_thcovmat_in_sampling=False, use_t0_sampling=True
     ):
         """
-        Produces the correct covmat to be used in make_replica according
-        to some options: whether to include the theory covmat and whether to
+        Produces the correct MC replica method sampling covmat to be used in
+        make_replica according to some options: whether to sample using a t0
+        covariance matrix, include the theory covmat and whether to
         separate the multiplcative errors.
+
+        Parameters
+        ----------
+        sep_mult : bool, default=False
+            Whether to separate the multiplicative errors.
+        use_thcovmat_in_sampling : bool, default=False
+            Whether to include the theory covariance matrix.
+        use_t0_sampling : bool, default=True
+            Whether to sample using a t0 covariance matrix.
+
+        Returns
+        -------
+        Callable
         """
         from validphys import covmats
 
-        if use_thcovmat_in_sampling:
-            if sep_mult:
-                return covmats.dataset_inputs_total_covmat_separate
+        if use_t0_sampling:
+            if use_thcovmat_in_sampling:
+                if sep_mult:
+                    return covmats.dataset_inputs_t0_total_covmat_separate
+                else:
+                    return covmats.dataset_inputs_t0_total_covmat
             else:
-                return covmats.dataset_inputs_total_covmat
+                if sep_mult:
+                    return covmats.dataset_inputs_t0_exp_covmat_separate
+                else:
+                    return covmats.dataset_inputs_t0_exp_covmat
+
         else:
-            if sep_mult:
-                return covmats.dataset_inputs_exp_covmat_separate
+            if use_thcovmat_in_sampling:
+                if sep_mult:
+                    return covmats.dataset_inputs_total_covmat_separate
+                else:
+                    return covmats.dataset_inputs_total_covmat
             else:
-                return covmats.dataset_inputs_exp_covmat
+                if sep_mult:
+                    return covmats.dataset_inputs_exp_covmat_separate
+                else:
+                    return covmats.dataset_inputs_exp_covmat
 
     def produce_loaded_theory_covmat(
         self,
