@@ -1,4 +1,4 @@
-""" This module implements tools for computing convolutions between PDFs and
+"""This module implements tools for computing convolutions between PDFs and
 theory grids, which yield observables.
 
 The high level :py:func:`predictions` function can be used to extact theory
@@ -44,6 +44,7 @@ import numpy as np
 import pandas as pd
 
 from validphys.pdfbases import evolution
+import validphys
 
 FK_FLAVOURS = evolution.to_known_elements(
     [
@@ -226,7 +227,9 @@ def predictions(dataset, pdf):
     return _predictions(dataset, pdf, fk_predictions)
 
 
-def central_predictions(dataset, pdf):
+def central_predictions(
+    dataset: validphys.core.DataSetSpec, pdf: validphys.core.PDF
+) -> pd.DataFrame:
     """Same as :py:func:`predictions` but computing the predictions for the
     central member of the PDF set only. For Monte Carlo PDFs, this is a faster
     alternative to computing the central predictions as the average of the
