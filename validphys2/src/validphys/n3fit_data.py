@@ -557,9 +557,9 @@ replicas_exps_masks = collect("exps_tr_masks", ("replicas",))
 
 
 @table
-def replica_training_mask_table(replica_training_mask):
+def replica_mask_table(replica_mask):
     """Same as ``replica_training_mask`` but with a table decorator."""
-    return replica_training_mask
+    return replica_mask
 
 
 def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
