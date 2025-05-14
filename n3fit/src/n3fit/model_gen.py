@@ -73,18 +73,8 @@ class ObservableWrapper:
         """Generates the corresponding loss function depending on the values the wrapper
         was initialized with"""
         if self.invcovmat is not None:
-            if self.rotation:
-                # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
-                invcovmat_matrix = (
-                    np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
-                )
-                if self.covmat is not None:
-                    covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
-                else:
-                    covmat_matrix = self.covmat
-            else:
-                covmat_matrix = self.covmat
-                invcovmat_matrix = self.invcovmat
+            covmat_matrix = self.covmat
+            invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
                 invcovmat_matrix, self.data, mask, covmat=covmat_matrix, name=self.name
             )
@@ -111,6 +101,7 @@ class ObservableWrapper:
         # Finally concatenate all observables (so that experiments are one single entity)
         ret = op.concatenate(output_layers, axis=-1)
 
+        # rotate the predictions to the diagonal basis if rotation is provided.
         if self.rotation is not None:
             ret = self.rotation(ret)
 
@@ -265,7 +256,7 @@ def observable_generator(
         else:
             vl_mask_layer = Mask(validation_mask_array, name=f"vlmask_{spec_name}")
 
-    # Make rotations of the final data (if any)
+    # get rotation matrix to diagonal basis
     if spec_dict.get("data_transformation") is not None:
         obsrot = ObsRotation(spec_dict.get("data_transformation"))
     else:
@@ -299,6 +290,7 @@ def observable_generator(
         data=training_data,
         rotation=obsrot,
     )
+
     out_vl = ObservableWrapper(
         f"{spec_name}_val",
         model_observables,
@@ -308,6 +300,8 @@ def observable_generator(
         data=validation_data,
         rotation=obsrot,
     )
+
+    # experimental data has already been rotated if diagonal basis is requested
     out_exp = ObservableWrapper(
         f"{spec_name}_exp",
         model_observables,
