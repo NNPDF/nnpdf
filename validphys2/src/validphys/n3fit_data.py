@@ -126,7 +126,7 @@ class _Masks(TupleComp):
         super().__init__(group_name, seed)
 
 
-def masks(
+def _diagonal_masks(
     data,
     replica_trvlseed,
     dataset_inputs_fitting_covmat,
@@ -134,6 +134,36 @@ def masks(
     diagonal_frac=1.0,
     covmat_min=0,
 ):
+
+    # diagonalise the covariance matrix, eigenvalues appear in ascending order
+    covmat = dataset_inputs_fitting_covmat
+
+    # convert covmat to correlation
+    diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
+    cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
+    eig_vals, u_trans = np.linalg.eigh(cormat)
+    u_trans = np.einsum("i, ik -> ik", diag_inv_sqrt, u_trans)
+    ndata = len(eig_vals)
+
+    # construct training mask by selecting a fraction of the eigenvalues
+    tr_mask = np.random.random(ndata) < diagonal_frac
+    vl_mask = ~tr_mask
+
+    # discard the eigenvalues below covmat_min
+    tr_mask[eig_vals < covmat_min] = False
+    vl_mask[eig_vals < covmat_min] = False
+    return _Masks(
+        str(data),
+        replica_trvlseed,
+        [tr_mask],
+        [vl_mask],
+        diagonal_basis=True,
+        eig_vals=eig_vals,
+        u=u_trans.T,
+    )
+
+
+def _standard_masks(data, replica_trvlseed):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
     dataset. Each array has length equal to N_data, the datapoints which
@@ -147,57 +177,26 @@ def masks(
     # TODO: update this to new random infrastructure.
     rng = np.random.Generator(np.random.PCG64(nameseed))
 
-    if diagonal_basis:
+    trmask_partial = []
+    vlmask_partial = []
+    for dataset in data.datasets:
+        # TODO: python commondata will not require this rubbish.
+        # all data if cuts are None
+        cuts = dataset.cuts
+        ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
 
-        # diagonalise the covariance matrix, eigenvalues appear in ascending order
-        covmat = dataset_inputs_fitting_covmat
-
-        # convert covmat to correlation
-        diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
-        cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
-        eig_vals, u_trans = np.linalg.eigh(cormat)
-        u_trans = np.einsum("i, ik -> ik", diag_inv_sqrt, u_trans)
-        ndata = len(eig_vals)
-
-        # construct training mask by selecting a fraction of the eigenvalues
-        tr_mask = np.random.random(ndata) < diagonal_frac
+        frac = dataset.frac
+        # We do this so that a given dataset will always have the same number of points masked
+        trmax = int(ndata * frac)
+        if trmax == 0:
+            # If that number is 0, then get 1 point with probability frac
+            trmax = int(rng.random() < frac)
+        tr_mask = np.concatenate([np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)])
+        rng.shuffle(tr_mask)
         vl_mask = ~tr_mask
-
-        # discard the eigenvalues below covmat_min
-        tr_mask[eig_vals < covmat_min] = False
-        vl_mask[eig_vals < covmat_min] = False
-        return _Masks(
-            str(data),
-            replica_trvlseed,
-            [tr_mask],
-            [vl_mask],
-            diagonal_basis=True,
-            eig_vals=eig_vals,
-            u=u_trans.T,
-        )
-    else:
-        trmask_partial = []
-        vlmask_partial = []
-        for dataset in data.datasets:
-            # TODO: python commondata will not require this rubbish.
-            # all data if cuts are None
-            cuts = dataset.cuts
-            ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
-
-            frac = dataset.frac
-            # We do this so that a given dataset will always have the same number of points masked
-            trmax = int(ndata * frac)
-            if trmax == 0:
-                # If that number is 0, then get 1 point with probability frac
-                trmax = int(rng.random() < frac)
-            tr_mask = np.concatenate(
-                [np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)]
-            )
-            rng.shuffle(tr_mask)
-            vl_mask = ~tr_mask
-            trmask_partial.append(tr_mask)
-            vlmask_partial.append(vl_mask)
-        return _Masks(str(data), replica_trvlseed, trmask_partial, vlmask_partial)
+        trmask_partial.append(tr_mask)
+        vlmask_partial.append(vl_mask)
+    return _Masks(str(data), replica_trvlseed, trmask_partial, vlmask_partial)
 
 
 def kfold_masks(kpartitions, data):
@@ -469,7 +468,8 @@ def fitting_data_dict(
     return dict_out
 
 
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
+# TODO: by_experiment or by_metadata?
+exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
@@ -493,8 +493,9 @@ replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", 
 groups_replicas_indexed_make_replica = collect(
     "indexed_make_replica", ("replicas", "group_dataset_inputs_by_experiment")
 )
+# TODO: by_experiment or by_metadata?
 experiment_indexed_make_replica = collect(
-    "indexed_make_replica", ("group_dataset_inputs_by_metadata",)
+    "indexed_make_replica", ("group_dataset_inputs_by_experiment",)
 )
 
 
@@ -553,7 +554,7 @@ def validation_pseudodata(replica_pseudodata, replica_mask):
 
 
 exps_masks = collect("masks", ("group_dataset_inputs_by_metadata",))
-replicas_exps_masks = collect("exps_tr_masks", ("replicas",))
+replicas_exps_masks = collect("exps_masks", ("replicas",))
 
 
 @table
