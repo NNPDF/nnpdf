@@ -98,17 +98,6 @@ def test_generate_q2grid():
 
 
 def test_utils():
-    # Testing the fake LHAPDF class
-    q20 = 1.65**2
-    x_grid = np.geomspace(1.0e-7, 1.0, 30)
-    fake_grids = [[x * (1.0 - x) for x in x_grid] for _ in PIDS_DICT.keys()]
-    pdf_grid = {pid: v for pid, v in zip(range(len(PIDS_DICT)), fake_grids)}
-    my_PDF = utils.LhapdfLike(pdf_grid, q20, x_grid)
-    assert my_PDF.hasFlavor(6)
-    assert not my_PDF.hasFlavor(0)
-    for pid in PIDS_DICT:
-        for x in x_grid:
-            np.testing.assert_allclose(my_PDF.xfxQ2(pid, x, q20), x * (1.0 - x))
     # Testing read_runcard
     runcard = utils.read_runcard(REGRESSION_FOLDER)
     assert isinstance(runcard["description"], str)

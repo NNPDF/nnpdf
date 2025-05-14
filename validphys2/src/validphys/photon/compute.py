@@ -8,6 +8,7 @@ from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
 import yaml
 
+from eko import basis_rotation
 from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
@@ -165,26 +166,27 @@ class Photon:
         # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
-        with EKO.read(self.path_to_eko_photon) as eko:
+        with EKO.read(self.path_to_eko_photon) as eko_photon:
             # TODO : if the eko has not the correct grid we have to reshape it
             # it has to be done inside vp-setupfit
 
-            # construct PDFs
-            pdfs_init = np.zeros((len(eko.bases.inputpids), len(XGRID)))
-            for j, pid in enumerate(eko.bases.inputpids):
-                if pid == 22:
-                    pdfs_init[j] = photon_qin
-                    ph_id = j
-                else:
-                    if pid not in self.luxpdfset.flavors:
-                        continue
-                    pdfs_init[j] = np.array(
-                        [self.luxpdfset.xfxQ(x, self.q_in, replica, pid) / x for x in XGRID]
-                    )
+            # NB: the eko should contain a single operator
+            for _, elem in eko_photon.items():
+                eko_op = elem.operator
 
-            # Apply EKO to PDFs
-            for _, elem in eko.items():
-                pdfs_final = np.einsum("ajbk,bk", elem.operator, pdfs_init)
+                pdfs_init = np.zeros_like(eko_op[0, 0])
+                for j, pid in enumerate(basis_rotation.flavor_basis_pids):
+                    if pid == 22:
+                        pdfs_init[j] = photon_qin
+                        ph_id = j
+                    elif pid not in self.luxpdfset.flavors:
+                        continue
+                    else:
+                        pdfs_init[j] = np.array(
+                            [self.luxpdfset.xfxQ(x, self.q_in, replica, pid) / x for x in XGRID]
+                        )
+
+                pdfs_final = np.einsum("ajbk,bk", eko_op, pdfs_init)
 
         photon_Q0 = pdfs_final[ph_id]
 
