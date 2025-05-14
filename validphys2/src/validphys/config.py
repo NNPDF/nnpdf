@@ -909,6 +909,18 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_covmat_from_systematics
 
     @configparser.explicit_node
+    def produce_masks(self, diagonal_basis: bool = False):
+        """Modifies which action is used as masks depending on the flag
+        `diagonal_basis`
+        """
+        from validphys import n3fit_data
+
+        if diagonal_basis:
+            return n3fit_data._diagonal_masks
+        else:
+            return n3fit_data._standard_masks
+
+    @configparser.explicit_node
     def produce_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as covariance_matrix depending on
         the flag `use_pdferr`
