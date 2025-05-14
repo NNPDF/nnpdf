@@ -174,6 +174,7 @@ def _predictions(dataset, pdf, fkfunc):
     return opfunc(*all_predictions)
 
 
+@functools.cache
 def predictions(dataset, pdf):
     """ "Compute theory predictions for a given PDF and dataset. Information
     regading the dataset, on cuts, CFactors and combinations of FKTables is
@@ -225,6 +226,7 @@ def predictions(dataset, pdf):
     return _predictions(dataset, pdf, fk_predictions)
 
 
+@functools.cache
 def central_predictions(
     dataset: validphys.core.DataSetSpec, pdf: validphys.core.PDF
 ) -> pd.DataFrame:
