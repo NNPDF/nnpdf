@@ -203,6 +203,7 @@ def pineappl_reader(fkspec):
 
     partial_fktables = []
     ndata = 0
+    full_data_index = []
     for fkname, p in zip(fknames, pines):
         # Start by reading possible cfactors if cfactor is not empty
         cfprod = 1.0
@@ -247,6 +248,7 @@ def pineappl_reader(fkspec):
         partial_fktables.append(pd.DataFrame(df_fktable, columns=lumi_columns, index=idx))
 
         ndata += n
+        full_data_index.append(data_idx)
 
     # Finallly concatenate all fktables, sort by flavours and fill any holes
     sigma = pd.concat(partial_fktables, sort=True, copy=False).fillna(0.0)
@@ -265,8 +267,14 @@ def pineappl_reader(fkspec):
             ndata = 1
 
         if ndata == 1:
-            # There's no doubt
-            protected = divisor == name
+            # When the number of points is 1 and the fktable is a divisor, protect it from cuts
+            if divisor == name:
+                protected = True
+                full_data_index = [[0]]
+
+    # Keeping the data index as a series is exploited to speed up certain operations (e.g. hadronic conv)
+    fid = np.concatenate(full_data_index)
+    data_index = pd.Series(fid, index=fid, name="data")
 
     return FKTableData(
         sigma=sigma,
@@ -277,4 +285,5 @@ def pineappl_reader(fkspec):
         hadronic=hadronic,
         xgrid=xgrid,
         protected=protected,
+        data_index=data_index,
     )
