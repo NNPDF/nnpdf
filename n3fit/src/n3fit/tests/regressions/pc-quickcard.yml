@@ -66,3 +66,4 @@ closuretest:
 
 ############################################################
 debug: false
+parallel_models: false
