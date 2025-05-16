@@ -56,6 +56,13 @@ class FKTableData:
         The most common use-case is when a total cross section is used
         as a normalization table for a differential cross section,
         in legacy code (<= NNPDF4.0) both fktables would be cut using the differential index.
+
+    data_index: pd.Series
+        index of the data points
+
+    legacy: bool
+        If False, this corresponds to an FkTable read from the old applgrid interface.
+        Deprecated and support will be dropped during the 4.1.X series of tags.
     """
 
     hadronic: bool
@@ -63,9 +70,11 @@ class FKTableData:
     ndata: int
     xgrid: np.ndarray
     sigma: pd.DataFrame
+    data_index: pd.Series
     convolution_types: tuple[str] = None
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
     protected: bool = False
+    legacy: bool = False
 
     def with_cfactor(self, cfactor):
         """Returns a copy of the FKTableData object with cfactors applied to the fktable"""
@@ -123,11 +132,12 @@ class FKTableData:
         newndata = len(cuts)
         try:
             newsigma = self.sigma.loc[cuts]
+            newdata_idx = self.data_index.loc[cuts]
         except KeyError as e:
             # This will be an ugly erorr msg, but it should be scary anyway
             log.error(f"Problem applying cuts to {self.metadata}")
             raise e
-        return dataclasses.replace(self, ndata=newndata, sigma=newsigma)
+        return dataclasses.replace(self, ndata=newndata, sigma=newsigma, data_index=newdata_idx)
 
     @property
     def luminosity_mapping(self):
@@ -168,8 +178,8 @@ class FKTableData:
         # Make the dataframe into a dense numpy array
 
         # First get the data index out of the way
-        # this is necessary because cuts/shifts and for performance reasons
-        # otherwise we will be putting things in a numpy array in very awkward orders
+        # this is necessary because cuts/shifts and because old fktables are not necessarily ordered
+        # in addition, for performance reason, we want to order the np array as (ndata, basis, x1, x2)
         ns = self.sigma.unstack(level=("data",), fill_value=0)
         x1 = ns.index.get_level_values(0)
 
@@ -244,5 +254,5 @@ class CFactorData:
     """
 
     description: str
-    central_value: np.array
-    uncertainty: np.array
+    central_value: np.ndarray
+    uncertainty: np.ndarray
