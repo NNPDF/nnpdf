@@ -71,23 +71,23 @@
   ],
   "timing": {
     "walltime": {
-      "Total": 16.63748264312744,
+      "Total": 16.55767035484314,
       "start": 0.0,
-      "replica_set": 0.2861497402191162,
-      "replica_fitted": 16.637373447418213,
-      "replica_set_to_replica_fitted": 16.351223707199097
+      "replica_set": 0.23888063430786133,
+      "replica_fitted": 16.55757999420166,
+      "replica_set_to_replica_fitted": 16.3186993598938
     },
     "cputime": {
-      "Total": 17.995295511000002,
+      "Total": 17.857941784,
       "start": 0.0,
-      "replica_set": 0.2831465099999999,
-      "replica_fitted": 17.995184544,
-      "replica_set_to_replica_fitted": 17.712038034
+      "replica_set": 0.22784026300000004,
+      "replica_fitted": 17.857849942,
+      "replica_set_to_replica_fitted": 17.630009679
     }
   },
   "version": {
     "numpy": "1.26.4",
-    "nnpdf": "4.0.10.post47.dev0+c3a29a9bf",
-    "validphys": "4.0.10.post47.dev0+c3a29a9bf"
+    "nnpdf": "4.0.10.post198.dev0+e71980840",
+    "validphys": "4.0.10.post198.dev0+e71980840"
   }
 }
