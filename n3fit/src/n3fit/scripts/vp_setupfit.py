@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-    setup-fit - prepare and apply data cuts before fit
-    setup-fit constructs the fit [results] folder where data used by nnfit
-    will be stored.
+setup-fit - prepare and apply data cuts before fit
+setup-fit constructs the fit [results] folder where data used by nnfit
+will be stored.
 """
 
 # Implementation notes
