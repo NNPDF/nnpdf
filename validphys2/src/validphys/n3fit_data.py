@@ -114,25 +114,47 @@ class _Masks(TupleComp):
     """
 
     def __init__(
-        self, group_name, seed, tr_masks, vl_masks, diagonal_basis=False, eig_vals=None, u=None
+        self,
+        group_name,
+        seed,
+        tr_masks,
+        vl_masks,
+        diagonal_basis=False,
+        eig_vals=None,
+        diagonal_rotation=None,
     ):
+        """
+        Initialize the _Masks object.
+
+        Parameters
+        ----------
+        group_name : str
+            The name of the group of datasets.
+        seed : int
+            The seed used for generating the masks.
+        tr_masks : list[np.array]
+            List of boolean arrays representing the training masks.
+        vl_masks : list[np.array]
+            List of boolean arrays representing the validation masks.
+        diagonal_basis : bool, optional
+            Whether the masks are in the diagonal basis. Default is False.
+        eig_vals : np.array, optional
+            Eigenvalues of the covariance matrix, required if diagonal_basis is True.
+        diagonal_rotation : np.array, optional
+            Eigenvectors of the correlation matrix, required if diagonal_basis is True.
+        """
 
         self.tr_masks = tr_masks
         self.vl_masks = vl_masks
         if diagonal_basis:
             self.eig_vals = eig_vals
-            self.u = u
+            self.diagonal_rotation = diagonal_rotation
 
         super().__init__(group_name, seed)
 
 
 def _diagonal_masks(
-    data,
-    replica_trvlseed,
-    dataset_inputs_fitting_covmat,
-    diagonal_basis=False,
-    diagonal_frac=1.0,
-    covmat_min=0,
+    data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=1.0, covmat_min=0
 ):
 
     # diagonalise the covariance matrix, eigenvalues appear in ascending order
@@ -159,7 +181,7 @@ def _diagonal_masks(
         [vl_mask],
         diagonal_basis=True,
         eig_vals=eig_vals,
-        u=u_trans.T,
+        diagonal_rotation=u_trans.T,
     )
 
 
@@ -343,8 +365,8 @@ def fitting_data_dict(
         eig_vals = masks.eig_vals
 
         # rotate the experimental data to the diagonal basis and obtain training/validation masks
-        u = masks.u
-        expdata = u @ expdata
+        diagonal_rotation = masks.diagonal_rotation
+        expdata = diagonal_rotation @ expdata
         tr_mask = masks.tr_masks[0]
         vl_mask = masks.vl_masks[0]
 
@@ -415,9 +437,6 @@ def fitting_data_dict(
             diag_inv_sqrt_covmat_vl,
         )
 
-        # invcovmat_tr = np.linalg.inv(covmat_tr)
-        # invcovmat_vl = np.linalg.inv(covmat_vl)
-
         # Set to 0 the points in the diagonal that were left as 1
         invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
         invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
@@ -463,13 +482,12 @@ def fitting_data_dict(
         "positivity": False,
         "count_chi2": True,
         "folds": folds,
-        "data_transformation": u if diagonal_basis else None,
+        "data_transformation": diagonal_rotation if diagonal_basis else None,
     }
     return dict_out
 
 
-# TODO: by_experiment or by_metadata?
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
+exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
@@ -491,11 +509,11 @@ replicas_validation_pseudodata = collect("validation_pseudodata", ("replicas",))
 replicas_pseudodata = collect("pseudodata_table", ("replicas",))
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
 groups_replicas_indexed_make_replica = collect(
-    "indexed_make_replica", ("replicas", "group_dataset_inputs_by_experiment")
+    "indexed_make_replica", ("replicas", "group_dataset_inputs_by_metadata")
 )
-# TODO: by_experiment or by_metadata?
+
 experiment_indexed_make_replica = collect(
-    "indexed_make_replica", ("group_dataset_inputs_by_experiment",)
+    "indexed_make_replica", ("group_dataset_inputs_by_metadata",)
 )
 
 
