@@ -420,7 +420,6 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     return level1_commondata_instances_wc
 
 
-# TODO: by by_metadata or by_experiment?
 _group_recreate_pseudodata = collect('indexed_make_replica', ('group_dataset_inputs_by_metadata',))
 _recreate_fit_pseudodata = collect('_group_recreate_pseudodata', ('fitreplicas', 'fitenvironment'))
 _recreate_pdf_pseudodata = collect('_group_recreate_pseudodata', ('pdfreplicas', 'fitenvironment'))

@@ -247,6 +247,9 @@ def groups_index(groups_data, diagonal_basis=False):
     respectively, the group is determined by a key in the dataset metadata, and
     controlled by `metadata_group` key in the runcard.
 
+    In case diagonal_basis is True, the dataset name is replaced by the eigenmode, because
+    individual datasets appear mixed in the diagonal basis
+
     Example
     -------
     TODO: add example
