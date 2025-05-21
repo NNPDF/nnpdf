@@ -163,6 +163,8 @@ def _diagonal_masks(
     # convert covmat to correlation
     diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
     cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
+
+    # diagonalise the correlation matrix
     eig_vals, u_trans = np.linalg.eigh(cormat)
     u_trans = np.einsum("i, ik -> ik", diag_inv_sqrt, u_trans)
     ndata = len(eig_vals)
@@ -361,17 +363,18 @@ def fitting_data_dict(
     if diagonal_basis:
         log.info("working in diagonal basis.")
 
-        # get the eigenvalues of the fit covariance matrix (in ascending order)
+        # get the eigenvalues of the fit cormat (in ascending order)
         eig_vals = masks.eig_vals
 
-        # rotate the experimental data to the diagonal basis and obtain training/validation masks
+        # rotate the experimental data to the diagonal basis of the cormat and obtain training/validation masks
         diagonal_rotation = masks.diagonal_rotation
         expdata = diagonal_rotation @ expdata
         tr_mask = masks.tr_masks[0]
         vl_mask = masks.vl_masks[0]
 
-        # construct the covariance matrix in the diagonal basis
-        cormat = np.diag(eig_vals)
+        # apply the training/validation masks to the eigenvalues and take the inverse
+        # this does not give the inverse of the covmat as the variable name might suggest,
+        # but we call it this way anyway as this needs to be returned at the end
         invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
         invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
 
