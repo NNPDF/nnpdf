@@ -154,7 +154,7 @@ class _Masks(TupleComp):
 
 
 def _diagonal_masks(
-    data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=1.0, covmat_min=0
+    data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=1.0, threshold_eigvals=0
 ):
 
     # diagonalise the covariance matrix, eigenvalues appear in ascending order
@@ -173,9 +173,9 @@ def _diagonal_masks(
     tr_mask = np.random.random(ndata) < diagonal_frac
     vl_mask = ~tr_mask
 
-    # discard the eigenvalues below covmat_min
-    tr_mask[eig_vals < covmat_min] = False
-    vl_mask[eig_vals < covmat_min] = False
+    # discard the eigenvalues below the set threshold
+    tr_mask[eig_vals < threshold_eigvals] = False
+    vl_mask[eig_vals < threshold_eigvals] = False
     return _Masks(
         str(data),
         replica_trvlseed,
