@@ -140,3 +140,6 @@ implemented_observables:
       theory: *legtheo
       data_uncertainties:
       - uncertainties_legacy_sys_10_PT-M.yaml
+    legacy_data_10:
+      data_uncertainties:
+      - uncertainties_legacy_sys_10_PT-M.yaml
