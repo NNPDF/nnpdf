@@ -1,0 +1,23 @@
+independent_variables:
+- header: {name: Parameter}
+  values:
+    - {value: '$\cw/\Lambda^{2}$'}
+    - {value: '$\cwww/\Lambda^{2}$'}
+    - {value: '$\cb/\Lambda^{2}$'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '95% CI (expected) $[TeV^{-2}]$'}
+  values:
+  - {value: '[-3.3, 2.0]'}
+  - {value: '[-1.8, 1.9]'}
+  - {value: '[-130, 170]'}
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '95% CI (observed) $[TeV^{-2}]$'}
+  values:
+  - {value: '[-4.1, 1.1]'}
+  - {value: '[-2.0, 2.1]'}
+  - {value: '[-100, 160]'}
