@@ -62,15 +62,15 @@ def plot_lambdavalues_bias_values(
             df = df[df.index == str(ds)]
 
             ax.errorbar(
-                lambdavalue["lambda_value"],
-                df["sqrt bias"].values,
+                1 - lambdavalue["lambda_value"],
+                df["sqrt bias"].values[::-1],
                 yerr=df["err sqrt bias"].values,
                 color="blue",
                 fmt='o',
             )
             ax.hlines(1, xmin=0, xmax=1.0, color="red", linestyle="--")
             ax.set_ylabel(r"$R_{b}$")
-            ax.set_xlabel(r"$\lambda$")
+            ax.set_xlabel(r"$1 - \lambda$")
 
         ax.set_title(f"{ds.commondata.metadata.plotting.dataset_label}")
 
@@ -101,15 +101,15 @@ def plot_lambdavalues_bias_values_full_data(
         df = lambdavalues_bootstrapped_table_bias_data[i]
 
         ax.errorbar(
-            lambdavalue["lambda_value"],
-            df["sqrt bias"].values,
+            1 - lambdavalue["lambda_value"],
+            df["sqrt bias"].values[::-1],
             yerr=df["err sqrt bias"].values,
             color="blue",
             fmt='o',
         )
         ax.hlines(1, xmin=0, xmax=1.0, color="red", linestyle="--")
         ax.set_ylabel(r"$R_{b}$")
-        ax.set_xlabel(r"$\lambda$")
+        ax.set_xlabel(r"$1- \lambda$")
 
     ax.set_title("Full data")
 
