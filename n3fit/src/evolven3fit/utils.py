@@ -108,3 +108,19 @@ def check_is_a_fit(config_folder):
     nnfitpath = usr_path / "nnfit"
     if not nnfitpath.is_dir():
         raise ValueError("nnfit folder not found: provided path is not valid")
+        
+def check_filter(config_folder):
+    """Check if config_folder contains a filter.yml file."""
+    usr_path = pathlib.Path(config_folder)
+    filter_path = usr_path / "filter.yml"
+    if not filter_path.is_file():
+        raise ValueError(
+            "filter.yaml file not found: the path" + str(filter_path.absolute()) + " is not valid"
+        )
+
+def check_nnfit_folder(config_folder):
+    """Check if config_folder contains a nnfit folder."""
+    usr_path = pathlib.Path(config_folder)
+    nnfitpath = usr_path / "nnfit"
+    if not nnfitpath.is_dir():
+        raise ValueError("nnfit folder not found: provided path is not valid")

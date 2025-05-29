@@ -2,7 +2,7 @@ from . import evolve, utils
 
 
 def cli_evolven3fit(
-    configuration_folder, q_fin, q_points, op_card_info, theory_card_info, force, load, dump
+    configuration_folder, q_fin, q_points, op_card_info, theory_card_info, force, load, dump, hessian
 ):
     """Evolves the fitted PDFs.
 
@@ -21,7 +21,8 @@ def cli_evolven3fit(
 
     The two options are mutually exclusive.
     """
-    utils.check_is_a_fit(configuration_folder)
+    
+    utils.check_nnfit_folder(configuration_folder)
     return evolve.evolve_fit(
-        configuration_folder, q_fin, q_points, op_card_info, theory_card_info, force, load, dump
+        configuration_folder, q_fin, q_points, op_card_info, theory_card_info, force, load, dump, hessian
     )
