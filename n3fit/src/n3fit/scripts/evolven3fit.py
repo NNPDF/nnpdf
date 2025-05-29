@@ -92,6 +92,9 @@ def construct_evolven3fit_parser(subparsers):
         "-d", "--dump", type=pathlib.Path, default=None, help="Path where the EKO is dumped"
     )
     parser.add_argument(
+        "-hf", "--hessian_fit", type=bool, default=False, help="Specify if the fit is hessian (default is False)"
+    )
+    parser.add_argument(
         "-f",
         "--force",
         action="store_true",
@@ -135,6 +138,7 @@ def main():
 
         fit_folder = pathlib.Path(args.fit_folder)
         if args.load is None:
+            utils.check_filter(fit_folder)
             theoryID = utils.get_theoryID_from_runcard(fit_folder)
             _logger.info(f"Loading eko from theory {theoryID}")
             eko_path = loader.check_eko(theoryID)
@@ -150,6 +154,7 @@ def main():
             args.force,
             eko_path,
             None,
+            args.hessian_fit
         )
     else:
         # If we are in the business of producing an eko, do some checks before starting:

@@ -27,7 +27,7 @@ LOGGING_SETTINGS = {
 
 
 def evolve_fit(
-    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path, dump_eko=None
+    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path, dump_eko=None, hessian_fit=False
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -80,13 +80,13 @@ def evolve_fit(
     usr_path = pathlib.Path(fit_folder)
     initial_PDFs_dict = load_fit(usr_path)
     x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(float)
-    theoryID = utils.get_theoryID_from_runcard(usr_path)
 
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
 
     if eko_path is None or not eko_path.exists():
+        theoryID = utils.get_theoryID_from_runcard(usr_path)
         if dump_eko is not None:
             _logger.warning(f"Trying to construct the eko at {dump_eko}")
             theory, op = eko_utils.construct_eko_cards(
@@ -145,7 +145,10 @@ def evolve_fit(
         # Modify the info file with the fit-specific info
         info = info_file.build(theory, op, 1, info_update={})
         info["NumMembers"] = "REPLACE_NREP"
-        info["ErrorType"] = "replicas"
+        if hessian_fit:
+            info["ErrorType"] = "hessian"
+        else:
+            info["ErrorType"] = "replicas"
         info["XMin"] = float(x_grid[0])
         info["XMax"] = float(x_grid[-1])
         # Save the PIDs in the info file in the same order as in the evolution
@@ -190,7 +193,7 @@ def evolve_fit(
                     pids=basis_rotation.flavor_basis_pids,
                 )
                 blocks.append(block)
-            dump_evolved_replica(blocks, usr_path, replica_idx)
+            dump_evolved_replica(blocks, usr_path, replica_idx, hessian_fit)
 
     # remove folder:
     # The function dump_evolved_replica uses a temporary folder
@@ -222,7 +225,7 @@ def load_fit(usr_path):
     return pdf_dict
 
 
-def dump_evolved_replica(evolved_blocks, usr_path, replica_num):
+def dump_evolved_replica(evolved_blocks, usr_path, replica_num, hessian_fit=False):
     """
     Dump the evolved replica given by evolved_block as the replica num "replica_num" in
     the folder usr_path/nnfit/replica_<replica_num>/usr_path.stem.dat
@@ -239,7 +242,10 @@ def dump_evolved_replica(evolved_blocks, usr_path, replica_num):
     path_where_dump = usr_path / "nnfit" / usr_path.stem
     # create folder to dump the evolved replica if it does not exist
     path_where_dump.mkdir(exist_ok=True)
-    to_write_in_head = f"PdfType: replica\nFromMCReplica: {replica_num}\n"
+    if hessian_fit:
+        to_write_in_head = f"PdfType: error\n"
+    else:
+        to_write_in_head = f"PdfType: replica\nFromMCReplica: {replica_num}\n"
     genpdf.export.dump_blocks(
         path_where_dump, replica_num, evolved_blocks, pdf_type=to_write_in_head
     )
