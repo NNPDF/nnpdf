@@ -31,8 +31,9 @@ from validphys.core import PDF, MCStats
 from validphys.covmats import covmat_from_systematics, sqrt_covmat, dataset_inputs_covmat_from_systematics
 from validphys.lhapdfset import LHAPDFSet
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
-from validphys.results import abs_chi2_data, phi_data, results, ThPredictionsResult
+from validphys.results import abs_chi2_data, phi_data, results
 from validphys.calcutils import calc_chi2
+from validphys.convolution import predictions, central_predictions
 
 log = logging.getLogger(__name__)
 # Order of the evolution basis output from n3fit
@@ -456,9 +457,8 @@ def compute_logp(n3pdf, experimental_data):
             exp_cv.append(cd.central_values)
 
             # update list of th pred, for the central value and for each replica
-            th_pred = ThPredictionsResult.from_convolution(n3pdf, datasetspec)
-            th_cv.append(th_pred.central_value)
-            th_replicas.append(th_pred.rawdata)
+            th_cv.append(central_predictions(datasetspec, n3pdf))
+            th_replicas.append(predictions(datasetspec, n3pdf))
 
     diffs = np.concatenate(th_cv) - np.concatenate(exp_cv)
     exp_cov = dataset_inputs_covmat_from_systematics(cds_list, use_weights_in_covmat=False)
