@@ -28,10 +28,10 @@ import numpy.linalg as la
 
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
-from validphys.covmats import covmat_from_systematics, sqrt_covmat
+from validphys.covmats import covmat_from_systematics, sqrt_covmat, dataset_inputs_covmat_from_systematics
 from validphys.lhapdfset import LHAPDFSet
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
-from validphys.results import abs_chi2_data, phi_data, results
+from validphys.results import abs_chi2_data, phi_data, results, ThPredictionsResult
 from validphys.calcutils import calc_chi2
 
 log = logging.getLogger(__name__)
@@ -437,12 +437,11 @@ def compute_logp(n3pdf, experimental_data):
     >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
     >>> chi2 = compute_logp(n3pdf, [data_group_spec])
     """
-
+    cds_list = []
     exp_cv = []
     th_cv = []
-    th_reps = []
-    exp_covmat = []
-
+    th_replicas = []
+    
     # Loop over the list of `DataGroupSpec` objects
     for datagroupspec in experimental_data:
         # datagroupspec is an instance of `DataGroupSpec`
@@ -450,30 +449,21 @@ def compute_logp(n3pdf, experimental_data):
         # Loop over `DataGroupSpec` datasets
         for datasetspec in datagroupspec.datasets:
             # datasetspec is an instance of `DataSetSpec`
+            
+            # update list of CommonData and corresponding central values
+            cd = datasetspec.load_commondata()
+            cds_list.append(cd)
+            exp_cv.append(cd.central_values)
 
-            # get covariant matrix for each `DataSetSpec`
-            covmat = covmat_from_systematics(datasetspec.load_commondata(), datasetspec)
-
-            # get experiment info (`DataResult`) and theory predictions (`ThPredictionsResult`)
-            data, th_pred = results(datasetspec, n3pdf, covmat, sqrt_covmat(covmat))
-
-            # Is there a way to get these without going through this loop?
-            # experimental central values
-            exp_cv.append(data.central_value)
-            # th central values
+            # update list of th pred, for the central value and for each replica
+            th_pred = ThPredictionsResult.from_convolution(n3pdf, datasetspec)
             th_cv.append(th_pred.central_value)
-            # th predictions for each replica
-            th_reps.append(th_pred.rawdata)
-            # exp covmat. Am I missing correlations between some datasets in this way?
-            exp_covmat.append(covmat)
+            th_replicas.append(th_pred.rawdata)
 
-    from scipy.linalg import block_diag, cholesky
     diffs = np.concatenate(th_cv) - np.concatenate(exp_cv)
-
-    # This is likely to be wrong. How do I build the total exp covmat?
-    exp_cov_tot = block_diag(*exp_covmat)
-    pdf_cov = np.cov(np.concatenate(th_reps))
-    total_covmat = exp_cov_tot + pdf_cov
+    exp_cov = dataset_inputs_covmat_from_systematics(cds_list, use_weights_in_covmat=False)
+    pdf_cov = np.cov(np.concatenate(th_replicas))
+    total_covmat = exp_cov + pdf_cov
     
     # compute  log det total covmat
     total_covmat_chol = cholesky(total_covmat, lower=True)
