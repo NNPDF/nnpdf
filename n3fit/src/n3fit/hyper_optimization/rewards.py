@@ -213,7 +213,7 @@ class HyperLoss:
         >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", variant="legacy", theoryid=399, cuts="internal")
         >>> experimental_data = [Loader().check_experiment("My DataGroupSpec", [ds])]
         >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-        >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
+        >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=[0,2], flav_info=fake_fl, fitbasis="FLAVOUR")
         >>> pdf = N3PDF(pdf_model.split_replicas())
         >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf, experimental_data)
         """
