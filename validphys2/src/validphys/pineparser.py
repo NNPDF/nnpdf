@@ -272,7 +272,8 @@ def pineappl_reader(fkspec):
                 protected = True
                 full_data_index = [[0]]
 
-    # Keeping the data index as a series is exploited to speed up certain operations (e.g. hadronic conv)
+    # Keeping the data index as a series is exploited to speed up convolutions
+    # see e.g., convolution.py::_gv_hadron_predictions
     fid = np.concatenate(full_data_index)
     data_index = pd.Series(fid, index=fid, name="data")
 
