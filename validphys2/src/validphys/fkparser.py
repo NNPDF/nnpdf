@@ -18,7 +18,7 @@ CFactors applied.
     res = load_fktable(fk)
 """
 
-# TODO: this module is deprecated and support for older theories will be removed
+# TODO: this module is deprecated and support for older theories is not guaranteed
 
 import dataclasses
 import functools

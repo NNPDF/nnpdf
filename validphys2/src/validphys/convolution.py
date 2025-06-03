@@ -372,28 +372,28 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
     # possible x1-x2 combinations (f1, f2, x1, x2)
     luminosity = np.einsum("ijk, ijl->ijkl", expanded_gv1, expanded_gv2)
 
-    if not loaded_fk.legacy:
-        lx = len(xgrid)
-        lc = len(fl1)
-        fktab = sigma.values.reshape(-1, lx, lx, lc)
-        ret = np.einsum("rcab, nabc->nr", luminosity, fktab)
-        return pd.DataFrame(ret, index=loaded_fk.data_index)
+    if loaded_fk.legacy:
+        # Old FkTables are singled out since they are not always sorted in x1/x2 so matching the
+        # FkTable with the PDF grids (gv1/gv2) is done by means of dataframes, which is slow.
+        # The gv1/gv2 grids are arrays of shape (replicas, flavours<14>, xarray)
+        # the expanded gv1/gv2 instead are shaped according to the channels (which will match)
+        # therefore the luminosity is an array of shape (replicas, channels, x1, x2)
+        def appl(df):
+            # x1 and x2 are encoded as the first and second index levels.
+            xx1 = df.index.get_level_values(1)
+            xx2 = df.index.get_level_values(2)
+            # take the active combinations from the luminosity tensor
+            partial_lumi = luminosity[..., xx1, xx2]
+            return pd.Series(np.einsum("ijk,kj->i", partial_lumi, df.values))
 
-    def appl(df):
-        # x1 and x2 are encoded as the first and second index levels.
-        xx1 = df.index.get_level_values(1)
-        xx2 = df.index.get_level_values(2)
-        # take the active combinations from the luminosity tensor
-        partial_lumi = luminosity[..., xx1, xx2]
-        return pd.Series(np.einsum("ijk,kj->i", partial_lumi, df.values))
+        return sigma.groupby(level=0).apply(appl)
 
-    # The gv1/gv2 grids are arrays of shape (replicas, flavours<14>, xarray)
-    # the expanded gv1/gv2 instead are shaped according to the channels (which will match)
-    # therefore the luminosity is an array of shape (replicas, channels, x1, x2)
-    # this needs to be matched with the fktable which for the old interface were not ordered
-    # and so the full dataframe needs to be used instead to keep track of the index
-
-    return sigma.groupby(level=0).apply(appl)
+    # Pineappl FkTables are sorted and can be treated as numpy arrays
+    lx = len(xgrid)
+    lc = len(fl1)
+    fktab = sigma.values.reshape(-1, lx, lx, lc)
+    ret = np.einsum("rcab, nabc->nr", luminosity, fktab)
+    return pd.DataFrame(ret, index=loaded_fk.data_index)
 
 
 def _gv_dis_predictions(loaded_fk, gvfunc):
@@ -409,18 +409,20 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
     if sigma.empty:
         return pd.DataFrame(columns=range(gv.shape[0]))
 
-    if not loaded_fk.legacy:
-        lx = len(xgrid)
-        fktab = sigma.values.reshape(-1, lx, len(fm))
-        ret = np.einsum("rfa, naf->nr", gv, fktab)
-        return pd.DataFrame(ret, index=loaded_fk.data_index)
+    if loaded_fk.legacy:
+        # Old FkTable are not necessarily sorted in x and need to be treated as dataframes
+        # See comment in `_gv_hadron_predictions` for more details
+        def appl(df):
+            # x is encoded as the first index level.
+            xind = df.index.get_level_values(1)
+            return pd.Series(np.einsum("ijk,kj->i", gv[:, :, xind], df.values))
 
-    def appl(df):
-        # x is encoded as the first index level.
-        xind = df.index.get_level_values(1)
-        return pd.Series(np.einsum("ijk,kj->i", gv[:, :, xind], df.values))
+        return sigma.groupby(level=0).apply(appl)
 
-    return sigma.groupby(level=0).apply(appl)
+    lx = len(xgrid)
+    fktab = sigma.values.reshape(-1, lx, len(fm))
+    ret = np.einsum("rfa, naf->nr", gv, fktab)
+    return pd.DataFrame(ret, index=loaded_fk.data_index)
 
 
 def hadron_predictions(loaded_fk, pdf):
