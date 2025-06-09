@@ -54,7 +54,7 @@ def read_txt_data(path_txt: Path) -> pd.DataFrame:
     """
     colnames = ["x", "Q2", "abs"]
     return pd.read_csv(
-        path_txt, delim_whitespace=True, names=colnames, usecols=[i for i in range(len(colnames))]
+        path_txt, sep=r'\s+', names=colnames, usecols=[i for i in range(len(colnames))]
     )
 
 
