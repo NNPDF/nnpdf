@@ -25,51 +25,6 @@ LOGGING_SETTINGS = {
     "level": logging.DEBUG,
 }
 
-def create_eko (
-    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, dump_eko
-):
-    """
-    Create an eko. The q_grid starts at the Q0 given by the theory but
-    the last point is q_fin and its number of
-    points can be specified by q_points. If just one of the
-    two is not specified by the user, the default grid
-    will be used.
-
-    Parameters
-    ----------
-
-        fit_folder: str or pathlib.Path
-            path to the folder containing the fit
-        q_fin: float
-            final point of the q_grid
-        q_points: int
-            number of points in the q_grid
-        op_card_dict: dict
-            user settings for the op_card
-        theory_card_dict: dict
-            user settings for the t_card
-        dump_eko: str or pathlib.Path
-            path where the eko is dumped (necessary only if the eko is computed)
-        """
-
-        usr_path = pathlib.Path(fit_folder)
-        initial_PDFs_dict = load_fit(usr_path)
-        x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(float)
-        theoryID = utils.get_theoryID_from_runcard(usr_path)
-
-        if dump_eko is not None:
-            _logger.warning(f"Trying to construct the eko at {dump_eko}")
-            theory, op = eko_utils.construct_eko_cards(
-                theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
-            )
-            runner.solve(theory, op, dump_eko)
-            eko_path = dump_eko
-        else:
-            raise ValueError(f"dump_eko not provided and {eko_path=} not found")
-        return eko_path
-
-
-
 def evolve_fit(
     fit_folder, force, eko_path, hessian_fit=False
 ):
