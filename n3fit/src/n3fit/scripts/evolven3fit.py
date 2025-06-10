@@ -138,22 +138,34 @@ def main():
 
         fit_folder = pathlib.Path(args.fit_folder)
         if args.load is None:
+            # no path provided to load the eko
             utils.check_filter(fit_folder)
             theoryID = utils.get_theoryID_from_runcard(fit_folder)
             _logger.info(f"Loading eko from theory {theoryID}")
-            eko_path = loader.check_eko(theoryID)
+            try:
+                # try to load eko from the theory
+                eko_path = loader.check_eko(theoryID)
+            except:
+                # if the theory is not there and a path is given 
+                # for the dump option, the eko will be dumped in that path after the computation.
+                eko_path = evolve.create_eko (
+                    fit_folder, 
+                    args.args.q_fin, 
+                    args.q_points, 
+                    op_card_info, 
+                    theory_card_info, 
+                    args.dump,
+                )
+
         else:
+            # If a path is given for the load option, the eko
+            # to be used for the evolution will be loaded from that path.
             eko_path = args.load
 
         cli.cli_evolven3fit(
             fit_folder,
-            args.q_fin,
-            args.q_points,
-            op_card_info,
-            theory_card_info,
             args.force,
             eko_path,
-            None,
             args.hessian_fit
         )
     else:
