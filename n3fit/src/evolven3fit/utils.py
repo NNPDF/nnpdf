@@ -115,7 +115,7 @@ def check_filter(config_folder):
     filter_path = usr_path / "filter.yml"
     if not filter_path.is_file():
         raise ValueError(
-            "filter.yaml file not found: the path" + str(filter_path.absolute()) + " is not valid"
+            f"filter.yaml file not found: the path {filter_path.absolute()} is not valid"
         )
 
 def check_nnfit_folder(config_folder):
