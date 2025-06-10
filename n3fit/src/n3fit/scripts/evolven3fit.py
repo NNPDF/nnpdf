@@ -92,7 +92,7 @@ def construct_evolven3fit_parser(subparsers):
         "-d", "--dump", type=pathlib.Path, default=None, help="Path where the EKO is dumped"
     )
     parser.add_argument(
-        "-hf", "--hessian_fit", type=bool, default=False, help="Specify if the fit is hessian (default is False)"
+        "--hessian_fit", type=bool, default=False, help="Specify if the fit is hessian (default is False)"
     )
     parser.add_argument(
         "-f",
