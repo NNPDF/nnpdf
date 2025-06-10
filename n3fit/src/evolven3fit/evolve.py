@@ -29,7 +29,11 @@ def create_eko (
     fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, dump_eko
 ):
     """
-    Evolves all the fitted replica in fit_folder/nnfit
+    Create an eko. The q_grid starts at the Q0 given by the theory but
+    the last point is q_fin and its number of
+    points can be specified by q_points. If just one of the
+    two is not specified by the user, the default grid
+    will be used.
 
     Parameters
     ----------
