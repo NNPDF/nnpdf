@@ -80,7 +80,7 @@ def get_kinematics(hepdata: dict, bin_index: list) -> list:
 
     kinematics = []
     for idx in bin_index:
-        ymin, ymax = [float(i) for i in rapbins[idx]['value'].split("-")]
+        ymin, ymax = (float(i) for i in rapbins[idx]['value'].split("-"))
         kin_value = {
             "y": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
             "m_Z2": {"min": None, "mid": MZ_VALUE**2, "max": None},
@@ -159,7 +159,7 @@ def read_corrmatrix(nb_datapoints: int, state: str) -> np.ndarray:
     corrmat = pd.read_csv(
         f"./rawdata/corrmat{MAP_STATE[state]}.corr",
         names=[f'{i}' for i in range(nb_datapoints)],
-        delim_whitespace=True,
+        sep=r'\s+',
     )
     corrmat = corrmat.iloc[:, :].values
 

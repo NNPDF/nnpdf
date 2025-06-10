@@ -148,9 +148,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
 
     """
     corrmat = pd.read_csv(
-        "./rawdata/corrmat.corr",
-        names=[f'{i}' for i in range(nb_datapoints)],
-        delim_whitespace=True,
+        "./rawdata/corrmat.corr", names=[f'{i}' for i in range(nb_datapoints)], sep=r'\s+'
     )
     corrmat = corrmat.iloc[:, :].values
 

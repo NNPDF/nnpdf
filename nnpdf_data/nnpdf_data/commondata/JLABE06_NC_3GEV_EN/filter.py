@@ -12,7 +12,7 @@ yaml.add_representer(float, prettify_float)
 def read_data(fnames):
     df = pd.DataFrame()
     for fname in fnames:
-        with open(fname, "r") as file:
+        with open(fname) as file:
             # Get the data as string
             data = file.read()
 
@@ -26,7 +26,7 @@ def read_data(fnames):
             last_section[0] = "x A_1 A_stat A_sys G G_stat G_sys"
 
             # Convert the modified section into a Pandas DataFrame
-            df_temp = pd.read_csv(StringIO('\n'.join(last_section)), delim_whitespace=True)
+            df_temp = pd.read_csv(StringIO('\n'.join(last_section)), sep=r'\s+')
 
             # Set the Q^2 and y value
             df_temp["Q2"] = "3.08"
