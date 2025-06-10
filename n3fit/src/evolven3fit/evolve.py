@@ -172,15 +172,16 @@ def evolve_fit(
             by_nf[nf].append(q2)
         q2block_per_nf = {nf: sorted(q2s) for nf, q2s in by_nf.items()}
 
-        for replica in initial_PDFs_dict.keys():
-            replica_idx = int(replica.split("_")[1]) - 1
+        for enum, replica in enumerate(initial_PDFs_dict.keys()):
+            replica_idx = int(replica.split("_")[1])
             blocks = []
             for nf, q2grid in q2block_per_nf.items():
 
                 def pdf_xq2(pid, x, Q2):
                     x_idx = targetgrid.index(x)
                     pid_idx = info["Flavors"].index(pid)
-                    return x * all_evolved[(Q2, nf)][replica_idx][pid_idx][x_idx]
+                    ret = x * all_evolved[(Q2, nf)][enum][pid_idx][x_idx]
+                    return ret
 
                 block = genpdf.generate_block(
                     pdf_xq2,
@@ -189,7 +190,7 @@ def evolve_fit(
                     pids=basis_rotation.flavor_basis_pids,
                 )
                 blocks.append(block)
-            dump_evolved_replica(blocks, usr_path, replica_idx + 1)
+            dump_evolved_replica(blocks, usr_path, replica_idx)
 
     # remove folder:
     # The function dump_evolved_replica uses a temporary folder
