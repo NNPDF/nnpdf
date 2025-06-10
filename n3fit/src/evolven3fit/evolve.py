@@ -25,9 +25,8 @@ LOGGING_SETTINGS = {
     "level": logging.DEBUG,
 }
 
-
-def evolve_fit(
-    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path, dump_eko=None, hessian_fit=False
+def create_eko (
+    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, dump_eko
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -45,13 +44,46 @@ def evolve_fit(
             user settings for the op_card
         theory_card_dict: dict
             user settings for the t_card
+        dump_eko: str or pathlib.Path
+            path where the eko is dumped (necessary only if the eko is computed)
+        """
+
+        usr_path = pathlib.Path(fit_folder)
+        initial_PDFs_dict = load_fit(usr_path)
+        x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(float)
+        theoryID = utils.get_theoryID_from_runcard(usr_path)
+
+        if dump_eko is not None:
+            _logger.warning(f"Trying to construct the eko at {dump_eko}")
+            theory, op = eko_utils.construct_eko_cards(
+                theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
+            )
+            runner.solve(theory, op, dump_eko)
+            eko_path = dump_eko
+        else:
+            raise ValueError(f"dump_eko not provided and {eko_path=} not found")
+        return eko_path
+
+
+
+def evolve_fit(
+    fit_folder, force, eko_path, hessian_fit=False
+):
+    """
+    Evolves all the fitted replica in fit_folder/nnfit
+
+    Parameters
+    ----------
+
+        fit_folder: str or pathlib.Path
+            path to the folder containing the fit
         force: bool
             whether to force the evolution to be done again
         eko_path: str or pathlib.Path
             path where the eko is stored (if None the eko will be
             recomputed)
-        dump_eko: str or pathlib.Path
-            path where the eko is dumped (necessary only if the eko is computed)
+        hessian_fit: bool
+            wether the fit is hessian 
     """
     log_file = pathlib.Path(fit_folder) / LOG_FILE
     if log_file.exists():
@@ -81,21 +113,8 @@ def evolve_fit(
     initial_PDFs_dict = load_fit(usr_path)
     x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(float)
 
-    if eko_path is not None:
-        eko_path = pathlib.Path(eko_path)
-        _logger.info(f"Loading eko from : {eko_path}")
-
-    if eko_path is None or not eko_path.exists():
-        theoryID = utils.get_theoryID_from_runcard(usr_path)
-        if dump_eko is not None:
-            _logger.warning(f"Trying to construct the eko at {dump_eko}")
-            theory, op = eko_utils.construct_eko_cards(
-                theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
-            )
-            runner.solve(theory, op, dump_eko)
-            eko_path = dump_eko
-        else:
-            raise ValueError(f"dump_eko not provided and {eko_path=} not found")
+    eko_path = pathlib.Path(eko_path)
+    _logger.info(f"Loading eko from : {eko_path}")
 
     # Open the EKO in read-only mode, if it needs to be manipulated keep it in memory
     with eko.EKO.read(eko_path) as eko_op:
@@ -238,6 +257,8 @@ def dump_evolved_replica(evolved_blocks, usr_path, replica_num, hessian_fit=Fals
             path of the fit folder
         replica_num: int
             replica number
+        hessian_fit: bool
+            wether the fit is hessian
     """
     path_where_dump = usr_path / "nnfit" / usr_path.stem
     # create folder to dump the evolved replica if it does not exist
