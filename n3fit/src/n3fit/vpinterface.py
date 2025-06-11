@@ -27,8 +27,14 @@ import numpy as np
 import numpy.linalg as la
 
 from validphys.arclength import arc_lengths, integrability_number
+from validphys.calcutils import calc_chi2
+from validphys.convolution import central_predictions, predictions
 from validphys.core import PDF, MCStats
-from validphys.covmats import covmat_from_systematics, sqrt_covmat
+from validphys.covmats import (
+    covmat_from_systematics,
+    dataset_inputs_covmat_from_systematics,
+    sqrt_covmat,
+)
 from validphys.lhapdfset import LHAPDFSet
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
 from validphys.results import abs_chi2_data, phi_data, results
@@ -407,3 +413,65 @@ def compute_phi(n3pdf, experimental_data):
             ndat_tot += ndat
 
     return np.sqrt(sum_phi / ndat_tot)
+
+
+def compute_logp(n3pdf, experimental_data):
+    """Compute logp, where p is the probability of experimental_data
+    given a fit n3pdf not containing them.
+
+    Parameters
+    ----------
+        n3pdfs: :class:`n3fit.vpinterface.N3PDF`
+            `N3PDF` instance defining the n3fitted multi-replica PDF
+        experimental_data: List[validphys.core.DataGroupSpec]
+            List of experiment group datasets as `DataGroupSpec` instances
+
+    Returns
+    -------
+        logp: float
+
+    Example
+    -------
+    >>> from n3fit.vpinterface import N3PDF, compute_logp
+    >>> from n3fit.model_gen import generate_pdf_model
+    >>> from validphys.loader import Loader
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> n3pdf = N3PDF(pdf_model.split_replicas())
+    >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=399, cuts="internal")
+    >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
+    >>> chi2 = compute_logp(n3pdf, [data_group_spec])
+    """
+    cds_list = []
+    exp_cv = []
+    th_cv = []
+    th_replicas = []
+
+    # Loop over the list of `DataGroupSpec` objects
+    for datagroupspec in experimental_data:
+        # datagroupspec is an instance of `DataGroupSpec`
+
+        # Loop over `DataGroupSpec` datasets
+        for datasetspec in datagroupspec.datasets:
+            # datasetspec is an instance of `DataSetSpec`
+
+            # update list of CommonData and corresponding central values
+            cd = datasetspec.load_commondata()
+            cds_list.append(cd)
+            exp_cv.append(cd.central_values)
+
+            # update list of th pred, for the central value and for each replica
+            th_cv.append(central_predictions(datasetspec, n3pdf))
+            th_replicas.append(predictions(datasetspec, n3pdf))
+
+    diffs = np.concatenate(th_cv) - np.concatenate(exp_cv)
+    exp_cov = dataset_inputs_covmat_from_systematics(cds_list, use_weights_in_covmat=False)
+    pdf_cov = np.cov(np.concatenate(th_replicas))
+    total_covmat = exp_cov + pdf_cov
+
+    # compute  log det total covmat
+    total_covmat_chol = la.cholesky(total_covmat, lower=True)
+    log_det_total_cov = 2 * np.sum(np.log(np.diag(total_covmat_chol)))
+    chi2 = calc_chi2(sqrtcov=total_covmat_chol, diffs=diffs)
+
+    return -0.5 * (len(diffs) * np.log(2 * np.pi) + log_det_total_cov + chi2)
