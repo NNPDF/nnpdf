@@ -1,10 +1,7 @@
 import pathlib
-import shutil
 
 import numpy as np
-from scipy.interpolate import interp1d
 
-from validphys.pdfbases import PIDS_DICT
 from validphys.utils import yaml_safe
 
 from .q2grids import Q2GRID_DEFAULT, Q2GRID_NNPDF40
@@ -61,41 +58,6 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False):
         return np.concatenate(grids).tolist()
 
 
-def fix_info_path(usr_path):
-    """Fix the location of the info file from the folder nnfit/usr_path to
-    just nnfit
-
-    Examples
-    --------
-    Starting from the info path
-        initial_info_file_path = "/myfolder/myfit/nnfit/myfit/myfit.info"
-    and using this function with usr_path = "/myfolder/myfit", one gets
-        final_info_file_path = "/myfolder/myfit/nnfit/myfit.info"
-    """
-    nnfit = usr_path / "nnfit"
-    info_file = usr_path.stem + ".info"
-    info_file_path = nnfit / usr_path.stem / info_file
-    dest_path_info = nnfit / info_file
-    shutil.move(info_file_path, dest_path_info)
-
-
-def fix_replica_path(usr_path, replica_num):
-    """Fix the location of the dat file of the replica <replica_num> from the folder nnfit/usr_path to
-    just nnfit/replica_<replica_num>
-
-    Examples
-    --------
-    Starting from the replica 5 path
-        initial_replica_file_path = "/myfolder/myfit/nnfit/myfit/myfit_5.dat"
-    and using this function with usr_path = "/myfolder/myfit", one gets
-        final_replica_file_path = "/myfolder/myfit/nnfit/replica_5/myfit.dat"
-    """
-    nnfit = usr_path / "nnfit"
-    replica_file_path = nnfit / usr_path.stem / f"{usr_path.stem}_{replica_num:04d}.dat"
-    dest_path_replica = nnfit / f"replica_{replica_num}" / f"{usr_path.stem}.dat"
-    shutil.move(replica_file_path, dest_path_replica)
-
-
 def check_is_a_fit(config_folder):
     """Check if config_folder is a fit folder, i.e. if it contains the filter.yml file
     and the nnfit folder."""
@@ -108,7 +70,8 @@ def check_is_a_fit(config_folder):
     nnfitpath = usr_path / "nnfit"
     if not nnfitpath.is_dir():
         raise ValueError("nnfit folder not found: provided path is not valid")
-        
+
+
 def check_filter(config_folder):
     """Check if config_folder contains a filter.yml file."""
     usr_path = pathlib.Path(config_folder)
@@ -117,6 +80,7 @@ def check_filter(config_folder):
         raise ValueError(
             f"filter.yaml file not found: the path {filter_path.absolute()} is not valid"
         )
+
 
 def check_nnfit_folder(config_folder):
     """Check if config_folder contains a nnfit folder."""
