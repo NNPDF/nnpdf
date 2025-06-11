@@ -60,9 +60,9 @@ vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
 
 [tool.poetry.dependencies]
 # Generic dependencies (i.e., validphys)
-python = "^3.9"
+python = ">=3.9"
 matplotlib = "^3.9"
-pineappl = "1.0.0a5"
+pineappl = "^1.0.0"
 pandas = "*"
 numpy = "*"
 "ruamel.yaml" = "*"
