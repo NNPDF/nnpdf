@@ -38,8 +38,8 @@ requirements:
         - requests
         - prompt_toolkit
         - validobj
-        - pineappl >=0.8.2
         - eko >=0.14.2,<0.15
+        - pineappl >=0.8.2,<1.0
         - fiatlux
         - sphinx >=5.0.2
         - joblib
