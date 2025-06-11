@@ -1,3 +1,10 @@
+"""
+This module collects functions to evolve an arbitrary PDF from an initial scale to the scales
+define by the loaded EKO.
+
+It also contains functions specialized for NNDPF / n3fit
+"""
+
 from collections import defaultdict
 import dataclasses
 import json
@@ -11,7 +18,7 @@ from ekobox import apply, genpdf, info_file
 import numpy as np
 
 import eko
-from eko import basis_rotation, runner
+from eko import basis_rotation
 from eko.interpolation import XGrid
 from eko.io import manipulate
 from validphys.pdfbases import PIDS_DICT
@@ -44,49 +51,36 @@ class ExportGrid:
         A list of the x*PDF values for all flavours for every point in x
         shape (len(xgrid), len(labels))
 
+    pids: list[str]
+        A list of the flavours contained in each element of the pdfgrid, by PID.
+
     labels: list[str]
-        A list of the flavours contained in each element of the pdfgrid,
-        defaults to: ['TBAR', 'BBAR', 'CBAR', 'SBAR', 'UBAR', 'DBAR', 'GLUON', 'D', 'U', 'S', 'C', 'B', 'T', 'PHT']
+        A list of the flavours contained in each element of the pdfgrid, by label. Not necessary if pids is given.
 
     replica: int
-        Index of the corresponding monte carlo replica, should be ``None`` for hessian fits
+        Index of the corresponding monte carlo replica or member
     """
 
     q20: float
     xgrid: np.ndarray
     pdfgrid: np.ndarray
-    labels: list = (
-        'TBAR',
-        'BBAR',
-        'CBAR',
-        'SBAR',
-        'UBAR',
-        'DBAR',
-        'GLUON',
-        'D',
-        'U',
-        'S',
-        'C',
-        'B',
-        'T',
-        'PHT',
-    )
+    labels: list = None
+    pids: list = None
     replica: int = None
+    hessian: bool = False
 
     def __post_init__(self):
         """Convert possible lists to arrays"""
         self.pdfgrid = np.array(self.pdfgrid)
         self.xgrid = np.array(self.xgrid)
+        if self.labels is None and self.pids is None:
+            raise ValueError("At least one of `labels=`, `pids=` must be given")
 
-    @property
-    def pids(self):
-        """Return PIDs instead of labels"""
-        return [LABEL_TO_PIDS[i] for i in self.labels]
-
-    @property
-    def hessian(self):
-        """If self.replica is None, assume the fit is hessian"""
-        return self.replica is None
+        # Fill the other
+        if self.pids is None:
+            self.pids = [LABEL_TO_PIDS[i] for i in self.labels]
+        if self.labels is None:
+            self.labels = [PIDS_DICT[i] for i in self.pids]
 
     @property
     def pdfvalues(self):
@@ -124,20 +118,23 @@ def evolve_exportgrid(eko_path, exportgrids):
     """
     # Check that all exportgrid objects have been evaluated for 1) The same value of Q, the same value of x
     ref = exportgrids[0]
+    hessian_fit = ref.hessian
 
-    hessian_fit = ref.replica is None
     for egrid in exportgrids:
         assert egrid.q20 == ref.q20, "Different values of q0 found among the exportgrids"
         np.testing.assert_allclose(
             ref.xgrid, egrid.xgrid, err_msg="ExportGrids are not all evaluate at the same x nodes"
         )
-        if hessian_fit:
-            assert ref.replica is None, "Hessian and non-hessian exportgrids mixed"
+        assert (
+            hessian_fit == egrid.hessian
+        ), "Trying to evolve hessian and non-hessian fit at the same time"
 
     # Read the EKO and the operator and theory cards
     eko_op = eko.EKO.read(eko_path)
     theory = eko_op.theory_card
     op = eko_op.operator_card
+
+    assert ref.q20 == op.mu20, f"The EKO can only evolve from {op.mu20}, PDF asked for {ref.q20}"
 
     _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
     _logger.debug(f"Operator card: {json.dumps(op.raw)}")
@@ -206,7 +203,7 @@ def evolve_exportgrid(eko_path, exportgrids):
     return info, sorted_evolved
 
 
-def evolve_exportgrids_into_lhapdf(eko_path, exportgrids, output_files, info_file):
+def evolve_exportgrids_into_lhapdf(eko_path, exportgrids, output_files, info_file, finalize=False):
     """
     Exportgrid evolution function.
 
@@ -223,6 +220,8 @@ def evolve_exportgrids_into_lhapdf(eko_path, exportgrids, output_files, info_fil
             the list must be of the same size as exportgrids
         info_file: pathlib.Path
             path to the info file
+        finalize: bool
+            If True, try to finalize the info file, otherwise keep placeholders to be filled at a later step
     """
     if len(exportgrids) != len(output_files):
         raise ValueError("The length of output_files and exportgrids must be equal")
@@ -241,6 +240,9 @@ def evolve_exportgrids_into_lhapdf(eko_path, exportgrids, output_files, info_fil
     temp_dir = tempfile.TemporaryDirectory()
     temp_path = pathlib.Path(temp_dir.name)
 
+    if finalize:
+        info["NumMembers"] = len(exportgrids)
+
     genpdf.export.dump_info(temp_path, info)
     temp_info = temp_path / f"{temp_path.stem}.info"
     shutil.move(temp_info, info_file)
@@ -253,6 +255,8 @@ def evolve_exportgrids_into_lhapdf(eko_path, exportgrids, output_files, info_fil
 
     for enum, (exportgrid, output_file) in enumerate(zip(exportgrids, output_files)):
         replica_idx = exportgrid.replica
+        if replica_idx is None and exportgrid.hessian:
+            replica_idx = enum
         blocks = []
 
         for nf, q2grid in q2block_per_nf.items():
@@ -269,6 +273,10 @@ def evolve_exportgrids_into_lhapdf(eko_path, exportgrids, output_files, info_fil
             blocks.append(block)
 
         dat_path = dump_evolved_replica(blocks, temp_path, replica_idx, exportgrid.hessian)
+        if not dat_path.exists():
+            raise FileNotFoundError(
+                "The expected {dat_path} file was not found after dumping the blocks"
+            )
         shutil.move(dat_path, output_file)
 
     temp_dir.cleanup()
@@ -321,12 +329,7 @@ def evolve_fit(fit_folder, force, eko_path, hessian_fit=False):
 
     for exportgrid_file in fit_folder.glob(f"nnfit/replica_*/{fit_folder.name}.exportgrid"):
         data = yaml_safe.load(exportgrid_file.read_text(encoding="UTF-8"))
-
-        # If hessian fit, force replica to be None
-        if hessian_fit:
-            data.replica = None
-
-        exportgrids.append(ExportGrid(**data))
+        exportgrids.append(ExportGrid(**data, hessian=hessian_fit))
         output_files.append(exportgrid_file.with_suffix(".dat"))
 
     info_path = fit_folder / "nnfit" / f"{fit_folder.name}.info"
