@@ -36,7 +36,7 @@ from typing import Callable
 
 import numpy as np
 
-from n3fit.vpinterface import N3PDF, compute_phi
+from n3fit.vpinterface import N3PDF, compute_logp, compute_phi
 from validphys.core import DataGroupSpec
 from validphys.pdfgrids import distance_grids, xplotting_grid
 
@@ -103,7 +103,7 @@ IMPLEMENTED_STATS = {
     "best_worst": _best_worst,
     "std": _std,
 }
-IMPLEMENTED_LOSSES = ["chi2", "phi2"]
+IMPLEMENTED_LOSSES = ["chi2", "phi2", "logp"]
 
 
 def _pdfs_to_n3pdfs(pdfs_per_fold):
@@ -260,6 +260,9 @@ class HyperLoss:
             loss = validation_loss_average + (max(kfold_loss_average, 2.0) - 2.0)
         elif self.loss_type == "phi2":
             loss = phi2_per_fold
+        elif self.loss_type == "logp":
+            # TODO: We probably want to estimate separately the complexity term
+            loss = compute_logp(pdf_object_reduced, experimental_data)
 
         return loss
 
@@ -366,7 +369,7 @@ class HyperLoss:
 
         selected_statistic = IMPLEMENTED_STATS[statistic]
 
-        if self.loss_type == "chi2":
+        if self.loss_type == "chi2" or self.loss_type == "logp":
             return selected_statistic
         elif self.loss_type == "phi2":
             # In case of phi2, calculate the inverse of the applied statistics
