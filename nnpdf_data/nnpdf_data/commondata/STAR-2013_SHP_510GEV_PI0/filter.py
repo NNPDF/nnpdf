@@ -32,7 +32,11 @@ def read_data(path_rawdata: str) -> pd.DataFrame:
 
 
 def dump_data(df_table: pd.DataFrame, tableid: int) -> None:
-    suffix = "lowrap.yaml" if tableid == 1 else "highrap.yaml"
+    suffix = "highrap.yaml" if tableid == 1 else "lowrap.yaml"
+    if tableid == 1:
+        eta_bins = {"min": 3.15, "mid": 3.525, "max": 3.90}
+    else:
+        eta_bins = {"min": 2.65, "mid": 2.900, "max": 3.15}
     # Dump central data into Yaml file
     data_central = []
     for i in range(len(df_table["asym"])):
@@ -50,7 +54,7 @@ def dump_data(df_table: pd.DataFrame, tableid: int) -> None:
                 "mid": (float(df_table.loc[i, "pT_high"]) + float(df_table.loc[i, "pT_low"])) / 2,
                 "max": float(df_table.loc[i, "pT_high"]),
             },
-            "eta": {"min": 3.15, "mid": 3.525, "max": 3.90},
+            "eta": eta_bins,
         }
         kinematics.append(kin_value)
 
