@@ -51,7 +51,7 @@ class ExportGrid:
         A list of the x*PDF values for all flavours for every point in x
         shape (len(xgrid), len(labels))
 
-    pids: list[str]
+    pids: list[int]
         A list of the flavours contained in each element of the pdfgrid, by PID.
 
     labels: list[str]
@@ -64,8 +64,8 @@ class ExportGrid:
     q20: float
     xgrid: np.ndarray
     pdfgrid: np.ndarray
-    labels: list = None
-    pids: list = None
+    labels: list[str] = None
+    pids: list[int] = None
     replica: int = None
     hessian: bool = False
 
@@ -90,7 +90,7 @@ class ExportGrid:
         return self.pdfgrid.T / self.xgrid
 
 
-def evolve_exportgrid(eko_path, exportgrids):
+def evolve_exportgrid(eko_path: pathlib.Path, exportgrids: list[ExportGrid]):
     """Takes the path to an EKO and a list of exportgrids,
     returns a tuple with an info file and the
     evolved exportgrid as a dictionary of the form:
@@ -104,17 +104,22 @@ def evolve_exportgrid(eko_path, exportgrids):
 
         with the output grouped by nf and sorted in ascending order by Q2
 
-    Parameters:
+    Parameters
+    ----------
         eko_path: pathlib.Path
             Path to the evolution eko
         exportgrids: list[ExportGrid]
+            List of ExportGrid objects to be evolved
 
     Returns
+    -------
         info_file: eko_box.info_file
             dict-like object with the info file information
 
         evolved_replicas: dict
-
+            a dictionary containing all evolved PDF.
+            The format of the output is
+                { (q2, flavour number): np.ndarray(replica, flavours, x) }
     """
     # Check that all exportgrid objects have been evaluated for 1) The same value of Q, the same value of x
     ref = exportgrids[0]
@@ -203,14 +208,21 @@ def evolve_exportgrid(eko_path, exportgrids):
     return info, sorted_evolved
 
 
-def evolve_exportgrids_into_lhapdf(eko_path, exportgrids, output_files, info_file, finalize=False):
+def evolve_exportgrids_into_lhapdf(
+    eko_path: pathlib.Path,
+    exportgrids: list[ExportGrid],
+    output_files: list[pathlib.Path],
+    info_file: pathlib.Path,
+    finalize: bool = False,
+):
     """
     Exportgrid evolution function.
 
     This function takes the path to an ``eko.tar`` and a list of ``ExportGrid`` objects
     and generate the corresponding ``.dat`` LHAPDF files as given by the ``output_files`` list.
 
-    Parameters:
+    Parameters
+    ----------
         eko_path: pathlib.Path
             Path to the evolution eko
         exportgrids: list[ExportGrid]
