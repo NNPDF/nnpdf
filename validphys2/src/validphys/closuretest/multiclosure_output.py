@@ -10,216 +10,246 @@ data.
 import numpy as np
 import pandas as pd
 import scipy.special as special
-import scipy.stats
+from scipy.stats import norm
 
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
 from validphys import plotutils
 
 
-@figure
-def plot_data_central_diff_histogram(experiments_replica_central_diff):
-    """Histogram of the difference between central prediction
-    and underlying law prediction normalised by the corresponding replica
-    standard deviation by concatenating the difference across all data. plot a
-    scaled gaussian for reference. Total xi is the number of central differences
-    which fall within the 1-sigma confidence interval of the scaled gaussian.
-
+@table
+def table_bias_datasets(bias_datasets, each_dataset):
     """
-    scaled_diffs = np.concatenate(
-        [
-            (central_diff / sigma).flatten()
-            for sigma, central_diff in experiments_replica_central_diff
-        ]
-    )
-    fig, ax = plotutils.subplots()
-    ax.hist(scaled_diffs, bins=50, density=True, label="Central prediction distribution")
-    xlim = (-5, 5)
-    ax.set_xlim(xlim)
+    Compute the bias and sqrt bias and associated errors for each dataset
+    and return a DataFrame with the results.
 
-    x = np.linspace(*xlim, 100)
-    ax.plot(x, scipy.stats.norm.pdf(x), "-k", label="Normal distribution")
+    Parameters
+    ----------
+
+    bias_datasets: list
+        List of tuples containing the values of bias for each dataset.
+
+    each_dataset: list
+        List of validphys.core.DataSetSpec
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the bias, variance, ratio and sqrt(ratio) for each dataset
+    """
+    records = []
+    for (biases, n_comp), ds in zip(bias_datasets, each_dataset):
+        bias = np.mean(biases)
+        std_bias = np.std(biases)
+
+        sqrt_bias = np.sqrt(bias)
+        # use gaussian uncertainty propagation
+        err_sqrt_bias = 0.5 * std_bias / sqrt_bias
+
+        records.append(
+            {
+                "dataset": str(ds),
+                "dof": n_comp,
+                "bias": bias,
+                "err bias": std_bias,
+                "sqrt bias": sqrt_bias,
+                "err sqrt bias": err_sqrt_bias,
+            }
+        )
+
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=("dataset", "dof", "bias", "err bias", "sqrt bias", "err sqrt bias"),
+    )
+
+    return df
+
+
+@table
+def table_bias_data(bias_data):
+    """
+    Same as table_bias_datasets but for all the data, meaning that
+    the correlations between the datasets are taken into account.
+
+    Parameters
+    ----------
+    bias_data: list
+        Same of bias_dataset but for all the data
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the bias, variance, ratio and sqrt(ratio) for each dataset
+    """
+    records = []
+
+    biases_tot, n_comp_tot = bias_data
+    bias_tot = np.mean(biases_tot)
+    std_bias_tot = np.std(biases_tot)
+
+    sqrt_bias_tot = np.sqrt(bias_tot)
+    # use gaussian uncertainty propagation
+    err_sqrt_bias_tot = 0.5 * std_bias_tot / sqrt_bias_tot
+
+    records.append(
+        {
+            "dataset": "Total",
+            "dof": n_comp_tot,
+            "bias": bias_tot,
+            "err bias": std_bias_tot,
+            "sqrt bias": sqrt_bias_tot,
+            "err sqrt bias": err_sqrt_bias_tot,
+        }
+    )
+
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=("dataset", "dof", "bias", "err bias", "sqrt bias", "err sqrt bias"),
+    )
+    return df
+
+
+@table
+def bootstrapped_table_bias_datasets(bootstrapped_bias_datasets):
+    """
+    Compute the bias, variance, ratio and sqrt(ratio) for each dataset
+    and return a DataFrame with the results.
+    Uncertainty on ratio and sqrt ratio is computed by Gaussian error propagation
+    of the bootstrap uncertainty on bias and variance.
+    """
+    records = []
+    for boot_ds in bootstrapped_bias_datasets:
+        df = boot_ds
+        mean_bias = df["bias"].mean()
+
+        # gaussian error propagation for the ratio of the means uncertainty
+        # only consider bias as source of uncertainty for the ratio (variance is almost constant)
+        bootstrap_unc = np.std(df["bias"])
+        sqrt_bias = np.mean(np.sqrt(df["bias"]))
+
+        # gaussian error propagation for the sqrt of the ratio
+        bootstrap_unc_sqrt = np.std(np.sqrt(df["bias"]))
+
+        records.append(
+            {
+                "dataset": df["dataset"].iloc[0],
+                "mean_dof": df.n_comp.mean(),
+                "bias": mean_bias,
+                "err bias": bootstrap_unc,
+                "sqrt bias": sqrt_bias,
+                "err sqrt bias": bootstrap_unc_sqrt,
+            }
+        )
+
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=("dataset", "mean_dof", "bias", "err bias", "sqrt bias", "err sqrt bias"),
+    )
+    return df
+
+
+@table
+def bootstrapped_table_bias_data(bootstrapped_bias_data):
+    """
+    Compute the bias, sqrt bias and their bootstrap errors for a DataGroup
+    and return a DataFrame with the results.
+    """
+    records = []
+
+    df = bootstrapped_bias_data
+
+    bias = df["bias"].mean()
+    sqrt_bias = np.mean(np.sqrt(df["bias"].values))
+
+    boot_err_bias = np.std(df["bias"])
+    boot_err_sqrt_bias = np.std(np.sqrt(df["bias"]))
+
+    records.append(
+        {
+            "dataset": "Total",
+            "mean_dof": df.n_comp.mean(),
+            "bias": bias,
+            "err bias": boot_err_bias,
+            "sqrt bias": sqrt_bias,
+            "err sqrt bias": boot_err_sqrt_bias,
+        }
+    )
+
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=("dataset", "mean_dof", "bias", "err bias", "sqrt bias", "err sqrt bias"),
+    )
+    return df
+
+
+@figure
+def xi_delta_histogram(normalized_delta_bias_data, title, lambda_value, label_hist=None):
+    """
+    Plot histogram of normalized delta regularized with PCA.
+
+    Parameters
+    ----------
+    normalized_delta_bias_data: tuple
+
+    label_hist: str
+        summary description of multiclosure
+
+    Returns
+    -------
+    fig
+        Figure object
+    """
+    fig, ax = plotutils.subplots()
+    size = np.shape(normalized_delta_bias_data[0])[0]
+    ax.hist(normalized_delta_bias_data[0], density=True, bins=int(np.sqrt(size)), label=label_hist)
+    ax.set_title(title + r", $\lambda:$" + f"{lambda_value}")
+    ax.set_xlabel(r"$\delta$")
+    ax.set_ylabel("Density")
+    x = np.linspace(-3, 3, 100)
+    y = norm.pdf(x, loc=0, scale=1)
+    ax.plot(x, y, label="Standard gaussian")
     ax.legend()
-    ax.set_xlabel("Difference to underlying prediction")
     return fig
 
 
 @table
-def experiments_bootstrap_sqrt_ratio_table(experiments_bootstrap_sqrt_ratio, experiments_data):
-    """Given experiments_bootstrap_sqrt_ratio, which a bootstrap
-    resampling of the sqrt(bias/variance) for each experiment and the total
-    across all data, tabulate the mean and standard deviation across bootstrap
-    samples.
-
+def table_xi_indicator_function_data(bootstrapped_indicator_function_data):
     """
-    indices = list(map(str, experiments_data)) + ["Total"]
-    records = []
-    for i, exp in enumerate(indices):
-        ratio_boot = experiments_bootstrap_sqrt_ratio[i]
-        records.append(
-            dict(
-                experiment=exp,
-                mean_ratio=np.mean(ratio_boot, axis=0),
-                std_ratio=np.std(ratio_boot, axis=0),
-            )
-        )
+    Computes the bootstrap average and std of the indicator function for the data.
+
+    Parameters
+    ----------
+    bootstrapped_indicator_function_data: tuple
+
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the average and std of the indicator function for the data.
+    """
+    indicator_list, mean_dof = bootstrapped_indicator_function_data
+
+    # average over data and fits within the bootstrap samples
+    mean_boot_vals = np.array([np.mean(boot_val) for boot_val in indicator_list])
+
+    # take bootstrap expectation and variance
+    mean_xi = np.mean(mean_boot_vals)
+    std_xi = np.std(mean_boot_vals)
+
+    records = [dict(data="full data", mean_dof=mean_dof, mean_xi=mean_xi, std_xi=std_xi)]
+
     df = pd.DataFrame.from_records(
-        records, index="experiment", columns=("experiment", "mean_ratio", "std_ratio")
+        records, index="data", columns=("data", "mean_dof", "mean_xi", "std_xi")
     )
-    df.columns = ["Bootstrap mean sqrt(bias/variance)", "Bootstrap std. dev. sqrt(bias/variance)"]
     return df
 
 
-@table
-def groups_bootstrap_sqrt_ratio_table(groups_bootstrap_sqrt_ratio, groups_data):
-    """Like :py:func:`experiments_bootstrap_sqrt_ratio_table` but for
-    metadata groups.
-    """
-    df = experiments_bootstrap_sqrt_ratio_table(groups_bootstrap_sqrt_ratio, groups_data)
-    idx = df.index.rename("group")
-    return df.set_index(idx)
-
-
-@table
-def experiments_bootstrap_expected_xi_table(experiments_bootstrap_expected_xi, experiments_data):
-    """Tabulate the mean and standard deviation across bootstrap samples of the
-    expected xi calculated from the ratio of bias/variance. Returns a table with
-    two columns, for the bootstrap mean and standard deviation
-    and a row for each experiment plus the total across all experiments.
-
-    """
-    df = experiments_bootstrap_sqrt_ratio_table(experiments_bootstrap_expected_xi, experiments_data)
-    # change the column headers
-    df.columns = [
-        r"Bootstrap mean expected $\xi_{1\sigma}$ from ratio",
-        r"Bootstrap std. dev. expected $\xi_{1\sigma}$ from ratio",
-    ]
-    return df
-
-
-@table
-def groups_bootstrap_expected_xi_table(groups_bootstrap_expected_xi, groups_data):
-    """Like :py:func:`experiments_bootstrap_expected_xi_table` but for metadata
-    groups.
-    """
-    df = experiments_bootstrap_expected_xi_table(groups_bootstrap_expected_xi, groups_data)
-    idx = df.index.rename("group")
-    return df.set_index(idx)
-
-
-@table
-def experiments_bootstrap_xi_table(experiments_bootstrap_xi, experiments_data, total_bootstrap_xi):
-    """Tabulate the mean and standard deviation of xi_1sigma across bootstrap
-    samples. Note that the mean has already be taken across data points
-    (or eigenvectors in the basis which diagonalises the covariance
-    matrix) for each individual bootstrap sample.
-
-    Tabulate the results for each experiment and for the total xi across all data.
-
-    """
-    # take mean across data points for each experiment
-    xi_1sigma = [np.mean(exp_xi, axis=1) for exp_xi in experiments_bootstrap_xi]
-    # take mean across all data
-    xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
-    df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments_data)
-    df.columns = [r"Bootstrap mean $\xi_{1\sigma}$", r"Bootstrap std. dev. $\xi_{1\sigma}$"]
-    return df
-
-
-@table
-def groups_bootstrap_xi_table(groups_bootstrap_xi, groups_data, total_bootstrap_xi):
-    """Like :py:func:`experiments_bootstrap_xi_table` but for metadata groups."""
-    df = experiments_bootstrap_xi_table(groups_bootstrap_xi, groups_data, total_bootstrap_xi)
-    idx = df.index.rename("group")
-    return df.set_index(idx)
-
-
-@table
-def experiments_bootstrap_xi_comparison(
-    experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table
-):
-    """Table comparing the mean and standard deviation across bootstrap samples of
-    the measured xi_1sigma and the expected xi_1sigma calculated from
-    bias/variance.
-
-    """
-    return pd.concat(
-        (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table), axis=1
-    )
-
-
-@table
-def groups_bootstrap_xi_comparison(groups_bootstrap_xi_table, groups_bootstrap_expected_xi_table):
-    """Like :py:func:`experiments_bootstrap_xi_comparison` but for metadata
-    groups.
-    """
-    return experiments_bootstrap_xi_comparison(
-        groups_bootstrap_xi_table, groups_bootstrap_expected_xi_table
-    )
-
-
 @figuregen
-def plot_experiments_sqrt_ratio_bootstrap_distribution(
-    experiments_bootstrap_sqrt_ratio, experiments_data
-):
-    """Plots a histogram for each experiment and the total, showing the
-    distribution of bootstrap samples. Takes the mean and std deviation of the
-    bootstrap sample and plots the corresponding scaled normal distribution
-    for comparison. The limits are set to be +/- 3 std deviations of the mean.
-
-    """
-    # experiments_bootstrap_sqrt_ratio includes total. str(exp) is only used to
-    # generate title, so appending string is fine.
-    for sqrt_ratio_sample, exp in zip(
-        experiments_bootstrap_sqrt_ratio, experiments_data + ["Total"]
-    ):
-        fig, ax = plotutils.subplots()
-        ax.hist(sqrt_ratio_sample, bins=20, density=True)
-        mean = np.mean(sqrt_ratio_sample)
-        std = np.std(sqrt_ratio_sample)
-
-        xlim = (mean - 3 * std, mean + 3 * std)
-        ax.set_xlim(xlim)
-
-        x = np.linspace(*xlim, 100)
-        ax.plot(
-            x,
-            scipy.stats.norm.pdf(x, mean, std),
-            "-r",
-            label=f"Corresponding normal distribution: mean = {mean:.2g}, std = {std:.2g}",
-        )
-        ax.legend()
-        ax.set_title(f"Bootstrap distribution of sqrt(bias/variance) for {exp}")
-        ax.set_xlabel("Sqrt(bias/variance)")
-        yield fig
-
-
-@figuregen
-def plot_experiments_xi_bootstrap_distribution(
-    experiments_bootstrap_xi, total_bootstrap_xi, experiments_data
-):
-    """Similar to :py:func:`plot_sqrt_ratio_bootstrap_distribution` except plots
-    the bootstrap distribution of xi_1sigma, along with a corresponding
-    scaled gaussian, for each experiment (and for all data).
-
-    """
-    # take mean across data points for each experiment
-    xi_1sigma = [np.mean(exp_xi, axis=1) for exp_xi in experiments_bootstrap_xi]
-    # take mean across all data
-    xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
-    # use plotting function from above
-    xi_plots = plot_experiments_sqrt_ratio_bootstrap_distribution(xi_1sigma, experiments_data)
-    # Update the title and x label on each plot to reflect that we're plotting
-    # \xi_1sigma, don't forget Total plot.
-    for fig, exp in zip(xi_plots, experiments_data + ["Total"]):
-        ax = fig.gca()
-        ax.set_title(r"Bootstrap distribution of $\xi_{1\sigma}$ for " + str(exp))
-        ax.set_xlabel(r"$\xi_{1\sigma}$")
-        yield fig
-
-
-@figuregen
-def xq2_data_prcs_maps(xq2_data_map, each_dataset):
+def plot_xq2_data_prcs_maps(xq2_data_map, each_dataset):
     """
     Heat map of the ratio bias variance (and xi, quantile estimator) for each datapoint
     in a dataset. The x and y axis are the x and Q2 coordinates of the datapoints.
