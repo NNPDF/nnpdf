@@ -30,6 +30,15 @@ Analysing results
    ./datthcomp.rst
    ./overfit_metric.rst
 
+
+NNPDF as a library
+------------------
+.. toctree::
+  :maxdepth: 1
+
+  ./evolution.rst
+
+
 Closure tests
 -------------
 .. toctree::
