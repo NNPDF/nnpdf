@@ -10,7 +10,7 @@ hepdata:
   url: NA
   version:
 version: 1
-version_comment: NA
+version_comment: "This data set supersedes CMS_TTBAR_13TEV_TOT"
 implemented_observables:
 - observable:
     description: total cross section of ttBar
