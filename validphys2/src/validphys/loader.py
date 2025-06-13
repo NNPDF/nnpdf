@@ -186,7 +186,13 @@ def _get_nnpdf_profile(profile_path=None):
         ) from e
 
     # Now read all paths and define them as relative to nnpdf_share (unless given as absolute)
-    for var in ["results_path", "theories_path", "validphys_cache_path", "hyperscan_path"]:
+    for var in [
+        "results_path",
+        "theories_path",
+        "validphys_cache_path",
+        "hyperscan_path",
+        "ekos_path",
+    ]:
         # if there are any problems setting or getting these variable erroring out is more than justified
         absolute_var = nnpdf_share / pathlib.Path(profile_dict[var]).expanduser()
         profile_dict[var] = absolute_var.absolute().as_posix()
@@ -249,17 +255,20 @@ class LoaderBase:
         datapath = pathlib.Path(profile["data_path"])
         theories_path = pathlib.Path(profile["theories_path"])
         resultspath = pathlib.Path(profile["results_path"])
+        ekos_path = pathlib.Path(profile["ekos_path"])
 
         if not datapath.exists():
             raise LoaderError(f"The data path {datapath} does not exist.")
 
         # Create the theories and results paths if they don't exist already
         theories_path.mkdir(exist_ok=True, parents=True)
+        ekos_path.mkdir(exist_ok=True, parents=True)
         resultspath.mkdir(exist_ok=True, parents=True)
 
         # And save them up
         self.datapath = datapath
         self._theories_path = theories_path
+        self._ekos_path = ekos_path
         self.resultspath = resultspath
         self._extremely_old_fits = set()
         self.nnprofile = profile
@@ -466,9 +475,8 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
 
     @functools.lru_cache
     def check_eko(self, theoryID):
-        """Check the eko (and the parent theory) both exists and returns the path to it"""
-        theory = self.check_theoryID(theoryID)
-        eko_path = theory.path / "eko.tar"
+        """Check the eko exists and return the path to it"""
+        eko_path = self._ekos_path / f"eko_{int(theoryID)}.tar"
         if not eko_path.exists():
             raise EkoNotFound(f"Could not find eko {eko_path} in theory: {theoryID}")
         return eko_path
@@ -1286,9 +1294,8 @@ class RemoteLoader(LoaderBase):
         if thid not in remote:
             raise EkoNotFound(f"EKO for TheoryID {thid} is not available in the remote server")
         # Check that we have the theory we need
-        theory = self.check_theoryID(thid)
-        target_path = theory.path / "eko.tar"
-        download_file(remote[thid], target_path, delete_on_failure=True)
+        target_path = self._ekos_path / f"eko_{int(thid)}.tar"
+        download_file(remote[thid], target_path)
 
     def download_vp_output_file(self, filename, **kwargs):
         try:
