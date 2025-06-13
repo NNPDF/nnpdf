@@ -1,5 +1,6 @@
 setname: ATLAS_WPWM_13p6TEV_TOT
 version: 1
+version_comments: "first version"
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: ATLAS

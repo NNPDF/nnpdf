@@ -1,5 +1,6 @@
 setname: ATLAS_Z0_13p6TEV_TOT
-version: 1 
+version: 1
+version_comment: "first version"
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
