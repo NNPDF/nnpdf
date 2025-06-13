@@ -1,11 +1,11 @@
-setname: CMS_TTBAR_5TEV_TOT
+setname: CMS_TTBAR_13TEV_TOT_35p9fbm1
 nnpdf_metadata:
   nnpdf31_process: TOP
   experiment: CMS
 arXiv:
-  url: https://arxiv.org/abs/1711.03143
+  url: https://arxiv.org/abs/1812.10505
 iNSPIRE:
-  url: https://inspirehep.net/literature/1635271
+  url: https://inspirehep.net/literature/1711626
 hepdata:
   url: NA
   version:
@@ -43,17 +43,9 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    dataset_label: CMS 5.02 TeV $\sigma_{t\bar{t}}$
+    dataset_label: CMS 13 TeV $\sigma_{t\bar{t}}$
     plot_x: sqrts
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:
-    - - CMS_TTBAR_5TEV_TOT_X-SEC
-    operation: 'null'
-  variants:
-    legacy:
-      theory:
-        conversion_factor: 1.0
-        operation: 'null'
-        FK_tables:
-        - - CMS_TTB_5TEV_TOT
+    - - CMS_TTBAR_13TEV_TOT_X-SEC

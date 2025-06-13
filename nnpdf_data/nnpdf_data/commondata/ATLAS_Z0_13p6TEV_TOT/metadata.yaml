@@ -1,0 +1,54 @@
+setname: ATLAS_Z0_13p6TEV_TOT
+version: 1 
+nnpdf_metadata:
+  nnpdf31_process: DY NC
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/2403.12902
+  journal: Phys.Lett.B 854 (2024) 138725 
+iNSPIRE:
+  url: 'https://inspirehep.net/literature/2770237'
+
+implemented_observables:
+- observable_name: TOT
+  observable:
+    description: NC DY Total Cross Section
+    label: ATLAS $Z$ inclusive 13.6 TeV
+    units: ''
+  process_type: INC
+  npoints: [1]
+  ndata: 1
+  plotting:
+    dataset_label: ATLAS $Z$ inclusive 13.6 TeV
+    y_label: $\sigma^{fid}$ (pb)
+    figure_by:
+    - boson
+    extra_labels:
+      ' ':
+      - Z
+      boson:
+      - Z
+    plot_x: ' '
+  kinematic_coverage:
+  - m_Z2
+  - sqrts
+  kinematics:
+    variables:
+      m_Z2:
+        description: Z boson mass squared
+        label: '$m_{Z}^2$'
+        units: 'GeV$^2$'
+      sqrts:
+        description: center of mass energy
+        label: '$\sqrt{s}$'
+        units: 'GeV'
+    file: kinematics.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLAS_WPWM_13p6TEV_TOT_Z0
+  data_uncertainties:
+  - uncertainties.yaml
+  data_central: data.yaml
+
