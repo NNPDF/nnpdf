@@ -23,7 +23,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 399        # database id
+  theoryid: 40_000_000        # database id
 
 ############################################################
 genrep: True    # on = generate MC replicas, False = use real data

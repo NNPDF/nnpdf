@@ -1,8 +1,9 @@
 #dataspecs.yaml
 #
 # We demonstrate the 'dataspecs' interface.
-# `experiments` will be resolved with fktables from theory 52 and
-# 162, matched with the corresponding PDFs.
+# `experiments` will be resolved with fktables from theories 40_000_000
+# and 40_000_001, NNLO and NLO respectively, 
+# matched with the corresponding PDFs.
 #
 # Then the matched_datasets_from_datasets production rule outputs new
 # lists of `dataspecs` taking the declared ones, so that it produces
@@ -21,12 +22,12 @@ dataset_inputs:
     from_: fit
 
 dataspecs:
-    - theoryid: 208
+    - theoryid: 40_000_001
       pdf: NNPDF40_nlo_as_01180
       speclabel: "NLO"
       fit: NNPDF40_nlo_as_01180
 
-    - theoryid: 399
+    - theoryid: 40_000_000
       pdf: NNPDF40_nnlo_low_precision_240916
       speclabel: "NNLO"
       fit: NNPDF40_nnlo_low_precision_240916

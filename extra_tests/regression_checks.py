@@ -1,5 +1,5 @@
 """
-    Regression tests
+Regression tests
 """
 
 import pathlib
@@ -28,6 +28,7 @@ runcard_and_replicas = {
     "no_csr": 613,
     "polarized_evol": 34,
     "t0theoryid": 100,
+    "no_t0_sampling": 430,
 }
 
 

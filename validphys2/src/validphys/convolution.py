@@ -10,9 +10,9 @@ predictions for experimentally measured quantities::
 
 
     inp = {
-        'fit': '181023-001-sc',
+        'fit': '240921-02-rs-nnpdf40-baseline',
         'use_cuts': 'internal',
-        'theoryid': 162,
+        'theoryid': 40_000_000,
         'pdf': 'NNPDF40_nnlo_lowprecision',
         'dataset_inputs': {'from_': 'fit'}
     }
