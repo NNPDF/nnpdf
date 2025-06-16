@@ -129,7 +129,7 @@ def make_replica(
     sep_mult=False,
     genrep=True,
     max_tries=int(1e6),
-    resample_negative_pseudodata=True,
+    resample_negative_pseudodata=False,
 ):
     """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
@@ -165,7 +165,8 @@ def make_replica(
         it will raise a :py:class:`ReplicaGenerationError`
 
     resample_negative_pseudodata: bool
-        When True, replicas that produce negative predictions will be resampled for ``max_tries`` until all points are positive (default: True)
+        When True, replicas that produce negative predictions will be resampled for ``max_tries``
+        until all points are positive (default: False)
     Returns
     -------
     pseudodata: np.array
