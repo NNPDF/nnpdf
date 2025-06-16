@@ -24,7 +24,6 @@ datacuts:
 theory:
   theoryid: 708        # database id
 
-separate_multiplicative: True
 ############################################################
 trvlseed: 1
 nnseed: 2
