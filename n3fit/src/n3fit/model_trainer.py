@@ -947,12 +947,8 @@ class ModelTrainer:
 
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
-            luxset_members = self.lux_params["luxset"].get_members() - 1  # -1 is for replica 0
-            # we take the MOD of the luxset_members to avoid failing due to limited number of
-            # replicas in the luxset
-            photonreplicas = tuple(r % luxset_members for r in self.replicas)
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=photonreplicas
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas
             )
         else:
             photons = None

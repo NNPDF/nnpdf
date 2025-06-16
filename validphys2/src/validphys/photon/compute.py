@@ -102,13 +102,17 @@ class Photon:
                 "Please install fiatlux: `pip install nnpdf[qed]` or `pip install fiatlux`"
             ) from e
 
-        for replica in replicas:
+        for replica in self.replicas:
+            # As input replica for the photon computation we take the MOD of the luxset_members to
+            # avoid failing due to limited number of replicas in the luxset
+            luxset_members = self.luxpdfset.n_members - 1  # - 1 because rep0 is included
+            photonreplica = (replica % luxset_members) or luxset_members
 
-            f2lo = sf.F2LO(self.luxpdfset.members[replica], theory)
+            f2lo = sf.F2LO(self.luxpdfset.members[photonreplica], theory)
 
             if theory["PTO"] > 0:
-                f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[replica])
-                fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[replica])
+                f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[photonreplica])
+                fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[photonreplica])
                 if not np.isclose(f2.q2_max, fl.q2_max):
                     log.error(
                         "FKtables for FIATLUX_DIS_F2 and FIATLUX_DIS_FL have two different q2_max"
