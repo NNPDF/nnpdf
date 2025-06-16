@@ -24,7 +24,8 @@ from functools import cached_property
 import logging
 
 import numpy as np
-import numpy.linalg as la
+import pandas as pd
+import scipy.linalg as la
 
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.calcutils import calc_chi2
@@ -232,6 +233,10 @@ class N3PDF(PDF):
     def load(self):
         """If the function needs an LHAPDF object, return a N3LHAPDFSet"""
         return self._lhapdf_set
+
+    def load_t0(self):
+        """Load the central PDF object"""
+        return N3LHAPDFSet(self.name, [self._models[0]], Q=self._Q)
 
     def get_nn_weights(self):
         """Outputs all weights of the NN as numpy.ndarrays"""
@@ -442,10 +447,10 @@ def compute_logp(n3pdf, experimental_data):
     >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
     >>> chi2 = compute_logp(n3pdf, [data_group_spec])
     """
-    cds_list = []
     exp_cv = []
-    th_cv = []
-    th_replicas = []
+    th_cvs = []
+    th_rep = []
+    cds_list = []
 
     # Loop over the list of `DataGroupSpec` objects
     for datagroupspec in experimental_data:
@@ -461,15 +466,18 @@ def compute_logp(n3pdf, experimental_data):
             exp_cv.append(cd.central_values)
 
             # update list of th pred, for the central value and for each replica
-            th_cv.append(central_predictions(datasetspec, n3pdf))
-            th_replicas.append(predictions(datasetspec, n3pdf))
+            th_cvs.append(central_predictions(datasetspec, n3pdf))
+            th_rep.append(predictions(datasetspec, n3pdf))
 
-    diffs = np.concatenate(th_cv) - np.concatenate(exp_cv)
+    pred_cvs = pd.concat(th_cvs, axis=0, ignore_index=True)
+    pred_rep = pd.concat(th_rep, axis=0, ignore_index=True)
+    expr_cvs = pd.concat(exp_cv, axis=0, ignore_index=True)
+    diffs = pred_cvs.values.flatten() - expr_cvs.values.flatten()
+
     exp_cov = dataset_inputs_covmat_from_systematics(cds_list, use_weights_in_covmat=False)
-    pdf_cov = np.cov(np.concatenate(th_replicas))
+    pdf_cov = np.cov(pred_rep.values.flatten())
     total_covmat = exp_cov + pdf_cov
 
-    # compute  log det total covmat
     total_covmat_chol = la.cholesky(total_covmat, lower=True)
     log_det_total_cov = 2 * np.sum(np.log(np.diag(total_covmat_chol)))
     chi2 = calc_chi2(sqrtcov=total_covmat_chol, diffs=diffs)
