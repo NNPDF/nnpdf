@@ -25,17 +25,15 @@ predictions for experimentally measured quantities::
 
     all_preds = [predictions(ds, pdf) for ds in all_datasets]
 
-
-
-
-Some variants such as :py:func:`central_predictions` and
-:py:func:`linear_predictions` are useful for more specialized tasks.
-
 These functions work with :py:class:`validphys.core.DatasetSpec` objects,
-allowing to account for information on COMPOUND predictions and cuts. A lower
-level interface which operates with :py:class:`validphys.coredata.FKTableData`
+allowing to account for information on predictions which requires no-trivial operations and cuts.
+A lower level interface which operates with :py:class:`validphys.coredata.FKTableData`
 objects is also available.
 """
+
+import logging
+
+log = logging.getLogger(__name__)
 
 import functools
 import operator
@@ -43,8 +41,8 @@ import operator
 import numpy as np
 import pandas as pd
 
-from validphys.pdfbases import evolution
 import validphys
+from validphys.pdfbases import evolution
 
 FK_FLAVOURS = evolution.to_known_elements(
     [
@@ -248,6 +246,7 @@ def linear_predictions(dataset, pdf):
     This approximation is generally a very good approximation in that yields
     differences that are much smaller that the PDF uncertainty.
     """
+    logging.error("Linear predictions are deprecated and will be removed")
     return _predictions(dataset, pdf, linear_fk_predictions)
 
 

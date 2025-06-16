@@ -104,7 +104,7 @@ def test_utils():
     assert runcard["datacuts"]["t0pdfset"] == "NNPDF40_nnlo_as_01180"
     # Testing get_theoryID_from_runcard
     ID = utils.get_theoryID_from_runcard(REGRESSION_FOLDER)
-    assert ID == 162
+    assert ID == 40_000_000
 
 
 def test_eko_utils(tmp_path, nnpdf_theory_card):

@@ -14,7 +14,7 @@ description: n3fit regression test
 dataset_inputs:
   - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy}
   - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy}
-  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 1.0, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 1.0, variant: legacy}
 
 ############################################################
 datacuts:

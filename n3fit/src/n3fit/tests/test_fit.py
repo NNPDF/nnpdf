@@ -23,6 +23,7 @@ import pandas as pd
 import pytest
 
 import n3fit
+from n3fit.io.writer import SuperEncoder
 from validphys.n3fit_data import replica_mcseed, replica_nnseed, replica_trvlseed
 from validphys.utils import yaml_safe
 
@@ -89,12 +90,19 @@ def check_fit_results(
     new_expgrid_file = new_json_file.with_suffix(".exportgrid")
     old_expgrid_file = regression_json.with_suffix(".exportgrid")
 
-    if regenerate:
-        shutil.copy2(new_expgrid_file, old_expgrid_file)
-        shutil.copy2(new_json_file, regression_json)
-
     # Compare json results
     new_json = _load_json(new_json_file)
+
+    if regenerate:
+        shutil.copy2(new_expgrid_file, old_expgrid_file)
+        # Remove the timing and version from the json file unless we want that information
+        if not timing:
+            new_json.pop("timing")
+        new_json.pop("version")
+        with open(regression_json, "w", encoding="utf-8") as fs:
+            json.dump(new_json, fs, indent=2, cls=SuperEncoder)
+            fs.write('\n')
+
     old_json = _load_json(regression_json)
 
     equal_checks = ["stop_epoch", "pos_state"]

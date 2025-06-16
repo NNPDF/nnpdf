@@ -28,31 +28,23 @@ def tmp(tmpdir):
 
 
 # Here define the default config items like the PDF, theory and experiment specs
-SINGLE_DATAPOINT = {'dataset': 'ATLAS_TTBAR_8TEV_TOT_X-SEC', 'variant': 'legacy'}
 
-SINGLE_DATASET = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
+SINGLE_DATASET = {'dataset': 'HERA_NC_318GEV_EP-SIGMARED'}
 
-SINGLE_CATEGORICAL = {"dataset": "ATLAS_DY_13TEV_TOT", 'variant': 'legacy'}
+SINGLE_DATAPOINT = {'dataset': 'ATLAS_Z0_13TEV_TOT', 'cfac': ['NRM']}
+
+SINGLE_CATEGORICAL = {'dataset': 'ATLAS_WPWM_13TEV_TOT', 'cfac': ['NRM']}
 
 DATA = [
-    {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-    {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
+    SINGLE_DATASET,
+    {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory'},
     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
     # Explicitly put a CMS dataset between the two ATLAS
     SINGLE_DATAPOINT,
 ]
 
 
-SINGLE_EXP = [
-    {
-        'experiment': 'pseudo experiment',
-        'datasets': [
-            {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-            {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
-            {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
-        ],
-    }
-]
+SINGLE_EXP = [{'experiment': 'pseudo experiment', 'datasets': DATA[0:3]}]
 
 WEIGHTED_DATA = [
     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
@@ -63,7 +55,7 @@ DATA_THCOVMAT = [
     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
     {'dataset': 'CHORUS_CC_NOTFIXED_PB_NU-SIGMARED', 'variant': 'legacy_dw'},
     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
-    {'dataset': 'ATLAS_WJ_8TEV_WP-PT', 'variant': 'legacy'},
+    {'dataset': 'ATLAS_WJ_8TEV_WP-PT'},
     {'dataset': 'LHCB_Z0_8TEV_MUON_Y', 'cfac': ['NRM']},
 ]
 
@@ -73,11 +65,11 @@ PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 40_000_000
 THEORY_QED = 40_000_100
-FIT = "NNPDF40_nnlo_low_precision_240916"
-FIT_3REPLICAS = "FIT_3REPLICAS_241108"
-FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_diffcuts_241108"
-FIT_ITERATED = "NNPDF40_nnlo_low_precision_240916_iterated"
-PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_241121"
+FIT_3REPLICAS = "FIT_3REPLICAS_250616"
+FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_250616_diffcuts"
+FIT = "NNPDF40_nnlo_like_CI_testing_250616"
+FIT_ITERATED = "NNPDF40_nnlo_like_CI_testing_250616_iterated"
+PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_250616"
 
 base_config = dict(
     pdf=PDF, use_cuts='nocuts', use_t0_sampling=False, dataset_inputs=DATA, theoryid=THEORYID, Q=10

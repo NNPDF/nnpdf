@@ -208,6 +208,10 @@ def _standard_masks(data, replica_trvlseed):
         # all data if cuts are None
         cuts = dataset.cuts
         ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
+        if ndata == 0:
+            tr_mask = []
+            vl_mask = []
+            continue
 
         frac = dataset.frac
         # We do this so that a given dataset will always have the same number of points masked

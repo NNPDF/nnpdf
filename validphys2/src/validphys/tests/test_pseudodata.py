@@ -94,7 +94,7 @@ def test_level0_commondata_wc():
     l = Loader()
 
     datasetspec = l.check_dataset(
-        name=dataset['dataset'], variant=dataset['variant'], theoryid=THEORYID
+        name=dataset['dataset'], variant=dataset.get('variant'), theoryid=THEORYID
     )
     t0set = l.check_pdf(pdfname)
 
