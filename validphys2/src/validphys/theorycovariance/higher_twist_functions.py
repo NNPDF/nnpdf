@@ -445,12 +445,9 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
 
     pc_func = None
     if process_type.startswith('DIS'):
-        f2_p_nodes = pc_dict["H2p"]['nodes']
-        f2_d_nodes = pc_dict["H2p"]['nodes']
-        hera_nc_xsec_nodes = pc_dict["xsec_nc"]['nodes']
-        hera_cc_xsec_nodes = pc_dict["hera_cc"]['nodes']
-        chorus_cc_xsec_nodes = pc_dict["chorus_cc"]['nodes']
-        nutev_cc_xsec_nodes = pc_dict["nutev_cc"]['nodes']
+        f2_p_nodes = pc_dict["f2p"]['nodes']
+        f2_d_nodes = pc_dict["f2d"]['nodes']
+        dis_cc_nodes = pc_dict["dis_cc"]['nodes']
 
         x = dataset_sp.commondata.metadata.load_kinematics()['x'].to_numpy().reshape(-1)[cuts]
         q2 = dataset_sp.commondata.metadata.load_kinematics()['Q2'].to_numpy().reshape(-1)[cuts]
@@ -459,19 +456,19 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
         if exp_name == "NMC_NC_NOTFIXED_EM-F2":
             pc_func_ratio = mult_dis_ratio_pc(f2_p_nodes, f2_d_nodes, x, q2, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func_ratio(pars_pc['comb']['H2p'], pars_pc['comb']['H2d'])
+                deltas[pars_pc['label']] = pc_func_ratio(pars_pc['comb']['f2p'], pars_pc['comb']['f2d'])
 
         # F2 proton traget
         elif exp_name in F2P_exps:
             pc_func = mult_dis_pc(f2_p_nodes, x, q2, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2p'])
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['f2p'])
 
         # F2 deuteron traget
         elif exp_name in F2D_exps:
             pc_func = mult_dis_pc(f2_d_nodes, x, q2, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2d'])
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['f2d'])
 
         # EMC
         elif exp_name.startswith('EMC_NC_250GEV'):
@@ -482,27 +479,27 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
 
         # HERA NC xsec
         elif exp_name in np.concatenate([NC_SIGMARED_P_EM, NC_SIGMARED_P_EP, NC_SIGMARED_P_EAVG]):
-            pc_func = mult_dis_pc(hera_nc_xsec_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(f2_p_nodes, x, q2, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['xsec_nc'])
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['f2p'])
 
         # CHORUS
         elif exp_name.startswith('CHORUS_CC'):
-            pc_func = mult_dis_pc(chorus_cc_xsec_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(dis_cc_nodes, x, q2, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['chorus_cc'])
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['dis_cc'])
 
         # NuTeV
         elif exp_name.startswith('NUTEV_CC'):
-            pc_func = mult_dis_pc(nutev_cc_xsec_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(dis_cc_nodes  , x, q2, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['nutev_cc'])
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['dis_cc'])
 
         # HERA_CC
         elif exp_name.startswith('HERA_CC'):
-            pc_func = mult_dis_pc(hera_cc_xsec_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(dis_cc_nodes, x, q2, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['hera_cc'])
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['dis_cc'])
 
         else:
             raise ValueError(
