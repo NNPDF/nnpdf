@@ -7,16 +7,12 @@ ModEv: EXA
 XIR: 1.0
 XIF: 1.0
 NfFF: 5
-MaxNfAs: 5
 MaxNfPdf: 5
 Q0: 1.65
 alphas: 0.118
 Qref: 91.2
 QED: 2
 alphaqed: 0.0077553
-Qedref: 91.2
-SxRes: 0
-SxOrd: LL
 HQ: POLE
 mc: 1.51
 Qmc: 1.51
@@ -43,6 +39,5 @@ GF: 1.1663787e-05
 SIN2TW: 0.23126
 TMC: 1
 MP: 0.938
-Comments: NNLO nFONLL QED theory, exact evolution, running alphaem, photon generated at 100GeV
-global_nx: 0
+Comments: NNLO nFONLL QED theory, exact evolution, running alphaem, photon generated at 100GeV (copy of 702)
 EScaleVar: 1
