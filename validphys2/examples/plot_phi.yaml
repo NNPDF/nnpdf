@@ -5,7 +5,7 @@ meta:
 
 pdf: {id: "NNPDF40_nnlo_as_01180", label: "4.0 NNLO"}
 
-theoryid: 162
+theoryid: 40_000_000
 
 use_cuts : internal
 

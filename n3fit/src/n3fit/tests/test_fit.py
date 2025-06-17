@@ -23,6 +23,7 @@ import pandas as pd
 import pytest
 
 import n3fit
+from n3fit.io.writer import SuperEncoder
 from validphys.n3fit_data import replica_mcseed, replica_nnseed, replica_trvlseed
 from validphys.utils import yaml_safe
 
@@ -89,19 +90,35 @@ def check_fit_results(
     new_expgrid_file = new_json_file.with_suffix(".exportgrid")
     old_expgrid_file = regression_json.with_suffix(".exportgrid")
 
-    if regenerate:
-        shutil.copy2(new_expgrid_file, old_expgrid_file)
-        shutil.copy2(new_json_file, regression_json)
-
     # Compare json results
     new_json = _load_json(new_json_file)
+
+    # Do the checks on timing and version to then drop the keys
+    assert new_json["version"]["nnpdf"] == n3fit.__version__
+
+    # check that the times didnt grow in a weird manner
+    if timing:
+        # Better to catch up errors even when they happen to grow larger by chance
+        times = new_json["timing"]
+        fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
+        assert fitting_time < EXPECTED_MAX_FITTIME
+
+    new_json.pop("version", None)
+    new_json.pop("timing", None)
+
+    if regenerate:
+        shutil.copy2(new_expgrid_file, old_expgrid_file)
+        with open(regression_json, "w", encoding="utf-8") as fs:
+            json.dump(new_json, fs, indent=2, cls=SuperEncoder)
+            fs.write('\n')
+
     old_json = _load_json(regression_json)
 
     equal_checks = ["stop_epoch", "pos_state"]
     approx_checks = ["erf_tr", "erf_vl", "chi2", "best_epoch", "best_epoch"]
     relaxed_checks = ["arc_lengths", "integrability"]
     for key, value in new_json.items():
-        reference = old_json[key]
+        reference = old_json.get(key)
         err_msg = f"error for .json: {key}"
         if key in equal_checks:
             assert_equal(value, reference, err_msg=err_msg)
@@ -115,20 +132,9 @@ def check_fit_results(
                 assert_allclose(ref["smallx"], cur["smallx"], err_msg=err_msg, rtol=rel_error)
                 assert_allclose(ref["largex"], cur["largex"], err_msg=err_msg, rtol=rel_error)
 
-    # check that the times didnt grow in a weird manner
-    if timing:
-        # Better to catch up errors even when they happen to grow larger by chance
-        times = new_json["timing"]
-        fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
-        assert fitting_time < EXPECTED_MAX_FITTIME
-
-    # For safety, check also the version
-    assert new_json["version"]["nnpdf"] == n3fit.__version__
-
+    # Now compare the exportgrids
     new_expgrid = _load_exportgrid(new_expgrid_file)
     old_expgrid = _load_exportgrid(old_expgrid_file)
-
-    # Now compare the exportgrids
     for key, value in new_expgrid.items():
         reference = old_expgrid[key]
         err_msg = f"error for .exportgrid: {key}"

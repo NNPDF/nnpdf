@@ -44,26 +44,5 @@
     3.8163916471489756e-17,
     0.011257131816819282,
     1.249000902703301e-16
-  ],
-  "timing": {
-    "walltime": {
-      "Total": 10.684729099273682,
-      "start": 0.0,
-      "replica_set": 0.23511266708374023,
-      "replica_fitted": 10.684659957885742,
-      "replica_set_to_replica_fitted": 10.449547290802002
-    },
-    "cputime": {
-      "Total": 11.778024966,
-      "start": 0.0,
-      "replica_set": 0.23462331400000025,
-      "replica_fitted": 11.777954254,
-      "replica_set_to_replica_fitted": 11.54333094
-    }
-  },
-  "version": {
-    "numpy": "1.26.4",
-    "nnpdf": "4.0.10.post201.dev0+95606e0e9",
-    "validphys": "4.0.10.post201.dev0+95606e0e9"
-  }
+  ]
 }

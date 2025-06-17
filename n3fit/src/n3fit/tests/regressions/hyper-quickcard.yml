@@ -13,7 +13,7 @@ description: n3fit regression test
 # sys: systematics treatment (see systypes)
 dataset_inputs:
 - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy }
-- { dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy }
+- { dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy_dw }
 - { dataset: CMS_WPWM_7TEV_ELECTRON_ASY, frac: 0.5}
 
 ############################################################
@@ -24,7 +24,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 399        # database id
+  theoryid: 40_000_000       # database id
 
 hyperscan_config:
     stopping:
