@@ -639,13 +639,10 @@ class Rule:
             except LoaderError as e:
                 raise RuleProcessingError(f"Could not find dataset {self.dataset}") from e
 
-            if cd.legacy:
+            if cd.metadata.is_ported_dataset:
                 self.variables = _get_kinlabel_process_type(cd.process_type)
             else:
-                if cd.metadata.is_ported_dataset:
-                    self.variables = _get_kinlabel_process_type(cd.process_type)
-                else:
-                    self.variables = cd.metadata.kinematic_coverage
+                self.variables = cd.metadata.kinematic_coverage
         else:
             self.variables = _get_kinlabel_process_type(self.process_type)
             # TODO: for now this will be a string within this class

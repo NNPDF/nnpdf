@@ -419,9 +419,7 @@ class CoreConfig(configparser.Config):
             custom_group: str
                 custom group to apply to the dataset
 
-        Note that the `sys` key is deprecated and allowed only for old-format dataset.
-
-        Old-format commondata will be translated to the new version in this function.
+        Old-format names-sys will be translated to the new version in this function.
         """
         accepted_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variant"}
         try:
@@ -476,7 +474,9 @@ class CoreConfig(configparser.Config):
                 variant = map_variant
 
             if sysnum is not None:
-                log.warning("The key 'sys' is deprecated and will soon be removed")
+                log.warning(
+                    f"The key 'sys' is deprecated and only used for variant discovery: {variant}"
+                )
 
         return DataSetInput(
             name=name,
@@ -485,7 +485,6 @@ class CoreConfig(configparser.Config):
             weight=weight,
             custom_group=custom_group,
             variant=variant,
-            sys=sysnum,
         )
 
     def parse_inconsistent_data_settings(self, settings):
@@ -536,11 +535,9 @@ class CoreConfig(configparser.Config):
         """Produce a CommondataSpec from a dataset input"""
 
         name = dataset_input.name
-        sysnum = dataset_input.sys
         try:
             return self.loader.check_commondata(
                 setname=name,
-                sysnum=sysnum,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 variant=dataset_input.variant,
@@ -687,7 +684,6 @@ class CoreConfig(configparser.Config):
         True, attempt to lod and check the PLOTTING files
         (note this may cause a noticeable slowdown in general)."""
         name = dataset_input.name
-        sysnum = dataset_input.sys
         cfac = dataset_input.cfac
         frac = dataset_input.frac
         weight = dataset_input.weight
@@ -695,7 +691,6 @@ class CoreConfig(configparser.Config):
         try:
             ds = self.loader.check_dataset(
                 name=name,
-                sysnum=sysnum,
                 theoryid=theoryid,
                 cfac=cfac,
                 cuts=cuts,

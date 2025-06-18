@@ -70,6 +70,8 @@ FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_250616_diffcuts"
 FIT = "NNPDF40_nnlo_like_CI_testing_250616"
 FIT_ITERATED = "NNPDF40_nnlo_like_CI_testing_250616_iterated"
 PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_250616"
+# These fits contain _only_ data
+MULTICLOSURE_FITS = ["250618-test-multiclosure-001", "250618-test-multiclosure-002"]
 
 base_config = dict(
     pdf=PDF, use_cuts='nocuts', use_t0_sampling=False, dataset_inputs=DATA, theoryid=THEORYID, Q=10

@@ -40,8 +40,6 @@ n3fit = "n3fit.scripts.n3fit_exec:main"
 validphys = "validphys.scripts.main:main"
 # Fitting scripts
 evolven3fit = "n3fit.scripts.evolven3fit:main"
-# Keep the `new` suffix so people's scripts don't break
-evolven3fit_new = "n3fit.scripts.evolven3fit:evolven3fit_new"
 vp-setupfit = "n3fit.scripts.vp_setupfit:main"
 postfit = "validphys.scripts.postfit:main"
 # validphys helpers and scripts
@@ -158,7 +156,6 @@ log_cli_level = "WARNING"
 omit = [
     "*/local*",
     "*/rule*",
-    "deprecated_functions.py",
     "*/nnpdf_data/commondata/*",
     "*/nnpdf_data/filter_utils/*",
     "*test_*.py"

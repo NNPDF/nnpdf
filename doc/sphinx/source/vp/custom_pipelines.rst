@@ -141,7 +141,7 @@ specification" (something typically containing metadata information
 such as paths, which are necessary to load the final commondata or fktable)
 
 In the case of the positivity set, this is entirely given in terms of
-existing check functions:
+existing check functions
 
 .. code:: python
 
@@ -150,9 +150,6 @@ existing check functions:
 	    fk = self.check_fktable(theiryID, setname, [])
 	    th =  self.check_theoryID(theiryID)
 	    return PositivitySetSpec(cd, fk, postlambda, th)
-
-	def get_posset(self, theoryID, setname, postlambda):
-	    return self.check_posset(theiryID, setname, postlambda).load()
 
 
 A more complicated example should raise the appropriate loader
