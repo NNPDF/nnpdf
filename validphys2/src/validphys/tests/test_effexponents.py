@@ -39,5 +39,7 @@ def test_next_runcard():
             if seed in runcard:
                 runcard.pop(seed)
 
-    # Check that the actual ite2 runcard matches what vp thinks it should be
+        # The description can be arbitrarily changed with no effect on the fit
+        runcard.pop("description")
+
     assert predicted_ite2_runcard == ite2_runcard

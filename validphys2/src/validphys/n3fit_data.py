@@ -208,6 +208,10 @@ def _standard_masks(data, replica_trvlseed):
         # all data if cuts are None
         cuts = dataset.cuts
         ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
+        if ndata == 0:
+            tr_mask = []
+            vl_mask = []
+            continue
 
         frac = dataset.frac
         # We do this so that a given dataset will always have the same number of points masked
@@ -609,26 +613,26 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
     -------
     >>> from validphys.api import API
     >>> ds_inp = [
-    ...     {'dataset': 'NMC', 'frac': 0.75},
-    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
-    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
+    ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.75},
+    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory', 'frac': 0.75},
+    ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',), 'frac': 0.75},
     ... ]
-    >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
-                         replica 1
-    group dataset    id
-    NMC   NMC        0        True
-                    1        True
-                    2       False
-                    3        True
-                    4        True
-    ...                        ...
-    CMS   CMSZDIFF12 45       True
-                    46       True
-                    47       True
-                    48      False
-                    49       True
+    >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=40_000_000, use_cuts="nocuts", mcseed=None, genrep=False)
+                                        replica 1
+    group dataset                       id
+    NMC   NMC_NC_NOTFIXED_P_EM-SIGMARED 0        True
+                                        1        True
+                                        2        True
+                                        3        True
+                                        4       False
+    ...                                           ...
+    CMS   CMS_Z0J_8TEV_PT-Y             45       True
+                                        46       True
+                                        47       True
+                                        48       True
+                                        49       True
 
-    [345 rows x 1 columns]
+    [343 rows x 1 columns]
     """
 
     all_tr_masks = np.concatenate(
@@ -737,26 +741,25 @@ def training_mask(replicas_mask):
     >>> # create namespace list for collects over replicas.
     >>> reps = NSList(list(range(1, 4)), nskey="replica")
     >>> ds_inp = [
-    ...     {'dataset': 'NMC', 'frac': 0.75},
-    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
-    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
+    ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.75},
+    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory', 'frac': 0.75},
+    ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',), 'frac': 0.75},
     ... ]
-    >>> API.training_mask(dataset_inputs=ds_inp, replicas=reps, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
-                        replica 1  replica 2  replica 3
-    group dataset    id
-    NMC   NMC        0        True      False      False
-                    1        True       True       True
-                    2       False       True       True
-                    3        True       True      False
-                    4        True       True       True
-    ...                        ...        ...        ...
-    CMS   CMSZDIFF12 45       True       True       True
-                    46       True      False       True
-                    47       True       True       True
-                    48      False       True       True
-                    49       True       True       True
-
-    [345 rows x 3 columns]
+    >>> API.training_mask(dataset_inputs=ds_inp, nreplica=3, trvlseed=123, theoryid=40_000_000, use_cuts="nocuts", mcseed=None, genrep=False)
+                                                    replica 1  replica 2  replica 3
+        group dataset                       id
+        NMC   NMC_NC_NOTFIXED_P_EM-SIGMARED 0        True      False      False
+                                            1        True       True       True
+                                            2        True      False       True
+                                            3        True       True      False
+                                            4       False       True       True
+        ...                                           ...        ...        ...
+        CMS   CMS_Z0J_8TEV_PT-Y             45       True      False       True
+                                            46       True       True       True
+                                            47       True      False       True
+                                            48       True       True       True
+                                            49       True      False       True
+        [343 rows x 3 columns]
 
     """
     return pd.concat(replicas_training_mask, axis=1)
@@ -774,8 +777,8 @@ def _fitting_lagrange_dict(lambdadataset):
     Examples
     --------
     >>> from validphys.api import API
-    >>> posdataset = {"dataset": "POSF2U", "maxlambda": 1e6}
-    >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=162)
+    >>> posdataset = {"dataset": "NNPDF_POS_2P24GEV_F2U", "maxlambda": 1e6}
+    >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=40_000_000)
     >>> len(pos)
     9
     """

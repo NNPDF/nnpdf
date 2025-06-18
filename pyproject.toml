@@ -69,6 +69,7 @@ numpy = "*"
 validobj = "*"
 prompt_toolkit = "*"
 reportengine = ">=0.32"
+packaging = "*"
 # Fit
 psutil = "*"
 tensorflow = "*"
