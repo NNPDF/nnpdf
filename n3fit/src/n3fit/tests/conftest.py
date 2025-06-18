@@ -7,8 +7,7 @@ import sys
 import pytest
 
 from validphys.loader import FallbackLoader
-
-THEORYID = 40_000_000
+from validphys.tests.conftest import THEORYID
 
 
 @pytest.fixture(scope='module')

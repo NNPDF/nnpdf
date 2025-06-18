@@ -17,6 +17,7 @@ from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import generate_pdf_model
 from n3fit.vpinterface import N3PDF
 from validphys.loader import Loader
+from validphys.tests.conftest import THEORYID
 
 
 def generate_pdf(seed, num_replicas):
@@ -36,7 +37,7 @@ def generate_pdf(seed, num_replicas):
     return pdf_model
 
 
-def get_experimental_data(dataset_name="NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=399):
+def get_experimental_data(dataset_name="NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=THEORYID):
     """Get experimental data set using validphys.
 
     Returns a list defined by the data set as
