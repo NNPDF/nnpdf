@@ -41,11 +41,12 @@ members:
 * Luigi Del Debbio - University of Edinburgh
 * Stefano Forte - Università degli Studi di Milano and INFN
 * Tommaso Giani - Vrije University Amsterdam and Nikhef
-* Felix Hekhorn - University of Jyvaskyla
+* Felix Hekhorn - University of Jyväskylä
 * José Ignacio Latorre - Quantum Research Centre, Technology
   Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
-* Giacomo Magni - Vrije University Amsterdam and Nikhef
+* Giacomo Magni - IJCLab Orsay and CNRS
 * Emanuele R. Nocera - Università degli Studi di Torino and INFN
+* Tanjona R. Rabemananjara - Vrije University Amsterdam and Nikhef
 * Juan Rojo - Vrije University Amsterdam and Nikhef
 * Tanishq Sharma - Università di Torino and INFN
 * Roy Stegeman - University of Edinburgh
