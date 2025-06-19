@@ -34,8 +34,8 @@ members:
 
 * Richard D. Ball - University of Edinburgh
 * Alessandro Candido - CERN
-* Amedeo Chiefa - University of Edinburgh
 * Stefano Carrazza - Università degli Studi di Milano and INFN
+* Amedeo Chiefa - University of Edinburgh
 * Mark Costantini - University of Cambridge
 * Juan M. Cruz-Martinez - CERN
 * Luigi Del Debbio - University of Edinburgh
