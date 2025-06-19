@@ -1,0 +1,112 @@
+dependent_variables:
+- header: {name: ''}
+  qualifiers:
+  - {name: ., value: Correlation matrix}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.42'
+  - errors: []
+    value: '0.42'
+  - errors: []
+    value: '0.28'
+  - errors: []
+    value: '0.13'
+  - errors: []
+    value: '0.42'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.42'
+  - errors: []
+    value: '0.38'
+  - errors: []
+    value: '0.29'
+  - errors: []
+    value: '0.42'
+  - errors: []
+    value: '0.42'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.27'
+  - errors: []
+    value: '0.29'
+  - errors: []
+    value: '0.28'
+  - errors: []
+    value: '0.38'
+  - errors: []
+    value: '0.27'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.17'
+  - errors: []
+    value: '0.13'
+  - errors: []
+    value: '0.29'
+  - errors: []
+    value: '0.29'
+  - errors: []
+    value: '0.17'
+  - errors: []
+    value: '1.00'
+independent_variables:
+- header: {name: '$m_{jj}$ [GeV] ($p_{\mathrm{T}}$>25 GeV)'}
+  values:
+  - {high: 180.0, low: 0.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 1000.0, low: 800.0}
+  - {high: 180.0, low: 0.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 1000.0, low: 800.0}
+  - {high: 180.0, low: 0.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 1000.0, low: 800.0}
+  - {high: 180.0, low: 0.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 1000.0, low: 800.0}
+  - {high: 180.0, low: 0.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 1000.0, low: 800.0}
+- header: {name: '$m_{jj}$ [GeV] ($p_{\mathrm{T}}$>25 GeV)'}
+  values:
+  - {high: 180.0, low: 0.0}
+  - {high: 180.0, low: 0.0}
+  - {high: 180.0, low: 0.0}
+  - {high: 180.0, low: 0.0}
+  - {high: 180.0, low: 0.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 300.0, low: 180.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 800.0, low: 500.0}
+  - {high: 1000.0, low: 800.0}
+  - {high: 1000.0, low: 800.0}
+  - {high: 1000.0, low: 800.0}
+  - {high: 1000.0, low: 800.0}
+  - {high: 1000.0, low: 800.0}
