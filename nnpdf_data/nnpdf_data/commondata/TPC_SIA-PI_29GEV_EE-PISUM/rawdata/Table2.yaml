@@ -1,0 +1,135 @@
+dependent_variables:
+- header: {name: 1/(BETA*SIG(C=TOTAL))*D(SIG)/D(X)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  - {name: SYS, value: Errors contain systematic errors added in quadrature. Statistical
+      errors dominate above Z}
+  values:
+  - errors:
+    - {symerror: 12.0}
+    value: 142.0
+  - errors:
+    - {symerror: 7.1}
+    value: 180.9
+  - errors:
+    - {symerror: 7.8}
+    value: 177.2
+  - errors:
+    - {symerror: 5.6}
+    value: 162.1
+  - errors:
+    - {symerror: 4.5}
+    value: 142.5
+  - errors:
+    - {symerror: 3.7}
+    value: 120.4
+  - errors:
+    - {symerror: 3.4}
+    value: 110.0
+  - errors:
+    - {symerror: 3.1}
+    value: 97.7
+  - errors:
+    - {symerror: 2.8}
+    value: 86.6
+  - errors:
+    - {symerror: 2.6}
+    value: 78.1
+  - errors:
+    - {symerror: 2.6}
+    value: 69.8
+  - errors:
+    - {symerror: 3.0}
+    value: 62.2
+  - {value: '-'}
+  - errors:
+    - {symerror: 1.9}
+    value: 36.4
+  - errors:
+    - {symerror: 1.5}
+    value: 30.2
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.51}
+    value: 12.52
+  - errors:
+    - {symerror: 0.45}
+    value: 10.79
+  - errors:
+    - {symerror: 0.36}
+    value: 7.97
+  - errors:
+    - {symerror: 0.26}
+    value: 6.14
+  - errors:
+    - {symerror: 0.14}
+    value: 4.09
+  - errors:
+    - {symerror: 0.1}
+    value: 2.61
+  - errors:
+    - {symerror: 0.071}
+    value: 1.582
+  - errors:
+    - {symerror: 0.038}
+    value: 0.875
+  - errors:
+    - {symerror: 0.022}
+    value: 0.37
+independent_variables:
+- header: {name: Z(DEF=P(P=3)/P(P=1))}
+  values:
+  - {high: 0.015, low: 0.01}
+  - {high: 0.02, low: 0.015}
+  - {high: 0.025, low: 0.02}
+  - {high: 0.03, low: 0.025}
+  - {high: 0.035, low: 0.03}
+  - {high: 0.04, low: 0.035}
+  - {high: 0.045, low: 0.04}
+  - {high: 0.05, low: 0.045}
+  - {high: 0.055, low: 0.05}
+  - {high: 0.06, low: 0.055}
+  - {high: 0.065, low: 0.06}
+  - {high: 0.07, low: 0.065}
+  - {value: '-'}
+  - {high: 0.1, low: 0.09}
+  - {high: 0.11, low: 0.1}
+  - {value: '-'}
+  - {high: 0.18, low: 0.16}
+  - {high: 0.2, low: 0.18}
+  - {high: 0.22, low: 0.2}
+  - {high: 0.25, low: 0.22}
+  - {high: 0.3, low: 0.25}
+  - {high: 0.35, low: 0.3}
+  - {high: 0.4, low: 0.35}
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+- header: {name: X(DEF=2E(P=3)/SQRT(S))}
+  values:
+  - {value: 0.016}
+  - {value: 0.02}
+  - {value: 0.024}
+  - {value: 0.029}
+  - {value: 0.034}
+  - {value: 0.039}
+  - {value: 0.044}
+  - {value: 0.048}
+  - {value: 0.053}
+  - {value: 0.058}
+  - {value: 0.063}
+  - {value: 0.068}
+  - {value: '-'}
+  - {value: 0.095}
+  - {value: 0.105}
+  - {value: '-'}
+  - {value: 0.17}
+  - {value: 0.19}
+  - {value: 0.21}
+  - {value: 0.235}
+  - {value: 0.275}
+  - {value: 0.325}
+  - {value: 0.375}
+  - {value: 0.45}
+  - {value: 0.55}
