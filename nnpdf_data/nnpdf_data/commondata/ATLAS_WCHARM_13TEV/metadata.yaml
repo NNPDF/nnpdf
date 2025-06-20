@@ -1,0 +1,49 @@
+setname: ATLAS_WCHARM_13TEV
+
+nnpdf_metadata:
+  nnpdf31_process: DY CC
+  experiment: ATLAS
+
+arXiv:
+  url: https://arxiv.org/abs/2302.00336
+  journal: 	Phys. Rev. D 108 (2023) 032012
+iNSPIRE:
+  url: https://inspirehep.net/literature/2628732
+hepdata:
+  url: https://www.hepdata.net/record/ins2628732
+  version: 1
+
+version: 1
+version_comment: Implementation 
+
+implemented_observables:
+- observable_name: 
+  observable:
+    description: 
+    label: 
+    units: 
+  process_type: 
+  tables:
+  ndata: 
+  plotting:
+    dataset_label: ATLAS $W^-+c$ 13 TeV
+    y_label:
+    x_label:
+    plot_x:
+  kinematic_coverage: 
+  kinematics:
+    variables:
+      abs_eta:
+        description:
+        label:
+        units: ''
+      m_W2:
+        description: 
+        label: 
+        units: 
+    file: 
+  data_uncertainties:
+  data_central: 
+  variants:
+    legacy:
+      data_uncertainties:
