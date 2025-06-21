@@ -14,7 +14,7 @@ from numpy.testing import assert_approx_equal
 import pytest
 
 from n3fit.hyper_optimization.rewards import HyperLoss
-from n3fit.model_gen import generate_pdf_model
+from n3fit.model_gen import ReplicaSettings, generate_pdf_model
 from n3fit.vpinterface import N3PDF
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID
@@ -26,9 +26,8 @@ def generate_pdf(seeds):
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
-    pdf_model = generate_pdf_model(
-        nodes=[8], activations=["linear"], seed_list=seeds, flav_info=fake_fl, fitbasis="FLAVOUR"
-    )
+    rp = [ReplicaSettings(nodes=[8], activations=["linear"], seed=seed) for seed in seeds]
+    pdf_model = generate_pdf_model(rp, flav_info=fake_fl, fitbasis="FLAVOUR")
     return pdf_model
 
 

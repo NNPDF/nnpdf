@@ -1,6 +1,6 @@
 """
-    Tests for the layers of n3fit
-    This module checks that the layers do what they would do with numpy
+Tests for the layers of n3fit
+This module checks that the layers do what they would do with numpy
 """
 
 import dataclasses
@@ -139,7 +139,7 @@ def test_DIS_basis():
         reference = np.zeros(FLAVS, dtype=bool)
         for i in comb:
             reference[i] = True
-        assert np.alltrue(result == reference)
+        np.testing.assert_allclose(result, reference)
 
 
 def test_DY_basis():
@@ -153,7 +153,7 @@ def test_DY_basis():
         reference = np.zeros((FLAVS, FLAVS))
         for i, j in comb:
             reference[i, j] = True
-        assert np.alltrue(result == reference)
+        np.testing.assert_allclose(result, reference)
 
 
 def test_DIS():
@@ -232,7 +232,7 @@ def test_rotation_flavour():
     pdf = op.numpy_to_tensor(pdf)
     rotmat = layers.FlavourToEvolution(flav_info, "FLAVOUR")
     res_layer = rotmat(pdf)
-    assert np.alltrue(res_np == res_layer)
+    np.testing.assert_allclose(res_np, res_layer)
 
 
 def test_rotation_evol():
@@ -257,7 +257,7 @@ def test_rotation_evol():
     pdf = op.numpy_to_tensor(pdf)
     rotmat = layers.FlavourToEvolution(flav_info, "EVOL")
     res_layer = rotmat(pdf)
-    assert np.alltrue(res_np == res_layer)
+    np.testing.assert_allclose(res_np, res_layer)
 
 
 def test_mask():

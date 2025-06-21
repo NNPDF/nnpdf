@@ -1,6 +1,6 @@
 import numpy as np
 
-from n3fit.model_gen import generate_pdf_model
+from n3fit.model_gen import ReplicaSettings, generate_pdf_model
 
 
 def test_replica_split():
@@ -11,13 +11,8 @@ def test_replica_split():
         {"fl": i, "largex": [0.5, 1.5], "smallx": [1.5, 2.5]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
-    pdf_model = generate_pdf_model(
-        nodes=[8],
-        activations=["linear"],
-        seed_list=[34] * num_replicas,
-        flav_info=fake_fl,
-        fitbasis="FLAVOUR",
-    )
+    rps = num_replicas * [ReplicaSettings(nodes=[8], activations=["linear"], seed=34)]
+    pdf_model = generate_pdf_model(rps, flav_info=fake_fl, fitbasis="FLAVOUR")
     rng = np.random.default_rng(seed=34)
     eps = 1e-9
     pdf_input = np.maximum(rng.random((1, 5, 1)), eps)
