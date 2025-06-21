@@ -49,11 +49,12 @@ def saturation(pdf_model=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_k
     Example
     -------
     >>> from n3fit.hyper_optimization.penalties import saturation
-    >>> from n3fit.model_gen import generate_pdf_model
+    >>> from n3fit.model_gen import generate_pdf_model, ReplicaSettings
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-    >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed_list=[0], flav_info=fake_fl, fitbasis="FLAVOUR")
-    >>> saturation(pdf_model, 5), float)
-    array([0.0038])
+    >>> rp = [ReplicaSettings(nodes = [8], activations=["linear"], seed=0)]
+    >>> pdf_model = generate_pdf_model(rp, flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> saturation(pdf_model, 5)
+    array([0.00014878])
 
     """
     if flavors is None:
@@ -129,9 +130,10 @@ def integrability(pdf_model=None, **_kwargs):
     Example
     -------
     >>> from n3fit.hyper_optimization.penalties import integrability
-    >>> from n3fit.model_gen import generate_pdf_model
+    >>> from n3fit.model_gen import generate_pdf_model, ReplicaSettings
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-    >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed_list=[0], flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> rp = [ReplicaSettings(nodes = [8], activations=["linear"], seed=0)]
+    >>> pdf_model = generate_pdf_model(rp, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> integrability(pdf_model)
     5.184705528587072e+21
 

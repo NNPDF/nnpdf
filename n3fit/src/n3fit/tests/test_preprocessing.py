@@ -102,8 +102,8 @@ def test_constraint():
     # Check that now everything satisfies the constraint again
     for w in prepro.weights:
         if w.trainable:
-            assert np.alltrue(w.constraint.min_value <= w.numpy())
-            assert np.alltrue(w.numpy() <= w.constraint.max_value)
+            np.testing.assert_array_less(w.constraint.min_value, w.numpy())
+            np.testing.assert_array_less(w.numpy(), w.constraint.max_value)
 
     # Check that other replicas were not affected
     for wa, wb in zip(weights_after[1:], weights_before[1:]):

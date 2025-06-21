@@ -324,7 +324,7 @@ def observable_generator(
 
 
 @dataclass
-class _ReplicaSettings:
+class ReplicaSettings:
     """Dataclass which hold all necessary replica-dependent information of a PDF.
 
     Parameters
@@ -351,8 +351,8 @@ class _ReplicaSettings:
     seed: int
     nodes: list[int]
     activations: list[str]
-    architecture: str
-    initializer: str
+    architecture: str = "dense"
+    initializer: str = "glorot_normal"
     dropout_rate: float = 0.0
     regularizer: str = None
     regularizer_args: dict = field(default_factory=dict)
@@ -379,24 +379,19 @@ class _ReplicaSettings:
             )
 
 
-# TODO:
-#   1. Decide whether the sampling occurs in this function or before entering here
-#      at the moment, it occurs here.
+def sample_pdf_models():
+    """
+    Given a set of parameters, sample a set of PDF models
+    """
+
+
 def generate_pdf_model(
-    nodes: list[int] = None,
-    activations: list[str] = None,
-    initializer_name: str = "glorot_normal",
-    layer_type: str = "dense",
+    replicas_settings: list[ReplicaSettings],
     flav_info: dict = None,
     fitbasis: str = "NN31IC",
     out: int = 14,
-    seed_list: list[int] = None,
-    dropout: float = 0.0,
-    regularizer: str = None,
-    regularizer_args: dict = None,
     impose_sumrule: str = None,
     scaler: Callable = None,
-    num_replicas: int = 1,
     photons: Photon = None,
 ):
     """
@@ -439,31 +434,33 @@ def generate_pdf_model(
 
     Parameters:
     -----------
-        nodes: list(int)
-            list of the number of nodes per layer of the PDF NN
-        activation: list
-            list of activation functions to apply to each layer
-        initializer_name: str
-            selects the initializer of the weights of the NN. Default: glorot_normal
-        layer_type: str
-            selects the type of architecture of the NN. Default: dense
-        flav_info: dict
-            dictionary containing the information about each PDF (basis dictionary in the runcard)
-            to be used by Preprocessing
-        fitbasis: str
-            fitbasis used during the fit. Default: NN31IC
+        replica_settings: list[ReplicaSettings]
+            list of ReplicaSettings objects which must contain the following information
+                nodes: list(int)
+                    list of the number of nodes per layer of the PDF NN
+                activation: list
+                    list of activation functions to apply to each layer
+                initializer_name: str
+                    selects the initializer of the weights of the NN. Default: glorot_normal
+                layer_type: str
+                    selects the type of architecture of the NN. Default: dense
+                seed: int
+                    the initialization seed for the NN
+                dropout: float
+                    rate of dropout layer by layer
+                regularizer: str
+                    name of the regularizer to use for the NN
+                regularizer_args: dict
+                    options to pass down to the regularizer (if any)
+                flav_info: dict
+                    dictionary containing the information about each PDF (basis dictionary in the runcard)
+                    to be used by Preprocessing
+                fitbasis: str
+                    fitbasis used during the fit. Default: NN31IC
         out: int
             number of output flavours of the model (default 14)
-        seed_list: list(int)
-            seed for the initialization of the Neural Network
         impose_sumrule: str
             whether to impose sumrules on the output pdf and which one to impose (All, MSR, VSR, TSR)
-        dropout: float
-            rate of dropout layer by layer
-        regularizer: str
-            name of the regularizer to use for the NN
-        regularizer_args: dict
-            options to pass down to the regularizer (if any)
         scaler: callable
             Function to apply to the input. If given the input to the model
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
@@ -478,22 +475,6 @@ def generate_pdf_model(
         pdf_model: MetaModel
             pdf model, with `single_replica_generator` attached as an attribute
     """
-    # Separate the settings which may be different for each replica
-    # from those that are guaranteed to be equal for all replicas
-    all_replicas = []
-    for seed in seed_list:
-        tmp = _ReplicaSettings(
-            seed=seed,
-            nodes=nodes,
-            activations=activations,
-            initializer=initializer_name,
-            architecture=layer_type,
-            dropout_rate=dropout,
-            regularizer=regularizer,
-            regularizer_args=regularizer_args,
-        )
-        all_replicas.append(tmp)
-
     shared_config = {
         "flav_info": flav_info,
         "fitbasis": fitbasis,
@@ -503,7 +484,7 @@ def generate_pdf_model(
         "photons": photons,
     }
 
-    pdf_model = _pdfNN_layer_generator(all_replicas, **shared_config)
+    pdf_model = _pdfNN_layer_generator(replicas_settings, **shared_config)
 
     # Note that the photons are passed unchanged to the single replica generator
     # computing the photon requires running fiatlux which takes 30' per replica
@@ -517,7 +498,7 @@ def generate_pdf_model(
 
         This function is necessary to separate all the different models after training.
         """
-        settings = all_replicas[replica_idx]
+        settings = replicas_settings[replica_idx]
         # TODO:
         # In principle we want to recover the initial replica exactly,
         # however, for the regression tests to pass
@@ -532,7 +513,7 @@ def generate_pdf_model(
 
 
 def _pdfNN_layer_generator(
-    replicas_settings: list[_ReplicaSettings],
+    replicas_settings: list[ReplicaSettings],
     flav_info: dict = None,
     fitbasis: str = "NN31IC",
     out: int = 14,
@@ -600,12 +581,12 @@ def _pdfNN_layer_generator(
     >>> from validphys.pdfgrids import xplotting_grid
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
     >>> fake_x = np.linspace(1e-3,0.8,3)
-    >>> pdf_model = _pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=[2,3], flav_info=fake_fl, num_replicas=2)
+    >>> pdf_model = _pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=[2,3], flav_info=fake_fl)
 
     Parameters
     ----------
-        replicas_settings: list(:py:class:`_ReplicaSettings`)
-            list of ``_ReplicaSettings`` objects holding the settings of each of the replicas
+        replicas_settings: list(:py:class:`ReplicaSettings`)
+            list of ``ReplicaSettings`` objects holding the settings of each of the replicas
         flav_info: dict
             dictionary containing the information about each PDF (basis dictionary in the runcard)
             to be used by Preprocessing
@@ -809,7 +790,7 @@ def _pdfNN_layer_generator(
     return MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
 
 
-# TODO: is there a way of keeping sincronized the input of this function and _ReplicaSettings
+# TODO: is there a way of keeping sincronized the input of this function and ReplicaSettings
 # beyond a test of it? In principle we might want to have the arguments explicitly here...
 def _generate_nn(
     input_layer: Input,
@@ -834,8 +815,8 @@ def _generate_nn(
             Index of the replica used to name the PDF
 
         All other arguments follow exactly the documentation
-        of ``_ReplicaSettings``.
-        See :py:class:`n3fit.model_gen._ReplicaSettings`
+        of ``ReplicaSettings``.
+        See :py:class:`n3fit.model_gen.ReplicaSettings`
 
 
     Returns

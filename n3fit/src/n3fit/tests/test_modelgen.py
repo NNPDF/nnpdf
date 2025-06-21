@@ -11,7 +11,7 @@ from dataclasses import asdict
 import pytest
 
 from n3fit.backends import Input
-from n3fit.model_gen import _generate_nn, _ReplicaSettings
+from n3fit.model_gen import ReplicaSettings, _generate_nn
 from nnpdf_data.utils import parse_input
 
 INSIZE = 16
@@ -83,15 +83,15 @@ def test_replica_settings():
         "dropout_rate": 0.4,
     }
 
-    rsettings = parse_input(config, _ReplicaSettings)
+    rsettings = parse_input(config, ReplicaSettings)
 
     with pytest.raises(ValueError):
         ctmp = {**config, "regularizer_args": {"some": 4}}
-        _ReplicaSettings(**ctmp)
+        ReplicaSettings(**ctmp)
 
     with pytest.raises(ValueError):
         ctmp = {**config, "nodes": [2]}
-        _ReplicaSettings(**ctmp)
+        ReplicaSettings(**ctmp)
 
     x = Input(shape=(None, 2))
     nn = _generate_nn(x, 0, **asdict(rsettings))

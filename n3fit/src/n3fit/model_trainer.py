@@ -652,70 +652,6 @@ class ModelTrainer:
         if interpolation_points:
             self._scaler = generate_scaler(self.input_list, interpolation_points)
 
-    def _generate_pdf(
-        self,
-        nodes_per_layer,
-        activation_per_layer,
-        initializer,
-        layer_type,
-        dropout,
-        regularizer,
-        regularizer_args,
-        seed,
-        photons,
-    ):
-        """
-        Defines the internal variable layer_pdf
-        this layer takes any input (x) and returns the pdf value for that x
-
-        if the sumrule is being imposed, it also updates input_list with the
-        integrator_input tensor used to calculate the sumrule
-
-        Parameters:
-        -----------
-            nodes_per_layer: list
-                list of nodes each layer has
-            activation_per_layer: list
-                list of the activation function for each layer
-            initializer: str
-                initializer for the weights of the NN
-            layer_type: str
-                type of layer to be used
-            dropout: float
-                dropout to add at the end of the NN
-            regularizer: str
-                choice of regularizer to add to the dense layers of the NN
-            regularizer_args: dict
-                dictionary of arguments for the regularizer
-            seed: int
-                seed for the NN
-            photons: :py:class:`validphys.photon.compute.Photon`
-                function to compute the photon PDF
-        see model_gen.pdfNN_layer_generator for more information
-
-        Returns
-        -------
-            pdf_model: MetaModel
-                pdf model
-        """
-        log.info("Generating PDF models")
-        pdf_model = model_gen.generate_pdf_model(
-            nodes=nodes_per_layer,
-            activations=activation_per_layer,
-            layer_type=layer_type,
-            flav_info=self.flavinfo,
-            fitbasis=self.fitbasis,
-            seed_list=seed,
-            initializer_name=initializer,
-            dropout=dropout,
-            regularizer=regularizer,
-            regularizer_args=regularizer_args,
-            impose_sumrule=self.impose_sumrule,
-            scaler=self._scaler,
-            photons=photons,
-        )
-        return pdf_model
-
     def _prepare_reporting(self, partition):
         """Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
         to select the bits necessary for reporting the chi2.
@@ -951,29 +887,43 @@ class ModelTrainer:
             )
         else:
             photons = None
+
+        # Prepare the settings for all replica
+        replicas_settings = []
+        for seed in self._nn_seeds:
+            # WIP here the sampling will happen when necessary
+            tmp = model_gen.ReplicaSettings(
+                seed=seed,
+                nodes=params["nodes_per_layer"],
+                activations=params["activation_per_layer"],
+                initializer=params["initializer"],
+                architecture=params["layer_type"],
+                dropout_rate=params["dropout"],
+                regularizer=params.get("regularizer"),
+                regularizer_args=params.get("regularizer_args"),
+            )
+            replicas_settings.append(tmp)
+
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
-            # Each partition of the kfolding needs to have its own separate model
-            # and the seed needs to be updated accordingly
-            seeds = self._nn_seeds
+
             if k > 0:
-                # generate random integers for each k-fold from the input `nnseeds`
-                # we generate new seeds to avoid the integer overflow that may
-                # occur when doing k*nnseeds
-                rngs = [np.random.default_rng(seed=seed) for seed in seeds]
-                seeds = [generator.integers(1, pow(2, 30)) * k for generator in rngs]
+                # When hyperoptimizing every patition takes the exact same model,
+                # only the seed needs to be updated,.
+                # Generate random integers for each k-fold from the input `nnseeds`
+                # this helps avoid the integer overflow that may occur when doing k*nnseeds
+                for seed, settings in zip(self._nn_seeds, replicas_settings):
+                    rng = np.random.default_rng(seed=seed)
+                    settings.seed = rng.integers(1, pow(2, 30)) * k
 
             # Generate the pdf model
-            pdf_model = self._generate_pdf(
-                params["nodes_per_layer"],
-                params["activation_per_layer"],
-                params["initializer"],
-                params["layer_type"],
-                params["dropout"],
-                params.get("regularizer", None),  # regularizer optional
-                params.get("regularizer_args", None),
-                seeds,
-                photons,
+            pdf_model = model_gen.generate_pdf_model(
+                replicas_settings=replicas_settings,
+                flav_info=self.flavinfo,
+                fitbasis=self.fitbasis,
+                impose_sumrule=self.impose_sumrule,
+                scaler=self._scaler,
+                photons=photons,
             )
 
             if photons:
