@@ -40,7 +40,7 @@ members:
 * Juan M. Cruz-Martinez - CERN
 * Luigi Del Debbio - University of Edinburgh
 * Stefano Forte - Università degli Studi di Milano and INFN
-* Tommaso Giani - Vrije University Amsterdam and Nikhef
+* Tommaso Giani - Max-Planck-Institut für Physik
 * Felix Hekhorn - University of Jyväskylä
 * José Ignacio Latorre - Quantum Research Centre, Technology
   Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
@@ -69,7 +69,7 @@ Former members of the NNPDF collaboration include
 * Rosalyn Pearson - Information Analyst at Public Health Scotland, UK
 * Andrea Piccione - High School Teacher at IPIA G. Piana, IT
 * Luca Rottoli - Post-doc at the University of Zurich, CH
-* Christopher Schwan -
+* Christopher Schwan
 * Emma Slade - Senior AI/ML Engineer at GSK, UK
 * Cameron Voisey - Data Scientist at Privacy Hub by Datavant
 * Michael Wilson - Applied Scientist at Amazon, UK
