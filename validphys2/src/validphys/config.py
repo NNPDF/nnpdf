@@ -911,9 +911,9 @@ class CoreConfig(configparser.Config):
         from validphys import n3fit_data
 
         if diagonal_basis:
-            return n3fit_data._diagonal_masks
+            return n3fit_data.diagonal_masks
         else:
-            return n3fit_data._standard_masks
+            return n3fit_data.standard_masks
 
     @configparser.explicit_node
     def produce_covariance_matrix(self, use_pdferr: bool = False):
