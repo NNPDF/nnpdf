@@ -1,0 +1,88 @@
+independent_variables:
+ - header: {name: 'E_T(Gamma) range [GeV]'}
+   values:
+    - {low: 250, high: 300}
+    - {low: 300, high: 350}
+    - {low: 350, high: 400}
+    - {low: 400, high: 470}
+    - {low: 470, high: 550}
+    - {low: 550, high: 650}
+    - {low: 650, high: 750}
+    - {low: 750, high: 900}
+    - {low: 900, high: 1100}
+    - {low: 1100, high: 1500}
+dependent_variables:
+ - header: {name: TheoryNNLO_Cross_Section_Gamma, units: fb/GeV}
+   qualifiers:
+    - {name: '', value: ''}
+   values:
+     - value: 29.8898
+       errors:
+         - {symerror: 0.0377706, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.436986, minus: -0.95796}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.278168, minus: -0.248739}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 0.368473, minus: -0.340465}, label: 'TheoryUncertAlphas'}
+         - {symerror: 0.298898, label: 'TheoryUncertNonPerturbative'} 
+     - value: 12.4609
+       errors:
+         - {symerror: 0.0161684, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.275162, minus: -0.422569}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.124656, minus: -0.113267}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 0.13008, minus: -0.126217}, label: 'TheoryUncertAlphas'}
+         - {symerror: 0.124609, label: 'TheoryUncertNonPerturbative'} 
+     - value: 5.69163
+       errors:
+         - {symerror: 0.00864157, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.0986369, minus: -0.189416}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.060749, minus: -0.0556925}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 0.0513484, minus: -0.0479125}, label: 'TheoryUncertAlphas'}
+         - {symerror: 0.0569163, label: 'TheoryUncertNonPerturbative'} 
+     - value: 2.4651
+       errors:
+         - {symerror: 0.00293604, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.047097, minus: -0.0866884}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.0282082, minus: -0.0261672}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 0.0188244, minus: -0.0179986}, label: 'TheoryUncertAlphas'}
+         - {symerror: 0.024651, label: 'TheoryUncertNonPerturbative'} 
+     - value: 0.941246
+       errors:
+         - {symerror: 0.00136957, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.0169178, minus: -0.0356664}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.0116723, minus: -0.0108845}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 0.0058725, minus: -0.00512492}, label: 'TheoryUncertAlphas'}
+         - {symerror: 0.00941246, label: 'TheoryUncertNonPerturbative'} 
+     - value: 0.328089
+       errors:
+         - {symerror: 0.000414776, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.00559585, minus: -0.0123889}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.0045161, minus: -0.00416045}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 0.00158697, minus: -0.00113564}, label: 'TheoryUncertAlphas'}
+         - {symerror: 0.00328089, label: 'TheoryUncertNonPerturbative'} 
+     - value: 0.108149
+       errors:
+         - {symerror: 0.000119545, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.00196329, minus: -0.00446856}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.00165364, minus: -0.00151418}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 0.000219936, minus: -0.000194324}, label: 'TheoryUncertAlphas'}
+         - {symerror: 0.00108149, label: 'TheoryUncertNonPerturbative'} 
+     - value: 0.0306495
+       errors:
+         - {symerror: 4.0229e-05, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.000593523, minus: -0.00131861}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.000533186, minus: -0.000485306}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 5.51762e-05, minus: 0}, label: 'TheoryUncertAlphas'}
+         - {symerror: 0.000306495, label: 'TheoryUncertNonPerturbative'} 
+     - value: 0.00560634
+       errors:
+         - {symerror: 5.58415e-06, label: TheoryUncertStat} 
+         - {asymerror: {plus: 0.000115483, minus: -0.000267785}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 0.00011899, minus: -0.00010833}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 1.91816e-05, minus: -3.55936e-06}, label: 'TheoryUncertAlphas'}
+         - {symerror: 5.60634e-05, label: 'TheoryUncertNonPerturbative'} 
+     - value: 0.000419912
+       errors:
+         - {symerror: 4.28638e-07, label: TheoryUncertStat} 
+         - {asymerror: {plus: 8.33662e-06, minus: -2.15243e-05}, label: 'TheoryUncertEnvelopeScales'}
+         - {asymerror: {plus: 1.2503e-05, minus: -1.11192e-05}, label: 'TheoryUncertPDF'}
+         - {asymerror: {plus: 2.79048e-06, minus: -1.32211e-06}, label: 'TheoryUncertAlphas'}
+         - {symerror: 4.19912e-06, label: 'TheoryUncertNonPerturbative'} 
