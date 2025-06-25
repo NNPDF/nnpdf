@@ -23,7 +23,7 @@ implemented_observables:
     label: ATLAS $W^-+c$ 13 TeV
     units: '[pb]'
   process_type: 
-  tables: [5,6,9,10,19,20,21,22]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
+  tables: [19,20,21,22]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
   ndata: 
   plotting:
     dataset_label: ATLAS $W^-+c$ 13 TeV
