@@ -51,3 +51,34 @@ def get_kinematics():
             kin.append(kin_value)
 
     return kin
+
+def decompose_covmat(covmat):
+    """Given a covmat it return an array sys with shape (ndat,ndat)
+    giving ndat correlated systematics for each of the ndat point.
+    The original covmat is obtained by doing sys@sys.T"""
+
+    lamb, mat = np.linalg.eig(covmat)
+    sys = np.multiply(np.sqrt(lamb), mat)
+    return sys
+
+def get_uncertainties():
+    """
+    returns the uncertainties.
+    """
+
+    ndat = 5
+    # Produce covmat of form [[W-/W+],[0],
+    #                        [0],[W-*/W+*]]
+    covmat = np.zeros((4*ndat, 4*ndat)) # Multiply by 4 because of W+/- and */not *
+   
+    def edit_covmat(filename, offset):
+        with open(filename) as f:
+            data = yaml.safe_load(f)
+        flat_values = [v["value"] for v in data["dependent_variables"][0]["values"]]
+        matrix = np.array(flat_values).reshape((2 * ndat, 2 * ndat))
+        covmat[offset:offset + 2 * ndat, offset:offset + 2 * ndat] = matrix
+
+    edit_covmat("rawdata/HEPData-ins2628732-v1-Table_16.yaml", offset=0)
+    edit_covmat("rawdata/HEPData-ins2628732-v1-Table_18.yaml", offset=2 * ndat)
+
+    sys = decompose_covmat(covmat)
