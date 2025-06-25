@@ -159,9 +159,9 @@ class MetaModel(Model):
         for k, v in x_params.items():
             x_params[k] = ops.repeat(v, steps_per_epoch, axis=0)
         y = [ops.repeat(yi, steps_per_epoch, axis=0) for yi in y]
-
+        x_params_dict = dict(x_params)
         history = super().fit(
-            x=x_params, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
+            x=x_params_dict, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
         )
         loss_dict = history.history
         return loss_dict

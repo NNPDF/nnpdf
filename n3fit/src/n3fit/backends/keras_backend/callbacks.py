@@ -45,7 +45,7 @@ class CallbackStep(Callback):
 
     def on_batch_end(self, batch, logs=None):
         step_number = self.steps_in_epoch + self.epochs_finished * self.steps_per_epoch
-        self.on_step_end(step_number, logs)
+        # self.on_step_end(step_number, logs)
         self.steps_in_epoch += 1
 
     def correct_logs(self, logs: dict) -> dict:
@@ -91,14 +91,15 @@ class TimerCallback(CallbackStep):
 
     def on_train_end(self, logs=None):
         """Print the results"""
-        total_time = time() - self.starting_time
-        n_times = len(self.all_times)
-        # Skip the first 100 epochs to avoid fluctuations due to compilations of part of the code
-        # by epoch 100 all parts of the code have usually been called so it's a good compromise
-        mean = np.mean(self.all_times[min(110, n_times - 1) :])
-        std = np.std(self.all_times[min(110, n_times - 1) :])
-        log.info(f"> > Average time per epoch: {mean:.5} +- {std:.5} s")
-        log.info(f"> > > Total time: {total_time/60:.5} min")
+        return
+        # total_time = time() - self.starting_time
+        # n_times = len(self.all_times)
+        # # Skip the first 100 epochs to avoid fluctuations due to compilations of part of the code
+        # # by epoch 100 all parts of the code have usually been called so it's a good compromise
+        # mean = np.mean(self.all_times[min(110, n_times - 1) :])
+        # std = np.std(self.all_times[min(110, n_times - 1) :])
+        # log.info(f"> > Average time per epoch: {mean:.5} +- {std:.5} s")
+        # log.info(f"> > > Total time: {total_time/60:.5} min")
 
 
 class StoppingCallback(CallbackStep):
@@ -130,9 +131,10 @@ class StoppingCallback(CallbackStep):
         print_stats = ((epoch + 1) % self.log_freq) == 0
         # Note that the input logs correspond to the fit before the weights are updated
         logs = self.correct_logs(logs)
-        self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
-        if self.stopping_object.stop_here():
-            self.model.stop_training = True
+        return
+        # self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
+        # if self.stopping_object.stop_here():
+        #     self.model.stop_training = True
 
     def on_train_end(self, logs=None):
         """The training can be finished by the stopping or by
