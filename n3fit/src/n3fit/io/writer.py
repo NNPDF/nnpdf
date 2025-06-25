@@ -286,9 +286,10 @@ class WriterWrapper:
 
     def _write_chi2s(self, out_path):
         # Note: same for all replicas, unless run separately
-        chi2_log = self.stopping_object.chi2exps_json()
-        with open(out_path, "w", encoding="utf-8") as fs:
-            json.dump(chi2_log, fs, indent=2, cls=SuperEncoder)
+        return
+        # chi2_log = self.stopping_object.chi2exps_json()
+        # with open(out_path, "w", encoding="utf-8") as fs:
+        #     json.dump(chi2_log, fs, indent=2, cls=SuperEncoder)
 
     def _write_metadata_json(self, i, out_path):
         json_dict = jsonfit(
