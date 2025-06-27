@@ -35,9 +35,9 @@ implemented_observables:
   kinematic_coverage: [ystar, m_jj, sqrts]
   plotting:
     x_scale: log
-    dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} d|y^*|}$'
+    dataset_label: 'ATLAS 13 TeV di-jets: $\frac{d^2\sigma}{dm_{jj} d|y^*|}$'
     plot_x: m_jj
-    y_label: '$\frac{d^2\sigma}{dm_{jj} d|y^*|}$ ($\frac{pb}{GeV}$)'
+    y_label: '$d^2\sigma/dm_{jj}d|y^*|$ (pb/GeV)'
     figure_by:
     - ystar
   theory:
