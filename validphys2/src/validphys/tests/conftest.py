@@ -16,6 +16,8 @@ import pytest
 settings.register_profile("extratime", deadline=1500)
 settings.load_profile("extratime")
 
+lhapdf.setVerbosity(0)
+
 
 # Fortunately py.test works much like reportengine and providers are
 # connected by argument names.

@@ -75,18 +75,39 @@ def _pinelumi_to_columns(pine_luminosity, hadronic):
     )
     flav_size = len(evol_basis_pids)
     columns = []
+    # TODO: Extend this to deal with a generic number of convolutions
     if hadronic:
         for i, j in pine_luminosity:
             idx = evol_basis_pids.index(i)
             jdx = evol_basis_pids.index(j)
             columns.append(flav_size * idx + jdx)
     else:
-        # The proton might come from both sides
-        try:
-            columns = [evol_basis_pids.index(i) for _, i in pine_luminosity]
-        except ValueError:
-            columns = [evol_basis_pids.index(i) for i, _ in pine_luminosity]
+        # Now for DIS, there is only ONE single PID
+        columns = [evol_basis_pids.index(i[0]) for i in pine_luminosity]
     return columns
+
+
+def _get_convolution_types(convolutions):
+    """Get the type of convolutions from for the given FK table.
+
+    Parameters
+    ----------
+    convolutions: list[pineappl.convolutions.Conv]
+        a list of PineAPPL object containing the types of convolutions
+
+    Returns
+    -------
+        tuple(str): a tuple of string containing whose elements are either
+            `UnpolPDF` or `PolPDF`
+    """
+    # TODO: Extend the following to deal with `time_like` FFs
+    convolution_types = []
+    for convolution in convolutions:
+        if convolution.convolution_types.polarized:
+            convolution_types.append("PolPDF")
+        else:
+            convolution_types.append("UnpolPDF")
+    return tuple(convolution_types)
 
 
 def get_yaml_information(yaml_file, theorypath):
@@ -155,28 +176,24 @@ def pineappl_reader(fkspec):
     # Extract metadata from the first grid
     pine_rep = pines[0]
 
-    # Is it hadronic? (at the moment only hadronic and DIS are considered)
-    try:
-        parton1 = pine_rep.key_values()["convolution_particle_1"]
-        parton2 = pine_rep.key_values()["convolution_particle_2"]
-    except KeyError:
-        # Old pineappl FKTables used  `initial_state` instead of `convolution_particle`
-        parton1 = pine_rep.key_values()["initial_state_1"]
-        parton2 = pine_rep.key_values()["initial_state_2"]
-    hadronic = parton1 == parton2
+    # Get the convolution types for this FK table
+    convolutions = pine_rep.convolutions
+    convolution_types = _get_convolution_types(convolutions)
 
-    # NOTE: while the following can accept any number of convolutions, at the moment only
-    # 1 (DIS) or 2 (hadronic) are implemented.
-    # In the case of DIS grids, convolution 1 refers to the hadron
-    conv_types = [pine_rep.key_values().get("convolution_type_1", "UnpolPDF")]
-    if hadronic:
-        # Sanity check (in case at some point we start fitting things that are not protons)
-        if parton1 != "2212":
-            raise ValueError("vp can only read hadronic fktables with 2 protons!")
+    # Is it hadronic? For the time being, hadronic is defined with `len(convolutions) == 2`.
+    # Hadronic could also involve 3 convolutions in processes such as `pp->H` (with FFs).
+    # DIS FK table now only contains ONE single convolutions.
+    hadronic = len(convolutions) == 2
+    # For the time being, allow only hadronic with identical initial-state protons
+    if hadronic and (convolutions[0].pid != 2212 or convolutions[1].pid != 2212):
+        raise ValueError("Only two identical protons in the initial-state are allowed.")
 
-        conv_types.append(pine_rep.key_values().get("convolution_type_2", "UnpolPDF"))
+    # TODO: While now any arbittrary number of convolutions is allowed, for the time being,
+    # raise Errors when the number of convolutions is more than 2.
+    if len(convolutions) > 2:
+        raise ValueError("Only FK tables with maximum 2 convolutions are allowed.")
 
-    Q0 = np.sqrt(pine_rep.muf2())
+    Q0 = np.sqrt(pine_rep.fac0())
     xgrid = np.array([])
     for pine in pines:
         xgrid = np.union1d(xgrid, pine.x_grid())
@@ -213,6 +230,9 @@ def pineappl_reader(fkspec):
 
         # Read the table, remove bin normalization and apply cfactors
         raw_fktable = (cfprod * p.table().T / p.bin_normalizations()).T
+        # If it is a DIS FK table then we need to expand the dimension
+        if not hadronic:
+            raw_fktable = np.expand_dims(raw_fktable, axis=-1)
         n = raw_fktable.shape[0]
 
         # Apply possible per-fktable fixes
@@ -272,7 +292,8 @@ def pineappl_reader(fkspec):
                 protected = True
                 full_data_index = [[0]]
 
-    # Keeping the data index as a series is exploited to speed up certain operations (e.g. hadronic conv)
+    # Keeping the data index as a series is exploited to speed up convolutions
+    # see e.g., convolution.py::_gv_hadron_predictions
     fid = np.concatenate(full_data_index)
     data_index = pd.Series(fid, index=fid, name="data")
 
@@ -280,7 +301,7 @@ def pineappl_reader(fkspec):
         sigma=sigma,
         ndata=ndata,
         Q0=Q0,
-        convolution_types=tuple(conv_types),
+        convolution_types=convolution_types,
         metadata=fkspec.metadata,
         hadronic=hadronic,
         xgrid=xgrid,

@@ -38,12 +38,13 @@ class InterpStructureFunction(StructureFunction):
 
     def __init__(self, path_to_fktable, pdfs):
         self.fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
-        x = np.unique(self.fktable.bin_left(1))
-        q2 = np.unique(self.fktable.bin_left(0))
+        bin_specs = np.array(self.fktable.bin_limits())
+        q2 = np.unique(bin_specs[:, 0, 0])  # Q2 in the 1st dimension
+        x = np.unique(bin_specs[:, 1, 0])  # x in 2nd dimension
 
         self.q2_max = max(q2)
 
-        predictions = self.fktable.convolve_with_one(2212, pdfs.xfxQ2)
+        predictions = self.fktable.convolve(pdg_convs=self.fktable.convolutions, xfxs=[pdfs.xfxQ2])
 
         grid2D = predictions.reshape(len(x), len(q2))
         self.interpolator = RectBivariateSpline(x, q2, grid2D)

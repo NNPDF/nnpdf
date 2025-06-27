@@ -909,6 +909,18 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_covmat_from_systematics
 
     @configparser.explicit_node
+    def produce_masks(self, diagonal_basis: bool = False):
+        """Modifies which action is used as masks depending on the flag
+        `diagonal_basis`
+        """
+        from validphys import n3fit_data
+
+        if diagonal_basis:
+            return n3fit_data._diagonal_masks
+        else:
+            return n3fit_data._standard_masks
+
+    @configparser.explicit_node
     def produce_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as covariance_matrix depending on
         the flag `use_pdferr`
@@ -1407,7 +1419,13 @@ class CoreConfig(configparser.Config):
         """
         return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
 
-    @functools.lru_cache
+    def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
+        """Turns drop_internal_rules into a tuple for internal caching."""
+        if drop_internal_rules is None:
+            return tuple()
+        return tuple(drop_internal_rules)
+
+    @functools.cache
     def produce_rules(
         self,
         theoryid,
@@ -1417,8 +1435,20 @@ class CoreConfig(configparser.Config):
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
         added_filter_rules: (tuple, type(None)) = None,
+        drop_internal_rules: tuple = tuple(),
     ):
-        """Produce filter rules based on the user defined input and defaults."""
+        """Produce filter rules based on the user defined input and defaults.
+
+        It is possible to overwrite or extend the internal rules from the runcard
+        using the following variables:
+
+        ``filter_rules``: tuple(rules)
+            Drop all internal rules and take these instead
+        ``added_filter_rules``: tuple(rules)
+            Extended internal rules with these
+        ``drop_internal_rules``: tuple(dataset names)
+            Drop internal dataset-specific rules, it is applied before ``added_filter_rules``
+        """
 
         theory_parameters = theoryid.get_description()
 
@@ -1432,15 +1462,20 @@ class CoreConfig(configparser.Config):
                 filter_rules = default_filter_rules_input()
 
         try:
-            rule_list = [
-                Rule(
-                    initial_data=rule,
-                    defaults=defaults,
-                    theory_parameters=theory_parameters,
-                    loader=self.loader,
+            rule_list = []
+            for rule in filter_rules:
+                # Don't load rules that are to be dropped
+                if rule.dataset in drop_internal_rules:
+                    continue
+
+                rule_list.append(
+                    Rule(
+                        initial_data=rule,
+                        defaults=defaults,
+                        theory_parameters=theory_parameters,
+                        loader=self.loader,
+                    )
                 )
-                for rule in filter_rules
-            ]
         except RuleProcessingError as e:
             raise ConfigError(f"Error Processing filter rules: {e}") from e
 
@@ -1662,13 +1697,14 @@ class CoreConfig(configparser.Config):
         """Load the default grouping of data"""
         # slightly superfluous, only one default at present but perhaps
         # somebody will want to add to this at some point e.g for th. uncertainties
-        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL"}
+        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL", "diagonal_basis": "ALL"}
         return allowed[spec]
 
     def produce_processed_data_grouping(
         self,
         use_thcovmat_in_fitting=False,
         use_thcovmat_in_sampling=False,
+        diagonal_basis=False,
         data_grouping=None,
         data_grouping_recorded_spec_=None,
     ):
@@ -1688,6 +1724,8 @@ class CoreConfig(configparser.Config):
             data_grouping = self.parse_data_grouping("standard_report")
             if use_thcovmat_in_fitting or use_thcovmat_in_sampling:
                 data_grouping = self.parse_data_grouping("thcovmat_fit")
+            if diagonal_basis:
+                data_grouping = self.parse_data_grouping("diagonal_basis")
         if data_grouping_recorded_spec_ is not None:
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)

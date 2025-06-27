@@ -1,8 +1,8 @@
 """
-    Module containing functions dedicated to the write down of the output of n3fit
+Module containing functions dedicated to the write down of the output of n3fit
 
-    The goal is to generate the same folder/file structure as the old nnfit code
-    so previously active scripts can still work.
+The goal is to generate the same folder/file structure as the old nnfit code
+so previously active scripts can still work.
 """
 
 import json
@@ -398,13 +398,15 @@ def version():
     try:
         import keras
 
-        versions["keras"] = f"{keras.__version__} backend={keras.backend()}"
+        backend = keras.backend.backend()
 
-        if keras.backend.backend() == "tensorflow":
+        versions["keras"] = f"{keras.__version__} {backend=}"
+
+        if backend == "tensorflow":
             import tensorflow as tf
 
             versions["tensorflow"] = tf.__version__
-        elif keras.backend.backend() == "torch":
+        elif backend == "torch":
             import torch
 
             versions["torch"] == torch.__version__
