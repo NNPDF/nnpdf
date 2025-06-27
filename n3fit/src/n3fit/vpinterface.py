@@ -477,7 +477,8 @@ def compute_logp(n3pdf, experimental_data):
     diffs = pred_cvs.values.flatten() - expr_cvs.values.flatten()
 
     exp_cov = dataset_inputs_covmat_from_systematics(cds_list, use_weights_in_covmat=False)
-    pdf_cov = np.cov(pred_rep.values.flatten())
+    pdf_cov = np.cov(pred_rep.values)
+    assert exp_cov.shape == pdf_cov.shape
     total_covmat = exp_cov + pdf_cov
 
     total_covmat_chol = la.cholesky(total_covmat, lower=True)
