@@ -131,6 +131,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         dict
         parameters of the best trial as found by ``hyperopt``
     """
+    # TODO: Re-define what is actually `best` as a return of this function.
     # Tell the trainer we are doing hpyeropt
     model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
 

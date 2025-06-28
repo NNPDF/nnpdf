@@ -320,7 +320,7 @@ class HyperLoss:
         # populate chi2 matrix and phi vector calculated for a given k-fold
         self.hyper_chi2_vector.append(hyper_chi2_per_fold)
         self.hyper_phi2_vector.append(hyper_phi2_per_fold)
-        self.hyper_phi2_vector.append(hyper_logp_per_fold)
+        self.hyper_logp_vector.append(hyper_logp_per_fold)
         self.exp_chi2_matrix.append(exp_chi2_per_fold)
 
         # save penalties per replica for a given k-fold
