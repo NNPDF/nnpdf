@@ -17,10 +17,10 @@ import copy
 import logging
 import os
 
-import hyperopt
 from hyperopt.pyll.base import scope
 import numpy as np
 
+import hyperopt
 from n3fit.backends import MetaLayer, MetaModel
 from n3fit.hyper_optimization.filetrials import FileTrials
 
@@ -125,13 +125,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
             a ``HyperScanner`` object defining the scan
         max_evals: int
             Number of trials to run
-
-    Returns
-    -------
-        dict
-        parameters of the best trial as found by ``hyperopt``
     """
-    # TODO: Re-define what is actually `best` as a return of this function.
     # Tell the trainer we are doing hpyeropt
     model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
 
@@ -182,14 +176,13 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     )
     if hyperscanner.parallel_hyperopt:
         trials.start_mongo_workers()
-        best = hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=trials.num_workers)
+        hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=trials.num_workers)
         trials.stop_mongo_workers()
         # stop mongod command and compress database
         hyperscanner.mongod_runner.stop(mongod)
         trials.compress_mongodb_database()
     else:
-        best = hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
-    return hyperscanner.space_eval(best)
+        hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
 
 
 class ActivationStr:
