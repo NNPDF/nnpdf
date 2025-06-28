@@ -419,9 +419,14 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
 
     exp_cov = dataset_inputs_covmat_from_systematics(cds_list, use_weights_in_covmat=False)
     exp_covmat_col = la.cholesky(exp_cov, lower=True)
-    pdf_cov = np.cov(pred_rep.values)
-    assert exp_cov.shape == pdf_cov.shape
-    total_covmat = exp_cov + pdf_cov
+
+    # If there is only one replica, we don't account for PDF covmat
+    if pred_rep.shape[1] == 1:
+        total_covmat = exp_cov
+    else:
+        pdf_cov = np.cov(pred_rep.values)
+        assert exp_cov.shape == pdf_cov.shape
+        total_covmat = exp_cov + pdf_cov
 
     total_covmat_chol = la.cholesky(total_covmat, lower=True)
     log_det_total_cov = 2 * np.sum(np.log(np.diag(total_covmat_chol)))
