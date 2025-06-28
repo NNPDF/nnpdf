@@ -336,6 +336,35 @@ def integrability_numbers(n3pdf, q0=1.65, flavours=None):
     return integrability_number(n3pdf, [q0], flavours=flavours)
 
 
+def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
+    """
+    Given the layer with the fit basis computes the arc length
+    using the corresponding validphys action
+    Parameters
+    ----------
+        pdf_function: function
+            pdf function has received by the writer or ``pdf_model``
+        q0: float
+            energy at which the arc length is computed
+        basis: str
+            basis in which to compute the arc length
+        flavours: list
+            output flavours
+    Example
+    -------
+    >>> from n3fit.vpinterface import N3PDF, compute_arclength
+    >>> from n3fit.model_gen import pdfNN_layer_generator
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> n3pdf = N3PDF(pdf_model)
+    >>> res = compute_arclength(n3pdf)
+    """
+    if flavours is None:
+        flavours = ["sigma", "gluon", "V", "V3", "V8"]
+    ret = arc_lengths(self, [q0], basis, flavours)
+    return ret.stats.central_value()
+
+
 def compute_hyperopt_metrics(n3pdf, experimental_data):
     """Compute the different hyperopt quantities from which one defines
     the hyperopt metric.
