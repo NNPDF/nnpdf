@@ -375,7 +375,7 @@ class ReplicaSettings:
             )
         if self.regularizer_args and self.regularizer is None:
             raise ValueError(
-                "Regularizer arguments have been provided but not regularizer is selected"
+                "Regularizer arguments have been provided but no regularizer is selected"
             )
 
 
@@ -674,7 +674,7 @@ def _pdfNN_layer_generator(
         list_of_nn_pdfs.append(rep_pdf(x_input))
 
     # Stack all replicas together as one single object
-    nn_pdfs = Lambda(lambda nns: op.stack(nns, axis=1), name=f"stack_replicas")(list_of_nn_pdfs)
+    nn_pdfs = Lambda(lambda nns: op.stack(nns, axis=1), name="stack_replicas")(list_of_nn_pdfs)
     nn_replicas = MetaModel({'NN_input': x_input}, nn_pdfs, name=NN_LAYER_ALL_REPLICAS)
 
     ## Preprocessing factors:
@@ -787,7 +787,7 @@ def _pdfNN_layer_generator(
     if not replica_axis:
         PDFs = Lambda(lambda pdfs: pdfs[:, 0], name="remove_replica_axis")(PDFs)
 
-    return MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
+    return MetaModel(model_input, PDFs, name="PDFs", scaler=scaler)
 
 
 # TODO: is there a way of keeping sincronized the input of this function and ReplicaSettings
