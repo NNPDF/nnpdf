@@ -1,13 +1,20 @@
 """
-Library of functions which generate the NN objects
+Library of functions which generate the models used by n3fit to determine PDF.
 
-Contains:
-    # observable_generator:
-        Generates the output layers as functions
-    # _pdfNN_layer_generator:
-        Generates the PDF NN layer to be fitted
+It contains functions to generate:
 
+1) Observables
+    The main function is ``observable_generator`` which takes the input theory
+    and generates the path from the PDF result to the computation of the
+    training and validation losses / chi2
 
+2) PDFs
+    The main function is ``generate_pdf_model``, which takes a list of settings
+    defining the replica-dependent architecture of each of the models that form
+    the ensemble as well as ensemble-wide options such as the flavour basis,
+    sum rule definition or theoretical settings, and generates a PDF model
+    which takes an array of (x) as input and outputs the value of the PDF
+    for each replica, for each x for each flavour.
 """
 
 from dataclasses import asdict, dataclass, field
@@ -325,7 +332,7 @@ def observable_generator(
 
 @dataclass
 class ReplicaSettings:
-    """Dataclass which hold all necessary replica-dependent information of a PDF.
+    """Dataclass which holds all necessary replica-dependent information of a PDF.
 
     Parameters
     ----------
@@ -377,12 +384,6 @@ class ReplicaSettings:
             raise ValueError(
                 "Regularizer arguments have been provided but no regularizer is selected"
             )
-
-
-def sample_pdf_models():
-    """
-    Given a set of parameters, sample a set of PDF models
-    """
 
 
 def generate_pdf_model(
@@ -478,7 +479,7 @@ def generate_pdf_model(
     shared_config = {
         "flav_info": flav_info,
         "fitbasis": fitbasis,
-        "out": out,
+        "output_size": out,
         "impose_sumrule": impose_sumrule,
         "scaler": scaler,
         "photons": photons,
@@ -516,12 +517,12 @@ def _pdfNN_layer_generator(
     replicas_settings: list[ReplicaSettings],
     flav_info: dict = None,
     fitbasis: str = "NN31IC",
-    out: int = 14,
+    output_size: int = 14,
     impose_sumrule: str = None,
     scaler: Callable = None,
     photons: Photon = None,
     replica_axis: bool = True,
-):  # pylint: disable=too-many-locals
+):
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
     and outputs a basis of 14 PDFs.
@@ -536,7 +537,6 @@ def _pdfNN_layer_generator(
     Where i goes from 1 to 14 while j goes from 1 to the size of the basis. R_{ji}
     is the rotation from the fitting basis to the physical basis needed for the
     convolution with the fktables.
-
 
     `layer_type` defines the architecture of the Neural Network, currently
     the following two options are implemented:
@@ -577,11 +577,17 @@ def _pdfNN_layer_generator(
 
     >>> import numpy as np
     >>> from n3fit.vpinterface import N3PDF
-    >>> from n3fit.model_gen import _pdfNN_layer_generator
+    >>> from n3fit.model_gen import _pdfNN_layer_generator, ReplicaSettings
     >>> from validphys.pdfgrids import xplotting_grid
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> fake_x = np.linspace(1e-3,0.8,3)
-    >>> pdf_model = _pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=[2,3], flav_info=fake_fl)
+    >>> rp = [ReplicaSettings(nodes = [8], activations=["linear"], seed=i) for i in [1,2]]
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> fake_x = np.linspace(1e-3,0.8,3).reshape(1,-1,1)
+    >>> pdf_model = _pdfNN_layer_generator(rp, flav_info=fake_fl, fitbasis='FLAVOUR', impose_sumrule=False)
+    >>> pdf_model(fake_x).shape
+    TensorShape([1, 2, 3, 14])
+
+    # 1 batch, 2 replicas, 3 x points, 14 flavours
+
 
     Parameters
     ----------
@@ -592,7 +598,7 @@ def _pdfNN_layer_generator(
             to be used by Preprocessing
         fitbasis: str
             fitbasis used during the fit. Default: NN31IC
-        out: int
+        output_size: int
             number of output flavours of the model (default 14)
         impose_sumrule: str
             whether to impose sumrules on the output pdf and which one to impose (All, MSR, VSR, TSR)
@@ -715,7 +721,7 @@ def _pdfNN_layer_generator(
     )
 
     # Evolution layer
-    layer_evln = FkRotation(output_dim=out, name="pdf_FK_basis")
+    layer_evln = FkRotation(output_dim=output_size, name="pdf_FK_basis")
 
     def compute_unnormalized_pdf(x):
         # Preprocess the input grid
