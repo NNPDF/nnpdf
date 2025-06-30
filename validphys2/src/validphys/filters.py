@@ -131,7 +131,7 @@ class FilterRule:
     process_type: str = None
     rule: str = None
     reason: str = None
-    local_variables: Mapping[str, Union[str, float]] = None
+    local_variables: Mapping[str, Union[str, float]] = dataclasses.field(default=None, hash=False)
     PTO: str = None
     FNS: str = None
     IC: str = None
