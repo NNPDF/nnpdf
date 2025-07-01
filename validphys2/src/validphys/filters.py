@@ -125,7 +125,6 @@ class FilterDefaults:
 class FilterRule:
     """
     Dataclass which carries the filter rule information.
-
     """
 
     dataset: str = None
@@ -168,10 +167,13 @@ def default_filter_rules_input():
     """
     Return a tuple of FilterRule objects.
     These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
-    Similarly to `parse_added_filter_rules`, this function checks if the rules
-    are unique, i.d. if there are no multiple rules for the same dataset of
+    Similarly to `parse_added_filter_rules`, this function checks if the rules 
+    are unique, i.d. if there are no multiple rules for the same dataset of 
     process with the same rule (`reason` and `local_variables` are not hashed).
     """
+    # TODO: This should be done using a more sophisticated comparison
+    # that checks if two rules are actually the same, regardless of the
+    # order in which the cuts are defined.
     list_rules = yaml_safe.load(read_text(validphys.cuts, "filters.yaml"))
     unique_rules = set(FilterRule(**rule) for rule in list_rules)
     if len(unique_rules) != len(list_rules):
