@@ -1411,7 +1411,19 @@ class CoreConfig(configparser.Config):
         """
         Returns a tuple of AddedFilterRule objects. Rules are immutable after parsing.
         AddedFilterRule objects inherit from FilterRule objects.
+        Note that if more than one rule is needed for the same dataset or process,
+        they should be combined into a single rule, otherwise an error is raised.
         """
+        # Check if rules for the same dataset of process have different rule
+        seen = set()
+        for rule in rules:
+            rule_instance = rule["dataset"] if rule.get("dataset", None) else rule["process_type"]
+            if rule_instance in seen:
+                raise RuleProcessingError(
+                    f"More than one filter rule is defined for {rule_instance}. "
+                    "Please, combine them into a single rule."
+                )
+            seen.add(rule_instance)
         return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
 
     def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
@@ -1444,7 +1456,6 @@ class CoreConfig(configparser.Config):
         ``drop_internal_rules``: tuple(dataset names)
             Drop internal dataset-specific rules, it is applied before ``added_filter_rules``
         """
-
         theory_parameters = theoryid.get_description()
 
         if filter_rules is None:
@@ -1473,10 +1484,9 @@ class CoreConfig(configparser.Config):
                 )
         except RuleProcessingError as e:
             raise ConfigError(f"Error Processing filter rules: {e}") from e
-
+        
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-
                 try:
                     rule_list.append(
                         Rule(
