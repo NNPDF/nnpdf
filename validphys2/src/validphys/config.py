@@ -1411,20 +1411,19 @@ class CoreConfig(configparser.Config):
         """
         Returns a tuple of AddedFilterRule objects. Rules are immutable after parsing.
         AddedFilterRule objects inherit from FilterRule objects.
-        Note that if more than one rule is needed for the same dataset or process,
-        they should be combined into a single rule, otherwise an error is raised.
+        It checks if the rules are unique, i.e. if there are no
+        multiple filters for the same dataset or process with the 
+        same fields (`reason` is not used in the comparison).
         """
-        # Check if rules for the same dataset of process have different rule
-        seen = set()
-        for rule in rules:
-            rule_instance = rule["dataset"] if rule.get("dataset", None) else rule["process_type"]
-            if rule_instance in seen:
-                raise RuleProcessingError(
-                    f"More than one filter rule is defined for {rule_instance}. "
-                    "Please, combine them into a single rule."
-                )
-            seen.add(rule_instance)
-        return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
+        # TODO: This should be done using a more sophisticated comparison
+        # that checks if two rules are actually the same, regardless of the
+        # order in which the cuts are defined.
+        unique_rules = set(AddedFilterRule(**rule) for rule in rules) if rules else None
+        if unique_rules and len(unique_rules) != len(rules):
+            raise ConfigError(
+                "Added filter rules must not have multiple rules for the same dataset or process."
+            )
+        return tuple(unique_rules)
 
     def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
         """Turns drop_internal_rules into a tuple for internal caching."""
