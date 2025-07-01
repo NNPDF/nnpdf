@@ -1418,12 +1418,15 @@ class CoreConfig(configparser.Config):
         # TODO: This should be done using a more sophisticated comparison
         # that checks if two rules are actually the same, regardless of the
         # order in which the cuts are defined.
-        unique_rules = set(AddedFilterRule(**rule) for rule in rules) if rules else None
-        if unique_rules and len(unique_rules) != len(rules):
-            raise ConfigError(
-                "Added filter rules must not have multiple rules for the same dataset or process."
-            )
-        return tuple(unique_rules)
+        if rules is not None:
+            unique_rules = set(AddedFilterRule(**rule) for rule in rules)
+            if len(unique_rules) != len(rules):
+                raise ConfigError(
+                    "Added filter rules must not have multiple rules for the same dataset or process."
+                )
+            return tuple(unique_rules)
+        else:
+            return None
 
     def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
         """Turns drop_internal_rules into a tuple for internal caching."""
