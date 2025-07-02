@@ -167,8 +167,8 @@ def default_filter_rules_input():
     """
     Return a tuple of FilterRule objects.
     These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
-    Similarly to `parse_added_filter_rules`, this function checks if the rules 
-    are unique, i.d. if there are no multiple rules for the same dataset of 
+    Similarly to `parse_added_filter_rules`, this function checks if the rules
+    are unique, i.d. if there are no multiple rules for the same dataset of
     process with the same rule (`reason` and `local_variables` are not hashed).
     """
     # TODO: This should be done using a more sophisticated comparison
