@@ -125,24 +125,14 @@ class FilterDefaults:
 class FilterRule:
     """
     Dataclass which carries the filter rule information.
-    Since `local_variables` is a Mapping, it could not
-    be used as a key in a dictionary. This means that this class 
-    could not be cached and would generate an 
-    error (see https://github.com/NNPDF/nnpdf/issues/2340).
-    To avoid this, we set `hash=False` for the `local_variables` field. 
-    Note that this does not affect the equality of the dataclass, which 
-    does not use the field `reason` for comparisons. Hence, two FilterRule
-    objects with same `dataset`, `process_type`, `rule` but different
-    `local_variables` will have same hash but will be considered
-    different objects.
 
     """
 
     dataset: str = None
     process_type: str = None
     rule: str = None
-    reason: str = dataclasses.field(default=None, hash=False, compare=False)
-    local_variables: Mapping[str, Union[str, float]] = dataclasses.field(default=None, hash=False)
+    reason: str = dataclasses.field(default=None, hash=False, compare=False) # Not relevant for hasing and comparison
+    local_variables: Mapping[str, Union[str, float]] = dataclasses.field(default=None, hash=False) # Avoid hash issues with caching
     PTO: str = None
     FNS: str = None
     IC: str = None
