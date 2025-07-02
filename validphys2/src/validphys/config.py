@@ -1541,7 +1541,7 @@ class CoreConfig(configparser.Config):
                 )
         except RuleProcessingError as e:
             raise ConfigError(f"Error Processing filter rules: {e}") from e
-        
+
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
                 try:
