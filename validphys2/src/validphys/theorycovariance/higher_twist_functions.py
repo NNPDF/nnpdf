@@ -519,7 +519,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
         
 
         if dataset_sp.commondata.metadata.experiment == 'ATLAS':
-            pc_jet_nodes = pc_dict["H2j_ATLAS"]['nodes'] if pc_dict.get("H2j_ATLAS") else pc_dict["Hj"]['nodes']
+            pc_jet_nodes = pc_dict["H2j_ATLAS"]['nodes'] if pc_dict.get("H2j_ATLAS") else pc_dict["H2j"]['nodes']
             eta_star = (
                 dataset_sp.commondata.metadata.load_kinematics()['ystar']
                 .to_numpy()
@@ -532,10 +532,10 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
             )
             pc_func = mult_jet_pc(pc_jet_nodes, m_jj, eta_star, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_ATLAS'] if pc_dict.get("H2j_ATLAS") else pars_pc['comb']['Hj'])
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_ATLAS'] if pc_dict.get("H2j_ATLAS") else pars_pc['comb']['H2j'])
 
         elif dataset_sp.commondata.metadata.experiment == 'CMS':
-            pc_jet_nodes = pc_dict["H2j_CMS"]['nodes'] if pc_dict.get("H2j_CMS") else pc_dict["Hj"]['nodes']
+            pc_jet_nodes = pc_dict["H2j_CMS"]['nodes'] if pc_dict.get("H2j_CMS") else pc_dict["H2j"]['nodes']
             eta_diff = (
                 dataset_sp.commondata.metadata.load_kinematics()['ydiff']
                 .to_numpy()
@@ -548,7 +548,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
             )
             pc_func = mult_jet_pc(pc_jet_nodes, m_jj, eta_diff, dataset_sp, pdf, pc_func_type)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_CMS'] if pc_dict.get("H2j_CMS") else pars_pc['comb']['Hj'])
+                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_CMS'] if pc_dict.get("H2j_CMS") else pars_pc['comb']['H2j'])
 
         else:
             raise ValueError(
