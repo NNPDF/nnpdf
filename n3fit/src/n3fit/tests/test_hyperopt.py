@@ -14,26 +14,20 @@ from numpy.testing import assert_approx_equal
 import pytest
 
 from n3fit.hyper_optimization.rewards import HyperLoss
-from n3fit.model_gen import generate_pdf_model
+from n3fit.model_gen import ReplicaSettings, generate_pdf_model
 from n3fit.vpinterface import N3PDF
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID
 
 
-def generate_pdf(seed, num_replicas):
+def generate_pdf(seeds):
     """Generate generic pdf model."""
     fake_fl = [
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
-    pdf_model = generate_pdf_model(
-        nodes=[8],
-        activations=["linear"],
-        seed=seed,
-        num_replicas=num_replicas,
-        flav_info=fake_fl,
-        fitbasis="FLAVOUR",
-    )
+    rp = [ReplicaSettings(nodes=[8], activations=["linear"], seed=seed) for seed in seeds]
+    pdf_model = generate_pdf_model(rp, flav_info=fake_fl, fitbasis="FLAVOUR")
     return pdf_model
 
 
@@ -63,7 +57,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     This example assumes a 2 replica calculation with 3 added penalties.
     """
     # generate 2 replica pdf model
-    pdf_model = generate_pdf(seed=[1, 2], num_replicas=2)
+    pdf_model = generate_pdf(seeds=[1, 2])
     # add 3 penalties for a 2 replica model
     penalties = {
         'saturation': np.array([0.0, 0.0]),
