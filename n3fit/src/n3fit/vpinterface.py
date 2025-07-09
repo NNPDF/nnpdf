@@ -378,11 +378,11 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
 
     Returns
     -------
-        logp: float
+        logp: HyperoptMetrics
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF, compute_logp
+    >>> from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
     >>> from n3fit.model_gen import generate_pdf_model
     >>> from validphys.loader import Loader
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
@@ -413,7 +413,7 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
 
     pred_cvs = pd.concat(th_cvs, axis=0, ignore_index=True)
     pred_rep = pd.concat(th_rep, axis=0, ignore_index=True)
-    expr_cvs = pd.concat(exp_cv, axis=0, ignore_index=True)
+    expr_cvs = pd.concat(exp_cv, axis=0, ignore_index=True) 
     diffs = pred_cvs.values.flatten() - expr_cvs.values.flatten()
     diffs_reps = pred_rep.values - expr_cvs.values[:, np.newaxis]
 
@@ -427,6 +427,10 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
         pdf_cov = np.cov(pred_rep.values)
         assert exp_cov.shape == pdf_cov.shape
         total_covmat = exp_cov + pdf_cov
+
+        # Normalize total covmat and shifts to central values of experimental data
+        total_covmat = total_covmat / np.outer(expr_cvs.values.flatten(),expr_cvs.values.flatten())
+        diffs = diffs / expr_cvs.values.flatten()
 
     total_covmat_chol = la.cholesky(total_covmat, lower=True)
     log_det_total_cov = 2 * np.sum(np.log(np.diag(total_covmat_chol)))
