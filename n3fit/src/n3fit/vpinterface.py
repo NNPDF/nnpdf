@@ -428,17 +428,20 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
         assert exp_cov.shape == pdf_cov.shape
         total_covmat = exp_cov + pdf_cov
 
-        # Normalize total covmat and shifts to central values of experimental data
-        total_covmat = total_covmat / np.outer(expr_cvs.values.flatten(),expr_cvs.values.flatten())
-        diffs = diffs / expr_cvs.values.flatten()
+    # Compute the log_det
+    # Normalize the total covmat to central values of experimental data
+    norm_total_covmat = total_covmat / np.outer(expr_cvs.values.flatten(),expr_cvs.values.flatten())
+    norm_total_covmat_chol = la.cholesky(norm_total_covmat, lower=True)
+    log_det_total_cov = 2 * np.sum(np.log(np.diag(norm_total_covmat_chol)))
 
+    # Compute the chi2
     total_covmat_chol = la.cholesky(total_covmat, lower=True)
-    log_det_total_cov = 2 * np.sum(np.log(np.diag(total_covmat_chol)))
-
-    # Compute the different hyperopt quantities
-    ndat = len(diffs)
     chi2 = calc_chi2(sqrtcov=total_covmat_chol, diffs=diffs)
+
+    # Compute phi2
     phi2 = calc_phi(sqrtcov=exp_covmat_col, diffs=diffs_reps)
+    
+    ndat = len(diffs)
     logp = -0.5 * (len(diffs) * np.log(2 * np.pi) + log_det_total_cov + chi2)
 
     return HyperoptMetrics(chi2=chi2 / ndat, phi2=phi2, logp=logp / ndat)
