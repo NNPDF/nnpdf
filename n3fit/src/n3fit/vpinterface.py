@@ -413,7 +413,7 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
 
     pred_cvs = pd.concat(th_cvs, axis=0, ignore_index=True)
     pred_rep = pd.concat(th_rep, axis=0, ignore_index=True)
-    expr_cvs = pd.concat(exp_cv, axis=0, ignore_index=True) 
+    expr_cvs = pd.concat(exp_cv, axis=0, ignore_index=True)
     diffs = pred_cvs.values.flatten() - expr_cvs.values.flatten()
     diffs_reps = pred_rep.values - expr_cvs.values[:, np.newaxis]
 
