@@ -152,5 +152,3 @@ def get_artificial_uncertainties():
         uncertainties.append([{"name": name, "values": values}])
     
     return uncertainties
-    return artificial_sys
-

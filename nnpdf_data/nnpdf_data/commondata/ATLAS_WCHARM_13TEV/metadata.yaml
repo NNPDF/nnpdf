@@ -6,7 +6,7 @@ nnpdf_metadata:
 
 arXiv:
   url: https://arxiv.org/abs/2302.00336
-  journal: 	Phys. Rev. D 108 (2023) 032012
+  journal: Phys. Rev. D 108 (2023) 032012
 iNSPIRE:
   url: https://inspirehep.net/literature/2628732
 hepdata:
@@ -24,7 +24,7 @@ implemented_observables:
     units: '[pb]'
   process_type: 
   tables: [19,20,21,22]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
-  ndata: 
+  ndata: 20
   plotting:
     dataset_label: ATLAS $W^-+c$ 13 TeV
     y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
