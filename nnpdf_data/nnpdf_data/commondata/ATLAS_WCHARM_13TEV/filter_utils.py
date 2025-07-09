@@ -6,6 +6,7 @@ from the rawdata files.
 import yaml
 import pandas as pd
 import numpy as np
+from numpy.linalg import eig
 
 
 def get_data_values():
@@ -52,16 +53,75 @@ def get_kinematics():
 
     return kin
 
-def decompose_covmat(covmat):
-    """Given a covmat it return an array sys with shape (ndat,ndat)
-    giving ndat correlated systematics for each of the ndat point.
-    The original covmat is obtained by doing sys@sys.T"""
+def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
+    r"""Convert the covariance matrix to a matrix of
+    artificial uncertainties.
 
-    lamb, mat = np.linalg.eig(covmat)
-    sys = np.multiply(np.sqrt(lamb), mat)
-    return sys
+    NOTE: This function has been taken from validphys.newcommondata_utils.
+    If those utils get merged in the future, we can replace this.
 
-def get_uncertainties():
+    Parameters
+    ----------
+    ndata : integer
+        Number of data points
+    covmat_list : list
+        A one dimensional list which contains the elements of
+        the covariance matrix row by row. Since experimental
+        datasets provide these matrices in a list form, this
+        simplifies the implementation for the user.
+    no_of_norm_mat : int
+        Normalized covariance matrices may have an eigenvalue
+        of 0 due to the last data point not being linearly
+        independent. To allow for this, the user should input
+        the number of normalized matrices that are being treated
+        in an instance. For example, if a single covariance matrix
+        of a normalized distribution is being processed, the input
+        would be 1. If a covariance matrix contains pertains to
+        3 normalized datasets (i.e. cross covmat for 3
+        distributions), the input would be 3. The default value is
+        0 for when the covariance matrix pertains to an absolute
+        distribution.
+
+    Returns
+    -------
+    artunc : list
+        A two dimensional matrix (given as a list of lists)
+        which contains artificial uncertainties to be added
+        to the commondata. i^th row (or list) contains the
+        artificial uncertainties of the i^th data point.
+
+    """
+    epsilon = -0.0000000001
+    neg_eval_count = 0
+    psd_check = True
+    covmat = np.zeros((ndata, ndata))
+    artunc = np.zeros((ndata, ndata))
+    for i in range(len(covmat_list)):
+        a = i // ndata
+        b = i % ndata
+        covmat[a][b] = covmat_list[i]
+    eigval, eigvec = eig(covmat)
+    for j in range(len(eigval)):
+        if eigval[j] < epsilon:
+            psd_check = False
+        elif eigval[j] > epsilon and eigval[j] <= 0:
+            neg_eval_count = neg_eval_count + 1
+            if neg_eval_count == (no_of_norm_mat + 1):
+                psd_check = False
+        elif eigval[j] > 0:
+            continue
+    if psd_check == False:
+        raise ValueError("The covariance matrix is not positive-semidefinite")
+    else:
+        for i in range(ndata):
+            for j in range(ndata):
+                if eigval[j] < 0:
+                    continue
+                else:
+                    artunc[i][j] = eigvec[i][j] * np.sqrt(eigval[j])
+    return artunc.tolist()
+
+def get_artificial_uncertainties():
     """
     returns the uncertainties.
     """
@@ -81,4 +141,16 @@ def get_uncertainties():
     edit_covmat("rawdata/HEPData-ins2628732-v1-Table_16.yaml", offset=0)
     edit_covmat("rawdata/HEPData-ins2628732-v1-Table_18.yaml", offset=2 * ndat)
 
-    sys = decompose_covmat(covmat)
+    covmat_list = covmat.flatten().tolist()
+    artificial_sys = np.array(covmat_to_artunc(4*ndat, covmat_list))
+    uncertainties = []
+    uncertainties.append([{"name": "stat", "values": np.zeros(4*ndat)}])
+
+    for i in range(len(artificial_sys)):
+        name = f"sys_{i}"
+        values = artificial_sys[:,i]
+        uncertainties.append([{"name": name, "values": values}])
+    
+    return uncertainties
+    return artificial_sys
+
