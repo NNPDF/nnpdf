@@ -53,6 +53,7 @@ def get_kinematics():
 
     return kin
 
+
 def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
     r"""Convert the covariance matrix to a matrix of
     artificial uncertainties.
@@ -121,6 +122,7 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
                     artunc[i][j] = eigvec[i][j] * np.sqrt(eigval[j])
     return artunc.tolist()
 
+
 def get_artificial_uncertainties():
     """
     returns the uncertainties.
@@ -129,26 +131,89 @@ def get_artificial_uncertainties():
     ndat = 5
     # Produce covmat of form [[W-/W+],[0],
     #                        [0],[W-*/W+*]]
-    covmat = np.zeros((4*ndat, 4*ndat)) # Multiply by 4 because of W+/- and */not *
-   
+    covmat = np.zeros((4 * ndat, 4 * ndat))  # Multiply by 4 because of W+/- and */not *
+
     def edit_covmat(filename, offset):
         with open(filename) as f:
             data = yaml.safe_load(f)
         flat_values = [v["value"] for v in data["dependent_variables"][0]["values"]]
         matrix = np.array(flat_values).reshape((2 * ndat, 2 * ndat))
-        covmat[offset:offset + 2 * ndat, offset:offset + 2 * ndat] = matrix
+        covmat[offset : offset + 2 * ndat, offset : offset + 2 * ndat] = matrix
 
     edit_covmat("rawdata/HEPData-ins2628732-v1-Table_16.yaml", offset=0)
     edit_covmat("rawdata/HEPData-ins2628732-v1-Table_18.yaml", offset=2 * ndat)
 
     covmat_list = covmat.flatten().tolist()
-    artificial_sys = np.array(covmat_to_artunc(4*ndat, covmat_list))
+    artificial_sys = np.array(covmat_to_artunc(4 * ndat, covmat_list))
     uncertainties = []
-    uncertainties.append([{"name": "stat", "values": np.zeros(4*ndat)}])
+    uncertainties.append([{"name": "stat", "values": np.zeros(4 * ndat)}])
 
     for i in range(len(artificial_sys)):
         name = f"sys_{i}"
-        values = artificial_sys[:,i]
+        values = artificial_sys[:, i]
         uncertainties.append([{"name": name, "values": values}])
-    
+
     return uncertainties
+
+
+def symmetrize_errors(delta_plus, delta_minus):
+    r"""Compute the symmetrized uncertainty and the shift in data point.
+
+    Parameters
+    ----------
+    delta_plus : float
+        The top/plus uncertainty with sign
+    delta_minus : float
+        The bottom/minus uncertainty with sign
+
+    Returns
+    -------
+    se_delta : float
+        The value to be added to the data point
+    se_sigma : float
+        The symmetrized uncertainty to be used in commondata
+
+    """
+    semi_diff = (delta_plus + delta_minus) / 2
+    average = (delta_plus - delta_minus) / 2
+    se_delta = semi_diff
+    se_sigma = np.sqrt(average * average + 2 * semi_diff * semi_diff)
+    return se_delta, se_sigma
+
+
+def get_uncertainties():
+
+    for i in range(19, 23):
+        hepdata_table = f"rawdata/HEPData-ins2628732-v1-Table_{i}.yaml"
+
+        with open(hepdata_table, 'r') as file:
+            input = yaml.safe_load(file)
+
+        values = input['dependent_variables'][1]['values']
+
+        print(f"Table {i}:")
+        for idx, point in enumerate(values):
+            sys_errors_for_point = []
+            for err in point['errors']:
+                label = err['label']
+                if 'asymerror' in err:
+                    minus = err['asymerror']['minus']
+                    plus = err['asymerror']['plus']
+                elif 'symerror' in err:
+                    minus = plus = err['symerror']
+                else:
+                    raise ValueError(f"Unknown error type in {hepdata_table} for point {idx}")
+
+                symmetrized_error = symmetrize_errors(plus, minus)
+
+                sys_errors_for_point.append(
+                    {'label': label, 'minus': symmetrized_error[0], 'plus': symmetrized_error[1]}
+                )
+
+            print(f"  Point {idx}: {len(sys_errors_for_point)} systematics")
+
+    return
+
+
+if __name__ == "__main__":
+    get_uncertainties()
