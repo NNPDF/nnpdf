@@ -207,7 +207,7 @@ def get_uncertainties():
                 symmetrized_error = symmetrize_errors(plus, minus)
 
                 sys_errors_for_point.append(
-                    {'label': label, 'minus': symmetrized_error[0], 'plus': symmetrized_error[1]}
+                    {'label': label, 'delta': symmetrized_error[0], 'sigma': symmetrized_error[1]}
                 )
 
             print(f"  Point {idx}: {len(sys_errors_for_point)} systematics")
