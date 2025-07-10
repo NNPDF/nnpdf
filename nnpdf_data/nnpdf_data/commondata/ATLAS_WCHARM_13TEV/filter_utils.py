@@ -182,7 +182,9 @@ def symmetrize_errors(delta_plus, delta_minus):
 
 
 def get_uncertainties():
-
+    syst_dict = {}
+    value_id = 0
+    ndat = 20
     for i in range(19, 23):
         hepdata_table = f"rawdata/HEPData-ins2628732-v1-Table_{i}.yaml"
 
@@ -191,9 +193,7 @@ def get_uncertainties():
 
         values = input['dependent_variables'][1]['values']
 
-        print(f"Table {i}:")
-        for idx, point in enumerate(values):
-            sys_errors_for_point = []
+        for point_idx, point in enumerate(values):
             for err in point['errors']:
                 label = err['label']
                 if 'asymerror' in err:
@@ -202,17 +202,19 @@ def get_uncertainties():
                 elif 'symerror' in err:
                     minus = plus = err['symerror']
                 else:
-                    raise ValueError(f"Unknown error type in {hepdata_table} for point {idx}")
+                    raise ValueError(f"Unknown error type in {hepdata_table} for point {point_idx}")
+
+                if label not in syst_dict:
+                    syst_dict[label] = np.zeros(ndat)
 
                 symmetrized_error = symmetrize_errors(plus, minus)
+                syst_dict[label][value_id] = symmetrized_error[1]
+            value_id += 1
 
-                sys_errors_for_point.append(
-                    {'label': label, 'delta': symmetrized_error[0], 'sigma': symmetrized_error[1]}
-                )
-
-            print(f"  Point {idx}: {len(sys_errors_for_point)} systematics")
-
-    return
+    syst_list = []
+    for label, values in syst_dict.items():
+        syst_list.append([{"name": label, "values": values.tolist()}])
+    return syst_list
 
 
 if __name__ == "__main__":
