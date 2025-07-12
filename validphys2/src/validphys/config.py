@@ -1411,8 +1411,23 @@ class CoreConfig(configparser.Config):
         """
         Returns a tuple of AddedFilterRule objects. Rules are immutable after parsing.
         AddedFilterRule objects inherit from FilterRule objects.
+        It checks if the rules are unique, i.e. if there are no
+        multiple filters for the same dataset or process with the
+        same fields (`reason` is not used in the comparison).
         """
-        return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
+        # TODO: This should be done using a more sophisticated comparison
+        # that checks if two rules are actually the same, regardless of the
+        # order in which the cuts are defined.
+        if rules is not None:
+            unique_rules = set(AddedFilterRule(**rule) for rule in rules)
+            if len(unique_rules) != len(rules):
+                raise RuleProcessingError(
+                    "Detected repeated filter rules. Please, make sure that "
+                    " rules are not repeated in the runcard."
+                )
+            return tuple(unique_rules)
+        else:
+            return None
 
     def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
         """Turns drop_internal_rules into a tuple for internal caching."""
@@ -1444,7 +1459,6 @@ class CoreConfig(configparser.Config):
         ``drop_internal_rules``: tuple(dataset names)
             Drop internal dataset-specific rules, it is applied before ``added_filter_rules``
         """
-
         theory_parameters = theoryid.get_description()
 
         if filter_rules is None:
@@ -1476,7 +1490,6 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-
                 try:
                     rule_list.append(
                         Rule(
@@ -1779,6 +1792,8 @@ class CoreConfig(configparser.Config):
         prescription. The options for the latter are defined in pointprescriptions.yaml.
         This hard codes the theories needed for each prescription to avoid user error."""
         th = t0id.id
+        if point_prescription == 'power corrections':
+            return NSList([t0id], nskey="theoryid")
 
         lsv = yaml_safe.load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
@@ -1861,7 +1876,18 @@ class CoreConfig(configparser.Config):
         if not fakedata:
             return validphys.filters.filter_real_data
         else:
-            if inconsistent_fakedata:
+            # TODO we don't want to sample from the theory covmat for L1 data,
+            # but we do want to use the theory covmat for L2 data
+            if theorycovmatconfig is not None and theorycovmatconfig.get(
+                "use_thcovmat_in_fakedata_sampling"
+            ):
+                # NOTE: By the time we run theory covmat closure tests,
+                # hopefully the generation of pseudodata will be done in python.
+                raise ConfigError(
+                    "Generating L1 closure test data which samples from the theory "
+                    "covariance matrix has not been implemented yet."
+                )
+            elif inconsistent_fakedata:
                 log.info("Using filter for inconsistent closure data")
                 return validphys.filters.filter_inconsistent_closure_data_by_experiment
 
@@ -1888,6 +1914,26 @@ class CoreConfig(configparser.Config):
         if fitthcovmat is None:
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
+
+    # TODO: to be removed once we are sure the the triangular
+    # function for the prior is the only one of interest
+    def produce_pc_func_type(self, theorycovmatconfig=None):
+        if theorycovmatconfig is None:
+            raise ValueError("theorycovmatconfig is defined in the runcard.")
+        return theorycovmatconfig.get('func_type', 'linear')
+
+    @configparser.explicit_node
+    def produce_covs_pt_prescrip(self, point_prescription):
+        if point_prescription != 'power corrections':
+            from validphys.theorycovariance.construction import covs_pt_prescrip_mhou
+
+            f = covs_pt_prescrip_mhou
+        else:
+            from validphys.theorycovariance.construction import covs_pt_prescrip_pc
+
+            f = covs_pt_prescrip_pc
+
+        return f
 
 
 class Config(report.Config, CoreConfig):
