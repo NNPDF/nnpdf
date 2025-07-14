@@ -8,7 +8,6 @@ backend-dependent calls.
 from pathlib import Path
 import re
 
-from keras import Variable
 from keras import optimizers as Kopt
 from keras.models import Model
 import numpy as np
@@ -98,13 +97,16 @@ class MetaModel(Model):
                 self.required_slots.add(k)
         super().__init__(input_tensors, output_tensors, **kwargs)
 
-        self.x_in = x_in
         self.input_tensors = input_tensors
         self.single_replica_generator = None
 
         self.target_tensors = None
         self.compute_losses_function = None
         self._scaler = scaler
+
+        # Keras' __setattr__ would try to track the input dictionary as a TrackedDict
+        # which is incompatible with jax, to avoid this problem, set the attribute directly
+        object.__setattr__(self, "x_in", x_in)
 
     def _parse_input(self, extra_input=None):
         """Returns the input data the model was compiled with.
@@ -159,9 +161,8 @@ class MetaModel(Model):
         for k, v in x_params.items():
             x_params[k] = ops.repeat(v, steps_per_epoch, axis=0)
         y = [ops.repeat(yi, steps_per_epoch, axis=0) for yi in y]
-        x_params_dict = dict(x_params)
         history = super().fit(
-            x=x_params_dict, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
+            x=x_params, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
         )
         loss_dict = history.history
         return loss_dict
@@ -496,9 +497,9 @@ def get_layer_replica_weights(layer, i_replica: int):
     """
     if is_stacked_single_replicas(layer):
         weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
-        weights = [Variable(w, name=w.name) for w in weights_ref]
+        weights = [ops.variable_to_numpy(w) for w in weights_ref]
     else:
-        weights = [Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+        weights = [ops.variable_to_numpy(w)[i_replica : i_replica + 1] for w in layer.weights]
 
     return weights
 
