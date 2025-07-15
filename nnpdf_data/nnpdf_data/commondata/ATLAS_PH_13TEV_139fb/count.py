@@ -2,7 +2,6 @@ import os
 import glob
 import yaml
 
-# Change this to your directory path
 directory = "./rawdata"
 
 # Glob pattern for the files
