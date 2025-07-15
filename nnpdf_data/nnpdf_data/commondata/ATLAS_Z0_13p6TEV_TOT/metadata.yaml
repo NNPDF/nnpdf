@@ -6,12 +6,12 @@ nnpdf_metadata:
   experiment: ATLAS
 arXiv:
   url: https://arxiv.org/abs/2403.12902
-  journal: Phys.Lett.B 854 (2024) 138725 
+  journal: Phys.Lett.B 854 (2024) 138725
 iNSPIRE:
   url: 'https://inspirehep.net/literature/2770237'
 
 implemented_observables:
-- observable_name: TOT
+- observable_name: X-SEC
   observable:
     description: NC DY Total Cross Section
     label: ATLAS $Z$ inclusive 13.6 TeV
@@ -52,4 +52,3 @@ implemented_observables:
   data_uncertainties:
   - uncertainties.yaml
   data_central: data.yaml
-
