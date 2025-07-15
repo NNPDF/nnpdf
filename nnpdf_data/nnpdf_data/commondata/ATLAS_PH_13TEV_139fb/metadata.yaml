@@ -19,8 +19,8 @@ implemented_observables:
     label: ATLAS direct photon production 13 TeV at 139 fb^-1
     units: ''
   process_type: PHT
-  tables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-  ndata: 248
+  tables: [7, 8, 9, 10, 11, 12]
+  ndata: 62
   plotting:
     dataset_label: ATLAS direct photon production 13 TeV and 139 fb^-1
     y_label: $d\sigma/dE_T ^\gamma$ (fb)
@@ -40,10 +40,6 @@ implemented_observables:
       ET:
         description: Transverse energy
         label: $E_T$
-        units: $GeV$
-      sqrts:
-        description: Center of mass energy
-        label: $\sqrt{s}$
         units: $GeV$
 
 
