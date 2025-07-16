@@ -366,7 +366,7 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
     return ret.stats.central_value()
 
 
-def compute_hyperopt_metrics(n3pdf, experimental_data):
+def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
     """Compute the different hyperopt quantities from which one defines
     the hyperopt metric.
 
@@ -379,7 +379,8 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
 
     Returns
     -------
-        logp: HyperoptMetrics
+        HyperoptMetrics: :class:`n3fit.vpinterface.HyperoptMetrics`
+            dataclass holding the values of chi2, phi2 and logp
 
     Example
     -------
@@ -432,7 +433,9 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
 
     # Compute the log_det
     # Normalize the total covmat to central values of experimental data
-    norm_total_covmat = total_covmat / np.outer(expr_cvs.values.flatten(),expr_cvs.values.flatten())
+    norm_total_covmat = total_covmat / np.outer(
+        expr_cvs.values.flatten(), expr_cvs.values.flatten()
+    )
     norm_total_covmat_chol = la.cholesky(norm_total_covmat, lower=True)
     log_det_total_cov = 2 * np.sum(np.log(np.diag(norm_total_covmat_chol)))
 
@@ -442,7 +445,7 @@ def compute_hyperopt_metrics(n3pdf, experimental_data):
 
     # Compute phi2
     phi2 = calc_phi(sqrtcov=exp_covmat_col, diffs=diffs_reps)
-    
+
     ndat = len(diffs)
     logp = -0.5 * (len(diffs) * np.log(2 * np.pi) + log_det_total_cov + chi2)
 
