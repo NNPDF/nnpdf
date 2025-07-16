@@ -1411,8 +1411,20 @@ class CoreConfig(configparser.Config):
         """
         Returns a tuple of AddedFilterRule objects. Rules are immutable after parsing.
         AddedFilterRule objects inherit from FilterRule objects.
+        It checks if the rules are unique, i.e. if there are no
+        multiple filters for the same dataset or process with the
+        same fields (`reason` is not used in the comparison).
         """
-        return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
+        if rules is not None:
+            unique_rules = set(AddedFilterRule(**rule) for rule in rules)
+            if len(unique_rules) != len(rules):
+                raise RuleProcessingError(
+                    "Detected repeated filter rules. Please, make sure that "
+                    " rules are not repeated in the runcard."
+                )
+            return tuple(unique_rules)
+        else:
+            return None
 
     def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
         """Turns drop_internal_rules into a tuple for internal caching."""
@@ -1444,7 +1456,6 @@ class CoreConfig(configparser.Config):
         ``drop_internal_rules``: tuple(dataset names)
             Drop internal dataset-specific rules, it is applied before ``added_filter_rules``
         """
-
         theory_parameters = theoryid.get_description()
 
         if filter_rules is None:
@@ -1476,7 +1487,6 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-
                 try:
                     rule_list.append(
                         Rule(
