@@ -72,7 +72,8 @@ packaging = "*"
 psutil = "*"
 tensorflow = "*"
 keras = "^3.1"
-eko = "^0.15.1"
+# TODO remove equal before mergin
+eko = "=0.15.1"
 joblib = "*"
 # Hyperopt
 hyperopt = "*"
