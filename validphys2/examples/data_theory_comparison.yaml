@@ -7,7 +7,7 @@ pdfs:
     - id: NNPDF40_nnlo_low_precision
       label: NNPDF40_nnlo_low_precision
 
-theoryid: 399
+theoryid: 40_000_000
 
 use_cuts: "internal"
 

@@ -22,7 +22,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 399        # database id
+  theoryid: 40_000_000 # database id
 
 ############################################################
 genrep: false
@@ -31,7 +31,6 @@ nnseed: 2
 mcseed: 1
 
 save: weights.weights.h5
-separate_multiplicative: True
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]

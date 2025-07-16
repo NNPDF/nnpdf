@@ -9,7 +9,6 @@ import pytest
 
 from eko import EKO, runner
 from validphys.api import API
-from validphys.pdfbases import PIDS_DICT
 from validphys.utils import yaml_safe
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
@@ -104,7 +103,7 @@ def test_utils():
     assert runcard["datacuts"]["t0pdfset"] == "NNPDF40_nnlo_as_01180"
     # Testing get_theoryID_from_runcard
     ID = utils.get_theoryID_from_runcard(REGRESSION_FOLDER)
-    assert ID == 162
+    assert ID == 40_000_000
 
 
 def test_eko_utils(tmp_path, nnpdf_theory_card):
@@ -145,6 +144,8 @@ def test_eko_utils(tmp_path, nnpdf_theory_card):
     np.testing.assert_allclose(list(eko_op.operator_card.raw["mugrid"]), op_card_dict["mugrid"])
 
 
+# Keep old theory 399 and 398 EKOs here to avoid having to download many GB of data
+# the only _actual_ eko test is given by the fit-bot
 @pytest.mark.parametrize(
     "fitname", ["Basic_runcard_3replicas_lowprec_399", "Basic_runcard_qed_3replicas_lowprec_398"]
 )

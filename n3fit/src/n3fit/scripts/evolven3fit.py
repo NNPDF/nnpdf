@@ -106,11 +106,6 @@ def construct_evolven3fit_parser(subparsers):
     return parser
 
 
-def evolven3fit_new():
-    _logger.warning("`evolven3fit_new` is deprecated. Please use `evolven3fit` instead.")
-    main()
-
-
 def main():
     parser = ArgumentParser(description="evolven3fit - a script with tools to evolve PDF fits")
     parser.add_argument(

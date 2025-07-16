@@ -6,7 +6,7 @@ from nnpdf_data.commondataparser import load_commondata
 from validphys.api import API
 from validphys.covmats_utils import construct_covmat
 from validphys.loader import FallbackLoader as Loader
-from validphys.tests.conftest import FIT, THEORYID_NEW
+from validphys.tests.conftest import FIT, THEORYID
 
 
 def test_basic_commondata_loading():
@@ -22,13 +22,13 @@ def test_basic_commondata_loading():
     rules = API.rules(
         **{
             "dataset_input": "SLAC_NC_NOTFIXED_D_DW_EM-F2",
-            "theoryid": THEORYID_NEW,
+            "theoryid": THEORYID,
             "use_cuts": "internal",
         }
     )
     # Test a dataset with no systematics
     emptysyscd = l.check_posset(
-        theoryID=THEORYID_NEW, setname='NNPDF_POS_2P24GEV_XDQ', postlambda=1e-10, rules=rules
+        theoryID=THEORYID, setname='NNPDF_POS_2P24GEV_XDQ', postlambda=1e-10, rules=rules
     )
     emptysysres = load_commondata(emptysyscd.commondata.metadata)
     assert emptysysres.nsys == 0
@@ -43,7 +43,7 @@ def test_commondata_with_cuts():
     loaded_cd = load_commondata(cd.metadata)
 
     fit_cuts = l.check_fit_cuts(fit=FIT, commondata=cd)
-    internal_cuts = l.check_internal_cuts(cd, API.rules(theoryid=THEORYID_NEW, use_cuts="internal"))
+    internal_cuts = l.check_internal_cuts(cd, API.rules(theoryid=THEORYID, use_cuts="internal"))
 
     loaded_cd_fit_cuts = loaded_cd.with_cuts(fit_cuts)
     # We must do these - 1 subtractions due to the fact that cuts indexing

@@ -103,8 +103,8 @@ def covmat_from_systematics(
 
     >>> from validphys.api import API
     >>> inp = dict(
-    ...     dataset_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10},
-    ...     theoryid=162,
+    ...     dataset_input={'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',)},
+    ...     theoryid=40_000_000,
     ...     use_cuts="internal"
     ... )
     >>> cov = API.covmat_from_systematics(**inp)
@@ -171,14 +171,14 @@ def dataset_inputs_covmat_from_systematics(
     This function can be called directly from the API:
 
     >>> dsinps = [
-    ...     {'dataset': 'NMC'},
-    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
-    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
+    ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory'},
+    ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',)},
     ... ]
-    >>> inp = dict(dataset_inputs=dsinps, theoryid=162, use_cuts="internal")
+    >>> inp = dict(dataset_inputs=dsinps, theoryid=40_000_000, use_cuts="internal")
     >>> cov = API.dataset_inputs_covmat_from_systematics(**inp)
     >>> cov.shape
-    (235, 235)
+    (233, 233)
 
     Which properly accounts for all dataset settings and cuts.
 
@@ -562,22 +562,9 @@ def sqrt_covmat(covariance_matrix):
     -------
     >>> import numpy as np
     >>> from validphys.api import API
-    >>> API.sqrt_covmat(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
-    array([[0.0326543 , 0.        , 0.        , ..., 0.        , 0.        ,
-            0.        ],
-        [0.00314523, 0.01467259, 0.        , ..., 0.        , 0.        ,
-            0.        ],
-        [0.0037817 , 0.00544256, 0.02874822, ..., 0.        , 0.        ,
-            0.        ],
-        ...,
-        [0.00043404, 0.00031169, 0.00020489, ..., 0.00441073, 0.        ,
-            0.        ],
-        [0.00048717, 0.00033792, 0.00022971, ..., 0.00126704, 0.00435696,
-            0.        ],
-        [0.00067353, 0.00050372, 0.0003203 , ..., 0.00107255, 0.00065041,
-            0.01002952]])
-    >>> sqrt_cov = API.sqrt_covmat(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
-    >>> cov = API.covariance_matrix(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
+    >>> ds = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
+    >>> sqrt_cov = API.sqrt_covmat(dataset_input=ds, theoryid=40_000_000, use_cuts="internal")
+    >>> cov = API.covariance_matrix(dataset_input=ds, theoryid=40_000_000, use_cuts="internal")
     >>> np.allclose(np.linalg.cholesky(cov), sqrt_cov)
     True
 
@@ -711,7 +698,7 @@ def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
                 'dataset': 'ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM',
                 'variant': 'legacy',
             },
-            'theoryid': 700,
+            'theoryid': 40_000_000,
             'pdf': 'NNPDF40_nlo_as_01180',
             'use_cuts': 'internal',
         }
@@ -838,9 +825,10 @@ def covmat_stability_characteristic(systematics_matrix_from_commondata):
     --------
 
     >>> from validphys.api import API
-    >>> API.covmat_stability_characteristic(dataset_input={"dataset": "NMC"},
-    ... theoryid=162, use_cuts="internal")
-    2.742658604186114
+    >>> ds = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
+    >>> API.covmat_stability_characteristic(dataset_input=ds,
+    ... theoryid=40_000_000, use_cuts="internal")
+    2.742658604186124
 
     """
     sqrtcov = systematics_matrix_from_commondata
