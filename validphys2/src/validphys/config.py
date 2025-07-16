@@ -1415,9 +1415,6 @@ class CoreConfig(configparser.Config):
         multiple filters for the same dataset or process with the
         same fields (`reason` is not used in the comparison).
         """
-        # TODO: This should be done using a more sophisticated comparison
-        # that checks if two rules are actually the same, regardless of the
-        # order in which the cuts are defined.
         if rules is not None:
             unique_rules = set(AddedFilterRule(**rule) for rule in rules)
             if len(unique_rules) != len(rules):
