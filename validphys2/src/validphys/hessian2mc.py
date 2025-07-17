@@ -6,14 +6,14 @@ like MSHT20 and CT18 to Monte Carlo sets.
 The functions implemented here follow equations (4.3) of the paper arXiv:2203.05506
 """
 
-import pathlib
-import lhapdf
-import os
 import logging
+import os
+
 import numpy as np
 
-from validphys.lhio import load_all_replicas, rep_matrix, write_replica
 from validphys.checks import check_pdf_is_hessian
+from validphys.lhaindex import get_lha_datapath
+from validphys.lhio import load_all_replicas, rep_matrix, write_replica
 
 log = logging.getLogger(__name__)
 
@@ -108,7 +108,7 @@ def write_hessian_to_mc_watt_thorne(pdf, mc_pdf_name, num_members, watt_thorne_r
     """
     hessian_set = pdf
 
-    lhapdf_path = pathlib.Path(lhapdf.paths()[-1])
+    lhapdf_path = get_lha_datapath()
 
     # path to hessian lhapdf set
     hessian_pdf_path = lhapdf_path / str(hessian_set)

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 """
-    vp-pdfrename - command line tool to rename LHAPDFs
+vp-pdfrename - command line tool to rename LHAPDFs
 
-    To obtain the PDF from an fit, simply run
-    vp-pdfrename <path-to-fit> <PDF name>. Optional flags allow for the
-    resulting pdf to be placed in the LHAPDF directory, as well as modifying
-    various fields of the info file. In addition, it is possible to compress
-    the resulting PDF also using tar archiving.
+To obtain the PDF from an fit, simply run
+vp-pdfrename <path-to-fit> <PDF name>. Optional flags allow for the
+resulting pdf to be placed in the LHAPDF directory, as well as modifying
+various fields of the info file. In addition, it is possible to compress
+the resulting PDF also using tar archiving.
 """
 
 import argparse
@@ -18,9 +18,8 @@ import sys
 import tarfile
 import tempfile
 
-import lhapdf
-
 from reportengine import colors
+from validphys.lhaindex import get_lha_datapath
 from validphys.renametools import rename_pdf
 from validphys.utils import yaml_rt
 
@@ -118,7 +117,7 @@ def main():
     log.addHandler(colors.ColorHandler())
 
     if args.lhapdf_path:
-        dest_path = pathlib.Path(lhapdf.paths()[-1]) / pdf_name
+        dest_path = get_lha_datapath() / pdf_name
     else:
         dest_path = source_path.with_name(pdf_name)
 

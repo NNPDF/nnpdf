@@ -9,14 +9,18 @@ import pathlib
 import sys
 
 from hypothesis import settings
-import lhapdf
 import pytest
 
 # Adding this here to change the time of deadline from default (200ms) to 1500ms
 settings.register_profile("extratime", deadline=1500)
 settings.load_profile("extratime")
 
-lhapdf.setVerbosity(0)
+try:
+    import lhapdf
+
+    lhapdf.setVerbosity(0)
+except ModuleNotFoundError:
+    pass
 
 
 # Fortunately py.test works much like reportengine and providers are
