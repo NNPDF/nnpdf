@@ -1,0 +1,22 @@
+definitions:
+  stat:
+    description: total statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    description: total systematic uncertainty
+    treatment: MULT
+    type: CORR
+  lumi:
+    description: luminosity uncertainty
+    treatment: MULT
+    type: ATLASLUMIRUNIII
+  beam:
+    description: beam uncertainty
+    treatment: ADD
+    type: CORR
+bins:
+- stat: 0.9
+  sys: 2.3
+  lumi: 1.1
+  beam: 0.2
