@@ -46,8 +46,8 @@ implemented_observables:
       pT_t: {description: "transverse momentum of t", label: '$pT_{t}$', units: '$GeV$'}
     file: kinematics_dSig_dpTt.yaml
   data_central: data_dSig_dpTt.yaml
-  data_uncertainties: uncertainties_dSig_dpTt.yaml
-  - 
+  data_uncertainties: 
+  - uncertainties_dSig_dpTt.yaml
   kinematic_coverage: [pT_t]
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dpT_{t}}$'
@@ -68,8 +68,8 @@ implemented_observables:
       y_t: {description: "rapidity of t", label: '$y_{t}$', units: '$$'}
     file: kinematics_dSig_dyt.yaml
   data_central: data_dSig_dyt.yaml
-  data_uncertainties: uncertainties_dSig_dyt.yaml
-  - 
+  data_uncertainties: 
+  - uncertainties_dSig_dyt.yaml
   kinematic_coverage: [y_t]
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dy_{t}}$'
