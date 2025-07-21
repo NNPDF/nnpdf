@@ -21,6 +21,8 @@ def the_function():
     kin_d2Sig_dmttBar_dyttBar = []
     error_d2Sig_dmttBar_dyttBar = []
 
+    m_t2 = 172.5 * 172.5
+
     # dSig_dmttBar
 
     with open("rawdata/mtt_abs_parton.yaml", "r") as f:
@@ -32,7 +34,10 @@ def the_function():
         data_central_value = values1[i]['value']
         kin_low = input1['independent_variables'][0]['values'][i]['low']
         kin_high = input1['independent_variables'][0]['values'][i]['high']
-        kin_value = {'m_ttBar': {'min': kin_low, 'mid': None, 'max': kin_high}}
+        kin_value = {
+            'm_ttBar': {'min': kin_low, 'mid': None, 'max': kin_high},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+        }
         value_delta = 0
         error_value = {}
         error_value['stat'] = values1[i]['errors'][0]['symerror']
@@ -86,7 +91,10 @@ def the_function():
         data_central_value = values2[i]['value']
         kin_low = input2['independent_variables'][0]['values'][i]['low']
         kin_high = input2['independent_variables'][0]['values'][i]['high']
-        kin_value = {'pT_t': {'min': kin_low, 'mid': None, 'max': kin_high}}
+        kin_value = {
+            'pT_t': {'min': kin_low, 'mid': None, 'max': kin_high},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+        }
         value_delta = 0
         error_value = {}
         error_value['stat'] = values2[i]['errors'][0]['symerror']
@@ -139,7 +147,10 @@ def the_function():
         data_central_value = values3[i]['value']
         kin_low = input3['independent_variables'][0]['values'][i]['low']
         kin_high = input3['independent_variables'][0]['values'][i]['high']
-        kin_value = {'y_t': {'min': kin_low, 'mid': None, 'max': kin_high}}
+        kin_value = {
+            'y_t': {'min': kin_low, 'mid': None, 'max': kin_high},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+        }
         value_delta = 0
         error_value = {}
         error_value['stat'] = values3[i]['errors'][0]['symerror']
@@ -194,6 +205,7 @@ def the_function():
         kin_value = {
             'm_ttBar': {'min': kin_low_mttBar, 'mid': None, 'max': kin_high_mttBar},
             'y_ttBar': {'min': kin_low_yttBar, 'mid': None, 'max': kin_high_yttBar},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
         }
         value_delta = 0
         error_value = {}

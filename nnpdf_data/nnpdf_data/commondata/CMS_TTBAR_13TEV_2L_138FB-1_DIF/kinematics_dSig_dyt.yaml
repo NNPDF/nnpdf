@@ -3,39 +3,79 @@ bins:
     min: -2.6
     mid: null
     max: -1.8
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: -1.8
     mid: null
     max: -1.35
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: -1.35
     mid: null
     max: -0.9
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: -0.9
     mid: null
     max: -0.45
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: -0.45
     mid: null
     max: 0.0
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: 0.0
     mid: null
     max: 0.45
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: 0.45
     mid: null
     max: 0.9
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: 0.9
     mid: null
     max: 1.35
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: 1.35
     mid: null
     max: 1.8
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - y_t:
     min: 1.8
     mid: null
     max: 2.6
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null

@@ -7,6 +7,10 @@ bins:
     min: 0.0
     mid: null
     max: 0.35
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 300
     mid: null
@@ -15,6 +19,10 @@ bins:
     min: 0.35
     mid: null
     max: 0.75
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 300
     mid: null
@@ -23,6 +31,10 @@ bins:
     min: 0.75
     mid: null
     max: 1.15
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 300
     mid: null
@@ -31,6 +43,10 @@ bins:
     min: 1.15
     mid: null
     max: 2.5
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 400
     mid: null
@@ -39,6 +55,10 @@ bins:
     min: 0.0
     mid: null
     max: 0.35
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 400
     mid: null
@@ -47,6 +67,10 @@ bins:
     min: 0.35
     mid: null
     max: 0.75
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 400
     mid: null
@@ -55,6 +79,10 @@ bins:
     min: 0.75
     mid: null
     max: 1.15
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 400
     mid: null
@@ -63,6 +91,10 @@ bins:
     min: 1.15
     mid: null
     max: 2.5
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 500
     mid: null
@@ -71,6 +103,10 @@ bins:
     min: 0.0
     mid: null
     max: 0.35
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 500
     mid: null
@@ -79,6 +115,10 @@ bins:
     min: 0.35
     mid: null
     max: 0.75
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 500
     mid: null
@@ -87,6 +127,10 @@ bins:
     min: 0.75
     mid: null
     max: 1.15
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 500
     mid: null
@@ -95,6 +139,10 @@ bins:
     min: 1.15
     mid: null
     max: 2.5
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 650
     mid: null
@@ -103,6 +151,10 @@ bins:
     min: 0.0
     mid: null
     max: 0.35
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 650
     mid: null
@@ -111,6 +163,10 @@ bins:
     min: 0.35
     mid: null
     max: 0.75
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 650
     mid: null
@@ -119,6 +175,10 @@ bins:
     min: 0.75
     mid: null
     max: 1.15
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
 - m_ttBar:
     min: 650
     mid: null
@@ -127,3 +187,7 @@ bins:
     min: 1.15
     mid: null
     max: 2.5
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null

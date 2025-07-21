@@ -22,11 +22,12 @@ implemented_observables:
   kinematics:
     variables:
       m_ttBar: {description: "invariant mass of ttBar pair", label: '$m_{t\bar{t}}$', units: '$GeV$'}
+      m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
     file: kinematics_dSig_dmttBar.yaml
   data_central: data_dSig_dmttBar.yaml
   data_uncertainties:
   - uncertainties_dSig_dmttBar.yaml
-  kinematic_coverage: [m_ttBar]
+  kinematic_coverage: [m_ttBar, m_t2]
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -45,11 +46,12 @@ implemented_observables:
   kinematics:
     variables:
       pT_t: {description: "transverse momentum of t", label: '$pT_{t}$', units: '$GeV$'}
+      m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
     file: kinematics_dSig_dpTt.yaml
   data_central: data_dSig_dpTt.yaml
   data_uncertainties: 
   - uncertainties_dSig_dpTt.yaml
-  kinematic_coverage: [pT_t]
+  kinematic_coverage: [pT_t, m_t2]
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dpT_{t}}$'
     x_scale: log
@@ -68,11 +70,12 @@ implemented_observables:
   kinematics:
     variables:
       y_t: {description: "rapidity of t", label: '$y_{t}$', units: '$$'}
+      m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
     file: kinematics_dSig_dyt.yaml
   data_central: data_dSig_dyt.yaml
   data_uncertainties: 
   - uncertainties_dSig_dyt.yaml
-  kinematic_coverage: [y_t]
+  kinematic_coverage: [y_t, m_t2]
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dy_{t}}$'
     x_scale: linear
@@ -91,12 +94,13 @@ implemented_observables:
   kinematics:
     variables:
       m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
-      y_ttBar: {description: "absolute rapidity of ttBar", label: '$|y_{t\bar{t}}|$', units: ""}    
+      y_ttBar: {description: "absolute rapidity of ttBar", label: '$|y_{t\bar{t}}|$', units: ""}
+      m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}    
     file: kinematics_d2Sig_dmttBar_dyttBar.yaml
   data_central: data_d2Sig_dmttBar_dyttBar.yaml
   data_uncertainties:
   - uncertainties_d2Sig_dmttBar_dyttBar.yaml
-  kinematic_coverage: [y_ttBar, m_ttBar]
+  kinematic_coverage: [y_ttBar, m_ttBar, m_t2]
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
     x_scale: linear
