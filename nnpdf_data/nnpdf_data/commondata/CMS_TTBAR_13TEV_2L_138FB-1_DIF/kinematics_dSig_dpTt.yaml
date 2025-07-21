@@ -1,0 +1,29 @@
+bins:
+- pT_t:
+    min: 0
+    mid: null
+    max: 55
+- pT_t:
+    min: 55
+    mid: null
+    max: 100
+- pT_t:
+    min: 100
+    mid: null
+    max: 165
+- pT_t:
+    min: 165
+    mid: null
+    max: 240
+- pT_t:
+    min: 240
+    mid: null
+    max: 330
+- pT_t:
+    min: 330
+    mid: null
+    max: 440
+- pT_t:
+    min: 440
+    mid: null
+    max: 600
