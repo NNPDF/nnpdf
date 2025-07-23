@@ -69,7 +69,7 @@ implemented_observables:
   tables: [yt_abs_parton]
   kinematics:
     variables:
-      y_t: {description: "rapidity of t", label: '$y_{t}$', units: '$$'}
+      y_t: {description: "rapidity of t", label: '$y_{t}$', units: ''}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
     file: kinematics_dSig_dyt.yaml
   data_central: data_dSig_dyt.yaml
