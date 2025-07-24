@@ -325,7 +325,7 @@ def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hash
 
 @functools.lru_cache
 def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_basis=False):
-    """Returns the inverse covmats for training, validation and totalm
+    """Returns the inverse covmats for training, validation and total
     attending to the right masks and whether it is diagonal or not.
 
     Since the masks and number of datapoints need to be treated for 1-point datasets
