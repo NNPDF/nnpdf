@@ -1,11 +1,11 @@
-setname: CMS_TTBAR_5TEV_TOT
+setname: ATLAS_TTBAR_13P6TEV_TOT
 nnpdf_metadata:
   nnpdf31_process: TOP
-  experiment: CMS
+  experiment: ATLAS
 arXiv:
-  url: https://arxiv.org/abs/1711.03143
+  url: https://arxiv.org/abs/2308.09529
 iNSPIRE:
-  url: https://inspirehep.net/literature/1635271
+  url: https://inspirehep.net/literature/2689657
 hepdata:
   url: NA
   version:
@@ -43,17 +43,9 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    dataset_label: CMS 5.02 TeV $\sigma_{t\bar{t}}$
+    dataset_label: ATLAS 13.6 TeV $\sigma_{t\bar{t}}$
     plot_x: sqrts
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:
-    - - CMS_TTBAR_5TEV_TOT_X-SEC
-    operation: 'null'
-  variants:
-    legacy:
-      theory:
-        conversion_factor: 1.0
-        operation: 'null'
-        FK_tables:
-        - - CMS_TTB_5TEV_TOT
+    - - ATLAS_TTBAR_13P6TEV_TOT_X-SEC
