@@ -18,6 +18,8 @@ CFactors applied.
     res = load_fktable(fk)
 """
 
+# TODO: this module is deprecated and support for older theories is not guaranteed
+
 import dataclasses
 import functools
 import io
@@ -313,9 +315,17 @@ def parse_fktable(f):
             hadronic = res['GridInfo'].hadronic
             ndata = res['GridInfo'].ndata
             xgrid = res.pop('xGrid')
+            data_idx = sigma.index.get_level_values("data").unique().to_series()
 
             return FKTableData(
-                sigma=sigma, ndata=ndata, Q0=Q0, metadata=res, hadronic=hadronic, xgrid=xgrid
+                sigma=sigma,
+                ndata=ndata,
+                Q0=Q0,
+                metadata=res,
+                hadronic=hadronic,
+                xgrid=xgrid,
+                data_index=data_idx,
+                legacy=True,
             )
         elif header_name in _KNOWN_SEGMENTS:
             parser = _KNOWN_SEGMENTS[header_name]
