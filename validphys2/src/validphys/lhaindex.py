@@ -150,3 +150,8 @@ def get_index_path(folder=None):
         folder = get_lha_datapath()
     index_file = os.path.join(folder, 'pdfsets.index')
     return index_file
+
+
+def paths_prepend(new_path):
+    """Prepend a path to the LHAPDF list of paths so that it takes precedence."""
+    lhapdf.pathsPrepend(new_path.as_posix())
