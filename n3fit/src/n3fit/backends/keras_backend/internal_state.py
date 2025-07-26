@@ -1,5 +1,5 @@
 """
-    Library of functions that modify the internal state of Keras/Tensorflow
+Library of functions that modify the internal state of Keras/Tensorflow
 """
 
 import os
@@ -21,7 +21,8 @@ import numpy as np
 log = logging.getLogger(__name__)
 
 # Prepare Keras-backend dependent functions
-if K.backend() in ("torch", "jax"):
+if (kback := K.backend()) == "torch":
+
     import torch
 
     def set_eager(flag=True):
@@ -55,6 +56,16 @@ elif K.backend() == "tensorflow":
             log.warning(
                 "Could not set tensorflow parallelism settings from n3fit, maybe tensorflow is already initialized by a third program"
             )
+
+elif K.backend() == "jax":
+
+    import jax
+
+    def set_eager(flag=True):
+        pass
+
+    def set_threading(threads, core):
+        pass
 
 else:
     # Keras should've failed by now, if it doesn't it could be a new backend that works ootb?
