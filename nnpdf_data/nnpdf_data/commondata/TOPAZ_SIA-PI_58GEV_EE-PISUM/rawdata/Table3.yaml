@@ -1,0 +1,39 @@
+dependent_variables:
+- header: {name: (1/SIG(Q=HAD))*D(SIG(Q=KS))/D(LN(1/X))}
+  qualifiers:
+  - {name: RE(Q=HAD), value: E+ E- --> 2HADRON (HADRONS)}
+  - {name: RE(Q=KS), value: E+ E- --> (K0 + KBAR0) X}
+  - {name: SQRT(S), units: GeV, value: '58.0'}
+  - {name: SQRT(S), units: GeV, value: '58.0'}
+  values:
+  - errors:
+    - {symerror: 0.1}
+    value: 0.58
+  - errors:
+    - {symerror: 0.12}
+    value: 0.65
+  - errors:
+    - {symerror: 0.1}
+    value: 0.68
+  - errors:
+    - {symerror: 0.09}
+    value: 0.61
+  - errors:
+    - {symerror: 0.09}
+    value: 0.62
+  - errors:
+    - {symerror: 0.09}
+    value: 0.49
+  - errors:
+    - {symerror: 0.04}
+    value: 0.23
+independent_variables:
+- header: {name: LN(1/X(DEF=2*P(P=3)/SQRT(S)))}
+  values:
+  - {value: 1.8}
+  - {value: 2.25}
+  - {value: 2.55}
+  - {value: 2.85}
+  - {value: 3.15}
+  - {value: 3.45}
+  - {value: 4.05}
