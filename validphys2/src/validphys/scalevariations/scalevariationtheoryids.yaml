@@ -412,6 +412,17 @@ n3lo: &n3lo
   (0.130): 40_007_013
 
 scale_variations_for:
+
+  # mtop alphas test
+  - theoryid: 40_010_006
+    variations:
+      (170.0): 40_011_006
+      (172.5): 40_010_006
+      (175.0): 40_012_006
+      (0.118): 40_009_000
+      (0.120): 40_010_006
+      (0.122): 40_010_008
+
   # NLO alphas=0.117
   - theoryid: 834
     variations: *nlo
