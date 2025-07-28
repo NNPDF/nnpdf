@@ -68,7 +68,13 @@ implemented_observables:
       theory: *id002
   theory:
     FK_tables:
-    - - CMS_1JET_8TEV-CMS_1JET_8TEV
+    - - CMS_1JET_8TEV_PTY_BIN1
+    - - CMS_1JET_8TEV_PTY_BIN2
+    - - CMS_1JET_8TEV_PTY_BIN3
+    - - CMS_1JET_8TEV_PTY_BIN4
+    - - CMS_1JET_8TEV_PTY_BIN5
+    - - CMS_1JET_8TEV_PTY_BIN6
+    - - CMS_1JET_8TEV_PTY_BIN7
     operation: 'null'
   plotting:
     dataset_label: CMS jets 8 TeV

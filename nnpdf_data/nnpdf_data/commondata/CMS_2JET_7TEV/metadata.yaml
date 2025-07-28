@@ -58,5 +58,9 @@ implemented_observables:
     # Theory
   theory:
     FK_tables:
-    - - CMS_2JET_7TEV
+    - - CMS_2JET_7TEV_M12Y_BIN1
+    - - CMS_2JET_7TEV_M12Y_BIN2
+    - - CMS_2JET_7TEV_M12Y_BIN3
+    - - CMS_2JET_7TEV_M12Y_BIN4
+    - - CMS_2JET_7TEV_M12Y_BIN5
     operation: 'null'
