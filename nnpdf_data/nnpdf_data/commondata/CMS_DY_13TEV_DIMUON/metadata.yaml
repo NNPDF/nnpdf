@@ -1,0 +1,56 @@
+setname: CMS_DY_13TEV_DIMUON
+version: 1
+version_comment: 
+arXiv:
+  url: 
+iNSPIRE:
+  url: 
+hepdata:
+  url: https://www.hepdata.net/record/ins2038801
+  version: 1
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: CMS
+implemented_observables:
+- observable_name: ASY_FB
+  observable:
+    description: Measurement of the forward backward asymmetry in muon pair production at sqrt(s) = 13 TeV
+    label: 
+    units: '[fb]'
+  process_type: 
+  tables:
+  - 2
+  npoints:
+  - 
+  ndata:
+  plotting:
+    dataset_label: CMS FB asymmetry 
+    plot_x: M
+    y_label: $A_{FB}^{\mu\mu}$
+  kinematic_coverage:
+  - m_mumu
+  - sqrts 
+  kinematics:
+    variables:
+      m_mumu:
+        description: dilepton mass
+        label: $M$
+        units: $GeV$
+      sqrts:
+        description: Center of Mass Energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  theory:
+    FK_tables:
+    - - 
+    - - 
+    operation: ASY
+    conversion_factor: 1.0
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_ASY.yaml
