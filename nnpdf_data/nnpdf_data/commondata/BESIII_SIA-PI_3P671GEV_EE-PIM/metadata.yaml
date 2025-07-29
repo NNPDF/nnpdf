@@ -1,0 +1,41 @@
+setname: 'BESIII_SIA-PI_3P671GEV_EE-PIM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-PI"
+  experiment: "BESIII"
+
+arXiv:
+  url: "https://arxiv.org/abs/2502.16084"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/2893764"
+# hepdata:
+#   url: "N/A"
+#   version: N/A
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "normalized x-sec differential wrt $p_h$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: '$$'}
+  observable_name: PH
+  process_type: SIA_PH
+  ndata: 25
+  tables: []
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'BESIII SIA 3.671 GeV PI- : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+    x_scale: linear
+    plot_x: ph
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
