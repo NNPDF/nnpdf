@@ -19,7 +19,7 @@ def magic(table, var_name):
 
     for i in range(ndat):
         kin_mid = input['independent_variables'][0]['values'][i]['value']
-        
+
         kin_value = {var_name: {'min': None, 'mid': kin_mid, 'max': None}}
 
         data_central_value = values[i]['value']
