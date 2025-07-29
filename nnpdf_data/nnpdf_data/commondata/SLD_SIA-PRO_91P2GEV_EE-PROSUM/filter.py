@@ -15,7 +15,9 @@ with open('kinematics_inc.yaml', 'w') as f:
 with open('uncertainties_inc.yaml', 'w') as f:
     yaml.dump(err_inc, f, sort_keys=False)
 
-data_uds, kin_uds, err_uds, data_c, kin_c, err_c, data_b, kin_b, err_b = magic2(table_tag, ndat, var_name)
+data_uds, kin_uds, err_uds, data_c, kin_c, err_c, data_b, kin_b, err_b = magic2(
+    table_tag, ndat, var_name
+)
 
 with open('data_uds.yaml', 'w') as f:
     yaml.dump(data_uds, f, sort_keys=False)
@@ -37,5 +39,3 @@ with open('kinematics_b.yaml', 'w') as f:
     yaml.dump(kin_b, f, sort_keys=False)
 with open('uncertainties_b.yaml', 'w') as f:
     yaml.dump(err_b, f, sort_keys=False)
-
-    
