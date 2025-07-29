@@ -59,6 +59,7 @@ def magic1(table, ndat, var_name):
 
     return data_central_yaml, kin_yaml, uncertainties_yaml
 
+
 def magic2(table, ndat, var_name):
     with open(table, 'r') as f:
         input = yaml.safe_load(f)
@@ -132,6 +133,14 @@ def magic2(table, ndat, var_name):
     kin_b_yaml = {'bins': kin_b}
     uncertainties_b_yaml = {'definitions': error_definition, 'bins': error_b}
 
-    return data_central_uds_yaml, kin_uds_yaml, uncertainties_uds_yaml, data_central_c_yaml, kin_c_yaml, uncertainties_c_yaml, data_central_b_yaml, kin_b_yaml, uncertainties_b_yaml
-
-    
+    return (
+        data_central_uds_yaml,
+        kin_uds_yaml,
+        uncertainties_uds_yaml,
+        data_central_c_yaml,
+        kin_c_yaml,
+        uncertainties_c_yaml,
+        data_central_b_yaml,
+        kin_b_yaml,
+        uncertainties_b_yaml,
+    )

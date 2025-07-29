@@ -13,4 +13,3 @@ with open('kinematics.yaml', 'w') as f:
     yaml.dump(kin, f, sort_keys=False)
 with open('uncertainties.yaml', 'w') as f:
     yaml.dump(err, f, sort_keys=False)
-

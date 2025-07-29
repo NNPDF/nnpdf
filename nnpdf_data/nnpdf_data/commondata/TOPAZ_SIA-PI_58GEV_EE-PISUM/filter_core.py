@@ -1,8 +1,8 @@
 import yaml
 
 from nnpdf_data.filter_utils.utils import percentage_to_absolute as pta
-from nnpdf_data.filter_utils.utils import symmetrize_errors as se
 from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import symmetrize_errors as se
 
 yaml.add_representer(float, prettify_float)
 
@@ -23,7 +23,7 @@ def magic(table, ndat, var_name, index):
             continue
         else:
             kin_mid = input['independent_variables'][0]['values'][i]['value']
-            
+
             kin_value = {var_name: {'min': None, 'mid': kin_mid, 'max': None}}
 
             data_central_value = values[i]['value']
@@ -35,7 +35,9 @@ def magic(table, ndat, var_name, index):
             error.append(error_value)
 
     if len(data_central) != ndat:
-        raise ValueError(f"Number of data points {len(data_central)} does not match expected {ndat}")
+        raise ValueError(
+            f"Number of data points {len(data_central)} does not match expected {ndat}"
+        )
 
     error_definition = {}
     error_definition['error'] = {

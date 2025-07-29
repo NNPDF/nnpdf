@@ -23,4 +23,3 @@ with open('kinematics_conventional.yaml', 'w') as f:
     yaml.dump(kin_conventional, f, sort_keys=False)
 with open('uncertainties_conventional.yaml', 'w') as f:
     yaml.dump(err_conventional, f, sort_keys=False)
-
