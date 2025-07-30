@@ -256,5 +256,23 @@ def the_function():
     with open('uncertainties_d2Sig_dmttBar_dyttBar.yaml', 'w') as file:
         yaml.dump(uncertainties_d2Sig_dmttBar_dyttBar_yaml, file, sort_keys=False)
 
+    # manual_decorr
+    for unc in [uncertainties_dSig_dmttBar_yaml, 
+                uncertainties_dSig_dpTt_yaml, 
+                uncertainties_dSig_dyt_yaml, 
+                uncertainties_d2Sig_dmttBar_dyttBar_yaml]:
+        for i in ['16', '17', '18']:
+            unc['definitions']['BTAG_STATISTIC_'+i]['treatment'] = 'ADD'
+            unc['definitions']['BTAG_STATISTIC_'+i]['type'] = 'UNCORR'
+
+    with open('uncertainties_md_dSig_dmttBar.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dmttBar_yaml, file, sort_keys=False)
+    with open('uncertainties_md_dSig_dpTt.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dpTt_yaml, file, sort_keys=False)
+    with open('uncertainties_md_dSig_dyt.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dyt_yaml, file, sort_keys=False)
+    with open('uncertainties_md_d2Sig_dmttBar_dyttBar.yaml', 'w') as file:
+        yaml.dump(uncertainties_d2Sig_dmttBar_dyttBar_yaml, file, sort_keys=False)
+
 
 the_function()

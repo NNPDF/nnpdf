@@ -37,6 +37,10 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_138FB-1_DIF_MTTBAR
     operation: 'null'
+  variants:
+    manual_decorr:
+      data_uncertainties:
+      - uncertainties_md_dSig_dmttBar.yaml
 
 - observable: {description: "differential cross section w.r.t. transverse momentum of t", label: '$\frac{d\sigma}{dpT_{t}}$', units: '$\frac{pb}{GeV}$'}
   observable_name: PTT
@@ -61,6 +65,10 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_138FB-1_DIF_PTT
     operation: 'null'
+  variants:
+    manual_decorr:
+      data_uncertainties:
+      - uncertainties_md_dSig_dpTt.yaml
 
 - observable: {description: "differential cross section w.r.t. rapidity of t", label: '$\frac{d\sigma}{dy_{t}}$', units: '$pb$'}
   observable_name: YT
@@ -85,6 +93,10 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_138FB-1_DIF_YT
     operation: 'null'
+  variants:
+    manual_decorr:
+      data_uncertainties:
+      - uncertainties_md_dSig_dyt.yaml
 
 - observable: {description: "double differential cross section w.r.t. invariant mass and absolute rapidity of ttBar", label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: '$\frac{pb}{GeV}$'}
   observable_name: MTTBAR-YTTBAR
@@ -112,3 +124,7 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_138FB-1_DIF_MTTBAR-YTTBAR
     operation: 'null'
+  variants:
+    manual_decorr:
+      data_uncertainties:
+      - uncertainties_md_d2Sig_dmttBar_dyttBar.yaml
