@@ -1,0 +1,126 @@
+definitions:
+  stat:
+    description: Statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys:
+    description: Systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_pdfs:
+    description: PDF uncertainty
+    treatment: MULT
+    type: CORR
+  sys_mcbg:
+    description: Statistical uncertainties in templates
+    treatment: MULT
+    type: CORR
+  sys_aplhas:
+    description: Variations of strong coupling, mu_R and mu_F
+    treatment: MULT
+    type: CORR
+  sys_dy:
+    description: DY cross section uncertainty
+    treatment: MULT
+    type: CORR
+  sys_pileup:
+    description: Uncertainty from difference in measured and simulated pileup
+    treatment: MULT
+    type: CORR
+  sys_fidcor:
+    description: Fiducial corrections
+    treatment: MULT
+    type: UNCORR
+  sys_ttbar:
+    description: ttbar cross section uncertainty
+    treatment: MULT
+    type: CORR
+  sys_dypt:
+    description: Uncertainty from mismodelling of the pt spectrum
+    treatment: MULT
+    type: UNCORR
+  sys_emushape:
+    description: Uncertainty from the electron muon background shape
+    treatment: MULT
+    type: CORR
+  sys_lumi:
+    description: Integrated luminosity uncertainty
+    treatment: MULT
+    type: CORR
+  sys_eid:
+    description: Uncertainty from electron identification/isolation
+    treatment: MULT
+    type: CORR
+  sys_enorm:
+    description: Electron MisID normalisation
+    treatment: MULT
+    type: CORR
+  sys_eshape:
+    description: Electron MisID shape
+    treatment: ADD
+    type: UNCORR
+  sys_btag:
+    description: Uncertainty from b tagging
+    treatment: MULT
+    type: CORR
+  sys_ptmiss:
+    description: Missing pt modelling uncertainty
+    treatment: MULT
+    type: CORR
+  sys_muid:
+    description: Uncertainty from muon identification/isolation
+    treatment: MULT
+    type: CORR
+  sys_mushape:
+    description: Muon MisID shape
+    treatment: ADD
+    type: UNCORR
+  sys_phph:
+    description: gamma gamma --> ll cross section uncertainty
+    treatment: MULT
+    type: CORR
+  sys_munorm:
+    description: Muon MisID normalisation
+    treatment: MULT
+    type: CORR
+  sys_etrig:
+    description: Electron trigger uncertainty
+    treatment: MULT
+    type: CORR
+  sys_diboson:
+    description: Diboson cross section uncertainty
+    treatment: MULT
+    type: CORR
+  sys_erec:
+    description: Electron reconstruction efficiency
+    treatment: MULT
+    type: CORR
+  sys_mumom:
+    description: Muon momentum scale corrections
+    treatment: MULT
+    type: CORR
+  sys_emom:
+    description: Electron momentum scale corrections
+    treatment: MULT
+    type: CORR
+  sys_mutrig:
+    description: Muon trigger uncertainty
+    treatment: MULT
+    type: CORR
+bins:
+- sys: 0.011
+  stat: 0.012
+- sys: 0.01
+  stat: 0.012
+- sys: 0.009
+  stat: 0.014
+- sys: 0.009
+  stat: 0.014
+- sys: 0.008
+  stat: 0.027
+- sys: 0.009
+  stat: 0.042
+- sys: 0.011
+  stat: 0.07
+- sys: 0.007
+  stat: 0.006
