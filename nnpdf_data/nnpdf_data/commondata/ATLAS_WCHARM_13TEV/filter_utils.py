@@ -15,7 +15,8 @@ def get_data_values():
     """
 
     data_central = []
-
+    symm_errs, deltas = get_uncertainties()
+    j = 0
     for i in range(19, 23):
         hepdata_table = f"rawdata/HEPData-ins2628732-v1-Table_{i}.yaml"
 
@@ -26,7 +27,9 @@ def get_data_values():
 
         for value in values:
             # store data central and convert the units and apply the correction factor
-            data_central.append(value['value'])
+            perturbed = value['value'] + float(deltas[j])
+            data_central.append(perturbed)
+            j += 1
 
     return data_central
 
@@ -174,8 +177,8 @@ def symmetrize_errors(delta_plus, delta_minus):
         The symmetrized uncertainty to be used in commondata
 
     """
-    semi_diff = (delta_plus + delta_minus) / 2
-    average = (delta_plus - delta_minus) / 2
+    semi_diff = (delta_plus - delta_minus) / 2
+    average = (delta_plus + delta_minus) / 2
     se_delta = semi_diff
     se_sigma = np.sqrt(average * average + 2 * semi_diff * semi_diff)
     return se_delta, se_sigma
@@ -185,6 +188,7 @@ def get_uncertainties():
     syst_dict = {}
     value_id = 0
     ndat = 20
+    deltas = np.zeros(ndat)
     for i in range(19, 23):
         hepdata_table = f"rawdata/HEPData-ins2628732-v1-Table_{i}.yaml"
 
@@ -207,14 +211,15 @@ def get_uncertainties():
                 if label not in syst_dict:
                     syst_dict[label] = np.zeros(ndat)
 
-                symmetrized_error = symmetrize_errors(plus, minus)
-                syst_dict[label][value_id] = symmetrized_error[1]
+                delta, symm_err = symmetrize_errors(plus, minus)
+                syst_dict[label][value_id] = symm_err
+                deltas[value_id] += delta
             value_id += 1
 
     syst_list = []
     for label, values in syst_dict.items():
         syst_list.append([{"name": label, "values": values.tolist()}])
-    return syst_list
+    return syst_list, deltas
 
 
 if __name__ == "__main__":
