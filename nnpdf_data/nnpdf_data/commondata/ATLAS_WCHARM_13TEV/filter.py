@@ -78,7 +78,7 @@ def filter_get_systematics():
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
-    systematics = get_uncertainties()
+    systematics, deltas = get_uncertainties()
 
     error_definitions = {}
     errors = []
