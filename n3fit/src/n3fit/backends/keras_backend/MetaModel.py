@@ -8,6 +8,7 @@ backend-dependent calls.
 from pathlib import Path
 import re
 
+from keras import backend as K
 from keras import optimizers as Kopt
 from keras.models import Model
 import numpy as np
@@ -176,7 +177,12 @@ class MetaModel(Model):
         of extra training epochs being run equal to max_epochs % 100 in the worst case.
 
         """
-        num_replicas = self.output_shape[0]
+        if K.backend() == "jax":
+            return 1
+
+        # TODO: test and document the actual impact of this line
+        # and whether it makes a difference for torch, CPU, GPU
+        num_replicas = self.output_shape[0][0]
         if num_replicas == 1 or epochs < 100:
             return 1
 
