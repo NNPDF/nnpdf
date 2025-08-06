@@ -242,7 +242,7 @@ def _plot_fancy_impl(
         The index of the result to which ratios will be computed. If ``None``,
         plot absolute values.
     labellist : list or None
-        The labesl that will appear in the plot. They sill be deduced
+        The labesl that will appear in the plot. They will be deduced
         (from the PDF names) if None is given.
     Returns
     -------
@@ -254,6 +254,10 @@ def _plot_fancy_impl(
     table = kitable(commondata, info)
     nkinlabels = len(table.columns)
     ndata = len(table)
+
+    ld_cd_wc = loaded_commondata_with_cuts(commondata,cutlist)
+    shifts = shifts_from_systematics(ld_cd_wc,results)
+    print(shifts)
 
     # This is easier than cheking every time
     if labellist is None:
@@ -423,6 +427,7 @@ def plot_fancy(
     cuts,
     normalize_to: (int, str, type(None)) = None,
     use_pdferr: bool = False,  # pylint: disable=unused-argument # for checks
+    #use_shift: bool = True,
 ):
     """
     Read the PLOTTING configuration for the dataset and generate the
