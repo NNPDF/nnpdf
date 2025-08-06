@@ -229,6 +229,70 @@ def dataset_inputs_covmat_from_systematics(
         covmat = regularize_covmat(covmat, norm_threshold=norm_threshold)
     return covmat
 
+def shifts_from_systematics(loaded_commondata_with_cuts, results_df):
+
+    """Take the statistical uncertainty and systematics table from
+    a :py:class:`validphys.coredata.CommonData` object and
+    the corresponding theoretical predictions from :py:funct:`results`
+    to compute the shifts on experimental data due to correlated uncertainties 
+    according to Eqs.(7)-(9) of arXiv:hep-ph/0201195.
+    The treatment of uncertainties is as in covmat_from_systematics.
+    The shifts must be added to the central value of the unshifted data.
+    Parameters
+    ----------
+    loaded_commondata_with_cuts : validphys.coredata.CommonData
+        CommonData which stores information about systematic errors,
+        their treatment and description.
+    results_without_covmat : py:funct:
+        A results object with a diagonal covmat
+    Returns
+    -------
+    shifts: np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data 
+        points) containing the numerical value of the systematic shifts 
+        due to correlated uncertainties
+    """
+
+    # Separate statistical and systematic errors
+    stat_errors = lcd_wc.stat_errors.to_numpy()
+    syst_errors = lcd_wc.systematic_errors(None)
+
+    # Determine the uncorrelated part of the error
+    alpha2 = stat_errors**2
+    is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
+    alpha2 += (syst_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
+    alpha = np.sqrt(alpha2)
+
+    if alpha.all() == 0:
+        shifts = np.zeros(len(alpha))
+    else:
+    
+        # Determine the correlated part of the error
+        beta = syst_errors.loc[:, ~is_uncorr].to_numpy()
+        beta = beta/alpha[:, np.newaxis]
+        
+        # The number of data points and the number of correlated systematics
+        (n_data, n_corr_syst) = np.shape(beta)
+
+        # Get experimental central values and the corresponding
+        # theoretical predictions
+        D = results_df['exp_data']
+        D = np.divide(D,alpha)    
+        T = results_df['predictions']
+        T = np.divide(T,alpha)
+    
+        # Construct the matrices A and B (Eq. 9)
+        A = np.identity(n_corr_syst) + np.matmul(beta.T,beta)
+        A_inverse = np.linalg.inv(A)
+        B = np.matmul(D-T,beta)
+    
+        # Compute the nuisance parameters r (Eq. 8)
+        r = np.matmul(np.linalg.inv(A),B)
+    
+        # Compute the shifts
+        shifts = - np.matmul(beta*alpha[:, np.newaxis], r)
+
+    return shifts
 
 @check_cuts_considered
 @functools.lru_cache
