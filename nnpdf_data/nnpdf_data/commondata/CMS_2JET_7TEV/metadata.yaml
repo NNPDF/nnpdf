@@ -55,8 +55,9 @@ implemented_observables:
   - uncertainties.yaml
   variants:
     legacy:
-      FK_tables:
-      - - CMS_2JET_7TEV
+      theory:
+        FK_tables:
+        - - CMS_2JET_7TEV
 
     # Theory
   theory:
