@@ -74,7 +74,7 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_bugged.yaml
     legacy_theory:
-        theory:
+      theory:
         FK_tables:
         - - ATLAS_2JET_7TEV_R06
 
