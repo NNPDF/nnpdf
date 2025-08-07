@@ -53,7 +53,10 @@ implemented_observables:
   data_central: data.yaml
   data_uncertainties:
   - uncertainties.yaml
-
+  variants:
+    legacy:
+      FK_tables:
+      - - CMS_2JET_7TEV
 
     # Theory
   theory:
