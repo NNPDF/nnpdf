@@ -6,6 +6,7 @@ DAMP: 0
 IC: 1
 Q0: 1.65
 ModEv: EXA
+ModSV: expanded
 IterEv: 60
 XIR: 2.0
 XIF: 2.0
