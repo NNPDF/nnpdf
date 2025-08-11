@@ -229,13 +229,14 @@ def dataset_inputs_covmat_from_systematics(
         covmat = regularize_covmat(covmat, norm_threshold=norm_threshold)
     return covmat
 
-def shifts_from_systematics(loaded_commondata_with_cuts, results_df):
+def shifts_from_systematics(lcd_wc, theory_predictions):
 
     """Take the statistical uncertainty and systematics table from
     a :py:class:`validphys.coredata.CommonData` object and
     the corresponding theoretical predictions from :py:funct:`results`
     to compute the shifts on experimental data due to correlated uncertainties 
-    according to Eqs.(7)-(9) of arXiv:hep-ph/0201195.
+    according to Eqs.(7)-(9) of arXiv:hep-ph/0201195. Note that the shift is 
+    induced ONLY by the experimental covariance matrix constructed after cuts.
     The treatment of uncertainties is as in covmat_from_systematics.
     The shifts must be added to the central value of the unshifted data.
     Parameters
@@ -276,9 +277,9 @@ def shifts_from_systematics(loaded_commondata_with_cuts, results_df):
 
         # Get experimental central values and the corresponding
         # theoretical predictions
-        D = results_df['exp_data']
-        D = np.divide(D,alpha)    
-        T = results_df['predictions']
+        D = lcd_wc.central_values.to_numpy()
+        D = np.divide(D,alpha)
+        T = theory_predictions
         T = np.divide(T,alpha)
     
         # Construct the matrices A and B (Eq. 9)
@@ -292,7 +293,7 @@ def shifts_from_systematics(loaded_commondata_with_cuts, results_df):
         # Compute the shifts
         shifts = - np.matmul(beta*alpha[:, np.newaxis], r)
 
-    return shifts
+    return shifts, alpha
 
 @check_cuts_considered
 @functools.lru_cache
