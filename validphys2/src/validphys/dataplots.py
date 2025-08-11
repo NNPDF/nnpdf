@@ -249,8 +249,12 @@ def _plot_fancy_impl(
         The index of the result to which ratios will be computed. If ``None``,
         plot absolute values.
     labellist : list or None
-        The labesl that will appear in the plot. They will be deduced
+        The labels that will appear in the plot. They will be deduced
         (from the PDF names) if None is given.
+    with_shift: bool
+        This option specifies wheter one wants (True) or not (False) to shift
+        the theoretical predictions by a shift due to the correlated part of 
+        the experimental uncertainty. The default is True. 
     Returns
     -------
     A generator over figures.
@@ -536,8 +540,19 @@ def plot_fancy_dataspecs(
 
         - or None (default) to plot absolute values.
 
+    ``with_shift`` be either:
+        
+        - True (default): this shifts theoretical predictions by an amount that
+          depends on the correlated part of the experimental uncertainty,
+          according to Eqs.(7)-(9) of arXiv:hep-ph/0201195. In this case only
+          the uncorrelated part of the experimental uncertainty is displayed.
+
+        - False: this does not shift theoretical predictions. In this case the
+          sum in quadrature of the uncorrelated and correlated parts of the
+          experimental uncertainty is displayed.
+
     A limitation at the moment is that the data cuts and errors will be taken
-    from the first specifiaction.
+    from the first specification.
     """
     # We have at least one element
     if not dataspecs_results:
