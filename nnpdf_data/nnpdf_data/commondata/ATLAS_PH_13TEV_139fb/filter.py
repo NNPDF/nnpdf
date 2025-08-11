@@ -206,13 +206,13 @@ def dump_commondata(kinematics: list, data: list, errors: dict, obs: str) -> Non
         }
 
     errors_formatted = format_uncertainties(errors)
-    with open(f"data_{obs}.yaml", "w") as file:
+    with open(f"data_{obs}_r04.yaml", "w") as file:
         yaml.dump({"data_central": data.tolist()}, file, sort_keys=False)
 
-    with open(f"kinematics_{obs}.yaml", "w") as file:
+    with open(f"kinematics_{obs}_r04.yaml", "w") as file:
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
-    with open(f"uncertainties_{obs}.yaml", "w") as file:
+    with open(f"uncertainties_{obs}_r04.yaml", "w") as file:
         yaml.dump(
             {"definitions": error_definition, "bins": errors_formatted}, file, sort_keys=False
         )
@@ -223,7 +223,7 @@ def main_filter() -> None:
     Main function that reads the HepData yaml files and generates the commondata files
     """
 
-    yaml_content_data = [load_yaml(table_id=i, version=1) for i in range(7,13)]
+    yaml_content_data = [load_yaml(table_id=i, version=1) for i in range(1,7)]
     uncertainties_all = pd.DataFrame()
     central_values_all = np.array([])
     kinematics_all = []

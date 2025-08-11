@@ -1,0 +1,497 @@
+bins:
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 275.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 325.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 375.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 435.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 600.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 700.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 825.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 1000.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 1300.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 1750.0
+    max: null
+- eta:
+    min: null
+    mid: 0.3
+    max: null
+  ET:
+    min: null
+    mid: 2250.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 275.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 325.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 375.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 435.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 600.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 700.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 825.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 1000.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 1300.0
+    max: null
+- eta:
+    min: null
+    mid: 0.7
+    max: null
+  ET:
+    min: null
+    mid: 1750.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 275.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 325.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 375.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 435.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 600.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 700.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 825.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 1000.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 1300.0
+    max: null
+- eta:
+    min: null
+    mid: 1.085
+    max: null
+  ET:
+    min: null
+    mid: 1750.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 275.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 325.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 375.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 435.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 600.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 700.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 825.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 1000.0
+    max: null
+- eta:
+    min: null
+    mid: 1.685
+    max: null
+  ET:
+    min: null
+    mid: 1300.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 275.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 325.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 375.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 435.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 600.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 700.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 825.0
+    max: null
+- eta:
+    min: null
+    mid: 1.91
+    max: null
+  ET:
+    min: null
+    mid: 1000.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 275.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 325.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 375.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 435.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 600.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 700.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 825.0
+    max: null
+- eta:
+    min: null
+    mid: 2.19
+    max: null
+  ET:
+    min: null
+    mid: 1000.0
+    max: null
