@@ -25,11 +25,13 @@ from reportengine.figure import figure, figuregen
 from reportengine.floatformatting import format_number
 from validphys import plotutils
 from validphys.checks import check_not_using_pdferr
-from validphys.core import CutsPolicy, MCStats, cut_mask
+from validphys.core import CutsPolicy, MCStats, cut_mask, load_commondata
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
 from validphys.sumrules import POL_LIMS, partial_polarized_sum_rules
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
+from validphys.commondata import loaded_commondata_with_cuts
+from validphys.covmats import shifts_from_systematics
 
 log = logging.getLogger(__name__)
 
@@ -224,7 +226,12 @@ def check_normalize_to(ns, **kwargs):
 # TODO: This interface is horrible.
 # We need to think how to adapt it to make this use case easier
 def _plot_fancy_impl(
-    results, commondata, cutlist, normalize_to: (int, type(None)) = None, labellist=None
+        results,
+        commondata,
+        cutlist,
+        normalize_to: (int, type(None)) = None,
+        labellist=None,
+        with_shift: bool = True,
 ):
     """Implementation of the data-theory comparison plots. Providers are
     supposed to call (yield from) this.
@@ -255,36 +262,45 @@ def _plot_fancy_impl(
     nkinlabels = len(table.columns)
     ndata = len(table)
 
-    ld_cd_wc = loaded_commondata_with_cuts(commondata,cutlist)
-    shifts = shifts_from_systematics(ld_cd_wc,results)
-    print(shifts)
-
+    # Compute shifts due to the correlated part of the exp cov matrix
+    lcd_wc = loaded_commondata_with_cuts(commondata,cutlist[0])
+    theory_predictions = results[1].central_value
+    shifts, alpha = shifts_from_systematics(lcd_wc,theory_predictions)
+    
     # This is easier than cheking every time
     if labellist is None:
         labellist = [None] * len(results)
-
+        
     if normalize_to is not None:
         norm_result = results[normalize_to]
         mask = cut_mask(cutlist[normalize_to])
         cv = np.full(ndata, np.nan)
-        cv[mask] = norm_result.central_value
-
         err = np.full(ndata, np.nan)
+        cv[mask] = norm_result.central_value
         err[mask] = norm_result.std_error
         # We modify the table, so we pass only the label columns
         norm_cv, _ = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
-
+        
     cvcols = []
+    
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
         # We modify the table, so we pass only the label columns
         mask = cut_mask(cuts)
         cv = np.full(ndata, np.nan)
-        cv[mask] = result.central_value
         err = np.full(ndata, np.nan)
-        err[mask] = result.std_error
+        # Shift the theory when with_shift option is True
+        if i==1 and with_shift:
+            cv[mask] = result.central_value + shifts
+        else:
+            cv[mask] = result.central_value           
+        # Retain only the uncorrelated part of the error if shifting the data
+        if i==0 and with_shift:
+            err[mask] = alpha
+        else:
+            err[mask] = result.std_error
 
         cv, err = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
-
+        
         # By doing tuple keys we avoid all possible name collisions
         cvcol = ('cv', i)
         if normalize_to is None:
@@ -296,7 +312,7 @@ def _plot_fancy_impl(
         cvcols.append(cvcol)
 
     figby = sane_groupby_iter(table, info.figure_by)
-
+    
     for samefig_vals, fig_data in figby:
         # Nothing to plot if all data is cut away
         if np.all(np.isnan(fig_data[cvcols])):
@@ -338,7 +354,7 @@ def _plot_fancy_impl(
             # and follow the cycle for
             # the rest.
             next_color = itertools.chain(['#262626'], plotutils.color_iter())
-
+            
             for i, (res, lb, color) in enumerate(zip(results, labellist, next_color)):
                 if labels:
                     if lb:
@@ -347,7 +363,7 @@ def _plot_fancy_impl(
                         label = res.label
                 else:
                     label = None
-
+                    
                 cv = line_data[('cv', i)].values
                 err = line_data[('err', i)].values
                 ax.errorbar(
@@ -427,11 +443,11 @@ def plot_fancy(
     cuts,
     normalize_to: (int, str, type(None)) = None,
     use_pdferr: bool = False,  # pylint: disable=unused-argument # for checks
-    #use_shift: bool = True,
+    with_shift: bool = True,
 ):
     """
     Read the PLOTTING configuration for the dataset and generate the
-    corrspondig data theory plot.
+    correspondig data theory plot.
 
     The input results are assumed to be such that the first one is the data,
     and the subsequent ones are the predictions for the PDFfs. See
@@ -451,6 +467,7 @@ def plot_fancy(
         commondata=commondata,
         cutlist=[cuts] * len(one_or_more_results),
         normalize_to=normalize_to,
+        with_shift=with_shift,
     )
 
 
@@ -492,6 +509,7 @@ def plot_fancy_dataspecs(
     dataspecs_speclabel,
     normalize_to: (str, int, type(None)) = None,
     use_pdferr: bool = False,  # pylint: disable=unused-argument # for checks
+    with_shift: bool = True,
 ):
     """
     General interface for data-theory comparison plots.
@@ -537,6 +555,7 @@ def plot_fancy_dataspecs(
         cutlist=cutlist,
         labellist=labellist,
         normalize_to=normalize_to,
+        with_shift=with_shift,
     )
 
 
@@ -549,6 +568,7 @@ def plot_fancy_sv_dataspecs(
     dataspecs_cuts,
     dataspecs_speclabel,
     normalize_to: (str, int, type(None)) = None,
+    with_shift: bool = True,
 ):
     """
     Exactly the same as ``plot_fancy_dataspecs`` but the theoretical results passed down
@@ -563,6 +583,7 @@ def plot_fancy_sv_dataspecs(
         dataspecs_cuts,
         dataspecs_speclabel,
         normalize_to=normalize_to,
+        with_shift=with_shift,
     )
 
 

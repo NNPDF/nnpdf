@@ -7,7 +7,6 @@ import inspect
 import logging
 import numbers
 import pathlib
-
 import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
@@ -213,6 +212,10 @@ class CoreConfig(configparser.Config):
 
         return res
 
+    def parse_with_shift(self, with_shift: bool):
+        """Shift to theory due to correlated systematics in data/theory plots"""
+        return with_shift
+               
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""
         return NSList(range(1, nreplica + 1), nskey="replica")
