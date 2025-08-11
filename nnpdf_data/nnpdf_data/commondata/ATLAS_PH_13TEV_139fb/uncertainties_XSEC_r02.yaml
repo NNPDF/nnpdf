@@ -10,323 +10,323 @@ definitions:
   sys_corr_2:
     description: RESOLUTION_AF2
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_3:
     description: RESOLUTION_MATERIALCALO
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_4:
     description: RESOLUTION_MATERIALCRYO
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_5:
     description: RESOLUTION_MATERIALGAP
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_6:
     description: RESOLUTION_MATERIALIBL
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_7:
     description: RESOLUTION_MATERIALID
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_8:
     description: RESOLUTION_MATERIALPP0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_9:
     description: RESOLUTION_PILEUP
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_10:
     description: RESOLUTION_SAMPLINGTERM
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_11:
     description: RESOLUTION_ZSMEARING
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_12:
     description: SCALE_AF2
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_13:
     description: SCALE_E4SCINTILLATOR__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_14:
     description: SCALE_E4SCINTILLATOR__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_15:
     description: SCALE_E4SCINTILLATOR__ETABIN2
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_16:
     description: SCALE_G4
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_17:
     description: SCALE_L1GAIN
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_18:
     description: SCALE_L2GAIN
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_19:
     description: SCALE_LARCALIB__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_20:
     description: SCALE_LARCALIB__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_21:
     description: SCALE_LARELECCALIB
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_22:
     description: SCALE_LARELECUNCONV__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_23:
     description: SCALE_LARELECUNCONV__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_24:
     description: SCALE_LARUNCONVCALIB__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_25:
     description: SCALE_LARUNCONVCALIB__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_26:
     description: SCALE_MATCALO__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_27:
     description: SCALE_MATCALO__ETABIN10
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_28:
     description: SCALE_MATCALO__ETABIN11
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_29:
     description: SCALE_MATCALO__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_30:
     description: SCALE_MATCALO__ETABIN2
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_31:
     description: SCALE_MATCALO__ETABIN3
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_32:
     description: SCALE_MATCALO__ETABIN4
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_33:
     description: SCALE_MATCALO__ETABIN5
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_34:
     description: SCALE_MATCALO__ETABIN6
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_35:
     description: SCALE_MATCALO__ETABIN7
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_36:
     description: SCALE_MATCALO__ETABIN8
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_37:
     description: SCALE_MATCALO__ETABIN9
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_38:
     description: SCALE_MATCRYO__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_39:
     description: SCALE_MATCRYO__ETABIN10
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_40:
     description: SCALE_MATCRYO__ETABIN11
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_41:
     description: SCALE_MATCRYO__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_42:
     description: SCALE_MATCRYO__ETABIN2
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_43:
     description: SCALE_MATCRYO__ETABIN3
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_44:
     description: SCALE_MATCRYO__ETABIN4
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_45:
     description: SCALE_MATCRYO__ETABIN5
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_46:
     description: SCALE_MATCRYO__ETABIN6
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_47:
     description: SCALE_MATCRYO__ETABIN7
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_48:
     description: SCALE_MATCRYO__ETABIN8
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_49:
     description: SCALE_MATCRYO__ETABIN9
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_50:
     description: SCALE_MATID__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_51:
     description: SCALE_MATID__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_52:
     description: SCALE_MATID__ETABIN2
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_53:
     description: SCALE_MATID__ETABIN3
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_54:
     description: SCALE_MATPP0__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_55:
     description: SCALE_MATPP0__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_56:
     description: SCALE_PEDESTAL
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_57:
     description: SCALE_PS_BARREL_B12
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_58:
     description: SCALE_PS__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_59:
     description: SCALE_PS__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_60:
     description: SCALE_PS__ETABIN2
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_61:
     description: SCALE_PS__ETABIN3
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_62:
     description: SCALE_PS__ETABIN4
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_63:
     description: SCALE_PS__ETABIN5
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_64:
     description: SCALE_PS__ETABIN6
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_65:
     description: SCALE_PS__ETABIN7
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_66:
     description: SCALE_PS__ETABIN8
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_67:
     description: SCALE_S12__ETABIN0
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_68:
     description: SCALE_S12__ETABIN1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_69:
     description: SCALE_S12__ETABIN2
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_70:
     description: SCALE_S12__ETABIN3
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_71:
     description: SCALE_S12__ETABIN4
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_72:
     description: SCALE_TOPOCLUSTER_THRES
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_73:
     description: SCALE_WTOTS1
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_74:
     description: SCALE_ZEESTAT
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_75:
     description: SCALE_ZEESYST
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_76:
     description: PH_SCALE_CONVEFFICIENCY
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_77:
     description: PH_SCALE_CONVFAKERATE
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_78:
     description: PH_SCALE_CONVRADIUS
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_79:
     description: PH_SCALE_LEAKAGECONV
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_80:
     description: PH_SCALE_LEAKAGEUNCONV
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_81:
     description: sysBackgroundIsolation
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_82:
     description: sysBackgroundIsolationUpperLimit
     treatment: MULT
@@ -338,19 +338,19 @@ definitions:
   sys_corr_84:
     description: sysBackground
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_85:
     description: syselectronBackground
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_86:
     description: sysSignalLeakage
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_87:
     description: sysUnfolding
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_88:
     description: sysIsolationMC
     treatment: MULT
@@ -358,7 +358,7 @@ definitions:
   sys_corr_89:
     description: sysPUrew
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_90:
     description: sysMCstats
     treatment: MULT
@@ -366,15 +366,15 @@ definitions:
   sys_corr_91:
     description: sysTrigger
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_92:
     description: sysUnfoldingClosure
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_93:
     description: sysRecoEffPhoton
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_94:
     description: sysLumi
     treatment: MULT
