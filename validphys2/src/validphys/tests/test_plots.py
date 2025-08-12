@@ -44,7 +44,7 @@ def test_dataspecschi2():
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare()
 def test_plotfancy():
-    fig = API.plot_fancy(dataset_input=DATA[2], theoryid=THEORYID, pdfs=[PDF], use_cuts='internal')[
+    fig = API.plot_fancy(dataset_input=DATA[2], theoryid=THEORYID, pdfs=[PDF], use_cuts='internal', with_shift=True)[
         0
     ]
     fig.tight_layout()
