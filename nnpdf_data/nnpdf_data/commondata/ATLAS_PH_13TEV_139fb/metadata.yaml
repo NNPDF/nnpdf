@@ -42,7 +42,7 @@ implemented_observables:
       eta:
         description: Absolute photon pseudorapidity
         label: $|\eta|$
-        units: 
+        units: ""
       ET:
         description: Transverse energy
         label: $E_T$
@@ -79,7 +79,7 @@ implemented_observables:
       eta:
         description: Absolute photon pseudorapidity
         label: $|\eta|$
-        units: 
+        units: ""
       ET:
         description: Transverse energy
         label: $E_T$
