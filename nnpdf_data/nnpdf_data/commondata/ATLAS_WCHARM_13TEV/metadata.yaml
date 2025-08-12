@@ -17,14 +17,14 @@ version: 1
 version_comment: Implementation 
 
 implemented_observables:
-- observable_name: 
+- observable_name: WMDP
   observable:
     description: 
     label: ATLAS $W^-+c$ 13 TeV
     units: '[pb]'
   process_type: 
-  tables: [19,20,21,22]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
-  ndata: 20
+  tables: [19]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
+  ndata: 5
   plotting:
     dataset_label: ATLAS $W^-+c$ 13 TeV
     y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
@@ -41,9 +41,90 @@ implemented_observables:
         description: 
         label: 
         units: 
-    file: 
-  data_uncertainties:
-  data_central: 
-  variants:
-    legacy:
-      data_uncertainties:
+    file: kinematics_WMDP.yaml
+  data_uncertainties: uncertainties_WMDP.yaml
+  data_central: data_WMDP.yaml
+
+- observable_name: WPDM
+  observable:
+    description: 
+    label: ATLAS $W^-+c$ 13 TeV
+    units: '[pb]'
+  process_type: 
+  tables: [20]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
+  ndata: 5
+  plotting:
+    dataset_label: ATLAS $W^-+c$ 13 TeV
+    y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
+    x_label: $|\eta^\ell|$
+    plot_x: abs_eta
+  kinematic_coverage: 
+  kinematics:
+    variables:
+      abs_eta:
+        description:
+        label:
+        units: ''
+      m_W2:
+        description: 
+        label: 
+        units: 
+    file: kinematics_WPDM.yaml
+  data_uncertainties: uncertainties_WPDM.yaml
+  data_central: data_WPDM.yaml
+      
+- observable_name: WMDP_star
+  observable:
+    description: 
+    label: ATLAS $W^-+c$ 13 TeV
+    units: '[pb]'
+  process_type: 
+  tables: [21]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
+  ndata: 5
+  plotting:
+    dataset_label: ATLAS $W^-+c$ 13 TeV
+    y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
+    x_label: $|\eta^\ell|$
+    plot_x: abs_eta
+  kinematic_coverage: 
+  kinematics:
+    variables:
+      abs_eta:
+        description:
+        label:
+        units: ''
+      m_W2:
+        description: 
+        label: 
+        units: 
+    file: kinematics_WMDP_star.yaml
+  data_uncertainties: uncertainties_WMDP_star.yaml
+  data_central: data_WMDP_star.yaml
+
+- observable_name: WPDM_star
+  observable:
+    description: 
+    label: ATLAS $W^-+c$ 13 TeV
+    units: '[pb]'
+  process_type: 
+  tables: [22]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
+  ndata: 5
+  plotting:
+    dataset_label: ATLAS $W^-+c$ 13 TeV
+    y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
+    x_label: $|\eta^\ell|$
+    plot_x: abs_eta
+  kinematic_coverage: 
+  kinematics:
+    variables:
+      abs_eta:
+        description:
+        label:
+        units: ''
+      m_W2:
+        description: 
+        label: 
+        units: 
+    file: kinematics_WPDM_star.yaml
+  data_uncertainties: uncertainties_WPDM_star.yaml
+  data_central: data_WPDM_star.yaml

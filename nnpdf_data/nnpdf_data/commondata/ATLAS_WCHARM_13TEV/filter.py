@@ -24,93 +24,108 @@ def filter_ATLAS_WCHARM_13TEV_data_kinematic():
 
     kin = get_kinematics()
 
-    data_central_yaml = {"data_central": central_values}
+    data_central_yaml_WMDP = {"data_central": central_values[:5]}
+    data_central_yaml_WPDM = {"data_central": central_values[5:10]}
+    data_central_yaml_WMDP_star = {"data_central": central_values[10:15]}
+    data_central_yaml_WPDM_star = {"data_central": central_values[15:20]}
 
-    kinematics_yaml = {"bins": kin}
+    kinematics_yaml_WMDP = {"bins": kin[:5]}
+    kinematics_yaml_WPDM = {"bins": kin[5:10]}
+    kinematics_yaml_WMDP_star = {"bins": kin[10:15]}
+    kinematics_yaml_WPDM_star = {"bins": kin[15:20]}
 
     # write central values and kinematics to yaml file
-    with open("data.yaml", "w") as file:
-        yaml.dump(data_central_yaml, file, sort_keys=False)
+    for channel in ["WMDP", "WPDM", "WMDP_star", "WPDM_star"]:
+        with open(f"data_{channel}.yaml", "w") as file:
+            data_central_yaml = eval(f"data_central_yaml_{channel}")
+            yaml.dump(data_central_yaml, file, sort_keys=False)
 
-    with open("kinematics.yaml", "w") as file:
-        yaml.dump(kinematics_yaml, file, sort_keys=False)
+    for channel in ["WMDP", "WPDM", "WMDP_star", "WPDM_star"]:
+        kinematics_yaml = eval(f"kinematics_yaml_{channel}")
+        with open(f"kinematics_{channel}.yaml", "w") as file:
+            yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
 def filter_get_artificial_uncertainties():
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
-    systematics = get_artificial_uncertainties()
+    systematics_full = get_artificial_uncertainties()
 
-    error_definitions = {}
-    errors = []
+    for channel in ["WMDP", "WPDM", "WMDP_star", "WPDM_star"]:
 
-    for sys in systematics:
-        if sys[0]['name'] == 'stat':
-            error_definitions[sys[0]['name']] = {
-                "description": "Uncorrelated statistical uncertainties",
-                "treatment": "ADD",
-                "type": "UNCORR",
-            }
-        else:
-            error_definitions[sys[0]['name']] = {
-                "description": "Systematic uncertainty",
-                "treatment": "MULT",  # Not sure if this is correct
-                "type": "CORR",
-            }
+        systematics = systematics_full[channel]
 
-    for i in range(metadata['implemented_observables'][0]['ndata']):
-        error_value = {}
+        error_definitions = {}
+        errors = []
 
         for sys in systematics:
-            error_value[sys[0]['name']] = float(sys[0]['values'][i])
+            if sys['name'] == 'stat':
+                error_definitions[sys['name']] = {
+                    "description": "Uncorrelated statistical uncertainties",
+                    "treatment": "ADD",
+                    "type": "UNCORR",
+                }
+            else:
+                error_definitions[sys['name']] = {
+                    "description": "Systematic uncertainty",
+                    "treatment": "MULT",  # Not sure if this is correct
+                    "type": "CORR",
+                }
 
-        errors.append(error_value)
+        for i in range(metadata['implemented_observables'][0]['ndata']):
+            error_value = {}
 
-    uncertainties_yaml = {"definitions": error_definitions, "bins": errors}
+            for sys in systematics:
+                error_value[sys['name']] = float(sys['values'][i])
 
-    # write uncertainties
-    with open(f"uncertainties_covariances.yaml", 'w') as file:
-        yaml.dump(uncertainties_yaml, file, sort_keys=False)
+            errors.append(error_value)
+
+        uncertainties_yaml = {"definitions": error_definitions, "bins": errors}
+
+        # write uncertainties
+        with open(f"uncertainties_covariances_{channel}.yaml", 'w') as file:
+            yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
 def filter_get_systematics():
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
-    systematics, deltas = get_uncertainties()
-
-    error_definitions = {}
-    errors = []
-    # print("Systematics:", systematics)
-    for sys in systematics:
-        if sys[0]['name'] == 'stat':
-            error_definitions[sys[0]['name']] = {
-                "description": "Uncorrelated statistical uncertainties",
-                "treatment": "ADD",
-                "type": "UNCORR",
-            }
-        else:
-            error_definitions[sys[0]['name']] = {
-                "description": "Systematic uncertainty",
-                "treatment": "MULT",  # Not sure if this is correct
-                "type": "CORR",
-            }
-
-    for i in range(metadata['implemented_observables'][0]['ndata']):
-        error_value = {}
-
+    systematics_full, deltas = get_uncertainties()
+    for channel in ["WMDP", "WPDM", "WMDP_star", "WPDM_star"]:
+        systematics = systematics_full[channel]
+        error_definitions = {}
+        errors = []
+        # print("Systematics:", systematics)
         for sys in systematics:
+            if sys['name'] == 'stat':
+                error_definitions[sys['name']] = {
+                    "description": "Uncorrelated statistical uncertainties",
+                    "treatment": "ADD",
+                    "type": "UNCORR",
+                }
+            else:
+                error_definitions[sys['name']] = {
+                    "description": "Systematic uncertainty",
+                    "treatment": "MULT",  # Not sure if this is correct
+                    "type": "CORR",
+                }
 
-            error_value[sys[0]['name']] = float(sys[0]['values'][i])
+        for i in range(metadata['implemented_observables'][0]['ndata']):
+            error_value = {}
 
-        errors.append(error_value)
+            for sys in systematics:
 
-    uncertainties_yaml = {"definitions": error_definitions, "bins": errors}
+                error_value[sys['name']] = float(sys['values'][i])
 
-    # write uncertainties
-    with open(f"uncertainties.yaml", 'w') as file:
-        yaml.dump(uncertainties_yaml, file, sort_keys=False)
+            errors.append(error_value)
+
+        uncertainties_yaml = {"definitions": error_definitions, "bins": errors}
+
+        # write uncertainties
+        with open(f"uncertainties_{channel}.yaml", 'w') as file:
+            yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
 if __name__ == "__main__":
