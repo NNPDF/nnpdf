@@ -57,38 +57,38 @@ implemented_observables:
   data_central: data_XSEC_r02.yaml
 
 - observable_name: XSEC
-observable:
-  description: Photon Production
-  label: ATLAS direct photon production 13 TeV at 139 fb^-1
-  units: "$fb/GeV$"
-process_type: PHT
-tables: [1, 2, 3, 4, 5, 6]
-ndata: 62
-plotting:
-  dataset_label: ATLAS direct photon production 13 TeV and 139 fb^-1
-  y_label: $d\sigma/dE_T ^\gamma$ (fb)
-  figure_by:
+  observable:
+    description: Photon Production
+    label: ATLAS direct photon production 13 TeV at 139 fb^-1
+    units: "$fb/GeV$"
+  process_type: PHT
+  tables: [1, 2, 3, 4, 5, 6]
+  ndata: 62
+  plotting:
+    dataset_label: ATLAS direct photon production 13 TeV and 139 fb^-1
+    y_label: $d\sigma/dE_T ^\gamma$ (fb)
+    figure_by:
+    - eta
+    plot_x: ET
+  kinematic_coverage:
   - eta
-  plot_x: ET
-kinematic_coverage:
-- eta
-- ET
-- sqrts
-kinematics:
-  variables:
-    eta:
-      description: Absolute photon pseudorapidity
-      label: $|\eta|$
-      units: 
-    ET:
-      description: Transverse energy
-      label: $E_T$
-      units: $GeV$
-  file: kinematics_XSEC_r04.yaml
-data_uncertainties: [uncertainties_XSEC_r04.yaml]
-variants:
-  r04:
-    data_uncertainties:
-    - uncertainties_XSEC_r04.yaml
-    data_central: data_XSEC_r04.yaml
-data_central: data_XSEC_r04.yaml
+  - ET
+  - sqrts
+  kinematics:
+    variables:
+      eta:
+        description: Absolute photon pseudorapidity
+        label: $|\eta|$
+        units: 
+      ET:
+        description: Transverse energy
+        label: $E_T$
+        units: $GeV$
+    file: kinematics_XSEC_r04.yaml
+  data_uncertainties: [uncertainties_XSEC_r04.yaml]
+  variants:
+    r04:
+      data_uncertainties:
+      - uncertainties_XSEC_r04.yaml
+      data_central: data_XSEC_r04.yaml
+  data_central: data_XSEC_r04.yaml
