@@ -78,13 +78,14 @@ class N3Stats(MCStats):
 class N3LHAPDFSet(LHAPDFSet):
     """Extension of LHAPDFSet using n3fit models"""
 
-    def __init__(self, name, pdf_models, Q=1.65):
+    def __init__(self, name, pdf_models, Q=1.65, is_t0=False):
         log.debug("Creating LHAPDF-like n3fit PDF")
         self._error_type = "replicas"
         self._name = name
         self._lhapdf_set = pdf_models
         self._flavors = None
         self._fitting_q = Q
+        self._is_t0 = is_t0
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
 
     def xfxQ(self, x, Q, n, fl):
@@ -135,12 +136,12 @@ class N3LHAPDFSet(LHAPDFSet):
         # Register the grid with the photon
         self._register_photon(mod_xgrid)
 
-        if replica is None or replica == 0:
+        if replica is None or replica == 0 or self._is_t0:
             # We need generate output values for all replicas
             result = np.concatenate(
                 [m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0
             )
-            if replica == 0:
+            if replica == 0 or self._is_t0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)
         else:
@@ -240,7 +241,7 @@ class N3PDF(PDF):
 
     def load_t0(self):
         """Load the central PDF object"""
-        return N3LHAPDFSet(self.name, [self._models[0]], Q=self._Q)
+        return N3LHAPDFSet(self.name, self._models, Q=self._Q, is_t0=True)
 
     def get_nn_weights(self):
         """Outputs all weights of the NN as numpy.ndarrays"""
