@@ -1,0 +1,4430 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  FID_EFF_WPLUSD_MG:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  TRK_EFF_Overal:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  TRK_EFF_Z0_MEAS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_BR_SIG:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  FID_EFF_QCD:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  TRK_EFF_PP0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  TRK_EFF_D0_MEAS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_SHERPA2211_QCD_WCHARM:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Lumi:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_Flavor_Composition:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_Pileup_RhoTopology:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_PEAK_RESOLUTION_PLUS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  MUON_EFF_ISO_SYS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  PRW_DATASF:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  MET_SoftTrk:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JER_EffectiveNP_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatch_Sh_MG_2P_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  TRK_EFF_IBL:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_Flavor_Response:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JER_EffectiveNP_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  MET_SoftTrk_ResoPara:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  FID_EFF_PDF:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_SHERPA2211_PDF_WJETS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatchNorm_0tag_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  MET_SoftTrk_ResoPerp:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  MUON_EFF_TrigSystUncertainty:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_PEAK_RESOLUTION_MINUS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JER_EffectiveNP_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Top_HS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_SHERPA2211_QCD_WJETS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_EffectiveNP_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Matched_Sherpa_MG_2P:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatchNorm_0tag_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatch_Sh_MG_2P_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JER_EffectiveNP_7restTerm:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  EG_SCALE_ALL:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JER_EffectiveNP_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JER_EffectiveNP_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_EtaIntercalibration_Modelling:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatch_Sh_MG_2P_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JER_EffectiveNP_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_Pileup_OffsetMu:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  PROD_FRAC_EIG_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JvtEfficiency:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  MUON_SAGITTA_RESBIAS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MM_EL_RR_MadGraph_Var:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatchNorm_0tag_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MM_EL_FR_MET_Var:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_8:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_BR_BKG:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_Pileup_OffsetNPV:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Top_Shower:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatchNorm_0tag_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Top_GEN_isr:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatch_Sh_MG_2P_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  FT_EFF_Eigen_B_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_CharmNorm_0tag_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  PROD_FRAC_EIG_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MisMatchNorm_0tag_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_CharmNorm_0tag_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_CharmNorm_0tag_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  PROD_FRAC_EIG_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_7:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MM_EL_RR_STAT:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_minus_1_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  FID_EFF_AS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  MUON_EFF_RECO_SYS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_minus_3_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_minus_4_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_minus_2_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  mu_Top:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_minus_5_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  MUON_CB:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_CharmNorm_0tag_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_SHERPA2211_AS_WJETS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_8:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_OtherNorm_0tag:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  JET_JER_DataVsMC_MC16:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_DibosonZjets_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_7:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_8:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_PEAK_POSITION_PLUS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_7:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_7:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MM_MU_FR_MET_Var:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_PEAK_POSITION_MINUS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_WjetsNorm_0tag_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_7:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_plus_3_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_plus_1_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_8:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_CharmNorm_0tag_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_WjetsNorm_0tag_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_WjetsNorm_0tag_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_WjetsNorm_0tag_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_plus_2_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_plus_5_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DPLUS_MC_Stat_Fid_Eff_plus_4_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wminus_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wminus_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wminus_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wminus_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wminus_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wplus_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wplus_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wplus_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wplus_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dplus_mu_Wplus_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_BR_SIG:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_SHERPA2211_QCD_WJETS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_SHERPA2211_QCD_WPLUSC:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_PEAK_RESOLUTION_PLUS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatched_Sherpa_MG_2P_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_PEAK_RESOLUTION_MINUS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_SHERPA2211_AS_WPLUSC:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_SHERPA2211_PDF_WPLUSC:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatched_Sherpa_MG_2P_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_WjetsNorm_0tag_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatched_Sherpa_MG_2P_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_PEAK_POSITION_ADHOC_PLUS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatched_Sherpa_MG_2P_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_12:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_SHERPA2211_PDF_WJETS:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_WjetsNorm_0tag_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_OtherNorm_0tag:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_minus_3_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_minus_1_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_minus_2_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatchNorm_0tag_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_12:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_minus_5_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_WjetsNorm_0tag_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_minus_4_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatchNorm_0tag_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatchNorm_0tag_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MM_EL_FR_MET_Var:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatchNorm_0tag_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_7:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Wjets_MG_Sherpa_2P_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_8:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_CharmNorm_0tag_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_CharmNorm_0tag_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_CharmNorm_0tag_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MM_MU_FR_MET_Var:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Wjets_MG_Sherpa_2P_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MisMatchNorm_0tag_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MM_EL_RR_STAT:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_WjetsNorm_0tag_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MM_EL_RR_MadGraph_Var:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_12:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_CharmNorm_0tag_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_12:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_12:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_CharmNorm_0tag_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_DibosonZjets_0tag_SS_eta_bin3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_plus_3_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_plus_2_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_plus_1_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_plus_5_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  DSTAR_MC_Stat_Fid_Eff_plus_4_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wminus_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wminus_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wminus_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wminus_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wminus_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wplus_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wplus_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wplus_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wplus_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  Uncorr_dstar_mu_Wplus_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 0.18
+  FID_EFF_WPLUSD_MG: 1.55563492e-01
+  TRK_EFF_Overal: 3.39411255e-01
+  TRK_EFF_Z0_MEAS: 1.19502092e-01
+  DPLUS_BR_SIG: 0.0
+  FID_EFF_QCD: 9.12181451e-02
+  TRK_EFF_PP0: 1.55563492e-01
+  TRK_EFF_D0_MEAS: 9.26323378e-02
+  DPLUS_SHERPA2211_QCD_WCHARM: 0.0
+  Lumi: 1.38596537e-01
+  JET_Flavor_Composition: 1.11016891e-01
+  JET_Pileup_RhoTopology: 9.26323378e-02
+  DPLUS_PEAK_RESOLUTION_PLUS: 0.0
+  MUON_EFF_ISO_SYS: 7.84904453e-02
+  PRW_DATASF: 1.41421356e-01
+  MET_SoftTrk: 4.94974747e-02
+  JET_JER_EffectiveNP_1: 5.09215082e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin2: 0.0
+  TRK_EFF_IBL: 4.80832611e-02
+  JET_Flavor_Response: 8.55613815e-02
+  JET_JER_EffectiveNP_2: 7.28337147e-02
+  MET_SoftTrk_ResoPara: 3.18237333e-02
+  FID_EFF_PDF: 4.10121933e-02
+  DPLUS_SHERPA2211_PDF_WJETS: 0.0
+  DPLUS_MisMatchNorm_0tag_bin3: 0.0
+  MET_SoftTrk_ResoPerp: 4.52548340e-02
+  MUON_EFF_TrigSystUncertainty: 3.95979797e-02
+  DPLUS_PEAK_RESOLUTION_MINUS: 0.0
+  JET_JER_EffectiveNP_3: 6.01061561e-02
+  Top_HS: 3.25269119e-02
+  DPLUS_SHERPA2211_QCD_WJETS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_EffectiveNP_1: 4.52548340e-02
+  DPLUS_Matched_Sherpa_MG_2P: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_MisMatchNorm_0tag_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_MisMatch_Sh_MG_2P_bin5: 0.0
+  JET_JER_EffectiveNP_7restTerm: 5.09116882e-02
+  EG_SCALE_ALL: 1.69705627e-02
+  JET_JER_EffectiveNP_5: 1.06070731e-02
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  JET_JER_EffectiveNP_4: 6.36396103e-02
+  JET_EtaIntercalibration_Modelling: 2.12132034e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin1: 0.0
+  JET_JER_EffectiveNP_6: 1.90984293e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  JET_Pileup_OffsetMu: 7.35391052e-03
+  PROD_FRAC_EIG_2: 2.89956893e-03
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_JvtEfficiency: 2.26274170e-02
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  MUON_SAGITTA_RESBIAS: 1.55563492e-02
+  DPLUS_MM_EL_RR_MadGraph_Var: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_MisMatchNorm_0tag_bin4: 0.0
+  DPLUS_MM_EL_FR_MET_Var: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_8: 0.0
+  DPLUS_BR_BKG: 0.0
+  JET_Pileup_OffsetNPV: 2.12132034e-02
+  Top_Shower: 6.85911802e-02
+  DPLUS_MisMatchNorm_0tag_bin1: 0.0
+  Top_GEN_isr: 3.18237333e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin4: 0.0
+  EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR: 2.26274170e-02
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin2: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  FT_EFF_Eigen_B_0: 1.97989899e-02
+  DPLUS_CharmNorm_0tag_bin2: 0.0
+  EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR: 2.68700577e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  PROD_FRAC_EIG_3: 6.57628314e-03
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  DPLUS_MisMatchNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_CharmNorm_0tag_bin3: 0.0
+  DPLUS_CharmNorm_0tag_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  PROD_FRAC_EIG_1: 2.47537876e-03
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  DPLUS_MM_EL_RR_STAT: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_1_1: 0.0
+  FID_EFF_AS: 5.16212166e-03
+  MUON_EFF_RECO_SYS: 1.55563492e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_3_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_4_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_2_2: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  mu_Top: 5.63626649e-03
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_5_5: 0.0
+  MUON_CB: 9.19728221e-04
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  DPLUS_CharmNorm_0tag_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_SHERPA2211_AS_WJETS: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR: 9.12181451e-03
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_OtherNorm_0tag: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  JET_JER_DataVsMC_MC16: 3.40000000e-03
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_8: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_PEAK_POSITION_PLUS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  DPLUS_MM_MU_FR_MET_Var: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  DPLUS_PEAK_POSITION_MINUS: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_WjetsNorm_0tag_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin2: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_3_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin1: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_1_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_CharmNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_WjetsNorm_0tag_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_2_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_5_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_4_4: 0.0
+  Uncorr_dplus_mu_Wminus_1: 0.0
+  Uncorr_dplus_mu_Wminus_2: 0.0
+  Uncorr_dplus_mu_Wminus_3: 0.0
+  Uncorr_dplus_mu_Wminus_4: 0.0
+  Uncorr_dplus_mu_Wminus_5: 0.0
+  Uncorr_dplus_mu_Wplus_1: 0.0
+  Uncorr_dplus_mu_Wplus_2: 0.0
+  Uncorr_dplus_mu_Wplus_3: 0.0
+  Uncorr_dplus_mu_Wplus_4: 0.0
+  Uncorr_dplus_mu_Wplus_5: 0.0
+  DSTAR_BR_SIG: 1.83847763e-01
+  DSTAR_SHERPA2211_QCD_WJETS: 1.13854073e-01
+  DSTAR_SHERPA2211_QCD_WPLUSC: 4.06786185e-02
+  DSTAR_PEAK_RESOLUTION_PLUS: 8.55730682e-02
+  DSTAR_MisMatched_Sherpa_MG_2P_bin2: 1.41421356e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 1.83847763e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 1.10308658e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 1.83847763e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 1.55563492e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 1.40715138e-02
+  DSTAR_PEAK_RESOLUTION_MINUS: 3.46806863e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin4: 4.24264069e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 1.69705627e-02
+  DSTAR_SHERPA2211_AS_WPLUSC: 1.21861838e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 8.48528137e-03
+  DSTAR_SHERPA2211_PDF_WPLUSC: 2.61677282e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin4: 3.67695526e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 4.10609303e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 2.26495033e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 1.18793939e-01
+  DSTAR_MisMatched_Sherpa_MG_2P_bin4: 5.09215082e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin5: 3.88940870e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 1.02531702e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 3.18551409e-03
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin5: 3.60659119e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 1.20208153e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 8.69755713e-03
+  DSTAR_WjetsNorm_0tag_bin3: 2.05608852e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 1.76847392e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin1: 7.35391052e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin2: 3.81968585e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 5.16405848e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin3: 2.40416306e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin2: 3.39558537e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin2: 3.18237333e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin4: 1.32275281e-02
+  DSTAR_PEAK_POSITION_ADHOC_PLUS: 3.04425689e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 6.64755594e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin5: 1.48576580e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin3: 2.12132034e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin2: 2.89956893e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin4: 1.18899117e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 1.83847763e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 1.00453970e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_2: 2.61677282e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 1.11205890e-02
+  DSTAR_SHERPA2211_PDF_WJETS: 2.05121915e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 6.57628314e-03
+  DSTAR_WjetsNorm_0tag_bin4: 2.54754784e-02
+  DSTAR_OtherNorm_0tag: 1.28338420e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 6.15203218e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin1: 2.96984848e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_2: 1.76847392e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 1.24450793e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_3_3: 7.15034964e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 3.19178633e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 1.45832095e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 5.73301840e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 5.72778317e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_1_1: 7.21248917e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 2.00249844e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_2_2: 7.43286620e-04
+  DSTAR_MisMatchNorm_0tag_bin3: 5.72952878e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 9.56177285e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_2: 7.29160476e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin3: 6.36396103e-03
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin1: 2.61677282e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 4.31595876e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_5_5: 6.72216483e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 5.73301840e-03
+  DSTAR_WjetsNorm_0tag_bin5: 1.91507180e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_4_4: 6.65357047e-04
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin3: 5.81205643e-03
+  DSTAR_MisMatchNorm_0tag_bin1: 4.03329890e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 9.58683994e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 2.62059154e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 1.09059617e-02
+  DSTAR_MisMatchNorm_0tag_bin2: 1.36479852e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 7.03046940e-03
+  DSTAR_MM_EL_FR_MET_Var: 1.36054217e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 4.45505331e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 1.19234014e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 1.78535711e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 1.17379726e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_2: 5.82923666e-03
+  DSTAR_MisMatchNorm_0tag_bin4: 3.81968585e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_7: 7.38715101e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 6.44204936e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 6.21027375e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_6: 1.09059617e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_9: 4.33676146e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_0: 2.55277790e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 2.75816968e-02
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 8.10061726e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 3.11287648e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 4.03081878e-02
+  DSTAR_Wjets_MG_Sherpa_2P_bin3: 2.31084400e-04
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_8: 2.25983960e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin5: 2.90301567e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 1.11722871e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_0: 4.84561658e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 1.04651804e-02
+  DSTAR_CharmNorm_0tag_bin1: 2.47537876e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 7.17129695e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 4.69334635e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 9.33380951e-03
+  DSTAR_CharmNorm_0tag_bin2: 3.18237333e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin2: 2.83019434e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 8.62670273e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin1: 2.40416306e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 7.63740794e-03
+  DSTAR_CharmNorm_0tag_bin5: 3.67831483e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin4: 2.54754784e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 7.07177488e-03
+  DSTAR_MM_MU_FR_MET_Var: 2.75816968e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_2: 6.24079322e-04
+  DSTAR_Wjets_MG_Sherpa_2P_bin2: 4.17222962e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 6.64680374e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 6.94766148e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 7.92022727e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_6: 3.36991098e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 7.28337147e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_2: 2.28254244e-03
+  DSTAR_MisMatchNorm_0tag_bin5: 1.23442294e-03
+  DSTAR_MM_EL_RR_STAT: 2.41246762e-03
+  DSTAR_WjetsNorm_0tag_bin1: 6.12617336e-03
+  DSTAR_MM_EL_RR_MadGraph_Var: 3.60659119e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 2.26274170e-02
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 1.33644117e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_12: 1.39171657e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 1.11205890e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_2: 1.71518949e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 3.25269119e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 5.79827561e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_1: 1.76144117e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_1: 3.01164407e-03
+  DSTAR_CharmNorm_0tag_bin4: 3.46806863e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 3.32716095e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 3.30756708e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 5.51633937e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin5: 5.89470101e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 2.83328431e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 5.88621270e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin1: 1.37261612e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 5.86919926e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin5: 5.87090283e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 2.89956893e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 3.32377797e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 8.62728231e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin1: 1.12729765e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 1.20274686e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 2.83019434e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 3.40000000e-03
+  DSTAR_CharmNorm_0tag_bin3: 8.03539047e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 1.23161479e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin2: 4.59646603e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 1.26007936e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 6.64755594e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 2.12132034e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 8.73956521e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 2.89956893e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 1.36054217e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 1.48576580e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 2.97657521e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin1: 2.90301567e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 1.56051274e-03
+  DSTAR_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 1.70000000e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 2.19715725e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 4.74130784e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 2.54754784e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 1.16981836e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 1.70880075e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 1.84932420e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 3.59083208e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 1.10710207e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin4: 1.49902468e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 8.29864447e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 1.92361639e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 1.90984293e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 6.76683087e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 1.46287388e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 8.31670007e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 4.97066394e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 1.49248116e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 6.01892848e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 4.76759898e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 2.62539045e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_3_3: 3.68917335e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_2_2: 3.69864840e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_1_1: 3.90480473e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_5_5: 3.62318920e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_4_4: 3.34178096e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 1.51403435e-04
+  Uncorr_dstar_mu_Wminus_1: 7.94229186e-02
+  Uncorr_dstar_mu_Wminus_2: 0.0
+  Uncorr_dstar_mu_Wminus_3: 0.0
+  Uncorr_dstar_mu_Wminus_4: 0.0
+  Uncorr_dstar_mu_Wminus_5: 0.0
+  Uncorr_dstar_mu_Wplus_1: 0.0
+  Uncorr_dstar_mu_Wplus_2: 0.0
+  Uncorr_dstar_mu_Wplus_3: 0.0
+  Uncorr_dstar_mu_Wplus_4: 0.0
+  Uncorr_dstar_mu_Wplus_5: 0.0
+- stat: 0.17
+  FID_EFF_WPLUSD_MG: 3.25269119e-01
+  TRK_EFF_Overal: 3.32377797e-01
+  TRK_EFF_Z0_MEAS: 1.12431090e-01
+  DPLUS_BR_SIG: 0.0
+  FID_EFF_QCD: 8.98039531e-02
+  TRK_EFF_PP0: 1.55563492e-01
+  TRK_EFF_D0_MEAS: 8.83897619e-02
+  DPLUS_SHERPA2211_QCD_WCHARM: 0.0
+  Lumi: 1.33644117e-01
+  JET_Flavor_Composition: 9.26323378e-02
+  JET_Pileup_RhoTopology: 9.68749194e-02
+  DPLUS_PEAK_RESOLUTION_PLUS: 0.0
+  MUON_EFF_ISO_SYS: 8.27330043e-02
+  PRW_DATASF: 1.25158899e-01
+  MET_SoftTrk: 4.45505331e-02
+  JET_JER_EffectiveNP_1: 5.87430847e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin2: 0.0
+  TRK_EFF_IBL: 4.73787927e-02
+  JET_Flavor_Response: 8.20243866e-02
+  JET_JER_EffectiveNP_2: 3.81968585e-02
+  MET_SoftTrk_ResoPara: 6.29344897e-02
+  FID_EFF_PDF: 4.24264069e-02
+  DPLUS_SHERPA2211_PDF_WJETS: 0.0
+  DPLUS_MisMatchNorm_0tag_bin3: 0.0
+  MET_SoftTrk_ResoPerp: 9.19238816e-02
+  MUON_EFF_TrigSystUncertainty: 4.10121933e-02
+  DPLUS_PEAK_RESOLUTION_MINUS: 0.0
+  JET_JER_EffectiveNP_3: 6.85911802e-02
+  Top_HS: 1.76847392e-02
+  DPLUS_SHERPA2211_QCD_WJETS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_EffectiveNP_1: 4.10121933e-02
+  DPLUS_Matched_Sherpa_MG_2P: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_MisMatchNorm_0tag_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_MisMatch_Sh_MG_2P_bin5: 0.0
+  JET_JER_EffectiveNP_7restTerm: 5.65685425e-02
+  EG_SCALE_ALL: 2.12132034e-02
+  JET_JER_EffectiveNP_5: 5.44495179e-02
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  JET_JER_EffectiveNP_4: 2.97153159e-02
+  JET_EtaIntercalibration_Modelling: 1.10308658e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin1: 0.0
+  JET_JER_EffectiveNP_6: 4.31364115e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  JET_Pileup_OffsetMu: 6.57628314e-03
+  PROD_FRAC_EIG_2: 1.48027025e-05
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_JvtEfficiency: 2.26274170e-02
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  MUON_SAGITTA_RESBIAS: 1.55563492e-02
+  DPLUS_MM_EL_RR_MadGraph_Var: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_MisMatchNorm_0tag_bin4: 0.0
+  DPLUS_MM_EL_FR_MET_Var: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_8: 0.0
+  DPLUS_BR_BKG: 0.0
+  JET_Pileup_OffsetNPV: 1.69705627e-02
+  Top_Shower: 6.23538291e-03
+  DPLUS_MisMatchNorm_0tag_bin1: 0.0
+  Top_GEN_isr: 4.66797601e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin4: 0.0
+  EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR: 2.26274170e-02
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin2: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  FT_EFF_Eigen_B_0: 2.05121915e-02
+  DPLUS_CharmNorm_0tag_bin2: 0.0
+  EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR: 2.26274170e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  PROD_FRAC_EIG_3: 2.05121915e-03
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  DPLUS_MisMatchNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_CharmNorm_0tag_bin3: 0.0
+  DPLUS_CharmNorm_0tag_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  PROD_FRAC_EIG_1: 2.96984848e-03
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  DPLUS_MM_EL_RR_STAT: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_1_1: 0.0
+  FID_EFF_AS: 1.32936075e-02
+  MUON_EFF_RECO_SYS: 1.24450793e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_3_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_4_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_2_2: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  mu_Top: 1.11205890e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_5_5: 0.0
+  MUON_CB: 2.54558441e-03
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  DPLUS_CharmNorm_0tag_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_SHERPA2211_AS_WJETS: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR: 1.10308658e-02
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_OtherNorm_0tag: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  JET_JER_DataVsMC_MC16: 2.47537876e-02
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_8: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_PEAK_POSITION_PLUS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  DPLUS_MM_MU_FR_MET_Var: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  DPLUS_PEAK_POSITION_MINUS: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_WjetsNorm_0tag_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin2: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_3_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin1: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_1_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_CharmNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_WjetsNorm_0tag_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_2_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_5_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_4_4: 0.0
+  Uncorr_dplus_mu_Wminus_1: 0.0
+  Uncorr_dplus_mu_Wminus_2: 0.0
+  Uncorr_dplus_mu_Wminus_3: 0.0
+  Uncorr_dplus_mu_Wminus_4: 0.0
+  Uncorr_dplus_mu_Wminus_5: 0.0
+  Uncorr_dplus_mu_Wplus_1: 0.0
+  Uncorr_dplus_mu_Wplus_2: 0.0
+  Uncorr_dplus_mu_Wplus_3: 0.0
+  Uncorr_dplus_mu_Wplus_4: 0.0
+  Uncorr_dplus_mu_Wplus_5: 0.0
+  DSTAR_BR_SIG: 1.69705627e-01
+  DSTAR_SHERPA2211_QCD_WJETS: 1.17383985e-01
+  DSTAR_SHERPA2211_QCD_WPLUSC: 3.24191302e-02
+  DSTAR_PEAK_RESOLUTION_PLUS: 7.78074547e-02
+  DSTAR_MisMatched_Sherpa_MG_2P_bin2: 1.97989899e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 2.05121915e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 1.02531702e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 1.55563492e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 1.69705627e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 1.06774295e-02
+  DSTAR_PEAK_RESOLUTION_MINUS: 4.81248377e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin4: 4.80832611e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 1.69705627e-02
+  DSTAR_SHERPA2211_AS_WPLUSC: 5.28015151e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 7.56620777e-03
+  DSTAR_SHERPA2211_PDF_WPLUSC: 7.14615281e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin4: 4.24264069e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 2.69443872e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 6.71770050e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 1.19502092e-02
+  DSTAR_MisMatched_Sherpa_MG_2P_bin4: 2.76564640e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin5: 3.18237333e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 1.09602692e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 2.51141394e-04
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin5: 2.96984848e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 7.42478956e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 2.97153159e-03
+  DSTAR_WjetsNorm_0tag_bin3: 2.90301567e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 1.21622366e-01
+  DSTAR_MisMatched_Sherpa_MG_2P_bin1: 1.25326573e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin2: 2.68886593e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 4.66797601e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin3: 2.40416306e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin2: 2.40624188e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin2: 2.19260119e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin4: 2.75816968e-02
+  DSTAR_PEAK_POSITION_ADHOC_PLUS: 2.27156334e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 5.02070712e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin5: 1.55563492e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin3: 2.12132034e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin2: 1.98242276e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin4: 2.40624188e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 1.41421356e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 1.39308112e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_2: 2.26274170e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 8.92972564e-03
+  DSTAR_SHERPA2211_PDF_WJETS: 2.05121915e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 7.21248917e-03
+  DSTAR_WjetsNorm_0tag_bin4: 2.05121915e-02
+  DSTAR_OtherNorm_0tag: 1.08040502e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 6.08111832e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin1: 1.62711401e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_2: 3.04097024e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 1.07480231e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_3_3: 6.92964646e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 2.90989691e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 1.14029601e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 5.30353656e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 5.51543289e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_1_1: 7.28337147e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 3.89711432e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_2_2: 7.07106781e-02
+  DSTAR_MisMatchNorm_0tag_bin3: 7.35662966e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 7.78845299e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_2: 1.08912809e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin3: 1.97989899e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin1: 1.45150784e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 1.28010742e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_5_5: 6.57780358e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 5.59173497e-03
+  DSTAR_WjetsNorm_0tag_bin5: 1.29679412e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_4_4: 6.43486597e-04
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin3: 1.76847392e-02
+  DSTAR_MisMatchNorm_0tag_bin1: 7.14142843e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 6.22635527e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 2.19715725e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 9.34719209e-03
+  DSTAR_MisMatchNorm_0tag_bin2: 4.17941383e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 9.43437862e-03
+  DSTAR_MM_EL_FR_MET_Var: 4.57684389e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 3.68239053e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 5.16212166e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 1.72719426e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 2.47537876e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_2: 7.22979944e-03
+  DSTAR_MisMatchNorm_0tag_bin4: 2.28254244e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_7: 1.21885192e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 6.63079935e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 7.40877858e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_6: 6.52456895e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_9: 4.81248377e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_0: 4.27317212e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 8.00921344e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 8.73885004e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 6.79485099e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 1.29679412e-03
+  DSTAR_Wjets_MG_Sherpa_2P_bin3: 5.37494186e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_8: 2.19260119e-02
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin5: 5.51905789e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 7.92022727e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_0: 0.0043
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 1.55563492e-02
+  DSTAR_CharmNorm_0tag_bin1: 5.94306318e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 6.88095197e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 1.01387906e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 9.68749194e-03
+  DSTAR_CharmNorm_0tag_bin2: 2.26274170e-02
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin2: 2.96984848e-02
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 7.21318238e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin1: 5.23259018e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 8.06101731e-03
+  DSTAR_CharmNorm_0tag_bin5: 6.08111832e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin4: 5.51633937e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 9.68749194e-03
+  DSTAR_MM_MU_FR_MET_Var: 2.26274170e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_2: 8.55964368e-03
+  DSTAR_Wjets_MG_Sherpa_2P_bin2: 2.33398800e-02
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 5.73301840e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 8.22435408e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 7.00053569e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_6: 1.98242276e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 8.41471925e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_2: 1.04042059e-02
+  DSTAR_MisMatchNorm_0tag_bin5: 3.11287648e-03
+  DSTAR_MM_EL_RR_STAT: 7.99421666e-03
+  DSTAR_WjetsNorm_0tag_bin1: 6.81524027e-03
+  DSTAR_MM_EL_RR_MadGraph_Var: 3.20117166e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 2.95084734e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 4.10609303e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_12: 2.19260119e-02
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 3.32377797e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_2: 2.01990099e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 7.63937170e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 5.87090283e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_1: 1.47061212e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_1: 1.91574398e-03
+  DSTAR_CharmNorm_0tag_bin4: 4.38520239e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 4.56508488e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 4.47744347e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 3.74799947e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin5: 8.64118047e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 6.95323666e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 2.33398800e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin1: 2.51545225e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 1.38607359e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin5: 7.69334128e-04
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 5.94053870e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 7.63675324e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 3.40000000e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin1: 1.89975656e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 5.65773806e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 3.32377797e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 2.69443872e-03
+  DSTAR_CharmNorm_0tag_bin3: 1.22486734e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 2.54139725e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin2: 2.61677282e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 4.95075752e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 2.97153159e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 8.76869432e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 2.62059154e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 6.22253967e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 1.35823415e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 2.82842712e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 2.47537876e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin1: 6.91303117e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 1.79612778e-03
+  DSTAR_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 1.45832095e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 4.10243830e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 6.18445632e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 6.22474899e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 1.98242276e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 2.26495033e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 1.57482539e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 2.26495033e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 2.69443872e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin4: 4.47548880e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 6.22253967e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 6.60965203e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 1.40010714e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 1.44729921e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 1.63324830e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 3.39411255e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 2.05121915e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 1.37178716e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 6.27375486e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 2.26274170e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 8.24302736e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_3_3: 1.16176590e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_2_2: 8.78236870e-05
+  DSTAR_MC_Stat_Fid_Eff_plus_1_1: 7.93536389e-05
+  DSTAR_MC_Stat_Fid_Eff_plus_5_5: 8.98150878e-05
+  DSTAR_MC_Stat_Fid_Eff_plus_4_4: 9.26647182e-05
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 8.20487660e-05
+  Uncorr_dstar_mu_Wminus_1: 0.0
+  Uncorr_dstar_mu_Wminus_2: 9.55654226e-02
+  Uncorr_dstar_mu_Wminus_3: 0.0
+  Uncorr_dstar_mu_Wminus_4: 0.0
+  Uncorr_dstar_mu_Wminus_5: 0.0
+  Uncorr_dstar_mu_Wplus_1: 0.0
+  Uncorr_dstar_mu_Wplus_2: 0.0
+  Uncorr_dstar_mu_Wplus_3: 0.0
+  Uncorr_dstar_mu_Wplus_4: 0.0
+  Uncorr_dstar_mu_Wplus_5: 0.0
+- stat: 0.17
+  FID_EFF_WPLUSD_MG: 6.79117074e-01
+  TRK_EFF_Overal: 3.04097024e-01
+  TRK_EFF_Z0_MEAS: 1.02531702e-01
+  DPLUS_BR_SIG: 0.0
+  FID_EFF_QCD: 4.94974747e-02
+  TRK_EFF_PP0: 1.38596537e-01
+  TRK_EFF_D0_MEAS: 7.99046307e-02
+  DPLUS_SHERPA2211_QCD_WCHARM: 0.0
+  Lumi: 1.20916293e-01
+  JET_Flavor_Composition: 1.06070731e-01
+  JET_Pileup_RhoTopology: 9.54607249e-02
+  DPLUS_PEAK_RESOLUTION_PLUS: 0.0
+  MUON_EFF_ISO_SYS: 9.54607249e-02
+  PRW_DATASF: 8.41471925e-02
+  MET_SoftTrk: 4.31364115e-02
+  JET_JER_EffectiveNP_1: 1.74930701e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin2: 0.0
+  TRK_EFF_IBL: 4.52548340e-02
+  JET_Flavor_Response: 7.21248917e-02
+  JET_JER_EffectiveNP_2: 5.09215082e-02
+  MET_SoftTrk_ResoPara: 4.10121933e-02
+  FID_EFF_PDF: 5.93969696e-02
+  DPLUS_SHERPA2211_PDF_WJETS: 0.0
+  DPLUS_MisMatchNorm_0tag_bin3: 0.0
+  MET_SoftTrk_ResoPerp: 3.67695526e-02
+  MUON_EFF_TrigSystUncertainty: 6.08111832e-02
+  DPLUS_PEAK_RESOLUTION_MINUS: 0.0
+  JET_JER_EffectiveNP_3: 5.02070712e-02
+  Top_HS: 2.12132034e-02
+  DPLUS_SHERPA2211_QCD_WJETS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_EffectiveNP_1: 4.03081878e-02
+  DPLUS_Matched_Sherpa_MG_2P: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_MisMatchNorm_0tag_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_MisMatch_Sh_MG_2P_bin5: 0.0
+  JET_JER_EffectiveNP_7restTerm: 4.52548340e-02
+  EG_SCALE_ALL: 2.68700577e-02
+  JET_JER_EffectiveNP_5: 1.48576580e-02
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  JET_JER_EffectiveNP_4: 1.98242276e-02
+  JET_EtaIntercalibration_Modelling: 8.83897619e-03
+  DPLUS_MisMatch_Sh_MG_2P_bin1: 0.0
+  JET_JER_EffectiveNP_6: 3.40000000e-03
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  JET_Pileup_OffsetMu: 2.96984848e-03
+  PROD_FRAC_EIG_2: 1.55563492e-03
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_JvtEfficiency: 1.97989899e-02
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  MUON_SAGITTA_RESBIAS: 2.12132034e-02
+  DPLUS_MM_EL_RR_MadGraph_Var: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_MisMatchNorm_0tag_bin4: 0.0
+  DPLUS_MM_EL_FR_MET_Var: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_8: 0.0
+  DPLUS_BR_BKG: 0.0
+  JET_Pileup_OffsetNPV: 2.12132034e-02
+  Top_Shower: 1.98242276e-02
+  DPLUS_MisMatchNorm_0tag_bin1: 0.0
+  Top_GEN_isr: 7.14195351e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin4: 0.0
+  EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR: 2.12132034e-02
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin2: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  FT_EFF_Eigen_B_0: 1.97989899e-02
+  DPLUS_CharmNorm_0tag_bin2: 0.0
+  EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR: 1.97989899e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  PROD_FRAC_EIG_3: 5.58636733e-03
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  DPLUS_MisMatchNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_CharmNorm_0tag_bin3: 0.0
+  DPLUS_CharmNorm_0tag_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  PROD_FRAC_EIG_1: 3.32377797e-03
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  DPLUS_MM_EL_RR_STAT: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_1_1: 0.0
+  FID_EFF_AS: 1.41421356e-02
+  MUON_EFF_RECO_SYS: 1.83847763e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_3_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_4_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_2_2: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  mu_Top: 1.23693169e-03
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_5_5: 0.0
+  MUON_CB: 2.61677282e-03
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  DPLUS_CharmNorm_0tag_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_SHERPA2211_AS_WJETS: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR: 1.04651804e-02
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_OtherNorm_0tag: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  JET_JER_DataVsMC_MC16: 1.76847392e-02
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_8: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_PEAK_POSITION_PLUS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  DPLUS_MM_MU_FR_MET_Var: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  DPLUS_PEAK_POSITION_MINUS: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_WjetsNorm_0tag_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin2: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_3_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin1: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_1_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_CharmNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_WjetsNorm_0tag_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_2_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_5_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_4_4: 0.0
+  Uncorr_dplus_mu_Wminus_1: 0.0
+  Uncorr_dplus_mu_Wminus_2: 0.0
+  Uncorr_dplus_mu_Wminus_3: 0.0
+  Uncorr_dplus_mu_Wminus_4: 0.0
+  Uncorr_dplus_mu_Wminus_5: 0.0
+  Uncorr_dplus_mu_Wplus_1: 0.0
+  Uncorr_dplus_mu_Wplus_2: 0.0
+  Uncorr_dplus_mu_Wplus_3: 0.0
+  Uncorr_dplus_mu_Wplus_4: 0.0
+  Uncorr_dplus_mu_Wplus_5: 0.0
+  DSTAR_BR_SIG: 1.55563492e-01
+  DSTAR_SHERPA2211_QCD_WJETS: 1.01828287e-01
+  DSTAR_SHERPA2211_QCD_WPLUSC: 1.39957136e-01
+  DSTAR_PEAK_RESOLUTION_PLUS: 6.29344897e-02
+  DSTAR_MisMatched_Sherpa_MG_2P_bin2: 1.48576580e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 1.55563492e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 6.36474666e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 1.18087891e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 1.41421356e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 8.98039531e-03
+  DSTAR_PEAK_RESOLUTION_MINUS: 3.25883415e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin4: 4.38406204e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 1.27279221e-01
+  DSTAR_SHERPA2211_AS_WPLUSC: 1.65529454e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 1.41421356e-01
+  DSTAR_SHERPA2211_PDF_WPLUSC: 1.26344766e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin4: 3.81837662e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 3.96484552e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 4.66797601e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 1.10313191e-02
+  DSTAR_MisMatched_Sherpa_MG_2P_bin4: 1.48576580e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin5: 3.25269119e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 9.33380951e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 5.09215082e-03
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin5: 3.04097024e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 7.56620777e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 2.88574081e-04
+  DSTAR_WjetsNorm_0tag_bin3: 2.76179290e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 2.26274170e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin1: 1.06146126e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin2: 2.26495033e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 2.68886593e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin3: 2.40416306e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin2: 2.05608852e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin2: 2.33398800e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin4: 3.11287648e-02
+  DSTAR_PEAK_POSITION_ADHOC_PLUS: 1.84119526e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 4.17222962e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin5: 2.12132034e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin3: 2.12132034e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin2: 2.12367606e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin4: 2.83019434e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 1.20924563e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 1.28708974e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_2: 1.48576580e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 1.76847392e-02
+  DSTAR_SHERPA2211_PDF_WJETS: 1.76847392e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 6.01061561e-02
+  DSTAR_WjetsNorm_0tag_bin4: 1.37211516e-02
+  DSTAR_OtherNorm_0tag: 1.51878241e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 5.72778317e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin1: 9.70914517e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_2: 1.69705627e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 9.97133391e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_3_3: 7.35391052e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 3.40000000e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 1.02736313e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 5.37773186e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 4.38406204e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_1_1: 7.57017173e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 3.05081956e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_2_2: 7.36002717e-04
+  DSTAR_MisMatchNorm_0tag_bin3: 4.52658812e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 1.48576580e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_2: 4.17222962e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin3: 1.76847392e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin1: 8.80454428e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 3.25883415e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_5_5: 7.01480577e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 5.02070712e-02
+  DSTAR_WjetsNorm_0tag_bin5: 0.017
+  DSTAR_MC_Stat_Fid_Eff_minus_4_4: 7.00910123e-04
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin3: 1.62711401e-02
+  DSTAR_MisMatchNorm_0tag_bin1: 7.64395186e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 2.69443872e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 5.30353656e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 8.77724330e-03
+  DSTAR_MisMatchNorm_0tag_bin2: 6.15203218e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 9.01152040e-03
+  DSTAR_MM_EL_FR_MET_Var: 1.30766968e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 3.46806863e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 1.38451255e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 1.63324830e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 8.13311134e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_2: 1.77411950e-02
+  DSTAR_MisMatchNorm_0tag_bin4: 2.31732605e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_7: 7.66028720e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 9.81172768e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 2.03461913e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_6: 6.86785993e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_9: 3.11287648e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_0: 6.72160695e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 1.98997487e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 7.88463696e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 1.10710207e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 1.62711401e-03
+  DSTAR_Wjets_MG_Sherpa_2P_bin3: 3.53553391e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_8: 6.65882873e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin5: 6.93253200e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 1.10313191e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_0: 6.14735716e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 7.42613628e-03
+  DSTAR_CharmNorm_0tag_bin1: 2.26495033e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 6.80661443e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 1.68430253e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 8.76869432e-03
+  DSTAR_CharmNorm_0tag_bin2: 5.09116882e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin2: 2.83019434e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 8.98039531e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin1: 3.18237333e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 9.33380951e-03
+  DSTAR_CharmNorm_0tag_bin5: 8.27330043e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin4: 3.81968585e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 7.28337147e-03
+  DSTAR_MM_MU_FR_MET_Var: 4.38520239e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_2: 8.84576170e-03
+  DSTAR_Wjets_MG_Sherpa_2P_bin2: 3.46518398e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 1.12431090e-02
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 5.04058528e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 7.70762609e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_6: 3.68917335e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 4.38520239e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_2: 6.73999258e-03
+  DSTAR_MisMatchNorm_0tag_bin5: 1.17894020e-03
+  DSTAR_MM_EL_RR_STAT: 1.76847392e-03
+  DSTAR_WjetsNorm_0tag_bin1: 2.83019434e-03
+  DSTAR_MM_EL_RR_MadGraph_Var: 1.25685122e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 3.48245603e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 5.16792995e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_12: 1.63303399e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 2.82842712e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_2: 2.15870331e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 8.41590756e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 5.09116882e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_1: 1.65779975e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_1: 1.06521125e-03
+  DSTAR_CharmNorm_0tag_bin4: 3.32377797e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 6.74888880e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 6.58540052e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 6.29344897e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin5: 8.27813385e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 9.80752262e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 6.16177734e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin1: 1.10471716e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 2.54558441e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin5: 8.28975271e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 6.85911802e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 4.17222962e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 1.86279360e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin1: 9.62964174e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 4.03081878e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 6.64755594e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 3.04425689e-03
+  DSTAR_CharmNorm_0tag_bin3: 1.41421356e-02
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 3.78516842e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin2: 4.94974747e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 3.81837662e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 1.70880075e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 2.05121915e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 4.11217704e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 1.76847392e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 1.28833226e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 1.62711401e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 2.12367606e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin1: 2.13072758e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 3.76397396e-03
+  DSTAR_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 5.44495179e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 1.62711401e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 6.22976725e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 1.09119201e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 3.81968585e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 2.26495033e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 1.77411950e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 8.66184161e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 8.82198957e-04
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin4: 6.39218273e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 5.46328656e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 2.70370117e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 1.98242276e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 1.00402938e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 7.94229186e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 7.85286572e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 7.42882898e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 8.33711581e-05
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 3.08342342e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 3.56756219e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 1.87874293e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_3_3: 3.20117166e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_2_2: 2.90989691e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_1_1: 2.63960224e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_5_5: 2.70370117e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_4_4: 2.70370117e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 1.30487547e-04
+  Uncorr_dstar_mu_Wminus_1: 0.0
+  Uncorr_dstar_mu_Wminus_2: 0.0
+  Uncorr_dstar_mu_Wminus_3: 1.06296754e-01
+  Uncorr_dstar_mu_Wminus_4: 0.0
+  Uncorr_dstar_mu_Wminus_5: 0.0
+  Uncorr_dstar_mu_Wplus_1: 0.0
+  Uncorr_dstar_mu_Wplus_2: 0.0
+  Uncorr_dstar_mu_Wplus_3: 0.0
+  Uncorr_dstar_mu_Wplus_4: 0.0
+  Uncorr_dstar_mu_Wplus_5: 0.0
+- stat: 0.16
+  FID_EFF_WPLUSD_MG: 1.97989899e-01
+  TRK_EFF_Overal: 2.47537876e-01
+  TRK_EFF_Z0_MEAS: 8.27330043e-02
+  DPLUS_BR_SIG: 0.0
+  FID_EFF_QCD: 9.26323378e-02
+  TRK_EFF_PP0: 1.16673690e-01
+  TRK_EFF_D0_MEAS: 6.43486597e-02
+  DPLUS_SHERPA2211_QCD_WCHARM: 0.0
+  Lumi: 1.01117506e-01
+  JET_Flavor_Composition: 7.14195351e-02
+  JET_Pileup_RhoTopology: 7.70762609e-02
+  DPLUS_PEAK_RESOLUTION_PLUS: 0.0
+  MUON_EFF_ISO_SYS: 8.13188170e-02
+  PRW_DATASF: 9.61717214e-02
+  MET_SoftTrk: 4.52548340e-02
+  JET_JER_EffectiveNP_1: 5.45045870e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin2: 0.0
+  TRK_EFF_IBL: 3.74799947e-02
+  JET_Flavor_Response: 5.23259018e-02
+  JET_JER_EffectiveNP_2: 5.51633937e-02
+  MET_SoftTrk_ResoPara: 5.02070712e-02
+  FID_EFF_PDF: 6.64680374e-02
+  DPLUS_SHERPA2211_PDF_WJETS: 0.0
+  DPLUS_MisMatchNorm_0tag_bin3: 0.0
+  MET_SoftTrk_ResoPerp: 5.93969696e-02
+  MUON_EFF_TrigSystUncertainty: 5.09116882e-02
+  DPLUS_PEAK_RESOLUTION_MINUS: 0.0
+  JET_JER_EffectiveNP_3: 6.50615094e-02
+  Top_HS: 2.05121915e-02
+  DPLUS_SHERPA2211_QCD_WJETS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_EffectiveNP_1: 2.96984848e-02
+  DPLUS_Matched_Sherpa_MG_2P: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_MisMatchNorm_0tag_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_MisMatch_Sh_MG_2P_bin5: 0.0
+  JET_JER_EffectiveNP_7restTerm: 4.59646603e-02
+  EG_SCALE_ALL: 3.25269119e-02
+  JET_JER_EffectiveNP_5: 3.18237333e-02
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  JET_JER_EffectiveNP_4: 9.49420876e-03
+  JET_EtaIntercalibration_Modelling: 9.68749194e-03
+  DPLUS_MisMatch_Sh_MG_2P_bin1: 0.0
+  JET_JER_EffectiveNP_6: 2.75816968e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  JET_Pileup_OffsetMu: 6.50615094e-03
+  PROD_FRAC_EIG_2: 2.47537876e-03
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_JvtEfficiency: 1.83847763e-02
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  MUON_SAGITTA_RESBIAS: 2.12132034e-02
+  DPLUS_MM_EL_RR_MadGraph_Var: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_MisMatchNorm_0tag_bin4: 0.0
+  DPLUS_MM_EL_FR_MET_Var: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_8: 0.0
+  DPLUS_BR_BKG: 0.0
+  JET_Pileup_OffsetNPV: 7.35391052e-03
+  Top_Shower: 7.36002717e-03
+  DPLUS_MisMatchNorm_0tag_bin1: 0.0
+  Top_GEN_isr: 3.04097024e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin4: 0.0
+  EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR: 1.97989899e-02
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin2: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  FT_EFF_Eigen_B_0: 1.32237476e-02
+  DPLUS_CharmNorm_0tag_bin2: 0.0
+  EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR: 2.05121915e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  PROD_FRAC_EIG_3: 2.12132034e-03
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  DPLUS_MisMatchNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_CharmNorm_0tag_bin3: 0.0
+  DPLUS_CharmNorm_0tag_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  PROD_FRAC_EIG_1: 8.49279106e-05
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  DPLUS_MM_EL_RR_STAT: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_1_1: 0.0
+  FID_EFF_AS: 1.55563492e-02
+  MUON_EFF_RECO_SYS: 1.83847763e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_3_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_4_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_2_2: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  mu_Top: 1.01265740e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_5_5: 0.0
+  MUON_CB: 2.19260119e-03
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  DPLUS_CharmNorm_0tag_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_SHERPA2211_AS_WJETS: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR: 1.11016891e-02
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_OtherNorm_0tag: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  JET_JER_DataVsMC_MC16: 2.05121915e-02
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_8: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_PEAK_POSITION_PLUS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  DPLUS_MM_MU_FR_MET_Var: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  DPLUS_PEAK_POSITION_MINUS: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_WjetsNorm_0tag_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin2: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_3_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin1: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_1_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_CharmNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_WjetsNorm_0tag_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_2_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_5_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_4_4: 0.0
+  Uncorr_dplus_mu_Wminus_1: 0.0
+  Uncorr_dplus_mu_Wminus_2: 0.0
+  Uncorr_dplus_mu_Wminus_3: 0.0
+  Uncorr_dplus_mu_Wminus_4: 0.0
+  Uncorr_dplus_mu_Wminus_5: 0.0
+  Uncorr_dplus_mu_Wplus_1: 0.0
+  Uncorr_dplus_mu_Wplus_2: 0.0
+  Uncorr_dplus_mu_Wplus_3: 0.0
+  Uncorr_dplus_mu_Wplus_4: 0.0
+  Uncorr_dplus_mu_Wplus_5: 0.0
+  DSTAR_BR_SIG: 1.31525663e-01
+  DSTAR_SHERPA2211_QCD_WJETS: 9.68749194e-02
+  DSTAR_SHERPA2211_QCD_WPLUSC: 4.38665020e-02
+  DSTAR_PEAK_RESOLUTION_PLUS: 6.57628314e-02
+  DSTAR_MisMatched_Sherpa_MG_2P_bin2: 1.41421356e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 1.55563492e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 1.01823376e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 1.28693434e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 1.03945899e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 1.69705627e-01
+  DSTAR_PEAK_RESOLUTION_MINUS: 4.24381903e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin4: 2.96984848e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 1.35058321e-02
+  DSTAR_SHERPA2211_AS_WPLUSC: 3.76297754e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 7.63740794e-03
+  DSTAR_SHERPA2211_PDF_WPLUSC: 3.75066661e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin4: 2.68700577e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 2.76902510e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 1.41421356e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 9.82992879e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin4: 1.23073149e-01
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin5: 2.40416306e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 1.17379726e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 4.58291119e-04
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin5: 2.26274170e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 5.87090283e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 1.17379726e-01
+  DSTAR_WjetsNorm_0tag_bin3: 2.47941525e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 1.17532974e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin1: 1.31556072e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin2: 1.55884573e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 4.73998945e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin3: 2.26274170e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin2: 1.41105457e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin2: 2.19260119e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin4: 2.47537876e-02
+  DSTAR_PEAK_POSITION_ADHOC_PLUS: 2.12367606e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 8.20304821e-02
+  DSTAR_MisMatched_Sherpa_MG_2P_bin5: 1.44471450e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin3: 1.97989899e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin2: 2.05121915e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin4: 2.19260119e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 1.40010714e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 1.40010714e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_2: 1.55563492e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 3.39558537e-02
+  DSTAR_SHERPA2211_PDF_WJETS: 1.69705627e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 5.65685425e-03
+  DSTAR_WjetsNorm_0tag_bin4: 8.13925672e-03
+  DSTAR_OtherNorm_0tag: 2.97153159e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 3.95979797e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin1: 1.55563492e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_2: 6.08194048e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 3.81968585e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_3_3: 6.79117074e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 2.62821232e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 1.08327051e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 6.36710295e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 4.66690476e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_1_1: 6.64981203e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 6.15203218e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_2_2: 6.50845604e-04
+  DSTAR_MisMatchNorm_0tag_bin3: 7.35391052e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 2.89956893e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_2: 8.41828367e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin3: 1.55563492e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin1: 1.37211516e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 7.72706283e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_5_5: 6.43486597e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 4.32059024e-03
+  DSTAR_WjetsNorm_0tag_bin5: 1.19736168e-02
+  DSTAR_MC_Stat_Fid_Eff_minus_4_4: 6.64680374e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin3: 1.45832095e-02
+  DSTAR_MisMatchNorm_0tag_bin1: 2.55880832e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 6.09979508e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 2.33826859e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 2.47537876e-02
+  DSTAR_MisMatchNorm_0tag_bin2: 6.43486597e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 9.14480727e-03
+  DSTAR_MM_EL_FR_MET_Var: 2.62821232e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 2.97657521e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 2.48730276e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 4.87929298e-02
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 3.88940870e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_2: 9.45238065e-03
+  DSTAR_MisMatchNorm_0tag_bin4: 4.03081878e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_7: 1.84119526e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 4.53514057e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 5.09190534e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_6: 1.84119526e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_9: 4.22137418e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_0: 1.10905365e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 4.89974489e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 9.08625335e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 3.08990291e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 1.02969656e-03
+  DSTAR_Wjets_MG_Sherpa_2P_bin3: 5.30600368e-04
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_8: 6.59147176e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin5: 5.09509568e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 8.90954544e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_0: 1.91507180e-02
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 3.25269119e-03
+  DSTAR_CharmNorm_0tag_bin1: 4.24735212e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 8.23225364e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 2.54754784e-02
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 7.00053569e-03
+  DSTAR_CharmNorm_0tag_bin2: 6.50615094e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin2: 4.81871352e-04
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 5.65685425e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin1: 3.74799947e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 9.40571635e-03
+  DSTAR_CharmNorm_0tag_bin5: 5.94053870e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin4: 2.40416306e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 9.61717214e-03
+  DSTAR_MM_MU_FR_MET_Var: 6.64981203e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_2: 9.55235573e-03
+  DSTAR_Wjets_MG_Sherpa_2P_bin2: 4.03081878e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 5.86919926e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 6.66558325e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 5.30353656e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_6: 4.74420699e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 6.85911802e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_2: 9.34237657e-03
+  DSTAR_MisMatchNorm_0tag_bin5: 1.84119526e-03
+  DSTAR_MM_EL_RR_STAT: 1.15982757e-02
+  DSTAR_WjetsNorm_0tag_bin1: 7.48515197e-03
+  DSTAR_MM_EL_RR_MadGraph_Var: 2.93385412e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 1.23250761e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 2.97153159e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_12: 5.99609873e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 2.68700577e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_2: 1.90984293e-02
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 6.01061561e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 5.44495179e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_1: 0.017
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_1: 1.46515358e-02
+  DSTAR_CharmNorm_0tag_bin4: 1.48576580e-02
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 6.05702072e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 6.84762733e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 7.84904453e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin5: 3.13368792e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 1.69705627e-02
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 6.72662620e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin1: 2.00249844e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 1.34350288e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin5: 3.05122926e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 5.86919926e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 6.92964646e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 3.81968585e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin1: 1.57235492e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 4.17222962e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 3.04425689e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 5.23641098e-03
+  DSTAR_CharmNorm_0tag_bin3: 8.36704846e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 3.04920891e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin2: 4.10121933e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 3.67695526e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 3.04097024e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 5.94053870e-05
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 3.19178633e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 3.04097024e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 1.12439984e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 4.24264069e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 2.54754784e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin1: 7.80000000e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 1.68127184e-03
+  DSTAR_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 1.48576580e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 2.33826859e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 1.36656504e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 5.72778317e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 1.55563492e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 2.76179290e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 2.40624188e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 1.40438599e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 2.83548938e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin4: 4.88134203e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 4.95252461e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 2.79419040e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 9.36002137e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 7.84219357e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 1.08388191e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 7.05549431e-05
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 1.90984293e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 1.20805629e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 7.26842486e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 1.24225601e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 5.88451357e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_3_3: 3.67831483e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_2_2: 3.54118624e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_1_1: 3.60936282e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_5_5: 3.25883415e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_4_4: 3.25883415e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 1.41024821e-04
+  Uncorr_dstar_mu_Wminus_1: 0.0
+  Uncorr_dstar_mu_Wminus_2: 0.0
+  Uncorr_dstar_mu_Wminus_3: 0.0
+  Uncorr_dstar_mu_Wminus_4: 8.15030674e-02
+  Uncorr_dstar_mu_Wminus_5: 0.0
+  Uncorr_dstar_mu_Wplus_1: 0.0
+  Uncorr_dstar_mu_Wplus_2: 0.0
+  Uncorr_dstar_mu_Wplus_3: 0.0
+  Uncorr_dstar_mu_Wplus_4: 0.0
+  Uncorr_dstar_mu_Wplus_5: 0.0
+- stat: 0.16
+  FID_EFF_WPLUSD_MG: 2.47537876e-01
+  TRK_EFF_Overal: 2.12132034e-01
+  TRK_EFF_Z0_MEAS: 6.71770050e-02
+  DPLUS_BR_SIG: 0.0
+  FID_EFF_QCD: 3.39411255e-02
+  TRK_EFF_PP0: 1.00414142e-01
+  TRK_EFF_D0_MEAS: 5.16212166e-02
+  DPLUS_SHERPA2211_QCD_WCHARM: 0.0
+  Lumi: 8.27330043e-02
+  JET_Flavor_Composition: 5.65685425e-02
+  JET_Pileup_RhoTopology: 5.86919926e-02
+  DPLUS_PEAK_RESOLUTION_PLUS: 0.0
+  MUON_EFF_ISO_SYS: 6.85911802e-02
+  PRW_DATASF: 6.15203218e-02
+  MET_SoftTrk: 3.81837662e-02
+  JET_JER_EffectiveNP_1: 7.57413361e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin2: 0.0
+  TRK_EFF_IBL: 2.96984848e-02
+  JET_Flavor_Response: 4.94974747e-02
+  JET_JER_EffectiveNP_2: 1.50667681e-03
+  MET_SoftTrk_ResoPara: 2.26274170e-02
+  FID_EFF_PDF: 4.87929298e-02
+  DPLUS_SHERPA2211_PDF_WJETS: 0.0
+  DPLUS_MisMatchNorm_0tag_bin3: 0.0
+  MET_SoftTrk_ResoPerp: 2.54558441e-02
+  MUON_EFF_TrigSystUncertainty: 4.10121933e-02
+  DPLUS_PEAK_RESOLUTION_MINUS: 0.0
+  JET_JER_EffectiveNP_3: 2.40416306e-02
+  Top_HS: 1.09602692e-02
+  DPLUS_SHERPA2211_QCD_WJETS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_EffectiveNP_1: 2.68700577e-02
+  DPLUS_Matched_Sherpa_MG_2P: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_MisMatchNorm_0tag_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_MisMatch_Sh_MG_2P_bin5: 0.0
+  JET_JER_EffectiveNP_7restTerm: 1.69705627e-02
+  EG_SCALE_ALL: 1.69705627e-02
+  JET_JER_EffectiveNP_5: 9.34237657e-03
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  JET_JER_EffectiveNP_4: 4.71911009e-03
+  JET_EtaIntercalibration_Modelling: 1.38592929e-02
+  DPLUS_MisMatch_Sh_MG_2P_bin1: 0.0
+  JET_JER_EffectiveNP_6: 4.96588361e-03
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  JET_Pileup_OffsetMu: 6.92964646e-03
+  PROD_FRAC_EIG_2: 1.98242276e-04
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  JET_JvtEfficiency: 1.69705627e-02
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  MUON_SAGITTA_RESBIAS: 1.69705627e-02
+  DPLUS_MM_EL_RR_MadGraph_Var: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_MisMatchNorm_0tag_bin4: 0.0
+  DPLUS_MM_EL_FR_MET_Var: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_8: 0.0
+  DPLUS_BR_BKG: 0.0
+  JET_Pileup_OffsetNPV: 1.39308112e-02
+  Top_Shower: 1.98997487e-03
+  DPLUS_MisMatchNorm_0tag_bin1: 0.0
+  Top_GEN_isr: 4.31595876e-03
+  DPLUS_MisMatch_Sh_MG_2P_bin4: 0.0
+  EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR: 2.26274170e-02
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin2: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  FT_EFF_Eigen_B_0: 1.01828287e-02
+  DPLUS_CharmNorm_0tag_bin2: 0.0
+  EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR: 1.15259490e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  PROD_FRAC_EIG_3: 7.91959595e-03
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  DPLUS_MisMatchNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_CharmNorm_0tag_bin3: 0.0
+  DPLUS_CharmNorm_0tag_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  PROD_FRAC_EIG_1: 1.97989899e-03
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  DPLUS_MM_EL_RR_STAT: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_1_1: 0.0
+  FID_EFF_AS: 1.38592929e-02
+  MUON_EFF_RECO_SYS: 2.26274170e-02
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_3_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_4_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_2_2: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  mu_Top: 7.29160476e-03
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_2: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_minus_5_5: 0.0
+  MUON_CB: 5.37401154e-03
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  DPLUS_CharmNorm_0tag_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin3: 0.0
+  DPLUS_SHERPA2211_AS_WJETS: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR: 1.11016891e-02
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  DPLUS_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_9: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_9: 0.0
+  DPLUS_OtherNorm_0tag: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  JET_JER_DataVsMC_MC16: 8.60857131e-04
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin5: 0.0
+  DPLUS_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_8: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_1: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  DPLUS_PEAK_POSITION_PLUS: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_0: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_9: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_1: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_SS_eta_bin2: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_minus_Wjets_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_3: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 0.0
+  DPLUS_MM_MU_FR_MET_Var: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_5: 0.0
+  DPLUS_PEAK_POSITION_MINUS: 0.0
+  DPLUS_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  DPLUS_WjetsNorm_0tag_bin3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_0: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_0: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin2: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin1: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin5_bin_7: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_3_3: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin1: 0.0
+  DPLUS_Stat_plus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_1_1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin2: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_8: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_3: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin4_bin_1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin5_bin_6: 0.0
+  DPLUS_CharmNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_SS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin4: 0.0
+  DPLUS_Stat_plus_Wjets_0tag_OS_eta_bin1: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  gamma_stat_OS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  DPLUS_Stat_minus_WCharm_0tag_OS_eta_bin4: 0.0
+  DPLUS_WjetsNorm_0tag_bin5: 0.0
+  gamma_stat_SS_lep_minus_0tag_Dplus_eta_bin2_bin_9: 0.0
+  DPLUS_WjetsNorm_0tag_bin1: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin4_bin_6: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin1_bin_3: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin2_bin_4: 0.0
+  gamma_stat_OS_lep_plus_0tag_Dplus_eta_bin1_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_5: 0.0
+  gamma_stat_SS_lep_plus_0tag_Dplus_eta_bin3_bin_3: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_2_2: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_5_5: 0.0
+  DPLUS_MC_Stat_Fid_Eff_plus_4_4: 0.0
+  Uncorr_dplus_mu_Wminus_1: 0.0
+  Uncorr_dplus_mu_Wminus_2: 0.0
+  Uncorr_dplus_mu_Wminus_3: 0.0
+  Uncorr_dplus_mu_Wminus_4: 0.0
+  Uncorr_dplus_mu_Wminus_5: 0.0
+  Uncorr_dplus_mu_Wplus_1: 0.0
+  Uncorr_dplus_mu_Wplus_2: 0.0
+  Uncorr_dplus_mu_Wplus_3: 0.0
+  Uncorr_dplus_mu_Wplus_4: 0.0
+  Uncorr_dplus_mu_Wplus_5: 0.0
+  DSTAR_BR_SIG: 1.07484883e-01
+  DSTAR_SHERPA2211_QCD_WJETS: 4.66690476e-02
+  DSTAR_SHERPA2211_QCD_WPLUSC: 4.46178216e-02
+  DSTAR_PEAK_RESOLUTION_PLUS: 4.66690476e-02
+  DSTAR_MisMatched_Sherpa_MG_2P_bin2: 4.47744347e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 1.13137085e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 1.83847763e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 7.42478956e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 1.06066017e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 9.12181451e-03
+  DSTAR_PEAK_RESOLUTION_MINUS: 1.98242276e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin4: 2.26274170e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 9.75807358e-03
+  DSTAR_SHERPA2211_AS_WPLUSC: 1.06334378e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 6.43486597e-03
+  DSTAR_SHERPA2211_PDF_WPLUSC: 8.91333271e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin4: 1.97989899e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 1.41421356e-01
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 3.32377797e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 6.08111832e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin4: 1.80208213e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin5: 2.54558441e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 7.21248917e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 1.34350288e-01
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin5: 2.26274170e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 2.40416306e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 3.60659119e-03
+  DSTAR_WjetsNorm_0tag_bin3: 1.98242276e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 1.14568757e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin1: 2.40624188e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin2: 1.25382415e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_4: 9.61717214e-02
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin3: 1.76847392e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin2: 1.14090972e-02
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin2: 6.81469001e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin4: 8.07650915e-03
+  DSTAR_PEAK_POSITION_ADHOC_PLUS: 3.67695526e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_4: 4.24264069e-03
+  DSTAR_MisMatched_Sherpa_MG_2P_bin5: 3.39411255e-02
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin3: 1.55563492e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin2: 5.90487087e-03
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin4: 7.30393729e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 3.39558537e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 3.96484552e-02
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_2: 9.47997890e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 9.69058822e-03
+  DSTAR_SHERPA2211_PDF_WJETS: 8.91010662e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_4: 4.10121933e-03
+  DSTAR_WjetsNorm_0tag_bin4: 1.27294933e-02
+  DSTAR_OtherNorm_0tag: 7.17129695e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_4: 3.95979797e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin1: 6.59905296e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_2: 8.13311134e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 5.30542176e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_3_3: 4.31364115e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_3: 6.15203218e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_6: 2.47537876e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_5: 3.67831483e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_4: 2.54558441e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_1_1: 4.45505331e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_3: 1.91507180e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_2_2: 4.31364115e-04
+  DSTAR_MisMatchNorm_0tag_bin3: 5.94053870e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_12: 8.34625665e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_2: 4.03081878e-03
+  DSTAR_Stat_plus_Wjets_0tag_OS_eta_bin3: 1.30123019e-02
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin1: 5.54797260e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 1.68721664e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_5_5: 6.85911802e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_5: 3.53694784e-03
+  DSTAR_WjetsNorm_0tag_bin5: 3.15119025e-03
+  DSTAR_MC_Stat_Fid_Eff_minus_4_4: 4.24264069e-04
+  DSTAR_Stat_plus_Wjets_0tag_SS_eta_bin3: 1.18138690e-02
+  DSTAR_MisMatchNorm_0tag_bin1: 8.13925672e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_5: 5.72778317e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin3_bin_3: 2.19260119e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_6: 4.52990066e-03
+  DSTAR_MisMatchNorm_0tag_bin2: 4.01955221e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_2: 2.12132034e-02
+  DSTAR_MM_EL_FR_MET_Var: 1.11193525e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_5: 2.12367606e-03
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin2_bin_3: 5.95315043e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin4_bin_5: 7.89477675e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin2: 3.96106046e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_2: 6.80661443e-03
+  DSTAR_MisMatchNorm_0tag_bin4: 1.78428557e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_7: 2.12367606e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 2.89956893e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin5_bin_9: 2.54558441e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_6: 2.83548938e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin3_bin_9: 4.03329890e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_0: 2.75816968e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_0: 1.17418057e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 7.08237248e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 8.15889086e-04
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_3: 5.09509568e-04
+  DSTAR_Wjets_MG_Sherpa_2P_bin3: 3.61489972e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_8: 5.44495179e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin5: 2.40416306e-02
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin2: 4.03329890e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_0: 2.97153159e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin2: 3.39558537e-03
+  DSTAR_CharmNorm_0tag_bin1: 2.68700577e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_9: 6.86785993e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 8.86397202e-04
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin2: 3.39558537e-03
+  DSTAR_CharmNorm_0tag_bin2: 2.85657137e-04
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin2: 1.83847763e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin5: 6.85911802e-03
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin1: 1.37211516e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 2.47537876e-03
+  DSTAR_CharmNorm_0tag_bin5: 1.20916293e-02
+  DSTAR_Stat_minus_WCharm_0tag_OS_eta_bin4: 1.04003606e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 1.90984293e-03
+  DSTAR_MM_MU_FR_MET_Var: 4.59646603e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_2: 6.43486597e-03
+  DSTAR_Wjets_MG_Sherpa_2P_bin2: 1.84119526e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin3: 5.16405848e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 4.81767579e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin5: 5.86919926e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_6: 2.82842712e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_3: 5.58636733e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_2: 1.48576580e-03
+  DSTAR_MisMatchNorm_0tag_bin5: 2.40416306e-02
+  DSTAR_MM_EL_RR_STAT: 6.50845604e-03
+  DSTAR_WjetsNorm_0tag_bin1: 2.27156334e-03
+  DSTAR_MM_EL_RR_MadGraph_Var: 1.76847392e-02
+  gamma_stat_SS_lep_minus_0tag_Dstar_eta_bin1_bin_1: 1.14708326e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin1: 2.55342907e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin2_bin_12: 4.95378643e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_OS_eta_bin5: 1.83847763e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_2: 9.13016977e-04
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin4: 2.54754784e-03
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin3: 4.52658812e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_1: 1.63324830e-03
+  gamma_stat_OS_lep_minus_0tag_Dstar_eta_bin4_bin_1: 2.19260119e-03
+  DSTAR_CharmNorm_0tag_bin4: 1.48576580e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 1.62070972e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_12: 1.38451255e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 1.90984293e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin5: 1.74928557e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_0: 8.40059522e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_6: 1.98242276e-03
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin1: 4.89974489e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 5.73824886e-04
+  DSTAR_Stat_minus_Wjets_0tag_OS_eta_bin5: 2.06351036e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin4: 1.76847392e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 3.33279162e-04
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin1: 2.41246762e-03
+  DSTAR_Stat_minus_Wjets_0tag_SS_eta_bin1: 4.12067956e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_OS_eta_bin3: 3.18237333e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 1.76847392e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 2.83019434e-03
+  DSTAR_CharmNorm_0tag_bin3: 1.55563492e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 1.85827877e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin2: 1.06783660e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin3: 3.11287648e-03
+  DSTAR_Stat_plus_WMisMatched_0tag_SS_eta_bin1: 1.70000000e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 1.55563492e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_6: 2.27156334e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 4.38406204e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin5: 1.00414142e-02
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 3.81837662e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 3.04097024e-03
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin1: 4.73787927e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_5: 9.44603091e-04
+  DSTAR_Stat_minus_DibosonZjets_0tag_SS_eta_bin3: 1.32252599e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin5_bin_4: 6.25139984e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 9.55654226e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_4: 2.59422435e-04
+  DSTAR_Stat_minus_WMisMatched_0tag_SS_eta_bin1: 1.77411950e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_3: 5.40740233e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_5: 1.40438599e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 3.18237333e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_5: 1.06901824e-04
+  DSTAR_Stat_plus_WCharm_0tag_OS_eta_bin4: 6.29344897e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 1.55884573e-05
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_6: 8.23225364e-04
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 1.18138690e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin4_bin_3: 1.55884573e-03
+  gamma_stat_OS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 2.19260119e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_4: 6.15690669e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_4: 9.45238065e-05
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_3: 1.45150784e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin1_bin_5: 1.01216352e-03
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin2_bin_5: 7.37699126e-05
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_3: 8.44792874e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_3_3: 1.97989899e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_2_2: 1.90984293e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_1_1: 1.83847763e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_5_5: 1.76847392e-04
+  DSTAR_MC_Stat_Fid_Eff_plus_4_4: 1.76847392e-04
+  gamma_stat_SS_lep_plus_0tag_Dstar_eta_bin3_bin_4: 1.74355958e-04
+  Uncorr_dstar_mu_Wminus_1: 0.0
+  Uncorr_dstar_mu_Wminus_2: 0.0
+  Uncorr_dstar_mu_Wminus_3: 0.0
+  Uncorr_dstar_mu_Wminus_4: 0.0
+  Uncorr_dstar_mu_Wminus_5: 5.87090283e-02
+  Uncorr_dstar_mu_Wplus_1: 0.0
+  Uncorr_dstar_mu_Wplus_2: 0.0
+  Uncorr_dstar_mu_Wplus_3: 0.0
+  Uncorr_dstar_mu_Wplus_4: 0.0
+  Uncorr_dstar_mu_Wplus_5: 0.0

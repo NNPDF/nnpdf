@@ -148,13 +148,25 @@ def get_artificial_uncertainties():
 
     covmat_list = covmat.flatten().tolist()
     artificial_sys = np.array(covmat_to_artunc(4 * ndat, covmat_list))
-    uncertainties = []
-    uncertainties.append([{"name": "stat", "values": np.zeros(4 * ndat)}])
 
-    for i in range(len(artificial_sys)):
+    channels = ["WMDP", "WPDM", "WMDP_star", "WPDM_star"]
+
+    # Create a dict of empty lists, one per channel
+    uncertainties = {ch: [] for ch in channels}
+
+    # Add the 'stat' entry to each channel
+    for ch in channels:
+        uncertainties[ch].append({"name": "stat", "values": np.zeros(ndat)})
+
+    # Fill each channel with the appropriate 5-value slices
+    for i in range(len(artificial_sys[0])):  # loop over columns
         name = f"sys_{i}"
         values = artificial_sys[:, i]
-        uncertainties.append([{"name": name, "values": values}])
+
+        uncertainties["WMDP"].append({"name": name, "values": values[0:5]})
+        uncertainties["WPDM"].append({"name": name, "values": values[5:10]})
+        uncertainties["WMDP_star"].append({"name": name, "values": values[10:15]})
+        uncertainties["WPDM_star"].append({"name": name, "values": values[15:20]})
 
     return uncertainties
 
@@ -216,10 +228,15 @@ def get_uncertainties():
                 deltas[value_id] += delta
             value_id += 1
 
-    syst_list = []
+    channels = ["WMDP", "WPDM", "WMDP_star", "WPDM_star"]
+
+    sys_list = {ch: [] for ch in channels}
     for label, values in syst_dict.items():
-        syst_list.append([{"name": label, "values": values.tolist()}])
-    return syst_list, deltas
+        sys_list["WMDP"].append({"name": label, "values": values[0:5]})
+        sys_list["WPDM"].append({"name": label, "values": values[5:10]})
+        sys_list["WMDP_star"].append({"name": label, "values": values[10:15]})
+        sys_list["WPDM_star"].append({"name": label, "values": values[15:20]})
+    return sys_list, deltas
 
 
 if __name__ == "__main__":
