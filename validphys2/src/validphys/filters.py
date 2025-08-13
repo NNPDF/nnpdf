@@ -133,7 +133,7 @@ class FilterRule:
     rule: str = None
     reason: str = dataclasses.field(
         default=None, hash=False, compare=False
-    )  # Not relevant for hasing and comparison
+    )  # Not relevant for hashing
     local_variables: Mapping[str, Union[str, float]] = dataclasses.field(
         default=None, hash=False
     )  # Avoid hash issues with caching

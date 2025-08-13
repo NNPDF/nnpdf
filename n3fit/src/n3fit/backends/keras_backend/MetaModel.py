@@ -1,8 +1,8 @@
 """
-    MetaModel class
+MetaModel class
 
-    Extension of the backend Model class containing some wrappers in order to absorb other
-    backend-dependent calls.
+Extension of the backend Model class containing some wrappers in order to absorb other
+backend-dependent calls.
 """
 
 from pathlib import Path
@@ -408,7 +408,7 @@ class MetaModel(Model):
             raise ValueError("Trying to generate single replica models with no generator set.")
         replicas = []
         for i_replica in range(self.num_replicas):
-            replica = self.single_replica_generator()
+            replica = self.single_replica_generator(i_replica)
             replica.set_replica_weights(self.get_replica_weights(i_replica))
             replicas.append(replica)
 

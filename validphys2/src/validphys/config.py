@@ -911,9 +911,9 @@ class CoreConfig(configparser.Config):
         from validphys import n3fit_data
 
         if diagonal_basis:
-            return n3fit_data._diagonal_masks
+            return n3fit_data.diagonal_masks
         else:
-            return n3fit_data._standard_masks
+            return n3fit_data.standard_masks
 
     @configparser.explicit_node
     def produce_covariance_matrix(self, use_pdferr: bool = False):
@@ -1415,9 +1415,6 @@ class CoreConfig(configparser.Config):
         multiple filters for the same dataset or process with the
         same fields (`reason` is not used in the comparison).
         """
-        # TODO: This should be done using a more sophisticated comparison
-        # that checks if two rules are actually the same, regardless of the
-        # order in which the cuts are defined.
         if rules is not None:
             unique_rules = set(AddedFilterRule(**rule) for rule in rules)
             if len(unique_rules) != len(rules):

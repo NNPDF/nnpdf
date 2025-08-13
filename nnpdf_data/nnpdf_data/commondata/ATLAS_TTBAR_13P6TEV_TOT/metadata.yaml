@@ -1,0 +1,51 @@
+setname: ATLAS_TTBAR_13P6TEV_TOT
+nnpdf_metadata:
+  nnpdf31_process: TOP
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/2308.09529
+iNSPIRE:
+  url: https://inspirehep.net/literature/2689657
+hepdata:
+  url: NA
+  version:
+version: 1
+version_comment: NA
+implemented_observables:
+- observable:
+    description: total cross section of ttBar
+    label: $\sigma_{t\bar{t}}$
+    units: $pb$
+  observable_name: X-SEC
+  process_type: INC
+  ndata: 1
+  tables: []
+  kinematics:
+    variables:
+      zero:
+        description: ''
+        label: $$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage:
+  - zero
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: ATLAS 13.6 TeV $\sigma_{t\bar{t}}$
+    plot_x: sqrts
+    y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_13P6TEV_TOT_X-SEC

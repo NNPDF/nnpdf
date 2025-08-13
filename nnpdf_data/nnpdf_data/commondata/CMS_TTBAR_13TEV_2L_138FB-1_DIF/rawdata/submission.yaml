@@ -1,0 +1,47 @@
+additional_resources:
+- { description: web page with auxiliary material, 
+location: 'https://cds.cern.ch/record/2803771'}
+comment: 'Differential cross sections for top quark pair ($\rm{t}\bar{\rm{t}}$) production are measured in proton-proton collisions at a centre-of-mass energy of 13 TeV using a sample of events containing two oppositely charged leptons. The data were recorded with the CMS detector at the LHC and correspond to an integrated luminosity of 138 fb$^{-1}$. Differential cross sections are measured as functions of kinematic observables of the $\rm{t}\bar{\rm{t}}$ system, the top quark and antiquark and their decay products, and the number of additional jets in the event not originating from the $\rm{t}\bar{\rm{t}}$ decay. These cross sections are measured as function of one, two, or three variables and are presented at the parton and particle levels. The measurements are compared to standard model predictions of Monte Carlo event generators with next-to-leading-order accuracy in quantum chromodynamics (QCD) at matrix-element level interfaced to parton showers. Some of the measurements are also confronted with predictions beyond next-to-leading-order precision in QCD. The nominal predictions from all calculations, neglecting theoretical uncertainties, do not describe well several of the measured cross sections, and the deviations are found to be largest for the multi-differential cross sections.
+
+Note: All remaining cross sections will be uploaded to this record in the near future'
+---
+# This is Table 1.
+name: "ptt"
+description: Absolute differential ttbar production cross section measured as function of top pT at the parton level in the full phase space.
+keywords:
+- {name: reactions, values: [P P --> TOP TOPBAR]}
+- {name: observables, values: ['ptt']}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure 65 (top left) of paper
+data_file: ptt_abs_parton.yaml
+---
+# This is Table 2.
+name: "yt"
+description: Absolute differential ttbar production cross section measured as function of top rapidity at the parton level in the full phase space.
+keywords:
+- {name: reactions, values: [P P --> TOP TOPBAR]}
+- {name: observables, values: ['yt']}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure 66 (top left) of paper
+data_file: yt_abs_parton.yaml
+---
+# This is Table 3.
+name: "mtt"
+description: Absolute differential ttbar production cross section measured as function of ttbar mass at the parton level in the full phase space.
+keywords:
+- {name: reactions, values: [P P --> TOP TOPBAR]}
+- {name: observables, values: ['mtt']}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure 67 (middle left) of paper
+data_file: mtt_abs_parton.yaml
+---
+# This is Table 4.
+name: "mttytt"
+description: Absolute differential ttbar production cross section measured as function of ttbar rapidity in bins of ttbar mass at the parton level in the full phase space.
+keywords:
+- {name: reactions, values: [P P --> TOP TOPBAR]}
+- {name: observables, values: ['mtt']}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure 74 (top) of paper
+data_file: mttytt-abs_parton.yaml
+# End of YAML file.
