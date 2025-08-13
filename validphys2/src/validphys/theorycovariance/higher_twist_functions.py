@@ -42,69 +42,6 @@ NC_SIGMARED_P_EP = [
 NC_SIGMARED_P_EAVG = ['HERA_NC_318GEV_EAVG_CHARM-SIGMARED', 'HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED']
 
 
-# TODO This function will be deleted in the future
-def step_function(a: npt.ArrayLike, y_shift: npt.ArrayLike, bin_edges: npt.ArrayLike) -> np.ndarray:
-    """
-    This function defines the step function used to construct the prior. The bins of the step
-    function are constructed using pairs of consecutive points. For instance, given the set of
-    points [0.0, 0.1, 0.3, 0.5], there will be three bins with edges [[0.0, 0.1], [0.1, 0.3],
-    0.3, 0.5]]. Each bin is coupled with a shift, which correspond to the y-value of the bin.
-
-    Parameters
-    ----------
-    a:  ArrayLike of float
-      A one-dimensional array of points at which the function is evaluated.
-    y_shift:  ArrayLike of float
-      A one-dimensional array whose elements represent the y-value of each bin
-    bin_edges: ArrayLike of float
-      A one-dimensional array containing the edges of the bins. The bins are
-      constructed using pairs of consecutive points.
-
-    Return
-    ------
-    A one-dimensional array containing the function values evaluated at the points
-    specified in `a`.
-    """
-    res = np.zeros_like(a)
-    for shift_pos, shift in enumerate(y_shift):
-        bin_low = bin_edges[shift_pos]
-        bin_high = bin_edges[shift_pos + 1]
-        condition = np.multiply(
-            a >= bin_low, a < bin_high if shift_pos != len(y_shift) - 1 else a <= bin_high
-        )
-        res = np.add(res, [shift if cond else 0.0 for cond in condition])
-    return res
-
-
-# TODO This function will be deleted in the future
-def cubic_spline_function(
-    a: npt.ArrayLike, y_shift: npt.ArrayLike, nodes: npt.ArrayLike
-) -> np.ndarray:
-    """
-    This function defines the cubic spline function used to construct the prior. The spline
-    is constructed using the nodes specified in `nodes` and the y-values in `y_shift`. The
-    spline is evaluated at the points specified in `a`.
-
-    Parameters
-    ----------
-    a:  ArrayLike of float
-      A one-dimensional array of points at which the function is evaluated.
-    y_shift:  ArrayLike of float
-      A one-dimensional array whose elements represent the y-value of each bin
-    nodes: ArrayLike of float
-      A one-dimensional array containing the nodes used to construct the spline.
-
-    Return
-    ------
-    A one-dimensional array containing the function values evaluated at the points
-    specified in `a`.
-    """
-    from scipy.interpolate import CubicSpline
-
-    cs = CubicSpline(nodes, y_shift)
-    return cs(a)
-
-
 def linear_bin_function(
     a: npt.ArrayLike, y_shift: npt.ArrayLike, bin_edges: npt.ArrayLike
 ) -> np.ndarray:
@@ -166,14 +103,13 @@ def dis_pc_func(
     nodes: npt.ArrayLike,
     x: npt.ArrayLike,
     Q2: npt.ArrayLike,
-    pc_func_type: str = "step",
 ) -> npt.ArrayLike:
     """
     This function builds the functional form of the power corrections for DIS-like processes.
-    Power corrections are modelled using a step-function. The edges of the bins used in the
-    step-function are specified by the list of nodes. The y-values for each bin are given
+    Power corrections are modelled using a linear function, which interpolates between the nodes
+    of the parameterisation. The y-values for each node are given
     by the array `delta_h`. The power corrections will be computed for the pairs (xb, Q2),
-    where `xb` is the Bjorken x. The power correction for DIS processes are rescaled by Q2.
+    where `xb` is the Bjorken x. The power correction for DIS processes is divided by Q2.
 
     Parameters
     ----------
@@ -191,15 +127,7 @@ def dis_pc_func(
     A one-dimensional array of power corrections for DIS-like processes where each point is
     evaluated at the kinematic pair (x,Q2).
     """
-    if pc_func_type == "step":
-        PC = step_function(x, delta_h, nodes) / Q2
-    elif pc_func_type == "linear":
-        PC = linear_bin_function(x, delta_h, nodes) / Q2
-    elif pc_func_type == "cubic":
-        PC = cubic_spline_function(x, delta_h, nodes) / Q2
-    else:
-        raise ValueError(f"Invalid function type: {pc_func_type} is not supported.")
-
+    PC = linear_bin_function(x, delta_h, nodes) / Q2
     return PC
 
 
@@ -208,7 +136,6 @@ def jets_pc_func(
     nodes: npt.ArrayLike,
     pT: npt.ArrayLike,
     rap: npt.ArrayLike,
-    pc_func_type: str = "step",
 ) -> npt.ArrayLike:
     """
     Same as `dis_pc_func`, but for jet data. Here, the kinematic pair consists of the rapidity
@@ -230,14 +157,7 @@ def jets_pc_func(
     A one-dimensional array of power corrections for jet processes where each point is
     evaluated at the kinematic pair (y, pT).
     """
-    if pc_func_type == "step":
-        PC = step_function(rap, delta_h, nodes) / pT
-    elif pc_func_type == "linear":
-        PC = linear_bin_function(rap, delta_h, nodes) / pT
-    elif pc_func_type == "cubic":
-        PC = cubic_spline_function(rap, delta_h, nodes) / pT
-    else:
-        raise ValueError(f"Invalid function type: {pc_func_type} is not supported.")
+    PC = linear_bin_function(rap, delta_h, nodes) / pT
     return PC
 
 
@@ -265,7 +185,7 @@ def jets_pc_func(
 #     return func
 
 
-def mult_dis_pc(nodes, x, q2, dataset_sp, pdf, pc_func_type: str = "step"):
+def mult_dis_pc(nodes, x, q2, dataset_sp, pdf):
     """
     Returns the function that computes the shift to observables due to
     power corrections. Power corrections are treated as multiplicative
@@ -279,7 +199,6 @@ def mult_dis_pc(nodes, x, q2, dataset_sp, pdf, pc_func_type: str = "step"):
 
     This function returns a function that computes the shift
     given the y-values of the nodes used to define the power corrections.
-    The interpolation between the nodes is specified by `pc_func_type`.
     """
     cuts = dataset_sp.cuts
     (fkspec,) = dataset_sp.fkspecs
@@ -287,13 +206,13 @@ def mult_dis_pc(nodes, x, q2, dataset_sp, pdf, pc_func_type: str = "step"):
     th_preds = central_fk_predictions(fk, pdf)
 
     def func(y_values):
-        result = dis_pc_func(y_values, nodes, x, q2, pc_func_type)
+        result = dis_pc_func(y_values, nodes, x, q2)
         return np.multiply(result, th_preds.to_numpy()[:, 0])
 
     return func
 
 
-def mult_dis_ratio_pc(p_nodes, d_nodes, x, q2, dataset_sp, pdf, pc_func_type: str = "step"):
+def mult_dis_ratio_pc(p_nodes, d_nodes, x, q2, dataset_sp, pdf):
     """
     Returns the function that computes the shift for the ratio of structure
     functions F2_d / F2_p. For this observable, power corrections are defined
@@ -344,8 +263,8 @@ def mult_dis_ratio_pc(p_nodes, d_nodes, x, q2, dataset_sp, pdf, pc_func_type: st
     F2_ratio = operator.truediv(F2D, F2P)
 
     def func(y_values_p, y_values_d):
-        h2d = dis_pc_func(y_values_d, d_nodes, x, q2, pc_func_type)
-        h2p = dis_pc_func(y_values_p, p_nodes, x, q2, pc_func_type)
+        h2d = dis_pc_func(y_values_d, d_nodes, x, q2)
+        h2p = dis_pc_func(y_values_p, p_nodes, x, q2)
         num = np.sum([h2d, -h2p], axis=0)
         denom = np.sum([np.ones_like(h2p), h2p], axis=0)
         result = np.multiply(operator.truediv(num, denom), F2_ratio)
@@ -353,7 +272,7 @@ def mult_dis_ratio_pc(p_nodes, d_nodes, x, q2, dataset_sp, pdf, pc_func_type: st
 
     return func
 
-def mult_jet_pc(nodes, pT, rap, dataset_sp, pdf, pc_func_type: str = "step"):
+def mult_jet_pc(nodes, pT, rap, dataset_sp, pdf):
     """
     As `mult_dis_pc`, but for jet data. The power corrections are defined as
 
@@ -371,7 +290,7 @@ def mult_jet_pc(nodes, pT, rap, dataset_sp, pdf, pc_func_type: str = "step"):
     xsec = central_fk_predictions(fk, pdf)
 
     def func(y_values):
-        result = jets_pc_func(y_values, nodes, pT, rap, pc_func_type)
+        result = jets_pc_func(y_values, nodes, pT, rap)
         return np.multiply(result, xsec.to_numpy()[:, 0])
 
     return func
@@ -416,8 +335,7 @@ def construct_pars_combs(parameters_dict):
 
     return combinations
 
-# TODO `pc_func_type` will be removed
-def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_type: str):
+def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
     """
     Computes the shifts due to power corrections for a single dataset given
     the set of parameters that model the power corrections. The result is
@@ -454,19 +372,19 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
 
         # F2 ratio
         if exp_name == "NMC_NC_NOTFIXED_EM-F2":
-            pc_func_ratio = mult_dis_ratio_pc(f2_p_nodes, f2_d_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func_ratio = mult_dis_ratio_pc(f2_p_nodes, f2_d_nodes, x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func_ratio(pars_pc['comb']['f2p'], pars_pc['comb']['f2d'])
 
         # F2 proton traget
         elif exp_name in F2P_exps:
-            pc_func = mult_dis_pc(f2_p_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(f2_p_nodes, x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['f2p'])
 
         # F2 deuteron traget
         elif exp_name in F2D_exps:
-            pc_func = mult_dis_pc(f2_d_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(f2_d_nodes, x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['f2d'])
 
@@ -479,25 +397,25 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
 
         # HERA NC xsec
         elif exp_name in np.concatenate([NC_SIGMARED_P_EM, NC_SIGMARED_P_EP, NC_SIGMARED_P_EAVG]):
-            pc_func = mult_dis_pc(f2_p_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(f2_p_nodes, x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['f2p'])
 
         # CHORUS
         elif exp_name.startswith('CHORUS_CC'):
-            pc_func = mult_dis_pc(dis_cc_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(dis_cc_nodes, x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['dis_cc'])
 
         # NuTeV
         elif exp_name.startswith('NUTEV_CC'):
-            pc_func = mult_dis_pc(dis_cc_nodes  , x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(dis_cc_nodes  , x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['dis_cc'])
 
         # HERA_CC
         elif exp_name.startswith('HERA_CC'):
-            pc_func = mult_dis_pc(dis_cc_nodes, x, q2, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_dis_pc(dis_cc_nodes, x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['dis_cc'])
 
@@ -511,7 +429,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
         eta = dataset_sp.commondata.metadata.load_kinematics()['y'].to_numpy().reshape(-1)[cuts]
         pT = dataset_sp.commondata.metadata.load_kinematics()['pT'].to_numpy().reshape(-1)[cuts]
 
-        pc_func = mult_jet_pc(pc_jet_nodes, pT, eta, dataset_sp, pdf, pc_func_type)
+        pc_func = mult_jet_pc(pc_jet_nodes, pT, eta, dataset_sp, pdf)
         for pars_pc in pars_combs:
             deltas[pars_pc['label']] = pc_func(pars_pc['comb']['Hj'])
 
@@ -530,7 +448,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
                 .to_numpy()
                 .reshape(-1)[cuts]
             )
-            pc_func = mult_jet_pc(pc_jet_nodes, m_jj, eta_star, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_jet_pc(pc_jet_nodes, m_jj, eta_star, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_ATLAS'] if pc_dict.get("H2j_ATLAS") else pars_pc['comb']['H2j'])
 
@@ -546,7 +464,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict, pc_func_
                 .to_numpy()
                 .reshape(-1)[cuts]
             )
-            pc_func = mult_jet_pc(pc_jet_nodes, m_jj, eta_diff, dataset_sp, pdf, pc_func_type)
+            pc_func = mult_jet_pc(pc_jet_nodes, m_jj, eta_diff, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_CMS'] if pc_dict.get("H2j_CMS") else pars_pc['comb']['H2j'])
 

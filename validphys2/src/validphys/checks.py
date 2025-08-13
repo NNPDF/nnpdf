@@ -364,19 +364,11 @@ def check_darwin_single_process(NPROC):
 
 
 @make_argcheck
-def check_pc_parameters(pc_parameters, pc_func_type):
+def check_pc_parameters(pc_parameters):
     """Check that the parameters for the PC method are set correctly"""
     for par in pc_parameters.values():
-        # Check that the length of shifts is one less than the length of nodes.
-        if (len(par['yshift']) != len(par['nodes']) - 1) and pc_func_type not in [
-            'cubic',
-            'linear',
-        ]:
-            raise ValueError(
-                f"The length of nodes does not match that of the list in {par['ht']}."
-                f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
-            )
-        elif (len(par['yshift']) != len(par['nodes'])) and pc_func_type in ['cubic', 'linear']:
+        # Check that the length of shifts is the same as the length of nodes
+        if (len(par['yshift']) != len(par['nodes'])):
             raise ValueError(
                 f"The length of nodes does not match that of the list in {par['ht']}."
                 f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
