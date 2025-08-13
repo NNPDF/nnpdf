@@ -1969,13 +1969,6 @@ class CoreConfig(configparser.Config):
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
 
-    # TODO: to be removed once we are sure the the triangular
-    # function for the prior is the only one of interest
-    def produce_pc_func_type(self, theorycovmatconfig=None):
-        if theorycovmatconfig is None:
-            raise ValueError("theorycovmatconfig is defined in the runcard.")
-        return theorycovmatconfig.get('func_type', 'linear')
-
     @configparser.explicit_node
     def produce_covs_pt_prescrip(self, point_prescription):
         if point_prescription != 'power corrections':
