@@ -32,6 +32,16 @@ NN_PREFIX = "NN"
 NN_LAYER_ALL_REPLICAS = "all_NNs"
 PREPROCESSING_LAYER_ALL_REPLICAS = "preprocessing_factor"
 
+#  Running many steps in epoch eliminates some per-epoch overhead and has a big impact
+#  in GPU. In benchmarks, more than 100 steps doesn't seem to have any impact
+#  so this is the rationale for that number.
+#
+#  For reasons that are not clear at the time of writing (13/08/2025) jax only accepts
+#  one step per epoch, showing the same penalty of other libraries.
+STEPS_PER_EPOCH = 100
+if K.backend() == "jax":
+    STEPS_PER_EPOCH = 1
+
 # Some keys need to work for everyone
 for k, v in optimizers.items():
     v[1]["clipnorm"] = 1.0
@@ -156,8 +166,12 @@ class MetaModel(Model):
         if y is None:
             y = self.target_tensors
 
-        # Avoids Tensorflow overhead that happens at every epoch, by putting multiple steps in an epoch
-        steps_per_epoch = self._determine_steps_per_epoch(epochs)
+        # Running more than 1 step for every epoch eliminates some overhead of the backend libraries.
+        # In the special case in which epochs < STEPS_PER_EPOCH, set it to 1
+        if epochs < STEPS_PER_EPOCH:
+            steps_per_epoch = 1
+        else:
+            steps_per_epoch = STEPS_PER_EPOCH
 
         for k, v in x_params.items():
             x_params[k] = ops.repeat(v, steps_per_epoch, axis=0)
@@ -167,26 +181,6 @@ class MetaModel(Model):
         )
         loss_dict = history.history
         return loss_dict
-
-    def _determine_steps_per_epoch(self, epochs):
-        """Determine how many step to run in every epoch.
-        When running a single replica (CPU) or when the number of epochs is < 100 default to 1.
-        Otherwise run 100 steps per epoch.
-
-        If the number of epochs requested is not divisible by 100 there will be a number
-        of extra training epochs being run equal to max_epochs % 100 in the worst case.
-
-        """
-        if K.backend() == "jax":
-            return 1
-
-        # TODO: test and document the actual impact of this line
-        # and whether it makes a difference for torch, CPU, GPU
-        num_replicas = self.output_shape[0][0]
-        if num_replicas == 1 or epochs < 100:
-            return 1
-
-        return 100
 
     def predict(self, x=None, **kwargs):
         """Call super().predict with the right input arguments"""
