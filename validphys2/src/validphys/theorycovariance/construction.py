@@ -365,7 +365,6 @@ def covs_pt_prescrip_mhou(combine_by_type, point_prescription):
     return covmats
 
 
-# TODO `pc_func_type`will be removed in the future
 @check_pc_parameters
 def covs_pt_prescrip_pc(
     combine_by_type,
@@ -374,7 +373,6 @@ def covs_pt_prescrip_pc(
     pc_parameters,
     pc_included_procs,
     pc_excluded_exps,
-    pc_func_type,
 ):
     """Produces the sub-matrices of the theory covariance matrix for power
     corrections. Sub-matrices correspond to applying power corrected shifts
@@ -399,8 +397,8 @@ def covs_pt_prescrip_pc(
                 proc not in pc_included_procs for proc in [process_type1, process_type2]
             )
             if not (is_excluded_exp or is_included_proc):
-                deltas1 = compute_deltas_pc(data_spec1, pdf, pc_parameters, pc_func_type)
-                deltas2 = compute_deltas_pc(data_spec2, pdf, pc_parameters, pc_func_type)
+                deltas1 = compute_deltas_pc(data_spec1, pdf, pc_parameters)
+                deltas2 = compute_deltas_pc(data_spec2, pdf, pc_parameters)
                 s = compute_covs_pt_prescrip(
                     point_prescription, exp_name1, deltas1, exp_name2, deltas2
                 )
