@@ -32,10 +32,10 @@ implemented_observables:
   data_uncertainties: [uncertainties_dimuon_y.yaml]
   kinematic_coverage: [y, m_Z2, sqrts]
   plotting:
-    x_scale: log
-    dataset_label: "LHCb $Z\\to µµ$"
+    x_scale: linear
+    dataset_label: 'LHCb 13 TeV $Z$ $\frac{d\sigma}{dy^Z}$'
     plot_x: y
-    y_label: '$d\sigma_{Z}/dy^Z$ (pb)'
+    y_label: '$\frac{d\sigma_{Z}}{dy^Z$} (pb)'
   theory:
     FK_tables:
     - - LHCB_Z0_13TEV_DIMUON_2022
