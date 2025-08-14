@@ -54,7 +54,7 @@ class TheoryCard:
     alphaqed: float  # Values of alpha QED at the scale Qref
     Qref: float  # [GeV] Reference scale for alphas and alphaqed
     XIA: float = 1.0  # Fragmentation scale over the hard scattering scale ratio
-    NfFF: Optional[int]  # Number of active flavors, only for FFNS or FFN0 schemes
+    NfFF: Optional[int] = None  # Number of active flavors, only for FFNS or FFN0 schemes
     nfref: Optional[int] = None  # nf at Qref (its default depend on Qref)
     MaxNfPdf: Optional[int] = 5  # Used by pineko and the photon module to define the thresholds
     ## Fit theory parameters default
