@@ -108,6 +108,30 @@ jobs:
       run: |
         cd n3fit/runcards/examples
         n3fit Basic_runcard.yml 4
+        cat Basic_runcard/nnfit/*/Basic_runcard.json
+
+  run_jax:
+    runs-on: ubuntu-latest
+    env:
+      KERAS_BACKEND: jax
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install nnpdf without LHAPDF
+      shell: bash -l {0}
+      run: |
+        pip install .[nolha,jax]
+        # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
+        lhapdf-management update --init
+    - name: Test we can run one runcard
+      shell: bash -l {0}
+      run: |
+        cd n3fit/runcards/examples
+        n3fit Basic_runcard.yml 42
+        cat Basic_runcard/nnfit/*/Basic_runcard.json
+
 
   full_coverage:
     needs: [run_package_tests, regression_tests]
