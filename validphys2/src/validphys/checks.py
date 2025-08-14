@@ -361,3 +361,15 @@ def check_darwin_single_process(NPROC):
     """
     if platform.system() == "Darwin" and NPROC != 1:
         raise CheckError("NPROC must be set to 1 on OSX, because multithreading is not supported.")
+
+
+@make_argcheck
+def check_pc_parameters(pc_parameters):
+    """Check that the parameters for the PC method are set correctly"""
+    for par in pc_parameters.values():
+        # Check that the length of shifts is the same as the length of nodes
+        if (len(par['yshift']) != len(par['nodes'])):
+            raise ValueError(
+                f"The length of nodes does not match that of the list in {par['ht']}."
+                f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
+            )
