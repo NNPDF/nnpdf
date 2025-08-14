@@ -33,7 +33,7 @@ implemented_observables:
   - uncertainties_dSig_dmttBar.yaml
   kinematic_coverage: [m_ttBar, m_t2, sqrts]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
     plot_x: m_ttBar
     y_label: '$\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{pb}{GeV}$)'
@@ -59,7 +59,7 @@ implemented_observables:
   - uncertainties_dSig_dmttBar_norm.yaml
   kinematic_coverage: [m_ttBar, m_t2, sqrts]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
     plot_x: m_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'
@@ -85,7 +85,7 @@ implemented_observables:
   - uncertainties_dSig_dyttBar.yaml
   kinematic_coverage: [y_ttBar, m_t2, sqrts]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: linear
     plot_x: y_ttBar
     y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($pb$)'
@@ -111,7 +111,7 @@ implemented_observables:
   - uncertainties_dSig_dyttBar_norm.yaml
   kinematic_coverage: [y_ttBar, m_t2, sqrts]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: linear
     plot_x: y_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
@@ -138,7 +138,7 @@ implemented_observables:
   - uncertainties_d2Sig_dyttBar_dmttBar.yaml
   kinematic_coverage: [y_ttBar, m_ttBar, m_t2]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
     x_scale: linear
     plot_x: y_ttBar
     y_label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{pb}{GeV}$)'
@@ -167,7 +167,7 @@ implemented_observables:
   - uncertainties_d2Sig_dyttBar_dmttBar_norm.yaml
   kinematic_coverage: [y_ttBar, m_ttBar, m_t2]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
     x_scale: linear
     plot_x: y_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{1}{GeV}$)'
@@ -179,14 +179,14 @@ implemented_observables:
     - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR-YTTBAR-INTEGRATED
     operation: 'ratio'
 
-- observable: {description: "differential cross section w.r.t. transverse momentum of t", label: '$\frac{d\sigma}{dpT_t}$', units: "$\frac{pb}{GeV}$"}
+- observable: {description: "differential cross section w.r.t. transverse momentum of t", label: '$\frac{d\sigma}{dp_T^t}$', units: "$\frac{pb}{GeV}$"}
   observable_name: PTT
   process_type: HQP_PTQ
   ndata: 16
   tables: ['parton_abs_tleppt']
   kinematics:
     variables:
-      pT_t: {description: "transverse momentum of t", label: '$pT_t$', units: "$GeV$"}
+      pT_t: {description: "transverse momentum of t", label: '$p_T^t$', units: "$GeV$"}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
       sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dpTt.yaml
@@ -195,24 +195,24 @@ implemented_observables:
   - uncertainties_dSig_dpTt.yaml
   kinematic_coverage: [pT_t, m_t2, sqrts]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dpT_t}$'
-    x_scale: log
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{d\sigma}{dp_T^t}$'
+    x_scale: linear
     plot_x: pT_t
-    y_label: '$\frac{d\sigma}{dpT_t}$ ($\frac{pb}{GeV}$)'
+    y_label: '$\frac{d\sigma}{dp_T^t}$ ($\frac{pb}{GeV}$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_LJ_DIF_PTT
     conversion_factor: 0.2877   # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
     operation: 'null'
 
-- observable: {description: "normalized differential cross section w.r.t. transverse momentum of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$', units: "$\frac{1}{GeV}$"}
+- observable: {description: "normalized differential cross section w.r.t. transverse momentum of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_T^t}$', units: "$\frac{1}{GeV}$"}
   observable_name: PTT-NORM
   process_type: HQP_PTQ
   ndata: 16
   tables: ['parton_norm_tleppt']
   kinematics:
     variables:
-      pT_t: {description: "transverse momentum of t", label: '$pT_t$', units: "$GeV$"}
+      pT_t: {description: "transverse momentum of t", label: '$p_T^t$', units: "$GeV$"}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
       sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dpTt_norm.yaml
@@ -221,10 +221,10 @@ implemented_observables:
   - uncertainties_dSig_dpTt_norm.yaml
   kinematic_coverage: [pT_t, m_t2, sqrts]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
-    x_scale: log
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{1}{\sigma}\frac{d\sigma}{dp_T^t}$'
+    x_scale: linear
     plot_x: pT_t
-    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$ ($\frac{1}{GeV}$)'
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dp_T^t}$ ($\frac{1}{GeV}$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_LJ_DIF_PTT
@@ -247,7 +247,7 @@ implemented_observables:
   - uncertainties_dSig_dyt.yaml
   kinematic_coverage: [y_t, m_t2, sqrts]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_t|}$'
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{d\sigma}{d|y_t|}$'
     x_scale: linear
     plot_x: y_t
     y_label: '$\frac{d\sigma}{d|y_t|}$ ($pb$)'
@@ -273,7 +273,7 @@ implemented_observables:
   - uncertainties_dSig_dyt_norm.yaml
   kinematic_coverage: [y_t, m_t2, sqrts]
   plotting:
-    dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_t|}$'
+    dataset_label: 'CMS 13 TeV $t\bar{t}$ $\ell+j$ $\frac{1}{\sigma}\frac{d\sigma}{d|y_t|}$'
     x_scale: linear
     plot_x: y_t
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_t|}$'

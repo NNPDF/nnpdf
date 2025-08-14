@@ -36,9 +36,9 @@ implemented_observables:
   kinematic_coverage: [y, pT, sqrts]
   plotting:
     x_scale: log
-    dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T d|y|}$'
+    dataset_label: 'ATLAS 13 TeV single-inclusive jets $\frac{d^2\sigma}{dp_T d|y|}$'
     plot_x: pT
-    y_label: '$\frac{d^2\sigma}{dp_T d|y|}$ ($\frac{pb}{GeV}$)'
+    y_label: '$d^2\sigma/dp_T d|y|$ (pb/GeV)'
     figure_by:
     - y
   theory:
@@ -73,9 +73,9 @@ implemented_observables:
   kinematic_coverage: [y, pT, sqrts]
   plotting:
     x_scale: log
-    dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T d|y|}$'
+    dataset_label: 'ATLAS 13 TeV single-inclusive jets $\frac{d^2\sigma}{dp_T d|y|}$'
     plot_x: pT
-    y_label: '$\frac{d^2\sigma}{dp_T d|y|}$ ($\frac{pb}{GeV}$)'
+    y_label: '$d^2\sigma/dp_T d|y|$ (pb/GeV)'
     figure_by:
     - y
   theory:

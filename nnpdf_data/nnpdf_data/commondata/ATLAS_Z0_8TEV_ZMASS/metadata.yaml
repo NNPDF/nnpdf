@@ -24,7 +24,7 @@ implemented_observables:
 - observable_name: "LL"
   observable:
     description: "ATLAS 8 TeV, Z boson rapidity distribution in full phase space of decay leptons"
-    label: r"$d\\sigma/d|\|y_{ll}||$"
+    label: '$\frac{d\sigma}{d|y|}$ (pb)'
     units: "[pb]"
 
   ndata: 7
@@ -33,7 +33,7 @@ implemented_observables:
   process_type: DY_Z_Y
 
   plotting:
-    dataset_label: 'ATLAS 8 TeV $Z \to l^+ l^-$, absolute rapidity'
+    dataset_label: 'ATLAS 8 TeV $Z$ $\frac{d\sigma}{d|y|}$'
     x_scale: linear
     plot_x: y
 
@@ -41,7 +41,7 @@ implemented_observables:
 
   kinematics:
     variables:
-      y: {description: "Z > l+ l- absolute rapidity", label: '$|y_{ll}|$', units: ""}
+      y: {description: "Z > l+ l- absolute rapidity", label: '$|y_{\ell\ell}|$', units: ""}
       m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
       sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
     file: kinematics.yaml

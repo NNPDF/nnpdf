@@ -34,7 +34,7 @@ implemented_observables:
   - uncertainties_r04_lumi.yaml
   kinematic_coverage: [y, pT, sqrts]
   plotting:
-    dataset_label: 'CMS Jet 13 TeV R = 0.4: $\frac{d^2\sigma}{dp_T d|y|}$'
+    dataset_label: 'CMS 13 TeV single-inclusive jets (R=0.4) $\frac{d^2\sigma}{dp_T d|y|}$'
     plot_x: pT
     x_scale: log
     y_label: '$\frac{d^2\sigma}{dp_T d|y|}$ ($\frac{pb}{GeV}$)'
@@ -69,7 +69,7 @@ implemented_observables:
   - uncertainties_r07_lumi.yaml
   kinematic_coverage: [y, pT, sqrts]
   plotting:
-    dataset_label: 'CMS Jet 13 TeV R = 0.7: $\frac{d^2\sigma}{dp_T d|y|}$'
+    dataset_label: 'CMS 13 TeV single-inclusive jets (R=0.7) $\frac{d^2\sigma}{dp_T d|y|}$'
     plot_x: pT
     x_scale: log
     y_label: '$\frac{d^2\sigma}{dp_T d|y|}$ ($\frac{pb}{GeV}$)'

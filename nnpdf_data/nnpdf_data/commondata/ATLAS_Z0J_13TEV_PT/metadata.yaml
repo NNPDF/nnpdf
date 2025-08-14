@@ -21,7 +21,7 @@ implemented_observables:
 - observable_name: "LL"
   observable:
     description: "ATLAS 13 TeV, transverse momentum distribution of Drell-Yan lepton pairs."
-    label: r"$1/\sigma_{fid}d\\sigma/dp_{T}^{\\l\\l}$"
+    label: '$\frac{1}{\sigma}\,\frac{d\sigma}{dp_{T}^{\ell\ell}}$ (1/GeV)'
     units: "[1/GeV]"
 
   ndata: 38
@@ -30,7 +30,7 @@ implemented_observables:
   process_type: DY_NC_PT
 
   plotting:
-    dataset_label: 'ATLAS 13 TeV normalized differential cross section in $pT_{ll}$'
+    dataset_label: 'ATLAS 13 TeV $Z$ $\frac{1}{\sigma}\frac{d\sigma}{dp_{T}^{\ell\ell}}$'
     x_scale: log
     plot_x: pT
 
@@ -38,7 +38,7 @@ implemented_observables:
 
   kinematics:
     variables:
-      pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
+      pT: {description: "lepton pair transverse momentum", label: '$p_T^{\ell\ell}$', units: ""}
       m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
       sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
 
