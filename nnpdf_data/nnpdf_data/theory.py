@@ -7,7 +7,7 @@ import dataclasses
 import logging
 from typing import Literal, Optional
 
-DEPRECATED_KEYS = ["MaxNfPdf", "MaxNfAs", "SxRes", "SxOrd" "EScaleVar", "Qedref", "global_nx"]
+DEPRECATED_KEYS = ["MaxNfAs", "SxRes", "SxOrd" "EScaleVar", "Qedref", "global_nx"]
 
 log = logging.getLogger(__name__)
 
