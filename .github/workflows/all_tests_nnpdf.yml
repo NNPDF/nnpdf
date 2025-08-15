@@ -109,6 +109,13 @@ jobs:
         cd n3fit/runcards/examples
         n3fit Basic_runcard.yml 4
         cat Basic_runcard/nnfit/*/Basic_runcard.json
+    - name: Test we can still run postfit
+      shell: bash -l {0}
+      run: |
+        output=$(vp-get fit NNPDF40_nnlo_like_CI_testing_250616)
+        fit_path=$(echo $output | grep -o  "PosixPath('.*')" | cut -d"'" -f2)
+        mv ${fit_path} .
+        postfit 50 NNPDF40_nnlo_like_CI_testing_250616
 
   run_jax:
     runs-on: ubuntu-latest
@@ -131,7 +138,6 @@ jobs:
         cd n3fit/runcards/examples
         n3fit Basic_runcard.yml 42
         cat Basic_runcard/nnfit/*/Basic_runcard.json
-
 
   full_coverage:
     needs: [run_package_tests, regression_tests]

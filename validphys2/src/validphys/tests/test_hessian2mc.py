@@ -1,8 +1,10 @@
+import pathlib
+from unittest import mock
+
 import numpy as np
 import pandas as pd
-from unittest import mock
-from validphys.hessian2mc import write_mc_watt_thorne_replicas, write_hessian_to_mc_watt_thorne
-import pathlib
+
+from validphys.hessian2mc import write_hessian_to_mc_watt_thorne, write_mc_watt_thorne_replicas
 
 
 @mock.patch("validphys.hessian2mc.write_replica")
@@ -40,7 +42,7 @@ def test_write_mc_watt_thorne_replicas(mock_log_info, mock_write_replica):
 @mock.patch("validphys.hessian2mc.rep_matrix")
 @mock.patch("validphys.hessian2mc.write_new_lhapdf_info_file_from_previous_pdf")
 @mock.patch("validphys.hessian2mc.os.makedirs")
-@mock.patch("validphys.hessian2mc.lhapdf.paths")
+@mock.patch("validphys.hessian2mc.get_lha_datapath")
 def test_write_hessian_to_mc_watt_thorne(
     mock_lhapdf_paths,
     mock_makedirs,
@@ -56,7 +58,7 @@ def test_write_hessian_to_mc_watt_thorne(
 
     mock_load_all_replicas.return_value = (None, None)
 
-    mock_lhapdf_paths.return_value = [pathlib.Path("/path/to/lhapdf")]
+    mock_lhapdf_paths.return_value = pathlib.Path("/path/to/lhapdf")
 
     mock_rep_matrix.return_value = np.random.randn(5, 7)  # Mocked replica matrix
 
