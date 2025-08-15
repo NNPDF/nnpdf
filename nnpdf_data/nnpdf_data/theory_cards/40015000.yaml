@@ -1,5 +1,5 @@
-ID: '40_014_000'
-Comments: NNPDF4.0 N3LO alphas=0.115, mt=170.0 GeV, FHMRUVV splittings as Oct '24, EXA evolution
+ID: '40_015_000'
+Comments: NNPDF4.0 N3LO alphas=0.115, mt=175.0 GeV, FHMRUVV splittings as Oct '24, EXA evolution
 CKM:
 - 0.97428
 - 0.2253
@@ -38,7 +38,7 @@ kcThr: 1.0
 ktThr: 1.0
 mb: 4.92
 mc: 1.51
-mt: 170.0
+mt: 175.0
 n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]
 n3lo_cf_variation: 0
 use_fhmruvv: true
