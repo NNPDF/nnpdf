@@ -45,6 +45,12 @@ class _Vars:
     m_ll = "m_ll"
     m_ll2 = "m_ll2"
     abs_y = "abs_y"
+    # SIA Variables
+    sia_particle = "sia_particle"
+    xp = "xp"
+    z = "z"
+    ph = "ph"
+    xi = "xi"
 
 
 class _KinematicsInformation:
@@ -64,6 +70,10 @@ class _KinematicsInformation:
 
         if "sqrts" not in kin_cov:
             kins[_Vars.sqrts] = metadata.cm_energy
+
+        # needed to use correct hadron masses without function duplication
+        if metadata.process.startswith("SIA-"):
+            kins[_Vars.sia_particle] = metadata.process
 
         self._kins = kins
         self._variables = list(kins.keys())
@@ -331,6 +341,70 @@ def _dymll_xq2map(kin_info):
     return x, m_ll2
 
 
+def _sia_z_zq2map(kin_info):
+    z = kin_info[_Vars.z]
+    q2 = kin_info[_Vars.sqrts] ** 2
+
+    return z, q2
+
+
+def _sia_xp_zq2map(kin_info):
+    xp = kin_info[_Vars.xp]
+    q2 = kin_info[_Vars.sqrts] ** 2
+    particle = kin_info[_Vars.sia_particle]
+
+    if particle == "SIA-PI":
+        mass_h = 0.13957
+    elif particle == "SIA-KA":
+        mass_h = 0.49367
+    elif particle == "SIA-PRO":
+        mass_h = 0.93827
+    else:
+        raise ValueError(f"Unknown particle for SIA process")
+
+    z = xp * np.sqrt(1 + (4 * mass_h**2) / (xp**2 * q2))
+
+    return z, q2
+
+
+def _sia_ph_zq2map(kin_info):
+    ph = kin_info[_Vars.ph]
+    q2 = kin_info[_Vars.sqrts] ** 2
+    particle = kin_info[_Vars.sia_particle]
+
+    if particle == "SIA-PI":
+        mass_h = 0.13957
+    elif particle == "SIA-KA":
+        mass_h = 0.49367
+    elif particle == "SIA-PRO":
+        mass_h = 0.93827
+    else:
+        raise ValueError(f"Unknown particle for SIA process")
+
+    z = 2 * np.sqrt((ph**2 + mass_h**2) / q2)
+
+    return z, q2
+
+
+def _sia_xi_zq2map(kin_info):
+    xi = kin_info[_Vars.xi]
+    q2 = kin_info[_Vars.sqrts] ** 2
+    particle = kin_info[_Vars.sia_particle]
+
+    if particle == "SIA-PI":
+        mass_h = 0.13957
+    elif particle == "SIA-KA":
+        mass_h = 0.49367
+    elif particle == "SIA-PRO":
+        mass_h = 0.93827
+    else:
+        raise ValueError(f"Unknown particle for SIA process")
+
+    z = np.exp(-xi) * np.sqrt(1 + 4 * np.exp(2 * xi) * (mass_h**2) / (q2))
+
+    return z, q2
+
+
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
@@ -480,7 +554,6 @@ DY_PT_RAP = _Process(
     xq2map_function=_dybosonptrap_xq2map,
 )
 
-
 POS_XPDF = _Process("POS_XPDF", "Positivity of MS bar PDFs", accepted_variables=(_Vars.x, _Vars.Q2))
 
 POS_DIS = _Process(
@@ -507,6 +580,30 @@ SINGLETOP = _Process(
     xq2map_function=_singletop_xq2map,
 )
 
+SIA_Z = _Process(
+    "SIA_Z", "SIA - z", accepted_variables=(_Vars.z, _Vars.sqrts), xq2map_function=_sia_z_zq2map
+)
+
+SIA_XP = _Process(
+    "SIA_XP",
+    "SIA - xp",
+    accepted_variables=(_Vars.xp, _Vars.sqrts, _Vars.sia_particle),
+    xq2map_function=_sia_xp_zq2map,
+)
+
+SIA_PH = _Process(
+    "SIA_PH",
+    "SIA - ph",
+    accepted_variables=(_Vars.ph, _Vars.sqrts, _Vars.sia_particle),
+    xq2map_function=_sia_ph_zq2map,
+)
+
+SIA_XI = _Process(
+    "SIA_XI",
+    "SIA - xi",
+    accepted_variables=(_Vars.xi, _Vars.sqrts, _Vars.sia_particle),
+    xq2map_function=_sia_xi_zq2map,
+)
 
 PROCESSES = {
     "DIS": DIS,
@@ -547,6 +644,10 @@ PROCESSES = {
     "INTEG": dataclasses.replace(POS_DIS, name="INTEG", description="Integrability dataset"),
     "PHT": PHT,
     "SINGLETOP": SINGLETOP,
+    "SIA_Z": SIA_Z,
+    "SIA_XP": SIA_XP,
+    "SIA_PH": SIA_PH,
+    "SIA_XI": SIA_XI,
 }
 
 
