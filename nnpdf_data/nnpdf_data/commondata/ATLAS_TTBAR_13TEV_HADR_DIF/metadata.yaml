@@ -72,6 +72,11 @@ implemented_observables:
     - - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR-INTEGRATED
     operation: 'ratio'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dmttBar_norm.yaml
+      - mc_top_uncertainties_dSig_dmttBar_norm.yaml
 - observable: {description: "differential cross section w.r.t. absolute rapidity of top pair", label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: '$\pb$'}
   observable_name: YTTBAR
   process_type: HQP_YQQ
@@ -127,6 +132,11 @@ implemented_observables:
     - - ATLAS_TTBAR_13TEV_HADR_DIF_YTTBAR-INTEGRATED
     operation: 'ratio'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dyttBar_norm.yaml
+      - mc_top_uncertainties_dSig_dyttBar_norm.yaml
 - observable: {description: "double differential cross section w.r.t. mass and absolute rapidity of top pair", label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: '$\frac{pb}{GeV}$'}
   observable_name: MTTBAR-YTTBAR
   process_type: HQP_YQQ
@@ -187,3 +197,8 @@ implemented_observables:
     - - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR-YTTBAR
     - - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR-YTTBAR-INTEGRATED
     operation: 'ratio'
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_d2Sig_dmttBar_dyttBar_norm.yaml
+      - mc_top_uncertainties_d2Sig_dmttBar_dyttBar_norm.yaml

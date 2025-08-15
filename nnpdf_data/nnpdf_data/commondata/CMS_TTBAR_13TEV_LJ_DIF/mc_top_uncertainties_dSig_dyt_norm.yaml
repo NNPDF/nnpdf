@@ -1,0 +1,17 @@
+definitions:
+  mc_stat:
+    description: Monte Carlo uncertainty on the mtop variations
+    treatment: ADD
+    type: UNCORR
+bins:
+- mc_stat: 0.0006785186776811072
+- mc_stat: 0.0006289250928855388
+- mc_stat: 0.0012831032653462904
+- mc_stat: 0.0010392583073709888
+- mc_stat: 0.0005170116793245033
+- mc_stat: 0.00045130291317288296
+- mc_stat: 0.000543155612192496
+- mc_stat: 0.000530832018969535
+- mc_stat: 0.0006506837850640598
+- mc_stat: 0.0004920765610467617
+- mc_stat: 0.00016762705318149252
