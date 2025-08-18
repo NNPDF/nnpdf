@@ -19,7 +19,8 @@ MP: 0.938
 MW: 80.398
 MZ: 91.1876
 ModEv: EXA
-ModSV: expanded
+ModSV:
+NfFF: 4
 PTO: 3
 Q0: 1.65
 QED: 0
