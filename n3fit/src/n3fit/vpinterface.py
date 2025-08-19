@@ -450,4 +450,4 @@ def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
     ndat = len(diffs)
     logp = -0.5 * (len(diffs) * np.log(2 * np.pi) + log_det_total_cov + chi2)
 
-    return HyperoptMetrics(chi2=chi2 / ndat, phi2=phi2, logp=logp / ndat)
+    return HyperoptMetrics(chi2=chi2 / ndat, phi2=phi2, logp=-logp / ndat)
