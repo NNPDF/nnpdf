@@ -197,11 +197,16 @@ def the_function():
     values4 = input4['dependent_variables'][0]['values']
 
     for i in range(len(values4)):
-        data_central_value = values4[i]['value']
         kin_low_mttBar = input4['independent_variables'][1]['values'][i]['low']
         kin_high_mttBar = input4['independent_variables'][1]['values'][i]['high']
         kin_low_yttBar = input4['independent_variables'][0]['values'][i]['low']
         kin_high_yttBar = input4['independent_variables'][0]['values'][i]['high']
+        binwidth_mtt = kin_high_mttBar - kin_low_mttBar
+
+        # At the time of implementation (23/07/25), the hepdata entry was not normalized to the bin width.
+        # We correct for this here by dividing the error and central value by the bin width.
+        data_central_value = values4[i]['value'] / binwidth_mtt
+
         kin_value = {
             'm_ttBar': {'min': kin_low_mttBar, 'mid': None, 'max': kin_high_mttBar},
             'y_ttBar': {'min': kin_low_yttBar, 'mid': None, 'max': kin_high_yttBar},
@@ -209,12 +214,14 @@ def the_function():
         }
         value_delta = 0
         error_value = {}
-        error_value['stat'] = values4[i]['errors'][0]['symerror']
+        error_value['stat'] = values4[i]['errors'][0]['symerror'] /binwidth_mtt
         for j in range(1, len(values4[i]['errors'])):
             se_delta, se_sigma = se(
                 values4[i]['errors'][j]['asymerror']['plus'],
                 values4[i]['errors'][j]['asymerror']['minus'],
             )
+            se_delta /= binwidth_mtt
+            se_sigma /= binwidth_mtt
             value_delta += se_delta
             error_value[values4[i]['errors'][j]['label']] = se_sigma
         data_central_value = data_central_value + value_delta
