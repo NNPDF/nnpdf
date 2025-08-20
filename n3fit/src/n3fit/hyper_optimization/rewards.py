@@ -103,7 +103,7 @@ IMPLEMENTED_STATS = {
     "best_worst": _best_worst,
     "std": _std,
 }
-IMPLEMENTED_LOSSES = ["chi2", "phi2", "logp"]
+IMPLEMENTED_LOSSES = ["chi2", "phi2", "logp", "chi2p"]
 
 
 def _pdfs_to_n3pdfs(pdfs_per_fold):
@@ -279,6 +279,8 @@ class HyperLoss:
             loss = hyper_phi2_per_fold
         elif self.loss_type == "logp":
             loss = hyper_logp_per_fold
+        elif self.loss_type == "chi2p":
+            loss = hyper_chi2_per_fold
 
         return loss
 
