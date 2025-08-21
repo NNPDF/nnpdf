@@ -1720,7 +1720,7 @@ class CoreConfig(configparser.Config):
         self,
         use_thcovmat_in_fitting=False,
         use_thcovmat_in_sampling=False,
-        diagonal_basis=False,
+        diagonal_basis=True,
         data_grouping=None,
         data_grouping_recorded_spec_=None,
     ):
