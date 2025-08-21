@@ -905,7 +905,7 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_covmat_from_systematics
 
     @configparser.explicit_node
-    def produce_masks(self, diagonal_basis: bool = False):
+    def produce_masks(self, diagonal_basis: bool = True):
         """Modifies which action is used as masks depending on the flag
         `diagonal_basis`
         """
