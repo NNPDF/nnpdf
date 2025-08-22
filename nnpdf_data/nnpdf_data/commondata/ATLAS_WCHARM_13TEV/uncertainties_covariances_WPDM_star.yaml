@@ -1,0 +1,191 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_0:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_1:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_2:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_3:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_4:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_5:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_6:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_7:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_8:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_9:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_10:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_11:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_12:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_13:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_14:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_15:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_16:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_17:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_18:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+  sys_19:
+    description: Systematic uncertainty
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 0.0
+  sys_0: 0.0
+  sys_1: 0.0
+  sys_2: 0.0
+  sys_3: 0.0
+  sys_4: 0.0
+  sys_5: 0.0
+  sys_6: 0.0
+  sys_7: 0.0
+  sys_8: 0.0
+  sys_9: 0.0
+  sys_10: -3.24969948e-01
+  sys_11: -3.73114362e-01
+  sys_12: 2.78549522e-02
+  sys_13: 1.78604574e-02
+  sys_14: -2.63599573e-02
+  sys_15: 3.17086756e-02
+  sys_16: 8.16572490e-02
+  sys_17: 7.97315821e-02
+  sys_18: 7.16642849e-02
+  sys_19: -1.73851151e-01
+- stat: 0.0
+  sys_0: 0.0
+  sys_1: 0.0
+  sys_2: 0.0
+  sys_3: 0.0
+  sys_4: 0.0
+  sys_5: 0.0
+  sys_6: 0.0
+  sys_7: 0.0
+  sys_8: 0.0
+  sys_9: 0.0
+  sys_10: -5.22536063e-01
+  sys_11: -3.40401627e-02
+  sys_12: -2.02880097e-01
+  sys_13: -5.12247637e-02
+  sys_14: 7.39235140e-02
+  sys_15: 1.57435438e-01
+  sys_16: -4.04886830e-02
+  sys_17: 6.85860420e-03
+  sys_18: 1.63112348e-02
+  sys_19: 4.25439359e-02
+- stat: 0.0
+  sys_0: 0.0
+  sys_1: 0.0
+  sys_2: 0.0
+  sys_3: 0.0
+  sys_4: 0.0
+  sys_5: 0.0
+  sys_6: 0.0
+  sys_7: 0.0
+  sys_8: 0.0
+  sys_9: 0.0
+  sys_10: -5.55841843e-01
+  sys_11: 2.37871010e-01
+  sys_12: 5.52828247e-02
+  sys_13: 2.27718844e-02
+  sys_14: 3.49313319e-03
+  sys_15: -2.67726880e-02
+  sys_16: -1.77072202e-01
+  sys_17: 1.91550370e-02
+  sys_18: -5.39220857e-03
+  sys_19: -1.46297452e-01
+- stat: 0.0
+  sys_0: 0.0
+  sys_1: 0.0
+  sys_2: 0.0
+  sys_3: 0.0
+  sys_4: 0.0
+  sys_5: 0.0
+  sys_6: 0.0
+  sys_7: 0.0
+  sys_8: 0.0
+  sys_9: 0.0
+  sys_10: -3.33409891e-01
+  sys_11: -5.40334269e-02
+  sys_12: 6.06573418e-02
+  sys_13: 1.61012924e-01
+  sys_14: -1.64407415e-01
+  sys_15: 9.77397342e-02
+  sys_16: -3.22595078e-02
+  sys_17: -1.52032103e-02
+  sys_18: -1.49651086e-02
+  sys_19: 1.01168855e-01
+- stat: 0.0
+  sys_0: 0.0
+  sys_1: 0.0
+  sys_2: 0.0
+  sys_3: 0.0
+  sys_4: 0.0
+  sys_5: 0.0
+  sys_6: 0.0
+  sys_7: 0.0
+  sys_8: 0.0
+  sys_9: 0.0
+  sys_10: -2.83402463e-01
+  sys_11: 3.35390333e-02
+  sys_12: 8.25299937e-02
+  sys_13: -9.74842660e-02
+  sys_14: -1.17176255e-02
+  sys_15: -3.10405990e-02
+  sys_16: -1.56790962e-02
+  sys_17: -1.32593717e-02
+  sys_18: 2.44478337e-01
+  sys_19: 9.46132741e-02
