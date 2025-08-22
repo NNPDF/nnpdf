@@ -54,7 +54,7 @@ def get_all(obs=None):
                 'ymax': {'min': kin_2_values[i]['low'],
                          'mid': 0.5 * (kin_2_values[i]['low'] + kin_2_values[i]['high']),
                          'max': kin_2_values[i]['high']},
-                'm_jj': {'min': kin_1_values[i]['low'],
+                'mjj': {'min': kin_1_values[i]['low'],
                          'mid': 0.5 * (kin_1_values[i]['low'] + kin_1_values[i]['high']),
                          'max': kin_1_values[i]['high']},
                 'sqrts': {'min': None, 'mid': 13000.0, 'max': None},}
@@ -63,10 +63,10 @@ def get_all(obs=None):
                 'yb': {'min': kin_2_values[i]['low'],
                        'mid': 0.5 * (kin_2_values[i]['low'] + kin_2_values[i]['high']),
                        'max': kin_2_values[i]['high']},
-                'y_star': {'min': kin_3_values[i]['low'],
+                'ystar': {'min': kin_3_values[i]['low'],
                            'mid': 0.5 * (kin_3_values[i]['low'] + kin_3_values[i]['high']),
                            'max': kin_3_values[i]['high']},
-                'm_jj': {'min': kin_1_values[i]['low'],
+                'mjj': {'min': kin_1_values[i]['low'],
                          'mid': 0.5 * (kin_1_values[i]['low'] + kin_1_values[i]['high']),
                          'max': kin_1_values[i]['high']},}
         kinematics.append(kin)
