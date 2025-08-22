@@ -34,13 +34,17 @@ implemented_observables:
   kinematics:
     variables:
       abs_eta:
-        description:
-        label:
+        description: Absolute pseudorapidity of the lepton
+        label: $|\eta_l|$
         units: ''
       m_W2:
-        description: 
-        label: 
-        units: 
+        description: Squared invariant mass of the W boson
+        label: $m_W^2$
+        units: GeV$^2$
+      sqrts:
+        description: Center-of-mass energy
+        label: $\sqrt{s}$
+        units: GeV
     file: kinematics_WMDP.yaml
   data_uncertainties: uncertainties_WMDP.yaml
   data_central: data_WMDP.yaml
@@ -62,13 +66,17 @@ implemented_observables:
   kinematics:
     variables:
       abs_eta:
-        description:
-        label:
+        description: Absolute pseudorapidity of the lepton
+        label: $|\eta_l|$
         units: ''
       m_W2:
-        description: 
-        label: 
-        units: 
+        description: Squared invariant mass of the W boson
+        label: $m_W^2$
+        units: GeV$^2$
+      sqrts:
+        description: Center-of-mass energy
+        label: $\sqrt{s}$
+        units: GeV
     file: kinematics_WPDM.yaml
   data_uncertainties: uncertainties_WPDM.yaml
   data_central: data_WPDM.yaml
@@ -90,13 +98,17 @@ implemented_observables:
   kinematics:
     variables:
       abs_eta:
-        description:
-        label:
+        description: Absolute pseudorapidity of the lepton
+        label: $|\eta_l|$
         units: ''
       m_W2:
-        description: 
-        label: 
-        units: 
+        description: Squared invariant mass of the W boson
+        label: $m_W^2$
+        units: GeV$^2$
+      sqrts:
+        description: Center-of-mass energy
+        label: $\sqrt{s}$
+        units: GeV
     file: kinematics_WMDP_star.yaml
   data_uncertainties: uncertainties_WMDP_star.yaml
   data_central: data_WMDP_star.yaml
@@ -118,13 +130,17 @@ implemented_observables:
   kinematics:
     variables:
       abs_eta:
-        description:
-        label:
+        description: Absolute pseudorapidity of the lepton
+        label: $|\eta_l|$
         units: ''
       m_W2:
-        description: 
-        label: 
-        units: 
+        description: Squared invariant mass of the W boson
+        label: $m_W^2$
+        units: GeV$^2$
+      sqrts:
+        description: Center-of-mass energy
+        label: $\sqrt{s}$
+        units: GeV
     file: kinematics_WPDM_star.yaml
   data_uncertainties: uncertainties_WPDM_star.yaml
   data_central: data_WPDM_star.yaml
