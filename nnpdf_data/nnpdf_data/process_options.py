@@ -22,6 +22,8 @@ class _Vars:
     sqrts = "sqrts"
     ystar = "ystar"
     ydiff = "ydiff"
+    ymax = "ymax"
+    yb = "yb"
     m_jj = "m_jj"
     pT2 = "pT2"
     y_t = "y_t"
@@ -191,9 +193,9 @@ def _pht_xq2map(kin_info):
 
 
 def _dijets_xq2map(kin_info):
-    # Here we can have either ystar or ydiff, but in either case we need to do the same
-    ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.eta_1, _Vars.abs_eta_1)
-    ylab_2 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.eta_2, _Vars.abs_eta_2)
+    # Here we can have either ystar or ymax or ydiff, but in either case we need to do the same
+    ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_1, _Vars.abs_eta_1)
+    ylab_2 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_2, _Vars.abs_eta_2)
     # Then compute x, Q2
     ratio = kin_info[_Vars.m_jj] / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(ylab_1)
@@ -355,7 +357,14 @@ SHP = _Process(
 DIJET = _Process(
     "DIJET",
     "DiJets production",
-    accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff),
+    accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff, _Vars.ymax),
+    xq2map_function=_dijets_xq2map,
+)
+
+DIJET_3D = _Process(
+    "DIJET",
+    "DiJets production",
+    accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff, _Vars.ymax, _Vars.yb),
     xq2map_function=_dijets_xq2map,
 )
 
@@ -518,6 +527,7 @@ PROCESSES = {
     "DIS_NC_BOTTOM": dataclasses.replace(DIS, name="DIS_NC_BOTTOM"),
     "JET": JET,
     "DIJET": DIJET,
+    "DIJET_3D": DIJET_3D,
     "SHP_ASY": SHP,
     "HQP_YQ": HQP_YQ,
     "HQP_YQQ": dataclasses.replace(HQP_YQ, name="HQP_YQQ"),

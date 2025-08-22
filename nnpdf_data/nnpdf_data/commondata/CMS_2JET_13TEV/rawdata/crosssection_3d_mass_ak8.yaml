@@ -15,7 +15,7 @@ dependent_variables:
       label: JER
     - {label: UnfoldingModel, symerror: 0.55374}
     - asymerror: {minus: 3.2509, plus: 3.3269}
-      label: TimePtEt
+      label: TimePtEta
     - asymerror: {minus: 2.2383, plus: 2.2955}
       label: AbsoluteMPFBias
     - asymerror: {minus: 1.3386, plus: 1.342}

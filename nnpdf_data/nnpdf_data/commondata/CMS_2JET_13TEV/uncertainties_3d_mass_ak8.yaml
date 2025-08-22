@@ -27,8 +27,8 @@ definitions:
     description: UnfoldingModel unc. from Hepdata
     treatment: MULT
     type: CORR
-  TimePtEt:
-    description: TimePtEt unc. from Hepdata
+  TimePtEta:
+    description: TimePtEta unc. from Hepdata
     treatment: MULT
     type: CORR
   AbsoluteMPFBias:
@@ -123,7 +123,7 @@ bins:
   PrefiringAvg: -0.16088
   JER: 1.0309
   UnfoldingModel: 0.55374
-  TimePtEt: 3.3269
+  TimePtEta: 3.3269
   AbsoluteMPFBias: 2.2955
   AbsoluteScale: 1.342
   FlavorQCD: 5.8267
