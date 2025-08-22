@@ -29,19 +29,19 @@ implemented_observables:
   process_type: DIJET
 
   # Plotting	
-  kinematic_coverage: [ymax, m_jj, sqrts]
+  kinematic_coverage: [ymax, mjj, sqrts]
 
   plotting:
     dataset_label: "CMS dijets (2D) 13 TeV (R=0.8)"
     x_scale: log
-    plot_x: m_jj
+    plot_x: mjj
     figure_by:
     - ymax
 
   kinematics:
     variables:
       ymax: {description: "absolute rapidity of the outermost jet", label: "$|y_{\rm max}|$", units: ""}
-      m_jj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "GeV"}
+      mjj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "GeV"}
       sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
     file: kinematics_2d_mass_ak8.yaml
 
@@ -67,12 +67,12 @@ implemented_observables:
   process_type: DIJET
 
   # Plotting	
-  kinematic_coverage: [yb, ystar, m_jj]
+  kinematic_coverage: [yb, ystar, mjj]
 
   plotting:
     dataset_label: "CMS dijets (3D) 13 TeV (R=0.8)"
     x_scale: log
-    plot_x: m_jj
+    plot_x: mjj
     figure_by:
     - ystar
 
@@ -80,7 +80,7 @@ implemented_observables:
     variables:
       yb: {description: "total boost of the dijet system", label: "$y_b$", units: ""}
       ystar: {description: "absolute rapidity separation of the two jet", label: "$y^*$", units: ""}
-      m_jj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "GeV"}
+      mjj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "GeV"}
 
     file: kinematics_3d_mass_ak8.yaml
 
