@@ -397,7 +397,7 @@ class HyperLoss:
 
         selected_statistic = IMPLEMENTED_STATS[statistic]
 
-        if self.loss_type == "chi2" or self.loss_type == "logp":
+        if self.loss_type == "chi2" or self.loss_type == "logp" or self.loss_type == "chi2p":
             return selected_statistic
         elif self.loss_type == "phi2":
             # In case of phi2, calculate the inverse of the applied statistics
