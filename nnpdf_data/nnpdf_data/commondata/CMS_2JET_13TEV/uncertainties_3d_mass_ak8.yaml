@@ -25,8 +25,8 @@ definitions:
     type: CORR
   UnfoldingModel:
     description: UnfoldingModel unc. from Hepdata
-    treatment: MULT
-    type: CORR
+    treatment: ADD
+    type: UNCORR
   TimePtEta:
     description: TimePtEta unc. from Hepdata
     treatment: MULT

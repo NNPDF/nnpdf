@@ -117,8 +117,8 @@ definitions:
     type: CORR
   Model:
     description: Model unc. from Hepdata
-    treatment: MULT
-    type: CORR
+    treatment: ADD
+    type: UNCORR
 bins:
 - Stat: 4.0233
   AbsoluteMPFBias: 4.258056960282897
