@@ -5,10 +5,8 @@ Systematic uncertainties are implemented starting from the breakdown
 available on HepData. The correlation treatment follows the approach mentioned
 in the paper (see Sect. 7): all uncertainties are treated as fully correlated,
 except those coming from the unfolding model, which are treated as fully 
-uncorrelated. Two uncertainty variants are implemented: onen in which 
-statistical ucnertainties are uncorrelated; and one in which statistical
-uncertainties are correlated according to the correlation matrix (due to the
-unfolding procedure) available from Hepdata.
+uncorrelated. a statistical covariance matrix is provided on Hepdata, however
+this is not used because it reports only partial correlations.
 """
 
 import yaml
@@ -28,10 +26,9 @@ def get_tables(obs=None):
         print("3d_madd_ak8")
         exit(1)
     else:
-        table_cv = prefix + "crosssection_" + obs + ".yaml"
-        table_er = prefix + "statcorr_" + obs + ".yaml"
+        table = prefix + "crosssection_" + obs + ".yaml"
 
-    return [table_cv, table_er]
+    return table
 
 def get_all(obs=None):
     """
@@ -41,9 +38,9 @@ def get_all(obs=None):
     kinematics = []
     uncertainties = []
     
-    table_cv, table_er = get_tables(obs)
+    table = get_tables(obs)
     
-    with open(table_cv, 'r') as f:
+    with open(table, 'r') as f:
         input = yaml.safe_load(f)
         
     # Central values
@@ -111,6 +108,7 @@ def get_all(obs=None):
 
     # Shift the data due to asymmetric uncertainties
     data_central_shifted = [sum(x) for x in zip(data_central, shifts)]
+
     return (data_central_shifted, kinematics, uncertainties)
 
 def filter_CMS_2JET_13TEV():
