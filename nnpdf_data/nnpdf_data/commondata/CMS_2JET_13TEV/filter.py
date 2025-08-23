@@ -1,5 +1,14 @@
 """
-
+This file contains the piece of code needed to implement the CMS dijet 
+measurement at 13 TeV. The 2D and 3D differential distributions are considered.
+Systematic uncertainties are implemented starting from the breakdown
+available on HepData. The correlation treatment follows the approach mentioned
+in the paper (see Sect. 7): all uncertainties are treated as fully correlated,
+except those coming from the unfolding model, which are treated as fully 
+uncorrelated. Two uncertainty variants are implemented: onen in which 
+statistical ucnertainties are uncorrelated; and one in which statistical
+uncertainties are correlated according to the correlation matrix (due to the
+unfolding procedure) available from Hepdata.
 """
 
 import yaml
@@ -123,7 +132,7 @@ def filter_CMS_2JET_13TEV():
         correlation = ""
         treatment = ""
         for key in uncertainties[0].keys():
-            if key=="Stat":
+            if key=="Stat" or key=="Model" or key=="UnfoldingModel":
                 correlation = "UNCORR"
                 treatment = "ADD"
             elif key=="Lumi":
