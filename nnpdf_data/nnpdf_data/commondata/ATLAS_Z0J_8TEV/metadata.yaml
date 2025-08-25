@@ -74,7 +74,7 @@ implemented_observables:
       - uncertainties_decorr_PT-Y.yaml
     decorr_sys_10:
       data_uncertainties:
-      - uncertainties_decorr_sys10_PT-Y.yaml
+      - uncertainties_decorr_sys_10_PT-Y.yaml
       
 - observable_name: PT-M
   observable:
@@ -154,4 +154,4 @@ implemented_observables:
       - uncertainties_decorr_PT-M.yaml
     decorr_sys_10:
       data_uncertainties:
-      - uncertainties_decorr_sys10_PT-M.yaml   
+      - uncertainties_decorr_sys_10_PT-M.yaml   
