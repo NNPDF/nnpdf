@@ -1,6 +1,9 @@
 """
-
-
+This piece of code generates a simplified variant of the uncertainties.yaml 
+files in which the 99 correlated systematic uncertainties of the legacy 
+version are replaced with two systematic uncertainties, one that is uncorrelated
+and that is correlated. Statistical, luminosity and )optional) Monte Carlo
+uncertainties are as in the legacy version.
 """
 
 import yaml
@@ -80,7 +83,6 @@ def filter_unc_ATLAS_Z0J_8TEV(MC=False):
             if(MC==True):
                 uncertainties[i].update({"sys_mc_uncorr": mc_unc/100 * central_values[i] * 1000.})  
                                  
-        # Uncertainties
         treatment = {"stat": "ADD",
                      "sys,Uncorrelated": "ADD",
                      "sys,Correlated": "MULT",
