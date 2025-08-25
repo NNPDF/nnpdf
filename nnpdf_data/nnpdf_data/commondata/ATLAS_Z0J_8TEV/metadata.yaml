@@ -69,7 +69,13 @@ implemented_observables:
     legacy_10:
       data_uncertainties:
       - uncertainties_legacy_sys_10_PT-Y.yaml
-
+    decorr:
+      data_uncertainties:
+      - uncertainties_decorr_PT-Y.yaml
+    decorr_sys_10:
+      data_uncertainties:
+      - uncertainties_decorr_sys10_PT-Y.yaml
+      
 - observable_name: PT-M
   observable:
     description: Drell-Yan Transverse Momentum Distribution
@@ -143,3 +149,9 @@ implemented_observables:
     legacy_data_10:
       data_uncertainties:
       - uncertainties_legacy_sys_10_PT-M.yaml
+    decorr:
+      data_uncertainties:
+      - uncertainties_decorr_PT-M.yaml
+    decorr_sys_10:
+      data_uncertainties:
+      - uncertainties_decorr_sys10_PT-M.yaml   
