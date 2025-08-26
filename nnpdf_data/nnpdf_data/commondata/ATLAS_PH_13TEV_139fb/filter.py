@@ -1,3 +1,16 @@
+"""
+This file contains the piece of code needed to implement the ATLAS direct
+photon measurement at 13 TeV. Distributions differential in the transverse
+energy of the photon in various bins of photon rapidity are consisdered.
+Systematic uncertainties are implemented starting from the breakdown
+available on HepData. The correlation treatment follows the approach mentioned
+in the paper (see Sect. 7.7): "There are bin-to-bin correlations of the 
+systematic uncertainties for each source. [...] The following uncertainties are 
+considered as uncorrelated bin-to-bin: photon-identification efficiency, choice 
+of background control regions, E_t^iso modelling and MC statistical 
+uncertainties.
+"""
+
 import pathlib
 
 import numpy as np
