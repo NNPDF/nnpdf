@@ -1,6 +1,6 @@
 setname: CMS_Z0_13TEV
 version: 1
-version_comment: 
+version_comment: 'Initial implementation' 
 arXiv: 
   url: https://arxiv.org/abs/2202.12327
   journal: JHEP 2022 (2022) 08, 063
@@ -9,11 +9,13 @@ iNSPIRE:
 hepdata:
   url: https://www.hepdata.net/record/ins2038801
   version: 1
+
 nnpdf_metadata:
   nnpdf31_process: "DY NC"
   experiment: CMS
+  
 implemented_observables:
-- observable_name: ASY_FB_COMBINED
+- observable_name: AFB
   observable:
     description: "Measurement of the forward backward asymmetry in NC muon and electron pair production at sqrt(s) = 13 TeV"
     label: "A_{FB}"
@@ -25,7 +27,7 @@ implemented_observables:
   - 7
   ndata:
   plotting:
-    dataset_label: "CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined" 
+    dataset_label: 'CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined' 
     plot_x: m
     y_label: "$A_{FB}$"
   kinematic_coverage:
@@ -33,22 +35,22 @@ implemented_observables:
   - mass
   kinematics:
     variables:
-      eta
+      eta:
         description: "lepton pseudorapidity"
-	label: "$\eta$"
-	units: ""
+        label: "$\eta$"
+        units: ""
       mass:
         description: "dilepton mass"
         label: "$m_{ll}$"
         units: "$GeV$"
-    file: kinematics.yaml
-  data_central: data.yaml
+    file: kinematics_AFB.yaml
+  data_central: data_AFB.yaml
   data_uncertainties:
-  - uncertainties.yaml
+  - uncertainties_AFB.yaml
   variants:
      breakdown:
      data_uncertainteis:
-     - uncertainties_breakdown.yaml
+     - uncertainties_breakdown_AFB.yaml
   theory:
     FK_tables:
     - - CMS_Z0_13TEV_FWD

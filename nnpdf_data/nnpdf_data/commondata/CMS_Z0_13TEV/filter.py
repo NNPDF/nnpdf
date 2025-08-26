@@ -279,13 +279,13 @@ def dump_to_yaml(variant=None):
     data = get_data_values()
     kinematics = get_kinematics()
 
-    with open(f"data.yaml", "w") as file:
+    with open(f"data_AFB.yaml", "w") as file:
         yaml.dump({"data_central": data}, file, sort_keys=False)
 
-    with open(f"kinematics.yaml", "w") as file:
+    with open(f"kinematics_AFB.yaml", "w") as file:
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
-    with open(f"uncertainties{variant}.yaml", "w") as file:
+    with open(f"uncertainties{variant}_AFB.yaml", "w") as file:
         yaml.dump({"definitions": get_uncertainties(variant)['error defs'], "bins": get_uncertainties(variant)['uncertainties']}, file, sort_keys=False)
 
     return 
