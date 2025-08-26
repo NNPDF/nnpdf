@@ -3,18 +3,14 @@ definitions:
     description: Statistical uncertainties
     treatment: ADD
     type: UNCORR
-  sys:
-    description: Systematic uncertainties
-    treatment: MULT
-    type: CORR
   sys_pdfs:
     description: PDF uncertainty
     treatment: MULT
     type: CORR
   sys_mcbg:
     description: Statistical uncertainties in templates
-    treatment: MULT
-    type: CORR
+    treatment: ADD
+    type: UNCORR
   sys_aplhas:
     description: Variations of strong coupling, mu_R and mu_F
     treatment: MULT
@@ -46,7 +42,7 @@ definitions:
   sys_lumi:
     description: Integrated luminosity uncertainty
     treatment: MULT
-    type: CORR
+    type: CMSLUMI16
   sys_eid:
     description: Uncertainty from electron identification/isolation
     treatment: MULT
@@ -108,7 +104,8 @@ definitions:
     treatment: MULT
     type: CORR
 bins:
-- sys_pdfs: 0.0081
+- stat: 0.009
+  sys_pdfs: 0.0081
   sys_mcbg: 0.0041
   sys_aplhas: 0.0033
   sys_dy: 0.003
@@ -133,8 +130,8 @@ bins:
   sys_mumom: 0.0001
   sys_emom: 0.0001
   sys_mutrig: 0.0001
-  stat: 0.009
-- sys_pdfs: 0.0081
+- stat: 0.009
+  sys_pdfs: 0.0081
   sys_mcbg: 0.0041
   sys_aplhas: 0.0033
   sys_dy: 0.003
@@ -159,8 +156,8 @@ bins:
   sys_mumom: 0.0001
   sys_emom: 0.0001
   sys_mutrig: 0.0001
-  stat: 0.009
-- sys_pdfs: 0.0081
+- stat: 0.011
+  sys_pdfs: 0.0081
   sys_mcbg: 0.0041
   sys_aplhas: 0.0033
   sys_dy: 0.003
@@ -185,8 +182,8 @@ bins:
   sys_mumom: 0.0001
   sys_emom: 0.0001
   sys_mutrig: 0.0001
-  stat: 0.011
-- sys_pdfs: 0.0081
+- stat: 0.011
+  sys_pdfs: 0.0081
   sys_mcbg: 0.0041
   sys_aplhas: 0.0033
   sys_dy: 0.003
@@ -211,8 +208,8 @@ bins:
   sys_mumom: 0.0001
   sys_emom: 0.0001
   sys_mutrig: 0.0001
-  stat: 0.011
-- sys_pdfs: 0.0081
+- stat: 0.021
+  sys_pdfs: 0.0081
   sys_mcbg: 0.0041
   sys_aplhas: 0.0033
   sys_dy: 0.003
@@ -237,8 +234,8 @@ bins:
   sys_mumom: 0.0001
   sys_emom: 0.0001
   sys_mutrig: 0.0001
-  stat: 0.021
-- sys_pdfs: 0.0081
+- stat: 0.032
+  sys_pdfs: 0.0081
   sys_mcbg: 0.0041
   sys_aplhas: 0.0033
   sys_dy: 0.003
@@ -263,8 +260,8 @@ bins:
   sys_mumom: 0.0001
   sys_emom: 0.0001
   sys_mutrig: 0.0001
-  stat: 0.032
-- sys_pdfs: 0.0081
+- stat: 0.052
+  sys_pdfs: 0.0081
   sys_mcbg: 0.0041
   sys_aplhas: 0.0033
   sys_dy: 0.003
@@ -289,30 +286,3 @@ bins:
   sys_mumom: 0.0001
   sys_emom: 0.0001
   sys_mutrig: 0.0001
-  stat: 0.052
-- sys_pdfs: 0.0081
-  sys_mcbg: 0.0041
-  sys_aplhas: 0.0033
-  sys_dy: 0.003
-  sys_pileup: 0.0028
-  sys_fidcor: 0.0027
-  sys_ttbar: 0.0027
-  sys_dypt: 0.0021
-  sys_emushape: 0.0018
-  sys_lumi: 0.0012
-  sys_eid: 0.001
-  sys_enorm: 0.0009
-  sys_eshape: 0.0008
-  sys_btag: 0.0008
-  sys_ptmiss: 0.0007
-  sys_muid: 0.0006
-  sys_mushape: 0.0005
-  sys_phph: 0.0004
-  sys_munorm: 0.0004
-  sys_etrig: 0.0004
-  sys_diboson: 0.0002
-  sys_erec: 0.0002
-  sys_mumom: 0.0001
-  sys_emom: 0.0001
-  sys_mutrig: 0.0001
-  stat: 0.005
