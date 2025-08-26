@@ -21,11 +21,8 @@ implemented_observables:
     label: "A_{FB}"
     units: ""
   process_type: DY_MLL
-  tables:
-  - 2
-  npoints:
-  - 7
-  ndata:
+  tables: [2]
+  ndata: 7
   plotting:
     dataset_label: 'CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined' 
     plot_x: m
@@ -49,8 +46,8 @@ implemented_observables:
   - uncertainties_AFB.yaml
   variants:
      breakdown:
-     data_uncertainteis:
-     - uncertainties_breakdown_AFB.yaml
+       data_uncertainties:
+       - uncertainties_breakdown_AFB.yaml
   theory:
     FK_tables:
     - - CMS_Z0_13TEV_FWD
