@@ -1,8 +1,9 @@
-setname: CMS_DY_13TEV
+setname: CMS_Z0_13TEV
 version: 1
 version_comment: 
 arXiv: 
   url: https://arxiv.org/abs/2202.12327
+  journal: JHEP 2022 (2022) 08, 063
 iNSPIRE:
   url: https://inspirehep.net/literature/1952936
 hepdata:
@@ -12,100 +13,46 @@ nnpdf_metadata:
   nnpdf31_process: "DY NC"
   experiment: CMS
 implemented_observables:
-- observable_name: ASY_FB_DIMUON
-  observable:
-    description: Measurement of the forward backward asymmetry in NC muon pair production at sqrt(s) = 13 TeV
-    label: 
-    units: '[fb]'
-  process_type: 
-  tables:
-  - 1
-  npoints:
-  - 8
-  ndata:
-  plotting:
-    dataset_label: CMS FB asymmetry mu mu
-    plot_x: m
-    y_label: $A_{FB}^{\mu\mu}$
-  kinematic_coverage:
-  - mass
-  kinematics:
-    variables:
-      mass:
-        description: dilepton mass
-        label: $m_{ll}$
-        units: $GeV$
-    file: kinematics.yaml
-  data_central: data_dimuon.yaml
-  data_uncertainties:
-  - uncertainties_dimuon.yaml
-  theory:
-    FK_tables:
-    - - 
-    operation: ASY
-    conversion_factor: 1.0
-- observable_name: ASY_FB_DIELECTRON
-  observable:
-    description: Measurement of the forward backward asymmetry in NC electron pair production at sqrt(s) = 13 TeV
-    label:
-    units: '[fb]'
-  process_type:
-  tables:
-  - 2
-  npoints:
-  - 8
-  ndata:
-  plotting:
-    dataset_label: CMS FB asymmetry ee
-    plot_x: m
-    y_label: $A_{FB}^{ee}$
-  kinematic_coverage:
-  - mass
-  kinematics:
-    variables:
-      mass:
-        description: dilepton mass
-        label: $m_{ll}$
-        units: $GeV$
-    file: kinematics.yaml
-  data_central: data_dielectron.yaml
-  data_uncertainties:
-  - uncertainties_dielectron.yaml
-  theory:
-    FK_tables:
-    - -
-    operation: ASY
-    conversion_factor: 1.0
 - observable_name: ASY_FB_COMBINED
   observable:
-    description: Measurement of the forward backward asymmetry in NC muon and electron pair production at sqrt(s) = 13 TeV
-    label:
-    units: '[fb]'
-  process_type:
+    description: "Measurement of the forward backward asymmetry in NC muon and electron pair production at sqrt(s) = 13 TeV"
+    label: "A_{FB}"
+    units: ""
+  process_type: DY_MLL
   tables:
   - 2
   npoints:
-  - 8
+  - 7
   ndata:
   plotting:
-    dataset_label: CMS FB asymmetry ee
+    dataset_label: "CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined" 
     plot_x: m
-    y_label: $A_{FB}^{ee}$
+    y_label: "$A_{FB}$"
   kinematic_coverage:
+  - eta
   - mass
   kinematics:
     variables:
+      eta
+        description: "lepton pseudorapidity"
+	label: "$\eta$"
+	units: ""
       mass:
-        description: dilepton mass
-        label: $m_{ll}$
-        units: $GeV$
+        description: "dilepton mass"
+        label: "$m_{ll}$"
+        units: "$GeV$"
     file: kinematics.yaml
-  data_central: data_combined.yaml
+  data_central: data.yaml
   data_uncertainties:
-  - uncertainties_combined.yaml
+  - uncertainties.yaml
+  variants:
+     breakdown:
+     data_uncertainteis:
+     - uncertainties_breakdown.yaml
   theory:
     FK_tables:
-    - -
+    - - CMS_Z0_13TEV_FWD
+      - CMS_Z0_13TEV_BWD
     operation: ASY
     conversion_factor: 1.0
 
