@@ -1,57 +1,29 @@
 bins:
-- eta:
-    min: -2.4
-    mid: 0.0
-    max: 2.4
-  mass:
+- m_ll:
     min: 170.0
     mid: 185.0
     max: 200.0
-- eta:
-    min: -2.4
-    mid: 0.0
-    max: 2.4
-  mass:
+- m_ll:
     min: 200.0
     mid: 225.0
     max: 250.0
-- eta:
-    min: -2.4
-    mid: 0.0
-    max: 2.4
-  mass:
+- m_ll:
     min: 250.0
     mid: 285.0
     max: 320.0
-- eta:
-    min: -2.4
-    mid: 0.0
-    max: 2.4
-  mass:
+- m_ll:
     min: 320.0
     mid: 415.0
     max: 510.0
-- eta:
-    min: -2.4
-    mid: 0.0
-    max: 2.4
-  mass:
+- m_ll:
     min: 510.0
     mid: 605.0
     max: 700.0
-- eta:
-    min: -2.4
-    mid: 0.0
-    max: 2.4
-  mass:
+- m_ll:
     min: 700.0
     mid: 850.0
     max: 1000.0
-- eta:
-    min: -2.4
-    mid: 0.0
-    max: 2.4
-  mass:
+- m_ll:
     min: 1000.0
     mid: 7000.0
     max: 13000.0
