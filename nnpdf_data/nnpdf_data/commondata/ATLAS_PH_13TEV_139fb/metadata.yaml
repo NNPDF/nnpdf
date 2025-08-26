@@ -10,7 +10,7 @@ nnpdf_metadata:
 
 arXiv:
   url: https://arxiv.org/pdf/2302.00510
-  journal: HEP07(2023)086
+  journal: JHEP07(2023)086
 iNSPIRE:
   url: https://inspirehep.net/literature/2162989
 hepdata:
@@ -19,17 +19,17 @@ hepdata:
 
 implemented_observables:
 
-- observable_name: XSEC
+- observable_name: ET-ETA-R02
   observable:
-    description: Photon Production
-    label: ATLAS direct photon production 13 TeV at 139 fb^-1
+    description: "ATLAS direct photon production 13 TeV at 139 fb^-1 R=0.2"
+    label: r"dsigma/dE_T^\gamma"
     units: "$fb/GeV$"
   process_type: PHT
   tables: [7, 8, 9, 10, 11, 12]
   ndata: 62
   plotting:
-    dataset_label: ATLAS direct photon production 13 TeV and 139 fb^-1
-    y_label: $d\sigma/dE_T ^\gamma$ (fb)
+    dataset_label: "ATLAS direct photon production 13 TeV and 139 fb^-1 R=0.2"
+    y_label: '$d\sigma/dE_T ^\gamma$ (fb/GeV)'
     figure_by:
     - eta
     plot_x: ET
@@ -40,33 +40,33 @@ implemented_observables:
   kinematics:
     variables:
       eta:
-        description: Absolute photon pseudorapidity
-        label: $|\eta|$
+        description: "Absolute photon pseudorapidity"
+        label: "$|\eta|$"
         units: ""
       ET:
-        description: Transverse energy
-        label: $E_T$
-        units: $GeV$
-    file: kinematics_XSEC_r02.yaml
-  data_uncertainties: [uncertainties_XSEC_r02.yaml]
-  variants:
-    r02:
-      data_uncertainties:
-      - uncertainties_XSEC_r02.yaml
-      data_central: data_XSEC_r02.yaml
+        description: "Transverse energy"
+        label: "$E_T$"
+        units: "$GeV$"
+      sqrts:
+        description: "Centre-of-mass energy"
+	label: r"\sqrt{s}"
+	units: "GeV"	
+    file: kinematics_ET-ETA-R02.yaml
+  data_uncertainties:
+  - uncertainties_ET-ETA-R02.yaml
   data_central: data_XSEC_r02.yaml
 
-- observable_name: XSEC
+- observable_name: ET-ETA-R04
   observable:
-    description: Photon Production
-    label: ATLAS direct photon production 13 TeV at 139 fb^-1
+    description: "ATLAS direct photon production 13 TeV at 139 fb^-1 R=0.4"
+    label: r"dsigma/dE_T^\gamma"
     units: "$fb/GeV$"
   process_type: PHT
   tables: [1, 2, 3, 4, 5, 6]
   ndata: 62
   plotting:
-    dataset_label: ATLAS direct photon production 13 TeV and 139 fb^-1
-    y_label: $d\sigma/dE_T ^\gamma$ (fb)
+    dataset_label: "ATLAS direct photon production 13 TeV and 139 fb^-1 R=0.4"
+    y_label: '$d\sigma/dE_T ^\gamma$ (fb)'
     figure_by:
     - eta
     plot_x: ET
@@ -77,18 +77,18 @@ implemented_observables:
   kinematics:
     variables:
       eta:
-        description: Absolute photon pseudorapidity
-        label: $|\eta|$
+        description: "Absolute photon pseudorapidity"
+        label: "$|\eta|$"
         units: ""
       ET:
-        description: Transverse energy
-        label: $E_T$
-        units: $GeV$
-    file: kinematics_XSEC_r04.yaml
-  data_uncertainties: [uncertainties_XSEC_r04.yaml]
-  variants:
-    r04:
-      data_uncertainties:
-      - uncertainties_XSEC_r04.yaml
-      data_central: data_XSEC_r04.yaml
+        description: "Transverse energy"
+        label: "$E_T$"
+        units: "$GeV$"
+      sqrts:
+        description: "Centre-of-mass energy"
+	label: r"\sqrt{s}"
+	units: "GeV"
+    file: kinematics_ET-ETA-R04.yaml
+  data_uncertainties:
+  - uncertainties_ET-ETA-R04.yaml
   data_central: data_XSEC_r04.yaml
