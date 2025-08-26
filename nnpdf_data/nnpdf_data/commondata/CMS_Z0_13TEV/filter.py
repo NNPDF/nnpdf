@@ -24,8 +24,7 @@ def get_kinematics():
 
     for m in input["independent_variables"][0]['values']:
         kin_value = {
-            'eta': {'min': -2.4, 'mid': 0.0, 'max': +2.4},
-            'mass': {'min': m['low'], 'mid': 0.5 * (m['low'] + m['high']), 'max': m['high']},
+            'm_ll': {'min': m['low'], 'mid': 0.5 * (m['low'] + m['high']), 'max': m['high']},
         }
 
         kin.append(kin_value)
