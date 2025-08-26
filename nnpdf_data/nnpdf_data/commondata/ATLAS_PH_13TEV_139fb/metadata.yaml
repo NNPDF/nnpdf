@@ -56,6 +56,18 @@ implemented_observables:
   - uncertainties_ET-ETA-R02.yaml
   data_central: data_XSEC_r02.yaml
 
+  theory:
+    FK_tables:
+    - - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN1
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN2
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN3
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN4
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN5
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN6
+    operation: 'null'
+
+
+
 - observable_name: ET-ETA-R04
   observable:
     description: "ATLAS direct photon production 13 TeV at 139 fb^-1 R=0.4"
@@ -92,3 +104,13 @@ implemented_observables:
   data_uncertainties:
   - uncertainties_ET-ETA-R04.yaml
   data_central: data_XSEC_r04.yaml
+
+  theory:
+    FK_tables:
+    - - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN1
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN2
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN3
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN4
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN5
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN6
+    operation: 'null'
