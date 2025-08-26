@@ -54,7 +54,7 @@ implemented_observables:
     file: kinematics_ET-ETA-R02.yaml
   data_uncertainties:
   - uncertainties_ET-ETA-R02.yaml
-  data_central: data_XSEC_r02.yaml
+  data_central: data_ET-ETA-R02.yaml
 
   theory:
     FK_tables:
@@ -103,7 +103,7 @@ implemented_observables:
     file: kinematics_ET-ETA-R04.yaml
   data_uncertainties:
   - uncertainties_ET-ETA-R04.yaml
-  data_central: data_XSEC_r04.yaml
+  data_central: data_ET-ETA-R04.yaml
 
   theory:
     FK_tables:
