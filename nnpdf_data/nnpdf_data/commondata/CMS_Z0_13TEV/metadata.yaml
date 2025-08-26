@@ -25,18 +25,13 @@ implemented_observables:
   ndata: 7
   plotting:
     dataset_label: 'CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined' 
-    plot_x: m
+    plot_x: m_ll
     y_label: "$A_{FB}$"
   kinematic_coverage:
-  - eta
-  - mass
+  - m_ll
   kinematics:
     variables:
-      eta:
-        description: "lepton pseudorapidity"
-        label: "$\eta$"
-        units: ""
-      mass:
+      m_ll:
         description: "dilepton mass"
         label: "$m_{ll}$"
         units: "$GeV$"
