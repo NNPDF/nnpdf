@@ -8,10 +8,6 @@ from nnpdf_data.filter_utils.utils import prettify_float
 
 yaml.add_representer(float, prettify_float)
 
-NB_POINTS = 6
-MT_VALUE = 172.5
-SQRT_S = 13_000.0
-
 from nnpdf_data.filter_utils.utils import symmetrize_errors as se
 
 
@@ -35,7 +31,7 @@ def load_yaml(table_id: int, version: int = 1) -> dict:
     return yaml.safe_load(table.read_text())
 
 
-def get_kinematics(hepdata: dict, bin_index: list = [], indx: int = 0, mid_rap=None) -> list:
+def get_kinematics(hepdata: dict, bin_index: list = [], indx: int = 0, min_rap=None, max_rap=None) -> list:
     """Read the version and list of tables from metadata.
 
     Parameters
@@ -60,8 +56,9 @@ def get_kinematics(hepdata: dict, bin_index: list = [], indx: int = 0, mid_rap=N
         min_et, max_et = bins[i]["low"], bins[i]["high"]
 
         kin_value = {
-            "eta": {"min": None, "mid": mid_rap, "max": None},
-            "ET": {"min": None, "mid": ((min_et + max_et) / 2), "max": None},
+            "eta": {"min": min_rap, "mid": ((min_rap + max_rap) / 2) , "max": max_rap},
+            "ET": {"min": min_et, "mid": ((min_et + max_et) / 2), "max": max_et},
+            "sqrts": {"min": None, "mid": 13000, "max": None},
         }
         kinematics.append(kin_value)
 
@@ -133,11 +130,6 @@ def get_errors(hepdata: dict, bin_index: list) -> dict:
         cv_i = bin["value"] + shift_cv
         central_values.append(cv_i)
 
-    # # convert to fb
-
-    # df_errors = df_errors * 1e3
-    # central_values = np.array(central_values) * 1e3
-
     return central_values, df_errors
 
 
@@ -206,55 +198,79 @@ def dump_commondata(kinematics: list, data: list, errors: dict, obs: str) -> Non
         }
 
     errors_formatted = format_uncertainties(errors)
-    with open(f"data_{obs}_r04.yaml", "w") as file:
+    with open(f"data_{obs}.yaml", "w") as file:
         yaml.dump({"data_central": data.tolist()}, file, sort_keys=False)
 
-    with open(f"kinematics_{obs}_r04.yaml", "w") as file:
+    with open(f"kinematics_{obs}.yaml", "w") as file:
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
-    with open(f"uncertainties_{obs}_r04.yaml", "w") as file:
+    with open(f"uncertainties_{obs}.yaml", "w") as file:
         yaml.dump(
             {"definitions": error_definition, "bins": errors_formatted}, file, sort_keys=False
         )
 
 
-def main_filter() -> None:
+def main_filter(obs=None) -> None:
     """
     Main function that reads the HepData yaml files and generates the commondata files
     """
-
-    yaml_content_data = [load_yaml(table_id=i, version=1) for i in range(1,7)]
+    unc_err_lbl = ["sysPhotonID",
+                   "sysBackgroundIsolation",
+                   "sysBackgroundIsolationUpperLimit",
+                   "sysBackgroundID",
+                   "sysBackground",
+                   "sysIsolationMC",
+                   "sysMCstats",]
     uncertainties_all = pd.DataFrame()
     central_values_all = np.array([])
     kinematics_all = []
     n_datapoints = [12, 11, 11, 10, 9, 9]
-    mid_rapidities = [0.3, 0.7, 1.085, 1.685, 1.91, 2.19]
+    min_rapidities = [0.0, 0.6, 0.8, 1.56, 1.81, 2.01]
+    max_rapidities = [0.6, 0.8, 1.37, 1.81, 2.01, 2.37]
 
+    if obs=="ET-ETA-R04":
+        yaml_content_data = [load_yaml(table_id=i, version=1) for i in range(1,7)]
+    elif obs == "ET-ETA-R02":
+        yaml_content_data = [load_yaml(table_id=i, version=1) for i in range(7,13)]
+    else:
+        print("Wrong observable.")
+        print("Available observables are:")
+        print("- ET-ETA-R04")
+        print("- ET-ETA-R02")
+        exit()
+    
     for i, yaml_content in enumerate(yaml_content_data):
         kinematics = get_kinematics(
-            yaml_content, bin_index=range(n_datapoints[i]), mid_rap=mid_rapidities[i]
+            yaml_content, bin_index=range(n_datapoints[i]), min_rap=min_rapidities[i], max_rap=max_rapidities[i]
         )
         central_values, uncertainties = get_errors(yaml_content, bin_index=range(n_datapoints[i]))
         uncertainties_all = pd.concat([uncertainties_all, uncertainties])
         central_values_all = np.concatenate([central_values_all, central_values])
         kinematics_all += kinematics
-
+        
     uncertainties_all.index = [f"bin {i}" for i in range(uncertainties_all.shape[0])]
-
+    
     n_sources = uncertainties_all.shape[1]
     sys_types = {
         "treatment": ["ADD"] + ["MULT"] * (n_sources - 1),
-        "type": ["UNCORR"] * (n_sources - 1) + ["ATLASLUMI15"],
+        "type": ["UNCORR"] + ["CORR"] * (n_sources - 2) + ["ATLASLUMI15"],
     }
     sys_types_df = pd.DataFrame(sys_types, index=uncertainties_all.columns).T
     df_errors = pd.concat([sys_types_df, uncertainties_all])
-
+    
     errors = {"statistics": df_errors.iloc[:, [0]], "systematics": df_errors.iloc[:, 1:]}
 
-    dump_commondata(kinematics_all, central_values_all, errors, obs="XSEC")
-
+    for lbl in unc_err_lbl:
+        #errors["systematics"][lbl] = errors["systematics"][lbl].replace('CORR','UNCORR')
+        #errors["systematics"][lbl] = errors["systematics"][lbl].replace('MULT','ADD')
+        errors["systematics"].loc["treatment",lbl] = "ADD"
+        errors["systematics"].loc["type", lbl] = "UNCORR"
+        
+    dump_commondata(kinematics_all, central_values_all, errors, obs=obs)
+    
     return
 
 
 if __name__ == "__main__":
-    main_filter()
+    main_filter("ET-ETA-R02")
+    main_filter("ET-ETA-R04")

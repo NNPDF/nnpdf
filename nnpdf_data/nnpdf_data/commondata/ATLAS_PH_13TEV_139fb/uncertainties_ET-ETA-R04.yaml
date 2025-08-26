@@ -5,7 +5,7 @@ definitions:
     type: UNCORR
   sys_corr_1:
     description: sysPhotonID
-    treatment: MULT
+    treatment: ADD
     type: UNCORR
   sys_corr_2:
     description: RESOLUTION_AF2
@@ -325,20 +325,20 @@ definitions:
     type: CORR
   sys_corr_81:
     description: sysBackgroundIsolation
-    treatment: MULT
-    type: CORR
+    treatment: ADD
+    type: UNCORR
   sys_corr_82:
     description: sysBackgroundIsolationUpperLimit
-    treatment: MULT
+    treatment: ADD
     type: UNCORR
   sys_corr_83:
     description: sysBackgroundID
-    treatment: MULT
+    treatment: ADD
     type: UNCORR
   sys_corr_84:
     description: sysBackground
-    treatment: MULT
-    type: CORR
+    treatment: ADD
+    type: UNCORR
   sys_corr_85:
     description: syselectronBackground
     treatment: MULT
@@ -353,7 +353,7 @@ definitions:
     type: CORR
   sys_corr_88:
     description: sysIsolationMC
-    treatment: MULT
+    treatment: ADD
     type: UNCORR
   sys_corr_89:
     description: sysPUrew
@@ -361,7 +361,7 @@ definitions:
     type: CORR
   sys_corr_90:
     description: sysMCstats
-    treatment: MULT
+    treatment: ADD
     type: UNCORR
   sys_corr_91:
     description: sysTrigger
