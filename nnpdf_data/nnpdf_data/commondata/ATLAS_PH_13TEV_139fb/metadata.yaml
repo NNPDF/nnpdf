@@ -49,8 +49,8 @@ implemented_observables:
         units: "$GeV$"
       sqrts:
         description: "Centre-of-mass energy"
-	label: r"\sqrt{s}"
-	units: "GeV"	
+        label: r"\sqrt{s}"
+        units: "GeV"	
     file: kinematics_ET-ETA-R02.yaml
   data_uncertainties:
   - uncertainties_ET-ETA-R02.yaml
@@ -65,8 +65,6 @@ implemented_observables:
       - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN5
       - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN6
     operation: 'null'
-
-
 
 - observable_name: ET-ETA-R04
   observable:
@@ -98,8 +96,8 @@ implemented_observables:
         units: "$GeV$"
       sqrts:
         description: "Centre-of-mass energy"
-	label: r"\sqrt{s}"
-	units: "GeV"
+        label: r"\sqrt{s}"
+        units: "GeV"
     file: kinematics_ET-ETA-R04.yaml
   data_uncertainties:
   - uncertainties_ET-ETA-R04.yaml
