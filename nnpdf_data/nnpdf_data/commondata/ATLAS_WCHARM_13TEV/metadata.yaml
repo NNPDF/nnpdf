@@ -14,22 +14,39 @@ hepdata:
   version: 1
 
 version: 1
-version_comment: Implementation 
+version_comment: "Initial implementation"
 
 implemented_observables:
-- observable_name: WMDP
+- observable_name: WPWM-D
   observable:
-    description: 
-    label: ATLAS $W^-+c$ 13 TeV
+    description: "Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio, D channel" 
+    label: "ATLAS $W^\pm + c\to D$ 13 TeV"
     units: '[pb]'
-  process_type: 
-  tables: [19]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
+  process_type: DY_W_ETA
+  tables: [5,6,16]  
   ndata: 5
   plotting:
-    dataset_label: ATLAS $W^-+c$ 13 TeV
-    y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
+    dataset_label: ATLAS $W^\pm + c \to D$ 13 TeV
+    y_label: $d\sigma/d|\eta(\ell)|$ (fb)
     x_label: $|\eta^\ell|$
     plot_x: abs_eta
+    line_by:
+    - Boson
+    normalize:
+      figure_by:
+      - Boson
+    extra_labels:
+      Boson:
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
   kinematic_coverage: 
   kinematics:
     variables:
@@ -45,87 +62,47 @@ implemented_observables:
         description: Center-of-mass energy
         label: $\sqrt{s}$
         units: GeV
-    file: kinematics_WMDP.yaml
-  data_uncertainties: uncertainties_WMDP.yaml
-  data_central: data_WMDP.yaml
+    file: kinematics_WPWM-D.yaml
+  data_uncertainties: uncertainties_WPWM-D.yaml
+  data_central: data_WPWM-D.yaml
 
-- observable_name: WPDM
-  observable:
-    description: 
-    label: ATLAS $W^-+c$ 13 TeV
-    units: '[pb]'
-  process_type: 
-  tables: [20]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
-  ndata: 5
-  plotting:
-    dataset_label: ATLAS $W^-+c$ 13 TeV
-    y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
-    x_label: $|\eta^\ell|$
-    plot_x: abs_eta
-  kinematic_coverage: 
-  kinematics:
-    variables:
-      abs_eta:
-        description: Absolute pseudorapidity of the lepton
-        label: $|\eta_l|$
-        units: ''
-      m_W2:
-        description: Squared invariant mass of the W boson
-        label: $m_W^2$
-        units: GeV$^2$
-      sqrts:
-        description: Center-of-mass energy
-        label: $\sqrt{s}$
-        units: GeV
-    file: kinematics_WPDM.yaml
-  data_uncertainties: uncertainties_WPDM.yaml
-  data_central: data_WPDM.yaml
-      
-- observable_name: WMDP_star
-  observable:
-    description: 
-    label: ATLAS $W^-+c$ 13 TeV
-    units: '[pb]'
-  process_type: 
-  tables: [21]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
-  ndata: 5
-  plotting:
-    dataset_label: ATLAS $W^-+c$ 13 TeV
-    y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
-    x_label: $|\eta^\ell|$
-    plot_x: abs_eta
-  kinematic_coverage: 
-  kinematics:
-    variables:
-      abs_eta:
-        description: Absolute pseudorapidity of the lepton
-        label: $|\eta_l|$
-        units: ''
-      m_W2:
-        description: Squared invariant mass of the W boson
-        label: $m_W^2$
-        units: GeV$^2$
-      sqrts:
-        description: Center-of-mass energy
-        label: $\sqrt{s}$
-        units: GeV
-    file: kinematics_WMDP_star.yaml
-  data_uncertainties: uncertainties_WMDP_star.yaml
-  data_central: data_WMDP_star.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: null
+    FK_tables:
+    - - ATLAS_WCHARM_13TEV_WPWM-D_WM
+    - - ATLAS_WCHARM_13TEV_WPWM-D_WP
 
-- observable_name: WPDM_star
+- observable_name: WPWM-Dstar
   observable:
-    description: 
-    label: ATLAS $W^-+c$ 13 TeV
+    description: "Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio, D star channel" 
+    label: "ATLAS $W^\pm + c\to D^*$ 13 TeV"
     units: '[pb]'
-  process_type: 
-  tables: [22]  # 5/19 (W−+D+), 6/20(W++D−), 9/21(W−+D∗+), 10/22(W++D∗−) 
+  process_type: DY_W_ETA
+  tables: [9,10,18]  
   ndata: 5
   plotting:
-    dataset_label: ATLAS $W^-+c$ 13 TeV
-    y_label: 'Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio' #In Latex terms?
+    dataset_label: ATLAS $W^\pm + c \to D^*$ 13 TeV
+    y_label: $d\sigma/d|\eta(\ell)|$ (fb)
     x_label: $|\eta^\ell|$
     plot_x: abs_eta
+    line_by:
+    - Boson
+    normalize:
+      figure_by:
+      - Boson
+    extra_labels:
+      Boson:
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
   kinematic_coverage: 
   kinematics:
     variables:
@@ -141,6 +118,13 @@ implemented_observables:
         description: Center-of-mass energy
         label: $\sqrt{s}$
         units: GeV
-    file: kinematics_WPDM_star.yaml
-  data_uncertainties: uncertainties_WPDM_star.yaml
-  data_central: data_WPDM_star.yaml
+    file: kinematics_WPWM-Dstar.yaml
+  data_uncertainties: uncertainties_WPWM-Dstar.yaml
+  data_central: data_WPWM-Dstar.yaml
+
+  theory:
+    conversion_factor: 1.0
+    operation: null
+    FK_tables:
+    - - ATLAS_WCHARM_13TEV_WPWM-D_WM
+    - - ATLAS_WCHARM_13TEV_WPWM-D_WP
