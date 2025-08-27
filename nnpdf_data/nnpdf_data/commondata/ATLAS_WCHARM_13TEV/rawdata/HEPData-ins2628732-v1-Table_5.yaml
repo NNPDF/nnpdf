@@ -24,7 +24,7 @@ dependent_variables:
     - {label: stat, symerror: 0.11}
     - {label: syst, asymerror: {minus: -0.37, plus: 0.39}}
     value: 6.85
-- header: {name: 1/SIG INT(DSIG/DD_PT)}
+- header: {name: 1/SIG INT(DSIG/DLEP_ABS_ETA)}
   qualifiers:
   - {name: LUMINOSITY, units: 'fb$^{-1}$', value: 139}
   - {name: SQRT(S), units: GeV, value: 13000}
