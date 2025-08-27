@@ -14,7 +14,7 @@ hepdata:
   version: 1
 
 version: 1
-version_comment: "Initial implementation"
+version_comment: Initial implementation
 
 implemented_observables:
 - observable_name: WMWP-D
@@ -47,7 +47,7 @@ implemented_observables:
       - $W^+$
       - $W^+$
       - $W^+$
-  kinematic_coverage: 
+  kinematic_coverage: [abs_eta, m_W2]
   kinematics:
     variables:
       abs_eta:
@@ -59,15 +59,15 @@ implemented_observables:
         label: $m_W^2$
         units: GeV$^2$
     file: kinematics_WMWP-D.yaml
-  data_uncertainties: uncertainties_WMWP-D.yaml
+  data_uncertainties:
+  - uncertainties_WMWP-D.yaml
   data_central: data_WMWP-D.yaml
 
   theory:
-    conversion_factor: 1.0
-    operation: null
     FK_tables:
     - - ATLAS_WCHARM_13TEV_WMWP-D_WM
-    - - ATLAS_WCHARM_13TEV_WMWP-D_WP
+      - ATLAS_WCHARM_13TEV_WMWP-D_WP
+    operation: 'null'
 
 - observable_name: WMWP-Dstar
   observable:
@@ -99,7 +99,7 @@ implemented_observables:
       - $W^+$
       - $W^+$
       - $W^+$
-  kinematic_coverage: 
+  kinematic_coverage: [abs_eta, m_W2]
   kinematics:
     variables:
       abs_eta:
@@ -111,12 +111,12 @@ implemented_observables:
         label: $m_W^2$
         units: GeV$^2$
     file: kinematics_WMWP-Dstar.yaml
-  data_uncertainties: uncertainties_WMWP-Dstar.yaml
+  data_uncertainties:
+  - uncertainties_WMWP-Dstar.yaml
   data_central: data_WMWP-Dstar.yaml
 
   theory:
-    conversion_factor: 1.0
-    operation: null
     FK_tables:
     - - ATLAS_WCHARM_13TEV_WMWP-D_WM
-    - - ATLAS_WCHARM_13TEV_WMWP-D_WP
+      - ATLAS_WCHARM_13TEV_WMWP-D_WP
+    operation: 'null'
