@@ -17,10 +17,10 @@ version: 1
 version_comment: "Initial implementation"
 
 implemented_observables:
-- observable_name: WPWM-D
+- observable_name: WMWP-D
   observable:
     description: "Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio, D channel" 
-    label: "ATLAS $W^\pm + c\to D$ 13 TeV"
+    label: 'ATLAS $W^\pm + c\to D$ 13 TeV'
     units: '[pb]'
   process_type: DY_W_ETA
   tables: [5,6,16]  
@@ -58,25 +58,21 @@ implemented_observables:
         description: Squared invariant mass of the W boson
         label: $m_W^2$
         units: GeV$^2$
-      sqrts:
-        description: Center-of-mass energy
-        label: $\sqrt{s}$
-        units: GeV
-    file: kinematics_WPWM-D.yaml
-  data_uncertainties: uncertainties_WPWM-D.yaml
-  data_central: data_WPWM-D.yaml
+    file: kinematics_WMWP-D.yaml
+  data_uncertainties: uncertainties_WMWP-D.yaml
+  data_central: data_WMWP-D.yaml
 
   theory:
     conversion_factor: 1.0
     operation: null
     FK_tables:
-    - - ATLAS_WCHARM_13TEV_WPWM-D_WM
-    - - ATLAS_WCHARM_13TEV_WPWM-D_WP
+    - - ATLAS_WCHARM_13TEV_WMWP-D_WM
+    - - ATLAS_WCHARM_13TEV_WMWP-D_WP
 
-- observable_name: WPWM-Dstar
+- observable_name: WMWP-Dstar
   observable:
     description: "Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio, D star channel" 
-    label: "ATLAS $W^\pm + c\to D^*$ 13 TeV"
+    label: 'ATLAS $W^\pm + c\to D^*$ 13 TeV'
     units: '[pb]'
   process_type: DY_W_ETA
   tables: [9,10,18]  
@@ -114,17 +110,13 @@ implemented_observables:
         description: Squared invariant mass of the W boson
         label: $m_W^2$
         units: GeV$^2$
-      sqrts:
-        description: Center-of-mass energy
-        label: $\sqrt{s}$
-        units: GeV
-    file: kinematics_WPWM-Dstar.yaml
-  data_uncertainties: uncertainties_WPWM-Dstar.yaml
-  data_central: data_WPWM-Dstar.yaml
+    file: kinematics_WMWP-Dstar.yaml
+  data_uncertainties: uncertainties_WMWP-Dstar.yaml
+  data_central: data_WMWP-Dstar.yaml
 
   theory:
     conversion_factor: 1.0
     operation: null
     FK_tables:
-    - - ATLAS_WCHARM_13TEV_WPWM-D_WM
-    - - ATLAS_WCHARM_13TEV_WPWM-D_WP
+    - - ATLAS_WCHARM_13TEV_WMWP-D_WM
+    - - ATLAS_WCHARM_13TEV_WMWP-D_WP
