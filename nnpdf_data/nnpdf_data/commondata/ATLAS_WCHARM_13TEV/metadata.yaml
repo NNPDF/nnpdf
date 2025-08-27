@@ -24,7 +24,7 @@ implemented_observables:
     units: '[pb]'
   process_type: DY_W_ETA
   tables: [5,6,16]  
-  ndata: 5
+  ndata: 10
   plotting:
     dataset_label: ATLAS $W^\pm + c \to D$ 13 TeV
     y_label: $d\sigma/d|\eta(\ell)|$ (fb)
@@ -76,7 +76,7 @@ implemented_observables:
     units: '[pb]'
   process_type: DY_W_ETA
   tables: [9,10,18]  
-  ndata: 5
+  ndata: 10
   plotting:
     dataset_label: ATLAS $W^\pm + c \to D^*$ 13 TeV
     y_label: $d\sigma/d|\eta(\ell)|$ (fb)
