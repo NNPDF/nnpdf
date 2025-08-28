@@ -40,8 +40,6 @@ datacuts:
 theory:
   theoryid: 708        # database id
 
-separate_multiplicative: True
-
 ############################################################
 hyperscan_config:
   stopping:

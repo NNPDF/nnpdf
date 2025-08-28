@@ -1,12 +1,12 @@
 from validphys.api import API
 from validphys.core import InternalCutsWrapper, SimilarCuts
-from validphys.tests.conftest import DATA, PDF, THEORYID_NEW
+from validphys.tests.conftest import DATA, PDF, THEORYID
 
 
 def test_similarity_cuts():
     plain = [{"dataset": dt["dataset"]} for dt in DATA]
     inp = {
-        "theoryid": THEORYID_NEW,
+        "theoryid": THEORYID,
         "pdf": PDF,
         "cut_similarity_threshold": 1.5,
         "use_cuts": "fromsimilarpredictions",

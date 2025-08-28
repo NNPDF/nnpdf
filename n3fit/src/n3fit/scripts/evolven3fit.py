@@ -92,17 +92,18 @@ def construct_evolven3fit_parser(subparsers):
         "-d", "--dump", type=pathlib.Path, default=None, help="Path where the EKO is dumped"
     )
     parser.add_argument(
+        "--hessian_fit",
+        type=bool,
+        default=False,
+        help="Specify if the fit is hessian (default is False)",
+    )
+    parser.add_argument(
         "-f",
         "--force",
         action="store_true",
         help="Force the evolution to be done even if it has already been done",
     )
     return parser
-
-
-def evolven3fit_new():
-    _logger.warning("`evolven3fit_new` is deprecated. Please use `evolven3fit` instead.")
-    main()
 
 
 def main():
@@ -135,22 +136,17 @@ def main():
 
         fit_folder = pathlib.Path(args.fit_folder)
         if args.load is None:
+            # no path provided to load the eko, get it from the theory
+            utils.check_filter(fit_folder)
             theoryID = utils.get_theoryID_from_runcard(fit_folder)
             _logger.info(f"Loading eko from theory {theoryID}")
             eko_path = loader.check_eko(theoryID)
         else:
+            # If a path is given for the load option, the eko
+            # to be used for the evolution will be loaded from that path.
             eko_path = args.load
 
-        cli.cli_evolven3fit(
-            fit_folder,
-            args.q_fin,
-            args.q_points,
-            op_card_info,
-            theory_card_info,
-            args.force,
-            eko_path,
-            None,
-        )
+        cli.cli_evolven3fit(fit_folder, args.force, eko_path, args.hessian_fit)
     else:
         # If we are in the business of producing an eko, do some checks before starting:
         # 1. load the nnpdf theory early to check for inconsistent options and theory problems

@@ -1,5 +1,5 @@
 """
-    Add markers for pytest
+Add markers for pytest
 """
 
 import sys
@@ -7,8 +7,7 @@ import sys
 import pytest
 
 from validphys.loader import FallbackLoader
-
-THEORYID = 399
+from validphys.tests.conftest import THEORYID
 
 
 @pytest.fixture(scope='module')

@@ -4,8 +4,9 @@ measurement at 13 TeV. The absolute distributions differential in the
 pseudorapidity of the lepton are considered. Two datasets, corresponding to the
 decay of a W^+- boson into a D or a Dstar meson, are implemented. The two
 channels are largely independent. Correlations are implemented from the full
-covariance matrix (Table 12 in the paper, Tables 16 and 18 on HepData), a
-fter subtraction of the fully  correlated luminosity covariance matrix.
+covariance matrix (Table 12 in the paper, Tables 16 and 18 on HepData), 
+after subtraction of the fully  correlated luminosity covariance matrix.
+
 """
 
 import yaml

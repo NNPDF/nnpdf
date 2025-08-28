@@ -419,9 +419,7 @@ class CoreConfig(configparser.Config):
             custom_group: str
                 custom group to apply to the dataset
 
-        Note that the `sys` key is deprecated and allowed only for old-format dataset.
-
-        Old-format commondata will be translated to the new version in this function.
+        Old-format names-sys will be translated to the new version in this function.
         """
         accepted_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variant"}
         try:
@@ -476,7 +474,9 @@ class CoreConfig(configparser.Config):
                 variant = map_variant
 
             if sysnum is not None:
-                log.warning("The key 'sys' is deprecated and will soon be removed")
+                log.warning(
+                    f"The key 'sys' is deprecated and only used for variant discovery: {variant}"
+                )
 
         return DataSetInput(
             name=name,
@@ -485,7 +485,6 @@ class CoreConfig(configparser.Config):
             weight=weight,
             custom_group=custom_group,
             variant=variant,
-            sys=sysnum,
         )
 
     def parse_inconsistent_data_settings(self, settings):
@@ -536,11 +535,9 @@ class CoreConfig(configparser.Config):
         """Produce a CommondataSpec from a dataset input"""
 
         name = dataset_input.name
-        sysnum = dataset_input.sys
         try:
             return self.loader.check_commondata(
                 setname=name,
-                sysnum=sysnum,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 variant=dataset_input.variant,
@@ -687,7 +684,6 @@ class CoreConfig(configparser.Config):
         True, attempt to lod and check the PLOTTING files
         (note this may cause a noticeable slowdown in general)."""
         name = dataset_input.name
-        sysnum = dataset_input.sys
         cfac = dataset_input.cfac
         frac = dataset_input.frac
         weight = dataset_input.weight
@@ -695,7 +691,6 @@ class CoreConfig(configparser.Config):
         try:
             ds = self.loader.check_dataset(
                 name=name,
-                sysnum=sysnum,
                 theoryid=theoryid,
                 cfac=cfac,
                 cuts=cuts,
@@ -907,6 +902,18 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_t0_covmat_from_systematics
         else:
             return covmats.dataset_inputs_covmat_from_systematics
+
+    @configparser.explicit_node
+    def produce_masks(self, diagonal_basis: bool = False):
+        """Modifies which action is used as masks depending on the flag
+        `diagonal_basis`
+        """
+        from validphys import n3fit_data
+
+        if diagonal_basis:
+            return n3fit_data.diagonal_masks
+        else:
+            return n3fit_data.standard_masks
 
     @configparser.explicit_node
     def produce_covariance_matrix(self, use_pdferr: bool = False):
@@ -1404,10 +1411,28 @@ class CoreConfig(configparser.Config):
         """
         Returns a tuple of AddedFilterRule objects. Rules are immutable after parsing.
         AddedFilterRule objects inherit from FilterRule objects.
+        It checks if the rules are unique, i.e. if there are no
+        multiple filters for the same dataset or process with the
+        same fields (`reason` is not used in the comparison).
         """
-        return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
+        if rules is not None:
+            unique_rules = set(AddedFilterRule(**rule) for rule in rules)
+            if len(unique_rules) != len(rules):
+                raise RuleProcessingError(
+                    "Detected repeated filter rules. Please, make sure that "
+                    " rules are not repeated in the runcard."
+                )
+            return tuple(unique_rules)
+        else:
+            return None
 
-    @functools.lru_cache
+    def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
+        """Turns drop_internal_rules into a tuple for internal caching."""
+        if drop_internal_rules is None:
+            return tuple()
+        return tuple(drop_internal_rules)
+
+    @functools.cache
     def produce_rules(
         self,
         theoryid,
@@ -1417,9 +1442,20 @@ class CoreConfig(configparser.Config):
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
         added_filter_rules: (tuple, type(None)) = None,
+        drop_internal_rules: tuple = tuple(),
     ):
-        """Produce filter rules based on the user defined input and defaults."""
+        """Produce filter rules based on the user defined input and defaults.
 
+        It is possible to overwrite or extend the internal rules from the runcard
+        using the following variables:
+
+        ``filter_rules``: tuple(rules)
+            Drop all internal rules and take these instead
+        ``added_filter_rules``: tuple(rules)
+            Extended internal rules with these
+        ``drop_internal_rules``: tuple(dataset names)
+            Drop internal dataset-specific rules, it is applied before ``added_filter_rules``
+        """
         theory_parameters = theoryid.get_description()
 
         if filter_rules is None:
@@ -1432,21 +1468,25 @@ class CoreConfig(configparser.Config):
                 filter_rules = default_filter_rules_input()
 
         try:
-            rule_list = [
-                Rule(
-                    initial_data=rule,
-                    defaults=defaults,
-                    theory_parameters=theory_parameters,
-                    loader=self.loader,
+            rule_list = []
+            for rule in filter_rules:
+                # Don't load rules that are to be dropped
+                if rule.dataset in drop_internal_rules:
+                    continue
+
+                rule_list.append(
+                    Rule(
+                        initial_data=rule,
+                        defaults=defaults,
+                        theory_parameters=theory_parameters,
+                        loader=self.loader,
+                    )
                 )
-                for rule in filter_rules
-            ]
         except RuleProcessingError as e:
             raise ConfigError(f"Error Processing filter rules: {e}") from e
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-
                 try:
                     rule_list.append(
                         Rule(
@@ -1662,13 +1702,14 @@ class CoreConfig(configparser.Config):
         """Load the default grouping of data"""
         # slightly superfluous, only one default at present but perhaps
         # somebody will want to add to this at some point e.g for th. uncertainties
-        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL"}
+        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL", "diagonal_basis": "ALL"}
         return allowed[spec]
 
     def produce_processed_data_grouping(
         self,
         use_thcovmat_in_fitting=False,
         use_thcovmat_in_sampling=False,
+        diagonal_basis=False,
         data_grouping=None,
         data_grouping_recorded_spec_=None,
     ):
@@ -1688,6 +1729,8 @@ class CoreConfig(configparser.Config):
             data_grouping = self.parse_data_grouping("standard_report")
             if use_thcovmat_in_fitting or use_thcovmat_in_sampling:
                 data_grouping = self.parse_data_grouping("thcovmat_fit")
+            if diagonal_basis:
+                data_grouping = self.parse_data_grouping("diagonal_basis")
         if data_grouping_recorded_spec_ is not None:
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)

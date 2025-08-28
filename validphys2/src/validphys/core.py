@@ -84,12 +84,12 @@ class PDF(TupleComp):
     --------
     >>> from validphys.api import API
     >>> from validphys.convolution import predictions
-    >>> args = {"dataset_input":{"dataset": "ATLASTTBARTOT"}, "theoryid":162, "use_cuts":"internal"}
+    >>> args = { "dataset_input": {"dataset": "CMS_WPWM_7TEV_MUON_ASY"}, "theoryid":40_000_000, "use_cuts":"internal"}
     >>> ds = API.dataset(**args)
     >>> pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
     >>> preds = predictions(ds, pdf)
     >>> preds.shape
-    (3, 100)
+    (11, 100)
     """
 
     def __init__(self, name, boundary=None):
@@ -264,44 +264,14 @@ class CommonDataSpec(TupleComp):
     and only to be used with ``legacy=True``
     """
 
-    def __init__(self, name, metadata, legacy=False, datafile=None, sysfile=None, plotfiles=None):
-        self.legacy = legacy
+    def __init__(self, name, metadata, datafile=None):
         self._metadata = metadata
-
-        # Some checks
-        if legacy:
-            # TODO: this will start raising an error soon
-            if datafile is None or sysfile is None or plotfiles is None:
-                raise ValueError(
-                    "Legacy CommonDataSpec need datafile, sysfile and plotfiles arguments"
-                )
-        else:
-            if sysfile is not None:
-                raise ValueError("New CommonDataSpec don't need sysfile input")
-            if plotfiles is not None:
-                raise ValueError("New CommonDataSpec don't need plotfile input")
-
         self.datafile = datafile
-        self.sysfile = sysfile
-        if legacy:
-            self.plotfiles = tuple(plotfiles)
-            super().__init__(datafile, sysfile, self.plotfiles)
-        else:
-            self.plotfiles = False
-            super().__init__(name, self.metadata)
+        self.plotfiles = False
+        super().__init__(name, self.metadata)
 
     def with_modified_data(self, central_data_file, uncertainties_file=None):
         """Returns a copy of this instance with a new data file in the metadata"""
-        if self.legacy:
-            return self.__class__(
-                self.name,
-                self.metadata,
-                legacy=True,
-                datafile=central_data_file,
-                sysfile=self.sysfile,
-                plotfiles=self.plotfiles,
-            )
-
         modified_args = {"data_central": central_data_file}
 
         if uncertainties_file is not None:
@@ -316,11 +286,7 @@ class CommonDataSpec(TupleComp):
 
     @functools.cached_property
     def nsys(self):
-        if self.legacy:
-            return self.metadata.nsys
-        else:
-            cd = self.load()
-            return cd.nsys
+        return self.load().nsys
 
     @property
     def ndata(self):
@@ -340,8 +306,6 @@ class CommonDataSpec(TupleComp):
 
     @property
     def theory_metadata(self):
-        if self.legacy:
-            return None
         return self.metadata.theory
 
     def __str__(self):
@@ -376,13 +340,10 @@ class DataSetInput(TupleComp):
         extra weight to apply to the dataset (default: 1.0)
     variant: str or tuple[str]
         variant or variants to apply (default: None)
-    sysnum: int
-        deprecated, systematic file to load for the dataset
     """
 
-    def __init__(self, *, name, cfac, frac, weight, custom_group, variant, sys=None):
+    def __init__(self, *, name, cfac, frac, weight, custom_group, variant):
         self.name = name
-        self.sys = sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
@@ -396,7 +357,7 @@ class DataSetInput(TupleComp):
         if isinstance(variant, list):
             variant = tuple(variant)
         self.variant = variant
-        super().__init__(name, cfac, frac, weight, custom_group, variant, sys)
+        super().__init__(name, cfac, frac, weight, custom_group, variant)
 
     def __str__(self):
         return self.name
@@ -529,8 +490,6 @@ class DataSetSpec(TupleComp):
         self.frac = frac
 
         # If OP is None, check whether the commondata is setting an operation
-        # TODO: eventually the operation will _always_ be set from the commondata, but for legacy
-        # compatibility it will be also controllable as an input argument
         if op is None:
             if commondata.theory_metadata is None:
                 op = 'NULL'

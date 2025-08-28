@@ -16,6 +16,8 @@ import pytest
 settings.register_profile("extratime", deadline=1500)
 settings.load_profile("extratime")
 
+lhapdf.setVerbosity(0)
+
 
 # Fortunately py.test works much like reportengine and providers are
 # connected by argument names.
@@ -26,31 +28,23 @@ def tmp(tmpdir):
 
 
 # Here define the default config items like the PDF, theory and experiment specs
-SINGLE_DATAPOINT = {'dataset': 'ATLAS_TTBAR_8TEV_TOT_X-SEC', 'variant': 'legacy'}
 
-SINGLE_DATASET = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
+SINGLE_DATASET = {'dataset': 'HERA_NC_318GEV_EP-SIGMARED'}
 
-SINGLE_CATEGORICAL = {"dataset": "ATLAS_DY_13TEV_TOT", 'variant': 'legacy'}
+SINGLE_DATAPOINT = {'dataset': 'ATLAS_Z0_13TEV_TOT', 'cfac': ['NRM']}
+
+SINGLE_CATEGORICAL = {'dataset': 'ATLAS_WPWM_13TEV_TOT', 'cfac': ['NRM']}
 
 DATA = [
-    {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-    {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
+    SINGLE_DATASET,
+    {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory'},
     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
     # Explicitly put a CMS dataset between the two ATLAS
     SINGLE_DATAPOINT,
 ]
 
 
-SINGLE_EXP = [
-    {
-        'experiment': 'pseudo experiment',
-        'datasets': [
-            {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-            {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
-            {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
-        ],
-    }
-]
+SINGLE_EXP = [{'experiment': 'pseudo experiment', 'datasets': DATA[0:3]}]
 
 WEIGHTED_DATA = [
     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
@@ -61,7 +55,7 @@ DATA_THCOVMAT = [
     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
     {'dataset': 'CHORUS_CC_NOTFIXED_PB_NU-SIGMARED', 'variant': 'legacy_dw'},
     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
-    {'dataset': 'ATLAS_WJ_8TEV_WP-PT', 'variant': 'legacy'},
+    {'dataset': 'ATLAS_WJ_8TEV_WP-PT'},
     {'dataset': 'LHCB_Z0_8TEV_MUON_Y', 'cfac': ['NRM']},
 ]
 
@@ -69,23 +63,18 @@ POSITIVITIES = ["NNPDF_POS_2P24GEV_DYU", "NNPDF_POS_2P24GEV_F2S"]
 
 PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
-THEORYID = 162
-THEORYID_NEW = 399
-THEORY_QED = 398
-FIT = "NNPDF40_nnlo_low_precision_240916"
-FIT_3REPLICAS = "FIT_3REPLICAS_241108"
-FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_diffcuts_241108"
-FIT_ITERATED = "NNPDF40_nnlo_low_precision_240916_iterated"
-PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_241121"
-
+THEORYID = 40_000_000
+THEORY_QED = 40_000_100
+FIT_3REPLICAS = "FIT_3REPLICAS_250616"
+FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_250616_diffcuts"
+FIT = "NNPDF40_nnlo_like_CI_testing_250616"
+FIT_ITERATED = "NNPDF40_nnlo_like_CI_testing_250616_iterated"
+PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_250616"
+# These fits contain _only_ data
+MULTICLOSURE_FITS = ["250618-test-multiclosure-001", "250618-test-multiclosure-002"]
 
 base_config = dict(
-    pdf=PDF,
-    use_cuts='nocuts',
-    use_t0_sampling=False,
-    dataset_inputs=DATA,
-    theoryid=THEORYID_NEW,
-    Q=10,
+    pdf=PDF, use_cuts='nocuts', use_t0_sampling=False, dataset_inputs=DATA, theoryid=THEORYID, Q=10
 )
 
 
@@ -99,7 +88,7 @@ def thcovmat_config(data_config):
     """Same as data_config but with additional info for the thcovmat production."""
     new_config = dict(data_config)
     new_config["use_cuts"] = "internal"
-    new_config.update(theoryid=708)
+    new_config.update(theoryid=THEORYID)
     new_config.update(dataset_inputs=DATA_THCOVMAT)
     return new_config
 
@@ -114,7 +103,7 @@ def data_internal_cuts_config(data_config):
 @pytest.fixture(scope='module')
 def data_internal_cuts_new_theory_config(data_internal_cuts_config):
     config = dict(data_internal_cuts_config)
-    config["theoryid"] = THEORYID_NEW
+    config["theoryid"] = THEORYID
     return config
 
 
@@ -137,11 +126,7 @@ def single_data_internal_cuts_config(data_internal_cuts_config):
 @pytest.fixture(scope='module')
 def single_data_categorical_internal_cuts_config(data_internal_cuts_config):
     """Test dataset with categorical plotting variables"""
-    return {
-        **data_internal_cuts_config,
-        'dataset_input': SINGLE_CATEGORICAL,
-        'theoryid': THEORYID_NEW,
-    }
+    return {**data_internal_cuts_config, 'dataset_input': SINGLE_CATEGORICAL, 'theoryid': THEORYID}
 
 
 @pytest.fixture(scope='module')

@@ -67,7 +67,7 @@ def plot_covmat_heatmap(covmat, title):
         ),
     )
     cbar = fig.colorbar(matrixplot, fraction=0.046, pad=0.04)
-    cbar.set_label(label="% of data", fontsize=20)
+    cbar.set_label(label="% of data value", fontsize=20)
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
     ticklocs, ticklabels, startlocs = matrix_plot_labels(newdf)

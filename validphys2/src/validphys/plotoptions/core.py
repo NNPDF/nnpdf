@@ -172,30 +172,14 @@ class PlotInfo:
         plot_params = ChainMap()
         kinlabels = commondata.plot_kinlabels
 
-        if commondata.legacy:
-            if commondata.plotfiles:
-                for file in commondata.plotfiles:
-                    pf = parse_yaml_inp(file, PlottingFile)
-                    config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
-                    plot_params = plot_params.new_child(config_params)
-                if normalize and 'normalize' in plot_params:
-                    plot_params = plot_params.new_child(config_params['normalize'])
-                if 'dataset_label' not in plot_params:
-                    log.warning(f"'dataset_label' key not found in {file}")
-                    plot_params['dataset_label'] = commondata.name
-
-            else:
-                plot_params = {'dataset_label': commondata.name}
-
-        else:
-            pcd = commondata.metadata.plotting_options
-            config_params = dataclasses.asdict(pcd, dict_factory=dict_factory)
-            plot_params = plot_params.new_child(config_params)
-            # Add a reference to the metadata to the plot_params so that it is stored in PlotInfo
-            plot_params["ds_metadata"] = commondata.metadata
-            # If normalize, we need to update some of the parameters
-            if normalize and pcd.normalize is not None:
-                plot_params = plot_params.new_child(pcd.normalize)
+        pcd = commondata.metadata.plotting_options
+        config_params = dataclasses.asdict(pcd, dict_factory=dict_factory)
+        plot_params = plot_params.new_child(config_params)
+        # Add a reference to the metadata to the plot_params so that it is stored in PlotInfo
+        plot_params["ds_metadata"] = commondata.metadata
+        # If normalize, we need to update some of the parameters
+        if normalize and pcd.normalize is not None:
+            plot_params = plot_params.new_child(pcd.normalize)
 
         plot_params["process_type"] = commondata.metadata.process_type
 

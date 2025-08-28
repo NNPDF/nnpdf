@@ -1,5 +1,5 @@
 """
-    Tests for multiclosure utilities
+Tests for multiclosure utilities
 """
 
 import numpy as np
@@ -7,9 +7,7 @@ import pytest
 
 from reportengine.resourcebuilder import ResourceError
 from validphys.api import API
-
-# These fits contain _only_ data
-MULTICLOSURE_FITS = ["240412-test-multiclosure-001", "240412-test-multiclosure-002"]
+from validphys.tests.conftest import MULTICLOSURE_FITS
 
 
 def test_multiclosure_data_fits_cv(fromfit_closure_config, data_fromfit_cuts_config):

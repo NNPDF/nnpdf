@@ -40,8 +40,6 @@ n3fit = "n3fit.scripts.n3fit_exec:main"
 validphys = "validphys.scripts.main:main"
 # Fitting scripts
 evolven3fit = "n3fit.scripts.evolven3fit:main"
-# Keep the `new` suffix so people's scripts don't break
-evolven3fit_new = "n3fit.scripts.evolven3fit:evolven3fit_new"
 vp-setupfit = "n3fit.scripts.vp_setupfit:main"
 postfit = "validphys.scripts.postfit:main"
 # validphys helpers and scripts
@@ -62,13 +60,14 @@ vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
 # Generic dependencies (i.e., validphys)
 python = ">=3.9"
 matplotlib = "^3.9"
-pineappl = "^0.8.2"
+pineappl = "^1.0.0"
 pandas = "*"
 numpy = "*"
 "ruamel.yaml" = "*"
 validobj = "*"
 prompt_toolkit = "*"
 reportengine = ">=0.32"
+packaging = "*"
 # Fit
 psutil = "*"
 tensorflow = "*"
@@ -98,6 +97,8 @@ pdfflow = {version = "^1.2.1", optional = true}
 lhapdf-management = {version = "^0.5", optional = true}
 # torch
 torch = {version = "*", optional = true}
+# jax
+jax = {version = "*", optional = true}
 # parallel hyperopt
 pymongo = {version = "<4", optional = true}
 
@@ -108,6 +109,7 @@ docs = ["sphinxcontrib-bibtex", "sphinx-rtd-theme", "sphinx", "tabulate"]
 qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 torch = ["torch"]
+jax = ["jax"]
 parallelhyperopt = ["pymongo"]
 
 [tool.poetry-dynamic-versioning]
@@ -157,7 +159,6 @@ log_cli_level = "WARNING"
 omit = [
     "*/local*",
     "*/rule*",
-    "deprecated_functions.py",
     "*/nnpdf_data/commondata/*",
     "*/nnpdf_data/filter_utils/*",
     "*test_*.py"

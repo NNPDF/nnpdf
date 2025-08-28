@@ -18,7 +18,7 @@ from reportengine.configparser import ConfigError
 from validphys.api import API
 from validphys.loader import NNPDF_DIR, FallbackLoader, FitNotFound
 from validphys.plotoptions.core import get_info, kitable
-from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID_NEW
+from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID
 
 l = FallbackLoader()
 # The sorted is to appease hypothesis
@@ -101,7 +101,7 @@ def test_custom_profile_nnpdf_share(tmp_path):
     _check_download_resource(tmp_path / "results", profile=profile_path)
     # Check a theory
     _check_download_resource(
-        tmp_path / "theories", profile=profile_path, res_type="theoryID", resource=str(THEORYID_NEW)
+        tmp_path / "theories", profile=profile_path, res_type="theoryID", resource=str(THEORYID)
     )
 
 
@@ -121,7 +121,7 @@ results_path: {results_path.as_posix()}"""
     _check_download_resource(results_path, profile=profile_path)
     # Check a theory
     _check_download_resource(
-        theory_path, profile=profile_path, res_type="theoryID", resource=str(THEORYID_NEW)
+        theory_path, profile=profile_path, res_type="theoryID", resource=str(THEORYID)
     )
 
 

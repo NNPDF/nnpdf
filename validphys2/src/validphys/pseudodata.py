@@ -129,7 +129,7 @@ def make_replica(
     sep_mult=False,
     genrep=True,
     max_tries=int(1e6),
-    resample_negative_pseudodata=True,
+    resample_negative_pseudodata=False,
 ):
     """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
@@ -165,7 +165,8 @@ def make_replica(
         it will raise a :py:class:`ReplicaGenerationError`
 
     resample_negative_pseudodata: bool
-        When True, replicas that produce negative predictions will be resampled for ``max_tries`` until all points are positive (default: True)
+        When True, replicas that produce negative predictions will be resampled for ``max_tries``
+        until all points are positive (default: False)
     Returns
     -------
     pseudodata: np.array
@@ -320,7 +321,6 @@ def level0_commondata_wc(data, fakepdf):
             commondata_wc = commondata_wc.with_cuts(cuts)
 
         # == Generate a new CommonData instance with central value given by Level 0 data generated with fakepdf ==#
-
         t0_prediction = dataset_t0_predictions(
             t0dataset=dataset, t0set=fakepdf
         )  # N.B. cuts already applied to th. pred.
@@ -421,20 +421,18 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     return level1_commondata_instances_wc
 
 
-_group_recreate_pseudodata = collect(
-    'indexed_make_replica', ('group_dataset_inputs_by_experiment',)
-)
+_group_recreate_pseudodata = collect('indexed_make_replica', ('group_dataset_inputs_by_metadata',))
 _recreate_fit_pseudodata = collect('_group_recreate_pseudodata', ('fitreplicas', 'fitenvironment'))
 _recreate_pdf_pseudodata = collect('_group_recreate_pseudodata', ('pdfreplicas', 'fitenvironment'))
 
-fit_tr_masks = collect('replica_training_mask_table', ('fitreplicas', 'fitenvironment'))
-pdf_tr_masks = collect('replica_training_mask_table', ('pdfreplicas', 'fitenvironment'))
+fit_masks = collect('replica_mask_table', ('fitreplicas', 'fitenvironment'))
+pdf_masks = collect('replica_mask_table', ('pdfreplicas', 'fitenvironment'))
 make_replicas = collect('make_replica', ('replicas',))
 fitted_make_replicas = collect('make_replica', ('pdfreplicas',))
 indexed_make_replicas = collect('indexed_make_replica', ('replicas',))
 
 
-def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks):
+def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_masks):
     """Function used to reconstruct the pseudodata seen by each of the
     Monte Carlo fit replicas.
 
@@ -459,16 +457,16 @@ def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks)
     :py:func:`validphys.pseudodata.recreate_pdf_pseudodata`
     """
     res = []
-    for pseudodata, mask, rep in zip(_recreate_fit_pseudodata, fit_tr_masks, fitreplicas):
+    for pseudodata, mask, rep in zip(_recreate_fit_pseudodata, fit_masks, fitreplicas):
         df = pd.concat(pseudodata)
         df.columns = [f"replica {rep}"]
-        tr_idx = df.loc[mask.values].index
-        val_idx = df.loc[~mask.values].index
+        tr_idx = df.loc[mask[0].values].index
+        val_idx = df.loc[mask[1].values].index
         res.append(DataTrValSpec(df, tr_idx, val_idx))
     return res
 
 
-def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks):
+def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks):
     """Like :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     but accounts for the postfit reshuffling of replicas.
 
@@ -488,11 +486,11 @@ def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks)
     --------
     :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     """
-    return recreate_fit_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks)
+    return recreate_fit_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks)
 
 
-pdf_tr_masks_no_table = collect('replica_training_mask', ('pdfreplicas', 'fitenvironment'))
+pdf_masks_no_table = collect('replica_mask', ('pdfreplicas', 'fitenvironment'))
 
 
-def recreate_pdf_pseudodata_no_table(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks_no_table):
-    return recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks_no_table)
+def recreate_pdf_pseudodata_no_table(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks_no_table):
+    return recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks_no_table)

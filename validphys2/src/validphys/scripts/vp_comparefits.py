@@ -39,9 +39,6 @@ class CompareFitApp(App):
             help="Use theory cov mat for calculating statistical estimators if available.",
         )
         parser.add_argument(
-            '--no-thcovmat_if_present', action='store_true', help="DEPRECATED: does nothing"
-        )
-        parser.add_argument(
             '--current_fit_label',
             nargs='?',
             default=CURRENT_FIT_LABEL_DEFAULT,

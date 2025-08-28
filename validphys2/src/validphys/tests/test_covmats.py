@@ -10,7 +10,7 @@ import pytest
 from nnpdf_data.commondataparser import load_commondata
 from validphys.api import API
 from validphys.covmats import dataset_t0_predictions, reorder_thcovmat_as_expcovmat, sqrt_covmat
-from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, THEORYID_NEW
+from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, THEORYID
 
 # Experiments which have non trivial correlations between their datasets
 CORR_DATA = [
@@ -69,7 +69,7 @@ def test_covmat_with_one_systematic():
     This special case can break the covmat construction in python because of pandas indexing.
     """
     dsinput = {"dataset": "D0_Z0_1P96TEV_ZRAP", "frac": 1.0, 'variant': 'legacy'}
-    config = dict(dataset_input=dsinput, theoryid=THEORYID_NEW, use_cuts="nocuts")
+    config = dict(dataset_input=dsinput, theoryid=THEORYID, use_cuts="nocuts")
 
     ds = API.dataset(**config)
     # double check that the dataset does indeed only have 1 systematic.

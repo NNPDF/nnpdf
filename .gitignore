@@ -355,6 +355,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+doc/sphinx/source/theories_central.csv
 
 # PyBuilder
 target/

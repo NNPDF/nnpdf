@@ -16,9 +16,11 @@ def test_print_different_cuts():
     fits = [fit_1, fit_2]
     testi = API.test_for_same_cuts(fits=[FIT_3REPLICAS, FIT_3REPLICAS_DCUTS], use_cuts="fromfit")
     res = print_different_cuts(fits, testi)
+    # NMC
     assert "121 out of 260" in res
     assert "59 out of 260" in res
-    assert "33 out of 211" in res
+    # SLAC
+    assert "34 out of 211" in res
     assert "0 out of 211" in res
 
 

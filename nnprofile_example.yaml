@@ -8,9 +8,9 @@
 nnpdf_share: ~/.local/share/NNPDF
 
 results_path: results
+ekos_path: ekos
 theories_path: theories
 hyperscan_path: hyperscan
 validphys_cache_path: vp-cache
 
-# With these options downloaded theories will go to ~/.local/share/NNPDF/theories
-
+# With these options downloaded theories will go to ~/.local/share/NNPDF/theories, ekos to ~/.local/share/NNPDF/ekos and so on
