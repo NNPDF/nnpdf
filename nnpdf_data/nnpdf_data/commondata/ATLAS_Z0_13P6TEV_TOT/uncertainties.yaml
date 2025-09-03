@@ -1,0 +1,7 @@
+definitions:
+  statandsyst:
+    description: combination of stat and syst uncertainties (with lumi) 
+    treatment: ADD
+    type: UNCORR
+bins:
+- statandsyst: 20
