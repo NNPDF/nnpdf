@@ -43,6 +43,11 @@ implemented_observables:
     conversion_factor: 0.2877   # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
     operation: 'null'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dmttBar.yaml
+      - mc_top_uncertainties_dSig_dmttBar.yaml
 - observable: {description: "normalized differential cross section w.r.t. invariant mass of ttBar", label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$', units: "$\frac{1}{GeV}$"}
   observable_name: MTTBAR-NORM
   process_type: HQP_MQQ
@@ -100,6 +105,11 @@ implemented_observables:
     conversion_factor: 0.2877   # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
     operation: 'null'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dyttBar.yaml
+      - mc_top_uncertainties_dSig_dyttBar.yaml
 - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of ttBar", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: ""}
   observable_name: YTTBAR-NORM
   process_type: HQP_YQQ
@@ -160,6 +170,11 @@ implemented_observables:
     conversion_factor: 0.2877   # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
     operation: 'null'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_d2Sig_dyttBar_dmttBar.yaml
+      - mc_top_uncertainties_d2Sig_dyttBar_dmttBar.yaml
 - observable: {description: "normalized double differential cross section w.r.t. invariant mass and absolute rapidity of ttBar", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: "$\frac{1}{GeV}$"}
   observable_name: MTTBAR-YTTBAR-NORM
   process_type: HQP_YQQ
@@ -220,6 +235,11 @@ implemented_observables:
     conversion_factor: 0.2877   # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
     operation: 'null'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dpTt.yaml
+      - mc_top_uncertainties_dSig_dpTt.yaml
 - observable: {description: "normalized differential cross section w.r.t. transverse momentum of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$', units: "$\frac{1}{GeV}$"}
   observable_name: PTT-NORM
   process_type: HQP_PTQ
@@ -277,6 +297,11 @@ implemented_observables:
     conversion_factor: 0.2877   # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
     operation: 'null'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dyt.yaml
+      - mc_top_uncertainties_dSig_dyt.yaml
 - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_t|}$', units: ""}
   observable_name: YT-NORM
   process_type: HQP_YQ

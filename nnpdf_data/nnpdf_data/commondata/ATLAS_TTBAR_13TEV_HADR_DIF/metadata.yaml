@@ -46,6 +46,10 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_dSig_dmttBar_wo-lumi.yaml
 
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dmttBar.yaml
+      - mc_top_uncertainties_dSig_dmttBar.yaml
 - observable: {description: "normalized differential cross section w.r.t. mass of top pair", label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$', units: '$\frac{1}{GeV}$'}
   observable_name: MTTBAR-NORM
   process_type: HQP_MQQ
@@ -106,6 +110,10 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_dSig_dyttBar_wo-lumi.yaml
 
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dyttBar.yaml
+      - mc_top_uncertainties_dSig_dyttBar.yaml
 - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of top pair", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: ''}
   observable_name: YTTBAR-NORM
   process_type: HQP_YQQ
@@ -169,6 +177,10 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_d2Sig_dmttBar_dyttBar_wo-lumi.yaml
 
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_d2Sig_dmttBar_dyttBar.yaml
+      - mc_top_uncertainties_d2Sig_dmttBar_dyttBar.yaml
 - observable: {description: "normalized double differential cross section w.r.t. mass and absolute rapidity of top pair", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: '$\frac{1}{GeV}$'}
   observable_name: MTTBAR-YTTBAR-NORM
   process_type: HQP_YQQ
