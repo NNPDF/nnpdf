@@ -125,7 +125,7 @@ def covmat_from_systematics(
 
 def dataset_inputs_covmat_from_systematics(
     dataset_inputs_loaded_cd_with_cuts,
-    data_input,
+    data_input=None,
     use_weights_in_covmat=True,
     norm_threshold=None,
     _list_of_central_values=None,
@@ -186,9 +186,15 @@ def dataset_inputs_covmat_from_systematics(
     special_corrs = []
     block_diags = []
     weights = []
+
     if _list_of_central_values is None:
         # want to just pass None to systematic_errors method
         _list_of_central_values = [None] * len(dataset_inputs_loaded_cd_with_cuts)
+
+    if data_input is None:
+        if use_weights_in_covmat:
+            raise ValueError("if use_weights_in_covmat=True, ``data_input`` cannot be empty")
+        data_input = [None] * len(dataset_inputs_loaded_cd_with_cuts)
 
     for cd, dsinp, central_values in zip(
         dataset_inputs_loaded_cd_with_cuts, data_input, _list_of_central_values
@@ -199,7 +205,8 @@ def dataset_inputs_covmat_from_systematics(
         else:
             sys_errors = cd.systematic_errors(central_values)
         stat_errors = cd.stat_errors.to_numpy()
-        weights.append(np.full_like(stat_errors, dsinp.weight))
+        if use_weights_in_covmat and dsinp is not None:
+            weights.append(np.full_like(stat_errors, dsinp.weight))
         # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = sys_errors.columns.isin(INTRA_DATASET_SYS_NAME)

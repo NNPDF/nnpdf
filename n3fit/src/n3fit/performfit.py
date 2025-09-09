@@ -215,16 +215,11 @@ def performfit(
         if hyperopt:
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
-            # Note that hyperopt will not run in parallel or with more than one model _for now_
             replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
-            true_best = hyper_scan_wrapper(
+            hyper_scan_wrapper(
                 replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
             )
-            print("##################")
-            print("Best model found: ")
-            for k, i in true_best.items():
-                print(f" {k} : {i} ")
-
+            log.info("The hyperparameter scan is successfully finished.")
             # In general after we do the hyperoptimization we do not care about the fit
             # so just let this die here
             break
