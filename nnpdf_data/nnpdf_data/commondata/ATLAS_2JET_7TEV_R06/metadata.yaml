@@ -64,12 +64,18 @@ implemented_observables:
     weaker:
       data_uncertainties:
       - uncertainties_weaker.yaml
-    legacy:
-      data_uncertainties:
+    legacy_data:
+      data_uncertainties: &data
       - uncertainties_bugged.yaml
+    legacy_theory:
+      theory: &theory
+        FK_tables:
+          - - CMS_1JET_8TEV-CMS_1JET_8TEV
+    legacy:
+      theory: *theory
+      data_uncertainties: *data
 
-
-    # Theory
+  # Theory
   theory:
     FK_tables:
     - - ATLAS_2JET_7TEV_R06_M12Y_BIN1

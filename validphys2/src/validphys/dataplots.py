@@ -1422,7 +1422,7 @@ def plot_xq2(
     ...         {'dataset': 'CMS_Z0_7TEV_DIMUON_2D'},
     ...         {'dataset': 'CMS_WPWM_8TEV_MUON_Y', 'variant': 'legacy'},
     ...         {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
-    ...         {'dataset': 'CMS_2JET_7TEV_M12Y'},
+    ...         {'dataset': 'CMS_2JET_7TEV_M12Y', 'variant': 'legacy'},
     ...         {'dataset': 'CMS_1JET_8TEV_PTY', 'variant': 'legacy'},
     ...         {'dataset': 'CMS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
     ...         {'dataset': 'CMS_TTBAR_8TEV_TOT_X-SEC', 'variant': 'legacy'},

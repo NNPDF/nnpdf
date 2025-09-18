@@ -85,7 +85,9 @@ ATLAS_2JET_7TEV_R06:
 CMS_1JET_8TEV:
   dataset: CMS_1JET_8TEV_PTY
   variant: legacy
-CMS_2JET_7TEV: CMS_2JET_7TEV_M12Y
+CMS_2JET_7TEV:
+  dataset: CMS_2JET_7TEV_M12Y
+  variant: legacy
 HERACOMBCCEM:
   dataset: HERA_CC_318GEV_EM-SIGMARED
   variant: legacy
