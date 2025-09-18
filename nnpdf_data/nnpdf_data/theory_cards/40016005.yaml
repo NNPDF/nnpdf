@@ -1,5 +1,5 @@
 ID: 40016005
-Comments: 'NNPDF4.0 NNLO QCD x NLO QED, alphas=0.120, mt=172.5 GeV, '
+Comments: Same as 40_016_003, but alphas=0.120
 PTO: 2
 FNS: FONLL-C
 DAMP: 0

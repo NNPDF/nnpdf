@@ -1,5 +1,5 @@
 ID: 40_009_000
-Comments: Same as 700/708, but with fully NNLO TTBAR instead of K-factors
+Comments: NNPDF4.0 NNLO QCD, grids as in 4001 but with fully NNLO TTBAR instead of K-factors, alphas=0.118, mt=172.5 GeV
 PTO: 2
 FNS: FONLL-C
 DAMP: 0

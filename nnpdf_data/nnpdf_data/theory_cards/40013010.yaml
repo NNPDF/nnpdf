@@ -1,5 +1,5 @@
 ID: 40_013_010
-Comments: NNPDF4.0 N3LO alphas=0.125, mt=172.5 GeV, FHMRUVV splittings as Oct '24, EXA evolution
+Comments: Same as 40_013_003, but alphas=0.125
 CKM:
 - 0.97428
 - 0.2253

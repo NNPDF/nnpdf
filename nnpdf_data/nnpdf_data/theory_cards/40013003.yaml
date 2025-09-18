@@ -1,5 +1,5 @@
 ID: 40_013_003
-Comments: NNPDF4.0 N3LO alphas=0.118, mt=172.5 GeV, FHMRUVV splittings as Oct '24, EXA evolution
+Comments: NNPDF4.0 N3LO, grids as in 722 but with fully NNLO TTBAR instead of K-factors, FHMRUVV splittings as Oct '24, EXA evolution, alphas=0.118, mt=172.5 GeV
 CKM:
 - 0.97428
 - 0.2253

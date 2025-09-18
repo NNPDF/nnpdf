@@ -1,5 +1,5 @@
 ID: 40020006
-Comments: NNPDF4.0 N3LO QCD x NLO QED, FHMRUVVV, grids as in 722 but with fully NNLO TTBAR instead of K-factors, alphas=0.121, mt=170.0 GeV
+Comments: Same as 40_019_006, but mt=170.0 GeV
 CKM:
 - 0.97428
 - 0.2253

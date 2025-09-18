@@ -1,5 +1,5 @@
 ID: 40_009_005
-Comments: Same as 700/708, but with fully NNLO TTBAR instead of K-factors, (XIR, XIF) = (0.5, 2.0)
+Comments: Same as 40_009_000, but with fully NNLO TTBAR instead of K-factors, (XIR, XIF) = (0.5, 2.0)
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
