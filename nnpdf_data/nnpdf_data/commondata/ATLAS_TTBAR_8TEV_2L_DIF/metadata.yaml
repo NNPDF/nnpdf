@@ -53,6 +53,11 @@ implemented_observables:
     - - ATLAS_TTBAR_8TEV_2L_DIF_MTTBAR
     operation: 'null'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dmttBar.yaml
+      - mc_top_uncertainties_dSig_dmttBar.yaml
 - observable:
     description: normalized differential cross section w.r.t. ttBar invariant mass
     label: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$
@@ -95,6 +100,11 @@ implemented_observables:
     - - ATLAS_TTBAR_8TEV_2L_DIF_MTTBAR-INTEGRATED
     operation: ratio
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dmttBar_norm.yaml
+      - mc_top_uncertainties_dSig_dmttBar_norm.yaml
 - observable:
     description: differential cross section w.r.t. absolute rapidity of ttBar
     label: $\frac{d\sigma}{d|y_{t\bar{t}}|}$
@@ -136,6 +146,11 @@ implemented_observables:
     - - ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR
     operation: 'null'
 
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dyttBar.yaml
+      - mc_top_uncertainties_dSig_dyttBar.yaml
 - observable:
     description: normalized differential cross section w.r.t. absolute rapidity of ttBar
     label: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$
@@ -187,3 +202,7 @@ implemented_observables:
         FK_tables:
         - - ATLAS_TTB_8TEV_2L_TTRAP
         - - CMSTTBARTOT8TEV-TOPDIFF8TEVTOT
+    mc_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dyttBar_norm.yaml
+      - mc_top_uncertainties_dSig_dyttBar_norm.yaml

@@ -68,6 +68,7 @@ def check_correct_theory_combination_internal(
 
     # check that the alphas values are varied correctly
     alphas = [theoryid.get_description()["alphas"] for theoryid in theoryids]
+
     if point_prescription == "alphas 0118 0120 0116":
         check(
             alphas == [0.118, 0.120, 0.116],
@@ -79,6 +80,14 @@ def check_correct_theory_combination_internal(
             alphas == [0.120, 0.122, 0.118],
             "Choice of input theories does not correspond to a valid "
             "prescription for the requested alphas variation covmat",
+        )
+
+    mtop = [theoryid.get_description()["mt"] for theoryid in theoryids]
+    if point_prescription == "mtop 172.5 170 175":
+        check(
+            mtop == [172.5, 170.0, 175.0],
+            "Choice of input theories does not correspond to a valid "
+            "prescription for the requested mtop variation covmat",
         )
 
 
