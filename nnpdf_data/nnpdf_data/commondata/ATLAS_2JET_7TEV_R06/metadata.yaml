@@ -70,7 +70,7 @@ implemented_observables:
     legacy_theory:
       theory: &theory
         FK_tables:
-          - - CMS_1JET_8TEV-CMS_1JET_8TEV
+          - - ATLAS_2JET_7TEV_R06
     legacy:
       theory: *theory
       data_uncertainties: *data
