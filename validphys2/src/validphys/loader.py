@@ -1168,7 +1168,7 @@ class RemoteLoader(LoaderBase):
             raise PDFNotFound("PDF '%s' is neither an uploaded fit nor an " "LHAPDF set." % name)
 
     def download_theoryID(self, thid):
-        thid = str(thid)
+        thid = str(int(thid))
         remote = self.remote_theories
         if thid not in remote:
             raise TheoryNotFound("Theory %s not available." % thid)
