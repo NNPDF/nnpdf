@@ -1,5 +1,6 @@
 ID: 40_009_002
-Comments: Same as 40_009_000, but mt=175.0 GeV for TTBAR
+Comments: NNPDF4.0 NNLO QCD, TTBAR at fully NNLO instead of K-factors,
+  non-TTBAR from theory 40_008_005 and grids from 4001, alphas=0.118, mt=175.0 GeV
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
