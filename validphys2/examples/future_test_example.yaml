@@ -97,7 +97,7 @@ dataset_inputs:
   - {dataset: CMS_Z0_7TEV_DIMUON_2D, custom_group: NNPDF40 datasets, cfac: [QCD]}
   - {dataset: CMS_WPWM_8TEV_MUON_Y, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
   - {dataset: CMS_Z0J_8TEV_PT-Y, custom_group: NNPDF40 datasets, cfac: [QCD, NRM], variant: legacy_10}
-  - {dataset: CMS_2JET_7TEV_M12Y, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_2JET_7TEV_M12-Y, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
   - {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
   - {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
   - {dataset: CMS_TTBAR_13TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
