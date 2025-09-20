@@ -127,7 +127,7 @@ class _Masks(TupleComp):
         seed,
         tr_masks,
         vl_masks,
-        diagonal_basis=False,
+        diagonal_basis=True,
         eig_vals=None,
         diagonal_rotation=None,
     ):
@@ -324,7 +324,7 @@ def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hash
 
 
 @functools.lru_cache
-def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_basis=False):
+def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_basis=True):
     """Returns the inverse covmats for training, validation and total
     attending to the right masks and whether it is diagonal or not.
 
@@ -634,7 +634,7 @@ def replica_mask_table(replica_mask):
     return replica_mask
 
 
-def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
+def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=True):
     """Save the boolean mask used to split data into training and validation
     for a given replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
@@ -700,7 +700,7 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
     return df_tr, df_vl
 
 
-def replica_validation_mask(exps_tr_masks, replica, experiments_index, diagonal_basis=False):
+def replica_validation_mask(exps_tr_masks, replica, experiments_index, diagonal_basis=True):
     """Save the boolean mask used to split data into training and validation
     for a given replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
