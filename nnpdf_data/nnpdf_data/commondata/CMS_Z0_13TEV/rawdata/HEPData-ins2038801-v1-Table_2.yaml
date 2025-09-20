@@ -1,0 +1,175 @@
+dependent_variables:
+- header:
+    name: AFB (mumu)
+  values:
+  - errors:
+    - label: Statistical
+      symerror: 0.012
+    - label: Systematic
+      symerror: 0.011
+    value: 0.61
+  - errors:
+    - label: Statistical
+      symerror: 0.012
+    - label: Systematic
+      symerror: 0.01
+    value: 0.592
+  - errors:
+    - label: Statistical
+      symerror: 0.014
+    - label: Systematic
+      symerror: 0.009
+    value: 0.558
+  - errors:
+    - label: Statistical
+      symerror: 0.014
+    - label: Systematic
+      symerror: 0.009
+    value: 0.598
+  - errors:
+    - label: Statistical
+      symerror: 0.027
+    - label: Systematic
+      symerror: 0.008
+    value: 0.61
+  - errors:
+    - label: Statistical
+      symerror: 0.042
+    - label: Systematic
+      symerror: 0.009
+    value: 0.617
+  - errors:
+    - label: Statistical
+      symerror: 0.07
+    - label: Systematic
+      symerror: 0.011
+    value: 0.595
+  - errors:
+    - label: Statistical
+      symerror: 0.006
+    - label: Systematic
+      symerror: 0.007
+    value: 0.589
+- header:
+    name: AFB (ee)
+  values:
+  - errors:
+    - label: Statistical
+      symerror: 0.015
+    - label: Systematic
+      symerror: 0.012
+    value: 0.654
+  - errors:
+    - label: Statistical
+      symerror: 0.015
+    - label: Systematic
+      symerror: 0.011
+    value: 0.635
+  - errors:
+    - label: Statistical
+      symerror: 0.018
+    - label: Systematic
+      symerror: 0.01
+    value: 0.61
+  - errors:
+    - label: Statistical
+      symerror: 0.018
+    - label: Systematic
+      symerror: 0.009
+    value: 0.583
+  - errors:
+    - label: Statistical
+      symerror: 0.033
+    - label: Systematic
+      symerror: 0.009
+    value: 0.624
+  - errors:
+    - label: Statistical
+      symerror: 0.048
+    - label: Systematic
+      symerror: 0.008
+    value: 0.563
+  - errors:
+    - label: Statistical
+      symerror: 0.076
+    - label: Systematic
+      symerror: 0.014
+    value: 0.694
+  - errors:
+    - label: Statistical
+      symerror: 0.008
+    - label: Systematic
+      symerror: 0.007
+    value: 0.615
+- header:
+    name: AFB (combined)
+  values:
+  - errors:
+    - label: Statistical
+      symerror: 0.009
+    - label: Systematic
+      symerror: 0.011
+    value: 0.628
+  - errors:
+    - label: Statistical
+      symerror: 0.009
+    - label: Systematic
+      symerror: 0.01
+    value: 0.608
+  - errors:
+    - label: Statistical
+      symerror: 0.011
+    - label: Systematic
+      symerror: 0.009
+    value: 0.578
+  - errors:
+    - label: Statistical
+      symerror: 0.011
+    - label: Systematic
+      symerror: 0.008
+    value: 0.592
+  - errors:
+    - label: Statistical
+      symerror: 0.021
+    - label: Systematic
+      symerror: 0.008
+    value: 0.616
+  - errors:
+    - label: Statistical
+      symerror: 0.032
+    - label: Systematic
+      symerror: 0.008
+    value: 0.594
+  - errors:
+    - label: Statistical
+      symerror: 0.052
+    - label: Systematic
+      symerror: 0.011
+    value: 0.638
+  - errors:
+    - label: Statistical
+      symerror: 0.005
+    - label: Systematic
+      symerror: 0.007
+    value: 0.599
+independent_variables:
+- header:
+    name: Mass Bins
+    units: GeV
+  values:
+  - high: 200.0
+    low: 170.0
+  - high: 250.0
+    low: 200.0
+  - high: 320.0
+    low: 250.0
+  - high: 510.0
+    low: 320.0
+  - high: 700.0
+    low: 510.0
+  - high: 1000.0
+    low: 700.0
+  - high: 13000.0
+    low: 1000.0
+  - high: 13000.0
+    low: 170.0
