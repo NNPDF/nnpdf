@@ -1,0 +1,126 @@
+dependent_variables:
+- header: {name: (1/N(C=HAD))*D(N)/DP}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: RE(Q=HAD), value: E+ E- --> HADRONS X}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.096}
+    - {label: sys, symerror: 0.246}
+    value: 7.781
+  - errors:
+    - {label: stat, symerror: 0.078}
+    - {label: sys, symerror: 0.102}
+    value: 6.334
+  - errors:
+    - {label: stat, symerror: 0.072}
+    - {label: sys, symerror: 0.098}
+    value: 5.205
+  - errors:
+    - {label: stat, symerror: 0.066}
+    - {label: sys, symerror: 0.06}
+    value: 4.28
+  - errors:
+    - {label: stat, symerror: 0.063}
+    - {label: sys, symerror: 0.056}
+    value: 3.595
+  - errors:
+    - {label: stat, symerror: 0.044}
+    - {label: sys, symerror: 0.047}
+    value: 2.768
+  - errors:
+    - {label: stat, symerror: 0.039}
+    - {label: sys, symerror: 0.047}
+    value: 2.14
+  - errors:
+    - {label: stat, symerror: 0.025}
+    - {label: sys, symerror: 0.031}
+    value: 1.674
+  - errors:
+    - {label: stat, symerror: 0.02}
+    - {label: sys, symerror: 0.027}
+    value: 1.312
+  - errors:
+    - {label: stat, symerror: 0.017}
+    - {label: sys, symerror: 0.022}
+    value: 1.049
+  - errors:
+    - {label: stat, symerror: 0.015}
+    - {label: sys, symerror: 0.019}
+    value: 0.853
+  - errors:
+    - {label: stat, symerror: 0.0095}
+    - {label: sys, symerror: 0.0138}
+    value: 0.6166
+  - errors:
+    - {label: stat, symerror: 0.0077}
+    - {label: sys, symerror: 0.0101}
+    value: 0.4124
+  - errors:
+    - {label: stat, symerror: 0.0066}
+    - {label: sys, symerror: 0.0079}
+    value: 0.2861
+  - errors:
+    - {label: stat, symerror: 0.0057}
+    - {label: sys, symerror: 0.0058}
+    value: 0.201
+  - errors:
+    - {label: stat, symerror: 0.0044}
+    - {label: sys, symerror: 0.0051}
+    value: 0.1457
+  - errors:
+    - {label: stat, symerror: 0.0018}
+    - {label: sys, symerror: 0.0029}
+    value: 0.081
+  - errors:
+    - {label: stat, symerror: 0.0014}
+    - {label: sys, symerror: 0.0018}
+    value: 0.0409
+  - errors:
+    - {label: stat, symerror: 0.00093}
+    - {label: sys, symerror: 0.00088}
+    value: 0.01858
+  - errors:
+    - {label: stat, symerror: 0.00051}
+    - {label: sys, symerror: 0.00042}
+    value: 0.00629
+  - errors:
+    - {label: stat, symerror: 0.00035}
+    - {label: sys, symerror: 0.00028}
+    value: 0.00252
+  - errors:
+    - {label: stat, symerror: 0.0003}
+    - {label: sys, symerror: 0.00018}
+    value: 0.00081
+  - errors:
+    - {label: stat, symerror: 4.2e-05}
+    - {label: sys, symerror: 1.3e-05}
+    value: 1.6e-05
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {high: 0.91, low: 0.7}
+  - {high: 1.14, low: 0.91}
+  - {high: 1.37, low: 1.14}
+  - {high: 1.6, low: 1.37}
+  - {high: 1.82, low: 1.6}
+  - {high: 2.28, low: 1.82}
+  - {high: 2.74, low: 2.28}
+  - {high: 3.19, low: 2.74}
+  - {high: 3.65, low: 3.19}
+  - {high: 4.1, low: 3.65}
+  - {high: 4.56, low: 4.1}
+  - {high: 5.47, low: 4.56}
+  - {high: 6.38, low: 5.47}
+  - {high: 7.29, low: 6.38}
+  - {high: 8.21, low: 7.29}
+  - {high: 9.12, low: 8.21}
+  - {high: 11.9, low: 9.12}
+  - {high: 13.7, low: 11.9}
+  - {high: 18.2, low: 13.7}
+  - {high: 22.8, low: 18.2}
+  - {high: 27.4, low: 22.8}
+  - {high: 36.5, low: 27.4}
+  - {high: 45.6, low: 36.5}
