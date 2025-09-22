@@ -67,7 +67,7 @@ dataset_inputs:
 - {dataset: CMS_Z0_7TEV_DIMUON_2D, frac: 0.75, cfac: []}
 - {dataset: CMS_WPWM_8TEV_MUON_Y, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [NRM], variant: legacy_10}
-- {dataset: CMS_2JET_7TEV_M12Y, frac: 0.75, cfac: []}
+- {dataset: CMS_2JET_7TEV_M12-Y, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
@@ -200,7 +200,7 @@ kfold:
           - DYE605_Z0_38P8GEV_DW_PXSEC
           - CMS_Z0_7TEV_DIMUON_2D
         # JET+TOP
-          - CMS_2JET_7TEV_M12Y
+          - CMS_2JET_7TEV_M12-Y
           - ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM
           - ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC
           - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM
