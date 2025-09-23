@@ -12,6 +12,7 @@ between iterations while at the same time keeping the amount of redundant calls 
 from collections import namedtuple
 from itertools import zip_longest
 import logging
+import json
 
 import numpy as np
 
@@ -859,6 +860,12 @@ class ModelTrainer:
             for key in self._hyperkeys:
                 log.info(" > > Testing %s = %s", key, params[key])
             params = self._hyperopt_override(params)
+            
+        # if not doing hyperot, read the input hyperopt file containing 
+        # different samples
+        else:
+            with open(params['hyperopt_res'], 'r') as file:
+                hyperopt_params = json.load(file)
 
         # Preprocess some hyperparameters
         epochs = int(params["epochs"])
@@ -905,19 +912,33 @@ class ModelTrainer:
 
         # Prepare the settings for all replica
         replicas_settings = []
-        for seed in self._nn_seeds:
-            # WIP here the sampling will happen when necessary
-            tmp = model_gen.ReplicaSettings(
-                seed=seed,
-                nodes=params["nodes_per_layer"],
-                activations=params["activation_per_layer"],
-                initializer=params["initializer"],
-                architecture=params["layer_type"],
-                dropout_rate=params["dropout"],
-                regularizer=params.get("regularizer"),
-                regularizer_args=params.get("regularizer_args"),
-            )
-            replicas_settings.append(tmp)
+        if self.mode_hyperopt:
+            for seed in self._nn_seeds:
+                tmp = model_gen.ReplicaSettings(
+                    seed=seed,
+                    nodes=params["nodes_per_layer"],
+                    activations=params["activation_per_layer"],
+                    initializer=params["initializer"],
+                    architecture=params["layer_type"],
+                    dropout_rate=params["dropout"],
+                    regularizer=params.get("regularizer"),
+                    regularizer_args=params.get("regularizer_args"),
+                )
+                replicas_settings.append(tmp)
+        else:
+            # read hyperparameter values from hyperopt results
+            for rep, seed in zip(self.replicas, self._nn_seeds):
+                tmp = model_gen.ReplicaSettings(
+                    seed=seed,
+                    nodes=hyperopt_params["nodes_per_layer"][rep],
+                    activations=[hyperopt_params["activation_per_layer"][rep]] * len(hyperopt_params["nodes_per_layer"][rep]),
+                    initializer=hyperopt_params["initializer"][rep],
+                    architecture=hyperopt_params["layer_type"][rep],
+                    dropout_rate=hyperopt_params["dropout"][rep],
+                    regularizer=params.get("regularizer"),
+                    regularizer_args=params.get("regularizer_args"),
+                )
+                replicas_settings.append(tmp)
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
