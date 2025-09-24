@@ -6,7 +6,7 @@ DAMP: 0
 IC: 1
 Q0: 1.65
 ModEv: TRN
-ModSV: exponentiated
+ModSV: expanded
 XIR: 2.0
 XIF: 2.0
 NfFF: 5
