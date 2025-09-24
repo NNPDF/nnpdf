@@ -8,6 +8,7 @@ from ruamel.yaml import YAML
 
 yaml_safe = YAML(typ='safe')
 yaml_rt = YAML(typ='rt')
+yaml_rt.width = 2**31  # to prevent ruamel.yaml introducing linebreaks
 
 
 @contextlib.contextmanager
