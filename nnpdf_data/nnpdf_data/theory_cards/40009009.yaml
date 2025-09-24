@@ -1,11 +1,11 @@
 ID: 40_009_009
-Comments: Same as 40_009_000, (XIR, XIF) = (2.0, 1.0)
+Comments: Same as 40_009_000, but with TRN evolution, (XIF, XIR) = (2.0, 1.0)
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
 IC: 1
 Q0: 1.65
-ModEv: EXA
+ModEv: TRN
 ModSV: exponentiated
 XIR: 1.0
 XIF: 2.0

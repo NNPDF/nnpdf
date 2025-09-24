@@ -1125,7 +1125,7 @@ scale_variations_for:
       (0.5, 1): 40_009_004
       (0.5, 2): 40_009_005
       (1, 0.5): 40_009_006
-      (1, 1): 40_009_000
+      (1, 1): 40_009_011
       (1, 2): 40_009_007
       (2, 0.5): 40_009_008
       (2, 1): 40_009_009
@@ -1317,7 +1317,7 @@ scale_variations_for:
       (175.0): 40_018_007
 
       # MHOUs
-      
+
   - theoryid: 40_010_005 # mtop=172.5, alphas=0.119
     variations:
 
@@ -1763,4 +1763,3 @@ scale_variations_for:
 
   - theoryid: 40_013_003 # N3LO, fhmruvv, alphas=0.118, mt=172.5 GeV, ModEv=EXA
     variations: *n3lo_fhmruvv
-
