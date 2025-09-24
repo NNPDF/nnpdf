@@ -19,7 +19,7 @@ def get_theoryID_from_runcard(usr_path):
     return my_runcard["theory"]["theoryid"]
 
 
-def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False):
+def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False, theory_41=False):
     """Generate the q2grid used in the final evolved pdfs or use the default grid if Qfin or Q_points is
     not provided.
 
@@ -31,6 +31,8 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False):
             return Q2GRID_NNPDF40
         elif nf0 in (3, 4, 5):
             return Q2GRID_DEFAULT
+        elif theory_41:
+            return Q2GRID_DEFAULT_41
         elif nf0 is None:
             raise ValueError("In order to use a default grid, a value of nf0 must be provided")
         else:
