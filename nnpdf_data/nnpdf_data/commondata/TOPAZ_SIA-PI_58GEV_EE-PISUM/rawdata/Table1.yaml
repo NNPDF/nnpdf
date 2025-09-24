@@ -1,0 +1,99 @@
+dependent_variables:
+- header: {name: (1/SIG(Q=HAD))*D(SIG(Q=CHARGED))/D(LN(1/X))}
+  qualifiers:
+  - {name: RE(Q=CHARGED), value: E+ E- --> CHARGED X}
+  - {name: RE(Q=HAD), value: E+ E- --> 2HADRON (HADRONS)}
+  - {name: SQRT(S), units: GeV, value: '58.0'}
+  - {name: SQRT(S), units: GeV, value: '58.0'}
+  values:
+  - errors:
+    - {symerror: 0.015}
+    value: 0.287
+  - errors:
+    - {symerror: 0.018}
+    value: 0.656
+  - errors:
+    - {symerror: 0.024}
+    value: 0.942
+  - errors:
+    - {symerror: 0.031}
+    value: 1.313
+  - errors:
+    - {symerror: 0.041}
+    value: 1.783
+  - errors:
+    - {symerror: 0.055}
+    value: 2.455
+  - errors:
+    - {symerror: 0.067}
+    value: 3.116
+  - errors:
+    - {symerror: 0.076}
+    value: 3.547
+  - errors:
+    - {symerror: 0.089}
+    value: 4.182
+  - errors:
+    - {symerror: 0.093}
+    value: 4.38
+  - errors:
+    - {symerror: 0.103}
+    value: 4.877
+  - errors:
+    - {symerror: 0.107}
+    value: 5.089
+  - errors:
+    - {symerror: 0.119}
+    value: 5.674
+  - errors:
+    - {symerror: 0.12}
+    value: 5.705
+  - errors:
+    - {symerror: 0.119}
+    value: 5.673
+  - errors:
+    - {symerror: 0.114}
+    value: 5.406
+  - errors:
+    - {symerror: 0.109}
+    value: 5.135
+  - errors:
+    - {symerror: 0.098}
+    value: 4.564
+  - errors:
+    - {symerror: 0.087}
+    value: 4.037
+  - errors:
+    - {symerror: 0.071}
+    value: 3.265
+  - errors:
+    - {symerror: 0.055}
+    value: 2.498
+  - errors:
+    - {symerror: 0.046}
+    value: 1.637
+independent_variables:
+- header: {name: LN(1/X(DEF=2*P(P=3)/SQRT(S)))}
+  values:
+  - {value: 0.7}
+  - {value: 0.9}
+  - {value: 1.1}
+  - {value: 1.3}
+  - {value: 1.5}
+  - {value: 1.7}
+  - {value: 1.9}
+  - {value: 2.1}
+  - {value: 2.3}
+  - {value: 2.5}
+  - {value: 2.7}
+  - {value: 2.9}
+  - {value: 3.1}
+  - {value: 3.3}
+  - {value: 3.5}
+  - {value: 3.7}
+  - {value: 3.9}
+  - {value: 4.1}
+  - {value: 4.3}
+  - {value: 4.5}
+  - {value: 4.7}
+  - {value: 4.9}
