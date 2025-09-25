@@ -878,7 +878,6 @@ class CoreConfig(configparser.Config):
         # change ordering according to exp_covmat (so according to runcard order)
         tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
         bb = [str(i) for i in data_input]
-        import ipdb; ipdb.set_trace()
         return tmp.reindex(index=bb, columns=bb, level=0).values
 
     @configparser.explicit_node
