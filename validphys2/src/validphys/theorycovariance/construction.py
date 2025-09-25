@@ -531,7 +531,7 @@ def fromfile_covmat(covmatpath, groups_data_by_process, procs_index):
 
 
 @table
-def user_covmat(groups_data_by_process, procs_index, loaded_user_covmat_path):
+def user_covmat(groups_data_by_process, procs_index, loaded_user_covmat_path, mult_factor_user_covmat):
     """
     General theory covariance matrix provided by the user.
     Useful for testing the impact of externally produced
@@ -541,7 +541,7 @@ def user_covmat(groups_data_by_process, procs_index, loaded_user_covmat_path):
     ``user_covmat_path`` in ``theorycovmatconfig`` in the
     runcard. For more information see documentation.
     """
-    return fromfile_covmat(loaded_user_covmat_path, groups_data_by_process, procs_index)
+    return mult_factor_user_covmat * fromfile_covmat(loaded_user_covmat_path, groups_data_by_process, procs_index)
 
 
 @table

@@ -878,6 +878,7 @@ class CoreConfig(configparser.Config):
         # change ordering according to exp_covmat (so according to runcard order)
         tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
         bb = [str(i) for i in data_input]
+        import ipdb; ipdb.set_trace()
         return tmp.reindex(index=bb, columns=bb, level=0).values
 
     @configparser.explicit_node
@@ -1323,6 +1324,21 @@ class CoreConfig(configparser.Config):
             f = user_covmat_fitting
 
         return f
+    
+    def produce_mult_factor_user_covmat(self, mult_factor: float = None, user_covmat_path: str = None):
+        """
+        Multiplicative factors for the user covmat provided by mult_factors_user_covmat in the runcard.
+        If no factors are provided, returns None.
+        For use in theorycovariance.construction.user_covmat.
+        """
+        # Check that if mult_factors is provided, user_covmat_paths is also provided
+        if mult_factor is not None and user_covmat_path is None:
+            raise ConfigError("If mult_factors is provided, user_covmat_paths must also be provided.")
+            
+        if mult_factor is None:
+            return 1.0 if user_covmat_path is not None else None
+        else:
+            return mult_factor
 
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
