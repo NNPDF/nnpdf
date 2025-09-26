@@ -147,8 +147,8 @@ positivity:
   - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_F2C-CCE-17PTS, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_F2C-CCP-17PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2C-CCE, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2C-CCP, maxlambda: 1e6}
   # Positivity of MSbar PDFs
   - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XUB, maxlambda: 1e6}
@@ -161,7 +161,9 @@ positivity:
 added_filter_rules:
 - dataset: NNPDF_POS_2P24GEV_FLL
   rule: x > 5.0e-7
-- dataset: NNPDF_POS_2P24GEV_F2C
+- dataset: NNPDF_POS_2P24GEV_F2C-CCE
+  rule: x < 0.74
+- dataset: NNPDF_POS_2P24GEV_F2C-CCP
   rule: x < 0.74
 - dataset: NNPDF_POS_2P24GEV_XGL
   rule: x > 0.1
