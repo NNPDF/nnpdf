@@ -1304,16 +1304,25 @@ class CoreConfig(configparser.Config):
                 thcovmat_present = False
 
         if use_thcovmat_if_present and thcovmat_present:
-            # Expected path of theory covmat hardcoded
-            covmat_path = (
-                fit.path / "tables" / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
-            )
-            # All possible valid files
-            if not covmat_path.exists():
+            tables_path = fit.path / "tables"
+
+            # User covmat + point prescriptions
+            if (tables_path / "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv").exists():
+                covmat_path = (tables_path / "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv")
+            # Only point prescriptions
+            elif (tables_path / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv").exists():
+                covmat_path = (
+                    tables_path / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
+                )
+            # Only user covmat
+            elif (tables_path / "datacuts_theory_theorycovmatconfig_user_covmat.csv").exists():
+                covmat_path = (tables_path / "datacuts_theory_theorycovmatconfig_user_covmat.csv")
+            else:
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
                     f"usual location: {covmat_path}."
                 )
+            logging.info(f"Using theory covmat from fit: {covmat_path}")
             fit_theory_covmat = ThCovMatSpec(covmat_path)
         else:
             fit_theory_covmat = None
