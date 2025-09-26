@@ -928,10 +928,15 @@ class ModelTrainer:
         else:
             # read hyperparameter values from hyperopt results
             for rep, seed in zip(self.replicas, self._nn_seeds):
+
+                activations = [hyperopt_params["activation_per_layer"][rep]] * (len(hyperopt_params["nodes_per_layer"][rep])-1)
+                # last layer activation is always linear
+                activations.append('linear')
+
                 tmp = model_gen.ReplicaSettings(
                     seed=seed,
                     nodes=hyperopt_params["nodes_per_layer"][rep],
-                    activations=[hyperopt_params["activation_per_layer"][rep]] * len(hyperopt_params["nodes_per_layer"][rep]),
+                    activations=activations,
                     initializer=hyperopt_params["initializer"][rep],
                     architecture=hyperopt_params["layer_type"][rep],
                     dropout_rate=hyperopt_params["dropout"][rep],
