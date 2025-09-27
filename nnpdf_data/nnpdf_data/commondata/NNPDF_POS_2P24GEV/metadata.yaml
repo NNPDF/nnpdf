@@ -916,3 +916,63 @@ implemented_observables:
     - - NNPDF_POS_ANTI_UP
     - - NNPDF_POS_ANTI_DUP
   data_uncertainties: []
+- observable_name: F2C-CCP
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: CC DIS $\bar{c}$ structure function $F_2^{W^+,c}$'
+    units: ''
+  process_type: POS_DIS
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    dataset_label: 'positivity dataset: CC DIS $\bar{c}$ structure function $F_2^{W^+,c}$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  kinematics:
+    variables:
+      x:
+        description: Bjorken x
+        label: x
+        units: ''
+      Q2:
+        description: Factorization Scale
+        label: Q2
+        units: ''
+    file: kinematics_F2C.yaml
+  theory:
+    FK_tables:
+    - - NNPDF_POS_F2C_CCP_40
+  data_uncertainties: []
+- observable_name: F2C-CCE
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
+    units: ''
+  process_type: POS_DIS
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    dataset_label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  kinematics:
+    variables:
+      x:
+        description: Bjorken x
+        label: x
+        units: ''
+      Q2:
+        description: Factorization Scale
+        label: Q2
+        units: ''
+    file: kinematics_F2C.yaml
+  theory:
+    FK_tables:
+    - - NNPDF_POS_F2C_CCE_40
+  data_uncertainties: []

@@ -37,7 +37,6 @@ ekos_path: ekos
 # Remote resource locations
 fit_urls:
     - 'https://data.nnpdf.science/fits/'
-    - 'https://nnpdf.web.cern.ch/nnpdf/fits/'
 
 fit_index: 'fitdata.json'
 
@@ -47,12 +46,14 @@ hyperscan_urls:
 hyperscan_index: 'hyperscandata.json'
 
 theory_urls:
+    - 'https://nnpdf.nikhef.nl/nnpdf/theories/'
     - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
     - 'https://nnpdf.web.cern.ch/nnpdf/tables_box/'
 
 theory_index: 'theorydata.json'
 
 eko_urls:
+    - 'https://nnpdf.nikhef.nl/nnpdf/ekos/'
     - 'https://nnpdf.web.cern.ch/nnpdf/ekos/'
     - 'https://nnpdf.web.cern.ch/nnpdf/ekos_box/'
 
