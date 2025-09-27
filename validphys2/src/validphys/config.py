@@ -1305,24 +1305,25 @@ class CoreConfig(configparser.Config):
 
         if use_thcovmat_if_present and thcovmat_present:
             tables_path = fit.path / "tables"
+            theorycovmatconfig = fit.as_input()["theorycovmatconfig"]
+            user_covmat_path = theorycovmatconfig.get("user_covmat_path", None)
+            point_prescriptions = theorycovmatconfig.get("point_prescriptions", None)
 
-            # User covmat + point prescriptions
-            if (tables_path / "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv").exists():
-                covmat_path = (tables_path / "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv")
-            # Only point prescriptions
-            elif (tables_path / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv").exists():
-                covmat_path = (
-                    tables_path / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
-                )
-            # Only user covmat
-            elif (tables_path / "datacuts_theory_theorycovmatconfig_user_covmat.csv").exists():
-                covmat_path = (tables_path / "datacuts_theory_theorycovmatconfig_user_covmat.csv")
-            else:
+            generic_name = "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
+            if user_covmat_path is not None:
+                # User covmat + point prescriptions
+                if point_prescriptions is not None and point_prescriptions != []:
+                  generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
+                # Only user covmat
+                else:
+                    generic_name = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
+            covmat_path = tables_path / generic_name
+            if not covmat_path.exists():
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
                     f"usual location: {covmat_path}."
                 )
-            logging.info(f"Using theory covmat from fit: {covmat_path}")
+            logging.info(f"Using theory covmat in fit: {covmat_path}")
             fit_theory_covmat = ThCovMatSpec(covmat_path)
         else:
             fit_theory_covmat = None
