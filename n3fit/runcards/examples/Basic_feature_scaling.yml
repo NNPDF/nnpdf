@@ -11,7 +11,7 @@ description: Basic feature scaling
 dataset_inputs:
 - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, cfac: [], variant: legacy_data}
 
 ############################################################
 datacuts:
@@ -21,7 +21,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 708       # database id
+  theoryid: 41_000_000       # database id
 
 ############################################################
 trvlseed: 1
@@ -75,7 +75,7 @@ fitting:
 positivity:
   posdatasets:
   - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
-  - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
 
 ############################################################
 integrability:
