@@ -32,17 +32,17 @@ implemented_observables:
     dataset_label: CMS $Z$ $p_T$ 13 TeV $(p_T^{ll},M_{ll})$
     y_label: $d\sigma/dp_T(\\ell\\ell)$ (pb/GeV)
     figure_by:
-    - m_ll2
+    - m_ll
     x_scale: log
     plot_x: pT
-  kinematic_coverage: [pT, m_ll2]
+  kinematic_coverage: [pT, m_ll]
   kinematics:
     variables:
       pT:
          description: "lepton pair transverse momentum"
          label: '$p_T$'
          units: "GeV"
-      m_ll2:
+      m_ll:
          description: "Z boson mass squared"
          label: '$m^2_{\ell \ell}$'
          units: "GeV^2"
