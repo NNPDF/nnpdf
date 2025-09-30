@@ -7,7 +7,6 @@ import inspect
 import logging
 import numbers
 import pathlib
-
 import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
@@ -212,7 +211,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
 
         return res
-
+               
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""
         return NSList(range(1, nreplica + 1), nskey="replica")
