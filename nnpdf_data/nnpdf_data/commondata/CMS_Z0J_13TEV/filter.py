@@ -15,7 +15,7 @@ inspection confirms that indeed the aforementioned uncertainties are fully
 correlated. The other uncertainties are weakly correlated or anti-correlated. 
 """
 
-import yaml
+import yaml, re
 
 def get_tables():
     """
@@ -46,6 +46,12 @@ def get_all():
     for table in hepdata_tables:
         with open(table, 'r') as f:
             input = yaml.safe_load(f)
+        ranges = list(map(int, re.search(r"mass_(\d+)-(\d+)", table).groups()))
+        
+        min_mll = ranges[0]
+        mid_mll = 0.5 * (ranges[0] + ranges[1])
+        max_mll = ranges[1]
+            
         # Central values
         data_values = input["dependent_variables"][0]["values"]
         for data_value in data_values:
@@ -57,8 +63,7 @@ def get_all():
                 'pT': {'min': kin_value['low'],
                        'mid': 0.5 * (kin_value['low'] + kin_value['high']),
                        'max': kin_value['high']},
-                'm_ll2': {'min': None, 'mid': 8317.44, 'max': None},
-                'sqrts': {'min': None, 'mid': 13000.0, 'max': None},}
+                'm_ll': {'min': min_mll, 'mid': mid_mll, 'max': max_mll},}
             kinematics.append(kin)
         # Uncertainties
         for data_value in data_values:
