@@ -13,6 +13,8 @@ dataset_inputs:
 - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75 }
 
+diagonal_frac: 0.75
+
 ############################################################
 datacuts:
   t0pdfset     : NNPDF40_nnlo_as_01180 # PDF set to generate t0 covmat
