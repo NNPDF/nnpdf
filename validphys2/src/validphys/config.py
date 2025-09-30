@@ -211,10 +211,6 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
 
         return res
-
-    def parse_with_shift(self, with_shift: bool):
-        """Shift to theory due to correlated systematics in data/theory plots"""
-        return with_shift
                
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""

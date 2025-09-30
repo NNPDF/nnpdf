@@ -31,7 +31,7 @@ Below is an example runcard for a data theory comparison for BCDMSP, ``runcard.y
     - speclabel: "NNPDF40 (w/ shift)"
       theoryid: 40_000_000
       use_cuts: "internal"
-      with_shift: False
+      with_shift: True
       pdf: NNPDF40_nnlo_as_01180 
 
   dataset_inputs:
