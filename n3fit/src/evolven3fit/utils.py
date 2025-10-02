@@ -4,7 +4,7 @@ import numpy as np
 
 from validphys.utils import yaml_safe
 
-from .q2grids import Q2GRID_DEFAULT, Q2GRID_NNPDF40
+from .q2grids import Q2GRID_NNPDF40
 
 
 def read_runcard(usr_path):
@@ -19,7 +19,7 @@ def get_theoryID_from_runcard(usr_path):
     return my_runcard["theory"]["theoryid"]
 
 
-def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False, theory_41=False):
+def generate_q2grid(Q0, Qfin, Q_points, match_dict, legacy40=False):
     """Generate the q2grid used in the final evolved pdfs or use the default grid if Qfin or Q_points is
     not provided.
 
@@ -29,16 +29,39 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False, th
     if Qfin is None and Q_points is None:
         if legacy40:
             return Q2GRID_NNPDF40
-        elif nf0 in (3, 4, 5):
-            return Q2GRID_DEFAULT
-        elif theory_41:
-            return Q2GRID_DEFAULT_41
-        elif nf0 is None:
-            raise ValueError("In order to use a default grid, a value of nf0 must be provided")
-        else:
-            raise NotImplementedError(f"No default grid in Q available for {nf0=}")
+        else: 
+            grids = []
+            Q_low = 1
+            Q_ini = Q0
+            Qfin = 1.0000000e05
+            Q_points = 55
+            num_points_list = []
+            for masses in match_dict:
+                match_scale = masses * match_dict[masses]
+                #   Fraction of the total points to be included in this batch is proportional
+                # to the log of the ratio between the initial scale and final scale of the
+                # batch itself (normalized to the same log of the global initial and final
+                # scales)
+                if match_scale < Q_ini:
+                    num_points = int(7 * np.log(match_scale / Q_low) / np.log(Q_ini / Q_low))
+                    num_points_list.append(num_points)
+                    grids.append(np.geomspace(Q_low**2, match_scale**2, num=num_points, endpoint=False))
+                    num_points = int(np.log(Q_ini / Q_low) / np.log(Q_ini / Q_low))
+                    num_points_list.append(num_points)
+                    grids.append(np.geomspace(match_scale**2, Q_ini**2, num=num_points))
+                if match_scale > Q_ini and match_scale < Qfin:
+                    frac_of_point = np.log(match_scale / Q_ini) / np.log(Qfin / Q0)
+                    num_points = int(Q_points * frac_of_point)
+                    num_points_list.append(num_points)
+                    grids.append(np.geomspace(Q_ini**2, match_scale**2, num=num_points, endpoint=False))
+                    Q_ini = match_scale
+            num_points = Q_points - sum(num_points_list)
+            grids.append(np.geomspace(Q_ini**2, Qfin**2, num=num_points))
+            return np.concatenate(grids).tolist() 
+        
     elif Qfin is None or Q_points is None:
         raise ValueError("q_fin and q_points must be specified either both or none of them")
+    
     else:
         grids = []
         Q_ini = Q0
