@@ -20,11 +20,10 @@ from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_ba
 from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
-import n3fit.hyper_optimization.rewards
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
-from n3fit.vpinterface import N3PDF, compute_phi
+from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
 from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 
@@ -782,9 +781,23 @@ class ModelTrainer:
         exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 
-    def _filter_datagroupspec(self, datasets_partition):
-        """Takes a list of all input exp datasets as :class:`validphys.core.DataGroupSpec`
-        and select `DataSetSpec`s whose names are in datasets_partition.
+    def _filter_datagroupspec(self, datasets_partition, filter_in=True):
+        """Takes a list of strings with dataset names to either filter in or out
+        and returns instances of :class:`validphys.core.DataGroupSpec` which contain
+        either only the "in" datasets or all datasets minus the "out".
+        To control whether the dataset_partition should be selected or deselected
+        the ``filter_in`` variable must be set to either True (select) or False (deselect)
+
+        The use case of this function is to return a modified experiment group object
+        following the same criteria that is used during the training, but with only
+        a subset of datasets being considered.
+
+        Parameters
+        ----------
+            datasets_partition: List[str]
+                List with names of the datasets you want to select or deselect.
+            filter_in: bool
+                Whether the datasets should be selected in (True, default) or out (False)
 
         Parameters
         ----------
@@ -809,7 +822,7 @@ class ModelTrainer:
             # Now, loop over them
             for dataset in datagroup.datasets:
                 # Include `DataSetSpec`s whose names are in datasets_partition
-                if dataset.name in datasets_partition:
+                if (dataset.name in datasets_partition) == filter_in:
                     filtered_datasetspec.append(dataset)
 
             # List of filtered experiments as `DataGroupSpec`
@@ -874,8 +887,10 @@ class ModelTrainer:
         # And lists to save hyperopt utilities
         pdfs_per_fold = []
         exp_models = []
-        # phi evaluated over training/validation exp data
-        trvl_phi_per_fold = []
+        # Hyperopt metrics evaluated over training/validation exp data
+        trvl_chi2_per_fold = []
+        trvl_phi2_per_fold = []
+        trvl_logp_per_fold = []
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
@@ -1001,7 +1016,8 @@ class ModelTrainer:
                 # Extracting the necessary data to compute phi
                 # First, create a list of `validphys.core.DataGroupSpec`
                 # containing only exp datasets within the held out fold
-                experimental_data = self._filter_datagroupspec(partition["datasets"])
+                folded_datasets = partition["datasets"]
+                experimental_data = self._filter_datagroupspec(folded_datasets)
 
                 vplike_pdf = N3PDF(pdf_model.split_replicas())
                 if self.boundary_condition is not None:
@@ -1010,7 +1026,7 @@ class ModelTrainer:
                 # Compute per replica hyper losses
                 hyper_loss = self._hyper_loss.compute_loss(
                     penalties=penalties,
-                    kfold_loss=experimental_loss,
+                    experimental_loss=experimental_loss,
                     validation_loss=validation_loss,
                     pdf_object=vplike_pdf,
                     experimental_data=experimental_data,
@@ -1019,20 +1035,17 @@ class ModelTrainer:
 
                 # Create another list of `validphys.core.DataGroupSpec`
                 # containing now exp datasets that are included in the training/validation dataset
-                trvl_partitions = list(self.kpartitions)
-                trvl_partitions.pop(k)
-                trvl_exp_names = [
-                    exp_name for item in trvl_partitions for exp_name in item['datasets']
-                ]
-                trvl_data = self._filter_datagroupspec(trvl_exp_names)
-                # evaluate phi on training/validation exp set
-                trvl_phi = compute_phi(vplike_pdf, trvl_data)
+                trvl_data = self._filter_datagroupspec(folded_datasets, filter_in=False)
+                # Evaluate the hyperopt metrics on the training/validation experimental sets
+                hyper_metrics = compute_hyperopt_metrics(vplike_pdf, trvl_data)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
-                trvl_phi_per_fold.append(trvl_phi)
+                trvl_chi2_per_fold.append(hyper_metrics.chi2)
+                trvl_phi2_per_fold.append(hyper_metrics.phi2)
+                trvl_logp_per_fold.append(hyper_metrics.logp)
                 pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
 
@@ -1072,10 +1085,14 @@ class ModelTrainer:
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
                     "validation_losses": l_valid,
-                    "trvl_losses_phi": np.array(trvl_phi_per_fold),
+                    "trvl_losses_chi2": np.array(trvl_chi2_per_fold),
+                    "trvl_losses_phi2": np.array(trvl_phi2_per_fold),
+                    "trvl_losses_logp": np.array(trvl_logp_per_fold),
                     "experimental_losses": l_exper,
-                    "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
-                    "hyper_losses_phi": np.array(self._hyper_loss.phi2_vector),
+                    "hyper_losses": np.array(self._hyper_loss.exp_chi2_matrix),
+                    "hyper_losses_chi2": np.array(self._hyper_loss.hyper_chi2_vector),
+                    "hyper_losses_phi2": np.array(self._hyper_loss.hyper_phi2_vector),
+                    "hyper_losses_logp": np.array(self._hyper_loss.hyper_logp_vector),
                     "penalties": {
                         name: np.array(values)
                         for name, values in self._hyper_loss.penalties.items()

@@ -64,6 +64,7 @@ def get_all():
                        'mid': 0.5 * (kin_value['low'] + kin_value['high']),
                        'max': kin_value['high']},
                 'm_ll2': {'min': min_mll2, 'mid': mid_mll2, 'max': max_mll2},}
+
             kinematics.append(kin)
         # Uncertainties
         for data_value in data_values:

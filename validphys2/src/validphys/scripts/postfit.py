@@ -22,12 +22,12 @@ import re
 import shutil
 import sys
 
-import lhapdf
-
 from reportengine import colors
 from validphys import fitdata, fitveto, lhio
 from validphys.core import PDF
 from validphys.fitveto import INTEG_THRESHOLD, NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2
+from validphys.lhaindex import paths_prepend
+from validphys.lhapdf_compatibility import make_pdf
 from validphys.loader import Loader
 from validphys.utils import tempfile_cleaner
 
@@ -218,13 +218,13 @@ def _postfit(
         log.info("Beginning construction of replica 0")
         # It's important that this is prepended, so that any existing instance of
         # `fitname` is not read from some other path
-        lhapdf.pathsPrepend(str(postfit_path))
+        paths_prepend(postfit_path)
         generatingPDF = PDF(fitname)
         lhio.generate_replica0(generatingPDF)
 
         # Test replica 0
         try:
-            lhapdf.mkPDF(fitname, 0)
+            make_pdf(fitname, 0)
         except RuntimeError as e:
             raise PostfitError("CRITICAL ERROR: Failure in reading replica zero") from e
 
