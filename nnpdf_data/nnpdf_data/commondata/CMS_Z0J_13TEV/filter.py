@@ -48,9 +48,9 @@ def get_all():
             input = yaml.safe_load(f)
         ranges = list(map(int, re.search(r"mass_(\d+)-(\d+)", table).groups()))
         
-        min_mll = ranges[0]
-        mid_mll = 0.5 * (ranges[0] + ranges[1])
-        max_mll = ranges[1]
+        min_mll2 = ranges[0] ** 2
+        mid_mll2 = (0.5 * (ranges[0] + ranges[1])) ** 2
+        max_mll2 = ranges[1] ** 2
             
         # Central values
         data_values = input["dependent_variables"][0]["values"]
@@ -63,7 +63,7 @@ def get_all():
                 'pT': {'min': kin_value['low'],
                        'mid': 0.5 * (kin_value['low'] + kin_value['high']),
                        'max': kin_value['high']},
-                'm_ll': {'min': min_mll, 'mid': mid_mll, 'max': max_mll},}
+                'm_ll2': {'min': min_mll2, 'mid': mid_mll2, 'max': max_mll2},}
             kinematics.append(kin)
         # Uncertainties
         for data_value in data_values:
