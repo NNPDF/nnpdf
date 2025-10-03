@@ -1,0 +1,188 @@
+# implemented by JK
+# general information
+setname: "ATLAS_WPWPM_13TEV_140FB"
+version: 1
+version_comment: "First implementation"
+
+nnpdf_metadata:
+  nnpdf31_process: "DY CC"
+  experiment: "ATLAS"
+
+# reference information
+arXiv:
+  url: 'https://arxiv.org/abs/2502.21088'
+iNSPIRE:
+  url: 'https://inspirehep.net/literature/2895869'
+hepdata:
+  url: 'https://www.hepdata.net/record/ins2895869'
+  version: 2
+
+
+implemented_observables:
+
+# single differential in m_T^W for W+
+- observable_name: WP-MTW
+  observable:
+    description: Drell-Yan m_t^W Distribution 
+    label: ATLAS $W$ 13 TeV high mass
+    units: '[pb/GeV]'
+  process_type: DY_W_MT
+  tables: [45]
+  ndata:  12
+  plotting:
+    dataset_label: 'ATLAS $W^+ \to \ell^+ \nu$ 13 TeV'
+    x_label: '$m_T^W$'
+    x_scale: log
+    y_label: '$\frac{\mathrm{d}\sigma}{\mathrm{d}m_T^W}$ (pb/GeV)'
+  kinematic_coverage:
+  - m_t
+  - sqrts
+  kinematics:
+    variables:
+    m_t:
+        description: 'W+ bosom transverse mass'
+        label: '$m_T^W$'
+        units: 'GeV'
+      sqrts:
+        description: 'center of mass energy'
+        label: '$\sqrt{s}$'
+        units: 'GeV'
+    file: kinematics_WP_DIF_MTW.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - 
+      -
+      - 
+  data_central: data_WP_DIF_MTW.yaml
+  data_uncertainties:
+  - uncertainties_WP_DIF_MTW.yaml
+
+# single differential in m_T^W for W-
+- observable_name: WM_MTW
+  observable:
+    description: Drell-Yan m_t^W Distribution 
+    label: ATLAS $W$ 13 TeV high mass
+    units: '[pb/GeV]'
+  process_type: DY_W_MT
+  tables: [46]
+  ndata:  12
+  plotting:
+    dataset_label: 'ATLAS $W^- \to \ell^- \nu$ 13 TeV'
+    x_label: '$m_T^W$'
+    x_scale: log
+    y_label: '$\frac{\mathrm{d}\sigma}{\mathrm{d}m_T^W}$ (pb/GeV)'
+  kinematic_coverage:
+  - abs_eta
+  - sqrts
+  kinematics:
+    variables:
+      m_t:
+        description: 'W- bosom transverse mass'
+        label: '$m_T^W$'
+        units: 'GeV'
+      sqrts:
+        description: 'center of mass energy'
+        label: '$\sqrt{s}$'
+        units: 'GeV'
+    file: kinematics_WP_DIF_MTW.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - 
+      -
+      - 
+  data_central: data_WP_DIF_MTW.yaml
+  data_uncertainties:
+  - uncertainties_WP_DIF_MTW.yaml
+
+
+# double differential in m_T^W and |\eta| for W+
+- observable_name: WP-MTW-ABSETA
+  observable:
+    description: Drell-Yan m_t^W otimes abs_eta Distribution 
+    label: ATLAS $W$ 13 TeV high mass
+    units: '[pb/GeV]'
+  process_type: DY_W_MT_ABSETA
+  tables: [51, 52, 53, 54, 55]
+  ndata:  40
+  plotting:
+    dataset_label: 'ATLAS $W^+ \to \ell^+ \nu$ 13 TeV'
+    x_label: '$m_T^W \otimes |\eta|$'
+    x_scale: log
+    y_label: '$\frac{\mathrm{d}^2\sigma}{\mathrm{d}m_T^W\mathrm{d}|\eta|}$ (pb/GeV)'
+  kinematic_coverage:
+  - m_t
+  - abs_eta
+  - sqrts
+  kinematics:
+    variables:
+      abs_eta:
+        description: 'Absolute pseudorapidity of the (charged) lepton'
+        label: '$|\eta|$'
+        units: ''
+    m_t:
+        description: 'W+ bosom transverse mass'
+        label: '$m_T^W$'
+        units: 'GeV'
+      sqrts:
+        description: 'center of mass energy'
+        label: '$\sqrt{s}$'
+        units: 'GeV'
+    file: kinematics_WP_DIF_MTW-ABSETA.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - 
+      -
+      - 
+  data_central: data_WP_DIF_MTW-ABSETA.yaml
+  data_uncertainties:
+  - uncertainties_WP_DIF_MTW-ABSETA.yaml
+
+# double differential in m_T^W and |\eta| for W-
+- observable_name: WM_MTW_ABSETA
+  observable:
+    description: Drell-Yan m_t^W otimes abs_eta Distribution 
+    label: ATLAS $W$ 13 TeV high mass
+    units: '[pb/GeV]'
+  process_type: DY_W_MT_ABSETA
+  tables: [56, 57, 58, 59, 60]
+  ndata:  40
+  plotting:
+    dataset_label: 'ATLAS $W^- \to \ell^- \nu$ 13 TeV'
+    x_label: '$m_T^W \otimes |\eta|$'
+    x_scale: log
+    y_label: '$\frac{\mathrm{d}^2\sigma}{\mathrm{d}m_T^W\mathrm{d}|\eta|}$ (pb/GeV)'
+  kinematic_coverage:
+  - m_t
+  - abs_eta
+  - sqrts
+  kinematics:
+    variables:
+      abs_eta:
+        description: 'Absolute pseudorapidity of the (charged) lepton'
+        label: '$|\eta|$'
+        units: ''
+      m_t:
+        description: 'W- bosom transverse mass'
+        label: '$m_T^W$'
+        units: 'GeV'
+      sqrts:
+        description: 'center of mass energy'
+        label: '$\sqrt{s}$'
+        units: 'GeV'
+    file: kinematics_WP_DIF_MTW-ABSETA.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - 
+      -
+      - 
+  data_central: data_WP_DIF_MTW-ABSETA.yaml
+  data_uncertainties:
+  - uncertainties_WP_DIF_MTW-ABSETA.yaml
