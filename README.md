@@ -20,7 +20,7 @@ tools to [reproduce](https://docs.nnpdf.science/tutorials/reproduce.html) the
 
 ## Documentation
 
-The documentation is available at <https://docs.nnpdf.science/>
+The documentation is available at <https://docs.nnpdf.science/>.
 
 ## Install
 
