@@ -137,7 +137,7 @@ class Photon:
             self.lux[replica].InsertInelasticSplitQ([mb_thr, mt_thr])
             self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
-            photon_array = self.compute_photon_array(replica)
+            photon_array = self.compute_photon_array(replica, photonreplica)
             self.interpolator.append(
                 interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic")
             )
@@ -145,7 +145,7 @@ class Photon:
 
         self.integral = np.stack(self.integral, axis=-1)
 
-    def compute_photon_array(self, replica):
+    def compute_photon_array(self, replica, photonreplica):
         r"""
         Compute the photon PDF for every point in the grid xgrid.
 
@@ -187,7 +187,7 @@ class Photon:
                         continue
                     else:
                         pdfs_init[j] = np.array(
-                            [self.luxpdfset.xfxQ(x, self.q_in, replica, pid) / x for x in XGRID]
+                            [self.luxpdfset.xfxQ(x, self.q_in, photonreplica, pid) / x for x in XGRID]
                         )
 
                 pdfs_final = np.einsum("ajbk,bk", eko_op, pdfs_init)
