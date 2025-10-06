@@ -1,0 +1,215 @@
+setname: ATLAS_WPWM_13TEV_DIF
+version: 1
+version_comment:
+nnpdf_metadata:
+  nnpdf31_process: DY CC
+  experiment: ATLAS
+arXiv:
+  url: 'https://arxiv.org/abs/2502.21088'
+  journal: JHEP 07 (2025) 026
+iNSPIRE:
+  url: 'https://inspirehep.net/literature/2895869'
+hepdata:
+  url: 'https://www.hepdata.net/record/ins2895869'
+  version: 2
+implemented_observables:
+- observable_name: WPWM_DIF_LEP
+  observable:
+    description: Combined Born-level single-differential cross-section in the $l^+$ and $l^-$ channels in sequence
+    label: ATLAS $W$ 13 TeV Differential 
+    units: 'pb/GeV'
+  process_type: INC
+  tables: [38, 39]
+  npoints: [24]
+  ndata: 24
+  plotting:
+    dataset_label: ATLAS $W$ 13 TeV Differential
+    y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
+    figure_by:
+    - boson
+    extra_labels:
+      ' ':
+      - $W^+$
+      - $W^-$
+      boson:
+      - W
+      - W
+    plot_x: '$m_T^W$'
+  kinematic_coverage:
+  - m_T^W
+  - m_W2
+  kinematics:
+    variables:
+      m_T^W:
+        description: Transverse mass of the W boson
+        label: '$m_T^W$'
+        units: 'GeV'
+      m_W2:
+        description: W boson squared mass
+        label: '$m_W^2$'
+        units: 'GeV$^2$'
+    file: kinematics_WPWM_DIF_LEP.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+  data_uncertainties:
+  - 
+  variants:
+    legacy:
+      data_uncertainties:
+      - 
+  data_central: data_WPWM_DIF_LEP.yaml
+  ported_from: 
+
+- observable_name: WPWM_DIF_MUON
+  observable:
+    description:  Born-level single-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence
+    label: ATLAS $W$ 13 TeV Differential 
+    units: 'pb/GeV'
+  process_type: INC
+  tables: [20,21]
+  npoints: [24]
+  ndata: 24
+  plotting:
+    dataset_label: ATLAS $W$ 13 TeV Differential
+    y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
+    figure_by:
+    - boson
+    extra_labels:
+      ' ':
+      - $W^+$
+      - $W^-$
+      boson:
+      - W
+      - W
+    plot_x: '$m_T^W$'
+  kinematic_coverage:
+  - m_W2
+  - sqrts
+  kinematics:
+    variables:
+      m_W2:
+        description: W boson squared mass
+        label: '$m_W^2$'
+        units: 'GeV$^2$'
+      sqrts:
+        description: center of mass energy
+        label: '$\sqrt{s}$'
+        units: 'GeV'
+    file: kinematics_WPWM_DIF_MUON.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+  data_uncertainties:
+  - 
+  variants:
+    legacy:
+      data_uncertainties:
+      - 
+  data_central: data_WPWM_DIF_MUON.yaml
+  ported_from: 
+
+- observable_name: WPWM_DDIF_LEP
+  observable:
+    description:  Combined Born-level double-differential cross-section in the $l^+$ and $l^-$ channels in sequence # Should I separate observables in bins of m_T^W?
+    label: ATLAS $W$ 13 TeV Double-Differential 
+    units: 'pb/GeV'
+  process_type: INC
+  tables: [44,45,46,47,48,49,50,51,52,53]
+  npoints: []
+  ndata: 80
+  plotting:
+    dataset_label: ATLAS $W$ 13 TeV Double-Differential
+    y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
+    figure_by:
+    - boson
+    extra_labels:
+      boson:
+    plot_x: '$m_T^W$'
+  kinematic_coverage:
+  - abs_eta
+  - m_W2
+  - sqrts
+  kinematics:
+    variables:
+      abs_eta:
+        description: Absolute lepton pseudorapidity
+        label: '$|\eta|$'
+        units: ''
+      m_T^W:
+        description: Transverse mass of the W boson
+        label: '$m_T^W$'
+        units: 'GeV'
+      sqrts:
+        description: center of mass energy
+        label: '$\sqrt{s}$'
+        units: 'GeV'
+    file: kinematics_WPWM_DDIF_LEP.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+  data_uncertainties:
+  - 
+  variants:
+    legacy:
+      data_uncertainties:
+      - 
+  data_central: data_WPWM_DDIF_LEP.yaml
+  ported_from: 
+
+- observable_name: WPWM_DDIF_MU
+  observable:
+    description:  Combined Born-level double-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence # Should I separate observables in bins of m_T^W?
+    label: ATLAS $W$ 13 TeV Double-Differential 
+    units: 'pb/GeV'
+  process_type: INC
+  tables: [23,24,25,26,27,28,29,30,31,32]
+  npoints: []
+  ndata: 80
+  plotting:
+    dataset_label: ATLAS $W$ 13 TeV Double-Differential
+    y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
+    figure_by:
+    - boson
+    extra_labels:
+      ' ':
+      - $W^-$
+      - $W^+$
+      boson:
+      - W
+      - W
+    plot_x: '$m_T^W$'
+  kinematic_coverage:
+  - abs_eta
+  - m_W2
+  - sqrts
+  kinematics:
+    variables:
+      abs_eta:
+        description: Absolute lepton pseudorapidity
+        label: '$|\eta|$'
+        units: ''
+      m_T^W:
+        description: Transverse mass of the W boson
+        label: '$m_T^W$'
+        units: 'GeV'
+      sqrts:
+        description: center of mass energy
+        label: '$\sqrt{s}$'
+        units: 'GeV'
+    file: kinematics_WPWM_DDIF_MU.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+  data_uncertainties:
+  - 
+  variants:
+    legacy:
+      data_uncertainties:
+      - 
+  data_central: data_WPWM_DDIF_MU.yaml
+  ported_from: 
