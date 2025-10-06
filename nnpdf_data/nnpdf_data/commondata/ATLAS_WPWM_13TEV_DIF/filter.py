@@ -194,8 +194,14 @@ def filter_ATLAS_WPWM_13TEV_DIF(observable=None):
 
     kinematics_yaml = {"bins": kinematics}
 
-    treatment = {"LUMI": "MULT", "Stat. unc.": "ADD", "Others": "ADD"}
-    correlation = {"LUMI": "ATLASLUMI16", "Stat. unc.": "UNCORR", "Others": "CORR"}
+    treatment = {"LUMI": "MULT",
+                "Stat. unc.": "ADD",
+                "Uncor. syst. unc.":"ADD",
+                "Others": "ADD"}
+    correlation = {"LUMI": "ATLASLUMI16",
+                "Stat. unc.": "UNCORR",
+                "Uncor. syst. unc.":"UNCORR",
+                "Others": "CORR"}
     definitions = {}
 
     errors_yaml = []

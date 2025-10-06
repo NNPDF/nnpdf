@@ -10,7 +10,7 @@ definitions:
   Uncor. syst. unc.:
     description: Uncor. syst. unc.
     treatment: ADD
-    correlation: CORR
+    correlation: UNCORR
   Alternative MC unf. unc.:
     description: Alternative MC unf. unc.
     treatment: ADD
