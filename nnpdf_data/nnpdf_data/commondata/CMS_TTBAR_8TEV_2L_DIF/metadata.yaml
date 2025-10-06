@@ -128,7 +128,7 @@ implemented_observables:
     mc_uncertainties:
       data_central: data_legacy_MTTBAR-YT-NORM.yaml
       data_uncertainties:
-      - uncertainties_d2Sig_dyt_dmttBar_norm.yaml
+      - uncertainties_legacy_MTTBAR-YT-NORM.yaml
       - mc_top_uncertainties_d2Sig_dyt_dmttBar_norm.yaml
 - observable:
     description: normalized differential cross section w.r.t. invariant mass and absolute rapidity of ttBar pair
