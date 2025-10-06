@@ -126,6 +126,7 @@ implemented_observables:
     legacy_theory:
       theory: *id002
     mc_uncertainties:
+      data_central: data_legacy_MTTBAR-YT-NORM.yaml
       data_uncertainties:
       - uncertainties_d2Sig_dyt_dmttBar_norm.yaml
       - mc_top_uncertainties_d2Sig_dyt_dmttBar_norm.yaml
