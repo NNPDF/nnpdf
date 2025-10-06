@@ -6,6 +6,10 @@ differential CCDY at high transverse masses measurement at 13 TeV.
 import yaml
 import numpy as np
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+
 
 def symmetrize_errors(delta_plus, delta_minus):
     r"""Compute the symmetrized uncertainty and the shift in data point.
