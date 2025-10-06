@@ -1,6 +1,6 @@
 setname: ATLAS_WPWM_13TEV_DIF
 version: 1
-version_comment:
+version_comment: Initial Implementation
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: ATLAS
@@ -54,13 +54,8 @@ implemented_observables:
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - 
-  variants:
-    legacy:
-      data_uncertainties:
-      - 
+  - uncertainties_WPWM_DIF_LEP.yaml
   data_central: data_WPWM_DIF_LEP.yaml
-  ported_from: 
 
 - observable_name: WPWM_DIF_MUON
   observable:
@@ -103,13 +98,8 @@ implemented_observables:
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - 
-  variants:
-    legacy:
-      data_uncertainties:
-      - 
+  - uncertainties_WPWM_DIF_MUON.yaml
   data_central: data_WPWM_DIF_MUON.yaml
-  ported_from: 
 
 - observable_name: WPWM_DDIF_LEP
   observable:
@@ -152,13 +142,8 @@ implemented_observables:
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - 
-  variants:
-    legacy:
-      data_uncertainties:
-      - 
+  - uncertainties_WPWM_DDIF_LEP.yaml
   data_central: data_WPWM_DDIF_LEP.yaml
-  ported_from: 
 
 - observable_name: WPWM_DDIF_MU
   observable:
@@ -206,10 +191,5 @@ implemented_observables:
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - 
-  variants:
-    legacy:
-      data_uncertainties:
-      - 
+  - uncertainties_WPWM_DDIF_MU.yaml
   data_central: data_WPWM_DDIF_MU.yaml
-  ported_from: 
