@@ -1,21 +1,30 @@
 meta:
-    title: BCDMSP data/theory comparison
+    title: example of data-theory comparison
     keywords: [example]
     author: Lazy Person
 
-pdfs:
-    - id: NNPDF40_nnlo_low_precision
-      label: NNPDF40_nnlo_low_precision
-
-theoryid: 40_000_000
-
-use_cuts: "internal"
+dataspecs:
+  - speclabel: "NNPDF40 (w/o shift)"
+    theoryid: 40_000_000
+    use_cuts: "internal"
+    with_shift: False
+    pdf: NNPDF40_nnlo_as_01180
+  - speclabel: "NNPDF40 (w/ shift)"
+    theoryid: 40_000_000
+    use_cuts: "internal"
+    with_shift: False
+    pdf: NNPDF40_nnlo_as_01180 
 
 dataset_inputs:
-      - { dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy}
-      - { dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, variant: legacy}
+      - { dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED}
+      - { dataset: ATLAS_1JET_8TEV_R06_PTY, variant: "legacy_theory"}
+      - { dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: "legacy_dw"}
 
-template: dthcomparison.md
+template_text: |
+   # Data theory comparison with shifts
+   {@ with dataset_inputs @}
+   {@ plot_fancy_dataspecs(normalize_to=data) @}
+   {@ endwith @}
 
 actions_:
   - report(main=true)
