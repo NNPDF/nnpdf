@@ -19,7 +19,7 @@ It is possible to set up a custom profile file in: ::
 
 such that it will be used by every NNPDF installation (note that ``${XDG_CONFIG_HOME}`` defaults to ``~/.config``)
 or by defining the environment variable ``NNPDF_PROFILE_PATH`` to point to a
-different profile file, which will be loaded instead by the code. 
+different profile file, which will be loaded instead by the code.
 Specifying a custom profile could be useful to add repositories for specific projects or
 change the paths based on the local filesystem characteristics.
 
@@ -48,6 +48,12 @@ the code. These should be specified in YAML format.
     A path where completed fits are to be retrieved from,
     and stored when :ref:`downloaded <download>`.
     Defaults to ``nnpdf_share/results``.
+
+``data_path``
+    List of paths where to read the data from.
+    Regardless of the content of this variable, the installation path of the ``nnpdf_data`` package
+    will always be appended so that the official ``commondata`` distribution is always available.
+    The custom data path takes precedence with respect to the distribution within the package.
 
 ``validphys_cache_path``
     A path where to store downloaded validphys resources.

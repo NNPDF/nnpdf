@@ -6,17 +6,20 @@ Test loading utilities.
 
 import os
 from pathlib import Path
+import shutil
 import subprocess as sp
 import sys
 
 from hypothesis import given, settings
 from hypothesis.strategies import composite, sampled_from, sets
+import numpy as np
 import pytest
 
 from nnpdf_data import legacy_to_new_map
+from nnpdf_data.utils import DEFAULT_PATH_VPDATA, NNPDF_DIR, yaml_fast
 from reportengine.configparser import ConfigError
 from validphys.api import API
-from validphys.loader import NNPDF_DIR, FallbackLoader, FitNotFound
+from validphys.loader import FallbackLoader, FitNotFound
 from validphys.plotoptions.core import get_info, kitable
 from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID
 
@@ -153,3 +156,47 @@ def test_profile_relative_to_python(tmp_path):
 
     results_sys_prefix = Path(sys.prefix) / "share" / NNPDF_DIR / "results"
     _check_download_resource(results_sys_prefix, profile=profile_path)
+
+
+def test_extra_data_sources(tmp_path):
+    """Creates a custom profile with a ``data_path`` key and checks whether it is used
+    and whether it took precedence.
+    """
+    # Target dataset (and name of the data file), both need to be changed toghether
+    dataset = "LHCB_Z0_8TEV_MUON_Y"
+    faketaset = "LHCB_Z0_8TEV_FAKE_Y"
+    data_file = "data.yaml"
+
+    # Create the loader with a profile pointing to the temporary folder for data
+    profile_path = tmp_path / "nnprofile.yaml"
+    profile_path.write_text(f"data_path: [{tmp_path}]")
+    l = FallbackLoader(profile=profile_path)
+
+    original_set = dataset.rsplit("_", 1)[0]
+    original_folder = DEFAULT_PATH_VPDATA / original_set
+    fake_folder = tmp_path / faketaset.rsplit("_", 1)[0]
+    # Copy the dataset, first with the fake name
+    shutil.copytree(original_folder, fake_folder)
+
+    # And load it
+    fake_ds = l.check_dataset(faketaset, theoryid=40_000_000)
+    assert fake_ds.commondata.metadata._parent.folder == fake_folder
+
+    # But we can still load the original one, right?
+    original_ds = l.check_dataset(dataset, theoryid=40_000_000)
+    assert original_ds.commondata.metadata._parent.folder == DEFAULT_PATH_VPDATA / original_folder
+
+    # And if we substitute it now with random data but with the same name?
+    shutil.copytree(original_folder, tmp_path / original_set)
+
+    target_data = tmp_path / original_set / data_file
+    data_dict = yaml_fast.load(target_data.read_text(encoding="utf-8"))
+    random_data = np.random.rand(len(data_dict["data_central"]))
+    data_dict["data_central"] = random_data.tolist()
+    with target_data.open("w", encoding="utf-8") as sf:
+        yaml_fast.dump(data_dict, sf)
+
+    new_original_ds = l.check_dataset(dataset, theoryid=40_000_000)
+    read_data = new_original_ds.load_commondata().central_values
+    read_cuts = new_original_ds.cuts.load()
+    np.testing.assert_array_equal(read_data, random_data[read_cuts])
