@@ -37,6 +37,11 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_138FB-1_DIF_MTTBAR
     operation: 'null'
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+        - uncertainties_dSig_dmttBar.yaml
+        - mc_top_uncertainties_dSig_dmttBar.yaml
 
 - observable: {description: "differential cross section w.r.t. transverse momentum of t", label: '$\frac{d\sigma}{dpT_{t}}$', units: '$\frac{pb}{GeV}$'}
   observable_name: PTT
@@ -49,7 +54,7 @@ implemented_observables:
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
     file: kinematics_dSig_dpTt.yaml
   data_central: data_dSig_dpTt.yaml
-  data_uncertainties: 
+  data_uncertainties:
   - uncertainties_dSig_dpTt.yaml
   kinematic_coverage: [pT_t, m_t2]
   plotting:
@@ -61,6 +66,11 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_138FB-1_DIF_PTT
     operation: 'null'
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+        - uncertainties_dSig_dpTt.yaml
+        - mc_top_uncertainties_dSig_dpTt.yaml
 
 - observable: {description: "differential cross section w.r.t. rapidity of t", label: '$\frac{d\sigma}{dy_{t}}$', units: '$pb$'}
   observable_name: YT
@@ -73,7 +83,7 @@ implemented_observables:
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
     file: kinematics_dSig_dyt.yaml
   data_central: data_dSig_dyt.yaml
-  data_uncertainties: 
+  data_uncertainties:
   - uncertainties_dSig_dyt.yaml
   kinematic_coverage: [y_t, m_t2]
   plotting:
@@ -85,6 +95,11 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_138FB-1_DIF_YT
     operation: 'null'
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+        - uncertainties_dSig_dyt.yaml
+        - mc_top_uncertainties_dSig_dyt.yaml
 
 - observable: {description: "double differential cross section w.r.t. invariant mass and absolute rapidity of ttBar", label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: '$\frac{pb}{GeV}$'}
   observable_name: MTTBAR-YTTBAR
@@ -95,7 +110,7 @@ implemented_observables:
     variables:
       m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
       y_ttBar: {description: "absolute rapidity of ttBar", label: '$|y_{t\bar{t}}|$', units: ""}
-      m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}    
+      m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
     file: kinematics_d2Sig_dmttBar_dyttBar.yaml
   data_central: data_d2Sig_dmttBar_dyttBar.yaml
   data_uncertainties:
@@ -112,3 +127,8 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_138FB-1_DIF_MTTBAR-YTTBAR
     operation: 'null'
+  variants:
+    mc_uncertainties:
+      data_uncertainties:
+        - uncertainties_d2Sig_dmttBar_dyttBar.yaml
+        - mc_top_uncertainties_d2Sig_dmttBar_dyttBar.yaml
