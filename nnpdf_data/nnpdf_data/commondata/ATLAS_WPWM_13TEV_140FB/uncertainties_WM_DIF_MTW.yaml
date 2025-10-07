@@ -1,8 +1,8 @@
 definitions:
   Luminosity_error:
     description: Luminosity error
-    treatment: jelle
-    type: jelle
+    treatment: MULT
+    type: ATLASLUMI15
   Stat. unc.:
     description: Stat. unc.
     treatment: ADD
@@ -332,999 +332,999 @@ definitions:
     treatment: ADD
     type: CORR
 bins:
-- Luminosity_error: 0.0001112864
-  Stat. unc.: 6.772e-05
+- Luminosity_error: 1.11286400e-04
+  Stat. unc.: 6.77200000e-05
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: 2.8023e-05
-  Basic unf. unc.: -3.0838e-06
-  $E_T^{miss}$ SoftTrk Scale: 0.00018061
-  $E_T^{miss}$ SoftTrk ResoPara: 5.9934e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 4.666e-05
-  Electron Scale Zee (syst.): -6.114e-05
-  Electron Scale  S12: 3.1911e-05
-  Electron Scale PS B12: 1.0726e-06
-  Electron Scale MATID: -1.3408e-07
-  Electron Scale MATCRYO: -1.4347e-05
-  Electron Scale L1GAIN: -1.8771e-06
-  Electron Scale L2GAIN: 4.8269e-06
-  Electron Scale LARELECUNCOV: -2.6816e-07
-  Electron Scale LARCALIB: 1.5419e-05
-  Electron Scale PS: -6.1677e-06
-  JER DataVsMC MC16: -5.2693e-05
-  JER EffectiveNP 1: -0.00015634
-  JER EffectiveNP 2: -5.7386e-05
-  JER EffectiveNP 3: -1.3542e-05
-  JER EffectiveNP 4: -9.3856e-06
-  JER EffectiveNP 5: 4.0224e-07
-  JER EffectiveNP 6: -1.3944e-05
-  JER EffectiveNP 7rest: -1.2067e-06
-  JES EtaIntercalib Model: -2.1185e-05
-  JES Flavor Composition: 4.0224e-07
-  JES Flavor Response: -1.2604e-05
-  JES Pileup OffsetMu: -7.8303e-05
-  JES Pileup OffsetNPV: -1.9978e-05
-  JES Pileup RhoTopology: 4.5587e-06
-  Electron Eff. ChargeMisID (stat.): -7.2403e-06
-  Electron Eff. ChargeMisID (syst.): -4.961e-06
-  Electron Eff. Isol: -2.5475e-06
-  Electron Eff. ID High-$p_T$ Eta1: -3.8883e-06
-  Electron Eff. ID High-$p_T$ Eta2: -4.961e-06
-  Electron Eff. ID High-$p_T$ Eta3: -1.3408e-07
-  Electron Eff. ID High-$p_T$ Eta4: 1.5553e-05
-  Electron Eff. ID High-$p_T$ Eta5: 1.1665e-05
-  Electron Eff. ID High-$p_T$ Eta6: 1.3408e-07
-  Electron Eff. ID High-$p_T$ Eta7: -2.5475e-06
-  Electron Eff. ID High-$p_T$ Eta9: -1.0592e-05
-  Electron Eff. ID High-$p_T$ Eta10: -1.3676e-05
-  Electron Eff. ID High-$p_T$ Eta11: -8.313e-06
-  Electron Eff. ID High-$p_T$ Eta12: 7.7766e-06
-  Electron Eff. ID SIMP3: 7.3744e-06
-  Electron Eff. ID SIMP4: -1.0726e-05
-  Electron Eff. ID SIMP11: 2.0112e-06
-  Electron Eff. ID SIMP15: -9.7878e-06
-  Pileup: -7.7498e-05
-  $t\bar{t}$ FSR: 5.0012e-05
-  $t\bar{t}$ $p_T$-hard: 1.1397e-05
-  $t\bar{t}$ hadronization: 3.352e-06
-  $t\bar{t}$ hdamp: -4.6928e-06
-  $t\bar{t}$ RW inverted setup 2D: -1.2872e-05
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 7.5755e-05
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 0.00013569
-  $t\bar{t}$ PDF: -0.00010257
-  Multijet Electron $E_T^{miss}$: 3.8079e-05
-  Multijet Electron mix$E_T^{miss}$: -1.2201e-05
-  Multijet Electron MC Shape: 3.0838e-06
-  Multijet Electron MC Scaling: 1.8235e-05
-  $tW$ Diagram Removal: -3.0972e-05
-  $tW$ DS hdamp: -5.4973e-06
-  Norm. $W\rightarrow\tau\nu$ by 5%: -1.3676e-05
-  Norm. $Z$ by 5%: -6.1409e-05
-  Norm. Single top by 4%$: -3.0436e-05
-  Norm. Diboson by 6%: -3.5933e-05
-  Muon Resolution MS: -8.5811e-06
-  Muon Scale: 5.8325e-05
-  Muon Eff. Identification: -0.00010726
-  Muon Eff. Isolation: -2.5341e-05
-  Muon Eff. Trigger: 8.9163e-05
-  Bad Muon Veto: -5.8995e-06
-  Muon Sagitta Global: -8.9431e-05
-  Muon Sagitta $p_T$-extra: -1.2201e-05
-  Muon Multijet $E_T^{miss}$: -1.4749e-05
-  Muon Multijet $d_0^{sig}$: 1.4615e-05
-  Muon Multijet MC Scaling: 4.7732e-05
-  Muon Multijet Jet Multiplicity: -3.5531e-05
-  Muon Multijet MC Shape: 7.2403e-06
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -2.7486e-05
-- Luminosity_error: 4.4614990000000005e-05
-  Stat. unc.: 4.7733e-05
+  Alternative MC unf. unc.: 2.80230000e-05
+  Basic unf. unc.: -3.08380000e-06
+  $E_T^{miss}$ SoftTrk Scale: 1.80610000e-04
+  $E_T^{miss}$ SoftTrk ResoPara: 5.99340000e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 4.66600000e-05
+  Electron Scale Zee (syst.): -6.11400000e-05
+  Electron Scale  S12: 3.19110000e-05
+  Electron Scale PS B12: 1.07260000e-06
+  Electron Scale MATID: -1.34080000e-07
+  Electron Scale MATCRYO: -1.43470000e-05
+  Electron Scale L1GAIN: -1.87710000e-06
+  Electron Scale L2GAIN: 4.82690000e-06
+  Electron Scale LARELECUNCOV: -2.68160000e-07
+  Electron Scale LARCALIB: 1.54190000e-05
+  Electron Scale PS: -6.16770000e-06
+  JER DataVsMC MC16: -5.26930000e-05
+  JER EffectiveNP 1: -1.56340000e-04
+  JER EffectiveNP 2: -5.73860000e-05
+  JER EffectiveNP 3: -1.35420000e-05
+  JER EffectiveNP 4: -9.38560000e-06
+  JER EffectiveNP 5: 4.02240000e-07
+  JER EffectiveNP 6: -1.39440000e-05
+  JER EffectiveNP 7rest: -1.20670000e-06
+  JES EtaIntercalib Model: -2.11850000e-05
+  JES Flavor Composition: 4.02240000e-07
+  JES Flavor Response: -1.26040000e-05
+  JES Pileup OffsetMu: -7.83030000e-05
+  JES Pileup OffsetNPV: -1.99780000e-05
+  JES Pileup RhoTopology: 4.55870000e-06
+  Electron Eff. ChargeMisID (stat.): -7.24030000e-06
+  Electron Eff. ChargeMisID (syst.): -4.96100000e-06
+  Electron Eff. Isol: -2.54750000e-06
+  Electron Eff. ID High-$p_T$ Eta1: -3.88830000e-06
+  Electron Eff. ID High-$p_T$ Eta2: -4.96100000e-06
+  Electron Eff. ID High-$p_T$ Eta3: -1.34080000e-07
+  Electron Eff. ID High-$p_T$ Eta4: 1.55530000e-05
+  Electron Eff. ID High-$p_T$ Eta5: 1.16650000e-05
+  Electron Eff. ID High-$p_T$ Eta6: 1.34080000e-07
+  Electron Eff. ID High-$p_T$ Eta7: -2.54750000e-06
+  Electron Eff. ID High-$p_T$ Eta9: -1.05920000e-05
+  Electron Eff. ID High-$p_T$ Eta10: -1.36760000e-05
+  Electron Eff. ID High-$p_T$ Eta11: -8.31300000e-06
+  Electron Eff. ID High-$p_T$ Eta12: 7.77660000e-06
+  Electron Eff. ID SIMP3: 7.37440000e-06
+  Electron Eff. ID SIMP4: -1.07260000e-05
+  Electron Eff. ID SIMP11: 2.01120000e-06
+  Electron Eff. ID SIMP15: -9.78780000e-06
+  Pileup: -7.74980000e-05
+  $t\bar{t}$ FSR: 5.00120000e-05
+  $t\bar{t}$ $p_T$-hard: 1.13970000e-05
+  $t\bar{t}$ hadronization: 3.35200000e-06
+  $t\bar{t}$ hdamp: -4.69280000e-06
+  $t\bar{t}$ RW inverted setup 2D: -1.28720000e-05
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 7.57550000e-05
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 1.35690000e-04
+  $t\bar{t}$ PDF: -1.02570000e-04
+  Multijet Electron $E_T^{miss}$: 3.80790000e-05
+  Multijet Electron mix$E_T^{miss}$: -1.22010000e-05
+  Multijet Electron MC Shape: 3.08380000e-06
+  Multijet Electron MC Scaling: 1.82350000e-05
+  $tW$ Diagram Removal: -3.09720000e-05
+  $tW$ DS hdamp: -5.49730000e-06
+  Norm. $W\rightarrow\tau\nu$ by 5%: -1.36760000e-05
+  Norm. $Z$ by 5%: -6.14090000e-05
+  Norm. Single top by 4%$: -3.04360000e-05
+  Norm. Diboson by 6%: -3.59330000e-05
+  Muon Resolution MS: -8.58110000e-06
+  Muon Scale: 5.83250000e-05
+  Muon Eff. Identification: -1.07260000e-04
+  Muon Eff. Isolation: -2.53410000e-05
+  Muon Eff. Trigger: 8.91630000e-05
+  Bad Muon Veto: -5.89950000e-06
+  Muon Sagitta Global: -8.94310000e-05
+  Muon Sagitta $p_T$-extra: -1.22010000e-05
+  Muon Multijet $E_T^{miss}$: -1.47490000e-05
+  Muon Multijet $d_0^{sig}$: 1.46150000e-05
+  Muon Multijet MC Scaling: 4.77320000e-05
+  Muon Multijet Jet Multiplicity: -3.55310000e-05
+  Muon Multijet MC Shape: 7.24030000e-06
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -2.74860000e-05
+- Luminosity_error: 4.46149900e-05
+  Stat. unc.: 4.77330000e-05
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -4.6228e-06
-  Basic unf. unc.: 4.8378e-07
-  $E_T^{miss}$ SoftTrk Scale: 3.3058e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 9.5143e-06
-  $E_T^{miss}$ SoftTrk ResoPerp: 6.2891e-06
-  Electron Scale Zee (syst.): -1.2954e-05
-  Electron Scale  S12: 1.1396e-05
-  Electron Scale PS B12: 2.2039e-06
-  Electron Scale MATID: -1.7738e-06
-  Electron Scale MATCRYO: -1.8276e-06
-  Electron Scale L1GAIN: 7.5254e-07
-  Electron Scale L2GAIN: -5.3215e-06
-  Electron Scale LARELECUNCOV: -1.3976e-06
-  Electron Scale LARCALIB: 4.7303e-06
-  Electron Scale PS: -1.9351e-06
-  JER DataVsMC MC16: -7.3642e-06
-  JER EffectiveNP 1: -1.1288e-05
-  JER EffectiveNP 2: -1.3384e-05
-  JER EffectiveNP 3: -5.3215e-06
-  JER EffectiveNP 4: -1.5051e-06
-  JER EffectiveNP 5: -2.6877e-07
-  JER EffectiveNP 6: -4.2465e-06
-  JER EffectiveNP 7rest: -1.3438e-06
-  JES EtaIntercalib Model: 1.4513e-06
-  JES Flavor Composition: 2.0157e-05
-  JES Flavor Response: -2.4296e-05
-  JES Pileup OffsetMu: -1.3116e-05
-  JES Pileup OffsetNPV: -6.4504e-07
-  JES Pileup RhoTopology: 1.0267e-05
-  Electron Eff. ChargeMisID (stat.): 1.5051e-06
-  Electron Eff. ChargeMisID (syst.): 2.9564e-06
-  Electron Eff. Isol: -3.6015e-06
-  Electron Eff. ID High-$p_T$ Eta1: -3.1714e-06
-  Electron Eff. ID High-$p_T$ Eta2: -2.3114e-06
-  Electron Eff. ID High-$p_T$ Eta3: -1.6663e-06
-  Electron Eff. ID High-$p_T$ Eta4: 2.3114e-06
-  Electron Eff. ID High-$p_T$ Eta5: 3.709e-06
-  Electron Eff. ID High-$p_T$ Eta6: 1.2363e-06
-  Electron Eff. ID High-$p_T$ Eta7: -5.9128e-07
-  Electron Eff. ID High-$p_T$ Eta9: -5.5903e-06
-  Electron Eff. ID High-$p_T$ Eta10: -4.4077e-06
-  Electron Eff. ID High-$p_T$ Eta11: -2.0964e-06
-  Electron Eff. ID High-$p_T$ Eta12: 1.9351e-06
-  Electron Eff. ID SIMP3: 1.7738e-06
-  Electron Eff. ID SIMP4: -4.9453e-06
-  Electron Eff. ID SIMP11: 1.8276e-06
-  Electron Eff. ID SIMP15: -6.3429e-06
-  Pileup: -3.0639e-06
-  $t\bar{t}$ FSR: 2.4565e-05
-  $t\bar{t}$ $p_T$-hard: -1.6663e-06
-  $t\bar{t}$ hadronization: 2.5425e-05
-  $t\bar{t}$ hdamp: -2.6877e-07
-  $t\bar{t}$ RW inverted setup 2D: -7.4179e-06
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 3.4026e-05
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 5.9612e-05
-  $t\bar{t}$ PDF: -4.0906e-05
-  Multijet Electron $E_T^{miss}$: 1.3008e-05
-  Multijet Electron mix$E_T^{miss}$: -8.8692e-06
-  Multijet Electron MC Shape: -6.7191e-06
-  Multijet Electron MC Scaling: 8.0092e-06
-  $tW$ Diagram Removal: -2.3168e-05
-  $tW$ DS hdamp: -7.5254e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: -5.3753e-06
-  Norm. $Z$ by 5%: -2.3705e-05
-  Norm. Single top by 4%$: -1.1718e-05
-  Norm. Diboson by 6%: -1.6287e-05
-  Muon Resolution MS: -8.8155e-06
-  Muon Scale: 2.263e-05
-  Muon Eff. Identification: -5.0152e-05
-  Muon Eff. Isolation: -1.4137e-05
-  Muon Eff. Trigger: 2.8489e-05
-  Bad Muon Veto: -2.1501e-07
-  Muon Sagitta Global: -3.4456e-05
-  Muon Sagitta $p_T$-extra: -2.5264e-06
-  Muon Multijet $E_T^{miss}$: -8.8692e-06
-  Muon Multijet $d_0^{sig}$: 1.1557e-05
-  Muon Multijet MC Scaling: 2.1179e-05
-  Muon Multijet Jet Multiplicity: -1.4943e-05
-  Muon Multijet MC Shape: 6.6116e-06
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -1.575e-05
-- Luminosity_error: 2.052092e-05
-  Stat. unc.: 2.5565e-05
+  Alternative MC unf. unc.: -4.62280000e-06
+  Basic unf. unc.: 4.83780000e-07
+  $E_T^{miss}$ SoftTrk Scale: 3.30580000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 9.51430000e-06
+  $E_T^{miss}$ SoftTrk ResoPerp: 6.28910000e-06
+  Electron Scale Zee (syst.): -1.29540000e-05
+  Electron Scale  S12: 1.13960000e-05
+  Electron Scale PS B12: 2.20390000e-06
+  Electron Scale MATID: -1.77380000e-06
+  Electron Scale MATCRYO: -1.82760000e-06
+  Electron Scale L1GAIN: 7.52540000e-07
+  Electron Scale L2GAIN: -5.32150000e-06
+  Electron Scale LARELECUNCOV: -1.39760000e-06
+  Electron Scale LARCALIB: 4.73030000e-06
+  Electron Scale PS: -1.93510000e-06
+  JER DataVsMC MC16: -7.36420000e-06
+  JER EffectiveNP 1: -1.12880000e-05
+  JER EffectiveNP 2: -1.33840000e-05
+  JER EffectiveNP 3: -5.32150000e-06
+  JER EffectiveNP 4: -1.50510000e-06
+  JER EffectiveNP 5: -2.68770000e-07
+  JER EffectiveNP 6: -4.24650000e-06
+  JER EffectiveNP 7rest: -1.34380000e-06
+  JES EtaIntercalib Model: 1.45130000e-06
+  JES Flavor Composition: 2.01570000e-05
+  JES Flavor Response: -2.42960000e-05
+  JES Pileup OffsetMu: -1.31160000e-05
+  JES Pileup OffsetNPV: -6.45040000e-07
+  JES Pileup RhoTopology: 1.02670000e-05
+  Electron Eff. ChargeMisID (stat.): 1.50510000e-06
+  Electron Eff. ChargeMisID (syst.): 2.95640000e-06
+  Electron Eff. Isol: -3.60150000e-06
+  Electron Eff. ID High-$p_T$ Eta1: -3.17140000e-06
+  Electron Eff. ID High-$p_T$ Eta2: -2.31140000e-06
+  Electron Eff. ID High-$p_T$ Eta3: -1.66630000e-06
+  Electron Eff. ID High-$p_T$ Eta4: 2.31140000e-06
+  Electron Eff. ID High-$p_T$ Eta5: 3.70900000e-06
+  Electron Eff. ID High-$p_T$ Eta6: 1.23630000e-06
+  Electron Eff. ID High-$p_T$ Eta7: -5.91280000e-07
+  Electron Eff. ID High-$p_T$ Eta9: -5.59030000e-06
+  Electron Eff. ID High-$p_T$ Eta10: -4.40770000e-06
+  Electron Eff. ID High-$p_T$ Eta11: -2.09640000e-06
+  Electron Eff. ID High-$p_T$ Eta12: 1.93510000e-06
+  Electron Eff. ID SIMP3: 1.77380000e-06
+  Electron Eff. ID SIMP4: -4.94530000e-06
+  Electron Eff. ID SIMP11: 1.82760000e-06
+  Electron Eff. ID SIMP15: -6.34290000e-06
+  Pileup: -3.06390000e-06
+  $t\bar{t}$ FSR: 2.45650000e-05
+  $t\bar{t}$ $p_T$-hard: -1.66630000e-06
+  $t\bar{t}$ hadronization: 2.54250000e-05
+  $t\bar{t}$ hdamp: -2.68770000e-07
+  $t\bar{t}$ RW inverted setup 2D: -7.41790000e-06
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 3.40260000e-05
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 5.96120000e-05
+  $t\bar{t}$ PDF: -4.09060000e-05
+  Multijet Electron $E_T^{miss}$: 1.30080000e-05
+  Multijet Electron mix$E_T^{miss}$: -8.86920000e-06
+  Multijet Electron MC Shape: -6.71910000e-06
+  Multijet Electron MC Scaling: 8.00920000e-06
+  $tW$ Diagram Removal: -2.31680000e-05
+  $tW$ DS hdamp: -7.52540000e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: -5.37530000e-06
+  Norm. $Z$ by 5%: -2.37050000e-05
+  Norm. Single top by 4%$: -1.17180000e-05
+  Norm. Diboson by 6%: -1.62870000e-05
+  Muon Resolution MS: -8.81550000e-06
+  Muon Scale: 2.26300000e-05
+  Muon Eff. Identification: -5.01520000e-05
+  Muon Eff. Isolation: -1.41370000e-05
+  Muon Eff. Trigger: 2.84890000e-05
+  Bad Muon Veto: -2.15010000e-07
+  Muon Sagitta Global: -3.44560000e-05
+  Muon Sagitta $p_T$-extra: -2.52640000e-06
+  Muon Multijet $E_T^{miss}$: -8.86920000e-06
+  Muon Multijet $d_0^{sig}$: 1.15570000e-05
+  Muon Multijet MC Scaling: 2.11790000e-05
+  Muon Multijet Jet Multiplicity: -1.49430000e-05
+  Muon Multijet MC Shape: 6.61160000e-06
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -1.57500000e-05
+- Luminosity_error: 2.05209200e-05
+  Stat. unc.: 2.55650000e-05
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -4.2031e-06
-  Basic unf. unc.: 4.6976e-07
-  $E_T^{miss}$ SoftTrk Scale: 1.026e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 3.4614e-06
-  $E_T^{miss}$ SoftTrk ResoPerp: 3.2636e-06
-  Electron Scale Zee (syst.): -3.7086e-06
-  Electron Scale  S12: 4.4256e-06
-  Electron Scale PS B12: 1.5082e-06
-  Electron Scale MATID: -2.9669e-07
-  Electron Scale MATCRYO: -1.7307e-07
-  Electron Scale L1GAIN: -6.6755e-07
-  Electron Scale L2GAIN: -2.423e-06
-  Electron Scale LARELECUNCOV: -1.0137e-06
-  Electron Scale LARCALIB: 1.5823e-06
-  Electron Scale PS: -5.6865e-07
+  Alternative MC unf. unc.: -4.20310000e-06
+  Basic unf. unc.: 4.69760000e-07
+  $E_T^{miss}$ SoftTrk Scale: 1.02600000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 3.46140000e-06
+  $E_T^{miss}$ SoftTrk ResoPerp: 3.26360000e-06
+  Electron Scale Zee (syst.): -3.70860000e-06
+  Electron Scale  S12: 4.42560000e-06
+  Electron Scale PS B12: 1.50820000e-06
+  Electron Scale MATID: -2.96690000e-07
+  Electron Scale MATCRYO: -1.73070000e-07
+  Electron Scale L1GAIN: -6.67550000e-07
+  Electron Scale L2GAIN: -2.42300000e-06
+  Electron Scale LARELECUNCOV: -1.01370000e-06
+  Electron Scale LARCALIB: 1.58230000e-06
+  Electron Scale PS: -5.68650000e-07
   JER DataVsMC MC16: 7.17e-07
-  JER EffectiveNP 1: -1.0384e-06
-  JER EffectiveNP 2: -1.3845e-06
-  JER EffectiveNP 3: -4.9448e-08
-  JER EffectiveNP 4: 7.6644e-07
-  JER EffectiveNP 5: 2.423e-06
-  JER EffectiveNP 6: -8.1589e-07
-  JER EffectiveNP 7rest: -6.6755e-07
-  JES EtaIntercalib Model: 2.4477e-06
-  JES Flavor Composition: 1.3104e-05
-  JES Flavor Response: -1.2807e-05
-  JES Pileup OffsetMu: -2.5218e-06
-  JES Pileup OffsetNPV: 2.2252e-07
-  JES Pileup RhoTopology: 5.8101e-06
-  Electron Eff. ChargeMisID (stat.): 7.9117e-07
-  Electron Eff. ChargeMisID (syst.): 1.2115e-06
-  Electron Eff. Isol: -2.9916e-06
-  Electron Eff. ID High-$p_T$ Eta1: -1.6071e-06
-  Electron Eff. ID High-$p_T$ Eta2: -1.0631e-06
-  Electron Eff. ID High-$p_T$ Eta3: -7.4172e-07
-  Electron Eff. ID High-$p_T$ Eta4: 6.6755e-07
-  Electron Eff. ID High-$p_T$ Eta5: 1.5576e-06
-  Electron Eff. ID High-$p_T$ Eta6: 8.1589e-07
-  Electron Eff. ID High-$p_T$ Eta7: 2.4724e-08
-  Electron Eff. ID High-$p_T$ Eta9: -3.7086e-06
-  Electron Eff. ID High-$p_T$ Eta10: -1.4587e-06
-  Electron Eff. ID High-$p_T$ Eta11: -1.0631e-06
-  Electron Eff. ID High-$p_T$ Eta12: 1.5329e-06
-  Electron Eff. ID SIMP3: 1.3104e-06
-  Electron Eff. ID SIMP4: -1.8543e-06
-  Electron Eff. ID SIMP11: 1.7307e-07
-  Electron Eff. ID SIMP15: -2.4724e-06
-  Pileup: 7.4172e-07
-  $t\bar{t}$ FSR: 1.1348e-05
-  $t\bar{t}$ $p_T$-hard: -5.9338e-07
-  $t\bar{t}$ hadronization: 1.706e-05
-  $t\bar{t}$ hdamp: 5.4393e-07
-  $t\bar{t}$ RW inverted setup 2D: -4.5245e-06
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 1.3178e-05
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 2.3166e-05
-  $t\bar{t}$ PDF: -1.9408e-05
-  Multijet Electron $E_T^{miss}$: 4.2278e-06
-  Multijet Electron mix$E_T^{miss}$: -1.9779e-06
-  Multijet Electron MC Shape: -3.5603e-06
-  Multijet Electron MC Scaling: 2.6949e-06
-  $tW$ Diagram Removal: -1.392e-05
-  $tW$ DS hdamp: 7.9117e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: -2.4724e-06
-  Norm. $Z$ by 5%: -1.167e-05
-  Norm. Single top by 4%$: -5.2662e-06
-  Norm. Diboson by 6%: -9.7413e-06
-  Muon Resolution MS: -7.4914e-06
-  Muon Scale: 1.1027e-05
-  Muon Eff. Identification: -2.6034e-05
-  Muon Eff. Isolation: -9.494e-06
-  Muon Eff. Trigger: 1.1694e-05
-  Bad Muon Veto: -7.4172e-08
-  Muon Sagitta Global: -1.6985e-05
-  Muon Sagitta $p_T$-extra: -1.162e-06
-  Muon Multijet $E_T^{miss}$: -4.2031e-06
-  Muon Multijet $d_0^{sig}$: 6.4777e-06
-  Muon Multijet MC Scaling: 1.0532e-05
-  Muon Multijet Jet Multiplicity: -6.5271e-06
-  Muon Multijet MC Shape: 3.3872e-06
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -7.5408e-06
-- Luminosity_error: 9.27691e-06
-  Stat. unc.: 1.4007e-05
-  Uncor. syst. unc.: 5.395e-06
-  Alternative MC unf. unc.: -2.6042e-06
-  Basic unf. unc.: -7.8239e-08
-  $E_T^{miss}$ SoftTrk Scale: 3.6772e-06
-  $E_T^{miss}$ SoftTrk ResoPara: 2.4813e-06
-  $E_T^{miss}$ SoftTrk ResoPerp: 8.9416e-07
-  Electron Scale Zee (syst.): -1.1736e-06
-  Electron Scale  S12: 1.8219e-06
-  Electron Scale PS B12: 6.9297e-07
-  Electron Scale MATID: -5.5885e-08
-  Electron Scale MATCRYO: 1.2295e-07
-  Electron Scale L1GAIN: -2.0119e-07
-  Electron Scale L2GAIN: -1.7436e-06
-  Electron Scale LARELECUNCOV: -4.5826e-07
-  Electron Scale LARCALIB: 4.9179e-07
-  Electron Scale PS: -5.1414e-07
-  JER DataVsMC MC16: 7.9357e-07
-  JER EffectiveNP 1: 1.453e-07
-  JER EffectiveNP 2: 7.7121e-07
-  JER EffectiveNP 3: 1.2071e-06
-  JER EffectiveNP 4: 9.9475e-07
-  JER EffectiveNP 5: 1.1401e-06
-  JER EffectiveNP 6: 1.3412e-07
-  JER EffectiveNP 7rest: -6.818e-07
-  JES EtaIntercalib Model: 1.6095e-06
-  JES Flavor Composition: 5.5326e-06
-  JES Flavor Response: -5.3314e-06
-  JES Pileup OffsetMu: -4.6943e-07
-  JES Pileup OffsetNPV: 2.1236e-07
-  JES Pileup RhoTopology: 2.5707e-06
-  Electron Eff. ChargeMisID (stat.): 1.1065e-06
-  Electron Eff. ChargeMisID (syst.): 6.7062e-07
-  Electron Eff. Isol: -1.7213e-06
-  Electron Eff. ID High-$p_T$ Eta1: -6.9297e-07
-  Electron Eff. ID High-$p_T$ Eta2: -5.1414e-07
-  Electron Eff. ID High-$p_T$ Eta3: -3.4649e-07
-  Electron Eff. ID High-$p_T$ Eta4: 1.3412e-07
-  Electron Eff. ID High-$p_T$ Eta5: 8.4945e-07
-  Electron Eff. ID High-$p_T$ Eta6: 5.7003e-07
-  Electron Eff. ID High-$p_T$ Eta7: -1.1177e-08
-  Electron Eff. ID High-$p_T$ Eta9: -1.4418e-06
-  Electron Eff. ID High-$p_T$ Eta10: -3.6884e-07
-  Electron Eff. ID High-$p_T$ Eta11: -3.4649e-07
-  Electron Eff. ID High-$p_T$ Eta12: 5.5885e-07
-  Electron Eff. ID SIMP3: 1.3412e-07
-  Electron Eff. ID SIMP4: -6.2591e-07
-  Electron Eff. ID SIMP11: 1.0059e-07
-  Electron Eff. ID SIMP15: -6.3709e-07
-  Pileup: 1.766e-06
-  $t\bar{t}$ FSR: 5.6444e-06
-  $t\bar{t}$ $p_T$-hard: 2.2242e-06
-  $t\bar{t}$ hadronization: 8.5057e-06
-  $t\bar{t}$ hdamp: 2.2354e-08
-  $t\bar{t}$ RW inverted setup 2D: -2.0454e-06
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 4.5937e-06
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 8.3716e-06
-  $t\bar{t}$ PDF: -7.5557e-06
-  Multijet Electron $E_T^{miss}$: 2.0789e-06
-  Multijet Electron mix$E_T^{miss}$: -3.2413e-07
-  Multijet Electron MC Shape: -1.2071e-06
-  Multijet Electron MC Scaling: 1.1177e-06
-  $tW$ Diagram Removal: -7.3433e-06
-  $tW$ DS hdamp: 6.9297e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: -1.1065e-06
-  Norm. $Z$ by 5%: -5.6109e-06
-  Norm. Single top by 4%$: -2.3695e-06
-  Norm. Diboson by 6%: -4.3814e-06
-  Muon Resolution MS: -4.1467e-06
-  Muon Scale: 4.7614e-06
-  Muon Eff. Identification: -1.2809e-05
-  Muon Eff. Isolation: -5.2979e-06
-  Muon Eff. Trigger: 5.0408e-06
-  Bad Muon Veto: -5.5885e-07
-  Muon Sagitta Global: -7.3992e-06
-  Muon Sagitta $p_T$-extra: -4.9179e-07
-  Muon Multijet $E_T^{miss}$: -1.6542e-06
-  Muon Multijet $d_0^{sig}$: 2.8837e-06
-  Muon Multijet MC Scaling: 4.5602e-06
-  Muon Multijet Jet Multiplicity: -2.5707e-06
-  Muon Multijet MC Shape: 1.2406e-06
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -3.5208e-06
-- Luminosity_error: 4.119705e-06
-  Stat. unc.: 9.3711e-06
+  JER EffectiveNP 1: -1.03840000e-06
+  JER EffectiveNP 2: -1.38450000e-06
+  JER EffectiveNP 3: -4.94480000e-08
+  JER EffectiveNP 4: 7.66440000e-07
+  JER EffectiveNP 5: 2.42300000e-06
+  JER EffectiveNP 6: -8.15890000e-07
+  JER EffectiveNP 7rest: -6.67550000e-07
+  JES EtaIntercalib Model: 2.44770000e-06
+  JES Flavor Composition: 1.31040000e-05
+  JES Flavor Response: -1.28070000e-05
+  JES Pileup OffsetMu: -2.52180000e-06
+  JES Pileup OffsetNPV: 2.22520000e-07
+  JES Pileup RhoTopology: 5.81010000e-06
+  Electron Eff. ChargeMisID (stat.): 7.91170000e-07
+  Electron Eff. ChargeMisID (syst.): 1.21150000e-06
+  Electron Eff. Isol: -2.99160000e-06
+  Electron Eff. ID High-$p_T$ Eta1: -1.60710000e-06
+  Electron Eff. ID High-$p_T$ Eta2: -1.06310000e-06
+  Electron Eff. ID High-$p_T$ Eta3: -7.41720000e-07
+  Electron Eff. ID High-$p_T$ Eta4: 6.67550000e-07
+  Electron Eff. ID High-$p_T$ Eta5: 1.55760000e-06
+  Electron Eff. ID High-$p_T$ Eta6: 8.15890000e-07
+  Electron Eff. ID High-$p_T$ Eta7: 2.47240000e-08
+  Electron Eff. ID High-$p_T$ Eta9: -3.70860000e-06
+  Electron Eff. ID High-$p_T$ Eta10: -1.45870000e-06
+  Electron Eff. ID High-$p_T$ Eta11: -1.06310000e-06
+  Electron Eff. ID High-$p_T$ Eta12: 1.53290000e-06
+  Electron Eff. ID SIMP3: 1.31040000e-06
+  Electron Eff. ID SIMP4: -1.85430000e-06
+  Electron Eff. ID SIMP11: 1.73070000e-07
+  Electron Eff. ID SIMP15: -2.47240000e-06
+  Pileup: 7.41720000e-07
+  $t\bar{t}$ FSR: 1.13480000e-05
+  $t\bar{t}$ $p_T$-hard: -5.93380000e-07
+  $t\bar{t}$ hadronization: 1.70600000e-05
+  $t\bar{t}$ hdamp: 5.43930000e-07
+  $t\bar{t}$ RW inverted setup 2D: -4.52450000e-06
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 1.31780000e-05
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 2.31660000e-05
+  $t\bar{t}$ PDF: -1.94080000e-05
+  Multijet Electron $E_T^{miss}$: 4.22780000e-06
+  Multijet Electron mix$E_T^{miss}$: -1.97790000e-06
+  Multijet Electron MC Shape: -3.56030000e-06
+  Multijet Electron MC Scaling: 2.69490000e-06
+  $tW$ Diagram Removal: -1.39200000e-05
+  $tW$ DS hdamp: 7.91170000e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: -2.47240000e-06
+  Norm. $Z$ by 5%: -1.16700000e-05
+  Norm. Single top by 4%$: -5.26620000e-06
+  Norm. Diboson by 6%: -9.74130000e-06
+  Muon Resolution MS: -7.49140000e-06
+  Muon Scale: 1.10270000e-05
+  Muon Eff. Identification: -2.60340000e-05
+  Muon Eff. Isolation: -9.49400000e-06
+  Muon Eff. Trigger: 1.16940000e-05
+  Bad Muon Veto: -7.41720000e-08
+  Muon Sagitta Global: -1.69850000e-05
+  Muon Sagitta $p_T$-extra: -1.16200000e-06
+  Muon Multijet $E_T^{miss}$: -4.20310000e-06
+  Muon Multijet $d_0^{sig}$: 6.47770000e-06
+  Muon Multijet MC Scaling: 1.05320000e-05
+  Muon Multijet Jet Multiplicity: -6.52710000e-06
+  Muon Multijet MC Shape: 3.38720000e-06
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -7.54080000e-06
+- Luminosity_error: 9.27691000e-06
+  Stat. unc.: 1.40070000e-05
+  Uncor. syst. unc.: 5.39500000e-06
+  Alternative MC unf. unc.: -2.60420000e-06
+  Basic unf. unc.: -7.82390000e-08
+  $E_T^{miss}$ SoftTrk Scale: 3.67720000e-06
+  $E_T^{miss}$ SoftTrk ResoPara: 2.48130000e-06
+  $E_T^{miss}$ SoftTrk ResoPerp: 8.94160000e-07
+  Electron Scale Zee (syst.): -1.17360000e-06
+  Electron Scale  S12: 1.82190000e-06
+  Electron Scale PS B12: 6.92970000e-07
+  Electron Scale MATID: -5.58850000e-08
+  Electron Scale MATCRYO: 1.22950000e-07
+  Electron Scale L1GAIN: -2.01190000e-07
+  Electron Scale L2GAIN: -1.74360000e-06
+  Electron Scale LARELECUNCOV: -4.58260000e-07
+  Electron Scale LARCALIB: 4.91790000e-07
+  Electron Scale PS: -5.14140000e-07
+  JER DataVsMC MC16: 7.93570000e-07
+  JER EffectiveNP 1: 1.45300000e-07
+  JER EffectiveNP 2: 7.71210000e-07
+  JER EffectiveNP 3: 1.20710000e-06
+  JER EffectiveNP 4: 9.94750000e-07
+  JER EffectiveNP 5: 1.14010000e-06
+  JER EffectiveNP 6: 1.34120000e-07
+  JER EffectiveNP 7rest: -6.81800000e-07
+  JES EtaIntercalib Model: 1.60950000e-06
+  JES Flavor Composition: 5.53260000e-06
+  JES Flavor Response: -5.33140000e-06
+  JES Pileup OffsetMu: -4.69430000e-07
+  JES Pileup OffsetNPV: 2.12360000e-07
+  JES Pileup RhoTopology: 2.57070000e-06
+  Electron Eff. ChargeMisID (stat.): 1.10650000e-06
+  Electron Eff. ChargeMisID (syst.): 6.70620000e-07
+  Electron Eff. Isol: -1.72130000e-06
+  Electron Eff. ID High-$p_T$ Eta1: -6.92970000e-07
+  Electron Eff. ID High-$p_T$ Eta2: -5.14140000e-07
+  Electron Eff. ID High-$p_T$ Eta3: -3.46490000e-07
+  Electron Eff. ID High-$p_T$ Eta4: 1.34120000e-07
+  Electron Eff. ID High-$p_T$ Eta5: 8.49450000e-07
+  Electron Eff. ID High-$p_T$ Eta6: 5.70030000e-07
+  Electron Eff. ID High-$p_T$ Eta7: -1.11770000e-08
+  Electron Eff. ID High-$p_T$ Eta9: -1.44180000e-06
+  Electron Eff. ID High-$p_T$ Eta10: -3.68840000e-07
+  Electron Eff. ID High-$p_T$ Eta11: -3.46490000e-07
+  Electron Eff. ID High-$p_T$ Eta12: 5.58850000e-07
+  Electron Eff. ID SIMP3: 1.34120000e-07
+  Electron Eff. ID SIMP4: -6.25910000e-07
+  Electron Eff. ID SIMP11: 1.00590000e-07
+  Electron Eff. ID SIMP15: -6.37090000e-07
+  Pileup: 1.76600000e-06
+  $t\bar{t}$ FSR: 5.64440000e-06
+  $t\bar{t}$ $p_T$-hard: 2.22420000e-06
+  $t\bar{t}$ hadronization: 8.50570000e-06
+  $t\bar{t}$ hdamp: 2.23540000e-08
+  $t\bar{t}$ RW inverted setup 2D: -2.04540000e-06
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 4.59370000e-06
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 8.37160000e-06
+  $t\bar{t}$ PDF: -7.55570000e-06
+  Multijet Electron $E_T^{miss}$: 2.07890000e-06
+  Multijet Electron mix$E_T^{miss}$: -3.24130000e-07
+  Multijet Electron MC Shape: -1.20710000e-06
+  Multijet Electron MC Scaling: 1.11770000e-06
+  $tW$ Diagram Removal: -7.34330000e-06
+  $tW$ DS hdamp: 6.92970000e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: -1.10650000e-06
+  Norm. $Z$ by 5%: -5.61090000e-06
+  Norm. Single top by 4%$: -2.36950000e-06
+  Norm. Diboson by 6%: -4.38140000e-06
+  Muon Resolution MS: -4.14670000e-06
+  Muon Scale: 4.76140000e-06
+  Muon Eff. Identification: -1.28090000e-05
+  Muon Eff. Isolation: -5.29790000e-06
+  Muon Eff. Trigger: 5.04080000e-06
+  Bad Muon Veto: -5.58850000e-07
+  Muon Sagitta Global: -7.39920000e-06
+  Muon Sagitta $p_T$-extra: -4.91790000e-07
+  Muon Multijet $E_T^{miss}$: -1.65420000e-06
+  Muon Multijet $d_0^{sig}$: 2.88370000e-06
+  Muon Multijet MC Scaling: 4.56020000e-06
+  Muon Multijet Jet Multiplicity: -2.57070000e-06
+  Muon Multijet MC Shape: 1.24060000e-06
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -3.52080000e-06
+- Luminosity_error: 4.11970500e-06
+  Stat. unc.: 9.37110000e-06
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -1.5238e-06
-  Basic unf. unc.: 1.6876e-07
-  $E_T^{miss}$ SoftTrk Scale: 1.1416e-06
-  $E_T^{miss}$ SoftTrk ResoPara: 1.5635e-06
-  $E_T^{miss}$ SoftTrk ResoPerp: 4.7153e-07
-  Electron Scale Zee (syst.): -4.1693e-07
-  Electron Scale  S12: 8.2394e-07
-  Electron Scale PS B12: 3.5737e-07
-  Electron Scale MATID: -4.9635e-09
-  Electron Scale MATCRYO: -9.4307e-08
-  Electron Scale L1GAIN: -2.2336e-07
-  Electron Scale L2GAIN: -8.289e-07
-  Electron Scale LARELECUNCOV: -3.2759e-07
-  Electron Scale LARCALIB: 4.2686e-07
-  Electron Scale PS: -1.8861e-07
-  JER DataVsMC MC16: 5.2613e-07
-  JER EffectiveNP 1: 3.2263e-07
-  JER EffectiveNP 2: 2.4321e-07
-  JER EffectiveNP 3: 7.5445e-07
-  JER EffectiveNP 4: 5.9066e-07
-  JER EffectiveNP 5: 4.4672e-07
-  JER EffectiveNP 6: -2.2336e-07
-  JER EffectiveNP 7rest: -5.9562e-08
-  JES EtaIntercalib Model: 4.7153e-07
-  JES Flavor Composition: 2.045e-06
-  JES Flavor Response: -1.7769e-06
-  JES Pileup OffsetMu: 1.2409e-07
-  JES Pileup OffsetNPV: 6.3533e-07
-  JES Pileup RhoTopology: 1.1714e-06
-  Electron Eff. ChargeMisID (stat.): 5.4102e-07
-  Electron Eff. ChargeMisID (syst.): 5.6088e-07
-  Electron Eff. Isol: -4.8146e-07
-  Electron Eff. ID High-$p_T$ Eta1: -3.0774e-07
-  Electron Eff. ID High-$p_T$ Eta2: -2.3328e-07
-  Electron Eff. ID High-$p_T$ Eta3: -1.4891e-07
-  Electron Eff. ID High-$p_T$ Eta4: 3.9708e-08
-  Electron Eff. ID High-$p_T$ Eta5: 3.673e-07
-  Electron Eff. ID High-$p_T$ Eta6: 2.4321e-07
-  Electron Eff. ID High-$p_T$ Eta7: -1.4891e-08
-  Electron Eff. ID High-$p_T$ Eta9: -2.7299e-07
-  Electron Eff. ID High-$p_T$ Eta10: -8.438e-08
-  Electron Eff. ID High-$p_T$ Eta11: 1.2409e-07
-  Electron Eff. ID High-$p_T$ Eta12: 3.0774e-07
-  Electron Eff. ID SIMP3: -2.2832e-07
-  Electron Eff. ID SIMP4: 4.4672e-07
-  Electron Eff. ID SIMP11: -2.581e-07
-  Electron Eff. ID SIMP15: 1.6876e-07
-  Pileup: 8.1898e-07
-  $t\bar{t}$ FSR: 2.0102e-06
+  Alternative MC unf. unc.: -1.52380000e-06
+  Basic unf. unc.: 1.68760000e-07
+  $E_T^{miss}$ SoftTrk Scale: 1.14160000e-06
+  $E_T^{miss}$ SoftTrk ResoPara: 1.56350000e-06
+  $E_T^{miss}$ SoftTrk ResoPerp: 4.71530000e-07
+  Electron Scale Zee (syst.): -4.16930000e-07
+  Electron Scale  S12: 8.23940000e-07
+  Electron Scale PS B12: 3.57370000e-07
+  Electron Scale MATID: -4.96350000e-09
+  Electron Scale MATCRYO: -9.43070000e-08
+  Electron Scale L1GAIN: -2.23360000e-07
+  Electron Scale L2GAIN: -8.28900000e-07
+  Electron Scale LARELECUNCOV: -3.27590000e-07
+  Electron Scale LARCALIB: 4.26860000e-07
+  Electron Scale PS: -1.88610000e-07
+  JER DataVsMC MC16: 5.26130000e-07
+  JER EffectiveNP 1: 3.22630000e-07
+  JER EffectiveNP 2: 2.43210000e-07
+  JER EffectiveNP 3: 7.54450000e-07
+  JER EffectiveNP 4: 5.90660000e-07
+  JER EffectiveNP 5: 4.46720000e-07
+  JER EffectiveNP 6: -2.23360000e-07
+  JER EffectiveNP 7rest: -5.95620000e-08
+  JES EtaIntercalib Model: 4.71530000e-07
+  JES Flavor Composition: 2.04500000e-06
+  JES Flavor Response: -1.77690000e-06
+  JES Pileup OffsetMu: 1.24090000e-07
+  JES Pileup OffsetNPV: 6.35330000e-07
+  JES Pileup RhoTopology: 1.17140000e-06
+  Electron Eff. ChargeMisID (stat.): 5.41020000e-07
+  Electron Eff. ChargeMisID (syst.): 5.60880000e-07
+  Electron Eff. Isol: -4.81460000e-07
+  Electron Eff. ID High-$p_T$ Eta1: -3.07740000e-07
+  Electron Eff. ID High-$p_T$ Eta2: -2.33280000e-07
+  Electron Eff. ID High-$p_T$ Eta3: -1.48910000e-07
+  Electron Eff. ID High-$p_T$ Eta4: 3.97080000e-08
+  Electron Eff. ID High-$p_T$ Eta5: 3.67300000e-07
+  Electron Eff. ID High-$p_T$ Eta6: 2.43210000e-07
+  Electron Eff. ID High-$p_T$ Eta7: -1.48910000e-08
+  Electron Eff. ID High-$p_T$ Eta9: -2.72990000e-07
+  Electron Eff. ID High-$p_T$ Eta10: -8.43800000e-08
+  Electron Eff. ID High-$p_T$ Eta11: 1.24090000e-07
+  Electron Eff. ID High-$p_T$ Eta12: 3.07740000e-07
+  Electron Eff. ID SIMP3: -2.28320000e-07
+  Electron Eff. ID SIMP4: 4.46720000e-07
+  Electron Eff. ID SIMP11: -2.58100000e-07
+  Electron Eff. ID SIMP15: 1.68760000e-07
+  Pileup: 8.18980000e-07
+  $t\bar{t}$ FSR: 2.01020000e-06
   $t\bar{t}$ $p_T$-hard: 6.8e-07
-  $t\bar{t}$ hadronization: 3.2561e-06
-  $t\bar{t}$ hdamp: -1.7869e-07
+  $t\bar{t}$ hadronization: 3.25610000e-06
+  $t\bar{t}$ hdamp: -1.78690000e-07
   $t\bar{t}$ RW inverted setup 2D: -6.8e-07
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 1.4493e-06
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 2.5165e-06
-  $t\bar{t}$ PDF: -2.998e-06
-  Multijet Electron $E_T^{miss}$: 9.927e-07
-  Multijet Electron mix$E_T^{miss}$: 2.2336e-07
-  Multijet Electron MC Shape: -1.3898e-07
-  Multijet Electron MC Scaling: 1.4891e-07
-  $tW$ Diagram Removal: -3.3454e-06
-  $tW$ DS hdamp: 4.4175e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: -4.9139e-07
-  Norm. $Z$ by 5%: -2.0251e-06
-  Norm. Single top by 4%$: -1.0473e-06
-  Norm. Diboson by 6%: -1.9953e-06
-  Muon Resolution MS: -1.8762e-06
-  Muon Scale: 2.0946e-06
-  Muon Eff. Identification: -5.7726e-06
-  Muon Eff. Isolation: -2.4123e-06
-  Muon Eff. Trigger: 2.1988e-06
-  Bad Muon Veto: -2.5314e-07
-  Muon Sagitta Global: -3.3107e-06
-  Muon Sagitta $p_T$-extra: 3.4744e-08
-  Muon Multijet $E_T^{miss}$: -5.8073e-07
-  Muon Multijet $d_0^{sig}$: 9.0832e-07
-  Muon Multijet MC Scaling: 1.2855e-06
-  Muon Multijet Jet Multiplicity: -8.7854e-07
-  Muon Multijet MC Shape: 3.1766e-07
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -1.1515e-06
-- Luminosity_error: 1.783006e-06
-  Stat. unc.: 5.0846e-06
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 1.44930000e-06
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 2.51650000e-06
+  $t\bar{t}$ PDF: -2.99800000e-06
+  Multijet Electron $E_T^{miss}$: 9.92700000e-07
+  Multijet Electron mix$E_T^{miss}$: 2.23360000e-07
+  Multijet Electron MC Shape: -1.38980000e-07
+  Multijet Electron MC Scaling: 1.48910000e-07
+  $tW$ Diagram Removal: -3.34540000e-06
+  $tW$ DS hdamp: 4.41750000e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: -4.91390000e-07
+  Norm. $Z$ by 5%: -2.02510000e-06
+  Norm. Single top by 4%$: -1.04730000e-06
+  Norm. Diboson by 6%: -1.99530000e-06
+  Muon Resolution MS: -1.87620000e-06
+  Muon Scale: 2.09460000e-06
+  Muon Eff. Identification: -5.77260000e-06
+  Muon Eff. Isolation: -2.41230000e-06
+  Muon Eff. Trigger: 2.19880000e-06
+  Bad Muon Veto: -2.53140000e-07
+  Muon Sagitta Global: -3.31070000e-06
+  Muon Sagitta $p_T$-extra: 3.47440000e-08
+  Muon Multijet $E_T^{miss}$: -5.80730000e-07
+  Muon Multijet $d_0^{sig}$: 9.08320000e-07
+  Muon Multijet MC Scaling: 1.28550000e-06
+  Muon Multijet Jet Multiplicity: -8.78540000e-07
+  Muon Multijet MC Shape: 3.17660000e-07
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -1.15150000e-06
+- Luminosity_error: 1.78300600e-06
+  Stat. unc.: 5.08460000e-06
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -8.5498e-07
-  Basic unf. unc.: 2.1482e-09
-  $E_T^{miss}$ SoftTrk Scale: 2.5778e-07
-  $E_T^{miss}$ SoftTrk ResoPara: 2.363e-07
-  $E_T^{miss}$ SoftTrk ResoPerp: -2.363e-08
-  Electron Scale Zee (syst.): -4.9409e-08
-  Electron Scale  S12: 4.0386e-07
-  Electron Scale PS B12: 1.5037e-07
-  Electron Scale MATID: 1.5037e-08
-  Electron Scale MATCRYO: -4.2964e-09
-  Electron Scale L1GAIN: -5.8001e-08
-  Electron Scale L2GAIN: -3.1793e-07
-  Electron Scale LARELECUNCOV: -3.2223e-08
-  Electron Scale LARCALIB: 1.5467e-07
-  Electron Scale PS: -3.6519e-08
-  JER DataVsMC MC16: 2.8786e-07
-  JER EffectiveNP 1: 4.9409e-07
-  JER EffectiveNP 2: 2.7927e-08
-  JER EffectiveNP 3: 3.1793e-07
-  JER EffectiveNP 4: 3.1579e-07
-  JER EffectiveNP 5: 7.5187e-08
-  JER EffectiveNP 6: -8.378e-08
-  JER EffectiveNP 7rest: 1.0741e-08
-  JES EtaIntercalib Model: 1.826e-07
-  JES Flavor Composition: 6.8957e-07
-  JES Flavor Response: -6.1653e-07
-  JES Pileup OffsetMu: 1.0311e-07
-  JES Pileup OffsetNPV: 2.7282e-07
-  JES Pileup RhoTopology: 3.2008e-07
-  Electron Eff. ChargeMisID (stat.): 2.6423e-07
-  Electron Eff. ChargeMisID (syst.): 6.3372e-07
-  Electron Eff. Isol: -4.9623e-07
-  Electron Eff. ID High-$p_T$ Eta1: -9.8817e-08
-  Electron Eff. ID High-$p_T$ Eta2: -6.8742e-08
-  Electron Eff. ID High-$p_T$ Eta3: -4.5112e-08
+  Alternative MC unf. unc.: -8.54980000e-07
+  Basic unf. unc.: 2.14820000e-09
+  $E_T^{miss}$ SoftTrk Scale: 2.57780000e-07
+  $E_T^{miss}$ SoftTrk ResoPara: 2.36300000e-07
+  $E_T^{miss}$ SoftTrk ResoPerp: -2.36300000e-08
+  Electron Scale Zee (syst.): -4.94090000e-08
+  Electron Scale  S12: 4.03860000e-07
+  Electron Scale PS B12: 1.50370000e-07
+  Electron Scale MATID: 1.50370000e-08
+  Electron Scale MATCRYO: -4.29640000e-09
+  Electron Scale L1GAIN: -5.80010000e-08
+  Electron Scale L2GAIN: -3.17930000e-07
+  Electron Scale LARELECUNCOV: -3.22230000e-08
+  Electron Scale LARCALIB: 1.54670000e-07
+  Electron Scale PS: -3.65190000e-08
+  JER DataVsMC MC16: 2.87860000e-07
+  JER EffectiveNP 1: 4.94090000e-07
+  JER EffectiveNP 2: 2.79270000e-08
+  JER EffectiveNP 3: 3.17930000e-07
+  JER EffectiveNP 4: 3.15790000e-07
+  JER EffectiveNP 5: 7.51870000e-08
+  JER EffectiveNP 6: -8.37800000e-08
+  JER EffectiveNP 7rest: 1.07410000e-08
+  JES EtaIntercalib Model: 1.82600000e-07
+  JES Flavor Composition: 6.89570000e-07
+  JES Flavor Response: -6.16530000e-07
+  JES Pileup OffsetMu: 1.03110000e-07
+  JES Pileup OffsetNPV: 2.72820000e-07
+  JES Pileup RhoTopology: 3.20080000e-07
+  Electron Eff. ChargeMisID (stat.): 2.64230000e-07
+  Electron Eff. ChargeMisID (syst.): 6.33720000e-07
+  Electron Eff. Isol: -4.96230000e-07
+  Electron Eff. ID High-$p_T$ Eta1: -9.88170000e-08
+  Electron Eff. ID High-$p_T$ Eta2: -6.87420000e-08
+  Electron Eff. ID High-$p_T$ Eta3: -4.51120000e-08
   Electron Eff. ID High-$p_T$ Eta4: 0.0
-  Electron Eff. ID High-$p_T$ Eta5: 1.0311e-07
-  Electron Eff. ID High-$p_T$ Eta6: 7.0891e-08
-  Electron Eff. ID High-$p_T$ Eta7: 6.4446e-09
-  Electron Eff. ID High-$p_T$ Eta9: 1.2889e-08
-  Electron Eff. ID High-$p_T$ Eta10: 5.1557e-08
-  Electron Eff. ID High-$p_T$ Eta11: 1.0526e-07
+  Electron Eff. ID High-$p_T$ Eta5: 1.03110000e-07
+  Electron Eff. ID High-$p_T$ Eta6: 7.08910000e-08
+  Electron Eff. ID High-$p_T$ Eta7: 6.44460000e-09
+  Electron Eff. ID High-$p_T$ Eta9: 1.28890000e-08
+  Electron Eff. ID High-$p_T$ Eta10: 5.15570000e-08
+  Electron Eff. ID High-$p_T$ Eta11: 1.05260000e-07
   Electron Eff. ID High-$p_T$ Eta12: 1.16e-07
-  Electron Eff. ID SIMP3: -3.5875e-07
-  Electron Eff. ID SIMP4: 7.3468e-07
-  Electron Eff. ID SIMP11: -2.4704e-07
-  Electron Eff. ID SIMP15: 5.2416e-07
-  Pileup: 3.2438e-07
-  $t\bar{t}$ FSR: 6.6165e-07
-  $t\bar{t}$ $p_T$-hard: -3.6949e-07
-  $t\bar{t}$ hadronization: 7.9483e-07
-  $t\bar{t}$ hdamp: -2.0408e-07
-  $t\bar{t}$ RW inverted setup 2D: -2.5778e-07
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 4.5757e-07
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 7.8839e-07
-  $t\bar{t}$ PDF: -1.0934e-06
-  Multijet Electron $E_T^{miss}$: 3.8023e-07
-  Multijet Electron mix$E_T^{miss}$: 2.1697e-07
-  Multijet Electron MC Shape: 2.5778e-08
-  Multijet Electron MC Scaling: -1.0741e-08
-  $tW$ Diagram Removal: -1.3512e-06
-  $tW$ DS hdamp: 2.7927e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: -2.1267e-07
-  Norm. $Z$ by 5%: -8.7217e-07
-  Norm. Single top by 4%$: -2.363e-07
-  Norm. Diboson by 6%: -8.8721e-07
-  Muon Resolution MS: -8.4854e-07
-  Muon Scale: 9.1084e-07
-  Muon Eff. Identification: -2.6874e-06
-  Muon Eff. Isolation: -1.0505e-06
-  Muon Eff. Trigger: 8.915e-07
-  Bad Muon Veto: -1.16e-07
-  Muon Sagitta Global: -1.4414e-06
-  Muon Sagitta $p_T$-extra: 6.6594e-08
-  Muon Multijet $E_T^{miss}$: -1.2674e-07
-  Muon Multijet $d_0^{sig}$: 2.5564e-07
-  Muon Multijet MC Scaling: 3.8023e-07
-  Muon Multijet Jet Multiplicity: -2.1912e-07
-  Muon Multijet MC Shape: 7.7335e-08
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -3.9527e-07
-- Luminosity_error: 6.714036e-07
-  Stat. unc.: 2.414e-06
+  Electron Eff. ID SIMP3: -3.58750000e-07
+  Electron Eff. ID SIMP4: 7.34680000e-07
+  Electron Eff. ID SIMP11: -2.47040000e-07
+  Electron Eff. ID SIMP15: 5.24160000e-07
+  Pileup: 3.24380000e-07
+  $t\bar{t}$ FSR: 6.61650000e-07
+  $t\bar{t}$ $p_T$-hard: -3.69490000e-07
+  $t\bar{t}$ hadronization: 7.94830000e-07
+  $t\bar{t}$ hdamp: -2.04080000e-07
+  $t\bar{t}$ RW inverted setup 2D: -2.57780000e-07
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 4.57570000e-07
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 7.88390000e-07
+  $t\bar{t}$ PDF: -1.09340000e-06
+  Multijet Electron $E_T^{miss}$: 3.80230000e-07
+  Multijet Electron mix$E_T^{miss}$: 2.16970000e-07
+  Multijet Electron MC Shape: 2.57780000e-08
+  Multijet Electron MC Scaling: -1.07410000e-08
+  $tW$ Diagram Removal: -1.35120000e-06
+  $tW$ DS hdamp: 2.79270000e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: -2.12670000e-07
+  Norm. $Z$ by 5%: -8.72170000e-07
+  Norm. Single top by 4%$: -2.36300000e-07
+  Norm. Diboson by 6%: -8.87210000e-07
+  Muon Resolution MS: -8.48540000e-07
+  Muon Scale: 9.10840000e-07
+  Muon Eff. Identification: -2.68740000e-06
+  Muon Eff. Isolation: -1.05050000e-06
+  Muon Eff. Trigger: 8.91500000e-07
+  Bad Muon Veto: -1.16000000e-07
+  Muon Sagitta Global: -1.44140000e-06
+  Muon Sagitta $p_T$-extra: 6.65940000e-08
+  Muon Multijet $E_T^{miss}$: -1.26740000e-07
+  Muon Multijet $d_0^{sig}$: 2.55640000e-07
+  Muon Multijet MC Scaling: 3.80230000e-07
+  Muon Multijet Jet Multiplicity: -2.19120000e-07
+  Muon Multijet MC Shape: 7.73350000e-08
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -3.95270000e-07
+- Luminosity_error: 6.71403600e-07
+  Stat. unc.: 2.41400000e-06
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -3.5269e-07
-  Basic unf. unc.: 3.2357e-09
+  Alternative MC unf. unc.: -3.52690000e-07
+  Basic unf. unc.: 3.23570000e-09
   $E_T^{miss}$ SoftTrk Scale: -0.0
-  $E_T^{miss}$ SoftTrk ResoPara: 5.5815e-08
-  $E_T^{miss}$ SoftTrk ResoPerp: -9.707e-09
-  Electron Scale Zee (syst.): 3.721e-08
-  Electron Scale  S12: 1.2538e-07
-  Electron Scale PS B12: 7.1994e-08
-  Electron Scale MATID: -4.8535e-09
-  Electron Scale MATCRYO: 1.5369e-08
-  Electron Scale L1GAIN: -4.8535e-09
-  Electron Scale L2GAIN: -1.2781e-07
-  Electron Scale LARELECUNCOV: 2.3459e-08
-  Electron Scale LARCALIB: 8.5746e-08
-  Electron Scale PS: -1.1325e-08
-  JER DataVsMC MC16: 1.1244e-07
-  JER EffectiveNP 1: 2.5724e-07
-  JER EffectiveNP 2: 5.8242e-08
-  JER EffectiveNP 3: 2.8312e-08
-  JER EffectiveNP 4: 2.8312e-08
-  JER EffectiveNP 5: 4.9344e-08
-  JER EffectiveNP 6: -7.2803e-09
-  JER EffectiveNP 7rest: 8.8981e-09
-  JES EtaIntercalib Model: 5.1771e-08
-  JES Flavor Composition: 1.8039e-07
-  JES Flavor Response: -1.4156e-07
-  JES Pileup OffsetMu: 2.7503e-08
-  JES Pileup OffsetNPV: 4.8535e-08
-  JES Pileup RhoTopology: 4.6108e-08
-  Electron Eff. ChargeMisID (stat.): 1.0111e-07
-  Electron Eff. ChargeMisID (syst.): 3.0173e-07
-  Electron Eff. Isol: -2.9202e-07
-  Electron Eff. ID High-$p_T$ Eta1: -2.7503e-08
-  Electron Eff. ID High-$p_T$ Eta2: -1.8605e-08
-  Electron Eff. ID High-$p_T$ Eta3: -1.1325e-08
-  Electron Eff. ID High-$p_T$ Eta4: -1.1325e-08
-  Electron Eff. ID High-$p_T$ Eta5: 2.1841e-08
-  Electron Eff. ID High-$p_T$ Eta6: 2.265e-08
+  $E_T^{miss}$ SoftTrk ResoPara: 5.58150000e-08
+  $E_T^{miss}$ SoftTrk ResoPerp: -9.70700000e-09
+  Electron Scale Zee (syst.): 3.72100000e-08
+  Electron Scale  S12: 1.25380000e-07
+  Electron Scale PS B12: 7.19940000e-08
+  Electron Scale MATID: -4.85350000e-09
+  Electron Scale MATCRYO: 1.53690000e-08
+  Electron Scale L1GAIN: -4.85350000e-09
+  Electron Scale L2GAIN: -1.27810000e-07
+  Electron Scale LARELECUNCOV: 2.34590000e-08
+  Electron Scale LARCALIB: 8.57460000e-08
+  Electron Scale PS: -1.13250000e-08
+  JER DataVsMC MC16: 1.12440000e-07
+  JER EffectiveNP 1: 2.57240000e-07
+  JER EffectiveNP 2: 5.82420000e-08
+  JER EffectiveNP 3: 2.83120000e-08
+  JER EffectiveNP 4: 2.83120000e-08
+  JER EffectiveNP 5: 4.93440000e-08
+  JER EffectiveNP 6: -7.28030000e-09
+  JER EffectiveNP 7rest: 8.89810000e-09
+  JES EtaIntercalib Model: 5.17710000e-08
+  JES Flavor Composition: 1.80390000e-07
+  JES Flavor Response: -1.41560000e-07
+  JES Pileup OffsetMu: 2.75030000e-08
+  JES Pileup OffsetNPV: 4.85350000e-08
+  JES Pileup RhoTopology: 4.61080000e-08
+  Electron Eff. ChargeMisID (stat.): 1.01110000e-07
+  Electron Eff. ChargeMisID (syst.): 3.01730000e-07
+  Electron Eff. Isol: -2.92020000e-07
+  Electron Eff. ID High-$p_T$ Eta1: -2.75030000e-08
+  Electron Eff. ID High-$p_T$ Eta2: -1.86050000e-08
+  Electron Eff. ID High-$p_T$ Eta3: -1.13250000e-08
+  Electron Eff. ID High-$p_T$ Eta4: -1.13250000e-08
+  Electron Eff. ID High-$p_T$ Eta5: 2.18410000e-08
+  Electron Eff. ID High-$p_T$ Eta6: 2.26500000e-08
   Electron Eff. ID High-$p_T$ Eta7: -0.0
-  Electron Eff. ID High-$p_T$ Eta9: 2.8312e-08
-  Electron Eff. ID High-$p_T$ Eta10: 4.1255e-08
-  Electron Eff. ID High-$p_T$ Eta11: 4.0446e-08
-  Electron Eff. ID High-$p_T$ Eta12: 1.6987e-08
-  Electron Eff. ID SIMP3: -2.3701e-07
-  Electron Eff. ID SIMP4: 3.6159e-07
-  Electron Eff. ID SIMP11: -9.2217e-08
-  Electron Eff. ID SIMP15: 2.7908e-07
-  Pileup: 8.1701e-08
-  $t\bar{t}$ FSR: 1.2619e-07
-  $t\bar{t}$ $p_T$-hard: -2.8231e-07
-  $t\bar{t}$ hadronization: 1.359e-07
-  $t\bar{t}$ hdamp: -1.2538e-07
-  $t\bar{t}$ RW inverted setup 2D: -7.523e-08
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 9.5453e-08
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 1.6987e-07
-  $t\bar{t}$ PDF: -3.0577e-07
-  Multijet Electron $E_T^{miss}$: 1.7796e-08
-  Multijet Electron mix$E_T^{miss}$: 1.2053e-07
-  Multijet Electron MC Shape: 4.6917e-08
-  Multijet Electron MC Scaling: -2.5885e-08
-  $tW$ Diagram Removal: -5.4602e-07
-  $tW$ DS hdamp: 1.1325e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: -8.0892e-08
-  Norm. $Z$ by 5%: -2.5805e-07
-  Norm. Single top by 4%$: -8.6554e-08
-  Norm. Diboson by 6%: -2.9202e-07
-  Muon Resolution MS: -3.5835e-07
-  Muon Scale: 3.171e-07
-  Muon Eff. Identification: -1.02e-06
-  Muon Eff. Isolation: -3.5754e-07
-  Muon Eff. Trigger: 2.8474e-07
-  Bad Muon Veto: -4.2064e-08
-  Muon Sagitta Global: -5.2014e-07
-  Muon Sagitta $p_T$-extra: -8.0892e-10
-  Muon Multijet $E_T^{miss}$: -4.9344e-08
-  Muon Multijet $d_0^{sig}$: 7.9274e-08
-  Muon Multijet MC Scaling: 1.0031e-07
-  Muon Multijet Jet Multiplicity: -6.8758e-08
-  Muon Multijet MC Shape: 3.9637e-08
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -9.4644e-08
-- Luminosity_error: 2.3812700000000003e-07
-  Stat. unc.: 1.3272e-06
+  Electron Eff. ID High-$p_T$ Eta9: 2.83120000e-08
+  Electron Eff. ID High-$p_T$ Eta10: 4.12550000e-08
+  Electron Eff. ID High-$p_T$ Eta11: 4.04460000e-08
+  Electron Eff. ID High-$p_T$ Eta12: 1.69870000e-08
+  Electron Eff. ID SIMP3: -2.37010000e-07
+  Electron Eff. ID SIMP4: 3.61590000e-07
+  Electron Eff. ID SIMP11: -9.22170000e-08
+  Electron Eff. ID SIMP15: 2.79080000e-07
+  Pileup: 8.17010000e-08
+  $t\bar{t}$ FSR: 1.26190000e-07
+  $t\bar{t}$ $p_T$-hard: -2.82310000e-07
+  $t\bar{t}$ hadronization: 1.35900000e-07
+  $t\bar{t}$ hdamp: -1.25380000e-07
+  $t\bar{t}$ RW inverted setup 2D: -7.52300000e-08
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 9.54530000e-08
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 1.69870000e-07
+  $t\bar{t}$ PDF: -3.05770000e-07
+  Multijet Electron $E_T^{miss}$: 1.77960000e-08
+  Multijet Electron mix$E_T^{miss}$: 1.20530000e-07
+  Multijet Electron MC Shape: 4.69170000e-08
+  Multijet Electron MC Scaling: -2.58850000e-08
+  $tW$ Diagram Removal: -5.46020000e-07
+  $tW$ DS hdamp: 1.13250000e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: -8.08920000e-08
+  Norm. $Z$ by 5%: -2.58050000e-07
+  Norm. Single top by 4%$: -8.65540000e-08
+  Norm. Diboson by 6%: -2.92020000e-07
+  Muon Resolution MS: -3.58350000e-07
+  Muon Scale: 3.17100000e-07
+  Muon Eff. Identification: -1.02000000e-06
+  Muon Eff. Isolation: -3.57540000e-07
+  Muon Eff. Trigger: 2.84740000e-07
+  Bad Muon Veto: -4.20640000e-08
+  Muon Sagitta Global: -5.20140000e-07
+  Muon Sagitta $p_T$-extra: -8.08920000e-10
+  Muon Multijet $E_T^{miss}$: -4.93440000e-08
+  Muon Multijet $d_0^{sig}$: 7.92740000e-08
+  Muon Multijet MC Scaling: 1.00310000e-07
+  Muon Multijet Jet Multiplicity: -6.87580000e-08
+  Muon Multijet MC Shape: 3.96370000e-08
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -9.46440000e-08
+- Luminosity_error: 2.38127000e-07
+  Stat. unc.: 1.32720000e-06
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -1.38e-07
-  Basic unf. unc.: 2.0083e-09
-  $E_T^{miss}$ SoftTrk Scale: 1.1476e-09
-  $E_T^{miss}$ SoftTrk ResoPara: 1.2624e-08
-  $E_T^{miss}$ SoftTrk ResoPerp: -2.2952e-09
-  Electron Scale Zee (syst.): 1.6927e-08
-  Electron Scale  S12: 4.3035e-08
-  Electron Scale PS B12: 2.496e-08
-  Electron Scale MATID: -1.1476e-09
-  Electron Scale MATCRYO: 6.8856e-09
-  Electron Scale L1GAIN: 9.1808e-09
-  Electron Scale L2GAIN: -4.4183e-08
-  Electron Scale LARELECUNCOV: -5.738e-09
-  Electron Scale LARCALIB: 3.0125e-08
-  Electron Scale PS: 9.1808e-09
-  JER DataVsMC MC16: 2.9264e-08
-  JER EffectiveNP 1: 9.9267e-08
-  JER EffectiveNP 2: 1.6066e-08
-  JER EffectiveNP 3: 1.3771e-08
-  JER EffectiveNP 4: -2.0083e-09
-  JER EffectiveNP 5: 1.4058e-08
-  JER EffectiveNP 6: -1.4345e-09
-  JER EffectiveNP 7rest: -8.607e-10
+  Alternative MC unf. unc.: -1.38000000e-07
+  Basic unf. unc.: 2.00830000e-09
+  $E_T^{miss}$ SoftTrk Scale: 1.14760000e-09
+  $E_T^{miss}$ SoftTrk ResoPara: 1.26240000e-08
+  $E_T^{miss}$ SoftTrk ResoPerp: -2.29520000e-09
+  Electron Scale Zee (syst.): 1.69270000e-08
+  Electron Scale  S12: 4.30350000e-08
+  Electron Scale PS B12: 2.49600000e-08
+  Electron Scale MATID: -1.14760000e-09
+  Electron Scale MATCRYO: 6.88560000e-09
+  Electron Scale L1GAIN: 9.18080000e-09
+  Electron Scale L2GAIN: -4.41830000e-08
+  Electron Scale LARELECUNCOV: -5.73800000e-09
+  Electron Scale LARCALIB: 3.01250000e-08
+  Electron Scale PS: 9.18080000e-09
+  JER DataVsMC MC16: 2.92640000e-08
+  JER EffectiveNP 1: 9.92670000e-08
+  JER EffectiveNP 2: 1.60660000e-08
+  JER EffectiveNP 3: 1.37710000e-08
+  JER EffectiveNP 4: -2.00830000e-09
+  JER EffectiveNP 5: 1.40580000e-08
+  JER EffectiveNP 6: -1.43450000e-09
+  JER EffectiveNP 7rest: -8.60700000e-10
   JES EtaIntercalib Model: 0.0
-  JES Flavor Composition: 3.7297e-08
-  JES Flavor Response: -3.5289e-08
-  JES Pileup OffsetMu: 9.4677e-09
-  JES Pileup OffsetNPV: -1.1476e-09
-  JES Pileup RhoTopology: -5.738e-10
-  Electron Eff. ChargeMisID (stat.): 7.3446e-08
-  Electron Eff. ChargeMisID (syst.): 1.2939e-07
-  Electron Eff. Isol: -1.2107e-07
-  Electron Eff. ID High-$p_T$ Eta1: -5.1642e-09
-  Electron Eff. ID High-$p_T$ Eta2: -2.5821e-09
-  Electron Eff. ID High-$p_T$ Eta3: -8.607e-10
-  Electron Eff. ID High-$p_T$ Eta4: -3.1559e-09
-  Electron Eff. ID High-$p_T$ Eta5: 6.3118e-09
-  Electron Eff. ID High-$p_T$ Eta6: 4.0166e-09
-  Electron Eff. ID High-$p_T$ Eta7: 2.2952e-09
-  Electron Eff. ID High-$p_T$ Eta9: 1.0902e-08
-  Electron Eff. ID High-$p_T$ Eta10: 2.0944e-08
-  Electron Eff. ID High-$p_T$ Eta11: 1.4058e-08
-  Electron Eff. ID High-$p_T$ Eta12: 1.3484e-08
-  Electron Eff. ID SIMP3: -8.607e-08
-  Electron Eff. ID SIMP4: 1.3025e-07
-  Electron Eff. ID SIMP11: -3.1272e-08
-  Electron Eff. ID SIMP15: 1.007e-07
-  Pileup: 2.8977e-08
-  $t\bar{t}$ FSR: 1.8075e-08
-  $t\bar{t}$ $p_T$-hard: -8.0332e-08
-  $t\bar{t}$ hadronization: 1.3484e-08
-  $t\bar{t}$ hdamp: -4.6191e-08
-  $t\bar{t}$ RW inverted setup 2D: -1.3484e-08
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 1.664e-08
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 4.3035e-08
-  $t\bar{t}$ PDF: -8.9513e-08
-  Multijet Electron $E_T^{miss}$: -4.0166e-09
-  Multijet Electron mix$E_T^{miss}$: 7.029e-08
-  Multijet Electron MC Shape: 4.3896e-08
-  Multijet Electron MC Scaling: -2.0657e-08
-  $tW$ Diagram Removal: -1.2911e-07
-  $tW$ DS hdamp: 2.6969e-08
-  Norm. $W\rightarrow\tau\nu$ by 5%: -1.8935e-08
-  Norm. $Z$ by 5%: -7.8898e-08
-  Norm. Single top by 4%$: -1.7214e-09
-  Norm. Diboson by 6%: -1.0357e-07
-  Muon Resolution MS: -1.2681e-07
-  Muon Scale: 1.0902e-07
-  Muon Eff. Identification: -3.9047e-07
-  Muon Eff. Isolation: -1.2595e-07
-  Muon Eff. Trigger: 1.0328e-07
-  Bad Muon Veto: -1.2911e-08
-  Muon Sagitta Global: -2.0226e-07
-  Muon Sagitta $p_T$-extra: -1.578e-08
-  Muon Multijet $E_T^{miss}$: -2.0083e-09
-  Muon Multijet $d_0^{sig}$: 7.4594e-09
-  Muon Multijet MC Scaling: 1.1476e-08
-  Muon Multijet Jet Multiplicity: -8.3201e-09
-  Muon Multijet MC Shape: 3.1559e-09
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -1.4632e-08
-- Luminosity_error: 9.038700000000001e-08
-  Stat. unc.: 6.0682e-07
+  JES Flavor Composition: 3.72970000e-08
+  JES Flavor Response: -3.52890000e-08
+  JES Pileup OffsetMu: 9.46770000e-09
+  JES Pileup OffsetNPV: -1.14760000e-09
+  JES Pileup RhoTopology: -5.73800000e-10
+  Electron Eff. ChargeMisID (stat.): 7.34460000e-08
+  Electron Eff. ChargeMisID (syst.): 1.29390000e-07
+  Electron Eff. Isol: -1.21070000e-07
+  Electron Eff. ID High-$p_T$ Eta1: -5.16420000e-09
+  Electron Eff. ID High-$p_T$ Eta2: -2.58210000e-09
+  Electron Eff. ID High-$p_T$ Eta3: -8.60700000e-10
+  Electron Eff. ID High-$p_T$ Eta4: -3.15590000e-09
+  Electron Eff. ID High-$p_T$ Eta5: 6.31180000e-09
+  Electron Eff. ID High-$p_T$ Eta6: 4.01660000e-09
+  Electron Eff. ID High-$p_T$ Eta7: 2.29520000e-09
+  Electron Eff. ID High-$p_T$ Eta9: 1.09020000e-08
+  Electron Eff. ID High-$p_T$ Eta10: 2.09440000e-08
+  Electron Eff. ID High-$p_T$ Eta11: 1.40580000e-08
+  Electron Eff. ID High-$p_T$ Eta12: 1.34840000e-08
+  Electron Eff. ID SIMP3: -8.60700000e-08
+  Electron Eff. ID SIMP4: 1.30250000e-07
+  Electron Eff. ID SIMP11: -3.12720000e-08
+  Electron Eff. ID SIMP15: 1.00700000e-07
+  Pileup: 2.89770000e-08
+  $t\bar{t}$ FSR: 1.80750000e-08
+  $t\bar{t}$ $p_T$-hard: -8.03320000e-08
+  $t\bar{t}$ hadronization: 1.34840000e-08
+  $t\bar{t}$ hdamp: -4.61910000e-08
+  $t\bar{t}$ RW inverted setup 2D: -1.34840000e-08
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 1.66400000e-08
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 4.30350000e-08
+  $t\bar{t}$ PDF: -8.95130000e-08
+  Multijet Electron $E_T^{miss}$: -4.01660000e-09
+  Multijet Electron mix$E_T^{miss}$: 7.02900000e-08
+  Multijet Electron MC Shape: 4.38960000e-08
+  Multijet Electron MC Scaling: -2.06570000e-08
+  $tW$ Diagram Removal: -1.29110000e-07
+  $tW$ DS hdamp: 2.69690000e-08
+  Norm. $W\rightarrow\tau\nu$ by 5%: -1.89350000e-08
+  Norm. $Z$ by 5%: -7.88980000e-08
+  Norm. Single top by 4%$: -1.72140000e-09
+  Norm. Diboson by 6%: -1.03570000e-07
+  Muon Resolution MS: -1.26810000e-07
+  Muon Scale: 1.09020000e-07
+  Muon Eff. Identification: -3.90470000e-07
+  Muon Eff. Isolation: -1.25950000e-07
+  Muon Eff. Trigger: 1.03280000e-07
+  Bad Muon Veto: -1.29110000e-08
+  Muon Sagitta Global: -2.02260000e-07
+  Muon Sagitta $p_T$-extra: -1.57800000e-08
+  Muon Multijet $E_T^{miss}$: -2.00830000e-09
+  Muon Multijet $d_0^{sig}$: 7.45940000e-09
+  Muon Multijet MC Scaling: 1.14760000e-08
+  Muon Multijet Jet Multiplicity: -8.32010000e-09
+  Muon Multijet MC Shape: 3.15590000e-09
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -1.46320000e-08
+- Luminosity_error: 9.03870000e-08
+  Stat. unc.: 6.06820000e-07
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -6.9805e-08
-  Basic unf. unc.: 1.089e-10
-  $E_T^{miss}$ SoftTrk Scale: 1.5028e-08
-  $E_T^{miss}$ SoftTrk ResoPara: 1.1326e-08
-  $E_T^{miss}$ SoftTrk ResoPerp: 4.0293e-09
-  Electron Scale Zee (syst.): 1.3612e-08
-  Electron Scale  S12: 5.9895e-09
-  Electron Scale PS B12: 2.5047e-09
-  Electron Scale MATID: 2.2869e-09
-  Electron Scale MATCRYO: 6.534e-09
-  Electron Scale L1GAIN: 4.4649e-09
-  Electron Scale L2GAIN: -1.1217e-08
-  Electron Scale LARELECUNCOV: -7.623e-10
-  Electron Scale LARCALIB: 5.1183e-09
-  Electron Scale PS: 7.623e-10
-  JER DataVsMC MC16: 1.6008e-08
-  JER EffectiveNP 1: 1.9493e-08
-  JER EffectiveNP 2: -3.267e-10
-  JER EffectiveNP 3: 3.267e-09
-  JER EffectiveNP 4: -2.178e-09
-  JER EffectiveNP 5: 6.534e-09
-  JER EffectiveNP 6: 2.178e-09
-  JER EffectiveNP 7rest: -6.9696e-09
-  JES EtaIntercalib Model: -7.2963e-09
-  JES Flavor Composition: 8.712e-10
-  JES Flavor Response: -4.356e-09
-  JES Pileup OffsetMu: -1.9602e-09
-  JES Pileup OffsetNPV: -5.445e-09
-  JES Pileup RhoTopology: -6.0984e-09
-  Electron Eff. ChargeMisID (stat.): 2.6245e-08
-  Electron Eff. ChargeMisID (syst.): 4.9441e-08
-  Electron Eff. Isol: -2.9403e-08
-  Electron Eff. ID High-$p_T$ Eta1: -4.356e-10
-  Electron Eff. ID High-$p_T$ Eta2: -1.089e-10
-  Electron Eff. ID High-$p_T$ Eta3: 1.7424e-09
-  Electron Eff. ID High-$p_T$ Eta4: 1.4157e-09
-  Electron Eff. ID High-$p_T$ Eta5: 4.356e-09
-  Electron Eff. ID High-$p_T$ Eta6: 2.5047e-09
-  Electron Eff. ID High-$p_T$ Eta7: 4.356e-10
-  Electron Eff. ID High-$p_T$ Eta9: 3.8115e-09
-  Electron Eff. ID High-$p_T$ Eta10: 6.8607e-09
-  Electron Eff. ID High-$p_T$ Eta11: 8.1675e-09
-  Electron Eff. ID High-$p_T$ Eta12: 3.9204e-09
-  Electron Eff. ID SIMP3: -2.0909e-08
-  Electron Eff. ID SIMP4: 3.5066e-08
-  Electron Eff. ID SIMP11: -9.3654e-09
-  Electron Eff. ID SIMP15: 2.7443e-08
-  Pileup: 9.3654e-09
-  $t\bar{t}$ FSR: 7.623e-10
-  $t\bar{t}$ $p_T$-hard: -1.2197e-08
+  Alternative MC unf. unc.: -6.98050000e-08
+  Basic unf. unc.: 1.08900000e-10
+  $E_T^{miss}$ SoftTrk Scale: 1.50280000e-08
+  $E_T^{miss}$ SoftTrk ResoPara: 1.13260000e-08
+  $E_T^{miss}$ SoftTrk ResoPerp: 4.02930000e-09
+  Electron Scale Zee (syst.): 1.36120000e-08
+  Electron Scale  S12: 5.98950000e-09
+  Electron Scale PS B12: 2.50470000e-09
+  Electron Scale MATID: 2.28690000e-09
+  Electron Scale MATCRYO: 6.53400000e-09
+  Electron Scale L1GAIN: 4.46490000e-09
+  Electron Scale L2GAIN: -1.12170000e-08
+  Electron Scale LARELECUNCOV: -7.62300000e-10
+  Electron Scale LARCALIB: 5.11830000e-09
+  Electron Scale PS: 7.62300000e-10
+  JER DataVsMC MC16: 1.60080000e-08
+  JER EffectiveNP 1: 1.94930000e-08
+  JER EffectiveNP 2: -3.26700000e-10
+  JER EffectiveNP 3: 3.26700000e-09
+  JER EffectiveNP 4: -2.17800000e-09
+  JER EffectiveNP 5: 6.53400000e-09
+  JER EffectiveNP 6: 2.17800000e-09
+  JER EffectiveNP 7rest: -6.96960000e-09
+  JES EtaIntercalib Model: -7.29630000e-09
+  JES Flavor Composition: 8.71200000e-10
+  JES Flavor Response: -4.35600000e-09
+  JES Pileup OffsetMu: -1.96020000e-09
+  JES Pileup OffsetNPV: -5.44500000e-09
+  JES Pileup RhoTopology: -6.09840000e-09
+  Electron Eff. ChargeMisID (stat.): 2.62450000e-08
+  Electron Eff. ChargeMisID (syst.): 4.94410000e-08
+  Electron Eff. Isol: -2.94030000e-08
+  Electron Eff. ID High-$p_T$ Eta1: -4.35600000e-10
+  Electron Eff. ID High-$p_T$ Eta2: -1.08900000e-10
+  Electron Eff. ID High-$p_T$ Eta3: 1.74240000e-09
+  Electron Eff. ID High-$p_T$ Eta4: 1.41570000e-09
+  Electron Eff. ID High-$p_T$ Eta5: 4.35600000e-09
+  Electron Eff. ID High-$p_T$ Eta6: 2.50470000e-09
+  Electron Eff. ID High-$p_T$ Eta7: 4.35600000e-10
+  Electron Eff. ID High-$p_T$ Eta9: 3.81150000e-09
+  Electron Eff. ID High-$p_T$ Eta10: 6.86070000e-09
+  Electron Eff. ID High-$p_T$ Eta11: 8.16750000e-09
+  Electron Eff. ID High-$p_T$ Eta12: 3.92040000e-09
+  Electron Eff. ID SIMP3: -2.09090000e-08
+  Electron Eff. ID SIMP4: 3.50660000e-08
+  Electron Eff. ID SIMP11: -9.36540000e-09
+  Electron Eff. ID SIMP15: 2.74430000e-08
+  Pileup: 9.36540000e-09
+  $t\bar{t}$ FSR: 7.62300000e-10
+  $t\bar{t}$ $p_T$-hard: -1.21970000e-08
   $t\bar{t}$ hadronization: 0.0
-  $t\bar{t}$ hdamp: -9.9099e-09
-  $t\bar{t}$ RW inverted setup 2D: -5.1183e-09
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 6.0984e-09
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 8.712e-09
-  $t\bar{t}$ PDF: -3.9422e-08
-  Multijet Electron $E_T^{miss}$: -9.0387e-09
-  Multijet Electron mix$E_T^{miss}$: 3.0601e-08
-  Multijet Electron MC Shape: 1.9929e-08
-  Multijet Electron MC Scaling: -9.3654e-09
-  $tW$ Diagram Removal: -7.1112e-08
-  $tW$ DS hdamp: 8.0586e-09
+  $t\bar{t}$ hdamp: -9.90990000e-09
+  $t\bar{t}$ RW inverted setup 2D: -5.11830000e-09
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 6.09840000e-09
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 8.71200000e-09
+  $t\bar{t}$ PDF: -3.94220000e-08
+  Multijet Electron $E_T^{miss}$: -9.03870000e-09
+  Multijet Electron mix$E_T^{miss}$: 3.06010000e-08
+  Multijet Electron MC Shape: 1.99290000e-08
+  Multijet Electron MC Scaling: -9.36540000e-09
+  $tW$ Diagram Removal: -7.11120000e-08
+  $tW$ DS hdamp: 8.05860000e-09
   Norm. $W\rightarrow\tau\nu$ by 5%: 0.0
-  Norm. $Z$ by 5%: -2.5047e-08
-  Norm. Single top by 4%$: -1.1652e-08
-  Norm. Diboson by 6%: -2.276e-08
-  Muon Resolution MS: -6.3271e-08
-  Muon Scale: 3.9313e-08
-  Muon Eff. Identification: -1.8567e-07
-  Muon Eff. Isolation: -4.0075e-08
-  Muon Eff. Trigger: 3.7788e-08
-  Bad Muon Veto: -9.801e-09
-  Muon Sagitta Global: -1.2001e-07
-  Muon Sagitta $p_T$-extra: -2.4394e-08
-  Muon Multijet $E_T^{miss}$: -1.4157e-09
-  Muon Multijet $d_0^{sig}$: -1.5246e-09
-  Muon Multijet MC Scaling: 2.5047e-09
-  Muon Multijet Jet Multiplicity: -5.445e-10
-  Muon Multijet MC Shape: -7.623e-10
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -5.7717e-09
-- Luminosity_error: 2.362097e-08
-  Stat. unc.: 2.779e-07
+  Norm. $Z$ by 5%: -2.50470000e-08
+  Norm. Single top by 4%$: -1.16520000e-08
+  Norm. Diboson by 6%: -2.27600000e-08
+  Muon Resolution MS: -6.32710000e-08
+  Muon Scale: 3.93130000e-08
+  Muon Eff. Identification: -1.85670000e-07
+  Muon Eff. Isolation: -4.00750000e-08
+  Muon Eff. Trigger: 3.77880000e-08
+  Bad Muon Veto: -9.80100000e-09
+  Muon Sagitta Global: -1.20010000e-07
+  Muon Sagitta $p_T$-extra: -2.43940000e-08
+  Muon Multijet $E_T^{miss}$: -1.41570000e-09
+  Muon Multijet $d_0^{sig}$: -1.52460000e-09
+  Muon Multijet MC Scaling: 2.50470000e-09
+  Muon Multijet Jet Multiplicity: -5.44500000e-10
+  Muon Multijet MC Shape: -7.62300000e-10
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -5.77170000e-09
+- Luminosity_error: 2.36209700e-08
+  Stat. unc.: 2.77900000e-07
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -1.8498e-08
-  Basic unf. unc.: -1.8783e-09
-  $E_T^{miss}$ SoftTrk Scale: 1.4514e-09
-  $E_T^{miss}$ SoftTrk ResoPara: 2.5044e-09
-  $E_T^{miss}$ SoftTrk ResoPerp: 1.3091e-09
-  Electron Scale Zee (syst.): 3.5289e-09
-  Electron Scale  S12: 4.2689e-09
-  Electron Scale PS B12: 2.9882e-09
-  Electron Scale MATID: 6.261e-10
-  Electron Scale MATCRYO: 3.1305e-10
-  Electron Scale L1GAIN: 2.5329e-09
-  Electron Scale L2GAIN: -6.1471e-09
-  Electron Scale LARELECUNCOV: -8.8223e-10
-  Electron Scale LARCALIB: 4.0412e-09
-  Electron Scale PS: -1.4229e-10
-  JER DataVsMC MC16: 5.6064e-09
-  JER EffectiveNP 1: 6.5456e-09
-  JER EffectiveNP 2: -1.9921e-10
-  JER EffectiveNP 3: -9.1069e-10
-  JER EffectiveNP 4: 9.3915e-10
-  JER EffectiveNP 5: 1.0814e-09
-  JER EffectiveNP 6: 1.5368e-09
-  JER EffectiveNP 7rest: -2.5613e-10
-  JES EtaIntercalib Model: -1.2807e-09
-  JES Flavor Composition: 1.6222e-09
-  JES Flavor Response: -3.2443e-09
-  JES Pileup OffsetMu: -2.8459e-11
-  JES Pileup OffsetNPV: -1.5937e-09
-  JES Pileup RhoTopology: -1.4229e-09
-  Electron Eff. ChargeMisID (stat.): 1.6335e-08
-  Electron Eff. ChargeMisID (syst.): 2.3279e-08
-  Electron Eff. Isol: -5.2934e-09
-  Electron Eff. ID High-$p_T$ Eta1: -1.9921e-10
-  Electron Eff. ID High-$p_T$ Eta2: 8.5377e-11
-  Electron Eff. ID High-$p_T$ Eta3: 4.5534e-10
-  Electron Eff. ID High-$p_T$ Eta4: 3.1305e-10
-  Electron Eff. ID High-$p_T$ Eta5: 1.9068e-09
-  Electron Eff. ID High-$p_T$ Eta6: 1.5937e-09
-  Electron Eff. ID High-$p_T$ Eta7: 5.1226e-10
-  Electron Eff. ID High-$p_T$ Eta9: 1.9921e-09
-  Electron Eff. ID High-$p_T$ Eta10: 3.842e-09
-  Electron Eff. ID High-$p_T$ Eta11: 2.9882e-09
-  Electron Eff. ID High-$p_T$ Eta12: 1.3945e-09
-  Electron Eff. ID SIMP3: -6.6594e-09
-  Electron Eff. ID SIMP4: 1.1298e-08
-  Electron Eff. ID SIMP11: -2.419e-09
-  Electron Eff. ID SIMP15: 8.8223e-09
-  Pileup: 1.4229e-09
-  $t\bar{t}$ FSR: -2.3052e-09
-  $t\bar{t}$ $p_T$-hard: -2.7036e-09
-  $t\bar{t}$ hadronization: -1.3945e-09
-  $t\bar{t}$ hdamp: -2.4759e-09
-  $t\bar{t}$ RW inverted setup 2D: -4.5534e-10
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: -2.2767e-10
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 1.1953e-09
-  $t\bar{t}$ PDF: -1.2038e-08
-  Multijet Electron $E_T^{miss}$: -3.785e-09
-  Multijet Electron mix$E_T^{miss}$: 1.1298e-08
-  Multijet Electron MC Shape: 7.7408e-09
-  Multijet Electron MC Scaling: -4.7527e-09
-  $tW$ Diagram Removal: -2.2483e-09
-  $tW$ DS hdamp: 2.3906e-09
+  Alternative MC unf. unc.: -1.84980000e-08
+  Basic unf. unc.: -1.87830000e-09
+  $E_T^{miss}$ SoftTrk Scale: 1.45140000e-09
+  $E_T^{miss}$ SoftTrk ResoPara: 2.50440000e-09
+  $E_T^{miss}$ SoftTrk ResoPerp: 1.30910000e-09
+  Electron Scale Zee (syst.): 3.52890000e-09
+  Electron Scale  S12: 4.26890000e-09
+  Electron Scale PS B12: 2.98820000e-09
+  Electron Scale MATID: 6.26100000e-10
+  Electron Scale MATCRYO: 3.13050000e-10
+  Electron Scale L1GAIN: 2.53290000e-09
+  Electron Scale L2GAIN: -6.14710000e-09
+  Electron Scale LARELECUNCOV: -8.82230000e-10
+  Electron Scale LARCALIB: 4.04120000e-09
+  Electron Scale PS: -1.42290000e-10
+  JER DataVsMC MC16: 5.60640000e-09
+  JER EffectiveNP 1: 6.54560000e-09
+  JER EffectiveNP 2: -1.99210000e-10
+  JER EffectiveNP 3: -9.10690000e-10
+  JER EffectiveNP 4: 9.39150000e-10
+  JER EffectiveNP 5: 1.08140000e-09
+  JER EffectiveNP 6: 1.53680000e-09
+  JER EffectiveNP 7rest: -2.56130000e-10
+  JES EtaIntercalib Model: -1.28070000e-09
+  JES Flavor Composition: 1.62220000e-09
+  JES Flavor Response: -3.24430000e-09
+  JES Pileup OffsetMu: -2.84590000e-11
+  JES Pileup OffsetNPV: -1.59370000e-09
+  JES Pileup RhoTopology: -1.42290000e-09
+  Electron Eff. ChargeMisID (stat.): 1.63350000e-08
+  Electron Eff. ChargeMisID (syst.): 2.32790000e-08
+  Electron Eff. Isol: -5.29340000e-09
+  Electron Eff. ID High-$p_T$ Eta1: -1.99210000e-10
+  Electron Eff. ID High-$p_T$ Eta2: 8.53770000e-11
+  Electron Eff. ID High-$p_T$ Eta3: 4.55340000e-10
+  Electron Eff. ID High-$p_T$ Eta4: 3.13050000e-10
+  Electron Eff. ID High-$p_T$ Eta5: 1.90680000e-09
+  Electron Eff. ID High-$p_T$ Eta6: 1.59370000e-09
+  Electron Eff. ID High-$p_T$ Eta7: 5.12260000e-10
+  Electron Eff. ID High-$p_T$ Eta9: 1.99210000e-09
+  Electron Eff. ID High-$p_T$ Eta10: 3.84200000e-09
+  Electron Eff. ID High-$p_T$ Eta11: 2.98820000e-09
+  Electron Eff. ID High-$p_T$ Eta12: 1.39450000e-09
+  Electron Eff. ID SIMP3: -6.65940000e-09
+  Electron Eff. ID SIMP4: 1.12980000e-08
+  Electron Eff. ID SIMP11: -2.41900000e-09
+  Electron Eff. ID SIMP15: 8.82230000e-09
+  Pileup: 1.42290000e-09
+  $t\bar{t}$ FSR: -2.30520000e-09
+  $t\bar{t}$ $p_T$-hard: -2.70360000e-09
+  $t\bar{t}$ hadronization: -1.39450000e-09
+  $t\bar{t}$ hdamp: -2.47590000e-09
+  $t\bar{t}$ RW inverted setup 2D: -4.55340000e-10
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: -2.27670000e-10
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 1.19530000e-09
+  $t\bar{t}$ PDF: -1.20380000e-08
+  Multijet Electron $E_T^{miss}$: -3.78500000e-09
+  Multijet Electron mix$E_T^{miss}$: 1.12980000e-08
+  Multijet Electron MC Shape: 7.74080000e-09
+  Multijet Electron MC Scaling: -4.75270000e-09
+  $tW$ Diagram Removal: -2.24830000e-09
+  $tW$ DS hdamp: 2.39060000e-09
   Norm. $W\rightarrow\tau\nu$ by 5%: -0.0
-  Norm. $Z$ by 5%: -7.314e-09
-  Norm. Single top by 4%$: -1.7075e-10
-  Norm. Diboson by 6%: -9.05e-09
-  Muon Resolution MS: -1.8527e-08
-  Muon Scale: 1.0558e-08
-  Muon Eff. Identification: -5.595e-08
-  Muon Eff. Isolation: -1.1298e-08
-  Muon Eff. Trigger: 9.6761e-09
-  Bad Muon Veto: -3.7566e-09
-  Muon Sagitta Global: -3.2472e-08
-  Muon Sagitta $p_T$-extra: -1.0473e-08
-  Muon Multijet $E_T^{miss}$: 2.8459e-10
-  Muon Multijet $d_0^{sig}$: 1.1384e-10
-  Muon Multijet MC Scaling: 6.261e-10
-  Muon Multijet Jet Multiplicity: 6.261e-10
-  Muon Multijet MC Shape: -1.2522e-09
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -4.2688e-10
-- Luminosity_error: 3.976198e-09
-  Stat. unc.: 7.0048e-08
+  Norm. $Z$ by 5%: -7.31400000e-09
+  Norm. Single top by 4%$: -1.70750000e-10
+  Norm. Diboson by 6%: -9.05000000e-09
+  Muon Resolution MS: -1.85270000e-08
+  Muon Scale: 1.05580000e-08
+  Muon Eff. Identification: -5.59500000e-08
+  Muon Eff. Isolation: -1.12980000e-08
+  Muon Eff. Trigger: 9.67610000e-09
+  Bad Muon Veto: -3.75660000e-09
+  Muon Sagitta Global: -3.24720000e-08
+  Muon Sagitta $p_T$-extra: -1.04730000e-08
+  Muon Multijet $E_T^{miss}$: 2.84590000e-10
+  Muon Multijet $d_0^{sig}$: 1.13840000e-10
+  Muon Multijet MC Scaling: 6.26100000e-10
+  Muon Multijet Jet Multiplicity: 6.26100000e-10
+  Muon Multijet MC Shape: -1.25220000e-09
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: -4.26880000e-10
+- Luminosity_error: 3.97619800e-09
+  Stat. unc.: 7.00480000e-08
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -3.5594e-09
-  Basic unf. unc.: -2.9223e-10
-  $E_T^{miss}$ SoftTrk Scale: 8.4794e-10
-  $E_T^{miss}$ SoftTrk ResoPara: 6.7068e-10
-  $E_T^{miss}$ SoftTrk ResoPerp: 3.7367e-10
-  Electron Scale Zee (syst.): 7.3775e-10
-  Electron Scale  S12: 7.665e-10
-  Electron Scale PS B12: 4.1678e-10
-  Electron Scale MATID: 2.2516e-10
-  Electron Scale MATCRYO: 2.1079e-10
-  Electron Scale L1GAIN: 7.0901e-10
-  Electron Scale L2GAIN: -7.2338e-10
-  Electron Scale LARELECUNCOV: -2.9223e-10
-  Electron Scale LARCALIB: 4.9822e-10
-  Electron Scale PS: -1.9162e-11
-  JER DataVsMC MC16: 6.2757e-10
-  JER EffectiveNP 1: 6.8027e-10
-  JER EffectiveNP 2: -5.8445e-10
-  JER EffectiveNP 3: -4.5511e-10
-  JER EffectiveNP 4: 8.144e-11
-  JER EffectiveNP 5: 3.4013e-10
-  JER EffectiveNP 6: 5.7487e-11
-  JER EffectiveNP 7rest: 3.8325e-11
-  JES EtaIntercalib Model: -3.0181e-10
-  JES Flavor Composition: -9.5812e-12
-  JES Flavor Response: 3.8325e-11
-  JES Pileup OffsetMu: -7.665e-11
-  JES Pileup OffsetNPV: -3.593e-10
-  JES Pileup RhoTopology: -2.7785e-10
-  Electron Eff. ChargeMisID (stat.): 4.6517e-09
-  Electron Eff. ChargeMisID (syst.): 6.3188e-09
-  Electron Eff. Isol: -3.3534e-11
-  Electron Eff. ID High-$p_T$ Eta1: 3.3534e-11
-  Electron Eff. ID High-$p_T$ Eta2: 6.2278e-11
-  Electron Eff. ID High-$p_T$ Eta3: 1.533e-10
-  Electron Eff. ID High-$p_T$ Eta4: 1.4372e-10
-  Electron Eff. ID High-$p_T$ Eta5: 3.4971e-10
-  Electron Eff. ID High-$p_T$ Eta6: 2.7785e-10
-  Electron Eff. ID High-$p_T$ Eta7: 3.7846e-10
-  Electron Eff. ID High-$p_T$ Eta9: 1.3414e-10
-  Electron Eff. ID High-$p_T$ Eta10: 6.8027e-10
-  Electron Eff. ID High-$p_T$ Eta11: 5.2697e-10
-  Electron Eff. ID High-$p_T$ Eta12: 1.9641e-10
-  Electron Eff. ID SIMP3: -9.198e-10
-  Electron Eff. ID SIMP4: 1.2935e-09
-  Electron Eff. ID SIMP11: -3.4492e-10
-  Electron Eff. ID SIMP15: 1.6192e-09
-  Pileup: 2.9223e-10
-  $t\bar{t}$ FSR: -3.7846e-10
-  $t\bar{t}$ $p_T$-hard: -3.4013e-10
-  $t\bar{t}$ hadronization: -3.7367e-10
-  $t\bar{t}$ hdamp: -4.1199e-10
-  $t\bar{t}$ RW inverted setup 2D: 4.7906e-12
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 6.2278e-11
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 1.8683e-10
-  $t\bar{t}$ PDF: -1.9785e-09
-  Multijet Electron $E_T^{miss}$: -1.1497e-09
-  Multijet Electron mix$E_T^{miss}$: 1.8875e-09
-  Multijet Electron MC Shape: 1.2983e-09
-  Multijet Electron MC Scaling: -1.0779e-09
-  $tW$ Diagram Removal: 3.8325e-11
-  $tW$ DS hdamp: 4.3115e-10
+  Alternative MC unf. unc.: -3.55940000e-09
+  Basic unf. unc.: -2.92230000e-10
+  $E_T^{miss}$ SoftTrk Scale: 8.47940000e-10
+  $E_T^{miss}$ SoftTrk ResoPara: 6.70680000e-10
+  $E_T^{miss}$ SoftTrk ResoPerp: 3.73670000e-10
+  Electron Scale Zee (syst.): 7.37750000e-10
+  Electron Scale  S12: 7.66500000e-10
+  Electron Scale PS B12: 4.16780000e-10
+  Electron Scale MATID: 2.25160000e-10
+  Electron Scale MATCRYO: 2.10790000e-10
+  Electron Scale L1GAIN: 7.09010000e-10
+  Electron Scale L2GAIN: -7.23380000e-10
+  Electron Scale LARELECUNCOV: -2.92230000e-10
+  Electron Scale LARCALIB: 4.98220000e-10
+  Electron Scale PS: -1.91620000e-11
+  JER DataVsMC MC16: 6.27570000e-10
+  JER EffectiveNP 1: 6.80270000e-10
+  JER EffectiveNP 2: -5.84450000e-10
+  JER EffectiveNP 3: -4.55110000e-10
+  JER EffectiveNP 4: 8.14400000e-11
+  JER EffectiveNP 5: 3.40130000e-10
+  JER EffectiveNP 6: 5.74870000e-11
+  JER EffectiveNP 7rest: 3.83250000e-11
+  JES EtaIntercalib Model: -3.01810000e-10
+  JES Flavor Composition: -9.58120000e-12
+  JES Flavor Response: 3.83250000e-11
+  JES Pileup OffsetMu: -7.66500000e-11
+  JES Pileup OffsetNPV: -3.59300000e-10
+  JES Pileup RhoTopology: -2.77850000e-10
+  Electron Eff. ChargeMisID (stat.): 4.65170000e-09
+  Electron Eff. ChargeMisID (syst.): 6.31880000e-09
+  Electron Eff. Isol: -3.35340000e-11
+  Electron Eff. ID High-$p_T$ Eta1: 3.35340000e-11
+  Electron Eff. ID High-$p_T$ Eta2: 6.22780000e-11
+  Electron Eff. ID High-$p_T$ Eta3: 1.53300000e-10
+  Electron Eff. ID High-$p_T$ Eta4: 1.43720000e-10
+  Electron Eff. ID High-$p_T$ Eta5: 3.49710000e-10
+  Electron Eff. ID High-$p_T$ Eta6: 2.77850000e-10
+  Electron Eff. ID High-$p_T$ Eta7: 3.78460000e-10
+  Electron Eff. ID High-$p_T$ Eta9: 1.34140000e-10
+  Electron Eff. ID High-$p_T$ Eta10: 6.80270000e-10
+  Electron Eff. ID High-$p_T$ Eta11: 5.26970000e-10
+  Electron Eff. ID High-$p_T$ Eta12: 1.96410000e-10
+  Electron Eff. ID SIMP3: -9.19800000e-10
+  Electron Eff. ID SIMP4: 1.29350000e-09
+  Electron Eff. ID SIMP11: -3.44920000e-10
+  Electron Eff. ID SIMP15: 1.61920000e-09
+  Pileup: 2.92230000e-10
+  $t\bar{t}$ FSR: -3.78460000e-10
+  $t\bar{t}$ $p_T$-hard: -3.40130000e-10
+  $t\bar{t}$ hadronization: -3.73670000e-10
+  $t\bar{t}$ hdamp: -4.11990000e-10
+  $t\bar{t}$ RW inverted setup 2D: 4.79060000e-12
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: 6.22780000e-11
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 1.86830000e-10
+  $t\bar{t}$ PDF: -1.97850000e-09
+  Multijet Electron $E_T^{miss}$: -1.14970000e-09
+  Multijet Electron mix$E_T^{miss}$: 1.88750000e-09
+  Multijet Electron MC Shape: 1.29830000e-09
+  Multijet Electron MC Scaling: -1.07790000e-09
+  $tW$ Diagram Removal: 3.83250000e-11
+  $tW$ DS hdamp: 4.31150000e-10
   Norm. $W\rightarrow\tau\nu$ by 5%: -0.0
-  Norm. $Z$ by 5%: -1.1881e-09
-  Norm. Single top by 4%$: -2.8744e-11
-  Norm. Diboson by 6%: -1.8588e-09
-  Muon Resolution MS: -5.1643e-09
-  Muon Scale: 1.8204e-09
-  Muon Eff. Identification: -1.2331e-08
-  Muon Eff. Isolation: -1.3845e-09
-  Muon Eff. Trigger: 1.3653e-09
-  Bad Muon Veto: -1.3414e-09
-  Muon Sagitta Global: -9.8447e-09
-  Muon Sagitta $p_T$-extra: -3.7223e-09
-  Muon Multijet $E_T^{miss}$: 4.6469e-10
-  Muon Multijet $d_0^{sig}$: -5.6529e-10
-  Muon Multijet MC Scaling: -4.1199e-10
-  Muon Multijet Jet Multiplicity: 2.539e-10
-  Muon Multijet MC Shape: -4.599e-10
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: 3.4013e-10
-- Luminosity_error: 9.65041e-11
-  Stat. unc.: 4.6127e-09
+  Norm. $Z$ by 5%: -1.18810000e-09
+  Norm. Single top by 4%$: -2.87440000e-11
+  Norm. Diboson by 6%: -1.85880000e-09
+  Muon Resolution MS: -5.16430000e-09
+  Muon Scale: 1.82040000e-09
+  Muon Eff. Identification: -1.23310000e-08
+  Muon Eff. Isolation: -1.38450000e-09
+  Muon Eff. Trigger: 1.36530000e-09
+  Bad Muon Veto: -1.34140000e-09
+  Muon Sagitta Global: -9.84470000e-09
+  Muon Sagitta $p_T$-extra: -3.72230000e-09
+  Muon Multijet $E_T^{miss}$: 4.64690000e-10
+  Muon Multijet $d_0^{sig}$: -5.65290000e-10
+  Muon Multijet MC Scaling: -4.11990000e-10
+  Muon Multijet Jet Multiplicity: 2.53900000e-10
+  Muon Multijet MC Shape: -4.59900000e-10
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: 3.40130000e-10
+- Luminosity_error: 9.65041000e-11
+  Stat. unc.: 4.61270000e-09
   Uncor. syst. unc.: 0.0
-  Alternative MC unf. unc.: -9.4528e-11
-  Basic unf. unc.: -2.8719e-11
-  $E_T^{miss}$ SoftTrk Scale: 1.9766e-11
-  $E_T^{miss}$ SoftTrk ResoPara: 1.8138e-11
-  $E_T^{miss}$ SoftTrk ResoPerp: 8.9528e-12
-  Electron Scale Zee (syst.): 2.3603e-11
-  Electron Scale  S12: 2.9649e-11
-  Electron Scale PS B12: 1.5696e-11
-  Electron Scale MATID: 8.1389e-12
-  Electron Scale MATCRYO: 1.3139e-11
-  Electron Scale L1GAIN: 2.8137e-11
-  Electron Scale L2GAIN: -2.2091e-11
-  Electron Scale LARELECUNCOV: -9.5341e-12
-  Electron Scale LARCALIB: 2.0231e-11
-  Electron Scale PS: -4.5345e-12
-  JER DataVsMC MC16: 1.7441e-11
-  JER EffectiveNP 1: 2.6393e-11
-  JER EffectiveNP 2: -1.6627e-11
-  JER EffectiveNP 3: -1.9301e-11
-  JER EffectiveNP 4: 6.5111e-12
-  JER EffectiveNP 5: 1.186e-11
-  JER EffectiveNP 6: 3.023e-12
-  JER EffectiveNP 7rest: 4.8833e-12
-  JES EtaIntercalib Model: -6.046e-12
-  JES Flavor Composition: -5.8135e-13
-  JES Flavor Response: -4.6508e-13
-  JES Pileup OffsetMu: -4.6508e-12
-  JES Pileup OffsetNPV: -1.0232e-11
-  JES Pileup RhoTopology: -6.2786e-12
-  Electron Eff. ChargeMisID (stat.): 2.3103e-10
-  Electron Eff. ChargeMisID (syst.): 3.0428e-10
-  Electron Eff. Isol: 2.7207e-11
-  Electron Eff. ID High-$p_T$ Eta1: 1.3952e-12
-  Electron Eff. ID High-$p_T$ Eta2: 1.9766e-12
-  Electron Eff. ID High-$p_T$ Eta3: 3.9532e-12
-  Electron Eff. ID High-$p_T$ Eta4: 2.4417e-12
-  Electron Eff. ID High-$p_T$ Eta5: 9.3016e-12
-  Electron Eff. ID High-$p_T$ Eta6: 9.6504e-12
-  Electron Eff. ID High-$p_T$ Eta7: 1.0464e-11
-  Electron Eff. ID High-$p_T$ Eta9: 3.2556e-12
-  Electron Eff. ID High-$p_T$ Eta10: 2.4533e-11
-  Electron Eff. ID High-$p_T$ Eta11: 2.058e-11
-  Electron Eff. ID High-$p_T$ Eta12: 7.0925e-12
-  Electron Eff. ID SIMP3: -2.2091e-11
-  Electron Eff. ID SIMP4: 2.9068e-11
-  Electron Eff. ID SIMP11: -1.6627e-11
-  Electron Eff. ID SIMP15: 4.3718e-11
-  Pileup: 5.4647e-12
-  $t\bar{t}$ FSR: -1.1046e-11
-  $t\bar{t}$ $p_T$-hard: 2.5579e-12
-  $t\bar{t}$ hadronization: -1.0232e-11
-  $t\bar{t}$ hdamp: -9.3016e-12
-  $t\bar{t}$ RW inverted setup 2D: -1.5115e-12
-  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: -3.4881e-13
-  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 9.3016e-13
-  $t\bar{t}$ PDF: -5.5693e-11
-  Multijet Electron $E_T^{miss}$: -8.6854e-11
-  Multijet Electron mix$E_T^{miss}$: 1.5348e-11
-  Multijet Electron MC Shape: 1.8254e-11
-  Multijet Electron MC Scaling: -3.2323e-11
-  $tW$ Diagram Removal: -3.0114e-11
-  $tW$ DS hdamp: 1.3604e-11
-  Norm. $W\rightarrow\tau\nu$ by 5%: -2.3254e-13
-  Norm. $Z$ by 5%: -2.337e-11
-  Norm. Single top by 4%$: -3.4881e-13
-  Norm. Diboson by 6%: -3.4997e-11
-  Muon Resolution MS: -1.7754e-10
-  Muon Scale: 4.7903e-11
-  Muon Eff. Identification: -3.0684e-10
-  Muon Eff. Isolation: -3.3137e-11
-  Muon Eff. Trigger: 2.1742e-11
-  Bad Muon Veto: -5.3019e-11
-  Muon Sagitta Global: -2.9521e-10
-  Muon Sagitta $p_T$-extra: -1.3162e-10
-  Muon Multijet $E_T^{miss}$: 1.8371e-11
-  Muon Multijet $d_0^{sig}$: -2.0231e-11
-  Muon Multijet MC Scaling: -2.4766e-11
-  Muon Multijet Jet Multiplicity: 1.3836e-11
-  Muon Multijet MC Shape: -1.6743e-11
-  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: 1.0348e-11
+  Alternative MC unf. unc.: -9.45280000e-11
+  Basic unf. unc.: -2.87190000e-11
+  $E_T^{miss}$ SoftTrk Scale: 1.97660000e-11
+  $E_T^{miss}$ SoftTrk ResoPara: 1.81380000e-11
+  $E_T^{miss}$ SoftTrk ResoPerp: 8.95280000e-12
+  Electron Scale Zee (syst.): 2.36030000e-11
+  Electron Scale  S12: 2.96490000e-11
+  Electron Scale PS B12: 1.56960000e-11
+  Electron Scale MATID: 8.13890000e-12
+  Electron Scale MATCRYO: 1.31390000e-11
+  Electron Scale L1GAIN: 2.81370000e-11
+  Electron Scale L2GAIN: -2.20910000e-11
+  Electron Scale LARELECUNCOV: -9.53410000e-12
+  Electron Scale LARCALIB: 2.02310000e-11
+  Electron Scale PS: -4.53450000e-12
+  JER DataVsMC MC16: 1.74410000e-11
+  JER EffectiveNP 1: 2.63930000e-11
+  JER EffectiveNP 2: -1.66270000e-11
+  JER EffectiveNP 3: -1.93010000e-11
+  JER EffectiveNP 4: 6.51110000e-12
+  JER EffectiveNP 5: 1.18600000e-11
+  JER EffectiveNP 6: 3.02300000e-12
+  JER EffectiveNP 7rest: 4.88330000e-12
+  JES EtaIntercalib Model: -6.04600000e-12
+  JES Flavor Composition: -5.81350000e-13
+  JES Flavor Response: -4.65080000e-13
+  JES Pileup OffsetMu: -4.65080000e-12
+  JES Pileup OffsetNPV: -1.02320000e-11
+  JES Pileup RhoTopology: -6.27860000e-12
+  Electron Eff. ChargeMisID (stat.): 2.31030000e-10
+  Electron Eff. ChargeMisID (syst.): 3.04280000e-10
+  Electron Eff. Isol: 2.72070000e-11
+  Electron Eff. ID High-$p_T$ Eta1: 1.39520000e-12
+  Electron Eff. ID High-$p_T$ Eta2: 1.97660000e-12
+  Electron Eff. ID High-$p_T$ Eta3: 3.95320000e-12
+  Electron Eff. ID High-$p_T$ Eta4: 2.44170000e-12
+  Electron Eff. ID High-$p_T$ Eta5: 9.30160000e-12
+  Electron Eff. ID High-$p_T$ Eta6: 9.65040000e-12
+  Electron Eff. ID High-$p_T$ Eta7: 1.04640000e-11
+  Electron Eff. ID High-$p_T$ Eta9: 3.25560000e-12
+  Electron Eff. ID High-$p_T$ Eta10: 2.45330000e-11
+  Electron Eff. ID High-$p_T$ Eta11: 2.05800000e-11
+  Electron Eff. ID High-$p_T$ Eta12: 7.09250000e-12
+  Electron Eff. ID SIMP3: -2.20910000e-11
+  Electron Eff. ID SIMP4: 2.90680000e-11
+  Electron Eff. ID SIMP11: -1.66270000e-11
+  Electron Eff. ID SIMP15: 4.37180000e-11
+  Pileup: 5.46470000e-12
+  $t\bar{t}$ FSR: -1.10460000e-11
+  $t\bar{t}$ $p_T$-hard: 2.55790000e-12
+  $t\bar{t}$ hadronization: -1.02320000e-11
+  $t\bar{t}$ hdamp: -9.30160000e-12
+  $t\bar{t}$ RW inverted setup 2D: -1.51150000e-12
+  $t\bar{t}$ RW Fixed order vs PS $p_T(t)$: -3.48810000e-13
+  $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$: 9.30160000e-13
+  $t\bar{t}$ PDF: -5.56930000e-11
+  Multijet Electron $E_T^{miss}$: -8.68540000e-11
+  Multijet Electron mix$E_T^{miss}$: 1.53480000e-11
+  Multijet Electron MC Shape: 1.82540000e-11
+  Multijet Electron MC Scaling: -3.23230000e-11
+  $tW$ Diagram Removal: -3.01140000e-11
+  $tW$ DS hdamp: 1.36040000e-11
+  Norm. $W\rightarrow\tau\nu$ by 5%: -2.32540000e-13
+  Norm. $Z$ by 5%: -2.33700000e-11
+  Norm. Single top by 4%$: -3.48810000e-13
+  Norm. Diboson by 6%: -3.49970000e-11
+  Muon Resolution MS: -1.77540000e-10
+  Muon Scale: 4.79030000e-11
+  Muon Eff. Identification: -3.06840000e-10
+  Muon Eff. Isolation: -3.31370000e-11
+  Muon Eff. Trigger: 2.17420000e-11
+  Bad Muon Veto: -5.30190000e-11
+  Muon Sagitta Global: -2.95210000e-10
+  Muon Sagitta $p_T$-extra: -1.31620000e-10
+  Muon Multijet $E_T^{miss}$: 1.83710000e-11
+  Muon Multijet $d_0^{sig}$: -2.02310000e-11
+  Muon Multijet MC Scaling: -2.47660000e-11
+  Muon Multijet Jet Multiplicity: 1.38360000e-11
+  Muon Multijet MC Shape: -1.67430000e-11
+  Muon Multijet $\Delta\phi(\mu,E_T^{miss})$: 1.03480000e-11

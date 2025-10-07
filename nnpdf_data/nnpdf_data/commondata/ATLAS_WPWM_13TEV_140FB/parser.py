@@ -2,7 +2,10 @@
 import yaml
 import glob
 import os
+from nnpdf_data.filter_utils.utils import prettify_float
 
+
+yaml.add_representer(float, prettify_float)
 
 with open("sources.yaml") as f:
     definitions_yaml = yaml.safe_load(f)
@@ -113,8 +116,8 @@ def parse_files_singlediff(pattern, tag):
             if lumi_label not in uncertainties:
                 uncertainties[lumi_label] = {
                     "description": "Luminosity error",
-                    "treatment": "jelle",
-                    "type": "jelle"
+                    "treatment": "MULT",
+                    "type": "ATLASLUMI15"
                 }
             unc_bin[lumi_label] = 0.0083 * val
             
