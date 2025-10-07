@@ -7,12 +7,14 @@ import inspect
 import logging
 import numbers
 import pathlib
+
 import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
 from reportengine import configparser, report
 from reportengine.configparser import ConfigError, _parse_func, element_of, record_from_defaults
-from reportengine.environment import Environment, EnvironmentError_
+from reportengine.environment import Environment as reEnvironment
+from reportengine.environment import EnvironmentError_
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
 from validphys.core import (
@@ -52,7 +54,7 @@ from validphys.utils import yaml_safe
 log = logging.getLogger(__name__)
 
 
-class Environment(Environment):
+class Environment(reEnvironment):
     """Container for information to be filled at run time"""
 
     def __init__(self, *, this_folder=None, net=True, upload=False, dry=False, **kwargs):
@@ -75,8 +77,8 @@ class Environment(Environment):
         except LoaderError as e:
             log.error("Failed to find the paths. These are configured " "in the nnprofile settings")
             raise EnvironmentError_(e) from e
-        self.deta_path = self.loader.datapath
         self.results_path = self.loader.resultspath
+        self.data_paths = self.loader.commondata_folders
 
         self.upload = upload
         super().__init__(**kwargs)
@@ -211,7 +213,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
 
         return res
-               
+
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""
         return NSList(range(1, nreplica + 1), nskey="replica")
@@ -1312,7 +1314,7 @@ class CoreConfig(configparser.Config):
             if user_covmat_path is not None:
                 # User covmat + point prescriptions
                 if point_prescriptions is not None and point_prescriptions != []:
-                  generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
+                    generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
                 # Only user covmat
                 else:
                     generic_name = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
