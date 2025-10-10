@@ -1,0 +1,41 @@
+setname: CMS_TTBAR_13TEV_35P9FB-1_TAU_TOT
+nnpdf_metadata:
+  nnpdf31_process: TOP
+  experiment: CMS
+arXiv:
+  url: https://arxiv.org/abs/1911.13204
+iNSPIRE:
+  url: https://inspirehep.net/literature/1767671
+hepdata:
+  url: NA
+  version:
+version: 1
+version_comment: "This dataset is the tau leptop analogue of CMS_TTBAR_13TEV_35P9FB-1_TOT"
+implemented_observables:
+- observable:
+    description: total cross section of ttBar (with tau in final state)
+    label: $\sigma_{t\bar{t}}$
+    units: $pb$
+  observable_name: X-SEC
+  process_type: INC
+  ndata: 1
+  tables: []
+  kinematics:
+    variables:
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage:
+  - sqrts
+  plotting:
+    dataset_label: CMS 13 TeV $\sigma_{t\bar{t}} ($\tau$ final state)$
+    plot_x: sqrts
+    y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
+  theory:
+    FK_tables:
+    - - CMS_TTBAR_13TEV_TOT_X-SEC

@@ -1,0 +1,5 @@
+bins:
+  sqrts:
+    min: null
+    mid: 13000
+    max: null
