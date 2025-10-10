@@ -1,4 +1,4 @@
-setname: ATLAS_TTBAR_13TEV_2L_140FB-1_TOT
+setname: ATLAS_TTBAR_13TEV_2L_TOT
 nnpdf_metadata:
   nnpdf31_process: TOP
   experiment: ATLAS
@@ -10,7 +10,7 @@ hepdata:
   url: NA
   version:
 version: 1
-version_comment: NA
+version_comment: "This dataset is the 2L analogue of ATLAS_TTBAR_13TEV_TOT, which is based on L+J"
 implemented_observables:
 - observable:
     description: total cross section of ttBar
@@ -22,14 +22,6 @@ implemented_observables:
   tables: []
   kinematics:
     variables:
-      zero:
-        description: ''
-        label: $$
-        units: ''
-      m_t2:
-        description: mass of top quark squared
-        label: $m_{t}^2$
-        units: $GeV^2$
       sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
@@ -39,11 +31,9 @@ implemented_observables:
   data_uncertainties:
   - uncertainties.yaml
   kinematic_coverage:
-  - zero
-  - m_t2
   - sqrts
   plotting:
-    dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}}$
+    dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}} (2L channel)$
     plot_x: sqrts
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
