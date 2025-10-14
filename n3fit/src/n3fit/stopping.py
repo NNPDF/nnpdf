@@ -67,7 +67,7 @@ def parse_ndata(all_data):
     for dictionary in all_data:
         exp_name = dictionary["name"]
         if dictionary.get("count_chi2"):
-            tr_ndata = dictionary["ndata"]
+            tr_ndata = dictionary["ndata_tr"]
             vl_ndata = dictionary["ndata_vl"]
             if sum(tr_ndata) != 0:
                 tr_ndata_dict[exp_name] = np.array(tr_ndata)
@@ -455,6 +455,7 @@ class Stopping:
 
         # Step 5. loop over the valid indices to check whether the vl improved
         for i_replica in np.where(passes)[0]:
+
             self._best_epochs[i_replica] = epoch
             # By definition, if we have a ``best_epoch`` then positivity passed
             self.positivity_statuses[i_replica] = POS_OK

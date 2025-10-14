@@ -21,6 +21,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Callable
 
 import numpy as np
+import scipy.linalg as la
 
 from n3fit.backends import (
     NN_LAYER_ALL_REPLICAS,
@@ -68,8 +69,7 @@ class ObservableWrapper:
     observables: list
     trvl_mask_layer: Mask
     dataset_xsizes: list
-    invcovmat: np.array = None
-    covmat: np.array = None
+    sqrtcov: np.array = None
     multiplier: float = 1.0
     integrability: bool = False
     positivity: bool = False
@@ -79,12 +79,9 @@ class ObservableWrapper:
     def _generate_loss(self, mask=None):
         """Generates the corresponding loss function depending on the values the wrapper
         was initialized with"""
-        if self.invcovmat is not None:
-            covmat_matrix = self.covmat
-            invcovmat_matrix = self.invcovmat
-            loss = losses.LossInvcovmat(
-                invcovmat_matrix, self.data, mask, covmat=covmat_matrix, name=self.name
-            )
+        if self.sqrtcov is not None:
+            sqrtcov = self.sqrtcov
+            loss = losses.LossInvcovmat(self.data, mask, sqrtcov=sqrtcov, name=self.name)
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
         elif self.integrability:
@@ -130,8 +127,8 @@ def observable_generator(
     validation_mask_array=None,
     training_data=None,
     validation_data=None,
-    invcovmat_tr=None,
-    invcovmat_vl=None,
+    covmat_tr=None,
+    covmat_vl=None,
     positivity_initial=1.0,
     integrability=False,
     n_replicas=1,
@@ -293,7 +290,7 @@ def observable_generator(
         model_observables,
         tr_mask_layer,
         dataset_xsizes,
-        invcovmat=invcovmat_tr,
+        sqrtcov=[la.cholesky(cov, lower=True) for cov in covmat_tr],
         data=training_data,
         rotation=obsrot,
     )
@@ -303,7 +300,7 @@ def observable_generator(
         model_observables,
         vl_mask_layer,
         dataset_xsizes,
-        invcovmat=invcovmat_vl,
+        sqrtcov=[la.cholesky(cov, lower=True) for cov in covmat_vl],
         data=validation_data,
         rotation=obsrot,
     )
@@ -314,8 +311,7 @@ def observable_generator(
         model_observables,
         None,
         dataset_xsizes,
-        invcovmat=spec_dict["invcovmat_true"],
-        covmat=spec_dict["covmat"],
+        sqrtcov=la.cholesky(spec_dict["covmat"], lower=True),
         data=spec_dict["expdata_true"],
         rotation=None,
     )

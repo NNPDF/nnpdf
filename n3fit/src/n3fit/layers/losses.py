@@ -1,17 +1,19 @@
 """
-    Module containg the losses to be apply to the models as layers
+Module containg the losses to be apply to the models as layers
 
-    The layer take the input from the model and acts on it producing a score function.
-    For instance, in the case of the chi2 (``LossInvcovmat``) the function takes only
-    the prediction of the model and, during instantiation, took the real data to compare with
-    and the covmat.
+The layer take the input from the model and acts on it producing a score function.
+For instance, in the case of the chi2 (``LossInvcovmat``) the function takes only
+the prediction of the model and, during instantiation, took the real data to compare with
+and the covmat.
 
 """
 
 import numpy as np
+from scipy import linalg as la
 
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
+from validphys.calcutils import calc_chi2
 
 
 class LossInvcovmat(MetaLayer):
@@ -39,9 +41,8 @@ class LossInvcovmat(MetaLayer):
     True
     """
 
-    def __init__(self, invcovmat, y_true, mask=None, covmat=None, **kwargs):
-        self._invcovmat = op.numpy_to_tensor(invcovmat)
-        self._covmat = covmat
+    def __init__(self, y_true, mask=None, sqrtcov=None, **kwargs):
+        self._sqrtcov = op.numpy_to_tensor(sqrtcov)
         self._y_true = op.numpy_to_tensor(y_true)
         self._ndata = y_true.shape[-1]
         if mask is None or all(mask):
@@ -54,13 +55,14 @@ class LossInvcovmat(MetaLayer):
     def build(self, input_shape):
         """Transform the inverse covmat and the mask into
         weights of the layers"""
-        init = MetaLayer.init_constant(self._invcovmat)
-        self.kernel = self.builder_helper("invcovmat", self._invcovmat.shape, init, trainable=False)
+        init = MetaLayer.init_constant(self._sqrtcov)
+        # self.kernel = self.builder_helper("invcovmat", self._invcovmat.shape, init, trainable=False)
         mask_shape = (1, 1, self._ndata)
         if self._mask is None:
             init_mask = MetaLayer.init_constant(np.ones(mask_shape))
         else:
             init_mask = MetaLayer.init_constant(self._mask)
+
         self.mask = self.builder_helper("mask", mask_shape, init_mask, trainable=False)
 
     def add_covmat(self, covmat):
@@ -83,13 +85,18 @@ class LossInvcovmat(MetaLayer):
 
         # The experimental loss doesn't depend on replicas, so it doesn't have a replica axis and
         # must be treated separately
-        experimental_loss = len(self.kernel.shape) == 2
+
+        experimental_loss = len(self._sqrtcov.shape) == 2
         one_replica = obs_diff.shape[1] == 1
 
         if one_replica:  # einsum is not well suited for CPU, so use tensordot if single replica
-            kernel = self.kernel if experimental_loss else self.kernel[0]
-            right_dot = op.tensor_product(kernel, obs_diff[0, 0, :], axes=1)
-            loss = op.tensor_product(obs_diff[0, :, :], right_dot, axes=1)
+            if experimental_loss:
+                vec = op.solve_triangular(self._sqrtcov, obs_diff[0, 0, :], lower=True)
+                vec = op.reshape(vec, (1, -1))
+            else:
+                vec = op.solve_triangular(self._sqrtcov, obs_diff[0, :, :], lower=True)
+            loss = op.norm(vec, axis=-1) ** 2
+
         else:
             einstr = "bri, ij, brj -> r" if experimental_loss else "bri, rij, brj -> r"
             loss = op.einsum(einstr, obs_diff, self.kernel, obs_diff)

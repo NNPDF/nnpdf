@@ -334,13 +334,6 @@ def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_
     inv_total, inv_training, inv_validation, ndata_tr, ndata_vl, mask_tr, mask_vl, diagonal_rotation
     """
     covmat = _hashed_dataset_inputs_fitting_covmat.array
-
-    diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
-    cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
-    inv_total = (
-        np.diag(diag_inv_sqrt_total) @ np.linalg.inv(cormat_total) @ np.diag(diag_inv_sqrt_total)
-    )
-
     diagonal_rotation = None
 
     if diagonal_basis:
@@ -357,12 +350,12 @@ def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_
         # apply the training/validation masks to the eigenvalues and take the inverse
         # this does not give the inverse of the covmat as the variable name might suggest,
         # but we call it this way anyway as this needs to be returned at the end
-        invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
-        invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
+        covmat_tr = np.diag(eig_vals[tr_mask])
+        covmat_vl = np.diag(eig_vals[vl_mask])
 
         # obtain the number of data points in the training/validation sets
-        ndata_tr = invcovmat_tr.shape[0]
-        ndata_vl = invcovmat_vl.shape[0]
+        ndata_tr = covmat_tr.shape[0]
+        ndata_vl = covmat_vl.shape[0]
 
     else:
         # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
@@ -401,30 +394,30 @@ def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_
         covmat_tr[data_zero_tr, data_zero_tr] = 1.0
         covmat_vl[data_zero_vl, data_zero_vl] = 1.0
 
-        diag_inv_sqrt_covmat_tr = 1 / np.sqrt(np.diag(covmat_tr))
-        diag_inv_sqrt_covmat_vl = 1 / np.sqrt(np.diag(covmat_vl))
-        cormat_tr = np.einsum(
-            "i, ij, j -> ij", diag_inv_sqrt_covmat_tr, covmat_tr, diag_inv_sqrt_covmat_tr
-        )
-        cormat_vl = np.einsum(
-            "i, ij, j -> ij", diag_inv_sqrt_covmat_vl, covmat_vl, diag_inv_sqrt_covmat_vl
-        )
-        invcovmat_tr = np.einsum(
-            "i, ij, j -> ij",
-            diag_inv_sqrt_covmat_tr,
-            np.linalg.inv(cormat_tr),
-            diag_inv_sqrt_covmat_tr,
-        )
-        invcovmat_vl = np.einsum(
-            "i, ij, j -> ij",
-            diag_inv_sqrt_covmat_vl,
-            np.linalg.inv(cormat_vl),
-            diag_inv_sqrt_covmat_vl,
-        )
-
-        # Set to 0 the points in the diagonal that were left as 1
-        invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
-        invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
+        # diag_inv_sqrt_covmat_tr = 1 / np.sqrt(np.diag(covmat_tr))
+        # diag_inv_sqrt_covmat_vl = 1 / np.sqrt(np.diag(covmat_vl))
+        # cormat_tr = np.einsum(
+        #     "i, ij, j -> ij", diag_inv_sqrt_covmat_tr, covmat_tr, diag_inv_sqrt_covmat_tr
+        # )
+        # cormat_vl = np.einsum(
+        #     "i, ij, j -> ij", diag_inv_sqrt_covmat_vl, covmat_vl, diag_inv_sqrt_covmat_vl
+        # )
+        # invcovmat_tr = np.einsum(
+        #     "i, ij, j -> ij",
+        #     diag_inv_sqrt_covmat_tr,
+        #     np.linalg.inv(cormat_tr),
+        #     diag_inv_sqrt_covmat_tr,
+        # )
+        # invcovmat_vl = np.einsum(
+        #     "i, ij, j -> ij",
+        #     diag_inv_sqrt_covmat_vl,
+        #     np.linalg.inv(cormat_vl),
+        #     diag_inv_sqrt_covmat_vl,
+        # )
+        #
+        # # Set to 0 the points in the diagonal that were left as 1
+        # invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
+        # invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
 
         ndata_tr = np.count_nonzero(tr_mask)
         ndata_vl = np.count_nonzero(vl_mask)
@@ -433,17 +426,7 @@ def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_
         ndata_tr -= len(data_zero_tr)
         ndata_vl -= len(data_zero_vl)
 
-    return (
-        covmat,
-        inv_total,
-        invcovmat_tr,
-        invcovmat_vl,
-        ndata_tr,
-        ndata_vl,
-        tr_mask,
-        vl_mask,
-        diagonal_rotation,
-    )
+    return (covmat, covmat_tr, covmat_vl, ndata_tr, ndata_vl, tr_mask, vl_mask, diagonal_rotation)
 
 
 def fitting_data_dict(
@@ -500,7 +483,7 @@ def fitting_data_dict(
     expdata = make_replica
     fittable_datasets = fittable_datasets_masked
 
-    covmat, inv_true, invcovmat_tr, invcovmat_vl, ndata_tr, ndata_vl, tr_mask, vl_mask, diag_rot = (
+    covmat, covmat_tr, covmat_vl, ndata_tr, ndata_vl, tr_mask, vl_mask, diag_rot = (
         _inv_covmat_prepared
     )
 
@@ -528,15 +511,14 @@ def fitting_data_dict(
         "datasets": fittable_datasets,
         "name": str(data),
         "expdata_true": expdata_true.reshape(1, -1),
-        "invcovmat_true": inv_true,
         "covmat": covmat,
+        "covmat_tr": covmat_tr,
+        "covmat_vl": covmat_vl,
         "trmask": tr_mask,
-        "invcovmat": invcovmat_tr,
-        "ndata": ndata_tr,
-        "expdata": expdata_tr,
         "vlmask": vl_mask,
-        "invcovmat_vl": invcovmat_vl,
+        "ndata_tr": ndata_tr,
         "ndata_vl": ndata_vl,
+        "expdata_tr": expdata_tr,
         "expdata_vl": expdata_vl,
         "positivity": False,
         "count_chi2": True,

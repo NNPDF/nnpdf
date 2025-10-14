@@ -51,6 +51,8 @@ from keras.ops import (
     sum,
     tanh,
     transpose,
+    solve_triangular,
+    norm,
 )
 from keras.ops import log as op_log
 from keras.ops import power as pow
@@ -63,12 +65,15 @@ from keras.layers import subtract as op_subtract
 
 # Backend dependent functions and operations
 if K.backend() == "torch":
+    print("Using PyTorch backend")
     tensor_to_numpy_or_python = lambda x: x.detach().cpu().numpy()
     decorator_compiler = lambda f: f
 elif K.backend() == "jax":
+    print("Using JAX backend")
     tensor_to_numpy_or_python = lambda x: np.array(x.block_until_ready())
     decorator_compiler = lambda f: f
 elif K.backend() == "tensorflow":
+    print("Using TensorFlow backend")
     tensor_to_numpy_or_python = lambda x: x.numpy()
     import tensorflow as tf
 

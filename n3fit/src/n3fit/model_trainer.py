@@ -277,7 +277,7 @@ class ModelTrainer:
             - ``ndata``: number of experimental points
         """
         for exp_dict in self.exp_info[0]:
-            self.training["expdata"].append(exp_dict["expdata"])
+            self.training["expdata"].append(exp_dict["expdata_tr"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
             self.experimental["expdata"].append(exp_dict["expdata_true"])
 
@@ -285,7 +285,7 @@ class ModelTrainer:
             self.validation["folds"].append(exp_dict["folds"]["validation"])
             self.experimental["folds"].append(exp_dict["folds"]["experimental"])
 
-            nd_tr = exp_dict["ndata"]
+            nd_tr = exp_dict["ndata_tr"]
             nd_vl = exp_dict["ndata_vl"]
 
             self.training["ndata"] += nd_tr
@@ -539,10 +539,11 @@ class ModelTrainer:
         experiment_data = {
             "trmask": [],
             "vlmask": [],
-            "expdata": [],
+            "covmat": [],
+            "covmat_tr": [],
+            "covmat_vl": [],
+            "expdata_tr": [],
             "expdata_vl": [],
-            "invcovmat": [],
-            "invcovmat_vl": [],
         }
 
         # Loop over datasets
@@ -552,7 +553,7 @@ class ModelTrainer:
                 replica_data = []
                 # Loop over replicas
                 for replica in self.exp_info:
-                    if key in ["expdata", "expdata_vl"]:
+                    if key in ["expdata_tr", "expdata_vl"]:
                         # Save the data with shape (ndata) instead of (1, ndata)
                         replica_data.append(replica[i][key][0])
                     else:
@@ -571,10 +572,10 @@ class ModelTrainer:
                 self.boundary_condition,
                 training_mask_array=experiment_data["trmask"][i],
                 validation_mask_array=experiment_data["vlmask"][i],
-                training_data=experiment_data["expdata"][i],
+                training_data=experiment_data["expdata_tr"][i],
                 validation_data=experiment_data["expdata_vl"][i],
-                invcovmat_tr=experiment_data["invcovmat"][i],
-                invcovmat_vl=experiment_data["invcovmat_vl"][i],
+                covmat_tr=experiment_data["covmat_tr"][i],
+                covmat_vl=experiment_data["covmat_vl"][i],
                 n_replicas=len(self.replicas),
             )
 
@@ -666,12 +667,12 @@ class ModelTrainer:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
 
             # Now loop over replicas to fill in all data points as a list
-            list_ndata = []
+            list_ndata_tr = []
             list_ndata_vl = []
             for replica in self.exp_info:
                 replica_exp_dict = replica[idx]
 
-                ndata = replica_exp_dict.get("ndata")
+                ndata_tr = replica_exp_dict.get("ndata_tr")
                 ndata_vl = replica_exp_dict.get("ndata_vl")
 
                 if partition:
@@ -679,21 +680,21 @@ class ModelTrainer:
                     # from both the training and validation to avoid calculating the chi2 wrong
                     for dataset in replica_exp_dict["datasets"]:
                         if dataset in partition["datasets"]:
-                            dataset_ndata = dataset["ndata"]
+                            dataset_ndata_tr = dataset["ndata_tr"]
                             frac = dataset["frac"]
-                            ndata -= int(dataset_ndata * frac)
-                            ndata_vl -= int(dataset_ndata * (1 - frac))
+                            ndata_tr -= int(dataset_ndata_tr * frac)
+                            ndata_vl -= int(dataset_ndata_tr * (1 - frac))
 
-                list_ndata.append(ndata)
+                list_ndata_tr.append(ndata_tr)
                 list_ndata_vl.append(ndata_vl)
 
-            reporting_dict["ndata"] = list_ndata
+            reporting_dict["ndata_tr"] = list_ndata_tr
             reporting_dict["ndata_vl"] = list_ndata_vl
             reporting_list.append(reporting_dict)
 
         for exp_dict in self.pos_info + self.integ_info:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
-            reporting_dict["ndata"] = [exp_dict.get("ndata")]
+            reporting_dict["ndata_tr"] = [exp_dict.get("ndata_tr")]
             reporting_dict["ndata_vl"] = [exp_dict.get("ndata_vl")]
             reporting_list.append(reporting_dict)
 
