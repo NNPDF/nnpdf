@@ -33,27 +33,26 @@ The NNPDF collaboration is currently composed of the following
 members:
 
 * Richard D. Ball - University of Edinburgh
-* Alessandro Candido - CERN
+* Alessandro Candido - Quantum Research Centre, Technology Innovation Institute, Abu Dhabi
 * Stefano Carrazza - Università degli Studi di Milano and INFN
 * Amedeo Chiefa - University of Edinburgh
 * Ella Cole - University of Cambridge
 * Mark Costantini - University of Cambridge
-* Juan M. Cruz-Martinez - CERN
+* Juan M. Cruz-Martinez - Universidad de Sevilla
 * Luigi Del Debbio - University of Edinburgh
 * Stefano Forte - Università degli Studi di Milano and INFN
-* Tommaso Giani - Max-Planck-Institut für Physik
+* Tommaso Giani - Università degli Studi di Torino and INFN
 * Eva Groenendijk - Università degli Studi di Milano and INFN
 * Felix Hekhorn - University of Jyväskylä
 * Jaco ter Hoeve - University of Edinburgh
-* José Ignacio Latorre - Quantum Research Centre, Technology
-  Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
+* José Ignacio Latorre - Quantum Research Centre, Technology Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
 * Giacomo Magni - IJCLab Orsay and CNRS
 * Emanuele R. Nocera - Università degli Studi di Torino and INFN
 * Tanjona R. Rabemananjara - Vrije University Amsterdam and Nikhef
 * Juan Rojo - Vrije University Amsterdam and Nikhef
 * Valentina Schutze - University of Cambridge
 * Tanishq Sharma - Università di Torino and INFN
-* Roy Stegeman - University of Edinburgh
+* Roy Stegeman - Quantum Research Centre, Technology Innovation Institute, Abu Dhabi
 * Maria Ubiali - University of Cambridge
 * Ramon Winterhalder - Università degli Studi di Milano and INFN
 
