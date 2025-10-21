@@ -16,7 +16,7 @@ definitions:
     treatment: MULT
     type: ATLASLUMI12
   sys_mc_uncorr:
-    description: sys_mc_uncorr unc. from HepData
+    description: extra Monte Carlo statistical uncertainty
     treatment: ADD
     type: UNCORR
 bins:

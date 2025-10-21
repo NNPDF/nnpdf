@@ -1,12 +1,13 @@
 """
-This piece of code generates a simplified variant of the uncertainties.yaml 
-files in which the 99 correlated systematic uncertainties of the legacy 
+This piece of code generates a simplified variant of the uncertainties.yaml
+files in which the 99 correlated systematic uncertainties of the legacy
 version are replaced with two systematic uncertainties, one that is uncorrelated
 and that is correlated. Statistical, luminosity and )optional) Monte Carlo
 uncertainties are as in the legacy version.
 """
 
 import yaml
+
 
 def get_tables(observable):
     """
@@ -26,13 +27,14 @@ def get_tables(observable):
         print("- ATLAS_Z0J_8TEV_PT-Y")
         print("- ATLAS_Z0J_8TEV_PT-M")
         exit()
-            
+
     hepdata_tables = []
 
     for table in tables:
         hepdata_tables.append(f"{prefix}{table}.yaml")
 
     return hepdata_tables
+
 
 def get_uncertainties(observable):
     """
@@ -62,51 +64,68 @@ def get_uncertainties(observable):
 
     return (data_central, uncertainties)
 
+
 def filter_unc_ATLAS_Z0J_8TEV(MC=False):
     """
     Dumps uncertainties on .yaml files
     """
-    lumi_unc = 2.8 # %
-    mc_unc = 1.0 # %
+    lumi_unc = 2.8  # %
+    mc_unc = 1.0  # %
     observables = ["PT-Y", "PT-M"]
     for observable in observables:
-        if MC==False:
+        if MC == False:
             unc_file = "uncertainties_decorr_" + observable + ".yaml"
         else:
-            unc_file= "uncertainties_decorr_sys_10_" + observable + ".yaml"
+            unc_file = "uncertainties_decorr_sys_10_" + observable + ".yaml"
         central_values, uncertainties = get_uncertainties(observable)
 
         for i in range(len(central_values)):
             for k in uncertainties[i]:
-                uncertainties[i][k] = float(uncertainties[i][k].replace("%",""))/100. * central_values[i] * 1000.
-            uncertainties[i].update({"sys_lumi_corr": lumi_unc/100 * central_values[i] * 1000.})
-            if(MC==True):
-                uncertainties[i].update({"sys_mc_uncorr": mc_unc/100 * central_values[i] * 1000.})  
-                                 
-        treatment = {"stat": "ADD",
-                     "sys,Uncorrelated": "ADD",
-                     "sys,Correlated": "MULT",
-                     "sys_lumi_corr": "MULT",}
-        correlation = {"stat": "UNCORR",
-                       "sys,Uncorrelated": "UNCORR",
-                       "sys,Correlated": "CORR",
-                       "sys_lumi_corr": "ATLASLUMI12",}
+                uncertainties[i][k] = (
+                    float(uncertainties[i][k].replace("%", "")) / 100.0 * central_values[i] * 1000.0
+                )
+            uncertainties[i].update({"sys_lumi_corr": lumi_unc / 100 * central_values[i] * 1000.0})
+            if MC == True:
+                uncertainties[i].update(
+                    {"sys_mc_uncorr": mc_unc / 100 * central_values[i] * 1000.0}
+                )
+
+        treatment = {
+            "stat": "ADD",
+            "sys,Uncorrelated": "ADD",
+            "sys,Correlated": "MULT",
+            "sys_lumi_corr": "MULT",
+        }
+        correlation = {
+            "stat": "UNCORR",
+            "sys,Uncorrelated": "UNCORR",
+            "sys,Correlated": "CORR",
+            "sys_lumi_corr": "ATLASLUMI12",
+        }
         if MC == True:
             treatment.update({"sys_mc_uncorr": "ADD"})
             correlation.update({"sys_mc_uncorr": "UNCORR"})
 
         definitions = {}
-        for key,value in uncertainties[0].items():
-            definition = {key :
-                          {"description": key + " unc. from HepData",
-                           "treatment": treatment[key],
-                           "type": correlation[key]}}
+        for key, value in uncertainties[0].items():
+            definition = {
+                key: {
+                    "description": key + " unc. from HepData",
+                    "treatment": treatment[key],
+                    "type": correlation[key],
+                }
+            }
             definitions.update(definition)
-            uncertainties_yaml = {"definitions": definitions,"bins": uncertainties}
-            
+            uncertainties_yaml = {"definitions": definitions, "bins": uncertainties}
+
+        if MC:
+            uncertainties_yaml["definitions"][key][
+                "description"
+            ] = "extra Monte Carlo statistical uncertainty"
+
         with open(unc_file, "w") as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
-        
+
 
 if __name__ == "__main__":
     filter_unc_ATLAS_Z0J_8TEV(MC=False)
