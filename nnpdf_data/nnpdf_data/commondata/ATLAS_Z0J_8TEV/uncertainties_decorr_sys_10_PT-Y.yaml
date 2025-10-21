@@ -21,35 +21,35 @@ definitions:
     type: UNCORR
 bins:
 - stat: 9.771
-  sys,Uncorrelated: 6.514000000000001
-  sys,Correlated: 29.313000000000006
+  sys,Uncorrelated: 6.51400000e+00
+  sys,Correlated: 2.93130000e+01
   sys_lumi_corr: 91.196
   sys_mc_uncorr: 32.57
 - stat: 13.416
   sys,Uncorrelated: 6.708
   sys,Correlated: 40.248
-  sys_lumi_corr: 187.82399999999998
+  sys_lumi_corr: 1.87824000e+02
   sys_mc_uncorr: 67.08
 - stat: 13.428
   sys,Uncorrelated: 6.714
   sys,Correlated: 40.284
   sys_lumi_corr: 187.992
   sys_mc_uncorr: 67.14
-- stat: 11.772000000000002
-  sys,Uncorrelated: 5.886000000000001
+- stat: 1.17720000e+01
+  sys,Uncorrelated: 5.88600000e+00
   sys,Correlated: 35.316
   sys_lumi_corr: 164.808
   sys_mc_uncorr: 58.86
 - stat: 14.778
-  sys,Uncorrelated: 4.926000000000001
+  sys,Uncorrelated: 4.92600000e+00
   sys,Correlated: 29.556
   sys_lumi_corr: 137.928
-  sys_mc_uncorr: 49.260000000000005
-- stat: 7.837999999999999
-  sys,Uncorrelated: 3.9189999999999996
+  sys_mc_uncorr: 4.92600000e+01
+- stat: 7.83800000e+00
+  sys,Uncorrelated: 3.91900000e+00
   sys,Correlated: 23.514
   sys_lumi_corr: 109.732
-  sys_mc_uncorr: 39.190000000000005
+  sys_mc_uncorr: 3.91900000e+01
 - stat: 9.057
   sys,Uncorrelated: 3.019
   sys,Correlated: 18.114
@@ -58,38 +58,38 @@ bins:
 - stat: 4.56
   sys,Uncorrelated: 2.28
   sys,Correlated: 13.68
-  sys_lumi_corr: 63.839999999999996
-  sys_mc_uncorr: 22.799999999999997
+  sys_lumi_corr: 6.38400000e+01
+  sys_mc_uncorr: 2.28000000e+01
 - stat: 3.29
   sys,Uncorrelated: 1.645
-  sys,Correlated: 9.870000000000001
-  sys_lumi_corr: 46.059999999999995
+  sys,Correlated: 9.87000000e+00
+  sys_lumi_corr: 4.60600000e+01
   sys_mc_uncorr: 16.45
 - stat: 3.516
   sys,Uncorrelated: 1.172
   sys,Correlated: 7.032
-  sys_lumi_corr: 32.815999999999995
-  sys_mc_uncorr: 11.719999999999999
-- stat: 2.4726000000000004
+  sys_lumi_corr: 3.28160000e+01
+  sys_mc_uncorr: 1.17200000e+01
+- stat: 2.47260000e+00
   sys,Uncorrelated: 0.8242
   sys,Correlated: 5.7694
   sys_lumi_corr: 23.0776
   sys_mc_uncorr: 8.242
-- stat: 1.6656000000000002
+- stat: 1.66560000e+00
   sys,Uncorrelated: 0.5552
   sys,Correlated: 3.8864
   sys_lumi_corr: 15.5456
-  sys_mc_uncorr: 5.5520000000000005
+  sys_mc_uncorr: 5.55200000e+00
 - stat: 1.0968
   sys,Uncorrelated: 0.7312
   sys,Correlated: 2.9248
-  sys_lumi_corr: 10.236799999999999
+  sys_lumi_corr: 1.02368000e+01
   sys_mc_uncorr: 3.656
 - stat: 0.9316
   sys,Uncorrelated: 0.4658
   sys,Correlated: 1.8632
-  sys_lumi_corr: 6.521199999999999
-  sys_mc_uncorr: 2.3289999999999997
+  sys_lumi_corr: 6.52120000e+00
+  sys_mc_uncorr: 2.32900000e+00
 - stat: 0.776
   sys,Uncorrelated: 0.4656
   sys,Correlated: 1.2416
@@ -99,7 +99,7 @@ bins:
   sys,Uncorrelated: 0.3099
   sys,Correlated: 0.8264
   sys_lumi_corr: 2.8924
-  sys_mc_uncorr: 1.0330000000000001
+  sys_mc_uncorr: 1.03300000e+00
 - stat: 0.35628
   sys,Uncorrelated: 0.11876
   sys,Correlated: 0.47504
@@ -107,144 +107,144 @@ bins:
   sys_mc_uncorr: 0.5938
 - stat: 0.13626
   sys,Uncorrelated: 0.04542
-  sys,Correlated: 0.15896999999999997
-  sys_lumi_corr: 0.6358799999999999
-  sys_mc_uncorr: 0.22710000000000002
-- stat: 0.07158800000000001
+  sys,Correlated: 1.58970000e-01
+  sys_lumi_corr: 6.35880000e-01
+  sys_mc_uncorr: 2.27100000e-01
+- stat: 7.15880000e-02
   sys,Uncorrelated: 0.026032
   sys,Correlated: 0.052064
-  sys_lumi_corr: 0.18222399999999997
+  sys_lumi_corr: 1.82224000e-01
   sys_mc_uncorr: 0.06508
-- stat: 0.0038542000000000003
-  sys,Uncorrelated: 0.0011012
-  sys,Correlated: 0.0027530000000000002
-  sys_lumi_corr: 0.007708400000000001
-  sys_mc_uncorr: 0.0027530000000000002
-- stat: 9.656999999999998
+- stat: 3.85420000e-03
+  sys,Uncorrelated: 1.10120000e-03
+  sys,Correlated: 2.75300000e-03
+  sys_lumi_corr: 7.70840000e-03
+  sys_mc_uncorr: 2.75300000e-03
+- stat: 9.65700000e+00
   sys,Uncorrelated: 6.438
-  sys,Correlated: 28.971000000000004
-  sys_lumi_corr: 90.13199999999999
+  sys,Correlated: 2.89710000e+01
+  sys_lumi_corr: 9.01320000e+01
   sys_mc_uncorr: 32.19
 - stat: 13.352
   sys,Uncorrelated: 6.676
-  sys,Correlated: 40.056000000000004
+  sys,Correlated: 4.00560000e+01
   sys_lumi_corr: 186.928
   sys_mc_uncorr: 66.76
 - stat: 13.474
   sys,Uncorrelated: 6.737
   sys,Correlated: 40.422
-  sys_lumi_corr: 188.63599999999997
+  sys_lumi_corr: 1.88636000e+02
   sys_mc_uncorr: 67.37
 - stat: 17.616
   sys,Uncorrelated: 5.872
   sys,Correlated: 35.232
-  sys_lumi_corr: 164.41599999999997
+  sys_lumi_corr: 1.64416000e+02
   sys_mc_uncorr: 58.72
 - stat: 14.589
   sys,Uncorrelated: 4.863
   sys,Correlated: 29.178
-  sys_lumi_corr: 136.16400000000002
-  sys_mc_uncorr: 48.63000000000001
+  sys_lumi_corr: 1.36164000e+02
+  sys_mc_uncorr: 4.86300000e+01
 - stat: 7.786
   sys,Uncorrelated: 3.893
   sys,Correlated: 23.358
-  sys_lumi_corr: 109.00399999999999
+  sys_lumi_corr: 1.09004000e+02
   sys_mc_uncorr: 38.93
 - stat: 8.985
   sys,Uncorrelated: 2.995
   sys,Correlated: 17.97
-  sys_lumi_corr: 83.85999999999999
+  sys_lumi_corr: 8.38600000e+01
   sys_mc_uncorr: 29.95
 - stat: 6.798
   sys,Uncorrelated: 2.266
   sys,Correlated: 13.596
-  sys_lumi_corr: 63.44799999999999
+  sys_lumi_corr: 6.34480000e+01
   sys_mc_uncorr: 22.66
-- stat: 4.877999999999999
+- stat: 4.87800000e+00
   sys,Uncorrelated: 1.626
-  sys,Correlated: 9.755999999999998
-  sys_lumi_corr: 45.52799999999999
+  sys,Correlated: 9.75600000e+00
+  sys_lumi_corr: 4.55280000e+01
   sys_mc_uncorr: 16.26
-- stat: 3.4890000000000003
+- stat: 3.48900000e+00
   sys,Uncorrelated: 1.163
-  sys,Correlated: 6.978000000000001
-  sys_lumi_corr: 32.56399999999999
-  sys_mc_uncorr: 11.629999999999999
-- stat: 2.4282000000000004
+  sys,Correlated: 6.97800000e+00
+  sys_lumi_corr: 3.25640000e+01
+  sys_mc_uncorr: 1.16300000e+01
+- stat: 2.42820000e+00
   sys,Uncorrelated: 0.8094
-  sys,Correlated: 4.856400000000001
-  sys_lumi_corr: 22.663199999999996
-  sys_mc_uncorr: 8.094000000000001
-- stat: 1.6463999999999999
+  sys,Correlated: 4.85640000e+00
+  sys_lumi_corr: 2.26632000e+01
+  sys_mc_uncorr: 8.09400000e+00
+- stat: 1.64640000e+00
   sys,Uncorrelated: 1.0976
-  sys,Correlated: 3.8415999999999992
-  sys_lumi_corr: 15.366399999999997
-  sys_mc_uncorr: 5.4879999999999995
+  sys,Correlated: 3.84160000e+00
+  sys_lumi_corr: 1.53664000e+01
+  sys_mc_uncorr: 5.48800000e+00
 - stat: 1.4264
   sys,Uncorrelated: 0.7132
-  sys,Correlated: 2.4961999999999995
-  sys_lumi_corr: 9.984799999999998
+  sys,Correlated: 2.49620000e+00
+  sys_lumi_corr: 9.98480000e+00
   sys_mc_uncorr: 3.566
 - stat: 1.1515
   sys,Uncorrelated: 0.4606
   sys,Correlated: 1.8424
-  sys_lumi_corr: 6.4483999999999995
+  sys_lumi_corr: 6.44840000e+00
   sys_mc_uncorr: 2.303
-- stat: 0.9186000000000001
-  sys,Uncorrelated: 0.45930000000000004
+- stat: 9.18600000e-01
+  sys,Uncorrelated: 4.59300000e-01
   sys,Correlated: 1.2248
   sys_lumi_corr: 4.2868
-  sys_mc_uncorr: 1.5310000000000001
-- stat: 0.7223999999999999
+  sys_mc_uncorr: 1.53100000e+00
+- stat: 7.22400000e-01
   sys,Uncorrelated: 0.3096
   sys,Correlated: 0.8256
-  sys_lumi_corr: 2.8895999999999997
+  sys_lumi_corr: 2.88960000e+00
   sys_mc_uncorr: 1.032
 - stat: 0.34812
   sys,Uncorrelated: 0.17406
   sys,Correlated: 0.46416
   sys_lumi_corr: 1.62456
   sys_mc_uncorr: 0.5802
-- stat: 0.13440000000000002
+- stat: 1.34400000e-01
   sys,Uncorrelated: 0.0448
   sys,Correlated: 0.1792
   sys_lumi_corr: 0.6272
   sys_mc_uncorr: 0.224
-- stat: 0.06985000000000001
-  sys,Uncorrelated: 0.025400000000000002
-  sys,Correlated: 0.057150000000000006
-  sys_lumi_corr: 0.17779999999999999
+- stat: 6.98500000e-02
+  sys,Uncorrelated: 2.54000000e-02
+  sys,Correlated: 5.71500000e-02
+  sys_lumi_corr: 1.77800000e-01
   sys_mc_uncorr: 0.0635
-- stat: 0.0035868
-  sys,Uncorrelated: 0.0010248
-  sys,Correlated: 0.0028182000000000003
-  sys_lumi_corr: 0.0071736
-  sys_mc_uncorr: 0.0025619999999999996
+- stat: 3.58680000e-03
+  sys,Uncorrelated: 1.02480000e-03
+  sys,Correlated: 2.81820000e-03
+  sys_lumi_corr: 7.17360000e-03
+  sys_mc_uncorr: 2.56200000e-03
 - stat: 12.488
   sys,Uncorrelated: 6.244
-  sys,Correlated: 28.098000000000003
+  sys,Correlated: 2.80980000e+01
   sys_lumi_corr: 87.416
-  sys_mc_uncorr: 31.220000000000002
+  sys_mc_uncorr: 3.12200000e+01
 - stat: 12.924
   sys,Uncorrelated: 6.462
-  sys,Correlated: 45.233999999999995
-  sys_lumi_corr: 180.93599999999998
-  sys_mc_uncorr: 64.61999999999999
+  sys,Correlated: 4.52340000e+01
+  sys_lumi_corr: 1.80936000e+02
+  sys_mc_uncorr: 6.46200000e+01
 - stat: 13.096
   sys,Uncorrelated: 6.548
-  sys,Correlated: 39.288000000000004
-  sys_lumi_corr: 183.34399999999997
-  sys_mc_uncorr: 65.47999999999999
-- stat: 16.941000000000003
+  sys,Correlated: 3.92880000e+01
+  sys_lumi_corr: 1.83344000e+02
+  sys_mc_uncorr: 6.54800000e+01
+- stat: 1.69410000e+01
   sys,Uncorrelated: 5.647
-  sys,Correlated: 33.882000000000005
-  sys_lumi_corr: 158.11599999999999
-  sys_mc_uncorr: 56.470000000000006
-- stat: 14.148000000000001
+  sys,Correlated: 3.38820000e+01
+  sys_lumi_corr: 1.58116000e+02
+  sys_mc_uncorr: 5.64700000e+01
+- stat: 1.41480000e+01
   sys,Uncorrelated: 4.716
-  sys,Correlated: 28.296000000000003
+  sys,Correlated: 2.82960000e+01
   sys_lumi_corr: 132.048
-  sys_mc_uncorr: 47.160000000000004
+  sys_mc_uncorr: 4.71600000e+01
 - stat: 11.205
   sys,Uncorrelated: 3.735
   sys,Correlated: 22.41
@@ -253,37 +253,37 @@ bins:
 - stat: 8.703
   sys,Uncorrelated: 2.901
   sys,Correlated: 17.406
-  sys_lumi_corr: 81.22799999999998
-  sys_mc_uncorr: 29.009999999999998
+  sys_lumi_corr: 8.12280000e+01
+  sys_mc_uncorr: 2.90100000e+01
 - stat: 6.519
   sys,Uncorrelated: 2.173
   sys,Correlated: 13.038
-  sys_lumi_corr: 60.843999999999994
+  sys_lumi_corr: 6.08440000e+01
   sys_mc_uncorr: 21.73
 - stat: 4.68
-  sys,Uncorrelated: 1.5600000000000003
+  sys,Uncorrelated: 1.56000000e+00
   sys,Correlated: 9.36
   sys_lumi_corr: 43.68
-  sys_mc_uncorr: 15.600000000000001
-- stat: 3.3480000000000003
+  sys_mc_uncorr: 1.56000000e+01
+- stat: 3.34800000e+00
   sys,Uncorrelated: 1.116
-  sys,Correlated: 6.696000000000001
-  sys_lumi_corr: 31.247999999999998
-  sys_mc_uncorr: 11.160000000000002
-- stat: 2.3390999999999997
+  sys,Correlated: 6.69600000e+00
+  sys_lumi_corr: 3.12480000e+01
+  sys_mc_uncorr: 1.11600000e+01
+- stat: 2.33910000e+00
   sys,Uncorrelated: 0.7797
-  sys,Correlated: 4.6781999999999995
-  sys_lumi_corr: 21.831599999999995
-  sys_mc_uncorr: 7.796999999999999
+  sys,Correlated: 4.67820000e+00
+  sys_lumi_corr: 2.18316000e+01
+  sys_mc_uncorr: 7.79700000e+00
 - stat: 2.0924
   sys,Uncorrelated: 0.5231
-  sys,Correlated: 3.6616999999999993
-  sys_lumi_corr: 14.646799999999997
-  sys_mc_uncorr: 5.231000000000001
-- stat: 1.3544000000000003
-  sys,Uncorrelated: 0.6772000000000001
-  sys,Correlated: 2.7088000000000005
-  sys_lumi_corr: 9.480799999999999
+  sys,Correlated: 3.66170000e+00
+  sys_lumi_corr: 1.46468000e+01
+  sys_mc_uncorr: 5.23100000e+00
+- stat: 1.35440000e+00
+  sys,Uncorrelated: 6.77200000e-01
+  sys,Correlated: 2.70880000e+00
+  sys_lumi_corr: 9.48080000e+00
   sys_mc_uncorr: 3.386
 - stat: 1.0995
   sys,Uncorrelated: 0.4398
@@ -293,43 +293,43 @@ bins:
 - stat: 0.864
   sys,Uncorrelated: 0.432
   sys,Correlated: 1.296
-  sys_lumi_corr: 4.031999999999999
+  sys_lumi_corr: 4.03200000e+00
   sys_mc_uncorr: 1.44
 - stat: 0.67298
   sys,Uncorrelated: 0.28842
-  sys,Correlated: 0.8652600000000001
+  sys,Correlated: 8.65260000e-01
   sys_lumi_corr: 2.69192
   sys_mc_uncorr: 0.9614
 - stat: 0.3342
   sys,Uncorrelated: 0.1671
   sys,Correlated: 0.4456
-  sys_lumi_corr: 1.5595999999999997
-  sys_mc_uncorr: 0.5569999999999999
-- stat: 0.12666000000000002
-  sys,Uncorrelated: 0.06333000000000001
+  sys_lumi_corr: 1.55960000e+00
+  sys_mc_uncorr: 5.57000000e-01
+- stat: 1.26660000e-01
+  sys,Uncorrelated: 6.33300000e-02
   sys,Correlated: 0.16888
-  sys_lumi_corr: 0.5910799999999999
+  sys_lumi_corr: 5.91080000e-01
   sys_mc_uncorr: 0.2111
 - stat: 0.071748
   sys,Uncorrelated: 0.023916
   sys,Correlated: 0.05979
-  sys_lumi_corr: 0.16741199999999998
+  sys_lumi_corr: 1.67412000e-01
   sys_mc_uncorr: 0.05979
-- stat: 0.0035700000000000003
+- stat: 3.57000000e-03
   sys,Uncorrelated: 0.00119
-  sys,Correlated: 0.0026180000000000005
+  sys,Correlated: 2.61800000e-03
   sys_lumi_corr: 0.006664
   sys_mc_uncorr: 0.00238
 - stat: 10.252
   sys,Uncorrelated: 5.126
-  sys,Correlated: 23.067000000000004
+  sys,Correlated: 2.30670000e+01
   sys_lumi_corr: 71.764
-  sys_mc_uncorr: 25.630000000000003
-- stat: 16.023000000000003
+  sys_mc_uncorr: 2.56300000e+01
+- stat: 1.60230000e+01
   sys,Uncorrelated: 5.341
-  sys,Correlated: 37.38699999999999
-  sys_lumi_corr: 149.54799999999997
-  sys_mc_uncorr: 53.410000000000004
+  sys,Correlated: 3.73870000e+01
+  sys_lumi_corr: 1.49548000e+02
+  sys_mc_uncorr: 5.34100000e+01
 - stat: 15.996
   sys,Uncorrelated: 10.664
   sys,Correlated: 31.992
@@ -337,286 +337,286 @@ bins:
   sys_mc_uncorr: 53.32
 - stat: 13.941
   sys,Uncorrelated: 4.647
-  sys,Correlated: 23.235000000000003
-  sys_lumi_corr: 130.11599999999999
-  sys_mc_uncorr: 46.470000000000006
+  sys,Correlated: 2.32350000e+01
+  sys_lumi_corr: 1.30116000e+02
+  sys_mc_uncorr: 4.64700000e+01
 - stat: 11.769
-  sys,Uncorrelated: 7.846000000000001
-  sys,Correlated: 19.615000000000002
-  sys_lumi_corr: 109.84399999999998
-  sys_mc_uncorr: 39.230000000000004
-- stat: 9.456000000000001
+  sys,Uncorrelated: 7.84600000e+00
+  sys,Correlated: 1.96150000e+01
+  sys_lumi_corr: 1.09844000e+02
+  sys_mc_uncorr: 3.92300000e+01
+- stat: 9.45600000e+00
   sys,Uncorrelated: 3.152
   sys,Correlated: 12.608
   sys_lumi_corr: 88.256
   sys_mc_uncorr: 31.52
-- stat: 7.329000000000001
-  sys,Uncorrelated: 2.4430000000000005
+- stat: 7.32900000e+00
+  sys,Uncorrelated: 2.44300000e+00
   sys,Correlated: 12.215
   sys_lumi_corr: 68.404
   sys_mc_uncorr: 24.43
-- stat: 5.5409999999999995
-  sys,Uncorrelated: 1.8470000000000002
+- stat: 5.54100000e+00
+  sys,Uncorrelated: 1.84700000e+00
   sys,Correlated: 9.235
-  sys_lumi_corr: 51.715999999999994
+  sys_lumi_corr: 5.17160000e+01
   sys_mc_uncorr: 18.47
-- stat: 3.972000000000001
+- stat: 3.97200000e+00
   sys,Uncorrelated: 1.324
-  sys,Correlated: 6.620000000000001
+  sys,Correlated: 6.62000000e+00
   sys_lumi_corr: 37.072
-  sys_mc_uncorr: 13.240000000000002
+  sys_mc_uncorr: 1.32400000e+01
 - stat: 3.8232
   sys,Uncorrelated: 0.9558
   sys,Correlated: 5.7348
-  sys_lumi_corr: 26.762399999999996
+  sys_lumi_corr: 2.67624000e+01
   sys_mc_uncorr: 9.558
-- stat: 2.6676000000000006
-  sys,Uncorrelated: 0.6669000000000002
+- stat: 2.66760000e+00
+  sys,Uncorrelated: 6.66900000e-01
   sys,Correlated: 4.0014
   sys_lumi_corr: 18.6732
-  sys_mc_uncorr: 6.6690000000000005
+  sys_mc_uncorr: 6.66900000e+00
 - stat: 1.7768
   sys,Uncorrelated: 0.8884
   sys,Correlated: 2.6652
-  sys_lumi_corr: 12.437599999999998
+  sys_lumi_corr: 1.24376000e+01
   sys_mc_uncorr: 4.442
 - stat: 1.148
   sys,Uncorrelated: 0.574
-  sys,Correlated: 2.0089999999999995
-  sys_lumi_corr: 8.035999999999998
-  sys_mc_uncorr: 2.8699999999999997
-- stat: 0.9345000000000001
+  sys,Correlated: 2.00900000e+00
+  sys_lumi_corr: 8.03600000e+00
+  sys_mc_uncorr: 2.87000000e+00
+- stat: 9.34500000e-01
   sys,Uncorrelated: 0.3738
   sys,Correlated: 1.4952
-  sys_lumi_corr: 5.233199999999999
-  sys_mc_uncorr: 1.8690000000000002
-- stat: 0.8665999999999998
-  sys,Uncorrelated: 0.37139999999999995
-  sys,Correlated: 0.9904000000000001
-  sys_lumi_corr: 3.4663999999999993
+  sys_lumi_corr: 5.23320000e+00
+  sys_mc_uncorr: 1.86900000e+00
+- stat: 8.66600000e-01
+  sys,Uncorrelated: 3.71400000e-01
+  sys,Correlated: 9.90400000e-01
+  sys_lumi_corr: 3.46640000e+00
   sys_mc_uncorr: 1.238
 - stat: 0.67808
   sys,Uncorrelated: 0.25428
-  sys,Correlated: 0.7628400000000001
+  sys,Correlated: 7.62840000e-01
   sys_lumi_corr: 2.37328
   sys_mc_uncorr: 0.8476
-- stat: 0.33466999999999997
+- stat: 3.34670000e-01
   sys,Uncorrelated: 0.14343
   sys,Correlated: 0.38248
-  sys_lumi_corr: 1.3386799999999999
+  sys_lumi_corr: 1.33868000e+00
   sys_mc_uncorr: 0.4781
-- stat: 0.13061999999999999
+- stat: 1.30620000e-01
   sys,Uncorrelated: 0.03732
-  sys,Correlated: 0.13061999999999999
-  sys_lumi_corr: 0.5224799999999999
-  sys_mc_uncorr: 0.18660000000000002
+  sys,Correlated: 1.30620000e-01
+  sys_lumi_corr: 5.22480000e-01
+  sys_mc_uncorr: 1.86600000e-01
 - stat: 0.067184
-  sys,Uncorrelated: 0.020672000000000003
-  sys,Correlated: 0.041344000000000006
-  sys_lumi_corr: 0.14470399999999997
+  sys,Uncorrelated: 2.06720000e-02
+  sys,Correlated: 4.13440000e-02
+  sys_lumi_corr: 1.44704000e-01
   sys_mc_uncorr: 0.05168
-- stat: 0.0034391
-  sys,Uncorrelated: 0.0010115
-  sys,Correlated: 0.0024276000000000002
-  sys_lumi_corr: 0.005664399999999999
+- stat: 3.43910000e-03
+  sys,Uncorrelated: 1.01150000e-03
+  sys,Correlated: 2.42760000e-03
+  sys_lumi_corr: 5.66440000e-03
   sys_mc_uncorr: 0.002023
 - stat: 8.195
-  sys,Uncorrelated: 4.917000000000001
+  sys,Uncorrelated: 4.91700000e+00
   sys,Correlated: 16.39
-  sys_lumi_corr: 45.891999999999996
+  sys_lumi_corr: 4.58920000e+01
   sys_mc_uncorr: 16.39
 - stat: 10.182
   sys,Uncorrelated: 6.788
   sys,Correlated: 27.152
   sys_lumi_corr: 95.032
-  sys_mc_uncorr: 33.940000000000005
+  sys_mc_uncorr: 3.39400000e+01
 - stat: 10.251
   sys,Uncorrelated: 6.834
   sys,Correlated: 17.085
-  sys_lumi_corr: 95.67599999999999
+  sys_lumi_corr: 9.56760000e+01
   sys_mc_uncorr: 34.17
 - stat: 8.826
   sys,Uncorrelated: 5.884
-  sys,Correlated: 20.593999999999998
-  sys_lumi_corr: 82.37599999999999
+  sys,Correlated: 2.05940000e+01
+  sys_lumi_corr: 8.23760000e+01
   sys_mc_uncorr: 29.42
-- stat: 9.888000000000002
-  sys,Uncorrelated: 4.944000000000001
+- stat: 9.88800000e+00
+  sys,Uncorrelated: 4.94400000e+00
   sys,Correlated: 12.36
-  sys_lumi_corr: 69.21599999999998
+  sys_lumi_corr: 6.92160000e+01
   sys_mc_uncorr: 24.72
-- stat: 6.002999999999999
+- stat: 6.00300000e+00
   sys,Uncorrelated: 4.002
   sys,Correlated: 10.005
-  sys_lumi_corr: 56.02799999999999
+  sys_lumi_corr: 5.60280000e+01
   sys_mc_uncorr: 20.01
 - stat: 6.272
   sys,Uncorrelated: 3.136
   sys,Correlated: 7.84
-  sys_lumi_corr: 43.903999999999996
+  sys_lumi_corr: 4.39040000e+01
   sys_mc_uncorr: 15.68
 - stat: 4.82
   sys,Uncorrelated: 2.41
-  sys,Correlated: 6.025000000000001
+  sys,Correlated: 6.02500000e+00
   sys_lumi_corr: 33.74
-  sys_mc_uncorr: 12.050000000000002
+  sys_mc_uncorr: 1.20500000e+01
 - stat: 3.5332
   sys,Uncorrelated: 1.7666
   sys,Correlated: 5.2998
   sys_lumi_corr: 24.7324
   sys_mc_uncorr: 8.833
-- stat: 3.2279999999999998
+- stat: 3.22800000e+00
   sys,Uncorrelated: 1.2912
-  sys,Correlated: 3.2279999999999998
+  sys,Correlated: 3.22800000e+00
   sys_lumi_corr: 18.0768
-  sys_mc_uncorr: 6.4559999999999995
+  sys_mc_uncorr: 6.45600000e+00
 - stat: 1.8628
   sys,Uncorrelated: 0.9314
-  sys,Correlated: 2.3285000000000005
-  sys_lumi_corr: 13.039599999999998
-  sys_mc_uncorr: 4.657000000000001
+  sys,Correlated: 2.32850000e+00
+  sys_lumi_corr: 1.30396000e+01
+  sys_mc_uncorr: 4.65700000e+00
 - stat: 1.572
   sys,Uncorrelated: 0.6288
   sys,Correlated: 1.8864
-  sys_lumi_corr: 8.803199999999999
+  sys_lumi_corr: 8.80320000e+00
   sys_mc_uncorr: 3.144
-- stat: 1.0205000000000002
+- stat: 1.02050000e+00
   sys,Uncorrelated: 0.4082
   sys,Correlated: 1.4287
   sys_lumi_corr: 5.7148
-  sys_mc_uncorr: 2.0410000000000004
-- stat: 0.9050999999999999
+  sys_mc_uncorr: 2.04100000e+00
+- stat: 9.05100000e-01
   sys,Uncorrelated: 0.3879
   sys,Correlated: 1.0344
-  sys_lumi_corr: 3.6203999999999996
-  sys_mc_uncorr: 1.2930000000000001
+  sys_lumi_corr: 3.62040000e+00
+  sys_mc_uncorr: 1.29300000e+00
 - stat: 0.67968
   sys,Uncorrelated: 0.33984
   sys,Correlated: 0.76464
-  sys_lumi_corr: 2.3788799999999997
-  sys_mc_uncorr: 0.8495999999999999
-- stat: 0.5770000000000001
+  sys_lumi_corr: 2.37888000e+00
+  sys_mc_uncorr: 8.49600000e-01
+- stat: 5.77000000e-01
   sys,Uncorrelated: 0.2308
-  sys,Correlated: 0.5193000000000001
-  sys_lumi_corr: 1.6155999999999997
-  sys_mc_uncorr: 0.5770000000000001
+  sys,Correlated: 5.19300000e-01
+  sys_lumi_corr: 1.61560000e+00
+  sys_mc_uncorr: 5.77000000e-01
 - stat: 0.26632
   sys,Uncorrelated: 0.13316
   sys,Correlated: 0.26632
   sys_lumi_corr: 0.93212
-  sys_mc_uncorr: 0.33290000000000003
+  sys_mc_uncorr: 3.32900000e-01
 - stat: 0.1036
   sys,Uncorrelated: 0.03885
   sys,Correlated: 0.09065
   sys_lumi_corr: 0.3626
   sys_mc_uncorr: 0.1295
-- stat: 0.05678999999999999
+- stat: 5.67900000e-02
   sys,Uncorrelated: 0.01893
   sys,Correlated: 0.03786
-  sys_lumi_corr: 0.10600799999999999
+  sys_lumi_corr: 1.06008000e-01
   sys_mc_uncorr: 0.03786
-- stat: 0.0027300000000000002
-  sys,Uncorrelated: 0.0009099999999999999
-  sys,Correlated: 0.0018199999999999998
-  sys_lumi_corr: 0.0036399999999999996
+- stat: 2.73000000e-03
+  sys,Uncorrelated: 9.10000000e-04
+  sys,Correlated: 1.82000000e-03
+  sys_lumi_corr: 3.64000000e-03
   sys_mc_uncorr: 0.0013
 - stat: 4.5032
   sys,Uncorrelated: 2.2516
   sys,Correlated: 9.0064
-  sys_lumi_corr: 15.761199999999995
+  sys_lumi_corr: 1.57612000e+01
   sys_mc_uncorr: 5.629
 - stat: 5.705
   sys,Uncorrelated: 3.423
-  sys,Correlated: 12.551000000000002
-  sys_lumi_corr: 31.947999999999997
+  sys,Correlated: 1.25510000e+01
+  sys_lumi_corr: 3.19480000e+01
   sys_mc_uncorr: 11.41
-- stat: 6.7200000000000015
-  sys,Uncorrelated: 3.3600000000000008
+- stat: 6.72000000e+00
+  sys,Uncorrelated: 3.36000000e+00
   sys,Correlated: 7.84
   sys_lumi_corr: 31.36
-  sys_mc_uncorr: 11.200000000000001
-- stat: 5.7498000000000005
-  sys,Uncorrelated: 2.8749000000000002
+  sys_mc_uncorr: 1.12000000e+01
+- stat: 5.74980000e+00
+  sys,Uncorrelated: 2.87490000e+00
   sys,Correlated: 7.6664
   sys_lumi_corr: 26.8324
-  sys_mc_uncorr: 9.583000000000002
+  sys_mc_uncorr: 9.58300000e+00
 - stat: 4.8678
   sys,Uncorrelated: 2.4339
-  sys,Correlated: 5.679099999999999
-  sys_lumi_corr: 22.716399999999997
+  sys,Correlated: 5.67910000e+00
+  sys_lumi_corr: 2.27164000e+01
   sys_mc_uncorr: 8.113
-- stat: 3.9035999999999995
-  sys,Uncorrelated: 1.9517999999999998
-  sys,Correlated: 3.9035999999999995
+- stat: 3.90360000e+00
+  sys,Uncorrelated: 1.95180000e+00
+  sys,Correlated: 3.90360000e+00
   sys_lumi_corr: 18.2168
-  sys_mc_uncorr: 6.505999999999999
-- stat: 3.5286999999999997
-  sys,Uncorrelated: 2.0164000000000004
+  sys_mc_uncorr: 6.50600000e+00
+- stat: 3.52870000e+00
+  sys,Uncorrelated: 2.01640000e+00
   sys,Correlated: 3.0246
-  sys_lumi_corr: 14.114799999999999
+  sys_lumi_corr: 1.41148000e+01
   sys_mc_uncorr: 5.041
 - stat: 2.3634
   sys,Uncorrelated: 1.1817
   sys,Correlated: 2.3634
-  sys_lumi_corr: 11.029199999999998
-  sys_mc_uncorr: 3.9389999999999996
+  sys_lumi_corr: 1.10292000e+01
+  sys_mc_uncorr: 3.93900000e+00
 - stat: 2.0391
-  sys,Uncorrelated: 1.1652000000000002
+  sys,Uncorrelated: 1.16520000e+00
   sys,Correlated: 2.0391
   sys_lumi_corr: 8.1564
-  sys_mc_uncorr: 2.9130000000000003
+  sys_mc_uncorr: 2.91300000e+00
 - stat: 1.7088
   sys,Uncorrelated: 1.068
-  sys,Correlated: 1.9224000000000003
-  sys_lumi_corr: 5.9807999999999995
+  sys,Correlated: 1.92240000e+00
+  sys_lumi_corr: 5.98080000e+00
   sys_mc_uncorr: 2.136
 - stat: 1.0843
-  sys,Uncorrelated: 0.6196000000000002
+  sys,Uncorrelated: 6.19600000e-01
   sys,Correlated: 1.0843
   sys_lumi_corr: 4.3372
   sys_mc_uncorr: 1.549
 - stat: 0.8776
   sys,Uncorrelated: 0.3291
-  sys,Correlated: 0.7678999999999999
-  sys_lumi_corr: 3.0715999999999997
-  sys_mc_uncorr: 1.0970000000000002
+  sys,Correlated: 7.67900000e-01
+  sys_lumi_corr: 3.07160000e+00
+  sys_mc_uncorr: 1.09700000e+00
 - stat: 0.59072
   sys,Uncorrelated: 0.29536
   sys,Correlated: 0.59072
-  sys_lumi_corr: 2.0675199999999996
-  sys_mc_uncorr: 0.7384000000000001
-- stat: 0.49700000000000005
+  sys_lumi_corr: 2.06752000e+00
+  sys_mc_uncorr: 7.38400000e-01
+- stat: 4.97000000e-01
   sys,Uncorrelated: 0.1988
-  sys,Correlated: 0.4473000000000001
-  sys_lumi_corr: 1.3915999999999997
-  sys_mc_uncorr: 0.49700000000000005
-- stat: 0.41964000000000007
-  sys,Uncorrelated: 0.19368000000000002
-  sys,Correlated: 0.38736000000000004
-  sys_lumi_corr: 0.9038400000000001
-  sys_mc_uncorr: 0.32280000000000003
+  sys,Correlated: 4.47300000e-01
+  sys_lumi_corr: 1.39160000e+00
+  sys_mc_uncorr: 4.97000000e-01
+- stat: 4.19640000e-01
+  sys,Uncorrelated: 1.93680000e-01
+  sys,Correlated: 3.87360000e-01
+  sys_lumi_corr: 9.03840000e-01
+  sys_mc_uncorr: 3.22800000e-01
 - stat: 0.3432
-  sys,Uncorrelated: 0.15014999999999998
-  sys,Correlated: 0.27885000000000004
-  sys_lumi_corr: 0.6005999999999999
+  sys,Uncorrelated: 1.50150000e-01
+  sys,Correlated: 2.78850000e-01
+  sys_lumi_corr: 6.00600000e-01
   sys_mc_uncorr: 0.2145
-- stat: 0.16309999999999997
+- stat: 1.63100000e-01
   sys,Uncorrelated: 0.05825
   sys,Correlated: 0.1398
-  sys_lumi_corr: 0.32619999999999993
+  sys_lumi_corr: 3.26200000e-01
   sys_mc_uncorr: 0.1165
-- stat: 0.05893999999999999
+- stat: 5.89400000e-02
   sys,Uncorrelated: 0.02105
-  sys,Correlated: 0.04631000000000001
-  sys_lumi_corr: 0.11787999999999998
+  sys,Correlated: 4.63100000e-02
+  sys_lumi_corr: 1.17880000e-01
   sys_mc_uncorr: 0.0421
-- stat: 0.031408000000000005
+- stat: 3.14080000e-02
   sys,Uncorrelated: 0.01208
-  sys,Correlated: 0.020536000000000006
+  sys,Correlated: 2.05360000e-02
   sys_lumi_corr: 0.033824
   sys_mc_uncorr: 0.01208
-- stat: 0.0014109399999999999
-  sys,Uncorrelated: 0.00044555999999999996
-  sys,Correlated: 0.00081686
-  sys_lumi_corr: 0.0010396399999999999
-  sys_mc_uncorr: 0.00037129999999999997
+- stat: 1.41094000e-03
+  sys,Uncorrelated: 4.45560000e-04
+  sys,Correlated: 8.16860000e-04
+  sys_lumi_corr: 1.03964000e-03
+  sys_mc_uncorr: 3.71300000e-04
