@@ -17,7 +17,7 @@ from scipy.integrate import quad
 from reportengine.checks import check_positive
 from reportengine.floatformatting import format_error_value_columns
 from reportengine.table import table
-from validphys.core import PDF
+from validphys.core import PDF, MCStats, SymmHessianStats
 from validphys.pdfbases import parse_flarr
 
 # Limits of the partial integration when computing (Sum) Rules
@@ -206,14 +206,21 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
     return _combine_limits(_sum_rules(UNKNOWN_SUM_RULES, lpdf, Q))
 
 
-def _simple_description(d):
+def _simple_description(data, pdf):
+    """Return a table with simple descriptive statistics over the members of the PDF.
+     The statistics used depend on the type of PDF (MC or Hessian)."""
     res = {}
-    for k, arr in d.items():
-        res[k] = d = {}
-        d["mean"] = np.mean(arr)
-        d["std"] = np.std(arr)
-        d["min"] = np.min(arr)
-        d["max"] = np.max(arr)
+    stats_class = pdf.stats_class
+    for k, arr in data.items():
+        res[k] = stats_dict = {}
+        # Each entry in `data` is expected to be a vector with shape
+        # (central_member + error_members,), hence we reshape to (-1, 1) before
+        # passing to the stats class.
+        stats = stats_class(arr.reshape(-1,1))
+        stats_dict["mean"] = stats.central_value()
+        stats_dict["std"] = stats.std_error()
+        stats_dict["min"] = np.min(arr)
+        stats_dict["max"] = np.max(arr)
 
     return pd.DataFrame(res).T
 
@@ -233,10 +240,10 @@ def _err_mean_table(d, polarized=False):
 
 
 @table
-def sum_rules_table(sum_rules):
+def sum_rules_table(sum_rules, pdf):
     """Return a table with the descriptive statistics of the sum rules,
     over members of the PDF."""
-    return _simple_description(sum_rules)
+    return _simple_description(sum_rules, pdf)
 
 
 @table
