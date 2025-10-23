@@ -174,11 +174,11 @@ definitions:
   tW Diagram Removel:
     description: tW Diagram Removel
     treatment: ADD
-    correlation: CORR
+    correlation: UNCORR
   tW DS hdamp:
     description: tW DS hdamp
     treatment: ADD
-    correlation: CORR
+    correlation: UNCORR
   RW inverted setup 2D:
     description: RW inverted setup 2D
     treatment: ADD
@@ -193,20 +193,20 @@ definitions:
     correlation: CORR
   Norm. $W\rightarrow\tau\nu$ by 5%:
     description: Norm. $W\rightarrow\tau\nu$ by 5%
-    treatment: ADD
-    correlation: CORR
+    treatment: MULT
+    correlation: UNCORR
   Norm. Single top by 4%:
     description: Norm. Single top by 4%
-    treatment: ADD
-    correlation: CORR
+    treatment: MULT
+    correlation: UNCORR
   Norm. Diboson by 6%:
     description: Norm. Diboson by 6%
-    treatment: ADD
-    correlation: CORR
+    treatment: MULT
+    correlation: UNCORR
   Norm. Z by 5%:
     description: Norm. Z by 5%
-    treatment: ADD
-    correlation: CORR
+    treatment: MULT
+    correlation: UNCORR
 bins:
 - LUMI: 5.74675400e-05
   Data stat. unc.: 1.02020000e-04

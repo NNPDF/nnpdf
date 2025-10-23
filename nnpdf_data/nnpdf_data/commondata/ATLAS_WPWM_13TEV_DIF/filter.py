@@ -194,19 +194,79 @@ def filter_ATLAS_WPWM_13TEV_DIF(observable=None):
 
     kinematics_yaml = {"bins": kinematics}
 
-    treatment = {"LUMI": "MULT",
-                "Stat. unc.": "ADD",
-                "Uncor. syst. unc.":"ADD",
-                "Others": "ADD"}
-    correlation = {"LUMI": "ATLASLUMI16",
-                "Stat. unc.": "UNCORR",
-                "Uncor. syst. unc.":"UNCORR",
-                "Others": "CORR"}
+    treatment = {
+        "LUMI": "MULT",
+        "Stat. unc.": "ADD",
+        "Uncor. syst. unc.": "ADD",
+        "Electron Eff. ChargeMisID (stat.)": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta1": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta2": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta3": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta4": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta5": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta6": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta7": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta9": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta10": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta11": "ADD",
+        "Electron Eff. ID High-$p_T$ Eta12": "ADD",
+        "Electron Eff. ID SIMP3": "ADD",
+        "Electron Eff. ID SIMP4": "ADD",
+        "Electron Eff. ID SIMP11": "ADD",
+        "Electron Eff. ID SIMP15": "ADD",
+        "Others": "ADD",
+    }
+    correlation = {
+        "LUMI": "ATLASLUMI16",
+        "Stat. unc.": "UNCORR",
+        "Uncor. syst. unc.": "UNCORR",
+        "Electron Eff. ChargeMisID (stat.)": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta1": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta2": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta3": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta4": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta5": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta6": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta7": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta9": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta10": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta11": "UNCORR",
+        "Electron Eff. ID High-$p_T$ Eta12": "UNCORR",
+        "Electron Eff. ID SIMP3": "UNCORR",
+        "Electron Eff. ID SIMP4": "UNCORR",
+        "Electron Eff. ID SIMP11": "UNCORR",
+        "Electron Eff. ID SIMP15": "UNCORR",
+        "Others": "CORR",
+    }
     definitions = {}
 
     errors_yaml = []
     for unc in uncertainties:
-        if unc["name"] in treatment:
+        if "t\bar{t}" in unc["name"]:
+            definitions[unc["name"]] = {
+                "description": unc["name"],
+                "treatment": "ADD",
+                "correlation": "UNCORR",
+            }
+        elif "Multijet" in unc["name"]:
+            definitions[unc["name"]] = {
+                "description": unc["name"],
+                "treatment": "ADD",
+                "correlation": "UNCORR",
+            }
+        elif "Norm." in unc["name"]:
+            definitions[unc["name"]] = {
+                "description": unc["name"],
+                "treatment": "MULT",
+                "correlation": "UNCORR",
+            }
+        elif "tW" in unc["name"]:
+            definitions[unc["name"]] = {
+                "description": unc["name"],
+                "treatment": "ADD",
+                "correlation": "UNCORR",
+            }
+        elif unc["name"] in treatment:
             definitions[unc["name"]] = {
                 "description": unc["name"],
                 "treatment": treatment[unc["name"]],
