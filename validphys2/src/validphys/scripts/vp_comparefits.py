@@ -231,8 +231,6 @@ class CompareFitApp(App):
             )
         if self.check_identical_theory_cuts_covmat():
             autosettings['extra_dataset_page'] = True
-        print(autosettings['extra_dataset_page'])
-        import pdb; pdb.set_trace()
         return autosettings
 
 
@@ -254,8 +252,6 @@ class CompareFitApp(App):
         current_runcard_path = str(resultspath) + "/" + str(args['current_fit']) + "/filter.yml" 
         reference_runcard_path = str(resultspath) + "/" + str(args['reference_fit']) + "/filter.yml"
         
-        #current_fit = self.environment.loader.load(args['current_fit'])
-        #reference_fit = self.environment.loader.load(args['reference_fit'])
         with open(current_runcard_path) as fc:
             with open(reference_runcard_path) as fr:
                 current_runcard = yaml_safe.load(fc)
@@ -268,8 +264,6 @@ class CompareFitApp(App):
         same_datacuts = current_runcard.get("datacuts") == reference_runcard.get("datacuts")
         same_thcovmat = (current_thcovmat == reference_thcovmat or (current_thcovmat is None and reference_thcovmat is None))
 
-        yes = same_theoryid and same_datacuts and same_thcovmat
-        print(yes)
         return same_theoryid and same_datacuts and same_thcovmat
             
 
