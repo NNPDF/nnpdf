@@ -217,8 +217,8 @@ def _simple_description(data, pdf):
         # (central_member + error_members,), hence we reshape to (-1, 1) before
         # passing to the stats class.
         stats = stats_class(arr.reshape(-1,1))
-        stats_dict["mean"] = stats.central_value()
-        stats_dict["std"] = stats.std_error()
+        stats_dict["mean"] = stats.central_value().item()
+        stats_dict["std"] = stats.std_error().item()
         stats_dict["min"] = np.min(arr)
         stats_dict["max"] = np.max(arr)
 
