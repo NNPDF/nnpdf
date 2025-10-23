@@ -17,7 +17,7 @@ from scipy.integrate import quad
 from reportengine.checks import check_positive
 from reportengine.floatformatting import format_error_value_columns
 from reportengine.table import table
-from validphys.core import PDF, MCStats, SymmHessianStats
+from validphys.core import PDF
 from validphys.pdfbases import parse_flarr
 
 # Limits of the partial integration when computing (Sum) Rules
