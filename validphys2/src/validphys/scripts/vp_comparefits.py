@@ -229,7 +229,10 @@ class CompareFitApp(App):
                     'unpolarized_bc': {'from_': 'positivity_bound'},
                 }
             )
+        if self.check_identical_theory_cuts_covmat():
+            autosettings['extra_dataset_page'] = True
         return autosettings
+
 
     def get_config(self):
         self.try_complete_args()
@@ -240,7 +243,29 @@ class CompareFitApp(App):
             c = yaml_safe.load(f)
         c.update(self.complete_mapping())
         return self.config_class(c, environment=self.environment)
+    
+    def check_identical_theory_cuts_covmat(self):
+        args = self.args
+        l = self.environment.loader
+        resultspath = l.resultspath
+        
+        current_runcard_path = str(resultspath) + "/" + str(args['current_fit']) + "/filter.yml" 
+        reference_runcard_path = str(resultspath) + "/" + str(args['reference_fit']) + "/filter.yml"
+        
+        with open(current_runcard_path) as fc:
+            with open(reference_runcard_path) as fr:
+                current_runcard = yaml_safe.load(fc)
+                reference_runcard = yaml_safe.load(fr)
+        
+        current_thcovmat = current_runcard.get("theorycovmatconfig")
+        reference_thcovmat = reference_runcard.get("theorycovmatconfig")
 
+        same_theoryid = current_runcard.get("theory").get("theoryid") == reference_runcard.get("theory").get("theoryid")
+        same_datacuts = current_runcard.get("datacuts") == reference_runcard.get("datacuts")
+        same_thcovmat = (current_thcovmat == reference_thcovmat or (current_thcovmat is None and reference_thcovmat is None))
+
+        return same_theoryid and same_datacuts and same_thcovmat
+            
 
 def main():
     a = CompareFitApp()
