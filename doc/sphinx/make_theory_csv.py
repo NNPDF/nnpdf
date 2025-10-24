@@ -5,7 +5,7 @@ Generate the theory csv using validphys functions
 from argparse import ArgumentParser
 from pathlib import Path
 
-from nnpdf_data import theory_cards
+from nnpdf_data import THEORY_CARDS_PATH
 from nnpdf_data.theorydbutils import fetch_all
 
 if __name__ == "__main__":
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    theory_df = fetch_all(theory_cards)
+    theory_df = fetch_all(THEORY_CARDS_PATH)
 
     # Enforce the following order in the table:
     order = ["PTO", "QED", "Comments", "IC", "Q0", "ModEv"]
