@@ -127,7 +127,7 @@ class _Masks(TupleComp):
         seed,
         tr_masks,
         vl_masks,
-        diagonal_basis=False,
+        diagonal_basis=True,
         eig_vals=None,
         diagonal_rotation=None,
     ):
@@ -324,7 +324,7 @@ def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hash
 
 
 @functools.lru_cache
-def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_basis=False):
+def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_basis=True):
     """Returns the inverse covmats for training, validation and total
     attending to the right masks and whether it is diagonal or not.
 
@@ -334,7 +334,13 @@ def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_
     inv_total, inv_training, inv_validation, ndata_tr, ndata_vl, mask_tr, mask_vl, diagonal_rotation
     """
     covmat = _hashed_dataset_inputs_fitting_covmat.array
-    inv_total = np.linalg.inv(covmat)
+
+    diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
+    cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
+    inv_total = (
+        np.diag(diag_inv_sqrt_total) @ np.linalg.inv(cormat_total) @ np.diag(diag_inv_sqrt_total)
+    )
+
     diagonal_rotation = None
 
     if diagonal_basis:
@@ -428,6 +434,7 @@ def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_
         ndata_vl -= len(data_zero_vl)
 
     return (
+        covmat,
         inv_total,
         invcovmat_tr,
         invcovmat_vl,
@@ -443,7 +450,6 @@ def fitting_data_dict(
     data,
     make_replica,
     dataset_inputs_loaded_cd_with_cuts,
-    dataset_inputs_fitting_covmat,
     _inv_covmat_prepared,
     kfold_masks,
     fittable_datasets_masked,
@@ -494,7 +500,7 @@ def fitting_data_dict(
     expdata = make_replica
     fittable_datasets = fittable_datasets_masked
 
-    inv_true, invcovmat_tr, invcovmat_vl, ndata_tr, ndata_vl, tr_mask, vl_mask, diag_rot = (
+    covmat, inv_true, invcovmat_tr, invcovmat_vl, ndata_tr, ndata_vl, tr_mask, vl_mask, diag_rot = (
         _inv_covmat_prepared
     )
 
@@ -523,7 +529,7 @@ def fitting_data_dict(
         "name": str(data),
         "expdata_true": expdata_true.reshape(1, -1),
         "invcovmat_true": inv_true,
-        "covmat": dataset_inputs_fitting_covmat,
+        "covmat": covmat,
         "trmask": tr_mask,
         "invcovmat": invcovmat_tr,
         "ndata": ndata_tr,
@@ -634,7 +640,7 @@ def replica_mask_table(replica_mask):
     return replica_mask
 
 
-def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
+def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=True):
     """Save the boolean mask used to split data into training and validation
     for a given replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
@@ -700,7 +706,7 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
     return df_tr, df_vl
 
 
-def replica_validation_mask(exps_tr_masks, replica, experiments_index, diagonal_basis=False):
+def replica_validation_mask(exps_tr_masks, replica, experiments_index, diagonal_basis=True):
     """Save the boolean mask used to split data into training and validation
     for a given replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
