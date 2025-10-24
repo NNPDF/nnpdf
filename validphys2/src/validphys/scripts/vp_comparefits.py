@@ -7,7 +7,7 @@ import prompt_toolkit
 from prompt_toolkit.completion import WordCompleter
 
 from reportengine.colors import t
-from validphys import compareclosuretemplates, comparefittemplates
+from validphys import comparefittemplates
 from validphys.app import App
 from validphys.loader import RemoteLoader
 from validphys.promptutils import KeywordsWithCache, confirm
@@ -55,9 +55,6 @@ class CompareFitApp(App):
             '--interactive',
             help="Ask interactively for the missing data",
             action='store_true',
-        )
-        parser.add_argument(
-            '-c', '--closure', help="Use the closure comparison template.", action='store_true'
         )
         parser.add_argument(
             '-l', '--lite', help="Smaller version of the usual comparefit fit", action='store_true'
@@ -173,10 +170,7 @@ class CompareFitApp(App):
         # This is needed because the environment wants to know how to resolve
         # the relative paths to find the templates. Best to have the template
         # look as much as possible as a runcard passed from the command line
-        if args['closure']:
-            log.info("using closure test template.")
-            args['config_yml'] = compareclosuretemplates.template_path
-        elif args['lite']:
+        if args['lite']:
             log.info("using compare-lite template.")
             args['config_yml'] = comparefittemplates.template_lite_path
         elif args['use_polarized']:
