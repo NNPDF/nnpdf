@@ -1013,21 +1013,10 @@ class ModelTrainer:
                 threshold_chi2=threshold_chi2,
             )
             
-            if self.mode_hyperopt:
-                # Compile each of the models with the right parameters
-                for model in models.values():
-                    model.compile(**params["optimizer"])
-            else:
-                # Proper way of doing this? Not sure how optimizer parameters should be treated
-                optimizer_params = {}
-                optimizer_params["clipnorm"] = hyperopt_params['clipnorm'][self.replicas[0]]
-                optimizer_params["learning_rate"] = hyperopt_params['learning_rate'][self.replicas[0]]
-                optimizer_params["optimizer_name"] = hyperopt_params['optimizer'][self.replicas[0]]
-
-                for model in models.values():
-                    model.compile(**optimizer_params)
-
-
+            # Compile each of the models with the right parameters
+            for model in models.values():
+                model.compile(**params["optimizer"])
+            
             self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
