@@ -10,7 +10,8 @@ You need to provide:
 1. A PDF which includes your data set;
 2. A valid theory ID;
 3. A choice of cuts policy;
-4. A list of data sets to do the comparison for.
+4. A list of data sets to do the comparison for;
+5. Options to shift theoretical predictions according to the correlated part of the experimental uncertainties and/or to normalise the comparison to the central value of the experimental data.
 
 Below is an example runcard for a data theory comparison for BCDMSP, ``runcard.yaml``:
 
@@ -21,38 +22,30 @@ Below is an example runcard for a data theory comparison for BCDMSP, ``runcard.y
       keywords: [example]
       author: Rosalyn Pearson
 
-  pdfs: 
-      - id: NNPDF31_nnlo_as_0118
-        label: NNPDF31_nnlo_as_0118
-
-  theoryid: 53
-
-  use_cuts: false
+  dataspecs:
+    - speclabel: "NNPDF40 (w/o shift)"
+      theoryid: 40_000_000
+      use_cuts: "internal"
+      with_shift: False
+      pdf: NNPDF40_nnlo_as_01180
+    - speclabel: "NNPDF40 (w/ shift)"
+      theoryid: 40_000_000
+      use_cuts: "internal"
+      with_shift: True
+      pdf: NNPDF40_nnlo_as_01180 
 
   dataset_inputs:
-        - { dataset: BCDMSP}
+      - { dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, variant: legacy}
+      - { dataset: ATLAS_1JET_8TEV_R06, variant: legacy}
+      - { dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy}
 
-  template: dthcomparison.md
+  template_text: |
+     # Data theory comparison with and without shifts
+     {@ with dataset_inputs @}
+     {@ plot_fancy_dataspecs(normalize_to=data) @}
+     {@ endwith @}
 
   actions_:
     - report(main=true)
 
-The corresponding template, ``dthcomparison.md``, looks like this:
-
-.. code:: yaml
-
-  %BCDMSP (theory ID 52)
-
-  {@ dataset_inputs plot_fancy @}
-  {@ dataset_inputs::pdfs plot_fancy(normalize_to=data)@}
-  {@ dataset_inputs::pdfs plot_chi2dist @}
-  {@ dataset_inputs::pdfs group_result_table @}
-
-1.  ``plot_fancy`` produces data-theory comparison plots for the data. This is called 
-    twice to produce both normalised and unnormalised sets of plots.
-2.  ``plot_chi2dist`` gives the chi2 distribution between the theory and data.
-3.  ``group_result_table`` gives the numerical values which appear in the plots.
-
-Running :code:`validphys runcard.yaml` should produce a ``validphys`` report of the data-theory 
-comparison like the one `here <https://vp.nnpdf.science/ErmVZEPGT42GCfreWwzalg==/>`_ - see the
-`vp-guide <https://data.nnpdf.science/validphys-docs/guide.html#development-installs>`_.
+The function ``plot_fancy_dataspecs`` produces data-theory comparison plots for the specified list of data for all of the data specifications ``dataspecs``. The code can be run as :code:`validphys runcard.yaml` which will produce a ``validphys`` report with the desired plots. See the runcard ``data_theory_comparison.yaml`` in the validphys ``examples`` folder for details.

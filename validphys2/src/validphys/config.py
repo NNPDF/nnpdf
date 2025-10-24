@@ -7,7 +7,6 @@ import inspect
 import logging
 import numbers
 import pathlib
-
 import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
@@ -212,7 +211,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
 
         return res
-
+               
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""
         return NSList(range(1, nreplica + 1), nskey="replica")
@@ -1304,16 +1303,26 @@ class CoreConfig(configparser.Config):
                 thcovmat_present = False
 
         if use_thcovmat_if_present and thcovmat_present:
-            # Expected path of theory covmat hardcoded
-            covmat_path = (
-                fit.path / "tables" / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
-            )
-            # All possible valid files
+            tables_path = fit.path / "tables"
+            theorycovmatconfig = fit.as_input()["theorycovmatconfig"]
+            user_covmat_path = theorycovmatconfig.get("user_covmat_path", None)
+            point_prescriptions = theorycovmatconfig.get("point_prescriptions", None)
+
+            generic_name = "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
+            if user_covmat_path is not None:
+                # User covmat + point prescriptions
+                if point_prescriptions is not None and point_prescriptions != []:
+                  generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
+                # Only user covmat
+                else:
+                    generic_name = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
+            covmat_path = tables_path / generic_name
             if not covmat_path.exists():
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
                     f"usual location: {covmat_path}."
                 )
+            logging.info(f"Using theory covmat in fit: {covmat_path}")
             fit_theory_covmat = ThCovMatSpec(covmat_path)
         else:
             fit_theory_covmat = None
