@@ -1,0 +1,1942 @@
+independent_variables:
+- header: {name: "$\\Delta R_{\\text{Zb}}$ in $Z +\\ge 2 b$-jet"}
+  values:
+  - {low: 0, high: 0.4}
+  - {low: 0.4, high: 0.9}
+  - {low: 0.9, high: 1.3}
+  - {low: 1.3, high: 1.8}
+  - {low: 1.8, high: 2.3}
+  - {low: 2.3, high: 2.7}
+  - {low: 2.7, high: 3.1}
+  - {low: 3.1, high: 3.5}
+  - {low: 3.5, high: 4}
+  - {low: 4, high: 5}
+dependent_variables:
+- header: {name: DSIG/DDR, units: PB}
+  qualifiers:
+  - {name: Distribution, value: Data}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.107155
+    errors: 
+     - {symerror: 0.00331118, label: stat}
+     - {symerror: 0.00107159, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.000284616, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.000352472, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.000679009, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.00368079, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000424508, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.000233326, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000183016, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.000125177, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000113964, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.000118338, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.000183061, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.000144772, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.000118338, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000118345, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.000180125, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.00011836, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.000306174, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.000158232, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.000184312, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.000183061, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.000188649, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.000188671, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.000128683, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 4.82686e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.000211116, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.0001183, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 2.88077e-05, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.000178486, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.000188708, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.000112675, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.000183016, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.000176191, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.000321273, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.000115424, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.000176191, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.000183031, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.000241246, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.000188686, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 2.50712e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 8.67993e-07, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 1.03749e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 4.42192e-06, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 2.39909e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 7.0408e-07, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.000406895, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00019528, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.000353899, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.000899773, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.000604078, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.000845365, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.00114001, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.0011032, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.000289384, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.000834256, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.00012061, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.000125185, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.000292178, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.000302322, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.000183076, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.000185892, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 7.89762e-06, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.000112548, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.000139534, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.000183061, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.000134666, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.000180282, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.000169255, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.000142753, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.000165895, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.000176281, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.000198271, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.000477042, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.000119582, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.00131526, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00148983, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.000111401, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.000200108, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.000216696, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000182755, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.00011982, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.000118338, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 1.60187e-07, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.04891e-07, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 4.09782e-08, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.000118375, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.000118323, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 2.57045e-07, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 6.1579e-06, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 7.03707e-05, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.23456e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 7.03707e-05, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.23456e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.00125397, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.00015381, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 9.73567e-05, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.000127751, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.00039361, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.000141382, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.00137558, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.00060755, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.000465237, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.000107765, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.000155896, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.000666499, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 8.13752e-05, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.000120133, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.000107184, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.000156842, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.0012729, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 2.34693e-07, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.000237148, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.000100136, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.0009664, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.000278339, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.000519536, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.000439957, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.000976756, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.000548184, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.00248735, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 6.52671e-06, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 3.72529e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.000149444, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.00145053, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.000266023, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.000287879, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.000777546, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.000954952, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.00118136, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.00253655, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 6.25849e-07, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.000446014, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.000215128, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.000131305, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000183061, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000112772, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00011801, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.14366e-06, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 4.16115e-06, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 1.06804e-05, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 8.90717e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 1.6056e-05, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 1.51619e-06, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.000754304, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000322521, label: 'sys,MUON_SCALE' }
+     - {symerror: 5.02914e-07, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 4.32134e-07, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.00107087, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00105638, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.000671666, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.000210561, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 9.31323e-08, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 2.52165e-05, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000181586, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000732198, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.00254685, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.000159107, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.00335823, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.00286046, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.00228326, label: 'sys,MCStatistics' }
+     - {symerror: 0.000808697, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 5.61029e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.00180106, label: 'sys,FxFxSig' }
+     - {symerror: 0.00183687, label: 'sys,FxFxBkg' }
+  - value: 0.350312
+    errors: 
+     - {symerror: 0.00536549, label: stat}
+     - {symerror: 0.00354224, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.00100221, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.00123812, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.00235504, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.0125978, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.0011691, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.000713155, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000649124, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.000457644, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000417858, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.000431597, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.000649154, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.00053598, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.000431508, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000431627, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.000640005, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.000431687, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.00105684, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.00053221, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.00066027, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.000649124, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.00067392, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00067392, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.000402227, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.000184178, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.000715062, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.000431508, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 8.83341e-05, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.000620738, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.000674039, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.000406653, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.000649184, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.000622958, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.00100583, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.000415206, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.000622988, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.000648946, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.000744388, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.00067386, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.04606e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 7.00355e-07, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 3.29018e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 1.58101e-05, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 6.89924e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 2.63751e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.00137588, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.000699431, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00118627, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.00300358, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.00203919, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.00254552, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.00347649, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.00338019, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.000884116, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.00188765, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.000438541, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.000457644, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.000934228, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.00082843, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.000649273, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.000665218, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 4.58807e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.000406235, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.0005005, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.000649154, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.000804201, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.000640422, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.000603229, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.0017422, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.000539005, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.00062567, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.000823468, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.00194585, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.000433147, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.0036792, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00346443, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.000402004, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.000460416, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.000717133, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000380516, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.000439316, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.000431508, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 6.55651e-07, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 6.85453e-07, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 5.96046e-08, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.000431746, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.000431508, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 1.68383e-06, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 1.76579e-05, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.000242591, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 3.6791e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.000242591, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 3.6791e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0039947, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.0006589, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 4.40776e-05, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.00014244, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.000671893, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.000337124, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.000668153, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.000762314, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.000751227, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.000515848, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.000586539, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.000746459, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 5.43892e-05, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.000337809, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.000367612, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.000108212, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.00128415, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 1.16229e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.000708133, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.000219896, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.000763804, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.00335602, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.00322308, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.00180057, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.000595897, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.000809416, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.00178039, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 5.46873e-06, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.19209e-07, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.00158909, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.00324315, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.00118177, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.00172387, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.000975698, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.00206743, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.00113603, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.000762731, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 5.30481e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.000665843, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.000543445, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.000529096, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000648886, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000406921, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000430346, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.36604e-06, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.70916e-05, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 3.96073e-05, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 3.3617e-05, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 4.3571e-05, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 8.01682e-06, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.00115851, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000685871, label: 'sys,MUON_SCALE' }
+     - {symerror: 2.44379e-06, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.80304e-06, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.00175519, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00229321, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00170954, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.000863299, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 3.8743e-07, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 0.000111774, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000651747, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.00115845, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.0148108, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.00203958, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.0174399, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.0145161, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.00391859, label: 'sys,MCStatistics' }
+     - {symerror: 0.00262682, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 1.88947e-05, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.00224327, label: 'sys,FxFxSig' }
+     - {symerror: 0.00504594, label: 'sys,FxFxBkg' }
+  - value: 0.648751
+    errors: 
+     - {symerror: 0.00826925, label: stat}
+     - {symerror: 0.00645718, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.0018236, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.00228322, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.00449115, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.0239576, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.00191668, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.00150517, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.00113231, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.000779748, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000715136, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.000739992, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.00113237, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.000942886, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.000739932, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000739932, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.0011158, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.000739992, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.00193954, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.00102001, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.00113845, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.00113213, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.0011633, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00116324, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.000723869, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.000343829, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.00124058, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.000739932, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.000182003, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.00110915, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.00116342, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.00070858, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.00113225, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.00109226, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.00190014, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.000723898, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.00109243, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.00113213, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.00141808, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.00116348, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 2.33948e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 6.25849e-07, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 5.90086e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 3.12328e-05, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 1.14739e-05, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 5.30481e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.00330001, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00156832, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00260958, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.00580242, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.00369319, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.00503558, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.00598991, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.00573987, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.00154555, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.0044049, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.000751734, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.000779927, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.00171641, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.001517, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.00113243, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.00114775, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 8.66353e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.000707865, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.000760019, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.00113201, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.000952274, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.00111663, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.00104588, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.00155815, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.000930428, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.00109059, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00120667, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.00323465, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.000748873, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.00699559, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00705352, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.000700355, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.000784218, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.00122917, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000977784, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.000747323, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.000739932, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 1.01328e-06, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 1.2517e-06, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 1.49012e-07, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.000739932, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.000739872, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 1.84774e-06, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 2.30968e-05, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.00042361, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 4.54783e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.00042361, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 4.54783e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0107166, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.00131899, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.000282198, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.00063628, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.00114244, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.000920773, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.00686479, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.00131518, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.00121975, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.00117898, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.001243, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00140262, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.000283897, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.00103807, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.000965834, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.000593781, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.00294259, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 9.53674e-07, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.000806332, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.000409961, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.00147399, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.00286442, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.00215089, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.00220394, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.00208741, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.000926256, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.014901, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 2.06232e-05, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 5.96046e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.00238401, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.00945696, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.0123257, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.00926974, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.00912851, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.00112695, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.00315988, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.00933495, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.26362e-05, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.00107813, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.000187218, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.00111246, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00113183, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000708997, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000737786, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 7.03335e-06, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 2.76268e-05, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 6.99162e-05, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 5.88894e-05, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 7.77543e-05, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 1.13845e-05, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.00112605, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000419974, label: 'sys,MUON_SCALE' }
+     - {symerror: 3.51667e-06, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 3.06964e-06, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.00291437, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00413349, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00434601, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00175232, label: 'sys,DIBOSON' }
+     - {symerror: 5.96046e-08, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 3.8743e-07, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 0.000228703, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.00139698, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.00485608, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.0592521, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.00290483, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.0124882, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.0113787, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.00596017, label: 'sys,MCStatistics' }
+     - {symerror: 0.00492081, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 3.30806e-05, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.00807321, label: 'sys,FxFxSig' }
+     - {symerror: 0.00634465, label: 'sys,FxFxBkg' }
+  - value: 1.08776
+    errors: 
+     - {symerror: 0.00901723, label: stat}
+     - {symerror: 0.0106137, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.00192845, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.0037657, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.00692618, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.0417421, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.00354868, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.000985444, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000517964, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.000485063, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000146925, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.000367761, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.000517964, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.000871241, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.00101209, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000234127, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.00170416, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.000462711, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.00264519, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.00177342, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.000525117, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.00159895, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.00155717, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00157094, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.00103563, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.000593841, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.000772893, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.000939846, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.000285506, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.00231886, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.000745714, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.00104058, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.00154918, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.00103915, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.00129592, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.00106466, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.00103939, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.0008443, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.00235879, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.0012753, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 4.09484e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.96695e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 9.50694e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 5.13196e-05, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 1.8537e-05, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 8.34465e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.0108621, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00656414, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00526226, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.0133283, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.00827658, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.00488102, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.00692457, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.00717598, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.000539005, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.00414836, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.00095731, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.00057584, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.000481725, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.00106049, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.000517964, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.000510812, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 0.000103116, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.00103939, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.000196993, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.00056076, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.012827, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.000493646, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.00589341, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.015327, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.00321096, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.000695169, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00208199, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.0032233, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.000525951, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.00107205, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00545603, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.00159085, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.00217259, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.00212657, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000511289, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.000531077, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.000179172, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 1.37091e-06, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.08616e-06, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 1.19209e-07, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.000330567, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.00010711, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 1.13249e-06, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 2.89083e-05, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.000522494, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 6.28233e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.000522494, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 6.28233e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0295507, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.000997484, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.000654817, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.00112212, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.00148916, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.00108534, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.0297751, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.00324696, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.00291246, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.00116551, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.00101286, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00362813, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.000457406, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.000736117, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.00137025, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.00110948, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.0163221, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 2.563e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.000311136, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.000361502, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.00704521, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.0395021, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.0183982, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.0131435, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.0325103, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.0038141, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.087974, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 1.0252e-05, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.19209e-07, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.000625014, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.0248672, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.0510292, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.0370561, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.0573141, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.0205081, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.0171795, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.0310875, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 2.00868e-05, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.0016042, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.000476599, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.00104129, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000516891, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00104082, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000403821, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.11461e-05, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 3.9041e-05, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 0.000105858, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 8.9705e-05, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 0.00011915, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 1.49608e-05, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.0022403, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000325441, label: 'sys,MUON_SCALE' }
+     - {symerror: 5.48363e-06, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 4.23193e-06, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.0071277, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00774103, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00701481, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00390315, label: 'sys,DIBOSON' }
+     - {symerror: 1.19209e-07, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 1.01328e-06, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 0.000366986, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.0039925, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.0158382, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.0684339, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.00173986, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.0349945, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.0322104, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.00884485, label: 'sys,MCStatistics' }
+     - {symerror: 0.00917965, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 5.38826e-05, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.00784755, label: 'sys,FxFxSig' }
+     - {symerror: 0.0117884, label: 'sys,FxFxBkg' }
+  - value: 1.91567
+    errors: 
+     - {symerror: 0.0115755, label: stat}
+     - {symerror: 0.0184022, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.0035606, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.00624877, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.0117052, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.0709821, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.00696725, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.00266218, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.00127661, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.000833154, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000287712, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.000659347, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.000642061, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.00127149, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.00114262, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000468194, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.00269139, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.00082171, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.00441092, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.00312501, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.000903249, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.00194013, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.00271195, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00221038, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.00176632, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.00103086, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.00130773, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.00115019, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.000539362, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.00374395, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.0012641, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.00152814, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.00279856, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.00151956, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.00280493, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.00156629, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.00151861, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.00163335, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.00436425, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.00216323, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 6.74129e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.2517e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 0.000178039, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 9.40561e-05, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 3.45707e-05, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.48416e-05, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.0162879, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00971764, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00796574, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.0192452, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.0113659, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.00814301, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.0104156, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.0109231, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.00121117, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.000636876, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.00146914, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.00114012, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.000591516, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.00155234, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.000641465, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.000881195, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 0.000203609, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.00152576, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.000383615, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.000784099, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.0153695, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.00060308, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.00579733, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.015424, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.00159305, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.00115705, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00245839, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.00558263, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.00111204, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.00325155, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00121987, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.00150931, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.00175011, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.000669718, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000865519, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.00115424, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.000289023, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 2.02656e-06, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.563e-06, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.000487149, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.000170469, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 2.50339e-06, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 3.82662e-05, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.000886202, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 9.91821e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.000886202, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 9.91821e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0419211, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.000735641, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.000499189, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.00196326, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.00209713, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.000890136, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.0360262, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.00411606, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.00339317, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.00171018, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.000963628, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.0052166, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.000397921, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.00116861, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.000942469, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.00189459, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.0255213, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 4.64916e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.00030601, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.000561237, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.00723618, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.0373923, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.0220105, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.0160581, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.0420417, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.00579828, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.102728, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 7.39098e-06, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 9.53674e-07, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.0123279, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.0265568, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.0537257, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.0430701, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.0607636, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.0275033, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.024563, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.0351101, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 5.88894e-05, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.000728965, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.00129724, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.00180095, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000640631, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00152886, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000674248, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.52588e-05, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 5.29885e-05, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 0.000164449, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 0.000138104, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 0.000167966, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 1.82986e-05, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.00189626, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000382304, label: 'sys,MUON_SCALE' }
+     - {symerror: 7.33137e-06, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 6.02007e-06, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.0101311, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00956702, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00933415, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00483215, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 2.26498e-06, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 0.000775933, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.00723821, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.0108748, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.0660652, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.00586081, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.0600822, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.0540416, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.0117681, label: 'sys,MCStatistics' }
+     - {symerror: 0.0161373, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 0.000108957, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.0104223, label: 'sys,FxFxSig' }
+     - {symerror: 0.0445222, label: 'sys,FxFxBkg' }
+  - value: 3.76678
+    errors: 
+     - {symerror: 0.0171385, label: stat}
+     - {symerror: 0.0348941, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.00679505, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.0111667, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.0208162, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.127734, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.0165646, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.00610185, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.00331759, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.00148535, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000491619, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.00112128, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.00078845, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.00213432, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.00153744, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000792503, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.0046556, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.00150907, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.0079211, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.00587356, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.00161505, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.00261533, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.00493455, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00322855, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.00316298, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.00193357, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.00245666, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.00137317, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.000975728, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.00651538, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.00230134, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.00238371, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.00538898, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.00237226, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.00629354, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.00246, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.00237226, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.00344396, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.00865769, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.00388861, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 9.52482e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.50204e-05, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 0.000392199, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 0.000184894, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 7.9751e-05, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 3.27826e-05, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.0235299, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.013442, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.0114524, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.0275855, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.0154912, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.014344, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.0177654, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.019546, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.00321722, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.0124925, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.00149202, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.00217235, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.00194585, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.00332785, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.000788212, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.00157261, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 0.000198245, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.00237989, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.00111496, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.000867844, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.0113814, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.000711679, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.000782728, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.00386047, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.00449097, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.00156832, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00182223, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.0076735, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.00270581, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.0134431, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.0180483, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.00235271, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.00147629, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.00399923, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.00423992, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.00251031, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.00046289, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 4.41074e-06, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 3.45707e-06, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 2.38419e-07, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.000896692, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.000310302, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 4.29153e-06, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 7.53403e-05, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.00159407, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.00019598, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.00159407, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.00019598, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.05504, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.00144291, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.00105453, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.00227642, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.00115013, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.00192738, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.0291389, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.00327849, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.0019834, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.00216937, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.0018003, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00463176, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.000771165, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.00105238, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.00188696, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.00244808, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.0228274, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 3.8147e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.00063014, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.00126159, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.00868142, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.0051378, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.00224578, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.00755274, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.0271763, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.00554025, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.095971, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 2.24113e-05, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 5.72205e-06, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.0123529, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.0241024, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.0197525, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.00871253, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.0050298, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.012125, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.0147523, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.00772214, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 0.000122428, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.0014596, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.000582457, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.00418353, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000886321, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00238419, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00121236, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.65701e-05, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 6.65188e-05, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 0.000232816, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 0.000196338, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 0.000144482, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 2.5034e-05, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.0033555, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000916958, label: 'sys,MUON_SCALE' }
+     - {symerror: 8.9407e-06, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 7.15256e-06, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.0112185, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00927532, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00671339, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00588655, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 3.33786e-06, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 0.00159955, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.0112988, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.0157717, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.00853705, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.0124841, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.101408, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.0877771, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.0173044, label: 'sys,MCStatistics' }
+     - {symerror: 0.031579, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 0.000242949, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.0134459, label: 'sys,FxFxSig' }
+     - {symerror: 0.0643473, label: 'sys,FxFxBkg' }
+  - value: 8.09884
+    errors: 
+     - {symerror: 0.0244246, label: stat}
+     - {symerror: 0.0694022, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.0122428, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.0200043, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.0336103, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.218029, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.0491781, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.0110478, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.009408, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.0031271, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000851154, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.00195694, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.000985146, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.00349951, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.00201178, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.00148964, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.00816488, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.00278044, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.0134921, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.0105491, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.0033617, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.00354671, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.00961399, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00557899, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.00664854, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.00374174, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.00490093, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.00159121, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.00194788, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.0126925, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.00473452, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.00431538, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.0120993, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.00429916, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.0149817, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.00445652, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.00430012, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.00770235, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.0176291, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.00735664, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 2.86102e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 0.000151157, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 0.000970364, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 0.000339031, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 0.000229836, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 6.29425e-05, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.0087862, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.000885963, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00446987, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.0279741, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.0194311, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.0202346, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.0469699, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.0507917, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.0105982, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.0452194, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.00400019, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.00314045, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.00339746, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.0121531, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.00171518, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.00328541, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 2.3365e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.00430775, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.00493479, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.000987053, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.018496, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.000844955, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.017292, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.0264692, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.0180616, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.00368214, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00329494, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.012167, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.00626373, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.0419202, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.0697184, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.00607252, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.00906372, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.0151029, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.0105667, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.00383091, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.000779629, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 7.15256e-06, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 5.72205e-06, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.00273085, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.000801086, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 1.71661e-05, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 0.00024128, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.00332928, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.000560284, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.00332928, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.000560284, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0349679, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.00209332, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.000966549, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.00433445, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.00512886, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.00181484, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.0312481, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.00251484, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.00341511, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.00454235, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.00197792, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00179672, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.000874043, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.00187969, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.00186253, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.00469875, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.0245414, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 1.43051e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.00134897, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.00260782, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.00750446, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.136865, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.0670466, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.037353, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.0612206, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.00759935, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.079464, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 2.00272e-05, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.62125e-05, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.0223489, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.138582, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.203206, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.150036, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.190413, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.0892873, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.0778251, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.121913, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 0.000203133, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.00152349, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.00573683, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.0115371, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00253248, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00449514, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00260305, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.57356e-05, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 6.48499e-05, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 0.000279427, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 0.000234604, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 0.000123024, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 2.95639e-05, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.00221348, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000839233, label: 'sys,MUON_SCALE' }
+     - {symerror: 1.04904e-05, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 7.62939e-06, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.00338316, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00513124, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00435209, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00372076, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 2.86102e-06, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 0.00256538, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.0151138, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.0943546, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.18384, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.0220356, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.199435, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.1692, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.0224495, label: 'sys,MCStatistics' }
+     - {symerror: 0.0672226, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 0.000476837, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.0159035, label: 'sys,FxFxSig' }
+     - {symerror: 0.0714655, label: 'sys,FxFxBkg' }
+  - value: 5.80535
+    errors: 
+     - {symerror: 0.0227189, label: stat}
+     - {symerror: 0.0489881, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.0116639, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.0138958, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.0218589, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.142097, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.0342927, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.00919008, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.00633264, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.0060339, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000586271, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.00346994, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.00624895, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.00623703, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.00346994, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.00347233, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.00353956, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.00346994, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.00899434, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.010529, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.00259829, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.00625086, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.0060463, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00604391, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.00344849, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.00251126, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.00373435, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.00347042, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.00131273, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.00658488, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.00604391, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.00367689, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.00905681, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.00368738, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.0105126, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.00638437, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.00368881, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.0062499, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.0121143, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.00604391, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 4.48227e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 0.00013423, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 0.000674486, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 0.000212669, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 0.000166893, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 3.93391e-05, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.0175166, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00621271, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00451016, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.0218861, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.017396, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.0142381, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.0369222, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.038949, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.00866103, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.0391686, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.00618124, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.006042, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.005481, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.00640059, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.00625086, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.00333357, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 0.000151157, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.00368357, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.00618124, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.006248, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.0213511, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.00354147, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.016597, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.0369191, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.0181217, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.00468063, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00734091, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.00942636, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.00946569, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.0396233, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.0686002, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.00439453, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.00986624, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.0190864, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.0127606, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.00338793, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.00346994, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 5.72205e-06, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 4.52995e-06, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.0034709, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.00347185, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 1.78814e-05, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 0.000305891, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.0025754, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.00615644, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0025754, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.00615644, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0253987, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.00621653, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.00329781, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.00379992, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.00610161, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.00600386, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.0124049, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.00242186, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.00216627, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.00341177, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.00330353, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00817299, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.00337553, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.00609922, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.0061307, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.00358963, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.0534441, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 4.29153e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.00372839, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.00438929, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.00967646, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.104865, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.0498765, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.0406704, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.0262537, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.00810814, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.0267963, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 4.05312e-05, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 3.8147e-06, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.0599241, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.0488102, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.0936842, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.0684981, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.122238, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.0441656, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.0500135, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.0553489, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 9.89437e-05, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.00509691, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.00463247, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.00995016, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00625753, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00394511, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00348997, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.14577e-06, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.50204e-05, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 0.000103235, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 8.89301e-05, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 1.12057e-05, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 6.91414e-06, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.00527072, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.00415707, label: 'sys,MUON_SCALE' }
+     - {symerror: 3.09944e-06, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.90735e-06, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.00872612, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00592613, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00871134, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00466037, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 1.90735e-06, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 0.00111175, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.00429845, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.0552671, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.403712, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.0254712, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.296216, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.241738, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.0186605, label: 'sys,MCStatistics' }
+     - {symerror: 0.0489938, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 0.000210047, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.0204449, label: 'sys,FxFxSig' }
+     - {symerror: 0.0549161, label: 'sys,FxFxBkg' }
+  - value: 1.91521
+    errors: 
+     - {symerror: 0.0110797, label: stat}
+     - {symerror: 0.0167113, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.00468552, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.00551355, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.00977397, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.0588605, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.00733304, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.00396723, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.00232625, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.00224483, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.0002352, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.00148058, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.0023247, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.00232053, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.00148058, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.00148034, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.00165623, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.00148046, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.0040102, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.00426257, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.000778437, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.0023253, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.00225043, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00224948, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.00147212, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.000917435, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.00106692, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.00148082, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.000452101, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.00257653, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.00224948, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.00155604, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.00232482, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.00156057, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.00231195, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.00237584, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.00156093, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.0023253, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.00366479, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.00224972, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 3.43323e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.38283e-05, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 0.000184059, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 8.16584e-05, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 3.77297e-05, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.39475e-05, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.0166169, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00708514, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00697124, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.015825, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.0111985, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.00561285, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.00912172, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.00965619, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.0023253, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.00137985, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.0023011, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.00224662, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.00148845, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.00238276, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.0023253, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.00143051, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 0.000123262, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.00155854, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.0023005, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.00232553, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.00693184, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.00150597, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.00367373, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.00941855, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.00203121, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.00156164, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00278771, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.00277716, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.00231957, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.00307161, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00234789, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.00157773, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.00224304, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.00135171, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.00251555, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.00145984, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.00148094, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 2.26498e-06, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.14577e-06, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 2.38419e-07, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.00148082, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.00148058, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 5.48363e-06, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 5.59688e-05, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.000769734, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.00229144, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.000769734, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.00229144, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0314921, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.00202775, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.00165725, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.00138259, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.00145948, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.00210667, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.0226396, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.00115848, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.00169814, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.00160789, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.00148273, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00302809, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.00161433, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.00209665, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.00218523, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.00132549, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.0310875, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 3.21865e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.00343263, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.0016923, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.00464273, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.0202127, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.0102985, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.010377, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.0233459, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.00224978, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.0662542, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 8.58307e-06, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 2.86102e-06, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.00491959, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.00147963, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.0165319, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.0166995, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.0316945, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.00703806, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.00944972, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.0132474, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.72853e-05, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.00123215, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.00174141, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.0029121, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.0023272, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00155616, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00148678, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 8.9407e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 2.14577e-06, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 2.98023e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 3.09944e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 9.05991e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 6.55651e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.00464559, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.00287032, label: 'sys,MUON_SCALE' }
+     - {symerror: 2.38419e-07, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 2.38419e-07, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.0047164, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00463659, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00649852, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00156665, label: 'sys,DIBOSON' }
+     - {symerror: 2.38419e-07, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 7.7486e-07, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 0.000127614, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000201106, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.00323391, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.0988693, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.000366926, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.133753, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.129267, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.0117573, label: 'sys,MCStatistics' }
+     - {symerror: 0.0160045, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 1.26362e-05, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.013452, label: 'sys,FxFxSig' }
+     - {symerror: 0.0299001, label: 'sys,FxFxBkg' }
+  - value: 0.494374
+    errors: 
+     - {symerror: 0.00420144, label: stat}
+     - {symerror: 0.004412, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.00144547, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.00167747, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.00313216, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.0179283, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000851199, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.00113378, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000698745, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.000680506, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 6.91414e-05, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.000515461, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.000698805, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.000697911, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.000515521, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000515431, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.000654489, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 0.000515461, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.00135756, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.00133473, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.000396505, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.000984505, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.000681519, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00068143, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.000513613, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 0.000256658, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.000200525, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.00051564, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.000127867, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.000782847, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.0006814, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.000533134, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.000698775, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.000534296, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.000695616, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.000710219, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 0.000534117, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.000698805, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.000725254, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.0006814, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.61827e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.60933e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 3.73125e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 2.19941e-05, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 6.22869e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 3.26335e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.00582781, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00283448, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00241219, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.00583135, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.0046111, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.00102246, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.00228632, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.00233908, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.000698566, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.00550035, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.000693023, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.000680268, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.00018394, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.00119224, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.000698864, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.000504166, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 4.67151e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.000533462, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.000692993, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 0.000698864, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.00694188, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.000521779, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.00452121, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.0113405, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.00383499, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.000541329, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00123562, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.000600204, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.000697434, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.00328672, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.0071625, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.00144134, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.00118947, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.00231652, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000899613, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.000535592, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.00051564, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 6.10948e-07, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 7.15256e-07, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 0.000515491, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 0.00051564, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 2.05636e-06, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 9.34303e-06, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 0.00016588, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.000690758, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.00016588, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 0.000690758, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.0125186, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.000780612, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.000461876, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.000487238, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.000681907, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.000583649, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.0141977, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.000989944, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.00122286, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.000479698, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.000452757, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00179653, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.000483394, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.000697464, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.000601858, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.000469983, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.0250136, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 1.78814e-07, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.00312823, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.00200453, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.00312264, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.0226249, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.0134517, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.0142098, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.0139131, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.00106455, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.0316817, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 1.10269e-05, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 5.96046e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.0124154, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.00236304, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.00693472, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.00571814, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.0212371, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.00477313, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.00795741, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.00634858, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 2.65241e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 0.000205755, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.00102097, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.0007056, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00069955, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000533223, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000517607, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.8743e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.05798e-06, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 1.50502e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 1.2517e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 5.0962e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 1.63913e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.000612244, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000325233, label: 'sys,MUON_SCALE' }
+     - {symerror: 8.9407e-08, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.63913e-07, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.00185998, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00144762, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00121064, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.000361338, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 3.27826e-07, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 6.80983e-06, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 5.126e-05, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.00361116, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.100865, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.00120902, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.0336686, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.0395756, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.00503206, label: 'sys,MCStatistics' }
+     - {symerror: 0.00406569, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 8.64267e-07, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.00264242, label: 'sys,FxFxSig' }
+     - {symerror: 0.0145601, label: 'sys,FxFxBkg' }
+- header: {name: DSIG/DDR, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: MGaMC+Py8 FxFx 5FS (NLO)}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.120897
+    errors: 
+     - asymerror: {minus: -0.0083905, plus: 0.00356876}
+  - value: 0.408486
+    errors: 
+     - asymerror: {minus: -0.0303524, plus: 0.0169056}
+  - value: 0.725827
+    errors: 
+     - asymerror: {minus: -0.0575815, plus: 0.0295158}
+  - value: 1.16079
+    errors: 
+     - asymerror: {minus: -0.0980603, plus: 0.04399}
+  - value: 2.09215
+    errors: 
+     - asymerror: {minus: -0.181732, plus: 0.0872531}
+  - value: 4.25829
+    errors: 
+     - asymerror: {minus: -0.31127, plus: 0.193056}
+  - value: 9.4929
+    errors: 
+     - asymerror: {minus: -0.563003, plus: 0.468664}
+  - value: 6.88865
+    errors: 
+     - asymerror: {minus: -0.447193, plus: 0.378413}
+  - value: 1.81594
+    errors: 
+     - asymerror: {minus: -0.129266, plus: 0.104396}
+  - value: 0.353717
+    errors: 
+     - asymerror: {minus: -0.0293567, plus: 0.0214966}
+- header: {name: DSIG/DDR, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: Sherpa 5FS (NLO)}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.136018
+    errors: 
+     - asymerror: {minus: -0.0181819, plus: 0.0322965}
+  - value: 0.446935
+    errors: 
+     - asymerror: {minus: -0.0595661, plus: 0.107642}
+  - value: 0.779017
+    errors: 
+     - asymerror: {minus: -0.10345, plus: 0.185767}
+  - value: 1.2117
+    errors: 
+     - asymerror: {minus: -0.158372, plus: 0.296852}
+  - value: 2.11924
+    errors: 
+     - asymerror: {minus: -0.253965, plus: 0.507688}
+  - value: 4.25229
+    errors: 
+     - asymerror: {minus: -0.432511, plus: 0.812458}
+  - value: 9.82332
+    errors: 
+     - asymerror: {minus: -0.759206, plus: 1.06983}
+  - value: 7.46681
+    errors: 
+     - asymerror: {minus: -0.682413, plus: 0.765521}
+  - value: 2.10738
+    errors: 
+     - asymerror: {minus: -0.142048, plus: 0.402269}
+  - value: 0.453596
+    errors: 
+     - asymerror: {minus: -0.0544936, plus: 0.149306}
+- header: {name: DSIG/DDR, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: MGaMC+Py8 4FS (NLO)}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.0474311
+    errors: 
+     - asymerror: {minus: -0.00939761, plus: 0.0137038}
+  - value: 0.159349
+    errors: 
+     - asymerror: {minus: -0.0300897, plus: 0.0438093}
+  - value: 0.311858
+    errors: 
+     - asymerror: {minus: -0.0568999, plus: 0.084019}
+  - value: 0.57323
+    errors: 
+     - asymerror: {minus: -0.0939412, plus: 0.135217}
+  - value: 1.22116
+    errors: 
+     - asymerror: {minus: -0.171432, plus: 0.231799}
+  - value: 2.70308
+    errors: 
+     - asymerror: {minus: -0.316785, plus: 0.326492}
+  - value: 6.19387
+    errors: 
+     - asymerror: {minus: -0.765833, plus: 0.835735}
+  - value: 4.39458
+    errors: 
+     - asymerror: {minus: -0.58562, plus: 0.677099}
+  - value: 1.11613
+    errors: 
+     - asymerror: {minus: -0.16836, plus: 0.210085}
+  - value: 0.185223
+    errors: 
+     - asymerror: {minus: -0.0321196, plus: 0.0423339}
+- header: {name: DSIG/DDR, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: MGaMC+Py8 5FS (NLO)}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.102857
+    errors: 
+     - asymerror: {minus: -0.0196646, plus: 0.014714}
+  - value: 0.358421
+    errors: 
+     - asymerror: {minus: -0.0669196, plus: 0.0502084}
+  - value: 0.625748
+    errors: 
+     - asymerror: {minus: -0.112983, plus: 0.0851155}
+  - value: 1.0281
+    errors: 
+     - asymerror: {minus: -0.172575, plus: 0.131242}
+  - value: 2.09337
+    errors: 
+     - asymerror: {minus: -0.275186, plus: 0.217185}
+  - value: 4.69227
+    errors: 
+     - asymerror: {minus: -0.327054, plus: 0.345442}
+  - value: 10.42
+    errors: 
+     - asymerror: {minus: -0.664131, plus: 0.804229}
+  - value: 7.24047
+    errors: 
+     - asymerror: {minus: -0.476894, plus: 0.561002}
+  - value: 1.87256
+    errors: 
+     - asymerror: {minus: -0.125197, plus: 0.140299}
+  - value: 0.346285
+    errors: 
+     - asymerror: {minus: -0.0343776, plus: 0.0285804}
+- header: {name: DSIG/DDR, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: NLO Fixed Order}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.07391
+    errors: 
+     - asymerror: {minus: -0.0232305, plus: 0.0197107}
+  - value: 0.2377
+    errors: 
+     - asymerror: {minus: -0.0608045, plus: 0.0461512}
+  - value: 0.4039
+    errors: 
+     - asymerror: {minus: -0.101592, plus: 0.0760544}
+  - value: 0.6201
+    errors: 
+     - asymerror: {minus: -0.153786, plus: 0.113686}
+  - value: 1.241
+    errors: 
+     - asymerror: {minus: -0.30528, plus: 0.223882}
+  - value: 3.201
+    errors: 
+     - asymerror: {minus: -0.784376, plus: 0.573886}
+  - value: 9.27615
+    errors: 
+     - asymerror: {minus: -3.53486, plus: 3.59482}
+  - value: 0.5442
+    errors: 
+     - asymerror: {minus: -0.342744, plus: 0.511764}
+  - value: 0.1841
+    errors: 
+     - asymerror: {minus: -0.0419029, plus: 0.0457542}
+  - value: 0
+- header: {name: DSIG/DDR, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: NNLO Fixed Order}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.09989
+    errors: 
+     - asymerror: {minus: -0.0492105, plus: 0.021805}
+  - value: 0.3293
+    errors: 
+     - asymerror: {minus: -0.152404, plus: 0.0401355}
+  - value: 0.5952
+    errors: 
+     - asymerror: {minus: -0.292892, plus: 0.0716873}
+  - value: 0.9823
+    errors: 
+     - asymerror: {minus: -0.515986, plus: 0.119359}
+  - value: 1.794
+    errors: 
+     - asymerror: {minus: -0.85828, plus: 0.186487}
+  - value: 4.082
+    errors: 
+     - asymerror: {minus: -1.66538, plus: 0.335662}
+  - value: 6.738
+    errors: 
+     - asymerror: {minus: -0.99671, plus: 2.35397}
+  - value: 2.826
+    errors: 
+     - asymerror: {minus: -2.62454, plus: 0.526604}
+  - value: 0.4552
+    errors: 
+     - asymerror: {minus: -0.313003, plus: 0.0672127}
+  - value: 0

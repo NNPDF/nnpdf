@@ -1,0 +1,47 @@
+independent_variables: []
+dependent_variables: 
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: Data}
+  values:
+    - value: 1.394
+      errors:
+      - {symerror: 0.006, label: stat}
+      - {symerror: 0.131, label: sys}
+      - {symerror: 0., label: lumi}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: MGaMC+Py8 FxFx 5FS (NLO)}
+  values:
+    - value: 1.5618
+      errors:
+      - {symerror: 0.003416, label: stat}
+      - {symerror: 0.014049, label: pdf}
+      - {asymerror: {plus: 0.138338, minus: 0.187042}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: Sherpa 5FS (NLO)}
+  values:
+    - value: 1.25436
+      errors:
+      - {symerror: 0.00134429, label: stat}
+      - {symerror: 0.0021731, label: pdf}
+      - {asymerror: {plus: 0.48487, minus: 0.212498}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: MGaMC+Py8 Zbb 4FS (NLO)}
+  values:
+    - value: 1.18633
+      errors:
+      - {symerror: 0., label: stat}
+      - {symerror: 0., label: pdf}
+      - {asymerror: {plus: 0.174248, minus: 0.149331}, label: scale}
+    

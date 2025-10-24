@@ -1,0 +1,111 @@
+independent_variables: []
+dependent_variables: 
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: Data}
+  values:
+    - value: 20.8898
+      errors:
+      - {symerror: 0.06779, label: stat}
+      - {symerror: 2.77058, label: sys}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: MGaMC+Py8 FxFx 5FS (NLO)}
+  values:
+    - value: 18.52119
+      errors:
+      - {symerror: 0.014923, label: stat}
+      - {symerror: 0.4848886, label: pdf}
+      - {asymerror: {plus: 0.70054, minus: 1.253664}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: Sherpa 5FS (NLO)}
+  values:
+    - value: 19.2357
+      errors:
+      - {symerror: 0.009798, label: stat}
+      - {symerror: 0.039196, label: pdf}
+      - {asymerror: {plus: 2.33423, minus: 1.860155}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: MGaMC+Py8 4FS (NLO)}
+  values:
+    - value: 16.8131
+      errors:
+      - {symerror: 0., label: stat}
+      - {symerror: 0., label: pdf}
+      - {asymerror: {plus: 1.12483, minus: 1.27297}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: MGaMC+Py8 Zcc 3FS (NLO)}
+  values:
+    - value: 10.1732
+      errors:
+      - {symerror: 0.0448006, label: stat}
+      - {symerror: 0., label: pdf}
+      - {asymerror: {plus: 1.69571, minus: 1.43457}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: NNPDF40 (pch)}
+  values:
+    - value: 18.951847
+      errors:
+      - {symerror: 0.0082566, label: stat}
+      - {symerror: 0.17726827, label: pdf}
+      - {asymerror: {plus: 0.738469, minus: 1.2950308}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: NNPDF40 (LHCbZc + EMC)}
+  values:
+    - value: 18.86527
+      errors:
+      - {symerror: 0.00823776, label: stat}
+      - {symerror: 0.15748845, label: pdf}
+      - {asymerror: {plus: 0.73077, minus: 1.2866556}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: CT14NNLO}
+  values:
+    - value: 19.6532478
+      errors:
+      - {symerror: 0.008408, label: stat}
+      - {symerror: 0.1764128, label: pdf}
+      - {asymerror: {plus: 0.7640517, minus: 1.3419634}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: "BHPS1 ($\\langle x \\rangle_{\\mathrm{IC}} = 0.6\\%)"}
+  values:
+    - value: 19.857435
+      errors:
+      - {symerror: 0.00845, label: stat}
+      - {symerror: 0., label: pdf}
+      - {asymerror: {plus: 0.7511298, minus: 1.344138}, label: scale}
+- header: {name: SIG, units: PB}
+  qualifiers:
+    - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+    - {name: SQRT(S), units: GEV, value: 13000}
+    - {name: Distribution, value: "BHPS2 ($\\langle x \\rangle_{\\mathrm{IC}} = 2.1\\%)"}
+  values:
+    - value: 19.857435
+      errors:
+      - {symerror: 0.00845, label: stat}
+      - {symerror: 0., label: pdf}
+      - {asymerror: {plus: 0.7511298, minus: 1.344138}, label: scale}

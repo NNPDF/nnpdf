@@ -1,0 +1,62 @@
+setname: "ATLAS_Z1B_13TEV_PTZ"
+
+version: 1
+
+version_comment: "First implementation, central values and systematics from table 4 (HEPData)."
+
+# References
+arXiv:
+  url: "https://arxiv.org/pdf/2403.15093"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/2771257"
+hepdata:
+  url: "https://www.hepdata.net/record/ins2771257"
+  version: 2
+
+nnpdf_metadata:
+ #####
+ nnpdf31_process: "DY NC" 
+ ####
+  experiment: "ATLAS"
+
+implemented_observables:
+- observable_name: "PTZ"
+  observable:
+    description: "ATLAS 13 TeV, Differential fiducial cross-section of the Z boson transverse momentum in events with  Z + (>=) 1 b-jet."
+    label: r"$d\\sigma/{dp_{T}(Z)}$"
+    units: "[PB/GeV]"
+
+  ndata: 14
+#############################
+  tables: [5]
+  process_type: DY_NC_PT
+###########################
+  plotting:
+    dataset_label: 'ATLAS 13 TeV differential fiducial cross section in $p_T^{Z}$'
+    x_scale: log
+    plot_x: pT
+
+  kinematic_coverage: [pT, m_Z2, sqrts]
+
+  kinematics:
+    variables:
+      pT: {description: "Z transverse momentum", label: '$p_T$', units: ""}
+      m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
+      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+
+    file: kinematics.yaml
+
+    # Data
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+
+#######################################################
+    # Theory
+  theory:
+    shifts:
+      ATLAS_Z0J_13TEV_PT_LL: 9
+    FK_tables:
+    - - ATLAS_Z0J_13TEV_PT_LL
+    - - ATLAS_Z0_13TEV_TOT
+    operation: 'ratio'
