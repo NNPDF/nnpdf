@@ -2,7 +2,7 @@ setname: "ATLAS_Z1C_13TEV_PTZ"
 
 version: 1
 
-version_comment: "First implementation, central values and systematics from table 10 (HEPData). "
+version_comment: "First implementation, central values and systematics from table 9 (HEPData)."
 
 # References
 arXiv:
@@ -14,10 +14,8 @@ hepdata:
   version: 2
 
 nnpdf_metadata:
- #####
  nnpdf31_process: "DY NC"
- ####
-  experiment: "ATLAS"
+ experiment: "ATLAS"
 
 implemented_observables:
 - observable_name: "PTZ"
@@ -27,10 +25,9 @@ implemented_observables:
     units: "[PB/GeV]"
 
   ndata: 14
-#############################
-  tables: [5]
+  tables: [9]
   process_type: DY_NC_PT
-#############################
+
   plotting:
     dataset_label: 'ATLAS 13 TeV differential cross section in $p_T^{Z}$'
     x_scale: log
@@ -44,18 +41,18 @@ implemented_observables:
       m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
       sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
 
-    file: kinematics.yaml
+    file: kinematics_ATLAS_Z1C_13TEV_PTZ.yaml
 
     # Data
-  data_central: data.yaml
+  data_central: data_ATLAS_Z1C_13TEV_PTZ.yaml
   data_uncertainties:
-  - uncertainties.yaml
+  - ncertainties_ATLAS_Z1C_13TEV_PTZ.yaml
 
     # Theory
   theory:
     shifts:
       ATLAS_Z0J_13TEV_PT_LL: 9
     FK_tables:
-    - - ATLAS_Z0J_13TEV_PT_LL
-    - - ATLAS_Z0_13TEV_TOT
+    - - ATLAS_Z0J_13TEV_PT_LL #TO UPDATE
+    - - ATLAS_Z0_13TEV_TOT    #TO UPDATE
     operation: 'ratio'
