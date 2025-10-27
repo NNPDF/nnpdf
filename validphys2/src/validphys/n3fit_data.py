@@ -121,16 +121,7 @@ class _Masks(TupleComp):
     eigenvectors of the fitting covariance matrix.
     """
 
-    def __init__(
-        self,
-        group_name,
-        seed,
-        tr_masks,
-        vl_masks,
-        diagonal_basis=True,
-        # eig_vals=None,
-        # diagonal_rotation=None,
-    ):
+    def __init__(self, group_name, seed, tr_masks, vl_masks):
         """
         Initialize the _Masks object.
 
@@ -144,56 +135,31 @@ class _Masks(TupleComp):
             List of boolean arrays representing the training masks.
         vl_masks : list[np.array]
             List of boolean arrays representing the validation masks.
-        diagonal_basis : bool, optional
-            Whether the masks are in the diagonal basis. Default is False.
-        eig_vals : np.array, optional
-            Eigenvalues of the covariance matrix, required if diagonal_basis is True.
-        diagonal_rotation : np.array, optional
-            Eigenvectors of the correlation matrix, required if diagonal_basis is True.
         """
 
         self.tr_masks = tr_masks
         self.vl_masks = vl_masks
-        # if diagonal_basis:
-        #     self.eig_vals = eig_vals
-        #     self.diagonal_rotation = diagonal_rotation
 
         super().__init__(group_name, seed)
 
 
-# TODO: don't apply the mask yet here, just generate the eigenvalues and eigenvectors
-def diagonal_masks(
-    data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=1.0, threshold_eigvals=0
-):
+def diagonal_masks(data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=1.0):
 
-    # diagonalise the covariance matrix, eigenvalues appear in ascending order
-    # covmat = dataset_inputs_fitting_covmat
-    #
-    # # convert covmat to correlation
-    # diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
-    # cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
-    #
-    # # diagonalise the correlation matrix
-    # eig_vals, u_trans = np.linalg.eigh(cormat)
-    # u_trans = np.einsum("i, ik -> ik", diag_inv_sqrt, u_trans)
+    nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
+    nameseed += replica_trvlseed
+    rng = np.random.Generator(np.random.PCG64(nameseed))
     ndata = len(dataset_inputs_fitting_covmat)
 
     # construct training mask by selecting a fraction of the eigenvalues
-    tr_mask = np.random.random(ndata) < diagonal_frac
+    trmax = int(ndata * diagonal_frac)
+    tr_mask = np.concatenate([np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)])
+    rng.shuffle(tr_mask)
     vl_mask = ~tr_mask
 
-    # discard the eigenvalues below the set threshold
-    # tr_mask[eig_vals < threshold_eigvals] = False
-    # vl_mask[eig_vals < threshold_eigvals] = False
-    return _Masks(
-        str(data),
-        replica_trvlseed,
-        [tr_mask],
-        [vl_mask],
-        diagonal_basis=True,
-        # eig_vals=eig_vals,
-        # diagonal_rotation=u_trans.T,
-    )
+    # alternative implementation, but n_tr is not the same for all replicas this way
+    # tr_mask = np.random.random(ndata) < diagonal_frac
+
+    return _Masks(str(data), replica_trvlseed, [tr_mask], [vl_mask])
 
 
 def standard_masks(data, replica_trvlseed):
@@ -332,13 +298,13 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, diagonal_basis=T
     Since the masks and number of datapoints need to be treated for 1-point datasets
     it also returns the right ndata and masks for training and validation:
 
-    inv_total, inv_training, inv_validation, ndata_tr, ndata_vl, mask_tr, mask_vl, diagonal_rotation
     """
     log.info(
         f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}, diagonal_basis={diagonal_basis}"
     )
     covmat = _hashed_dataset_inputs_fitting_covmat.array
     diagonal_rotation = None
+    eig_vals = None
 
     if diagonal_basis:
         log.info("working in diagonal basis.")
@@ -348,33 +314,15 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, diagonal_basis=T
         cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
 
         # diagonalise the correlation matrix
-        eig_vals, u_trans = np.linalg.eigh(cormat)
-        u_trans = np.einsum("i, ik -> ik", diag_inv_sqrt, u_trans)
+        eig_vals, uT = np.linalg.eigh(cormat)
+        uT = np.einsum("i, ik -> ik", diag_inv_sqrt, uT)
+        diagonal_rotation = uT.T
+
         ndata = len(eig_vals)
 
-        # # construct training mask by selecting a fraction of the eigenvalues
-        # # tr_mask = np.random.random(ndata) < diagonal_frac
-        # # ntr = int(diagonal_frac * ndata)
-        # # tr_mask = np.concatenate([np.ones(ntr, dtype=bool), np.zeros(ndata - ntr, dtype=bool)])
-        # tr_mask = np.random.random(ndata) < diagonal_frac
-        # vl_mask = ~tr_mask
-
-        # discard the eigenvalues below the set threshold
-        # tr_mask[eig_vals < threshold_eigvals] = False
-        # vl_mask[eig_vals < threshold_eigvals] = False
-
-        # get the eigenvalues of the fit cormat (in ascending order)
-        # eig_vals = masks.eig_vals
-
-        # apply the training/validation masks to the eigenvalues and take the inverse
-        # this does not give the inverse of the covmat as the variable name might suggest,
-        # but we call it this way anyway as this needs to be returned at the end
-        inv_total = 1 / eig_vals
+        inv_total = np.diag(1 / eig_vals)
 
     else:
-        # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
-        # Here we want to have the data both in training and validation,
-        # but set to 0 the data, so that it doesn't affect the chi2 value.
 
         diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
         cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
@@ -384,206 +332,7 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, diagonal_basis=T
             @ np.diag(diag_inv_sqrt_total)
         )
 
-        # zero_tr = []
-        # zero_vl = []
-        # idx = 0
-        # for data_mask in masks.tr_masks:
-        #     dlen = len(data_mask)
-        #     if dlen == 1:
-        #         if data_mask[0]:
-        #             zero_vl.append(idx)
-        #         else:
-        #             zero_tr.append(idx)
-        #     idx += dlen
-        #
-        # tr_mask = np.concatenate(masks.tr_masks)
-        # vl_mask = ~tr_mask
-        #
-        # # Now set to true the masks
-        # tr_mask[zero_tr] = True
-        # vl_mask[zero_vl] = True
-        # # And prepare the index to 0 the (inverse) covmat
-        # data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
-        # data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
-        #
-        # covmat_tr = covmat[tr_mask].T[tr_mask]
-        # covmat_vl = covmat[vl_mask].T[vl_mask]
-        #
-        # # Remove possible correlations for 1-point datasets that should've been masked out
-        # covmat_tr[data_zero_tr, :] = covmat_tr[:, data_zero_tr] = 0.0
-        # covmat_vl[data_zero_vl, :] = covmat_vl[:, data_zero_vl] = 0.0
-        # # Set the diagonal to 1 to avoid infinities or inconsistencies when computing the inverse
-        # covmat_tr[data_zero_tr, data_zero_tr] = 1.0
-        # covmat_vl[data_zero_vl, data_zero_vl] = 1.0
-        #
-        # diag_inv_sqrt_covmat_tr = 1 / np.sqrt(np.diag(covmat_tr))
-        # diag_inv_sqrt_covmat_vl = 1 / np.sqrt(np.diag(covmat_vl))
-        # cormat_tr = np.einsum(
-        #     "i, ij, j -> ij", diag_inv_sqrt_covmat_tr, covmat_tr, diag_inv_sqrt_covmat_tr
-        # )
-        # cormat_vl = np.einsum(
-        #     "i, ij, j -> ij", diag_inv_sqrt_covmat_vl, covmat_vl, diag_inv_sqrt_covmat_vl
-        # )
-        # invcovmat_tr = np.einsum(
-        #     "i, ij, j -> ij",
-        #     diag_inv_sqrt_covmat_tr,
-        #     np.linalg.inv(cormat_tr),
-        #     diag_inv_sqrt_covmat_tr,
-        # )
-        # invcovmat_vl = np.einsum(
-        #     "i, ij, j -> ij",
-        #     diag_inv_sqrt_covmat_vl,
-        #     np.linalg.inv(cormat_vl),
-        #     diag_inv_sqrt_covmat_vl,
-        # )
-        #
-        # # Set to 0 the points in the diagonal that were left as 1
-        # invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
-        # invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
-        #
-        # ndata_tr = np.count_nonzero(tr_mask)
-        # ndata_vl = np.count_nonzero(vl_mask)
-        #
-        # # And subtract them for ndata
-        # ndata_tr -= len(data_zero_tr)
-        # ndata_vl -= len(data_zero_vl)
-
-    return (
-        covmat,
-        inv_total,
-        # invcovmat_tr,
-        # invcovmat_vl,
-        # ndata_tr,
-        # ndata_vl,
-        # tr_mask,
-        # vl_mask,
-        diagonal_rotation,
-    )
-
-
-# @functools.lru_cache
-# def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_basis=True):
-#     """Returns the inverse covmats for training, validation and total
-#     attending to the right masks and whether it is diagonal or not.
-#
-#     Since the masks and number of datapoints need to be treated for 1-point datasets
-#     it also returns the right ndata and masks for training and validation:
-#
-#     inv_total, inv_training, inv_validation, ndata_tr, ndata_vl, mask_tr, mask_vl, diagonal_rotation
-#     """
-#     log.info(
-#         f"_inv_covmat_prepared called with masks id={id(masks)}, covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}, diagonal_basis={diagonal_basis}")
-#     covmat = _hashed_dataset_inputs_fitting_covmat.array
-#
-#     diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
-#     cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
-#     inv_total = (
-#         np.diag(diag_inv_sqrt_total) @ np.linalg.inv(cormat_total) @ np.diag(diag_inv_sqrt_total)
-#     )
-#
-#     diagonal_rotation = None
-#
-#     if diagonal_basis:
-#         log.info("working in diagonal basis.")
-#
-#         # get the eigenvalues of the fit cormat (in ascending order)
-#         eig_vals = masks.eig_vals
-#
-#         # rotate the experimental data to the diagonal basis of the cormat and obtain training/validation masks
-#         diagonal_rotation = masks.diagonal_rotation
-#         tr_mask = masks.tr_masks[0]
-#         vl_mask = masks.vl_masks[0]
-#
-#         # apply the training/validation masks to the eigenvalues and take the inverse
-#         # this does not give the inverse of the covmat as the variable name might suggest,
-#         # but we call it this way anyway as this needs to be returned at the end
-#         invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
-#         invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
-#
-#         # obtain the number of data points in the training/validation sets
-#         ndata_tr = invcovmat_tr.shape[0]
-#         ndata_vl = invcovmat_vl.shape[0]
-#
-#     else:
-#         # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
-#         # Here we want to have the data both in training and validation,
-#         # but set to 0 the data, so that it doesn't affect the chi2 value.
-#
-#         zero_tr = []
-#         zero_vl = []
-#         idx = 0
-#         for data_mask in masks.tr_masks:
-#             dlen = len(data_mask)
-#             if dlen == 1:
-#                 if data_mask[0]:
-#                     zero_vl.append(idx)
-#                 else:
-#                     zero_tr.append(idx)
-#             idx += dlen
-#
-#         tr_mask = np.concatenate(masks.tr_masks)
-#         vl_mask = ~tr_mask
-#
-#         # Now set to true the masks
-#         tr_mask[zero_tr] = True
-#         vl_mask[zero_vl] = True
-#         # And prepare the index to 0 the (inverse) covmat
-#         data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
-#         data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
-#
-#         covmat_tr = covmat[tr_mask].T[tr_mask]
-#         covmat_vl = covmat[vl_mask].T[vl_mask]
-#
-#         # Remove possible correlations for 1-point datasets that should've been masked out
-#         covmat_tr[data_zero_tr, :] = covmat_tr[:, data_zero_tr] = 0.0
-#         covmat_vl[data_zero_vl, :] = covmat_vl[:, data_zero_vl] = 0.0
-#         # Set the diagonal to 1 to avoid infinities or inconsistencies when computing the inverse
-#         covmat_tr[data_zero_tr, data_zero_tr] = 1.0
-#         covmat_vl[data_zero_vl, data_zero_vl] = 1.0
-#
-#         diag_inv_sqrt_covmat_tr = 1 / np.sqrt(np.diag(covmat_tr))
-#         diag_inv_sqrt_covmat_vl = 1 / np.sqrt(np.diag(covmat_vl))
-#         cormat_tr = np.einsum(
-#             "i, ij, j -> ij", diag_inv_sqrt_covmat_tr, covmat_tr, diag_inv_sqrt_covmat_tr
-#         )
-#         cormat_vl = np.einsum(
-#             "i, ij, j -> ij", diag_inv_sqrt_covmat_vl, covmat_vl, diag_inv_sqrt_covmat_vl
-#         )
-#         invcovmat_tr = np.einsum(
-#             "i, ij, j -> ij",
-#             diag_inv_sqrt_covmat_tr,
-#             np.linalg.inv(cormat_tr),
-#             diag_inv_sqrt_covmat_tr,
-#         )
-#         invcovmat_vl = np.einsum(
-#             "i, ij, j -> ij",
-#             diag_inv_sqrt_covmat_vl,
-#             np.linalg.inv(cormat_vl),
-#             diag_inv_sqrt_covmat_vl,
-#         )
-#
-#         # Set to 0 the points in the diagonal that were left as 1
-#         invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
-#         invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
-#
-#         ndata_tr = np.count_nonzero(tr_mask)
-#         ndata_vl = np.count_nonzero(vl_mask)
-#
-#         # And subtract them for ndata
-#         ndata_tr -= len(data_zero_tr)
-#         ndata_vl -= len(data_zero_vl)
-#
-#     return (
-#         covmat,
-#         inv_total,
-#         invcovmat_tr,
-#         invcovmat_vl,
-#         ndata_tr,
-#         ndata_vl,
-#         tr_mask,
-#         vl_mask,
-#         diagonal_rotation,
-#     )
+    return (covmat, inv_total, diagonal_rotation, eig_vals)
 
 
 def fitting_data_dict(
@@ -594,6 +343,7 @@ def fitting_data_dict(
     _inv_covmat_prepared,
     kfold_masks,
     fittable_datasets_masked,
+    threshold=0.0,
 ):
     """
     Provider which takes  the information from validphys ``data``.
@@ -635,23 +385,94 @@ def fitting_data_dict(
         'count_chi2'
             should this be counted towards the chi2
     """
+
     # TODO: Plug in the python data loading when available. Including but not
     # limited to: central values, ndata, replica generation, covmat construction
     expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
     expdata = make_replica
     fittable_datasets = fittable_datasets_masked
-    covmat, inv_true, diag_rot = _inv_covmat_prepared
+
+    # all covmat manipulation is shared across the replicas for memory purposes
+    covmat, inv_true, diag_rot, eig_vals = _inv_covmat_prepared
 
     # get the masks - different for each replica so fine to call here
     tr_mask, vl_mask = masks.tr_masks[0], masks.vl_masks[0]
-    if diag_rot:
-        invcovmat_tr = np.diag(inv_true[tr_mask])
-        invcovmat_vl = np.diag(inv_true[vl_mask])
     ndata_tr = np.sum(tr_mask)
     ndata_vl = np.sum(vl_mask)
-    # covmat, inv_true, invcovmat_tr, invcovmat_vl, ndata_tr, ndata_vl, tr_mask, vl_mask, diag_rot = (
-    #     _inv_covmat_prepared
-    # )
+    if diag_rot is not None:
+        # discard the eigenvalues below the set threshold
+        tr_mask[eig_vals < threshold] = False
+        vl_mask[eig_vals < threshold] = False
+        invcovmat_tr = inv_true[:, tr_mask][tr_mask, :]
+        invcovmat_vl = inv_true[:, vl_mask][vl_mask, :]
+    else:
+        # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
+        # Here we want to have the data both in training and validation,
+        # but set to 0 the data, so that it doesn't affect the chi2 value.
+
+        zero_tr = []
+        zero_vl = []
+        idx = 0
+        for data_mask in masks.tr_masks:
+            dlen = len(data_mask)
+            if dlen == 1:
+                if data_mask[0]:
+                    zero_vl.append(idx)
+                else:
+                    zero_tr.append(idx)
+            idx += dlen
+
+        tr_mask = np.concatenate(masks.tr_masks)
+        vl_mask = ~tr_mask
+
+        # Now set to true the masks
+        tr_mask[zero_tr] = True
+        vl_mask[zero_vl] = True
+        # And prepare the index to 0 the (inverse) covmat
+        data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
+        data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
+
+        covmat_tr = covmat[tr_mask].T[tr_mask]
+        covmat_vl = covmat[vl_mask].T[vl_mask]
+
+        # Remove possible correlations for 1-point datasets that should've been masked out
+        covmat_tr[data_zero_tr, :] = covmat_tr[:, data_zero_tr] = 0.0
+        covmat_vl[data_zero_vl, :] = covmat_vl[:, data_zero_vl] = 0.0
+        # Set the diagonal to 1 to avoid infinities or inconsistencies when computing the inverse
+        covmat_tr[data_zero_tr, data_zero_tr] = 1.0
+        covmat_vl[data_zero_vl, data_zero_vl] = 1.0
+
+        diag_inv_sqrt_covmat_tr = 1 / np.sqrt(np.diag(covmat_tr))
+        diag_inv_sqrt_covmat_vl = 1 / np.sqrt(np.diag(covmat_vl))
+        cormat_tr = np.einsum(
+            "i, ij, j -> ij", diag_inv_sqrt_covmat_tr, covmat_tr, diag_inv_sqrt_covmat_tr
+        )
+        cormat_vl = np.einsum(
+            "i, ij, j -> ij", diag_inv_sqrt_covmat_vl, covmat_vl, diag_inv_sqrt_covmat_vl
+        )
+        invcovmat_tr = np.einsum(
+            "i, ij, j -> ij",
+            diag_inv_sqrt_covmat_tr,
+            np.linalg.inv(cormat_tr),
+            diag_inv_sqrt_covmat_tr,
+        )
+        invcovmat_vl = np.einsum(
+            "i, ij, j -> ij",
+            diag_inv_sqrt_covmat_vl,
+            np.linalg.inv(cormat_vl),
+            diag_inv_sqrt_covmat_vl,
+        )
+
+        # Set to 0 the points in the diagonal that were left as 1
+        invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
+        invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
+
+        ndata_tr = np.count_nonzero(tr_mask)
+        ndata_vl = np.count_nonzero(vl_mask)
+
+        # And subtract them for ndata
+        ndata_tr -= len(data_zero_tr)
+        ndata_vl -= len(data_zero_vl)
 
     if diag_rot is not None:
         expdata = diag_rot @ expdata
