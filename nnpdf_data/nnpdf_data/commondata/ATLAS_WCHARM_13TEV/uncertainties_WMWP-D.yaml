@@ -42,7 +42,7 @@ definitions:
   luminosity:
     description: luminosity unc. from HepData
     treatment: MULT
-    type: ATLASLUMI16
+    type: ATLASLUMIRUNII
 bins:
 - art. sys. 1: -0.6553479317183444
   art. sys. 2: 0.08723779936536531

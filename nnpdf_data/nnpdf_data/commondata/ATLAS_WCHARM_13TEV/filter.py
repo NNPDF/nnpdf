@@ -141,7 +141,7 @@ def filter_ATLAS_WCHARM_13TEV(observable=None):
             definition = {key :
                           {"description": key + " unc. from HepData",
                            "treatment": "MULT",
-                           "type": "ATLASLUMI16"}}
+                           "type": "ATLASLUMIRUNII"}}
         else:             
             definition = {key :
                           {"description": key + " unc. from HepData",
