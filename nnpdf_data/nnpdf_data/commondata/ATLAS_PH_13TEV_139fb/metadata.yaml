@@ -1,0 +1,114 @@
+setname: ATLAS_PH_13TEV_139fb
+
+version: 1
+
+version_comment: Implementation of new data
+
+nnpdf_metadata:
+  nnpdf31_process: PHOTON
+  experiment: ATLAS
+
+arXiv:
+  url: https://arxiv.org/pdf/2302.00510
+  journal: JHEP07(2023)086
+iNSPIRE:
+  url: https://inspirehep.net/literature/2162989
+hepdata:
+  url: https://www.hepdata.net/record/ins2628741
+  version: 1
+
+implemented_observables:
+
+- observable_name: ET-ETA-R02
+  observable:
+    description: "ATLAS direct photon production 13 TeV at 139 fb^-1 R=0.2"
+    label: r"dsigma/dE_T^\gamma"
+    units: "$fb/GeV$"
+  process_type: PHT
+  tables: [7, 8, 9, 10, 11, 12]
+  ndata: 62
+  plotting:
+    dataset_label: "ATLAS direct photon production 13 TeV and 139 fb^-1 R=0.2"
+    y_label: '$d\sigma/dE_T ^\gamma$ (fb/GeV)'
+    figure_by:
+    - eta
+    plot_x: ET
+  kinematic_coverage:
+  - eta
+  - ET
+  - sqrts
+  kinematics:
+    variables:
+      eta:
+        description: "Absolute photon pseudorapidity"
+        label: "$|\eta|$"
+        units: ""
+      ET:
+        description: "Transverse energy"
+        label: "$E_T$"
+        units: "$GeV$"
+      sqrts:
+        description: "Centre-of-mass energy"
+        label: r"\sqrt{s}"
+        units: "GeV"	
+    file: kinematics_ET-ETA-R02.yaml
+  data_uncertainties:
+  - uncertainties_ET-ETA-R02.yaml
+  data_central: data_ET-ETA-R02.yaml
+
+  theory:
+    FK_tables:
+    - - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN1
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN2
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN3
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN4
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN5
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R02_BIN6
+    operation: 'null'
+
+- observable_name: ET-ETA-R04
+  observable:
+    description: "ATLAS direct photon production 13 TeV at 139 fb^-1 R=0.4"
+    label: r"dsigma/dE_T^\gamma"
+    units: "$fb/GeV$"
+  process_type: PHT
+  tables: [1, 2, 3, 4, 5, 6]
+  ndata: 62
+  plotting:
+    dataset_label: "ATLAS direct photon production 13 TeV and 139 fb^-1 R=0.4"
+    y_label: '$d\sigma/dE_T ^\gamma$ (fb)'
+    figure_by:
+    - eta
+    plot_x: ET
+  kinematic_coverage:
+  - eta
+  - ET
+  - sqrts
+  kinematics:
+    variables:
+      eta:
+        description: "Absolute photon pseudorapidity"
+        label: "$|\eta|$"
+        units: ""
+      ET:
+        description: "Transverse energy"
+        label: "$E_T$"
+        units: "$GeV$"
+      sqrts:
+        description: "Centre-of-mass energy"
+        label: r"\sqrt{s}"
+        units: "GeV"
+    file: kinematics_ET-ETA-R04.yaml
+  data_uncertainties:
+  - uncertainties_ET-ETA-R04.yaml
+  data_central: data_ET-ETA-R04.yaml
+
+  theory:
+    FK_tables:
+    - - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN1
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN2
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN3
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN4
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN5
+      - ATLAS_PH_13TEV_139fb_ET-ETA-R04_BIN6
+    operation: 'null'
