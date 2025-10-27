@@ -378,7 +378,7 @@ definitions:
   sys_corr_94:
     description: sysLumi
     treatment: MULT
-    type: ATLASLUMI15
+    type: ATLASLUMIRUNII
 bins:
 - stat: 0.127091
   sys_corr_1: 3.77048264e-01
