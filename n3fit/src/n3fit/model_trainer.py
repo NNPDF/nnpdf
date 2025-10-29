@@ -18,6 +18,7 @@ import numpy as np
 from n3fit import model_gen
 from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
+from n3fit.layers import losses
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
 from n3fit.hyper_optimization.rewards import HyperLoss
@@ -1079,7 +1080,8 @@ class ModelTrainer:
             
             # Add penalty term to ensure convergence
             exp_chi2_fitted_data = np.average(trvl_chi2exp_per_fold)
-            final_hyper_loss += 1e2 * op.elu((exp_chi2_fitted_data-1.3), alpha=0.7)
+            expchi2_penalty = losses.LossHyperopt()
+            final_hyper_loss += expchi2_penalty(exp_chi2_fitted_data) 
 
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file
