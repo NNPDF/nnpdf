@@ -204,7 +204,7 @@ implemented_observables:
     FK_tables:
     - - NNPDF_POS_ANTI_STRANGE_Q2_10000
   data_uncertainties: []
-- observable_name: XCB
+  - observable_name: XCQ
   observable:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $xc$ PDF $Q^2=10000$ GeV$^2$'
