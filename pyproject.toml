@@ -55,6 +55,8 @@ vp-list = "validphys.scripts.vp_list:main"
 vp-nextfitruncard = "validphys.scripts.vp_nextfitruncard:main"
 vp-hyperoptplot = "validphys.scripts.vp_hyperoptplot:main"
 vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
+# FiatLux scripts
+fiatlux-run = "n3fit.scripts.fiatlux_exec:main"
 
 [tool.poetry.dependencies]
 # Generic dependencies (i.e., validphys)
