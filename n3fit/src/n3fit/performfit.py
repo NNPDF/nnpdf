@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
-@n3fit.checks.check_multireplica_qed
+@n3fit.checks.check_photonQED_exists
 @n3fit.checks.check_polarized_configs
 def performfit(
     *,

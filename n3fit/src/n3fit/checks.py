@@ -471,6 +471,16 @@ def check_multireplica_qed(replicas, fiatlux):
     if fiatlux is not None:
         if len(replicas) > 1:
             raise CheckError("At the moment, running a multireplica QED fits is not allowed.")
+        
+@make_argcheck
+def check_photonQED_exists(theoryid, fiatlux):
+    """Check that the Photon QED set for this theoryid and luxset exists"""
+    if fiatlux is not None:
+      luxset = fiatlux['luxset']
+      try:
+          _ = FallbackLoader().check_photonQED(theoryid, luxset)
+      except FileNotFoundError:
+          raise CheckError(f"Photon QED set for TheoryID {theoryid.id} and luxset {luxset} not found.")
 
 
 @make_argcheck

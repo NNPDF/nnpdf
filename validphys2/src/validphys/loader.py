@@ -80,6 +80,10 @@ class EkoNotFound(LoadFailedError):
     pass
 
 
+class PhotonQEDNotFound(LoadFailedError):
+    pass
+
+
 class TheoryMetadataNotFound(LoadFailedError):
     pass
 
@@ -143,16 +147,19 @@ class LoaderBase:
         theories_path = pathlib.Path(profile["theories_path"])
         resultspath = pathlib.Path(profile["results_path"])
         ekos_path = pathlib.Path(profile["ekos_path"])
+        photons_qed = pathlib.Path(profile["photons_qed_path"])
 
         # Create the theories and results paths if they don't exist already
         theories_path.mkdir(exist_ok=True, parents=True)
         ekos_path.mkdir(exist_ok=True, parents=True)
         resultspath.mkdir(exist_ok=True, parents=True)
+        photons_qed.mkdir(exist_ok=True, parents=True)
 
         # And save them up
         self.commondata_folders = tuple(datapaths)
         self._theories_path = theories_path
         self._ekos_path = ekos_path
+        self._photons_qed_path = photons_qed
         self.resultspath = resultspath
         self._extremely_old_fits = set()
         self.nnprofile = profile
@@ -208,6 +215,14 @@ class Loader(LoaderBase):
         """Return a string token for each of the available theories"""
         return {
             eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.tar")
+        }
+    
+    @property
+    @functools.lru_cache
+    def available_photons_qed(self):
+        """Return a string token for each of the available theories"""
+        return {
+            eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.npz")
         }
 
     @property
@@ -305,6 +320,14 @@ class Loader(LoaderBase):
         if not eko_path.exists():
             raise EkoNotFound(f"Could not find eko {eko_path} in theory: {theoryID}")
         return eko_path
+    
+    @functools.lru_cache
+    def check_photonQED(self, theoryID, luxset):
+        """Check the Photon QED set exists and return the path to it"""
+        photon_qed_path = self._photons_qed_path / f"photon_qed_{theoryID.id}_{luxset}.tar"
+        if not photon_qed_path.exists():
+            raise PhotonQEDNotFound(f"Could not find Photon QED set {photon_qed_path} in theory: {theoryID}")
+        return photon_qed_path
 
     @property
     def theorydb_folder(self):
@@ -815,6 +838,16 @@ class RemoteLoader(LoaderBase):
     @_key_or_loader_error
     def eko_urls(self):
         return self.nnprofile['eko_urls']
+    
+    @property
+    @_key_or_loader_error
+    def photon_qed_index(self):
+        return self.nnprofile['photon_qed_index']
+    
+    @property
+    @_key_or_loader_error
+    def photon_qed_urls(self):
+        return self.nnprofile['photon_qed_urls']
 
     @property
     @_key_or_loader_error
@@ -838,6 +871,7 @@ class RemoteLoader(LoaderBase):
 
     def _remote_files_from_url(self, url, index, thing='files'):
         index_url = url + index
+        import ipdb; ipdb.set_trace()
         try:
             resp = requests.get(index_url)
             resp.raise_for_status()
@@ -885,6 +919,13 @@ class RemoteLoader(LoaderBase):
         token = 'eko_'
         rt = self.remote_files(self.eko_urls, self.eko_index, thing="ekos")
         return {k[len(token) :]: v for k, v in rt.items()}
+    
+    @property
+    @functools.lru_cache
+    def remote_photons_qed(self):
+        token = 'photon_qed_'
+        rt = self.remote_files(self.photon_qed_urls, self.photon_qed_index, thing="photons_qed")
+        return {k[len(token) :]: v for k, v in rt.items()}
 
     @property
     @functools.lru_cache
@@ -919,6 +960,10 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_ekos(self):
         return list(self.remote_ekos)
+    
+    @property
+    def downloadable_photonsQED(self):
+        return list(self.remote_photons_qed)
 
     @property
     def lhapdf_pdfs(self):
@@ -1102,6 +1147,18 @@ class RemoteLoader(LoaderBase):
         target_path = self._ekos_path / f"eko_{int(thid)}.tar"
         download_file(remote[thid], target_path)
 
+    def download_photonQED(self, thid, luxset: str):
+        """Download the Photon set for a given theory ID"""
+        # thid = str(thid)
+        # remote = self.remote_photons_qed
+        # key = f"{thid}_{luxset}"
+        # if key not in remote:
+        #     raise PhotonQEDNotFound(f"Photon QED set for TheoryID {thid} and luxset {luxset} is not available in the remote server")
+        # # Check that we have the theory we need
+        # target_path = self._photon_qed_path / f"photon_qed_{int(thid)}_{luxset}.tar"
+        # download_file(remote[key], target_path)
+        log.warning("Downloading Photon QED sets is not implemented yet.")
+    
     def download_vp_output_file(self, filename, **kwargs):
         try:
             root_url = self.nnprofile['reports_root_url']

@@ -2,6 +2,7 @@
 
 import logging
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 from scipy.integrate import trapezoid
@@ -12,11 +13,13 @@ from eko import basis_rotation
 from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
+from validphys.loader import Loader, PhotonQEDNotFound
 
 from . import structure_functions as sf
 from .alpha import Alpha
 
 log = logging.getLogger(__name__)
+loader = Loader()
 
 # not the complete fiatlux runcard since some parameters are set in the code
 FIATLUX_DEFAULT = {
@@ -49,18 +52,30 @@ FIATLUX_DEFAULT = {
 
 
 class Photon:
-    """Photon class computing the photon array with the LuxQED approach."""
+    """Photon class computing the photon array with the LuxQED approach.
 
+    Parameters
+    ----------
+    theoryid : validphys.core.TheoryIDSpec
+        TheoryIDSpec object describing the theory to be used as
+        specified in the runcard.
+    lux_params : dict
+        Dictionary containing the LuxQED parameters as specified
+        in the runcard.
+    replica_list: list[int], optional
+        List of replica ids to be computed. If None, all replicas
+        will be computed based on the luxqed pdf set.
+    """
     def __init__(self, theoryid, lux_params, replicas):
         self.theoryid = theoryid
         self.lux_params = lux_params
+        self.replicas = replicas
 
-        theory = theoryid.get_description()
         fiatlux_runcard = FIATLUX_DEFAULT
         # TODO: for the time being, Qedref=Qref and so alphaem running will always trigger
         # This may be changed in the future in favor of a bool em_running in the runcard
         fiatlux_runcard["qed_running"] = True
-        fiatlux_runcard["mproton"] = float(theory["MP"])
+        fiatlux_runcard["mproton"] = float(theoryid.get_description()["MP"])
 
         # precision on final integration of double integral
         if "eps_base" in lux_params:
@@ -70,37 +85,46 @@ class Photon:
             fiatlux_runcard["eps_base"] = 1e-5
             log.info(f"Using default value for fiatlux parameter eps_base")
 
-        self.replicas = replicas
-
-        # structure functions
+        self.fiatlux_runcard = fiatlux_runcard
+        # Metadata for the photon ste
         self.luxpdfset = lux_params["luxset"].load()
         self.additional_errors = lux_params["additional_errors"]
         self.luxseed = lux_params["luxseed"]
+        self.luxpdfset_members = self.luxpdfset.n_members - 1 # Remove replica 0
+
+        try:
+          self.load_photon()
+        except PhotonQEDNotFound:
+          log.info(f"Photon set for theory ID {self.theoryid.id} and luxset {self.luxpdfset._name} not found. Computing it now...")
+          self.compute_photon_set()
+
+
+    def compute_photon_set(self):
+        """Compute the photon set for the desired replicas."""
+
+
+        # load fiatlux
+        try:
+          import fiatlux
+        except ModuleNotFoundError as e:
+          log.error("fiatlux not found, please install fiatlux")
+          raise ModuleNotFoundError("Please install fiatlux: `pip install nnpdf[qed]` or `pip install fiatlux`") from e
+
+        theory = self.theoryid.get_description()
 
         if theory["PTO"] > 0:
-            path_to_F2 = theoryid.path / "fastkernel/FIATLUX_DIS_F2.pineappl.lz4"
-            path_to_FL = theoryid.path / "fastkernel/FIATLUX_DIS_FL.pineappl.lz4"
+            path_to_F2 = self.theoryid.path / "fastkernel/FIATLUX_DIS_F2.pineappl.lz4"
+            path_to_FL = self.theoryid.path / "fastkernel/FIATLUX_DIS_FL.pineappl.lz4"
 
-        self.path_to_eko_photon = theoryid.path / "eko_photon.tar"
+        self.path_to_eko_photon = self.theoryid.path / "eko_photon.tar"
         with EKO.read(self.path_to_eko_photon) as eko:
             self.q_in = np.sqrt(eko.mu20)
 
         # set fiatlux
-        self.lux = {}
-
         mb_thr = theory["kbThr"] * theory["mb"]
         mt_thr = theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100
-
-        self.interpolator = []
-        self.integral = []
-
-        try:
-            import fiatlux
-        except ModuleNotFoundError as e:
-            log.error("fiatlux not found, please install fiatlux")
-            raise ModuleNotFoundError(
-                "Please install fiatlux: `pip install nnpdf[qed]` or `pip install fiatlux`"
-            ) from e
+        interpolator = []
+        integral = []
 
         for replica in self.replicas:
             # As input replica for the photon computation we take the MOD of the luxset_members to
@@ -117,85 +141,69 @@ class Photon:
                     log.error(
                         "FKtables for FIATLUX_DIS_F2 and FIATLUX_DIS_FL have two different q2_max"
                     )
-                fiatlux_runcard["q2_max"] = float(f2.q2_max)
+                self.fiatlux_runcard["q2_max"] = float(f2.q2_max)
             else:
                 f2 = f2lo
                 fl = sf.FLLO()
                 # using a default value for q2_max
-                fiatlux_runcard["q2_max"] = 1e8
+                self.fiatlux_runcard["q2_max"] = 1e8
 
-            alpha = Alpha(theory, fiatlux_runcard["q2_max"])
-
+            alpha = Alpha(theory, self.fiatlux_runcard["q2_max"])
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
-                yaml.dump(fiatlux_runcard, tmp)
-                self.lux[replica] = fiatlux.FiatLux(tmp.name)
+                yaml.dump(self.fiatlux_runcard, tmp)
+                lux = fiatlux.FiatLux(tmp.name)
+
             # we have a dict but fiatlux wants a yaml file
             # TODO : once that fiatlux will allow dictionaries
             # pass directly fiatlux_runcard
+            lux.PlugAlphaQED(alpha.alpha_em, alpha.qref)
+            lux.InsertInelasticSplitQ([mb_thr, mt_thr])
+            lux.PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
-            self.lux[replica].PlugAlphaQED(alpha.alpha_em, alpha.qref)
-            self.lux[replica].InsertInelasticSplitQ([mb_thr, mt_thr])
-            self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
+            # Evaluate photon for every point in the grid xgrid
+            def evaluate_at_x(x):
+              return lux.EvaluatePhoton(x, self.q_in**2).total
+            with ThreadPoolExecutor() as executor:
+                photon_qin = np.array(list(executor.map(evaluate_at_x, XGRID)))
 
-            photon_array = self.compute_photon_array(replica, photonreplica)
-            self.interpolator.append(
-                interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic")
-            )
-            self.integral.append(trapezoid(photon_array, XGRID))
+            photon_qin += self.generate_errors(replica)
 
-        self.integral = np.stack(self.integral, axis=-1)
+            # fiatlux computes x * gamma(x)
+            photon_qin /= XGRID
 
-    def compute_photon_array(self, replica, photonreplica):
-        r"""
-        Compute the photon PDF for every point in the grid xgrid.
+            # Load eko and reshape it
+            with EKO.read(self.path_to_eko_photon) as eko_photon:
+                # TODO : if the eko has not the correct grid we have to reshape it
+                # it has to be done inside vp-setupfit
 
-        Parameters
-        ----------
-        replica: int
-            replica id
+                # NB: the eko should contain a single operator
+                for _, elem in eko_photon.items():
+                    eko_op = elem.operator
 
-        Returns
-        -------
-        compute_photon_array: numpy.array
-            photon PDF at the fitting scale Q0
-        """
-        # Compute photon PDF
-        log.info(f"Computing photon")
-        photon_qin = np.array(
-            [self.lux[replica].EvaluatePhoton(x, self.q_in**2).total for x in XGRID]
-        )
-        photon_qin += self.generate_errors(replica)
-        # fiatlux computes x * gamma(x)
-        photon_qin /= XGRID
-        # TODO : the different x points could be even computed in parallel
+                    pdfs_init = np.zeros_like(eko_op[0, 0])
+                    for j, pid in enumerate(basis_rotation.flavor_basis_pids):
+                        if pid == 22:
+                            pdfs_init[j] = photon_qin
+                            ph_id = j
+                        elif pid not in self.luxpdfset.flavors:
+                            continue
+                        else:
+                            pdfs_init[j] = np.array(
+                                [self.luxpdfset.xfxQ(x, self.q_in, photonreplica, pid) / x for x in XGRID]
+                            )
 
-        # Load eko and reshape it
-        with EKO.read(self.path_to_eko_photon) as eko_photon:
-            # TODO : if the eko has not the correct grid we have to reshape it
-            # it has to be done inside vp-setupfit
+                    pdfs_final = np.einsum("ajbk,bk", eko_op, pdfs_init)
 
-            # NB: the eko should contain a single operator
-            for _, elem in eko_photon.items():
-                eko_op = elem.operator
+            photon_Q0 = pdfs_final[ph_id]
+            photon_array = XGRID * photon_Q0
+            interpolator.append(interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic"))
+            integral.append(trapezoid(photon_array, XGRID))
 
-                pdfs_init = np.zeros_like(eko_op[0, 0])
-                for j, pid in enumerate(basis_rotation.flavor_basis_pids):
-                    if pid == 22:
-                        pdfs_init[j] = photon_qin
-                        ph_id = j
-                    elif pid not in self.luxpdfset.flavors:
-                        continue
-                    else:
-                        pdfs_init[j] = np.array(
-                            [self.luxpdfset.xfxQ(x, self.q_in, photonreplica, pid) / x for x in XGRID]
-                        )
+        integral = np.stack(self.integral, axis=-1)
 
-                pdfs_final = np.einsum("ajbk,bk", eko_op, pdfs_init)
 
-        photon_Q0 = pdfs_final[ph_id]
-
-        # we want x * gamma(x)
-        return XGRID * photon_Q0
+        self.integral = integral
+        self.interpolator = interpolator
 
     def __call__(self, xgrid):
         """
@@ -247,3 +255,12 @@ class Photon:
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
         errors = u @ (s * rng.normal(size=7))
         return errors
+
+    def load_photon(self):
+      """Load the photon resource using the Loader class."""
+      path_to_photon = loader.check_photonQED(self.theoryid, self.luxpdfset._name)
+      log.info(f"Loading photon QED set from {path_to_photon}")
+
+      log.warning("Loading photon QED set is not yet implemented.")
+      exit(1)
+      return
