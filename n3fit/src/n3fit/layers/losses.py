@@ -210,7 +210,7 @@ class LossHyperopt:
     True
     """
 
-    def __init__(self, c=1e10, alpha=1e-7, chi2ref=1.3):
+    def __init__(self, c=1e2, alpha=1e-10, chi2ref=1.2):
         self.c = c
         self.alpha = alpha
         self.chi2ref = chi2ref
