@@ -68,9 +68,10 @@ def construct_eko_cards(
         q_fin,
         q_points,
         {
-            theory["mc"]: thresholds["c"],
-            theory["mb"]: thresholds["b"],
-            theory["mt"]: thresholds["t"],
+            "mc": theory["mc"],
+            "mb": theory["mb"],
+            "kcThr": theory["kcThr"],
+            "kbThr": theory["kbThr"],
         },
         legacy40=legacy40,
     )    
