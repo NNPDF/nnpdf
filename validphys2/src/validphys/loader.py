@@ -871,7 +871,6 @@ class RemoteLoader(LoaderBase):
 
     def _remote_files_from_url(self, url, index, thing='files'):
         index_url = url + index
-        import ipdb; ipdb.set_trace()
         try:
             resp = requests.get(index_url)
             resp.raise_for_status()
