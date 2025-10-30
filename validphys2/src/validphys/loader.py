@@ -324,7 +324,7 @@ class Loader(LoaderBase):
     @functools.lru_cache
     def check_photonQED(self, theoryID, luxset):
         """Check the Photon QED set exists and return the path to it"""
-        photon_qed_path = self._photons_qed_path / f"photon_qed_{theoryID.id}_{luxset}.tar"
+        photon_qed_path = self._photons_qed_path / f"photon_qed_{theoryID.id}_{luxset}"
         if not photon_qed_path.exists():
             raise PhotonQEDNotFound(f"Could not find Photon QED set {photon_qed_path} in theory: {theoryID}")
         return photon_qed_path
