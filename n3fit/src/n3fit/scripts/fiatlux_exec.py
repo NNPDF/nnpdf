@@ -2,7 +2,7 @@ import argparse
 import pathlib
 import logging
 
-from validphys.loader import Loader
+from validphys.loader import FallbackLoader as Loader
 from validphys.utils import yaml_safe
 from validphys.photon.compute import Photon
 
@@ -40,7 +40,7 @@ def main():
     fiatlux_params = runcard.get("fiatlux", None)
     fiatlux_params['luxset'] = loader.check_pdf(fiatlux_params['luxset'])
 
-    Photon(theoryID, fiatlux_params, replicas=replicas, save_to_disk=True)
+    Photon(theoryID, fiatlux_params, replicas=replicas, save_to_disk=True, force_computation=True)
 
 if __name__ == "__main__":
     main()
