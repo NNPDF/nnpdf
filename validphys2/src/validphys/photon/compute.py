@@ -66,7 +66,7 @@ class Photon:
         List of replica ids to be computed. If None, all replicas
         will be computed based on the luxqed pdf set.
     """
-    def __init__(self, theoryid, lux_params, replicas=None, save_to_disk=False):
+    def __init__(self, theoryid, lux_params, replicas=None, save_to_disk=False, force_computation=False):
         self.theoryid = theoryid
         self.lux_params = lux_params
         self.replicas = replicas
@@ -92,6 +92,11 @@ class Photon:
         self.additional_errors = lux_params["additional_errors"]
         self.luxseed = lux_params["luxseed"]
         self.luxpdfset_members = self.luxpdfset.n_members - 1 # Remove replica 0
+
+        if force_computation:
+            self.compute_photon_set()
+            return
+            
 
         try:
           self.load_photon()
@@ -271,13 +276,13 @@ class Photon:
 
       # Load the needed replicas
       for replica in self.replicas:
-            # As input replica for the photon computation we take the MOD of the luxset_members to
-            # avoid failing due to limited number of replicas in the luxset
-            photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
+          # As input replica for the photon computation we take the MOD of the luxset_members to
+          # avoid failing due to limited number of replicas in the luxset
+          photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
 
-            photon_array = np.load(path_to_photon / f"replica_{photonreplica}.npz")["photon_array"]
-            interpolator.append(interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic"))
-            integral.append(trapezoid(photon_array, XGRID))
+          photon_array = np.load(path_to_photon / f"replica_{photonreplica}.npz")["photon_array"]
+          interpolator.append(interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic"))
+          integral.append(trapezoid(photon_array, XGRID))
       
       self.interpolator = interpolator
       self.integral = np.stack(integral, axis=-1)
