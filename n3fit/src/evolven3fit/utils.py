@@ -40,7 +40,7 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, legacy40=False):
         if Qfin is None and Q_points is None:
             Q2_min = 1.0**2
             Q2_max = 1e5**2
-            Q0 = Q0                    
+            Q0 = 1.65                    
             Lambda2 = 0.0625                  
             total_points = 50
             total_points_ic = 6
