@@ -1,0 +1,13 @@
+bins:
+- zero:
+    min: null
+    mid: 0
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  sqrts:
+    min: null
+    mid: 5020
+    max: null

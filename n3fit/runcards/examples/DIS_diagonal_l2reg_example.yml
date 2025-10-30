@@ -19,15 +19,15 @@ dataset_inputs:
 - {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, frac: 0.75, variant: legacy_dw}
 - {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
 - {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
-- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_300GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75}
+- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75}
+- {dataset: HERA_NC_300GEV_EP-SIGMARED, frac: 0.75}
+- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75}
+- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75}
+- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75}
+- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75}
 
 ############################################################
 datacuts:
@@ -37,7 +37,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 708        # database id
+  theoryid: 41_000_000        # database id
 
 ############################################################
 trvlseed: 1
@@ -67,10 +67,6 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   regularizer_args: {l1: 0.0, l2: 1.0}
 
 fitting:
-  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
@@ -90,7 +86,7 @@ positivity:
   - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
   - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}

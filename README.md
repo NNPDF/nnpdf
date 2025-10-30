@@ -6,7 +6,9 @@
 [![Docs](https://github.com/NNPDF/nnpdf/actions/workflows/upload_docs.yml/badge.svg)](https://github.com/NNPDF/nnpdf/actions/workflows/upload_docs.yml)
 [![Commondata](https://github.com/NNPDF/nnpdf/actions/workflows/check_newcd.yml/badge.svg)](https://github.com/NNPDF/nnpdf/actions/workflows/check_newcd.yml)
 
+[![EPJC](https://img.shields.io/badge/Eur.Phys.J.C-81%20(2021)%2010-958?color=%231A43BF)](https://link.springer.com/article/10.1140/epjc/s10052-021-09747-9)
 [![DOI](https://zenodo.org/badge/118135201.svg)](https://zenodo.org/badge/latestdoi/118135201)
+[![HSF](https://hepsoftwarefoundation.org/images/HSF-logo/HSF-Affiliated.svg)](https://hepsoftwarefoundation.org/projects/projects)
 
 # NNPDF: An open-source machine learning framework for global analyses of parton distributions
 
