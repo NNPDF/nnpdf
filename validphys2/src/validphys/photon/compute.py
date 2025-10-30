@@ -53,7 +53,7 @@ FIATLUX_DEFAULT = {
 
 class Photon:
     """Photon class computing the photon array with the LuxQED approach.
-
+    
     Parameters
     ----------
     theoryid : validphys.core.TheoryIDSpec
@@ -66,10 +66,11 @@ class Photon:
         List of replica ids to be computed. If None, all replicas
         will be computed based on the luxqed pdf set.
     """
-    def __init__(self, theoryid, lux_params, replicas):
+    def __init__(self, theoryid, lux_params, replicas=None, save_to_disk=False):
         self.theoryid = theoryid
         self.lux_params = lux_params
         self.replicas = replicas
+        self.save_to_disk = save_to_disk
 
         fiatlux_runcard = FIATLUX_DEFAULT
         # TODO: for the time being, Qedref=Qref and so alphaem running will always trigger
@@ -98,18 +99,15 @@ class Photon:
           log.info(f"Photon set for theory ID {self.theoryid.id} and luxset {self.luxpdfset._name} not found. Computing it now...")
           self.compute_photon_set()
 
-
     def compute_photon_set(self):
         """Compute the photon set for the desired replicas."""
-
-
         # load fiatlux
         try:
           import fiatlux
         except ModuleNotFoundError as e:
           log.error("fiatlux not found, please install fiatlux")
           raise ModuleNotFoundError("Please install fiatlux: `pip install nnpdf[qed]` or `pip install fiatlux`") from e
-
+        
         theory = self.theoryid.get_description()
 
         if theory["PTO"] > 0:
@@ -129,8 +127,7 @@ class Photon:
         for replica in self.replicas:
             # As input replica for the photon computation we take the MOD of the luxset_members to
             # avoid failing due to limited number of replicas in the luxset
-            luxset_members = self.luxpdfset.n_members - 1  # - 1 because rep0 is included
-            photonreplica = (replica % luxset_members) or luxset_members
+            photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
 
             f2lo = sf.F2LO(self.luxpdfset.members[photonreplica], theory)
 
@@ -163,10 +160,11 @@ class Photon:
             # Evaluate photon for every point in the grid xgrid
             def evaluate_at_x(x):
               return lux.EvaluatePhoton(x, self.q_in**2).total
+            
             with ThreadPoolExecutor() as executor:
                 photon_qin = np.array(list(executor.map(evaluate_at_x, XGRID)))
 
-            photon_qin += self.generate_errors(replica)
+            # photon_qin += self.generate_errors(replica)
 
             # fiatlux computes x * gamma(x)
             photon_qin /= XGRID
@@ -175,7 +173,7 @@ class Photon:
             with EKO.read(self.path_to_eko_photon) as eko_photon:
                 # TODO : if the eko has not the correct grid we have to reshape it
                 # it has to be done inside vp-setupfit
-
+                
                 # NB: the eko should contain a single operator
                 for _, elem in eko_photon.items():
                     eko_op = elem.operator
@@ -196,10 +194,17 @@ class Photon:
 
             photon_Q0 = pdfs_final[ph_id]
             photon_array = XGRID * photon_Q0
+
+            if self.save_to_disk:
+                path_to_photon = loader._photons_qed_path / f"photon_qed_{self.theoryid.id}_{self.luxpdfset._name}"
+                path_to_photon.mkdir(parents=True, exist_ok=True)
+                np.savez_compressed(path_to_photon / f"replica_{photonreplica}.npz",photon_array=photon_array)
+                log.info(f"Saved photon replica {photonreplica} to {path_to_photon}")
+
             interpolator.append(interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic"))
             integral.append(trapezoid(photon_array, XGRID))
 
-        integral = np.stack(self.integral, axis=-1)
+        integral = np.stack(integral, axis=-1)
 
 
         self.integral = integral
@@ -255,12 +260,25 @@ class Photon:
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
         errors = u @ (s * rng.normal(size=7))
         return errors
-
+    
     def load_photon(self):
       """Load the photon resource using the Loader class."""
       path_to_photon = loader.check_photonQED(self.theoryid, self.luxpdfset._name)
       log.info(f"Loading photon QED set from {path_to_photon}")
 
-      log.warning("Loading photon QED set is not yet implemented.")
-      exit(1)
+      interpolator = []
+      integral = []
+
+      # Load the needed replicas
+      for replica in self.replicas:
+            # As input replica for the photon computation we take the MOD of the luxset_members to
+            # avoid failing due to limited number of replicas in the luxset
+            photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
+
+            photon_array = np.load(path_to_photon / f"replica_{photonreplica}.npz")["photon_array"]
+            interpolator.append(interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic"))
+            integral.append(trapezoid(photon_array, XGRID))
+      
+      self.interpolator = interpolator
+      self.integral = np.stack(integral, axis=-1)
       return
