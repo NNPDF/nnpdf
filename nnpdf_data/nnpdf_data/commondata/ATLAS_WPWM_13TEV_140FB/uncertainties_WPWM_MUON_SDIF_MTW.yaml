@@ -1,0 +1,6283 @@
+definitions:
+  Luminosity_error:
+    description: Luminosity error
+    treatment: MULT
+    type: ATLASLUMI15
+  Alternative MC unf. unc.:
+    description: Alternative MC unf. unc.
+    treatment: ADD
+    type: CORR
+  Basic unf. unc.:
+    description: Basic unf. unc.
+    treatment: ADD
+    type: CORR
+  JES Flavor Composition:
+    description: JES Flavor Composition
+    treatment: ADD
+    type: CORR
+  JES Pileup RhoTopology:
+    description: JES Pileup RhoTopology
+    treatment: ADD
+    type: CORR
+  JES Pileup OffsetMu:
+    description: JES Pileup OffsetMu
+    treatment: ADD
+    type: CORR
+  JES Pileup OffsetNPV:
+    description: JES Pileup OffsetNPV
+    treatment: ADD
+    type: CORR
+  JES EtaIntercalib Model:
+    description: JES EtaIntercalib Model
+    treatment: ADD
+    type: CORR
+  JES Flavor Response:
+    description: JES Flavor Response
+    treatment: ADD
+    type: CORR
+  JER EffectiveNP 1:
+    description: JER EffectiveNP 1
+    treatment: ADD
+    type: CORR
+  JER EffectiveNP 2:
+    description: JER EffectiveNP 2
+    treatment: ADD
+    type: CORR
+  JER EffectiveNP 3:
+    description: JER EffectiveNP 3
+    treatment: ADD
+    type: CORR
+  JER EffectiveNP 4:
+    description: JER EffectiveNP 4
+    treatment: ADD
+    type: CORR
+  JER EffectiveNP 5:
+    description: JER EffectiveNP 5
+    treatment: ADD
+    type: CORR
+  JER EffectiveNP 6:
+    description: JER EffectiveNP 6
+    treatment: ADD
+    type: CORR
+  JER EffectiveNP 7rest:
+    description: JER EffectiveNP 7rest
+    treatment: ADD
+    type: CORR
+  JER DataVsMC MC16:
+    description: JER DataVsMC MC16
+    treatment: ADD
+    type: CORR
+  $E_T^{miss}$ SoftTrk Scale:
+    description: $E_T^{miss}$ SoftTrk Scale
+    treatment: ADD
+    type: CORR
+  $E_T^{miss}$ SoftTrk ResoPara:
+    description: $E_T^{miss}$ SoftTrk ResoPara
+    treatment: ADD
+    type: CORR
+  $E_T^{miss}$ SoftTrk ResoPerp:
+    description: $E_T^{miss}$ SoftTrk ResoPerp
+    treatment: ADD
+    type: CORR
+  Muon Resolution MS:
+    description: Muon Resolution MS
+    treatment: ADD
+    type: CORR
+  Muon Scale:
+    description: Muon Scale
+    treatment: ADD
+    type: CORR
+  Bad Muon Veto:
+    description: Bad Muon Veto
+    treatment: ADD
+    type: CORR
+  Muon Sagitta Global:
+    description: Muon Sagitta Global
+    treatment: ADD
+    type: CORR
+  Pileup:
+    description: Pileup
+    treatment: ADD
+    type: CORR
+  $t\bar{t}$ $p_T$-hard:
+    description: $t\bar{t}$ $p_T$-hard
+    treatment: ADD
+    type: CORR
+  $t\bar{t}$ FSR:
+    description: $t\bar{t}$ FSR
+    treatment: ADD
+    type: CORR
+  $t\bar{t}$ hadronization:
+    description: $t\bar{t}$ hadronization
+    treatment: ADD
+    type: CORR
+  $t\bar{t}$ hdamp:
+    description: $t\bar{t}$ hdamp
+    treatment: ADD
+    type: CORR
+  Norm. $W\rightarrow\tau\nu$ by 5%:
+    description: Norm. $W\rightarrow\tau\nu$ by 5%
+    treatment: MULT
+    type: CORR
+  Norm. Diboson by 6%:
+    description: Norm. Diboson by 6%
+    treatment: MULT
+    type: CORR
+bins:
+- &id002
+  Luminosity_error: 1.75818900e-04
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - &id001 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    iFZrhCXuFj8=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mrg+dI0LET8=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UBdm952M9T4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    olMuw6XwAD8=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    w7oR2Iwz1T4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    I9HdC1JE5D4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1NyVU75EFT8=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GelKpjh+AD8=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vUXZuzwm/T4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LlKsQwPr5z4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    N2+9Is9gKT8=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    w4cryhlIHz8=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UGCkkXssED8=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Wq0HJEWKDz8=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    48bryRVBED8=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RC3fkMw+DT8=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KTntSkcQCT8=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Qpp+d5UvFD8=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    TrU3dIrALj8=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    g+oOcexwIj8=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YHiHdHdLJT8=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bDg5N/4oAD8=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jrwg4BgbHT8=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    asFqsJkRKD8=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XQZSGErcCT8=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pL2oeoVHIz8=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YWZbqivP/j4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KMNl0xkxJj8=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Xe+KIpz9Hj8=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JQHI29paED8=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /Kix87FQBz8=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /ujbJSejDz8=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    q7aJ/d+9FT8=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wCK9YUsBGT8=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bCiXCbAmBj8=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yKQ4p49JET8=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /MdTlbfxzD4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    L9A3ZxnpAj8=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aZanvKkK0D4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hXQiCCq/6T4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    goNJMw7cHj8=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    W1VM1I9QDz8=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    a8Znh/9B4j4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8CtvfM2x9D4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    PxdNFuc2HD8=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ba8BZ9hoKD8=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wOdhSh8Y8j4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gysVXsZw/D4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sZf0l+BLBj8=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    h04y5mwJIj8=
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- *id002
+- &id003
+  Luminosity_error: 7.31769500e-05
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MEdu0fLRDD8=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6pTfU03RAD8=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QmJdCn/u6j4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fKMmuq5jCT8=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uzijRh4R/j4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JlGSIvCP8D4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vQdzsSWI8z4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zbc5ql4rxj4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qM5sXcZixj4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HJHl4HbBAD8=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IxbOwXW9Cz8=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mkvSfmkm/z4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uKV1HowN+j4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Xs79uY6P+z4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    z5dvYQNA+j4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    css1bxbb9j4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LL0kOG9I9T4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MIrPsUTm+D4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DxpD/m7BDz8=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YX1PmhiLBD8=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aa6cXdHMAz8=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Qr0y0v8w8T4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Wsqr0370CD8=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bT2e8dgqHD8=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    E2BJ008h/z4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EeVcoUdAED8=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZhUarizW0j4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    E9C+niGvFj8=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bF4rWuaYDz8=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zOUOtGVt8T4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /mwHmpRp+D4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +QQERaHDAj8=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    c81eYp4oCD8=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    luW2lWhpBj8=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GBgujaHz+D4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rY5y6cV0BD8=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZKD8Jwmm1j4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    t+ow4t/A9D4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Xpqn4D/o8z4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HYPwTfydyT4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EWktYl6bCz8=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    TmBa9T7dBz8=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UDRILxUcyD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vbkfB7Mh7T4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    piozV68jCD8=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    v9aeoazxFD8=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SEDpKQmA3j4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6Zl1/qEk6j4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0VP7rObE9D4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fQ7TjoCpDT8=
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- *id003
+- &id004
+  Luminosity_error: 3.50509000e-05
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6r/MTHC3Aj8=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8Z0wEu5W9T4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EzPNBFvW4T4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    q4DbAUTMAD8=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RzBPk4vE8z4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MplfCmWa5j4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2h+BJhY91j4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sgGubvCaqz4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CMHVQ3VowT4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8VwpFZ7h9z4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /Hd6Lh6h8D4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FchUEO945D4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    McmFYQAc5D4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    W3enxkHF5T4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wihgsQEu4z4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AtJf6MiD4T4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qC3kv28k4T4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mWYud3yw0j4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jKd+25wV9D4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mDvB2RqIwD4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    S/MMYyou6j4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    i2Z33kyg5j4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vjAGx0bP9j4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    NyZ/iPHADj8=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wdlN8wVi9j4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zeVDpjUz/j4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    X5COGQqStT4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Y7AVRhBtCz8=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XLiuw5E6Az8=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MS+8YYZ+2T4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ddLXW1Rc5D4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4emO89h48T4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eSL1j5889T4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2B+X/8uL8j4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DWs5PlNl4T4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OgTfSxns8T4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +VS5ntHpyT4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZbIAsVqV4z4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hS4Ggv7x7T4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YjO+0RsAjT4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9AVxQV109z4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    TJF3vd7X+j4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oZnNtwBQhD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tG5aY9rr3z4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VnByhTWZ8z4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ytHSteoKAT8=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zf8I2/igyj4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    n99GtjJi2D4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lINp+XmD4z4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    v1mZ3GcW+j4=
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- *id004
+- &id005
+  Luminosity_error: 1.61310500e-05
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ypqnJgCA9T4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SlUu4qjN6T4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8XseEmyL0z4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EPlztt868j4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LOmfXnTr4T4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    04nNzZOA0z4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Ff3fIWX8vT4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KLcnhgpCoj4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0W9Pt3uXvD4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SvojKFjF5j4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0zHgFveZ1j4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6REkaCyXxj4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fmvwDSjMyT4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vBlnK6XivD4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    89YfNk80uj4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    z5RSXk8exD4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BI5nRCdTvj4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CBOdCyOniz4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    u0IMbaHo2D4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    I60tO8i/3D4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GAXjZI/S3z4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jxrrUEGN2D4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    feOnDSCe4j4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yn0Dd8YV/D4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    U0j/udKs6D4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1oDgqBen6j4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uakXubSMrj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    V0r3vOCo/D4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qKCg6SyA9z4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oaTrgvQmvD4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cQX1y8URzz4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    z7o5V/Cz3T4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aH1jcwlT4T4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    iWVbOVDs3D4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tjPAF7pzxz4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    iraccBPT3D4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    z7eqBQ3bsD4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QqFRQnhJzz4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QihSZ4Ho3z4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YQVj7fErgz4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jzePAHv34T4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0yNVrGXS4z4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    NvMBV/4zsD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pPlKFJiGzD4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    N5eC2AlB3D4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GMn4X8ee6D4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RneZLLHcuT4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CR1llTrOwj4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LoEG5X6K0T4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cZsYrui45T4=
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- *id005
+- &id006
+  Luminosity_error: 7.11052700e-06
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    PyUK1DK36j4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    F/WAKsvf3z4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hIsRWOSPxT4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ibmAyazb3j4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0K/assQOyD4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ll/0f4i5tj4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jSyq2PAhpT4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pGox3a1Pgz4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vq8+3N0coT4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wCXIVDa2yz4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    x0f8Y0mUwD4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dcvluv32pD4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IYYOheqnrz4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    D9ZnM85GoD4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    r7Jh2VDloz4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    K2wNMF7lmT4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    r2Ld4/VikT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cDLG8npxUD4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +lodnY+7vD4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AEgpuF6EuD4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6OGefJDWvD4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pAMTMYUExT4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    chqGtU/MzD4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    g3jWzi395j4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5h0ukFyS1T4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    84kgPaqC1j4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    e7nbYwmipD4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    U57Zqxh57D4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9fIsIjmC7D4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uV4Pj+Punj4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wKhoWpWvtT4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    A84gBPb6xz4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vJCQ/br3yj4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oG/LE5tjxj4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3dRkygOltT4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    STkh9r5/xz4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5pvy1zELlD4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Z15udjuptT4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tvf/srAAzD4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ejsjAROOij4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    C4ocq1+syT4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2wW1j44e0z4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Lo8RpirhsD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /spu26E+tj4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JyB+XMaJwj4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    90kfX5Qv0D4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CnE/Ij8npj4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HU8a4fYZrT4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Biv+kjwuvT4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IfVShUMO0T4=
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- *id006
+- &id007
+  Luminosity_error: 3.27999400e-06
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Ki7XMkPp3j4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DTZM6AKb0j4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cAji7+hVtT4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DyApS16YxT4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rk86YT0hqj4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    N7Q0lpMbjj4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SojnsDujkD4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cuaUK/zGVj4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wS8iuKvNVT4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cjKumf9Roz4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    naHNSwYdpj4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    E7l4tE8ckz4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dhkeSJhdkz4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Ku9K9Es9kz4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Kf2qTuSboj4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rR2VP6o3eD4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZXbP/VQwlz4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    V5IijTwMUT4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aHNUy0anpD4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    K4I3QGgWpT4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OEP2k5BUoz4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QgUQftspsD4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +iQEXjd7uD4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Sjb7XJ3+1D4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZK8qzFH4wj4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    D1eJnPckxD4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1ljSKmu9lT4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HxHurYNl3j4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EAwQ47Z43z4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    s2LCIa1ErD4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uh0Y1zNGlj4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    c1Mnon8erD4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eQ34KeVbrz4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rDsog0RKrD4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vLsEZ7algD4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    em3mqMH3rT4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +zm4pbYwij4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hVlOsDUmoj4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nfeAAYpOsz4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    PAm6ejcgoT4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    H0/hPY0Ysj4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RrIyIKDYxD4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OCSNnvHQmD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XIdf6WEMnz4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Qh6qmqtDpz4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gsxmcR1YtD4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UVftQU3Ikj4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    c6nO1acHlT4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /1H31KngqD4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GorKrSFduT4=
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- *id007
+- &id008
+  Luminosity_error: 1.28019200e-06
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DouPFvlKzz4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rKS0R//1wD4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5M3+M+4Xoz4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fCswKcixqj4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XdPqFIiCgz4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IEc40wzNXD4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cf3Vq9Wgej4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    iljmABrfMD4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZR1wD1mTZD4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VN1RsmSdQj4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SgbQIC5ZiT4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    na3hPd5fgT4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wkLLZwRwcT4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0YVVE8dCWT4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    210DJ7DhhD4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jS3cZhHxbz4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jt5TxTo7dT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6yp1I12gPz4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2yfq51ehkD4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    t2WKNqtpjz4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /Gam9z1tlD4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dbF6BPu0lj4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    l29eCQrToj4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xbwbB3buwT4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UMDvXDSArD4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bnq/A3Eorz4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rFtX6YLDgT4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +P0ItFX4zD4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qJY3w6mozD4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rkIAO4XQnD4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yQBoGD5maj4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    b0BRtXDKgD4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    O3B5w8sbgz4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3CmhDBjthT4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6qam6i+4Zj4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pHQyCi94hT4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oOnKAS7ufj4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UGRXdQG7jj4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +8K7O83rkz4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4iRU8wD6mD4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2nm6RXM/lz4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    P6tTF0XvqD4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    r/W6awHXeT4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    U2kAsRGsgj4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yy35bw6+ij4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zXiL55lnlz4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BoeWem/zej4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    94U/LX0Edz4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ohwC5oBIkT4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cAbGlCTcnz4=
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- *id008
+- &id009
+  Luminosity_error: 4.35907700e-07
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wQxTxRfgwD4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nvWn2Ap2uT4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UpSVEYYHkz4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hj1QroHBhT4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Dbi1qC/uUT4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8xGU9kJ3Uz4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oay1N2NUXz4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    7Kt1IWawOT4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KLun/Q9aTT4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    B8Q+SqgySz4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xXsFRxi5Yz4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bu6a7KH0XD4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +JkLC396MD4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    viInxZOjGz4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    22pDegiTRj4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HMHBuuLpUz4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tRQ84MjPMT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    McTsVyf0RT4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3tqS7PjodD4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eJdO4PSIgj4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /A//bNozgj4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4zS+fIIThT4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    C4PsfRP9iT4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LDtnJiIqrD4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CJ6PlNELkz4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    q/yOnoY1lT4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4AaiaGKhaj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JOOKZyYauD4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    upCZkyhXtz4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +TgGuDnMfD4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Hph3XSfAYD4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fky/QvMZdj4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6aywh1i3eD4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rlHBOA55cj4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HFYsPKsjXD4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uiWuk0bGbj4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    e6huzMDQYz4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cMoEKcJIcj4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    M8SPl0lXcz4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HC75IoWWgD4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Z3AqlR0/ej4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    L096NNuxej4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CXn9fG2TgD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6++AlfZpZT4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MEkOWw0XbD4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jqob62GheD4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sToDEE0CYz4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9dyOv++FWD4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zxXxsCjMdT4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6Olqg2y1gT4=
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- *id009
+- &id010
+  Luminosity_error: 1.55068900e-07
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zzlIpP4VsT4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uaEy5/fdoT4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6jJOvAt6fz4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FM9ms5qEHz4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    TyixRx+VNj4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    7QgfLJl2OD4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wk8gqwpCSD4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pc+t8FjKOT4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CTfoYlRXNj4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fpRPN+GxPj4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IdVg7CRbRz4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yzqPppW2QD4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    p+1WJ+6bIz4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EqkpaU5wLD4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uSjeWaZTMT4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bHDN/JOEMT4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Irizx699LT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BpyU5pE4Pz4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LfA0HPVKYj4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0XbhQFsiYj4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yB7Vw4YhXD4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    857eQfK4dz4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RDi9TTOhcj4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kcBcmPeClz4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BU0t0Q09ej4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oJw2vjMafj4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    khvVeOqaVz4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    veEBhIyGpD4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9OVji/A/pD4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    R1IW2FokSD4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cxFZZ+G4Lj4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    b1dTdvoKPT4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eP1g2wKzQD4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oKVibN3dRj4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LM9aMV5jIT4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dZcPTvhyOD4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    o6qJKZ40Oz4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1AL6yL1qTj4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    M8qDVxZZSz4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    TbqJaQGOWj4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FZCijCLvXD4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lPfT5P3E/T0=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9n6kQlxEgj4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tLGKATiHQj4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OSl7oRZYTj4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rA4ac3WKWj4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XzPl7aTfSj4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    o9IHlxSZRj4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cFLE5dnlYj4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YlyLY9vNZj4=
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- *id010
+- &id011
+  Luminosity_error: 5.40247000e-08
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0MH4nQjzoD4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gxuwuRh7fj4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    36+O4iYgbD4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BOtuAHZvUT4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    PYZ/3bLuJz4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BMebOP8TFD4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    G7bEe0HNMT4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    y/C4KxfUJz4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DfWHWMRuHD4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6YB9NwEyIT4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    c1BpmdkdMj4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lTl4H0lHKT4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    H1Nk3PtWDT4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qe5SOQ6QIz4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3Ws/jCiHFj4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RT+QQ8meBz4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mRF0a0SlAD4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MCPuZr9vKT4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +9kBYQY+TT4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZI12CH7MVD4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    w1FHSVF5VT4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1UmO1cmxaz4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jUG04LcAWj4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ujc6pSy6hD4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OsAGT5T9YT4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yOFofDUHZT4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    PdgoYamFSD4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    o9VPU1mBkj4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    r8zMj1Mnkj4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    J/UBR/oUIT4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2i5g5FMWIj4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xm6Cz+E1Nj4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    t982qXXeNj4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9N5FBXwqRT4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    G3ZuLkHFMT4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xZEaRT84RT4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aMU5O6TdBD4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VbajYG6XJj4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    znTUup4oGz4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vJ/XmvcVMT4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3WFBp0JxQD4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8bo5I0K7Jz4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    61Z7z4WCYD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pJjeyasZHT4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KMI15QwOMT4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eCDQKdW1PT4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ogYI5HVeLT4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DYPdmdNQHT4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9LBnCz2aQT4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    c2e8wcUFTz4=
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- *id011
+- &id012
+  Luminosity_error: 9.33418000e-09
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rR2AT/wWgz4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hVXvgh7whD4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4Srka4rKUD4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    n1XdCyCFNj4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jnJWCmTl8D0=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    84VpkaH28D0=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RYBL3ep56j0=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mC+UfVgW6j0=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    b1a6qd4A0T0=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    A3kFf/EY5j0=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pUFb9+T69D0=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Q+YfZuGj8j0=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ku1chWce+z0=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    te5J+pqpBz4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qUs5mKRq1z0=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aIwYBi8q5j0=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    K6D1RHZ3/z0=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GgdMirVA6z0=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1wX31u9+Ej4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xkBTdo9kGD4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hoiNbBVpGT4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wXoktdwKUT4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZLozyMmaMT4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xEGcnbYCYz4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    y74Nm3+xOT4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1b+jPESzPD4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HeC9C+tELj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6vi6Mk6CdD4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oFsg/tXkbz4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Mg4wofQ+Az4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pFjsd3rfuz0=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rWIA7UyIID4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hhyX24pOKT4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hUTYMlhr4T0=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pwmNyEcj1j0=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    t7xezQRg2D0=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uVdPjr7gnT0=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uQCXMgIU0D0=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Q5Hd0MRcrD0=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    osw5gvuf1z0=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lMfQqPM79j0=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Uf83A25/8j0=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Zrsskk58NT4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Ag+LdAh9xT0=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QNfeNHzL2z0=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    R4yGt6sS6D0=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Lw6qxA7x/j0=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    j1C63BGC4z0=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1zeiZ4ehID4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IgFhCBcYID4=
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- *id012
+- &id013
+  Luminosity_error: 3.34299100e-10
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gwjyGRK4TT4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ME7vKPYlBj4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    e02vEvmBMD4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +U3XXu6P8T0=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Q+KhPUwWSj0=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mnVXWBhBfz0=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ReImWkF2uD0=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    X9PHfm3cpj0=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mkYF6LRIpD0=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    q57zCFSkhT0=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JLa46tnmvD0=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    x+LnDu5bsz0=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wp6Ai2IUlz0=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    teldOVk2sD0=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wiJcfbFJlT0=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BlsnKZ3yej0=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wGHtlsKDpD0=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sA/t2Lu0sj0=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qPU8pG0j1j0=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    X5Xzywds1T0=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kE8MaEH+1z0=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AP9uqfFgDz4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3YL7BWrF5D0=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dyq0EWj5GT4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xR2yeC8h7D0=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    t7EE7ICb8D0=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RuwE8af47T0=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +Z1ee78qMT4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hPGbqYq9JD4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FdxWYz9e0D0=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sLB7lyeibT0=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mo+9+VhBCj4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kkbWOiFRFD4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lNZcBpE1uT0=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    n8SSCoGVsz0=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Utm7UzHGxz0=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2aUEFDlOkD0=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9MsvtPwzkj0=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GM4kt8ZClz0=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CdnfE+jPiT0=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bw8IUKbquz0=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SFJ7b2lwiT0=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8ngOtAsSxT0=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yBqpK+38fz0=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yPzi+zYOsz0=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    koH98e9swD0=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qfqopwXSrD0=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6xphYhSYgj0=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    x1SMuPvd2z0=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tRHitGCK1j0=
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- *id013
+- &id014
+  Luminosity_error: 1.11311300e-04
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /6nA4tMQEz8=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZP5Qt1M9ED8=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2t2tc6bl9D4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jiN+kE7gGz8=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4c2oZscnwz4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    v9OhKfQntT4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /PnuCgijFT8=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HFHAx3dh/z4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ozwUgcGgAj8=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3C/Unuhz+z4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    asFqsJkRKD8=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    njQ/xCcZID8=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Q/zf600HED8=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +TeGBZmSDD8=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BGHrdTIIAT8=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pfary+ydCD8=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xAuUp7vRCD8=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uPYfSMed/j4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8c2AxMCEKz8=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wELEkjrHIj8=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bQrauYEtIj8=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /6Vy/hnq7z4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    k1XF3+ySFT8=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    59AaarFnIT8=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vkHwAmkiAz8=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ngDUHkDQGz8=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZrOFSM/y8T4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lYrfd4DlID8=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rkRUbMJ5FT8=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IPlaArakHz8=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kPUDWB9gBz8=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1CqZVFr3Dj8=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    A7NCke7nFD8=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    v1NFYIcAGD8=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XH7fvRJBBj8=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    khsVnQTtED8=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    toqwmP5y0T4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LBP/KbUUCT8=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XSVXrXYv7D4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yHNu9ODX8D4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zLD2HP3UHT8=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KY94zpErBj8=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EN/RnP9S2z4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eqQR87R69D4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OJ7ijQKTGz8=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8fdK+lPbJz8=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kd9RlcUs4z4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    o7Eh+BI8+z4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vgUZziPpBD8=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DRI9UVvoDz8=
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- *id014
+- &id015
+  Luminosity_error: 4.45776400e-05
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OODh4Ez4Bz8=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tPA+jOWdAD8=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    PKevoJYKDT8=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FfTIw5VA1j4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sX7TvjDO/D4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /EItpeVC8D4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xV5nxH6v7j4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +kVTPgfE0j4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VtRkrhqwxT4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    P05o94M4AT8=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pXoUqY4nAj8=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KmHTbucH/T4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    n8Pyq52P4D4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Lfn7bLSB4z4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sb2SBFpj1D4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gz2Nx8qA4z4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RlM235rR5T4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AdfWzn5E5j4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    90ihMTU3Bj8=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    r1ZbVx3m0T4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    t/PPkwHc+z4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QmJdCn/u6j4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3fXwalvCAT8=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    N7x+kzbtEz8=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YIVZPWfY9j4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MmfoZTXZBj8=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AthbZvOhxD4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VD2MVfLNED8=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oq2eIYlPCz8=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IIOgmeO59z4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    C94Bd1/B/D4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xwY46F5XAz8=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uhvKpBThBz8=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wEi9ds0bBj8=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VlBHRm5O+z4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YwO0cAOFBD8=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KS/YVUcnvT4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ncT86fqW/T4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8oQ09emFAz8=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    88X3ce+7xD4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    s/QnRbmhCj8=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XXlyrX1iAD8=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tqT5HIUP2D4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4As/XOA57T4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9JRZ8ke9Bz8=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XomXqtuZFD8=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jYWhzeoPzz4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9JLyn9096j4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mukIJzx98T4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3ZvIlFvP+j4=
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- *id015
+- &id016
+  Luminosity_error: 2.04935300e-05
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    B5QTDjmN/z4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xpEleOWo8z4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    syExmaAB4j4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /RJEU4NBlz4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KH+K8uvY7z4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CX2orQNy4T4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6j5iruO8yj4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    O8JAi3lafT4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hmec3vLFuD4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VTsycvAu8j4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    b/WmZjLD5j4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    WwdGKHaw3j4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IDRQU6rIsT4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DBzFO31Szz4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CQDB5QBkyT4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sqOGsetw0j4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zlf2kZWH1z4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rE/b/ajRzT4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bGQIFHIk7j4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bV33uMBHwj4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UwiSA7bI6z4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KueVL4sw5T4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Z7O6Op+47j4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1wOclDjhBD8=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DoK0HVgw7z4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bsfjiAZA9D4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EYBfHyq1rj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Lc1hghBMAj8=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hcM9XJPqAj8=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fyrgemr3zz4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UE5lti0H6z4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    k5pA8veq8z4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UHn6XPtv9j4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YTc116Qc8z4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eaqmpNAy6j4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    s683j5Uo8z4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pl3PhHykqT4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ApIbCyuR6z4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Dqrjc/mE+D4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0kDFCARWpD4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    WMkv0nf29j4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hBSsTmqc9D4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wboabvqS0T4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LNiIr7sJ4D4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6gl6Kvgu8z4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    s/4NsMmvAD8=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qISB0WdzvD4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0Kb/uSP01z4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    F/zMTZqV5D4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tdFA+amU6D4=
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- *id016
+- &id017
+  Luminosity_error: 9.31094000e-06
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zOUOtGVt8T4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yCatg3lL5j4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3Q/VY73C0j4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uxnLZMfCwT4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    NXZvKOgt2D4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XyqNC1T1zD4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DkXcQCNPoD4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sHw/BItFkz4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    w0zD/hc5tz4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    71OVOqhL3T4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Y+VMoReY0z4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IPTN7c6wwj4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RxQ5ETQXxT4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1Gh+7cM3uT4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IE3F4sievD4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sYsbYCqixD4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jRjhIVjSyz4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    V4LEXfuzrT4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dCqbpeTd2D4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kp7momCU0T4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3eBkjXxUxT4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tIyXYTGg1j4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HXoVVVuD2T4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    h5nMZHcC8z4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UbQF3CDH4D4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ETnSGPNT4T4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oChPe8KMpz4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    b5qcrOG68z4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2G7jmCrt9D4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gyJI4GbZRj4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    f8Wb+sgd1T4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    i05QkPqn4D4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    x6RgAZw74j4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dfLa8pz/3j4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    r+CF5SMU1D4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mJZUzhcy4D4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YrOO9M6/qD4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ht7FsAjb1j4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YHiHdHdL5T4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JxUM1v0ipD4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    u2Tg5OWO4T4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6livV9KD4z4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2oifN4D7xD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VjuXi++ZzD4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yPREY/hB2z4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XgoSQdzC5z4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rj2Eb/vrqT4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    izQJ0Io+wz4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fzuMLk8l0z4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Cma5XUmh1T4=
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- *id017
+- &id018
+  Luminosity_error: 4.18104200e-06
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    48n0n8Pp5T4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FJg3T8FW4z4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /HhG5D2DxD4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    WsyRNFpbzT4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IOhRAvW+vj4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +Noq/rNKtz4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HEHMsjl6hj4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    G3+jTMAmlT4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    n2ui4NIdqT4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jPULAiSEwj4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lDE6OMqVwD4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0DuC4ONyrD4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hNPgiH4Fuj4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2Dv118dRoT4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZCdxPNq7pj4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    f5L0TXeusT4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ga1zDH8/uT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    M10zPDNZiD4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lKW5gTl0vj4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xZFfBAUwzT4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pEH267rIwT4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Vycinaxawz4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kDeGag2YxT4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    7QctBVO24D4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    t1ZjYJBBzT4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gD6gm5XnzD4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nbBBrqPKnj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SvojKFjF5j4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wcnx5MXL5D4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hGoOe5Pvnj4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4c9spkeDuD4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nbjj8/PpxD4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KsKktJJoxj4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sfg+YjDRwz4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Xfw8hos+sz4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    TiEWPMzoxT4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5ng+P0L/oT4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fFlMSMFVwj4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HIB+dIwF0D4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eiG4ShBMnD4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JDXDvkNnxz4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ziAw++VB0D4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8oV+ooEDsj4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    l0zmX962tT4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    o6IbozXmwD4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ngvrbfaKzT4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    77hwFH7akz4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    c5lbtriOrD4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rK2PQKAQwT4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZkzBGmfTwT4=
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- *id018
+- &id019
+  Luminosity_error: 1.87223100e-06
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    o4tkx/qR2D4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    TyY9bmnF2D4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qCEqTFgNtD4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aJxRviSjyz4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LLXJ8W5npT4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8N4WNOehnz4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XLCt+1GFkT4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    32sYsgOAkD4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    F9KrCpeRlj4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XkoLUTA4pT4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    j/9ZZl49mD4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oRe2J/MFTT4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oAqFl6gUrD4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BPPaJPsyfD4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    q8v3V1g6eD4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    lbK6BIjDkD4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    g/dMbAJwmj4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4+4xHjtaWD4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VsYN6u+wgj4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    o9ZSCCnHZT4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3u20CZ2/gz4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uDQT2NBQsj4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Hpe5BJXtsj4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UKhU/nYP0D4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uAW5NlWxuD4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kPZ+bb0iuD4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6ILbR9Rbjj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XOmXOt8+2D4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oZPDvpSu1j4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6raoHmyAnj4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jc4EM1JGmD4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DD1AY950pT4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    iEIKx45Npj4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vR7zFt5Xoz4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Ve0ddPuIiD4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2UlDBoXxpz4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    u6n9OokvjT4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1UhooemjqT4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8ZepvbpnuD4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Fae5LKCHhj4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XEXIKBBVrT4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sxQQrI3+uj4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IPnhv1bmnD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2PW8YyPtnj4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dsMw7FO9oj4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    55SP8QR0sD4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UymAMUg1gD4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mIREXhXRkT4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    X+WO2u74qj4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3uomVtZDqz4=
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- *id019
+- &id020
+  Luminosity_error: 6.81928000e-07
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XM4GUPzuxz4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5Gmxh/pFxz4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JT79GnnRoz4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +BW0Ux9puT4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cW1MOk/Whj4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1q8DN8K+dT4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    y4W4O4ciej4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    W7L5YxKhdT4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sh5h4TfFdT4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Osi7E1UKgD4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ecLv/xO+fz4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YkV0w101jT4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    J0EtfkKakj4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    E38nAdPAOz4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ud3n+Bmwdj4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8mRsRId7Qj4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bKggujX6SD4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cvYW7cYTJD4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6iTc2pL5cj4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hQMEo72Scz4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Z9AvYDnwhT4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vX7RdQtjnj4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    7Fv0MUJomz4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ghLeVuW/uj4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wWLhs94DoT4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AvGg6BXWoD4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GuzvpBD0dj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xLK7dmB2wz4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yCvdS4SHxT4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +Jj9zIPHhz4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    y5ImWrIxhj4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wQXDg7GFkT4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZUhrg738kD4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nZF2WZQRiD4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qekx1PxfgT4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rvJ7RSpOij4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wnsAgi12bT4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HG4K+fCfij4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pQFc+qx/nD4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    B7FruvNOZT4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mw8lu+h2kD4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Rqgniih7qz4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hAaRwaN7hD4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    05WKmUQ+gj4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    l2CEcszYgT4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /I7y6Rd/jz4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DQKzu27/aD4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8osLsj3VcT4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CjNxHibakz4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8uI8vpTWkT4=
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- *id020
+- &id021
+  Luminosity_error: 2.42849700e-07
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2D04qhoOuT4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    NND0SsTYvD4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uCkchGu8jD4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oTmHv2UppD4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AKSOj1t9ZD4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uFQLno9kUD4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EReBt/7dWj4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YUm40ybqUD4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HvRoXZoAUj4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SU6T94cNVT4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5kZNUjtpdz4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sSZAhlQTfj4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XAxMECWrcz4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0JjBZGPj8j0=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eUdbpqaxaz4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    petYc3eOSz4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6D1U037OVT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mO9xNDj+PT4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    n7RnOFH/YD4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    efGyagJpYD4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9aK7Fvm6aD4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CmCvZN3/hz4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    b7QHY+T8gT4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mbpdnW0Rpj4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rjgIpHEHhz4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AhYqagzvhj4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    11wilXQzYj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    iMfyVtEQsD4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nFokT0y1sz4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    losP+yzQcD4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HJCBix53Pj4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Tz8vkjvdQD4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wil3QwZoMD4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZHkdHrsBDD4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +MKTFRR2QD4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tS/iePVnPz4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zJXmZjlyRz4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gSN3qrRGZT4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +OvgR4J5eD4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YO03AwtsOD4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4pcziK35bj4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DixYMfcalD4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BA1G2/10Wj4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kAY/VXfSYD4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dDANcGbEWT4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    59KI9o7sZj4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    7C7L2zhjTD4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tYyOy8NASj4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jHWfPWulez4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nQzUaDYveD4=
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- *id021
+- &id022
+  Luminosity_error: 9.94091000e-08
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +FOXohwcrT4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nadmtQKwjj4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    f0gSWIYehD4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IqIVgCHikz4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ogcNzmeKMT4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gbdNgA1NIT4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    On7cRM2gEj4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rsBakjo88z0=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oMHfG8tk0T0=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8W5tcQikJD4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /xilnBp4KT4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    C5+OrCg6Rz4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gUtL7iaCOz4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6mPQEoxURz4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sDsaolE8QD4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    iVA92P1rEz4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zqsHU51UFT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gAOjl7ETHT4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fP5TFVFvTD4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    F7UW2lnJRz4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oWtkntS4SD4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DkGSA7o5eD4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1oY2pQLxaz4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    64cecPQ+lj4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hu0YybemcT4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZrAjtwjGcj4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3m+S/Gg3Vz4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wqduVdTxnT4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    As+AbVKHpD4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OxTbrvj1UD4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    W88ptc08TD4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Z8TkUCQaTj4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    krqr1X/QQT4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wP/g+WpUTD4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4aony+vORj4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xH9zNz2vUT4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    JOxYEWTxJj4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ddtkNC0xRj4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aHJpYijTVD4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QdAioANYIj4=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CFxokEHpVz4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    D7DtDeKQgD4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fwtSUASsIj4=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LghiiQ7tQT4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1j93Owh0Qz4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3lLsE2EmUT4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fCYBwQJ8ND4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UVBVG/9pOj4=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CzR5zOpnZD4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hj7D8vI2Zj4=
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- *id022
+- &id023
+  Luminosity_error: 2.87761000e-08
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OMxT5NVBmD4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nQdeykyrmT4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ktrTqDqGbj4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LAGj1qb6eD4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    te2Q1m3cIT4=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dxxgdKYgFz4=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    RNjFOOmlFz4=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pudrDPEhAD4=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nw539nDiBD4=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    7HMiZMQ6Ij4=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fAhVQtKXPj4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +kCv4FU/Oj4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wQ8hfbFGJz4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    D5eI64IMMT4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fgKnhZEfHT4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aCPT2yJfFj4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pfME5C4UJT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4YtXwnzgDz4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Cq3lkYUlFj4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    LQVynIsNzD0=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    crYIgBDMJj4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    NPDm4+KLZj4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    UGRXdQG7Tj4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DmXp9o+Dgz4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6AYqUPSgVD4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    a1H4Q0xYVT4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IwtcpWEbSj4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2RDxzfWIiD4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8J3fKZuKkz4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    iO89Fe/iRz4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uvr1YiSbJT4=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5rAGSTYvJD4=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Z7mRn/afBj4=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kgWrLf+dLD4=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    iyk/G9AUJz4=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GEIfUXW0Jj4=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Dtxg6sDpBD4=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ymJmMqMEIz4=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    C+wGIO6bNT4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    kH4viPnr8z0=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    srWUIR/8Oj4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eCj+Ap09Ij4=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    H69UwwFQ9j0=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    nJtHipIXIT4=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CqFUaEv3Fj4=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    atLrH0+lJD4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YFg7OzYwEj4=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    C3SN6vGD+j0=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    7ax0eyG3RT4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    R8O+9PQoTz4=
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- *id023
+- &id024
+  Luminosity_error: 5.17256000e-09
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    tGK5iz/lfz4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SfdnOQNZRT4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XmE9DvxRWD4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    d4ww2nv1UT4=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jWxikui8uj0=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    4Kp/i8oGqD0=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fX28aJ218z0=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    sgaFgejF1T0=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    f9O1FDnq6D0=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    vGnWUYQw5j0=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    f8SoU0pEMD4=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bfQhESI+MD4=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    mlgaIGP6Jj4=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    s4CSMmcdHD4=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    U0P9j12FFz4=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3DLtdMsKEz4=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    1HWmKQWiFT4=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    dHBnjDiSFD4=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hurrSvMrGz4=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    beHoeHztFD4=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HVt6tb9tFz4=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rHb0LabUSj4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8wRpk5jmJj4=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zajLdGHeYT4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5u8q6L87LD4=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Yl/cMcVkLz4=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6xZ5WZF0Mz4=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    pd4YIB/daT4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rBcCA04FdD4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zgAINbSnJj4=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +vs+BsY15T0=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    k4zHbSWI5j0=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    wy2BNR3M3j0=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zF4BVa5U4z0=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    MiDuRYiJ8T0=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    fFK+7gES8z0=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    i7sMnjEa2j0=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    aYwVvpMX+j0=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xOyFxiU8BD4=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GRcbR6Pr3T0=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hTGYj0imGT4=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    9StFvNB4/T0=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    jSe3xPjr0T0=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    oKhs1uNs8T0=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    HANcYy8Z/D0=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gHkdrEGTCD4=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    d8nXaSCN6T0=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    /IrPkwjkyj0=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZJKGHBiOKT4=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    X4nkKXc5KD4=
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- *id024
+- &id025
+  Luminosity_error: 1.20275300e-10
+  Data stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +Ls02ktQQT4=
+  Sig. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Vr4GU/zQDT4=
+  Bkg. stat. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8LQXFAcFKz4=
+  Alternative MC unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    rrAKC7W5+j0=
+  Basic unf. unc.: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  JES Flavor Composition: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZZcUMEM+gz0=
+  JES Pileup RhoTopology: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Ff+kW4bgaT0=
+  JES Pileup OffsetMu: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OwvP7tOToT0=
+  JES Pileup OffsetNPV: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    DgZ1N2UPgj0=
+  JES EtaIntercalib Model: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    buAZojxRlT0=
+  JES Flavor Response: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    7Lyqx1BKdz0=
+  JER EffectiveNP 1: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    8bfUe+EE4T0=
+  JER EffectiveNP 2: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Tgsqhgzn4z0=
+  JER EffectiveNP 3: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    z1EYaKl74D0=
+  JER EffectiveNP 4: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +yIPEZgJ0D0=
+  JER EffectiveNP 5: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    s49l543Byz0=
+  JER EffectiveNP 6: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    k0lKJNIEyD0=
+  JER EffectiveNP 7rest: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2Y1b8nc4xj0=
+  JER DataVsMC MC16: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    OZ79zUa70T0=
+  $E_T^{miss}$ SoftTrk Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QTgp1FX1xD0=
+  $E_T^{miss}$ SoftTrk ResoPara: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    3aR0ZA2GtT0=
+  $E_T^{miss}$ SoftTrk ResoPerp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hkASxXJ+tj0=
+  Muon Resolution MS: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    uRBmdJw1AT4=
+  Muon Scale: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    IfINEZo40T0=
+  Muon SF Identification Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    qICV4aPeDz4=
+  Muon SF Isolation Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YZQEhN9y1T0=
+  Muon SF Trigger Syst: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eDIdGdnO1z0=
+  Bad Muon Veto: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AwrPqbGu6j0=
+  Muon Sagitta Global: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    hCJFmMvGGj4=
+  Muon Sagitta PTextra: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    QaUh3syhJT4=
+  Pileup: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    VRCQA8dd3z0=
+  MJ MU $E_T^{miss}$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    Es61jZ9zwj0=
+  MJ MU d0cut: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bsSXSJBhwz0=
+  MJ MU MC Scaling: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    +r4ymC/tvT0=
+  MJ MU jet mult: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    zXPGMpuytj0=
+  MJ MU Shape: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    5tqGkntiwj0=
+  MJ MU dphi: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    xiWeCpJEtT0=
+  $t\bar{t}$ $p_T$-hard: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    i/qjWvFqkz0=
+  $t\bar{t}$ FSR: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    c2KTrCB+sj0=
+  $t\bar{t}$ hadronization: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    SFYTCu72vz0=
+  $t\bar{t}$ hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    BeOUHPfjkj0=
+  $t\bar{t}$ NNPDF: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    FpoZah2l1D0=
+  tW Diagram Removel: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    0xFj6Ppg6D0=
+  tW DS hdamp: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GaN7OxNcdj0=
+  RW inverted setup 2D: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    2f/yCQsnnD0=
+  RW Fixed order vs PS $p_T(t)$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    O5P9LxztsT0=
+  RW Fixed order vs PS $m(t\bar{t})$: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    GXWzE6wMvz0=
+  Norm. $W\rightarrow\tau\nu$ by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    z5QslhCejj0=
+  Norm. Single top by 4%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    bXN00vWCnz0=
+  Norm. Diboson by 6%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    eiuz8M92tD0=
+  Norm. Z by 5%: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    M5wFJVpc0z0=
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
+- *id025
