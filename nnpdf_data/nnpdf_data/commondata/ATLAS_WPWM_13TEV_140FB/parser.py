@@ -167,7 +167,7 @@ def mergedata(dataset):
     data, bins, uncertainties, unc_values = [], [], {}, []
     for d, b, u, uv in dataset:
         data += d
-        bins += d
+        bins += b
         unc_values += uv
         uncertainties.update(u)
     return data, bins, uncertainties, unc_values
