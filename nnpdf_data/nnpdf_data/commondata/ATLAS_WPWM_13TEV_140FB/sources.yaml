@@ -2,7 +2,7 @@ definitions:
   Luminosity uncertainty:
     description: Luminosity error
     treatment: MULT
-    type: ATLASLUMI15
+    type: ATLASLUMIRUNII
   Stat. unc.:
     description: Stat. unc.
     treatment: ADD
