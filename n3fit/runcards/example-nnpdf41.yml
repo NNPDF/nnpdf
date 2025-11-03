@@ -139,46 +139,16 @@ fitting:
 ################################################################################
 positivity:
   posdatasets:
-  # Positivity Lagrange Multiplier
-  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_F2C-CCE, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_F2C-CCP, maxlambda: 1e6}
-  # Positivity of MSbar PDFs
-  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XUB, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XDQ, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XDB, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XSQ, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
-
-added_filter_rules:
-- dataset: NNPDF_POS_2P24GEV_FLL
-  rule: x > 5.0e-7
-- dataset: NNPDF_POS_2P24GEV_F2C-CCE
-  rule: x < 0.74
-- dataset: NNPDF_POS_2P24GEV_F2C-CCP
-  rule: x < 0.74
-- dataset: NNPDF_POS_2P24GEV_XGL
-  rule: x > 0.1
-- dataset: NNPDF_POS_2P24GEV_XUQ
-  rule: x > 0.1
-- dataset: NNPDF_POS_2P24GEV_XUB
-  rule: x > 0.1
-- dataset: NNPDF_POS_2P24GEV_XDQ
-  rule: x > 0.1
-- dataset: NNPDF_POS_2P24GEV_XDB
-  rule: x > 0.1
-- dataset: NNPDF_POS_2P24GEV_XSQ
-  rule: x > 0.1
-- dataset: NNPDF_POS_2P24GEV_XSB
-  rule: x > 0.1
+    # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_100GEV_XUQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XUB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XDQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XDB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XSQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XSB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XCQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XCB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XGL, maxlambda: 1e6}
 
 integrability:
   integdatasets:
