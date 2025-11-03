@@ -1,16 +1,16 @@
-setname: ATLAS_TTBAR_13TEV_TOT
+setname: ATLAS_TTBAR_13TEV_2L_TOT
 nnpdf_metadata:
   nnpdf31_process: TOP
   experiment: ATLAS
 arXiv:
-  url: https://arxiv.org/abs/2006.13076
+  url: https://arxiv.org/abs/2303.15340
 iNSPIRE:
-  url: https://inspirehep.net/literature/1802524
+  url: https://inspirehep.net/literature/2648096
 hepdata:
   url: NA
   version:
 version: 1
-version_comment: NA
+version_comment: "This dataset is the 2L analogue of ATLAS_TTBAR_13TEV_TOT, which is based on L+J"
 implemented_observables:
 - observable:
     description: total cross section of ttBar
@@ -22,10 +22,6 @@ implemented_observables:
   tables: []
   kinematics:
     variables:
-      zero:
-        description: ''
-        label: $$
-        units: ''
       m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
@@ -39,26 +35,12 @@ implemented_observables:
   data_uncertainties:
   - uncertainties.yaml
   kinematic_coverage:
-  - zero
   - m_t2
   - sqrts
   plotting:
-    dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}} (l+j channel)$
+    dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}} (2L channel)$
     plot_x: sqrts
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:
     - - ATLAS_TTBAR_13TEV_TOT_X-SEC
-  variants:
-    legacy:
-      theory: &id002
-        conversion_factor: 1.0
-        operation: 'null'
-        FK_tables:
-        - - ATLAS_TTBARTOT_13TEV_FULLLUMI-TOPDIFF13TEVTOT
-      data_uncertainties: &id001
-      - uncertainties_legacy_X-SEC.yaml
-    legacy_data:
-      data_uncertainties: *id001
-    legacy_theory:
-      theory: *id002
