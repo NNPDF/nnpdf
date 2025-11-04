@@ -162,7 +162,7 @@ def test_extra_data_sources(tmp_path):
     """Creates a custom profile with a ``data_path`` key and checks whether it is used
     and whether it took precedence.
     """
-    # Target dataset (and name of the data file), both need to be changed toghether
+    # Target dataset (and name of the data file), both need to be changed together
     dataset = "LHCB_Z0_8TEV_MUON_Y"
     faketaset = "LHCB_Z0_8TEV_FAKE_Y"
     data_file = "data.yaml"
