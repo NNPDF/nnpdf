@@ -169,7 +169,7 @@ class Photon:
             with ThreadPoolExecutor() as executor:
                 photon_qin = np.array(list(executor.map(evaluate_at_x, XGRID)))
 
-            # photon_qin += self.generate_errors(replica)
+            photon_qin += self.generate_errors(replica)
 
             # fiatlux computes x * gamma(x)
             photon_qin /= XGRID
