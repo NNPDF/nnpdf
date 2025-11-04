@@ -875,7 +875,7 @@ class ModelTrainer:
             integrability_dict.get("multiplier"),
             integrability_dict.get("initial"),
             epochs,
-            params.get("interpolation_points"),
+            params.get("feature_scaling_points"),
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
