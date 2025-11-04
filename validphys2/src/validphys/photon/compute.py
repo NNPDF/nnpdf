@@ -201,7 +201,7 @@ class Photon:
             photon_array = XGRID * photon_Q0
 
             if self.save_to_disk:
-                path_to_photon = loader._photons_qed_path / f"photon_qed_{self.theoryid.id}_{self.luxpdfset._name}"
+                path_to_photon = loader._photons_qed_path / f"photon_theoryID_{self.theoryid.id}_fit_{self.luxpdfset._name}"
                 path_to_photon.mkdir(parents=True, exist_ok=True)
                 np.savez_compressed(path_to_photon / f"replica_{photonreplica}.npz",photon_array=photon_array)
                 log.info(f"Saved photon replica {photonreplica} to {path_to_photon}")
