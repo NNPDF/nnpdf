@@ -323,7 +323,7 @@ incapable of distinguishing features across many orders of magnitude of ``x``, t
 scaling means that the algorithm is limited to learning features on a logarithmic and linear scale.
 
 To solve this problem there is the possibility to apply a different feature scaling to the input by
-adding a ``interpolation_points: [number of points]`` flag to the ``n3fit`` runcard. By adding this
+adding a ``feature_scaling_points: [number of points]`` flag to the ``n3fit`` runcard. By adding this
 flag the ``(x,log(x))`` scaling is replaced by a scaling in such a way that all input ``x`` values
 are evenly distributed on the domain ``[-1,1]``, and the input node is no longer split in two.
 
@@ -333,7 +333,7 @@ increasing cubic spline is used to interpolate after the scaling has been applie
 function from the scipy library is used. However, this way the neural network will be agnostic to
 the existence of this interpolation function meaning it can no longer learn the true underlying law.
 To fix this, the interpolation function has to be probed as well. This is done by only using
-``[number of points]`` set by the ``interpolation_points`` flag to define the interpolation function
+``[number of points]`` set by the ``feature_scaling_points`` flag to define the interpolation function
 after the scaling has been applied. Using this methodology the points used in the interpolation are
 again evenly distributed.
 

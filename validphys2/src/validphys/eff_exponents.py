@@ -509,6 +509,12 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
     checked = check_basis(basis, None)
     basis = checked["basis"]
 
+    # If the runcard still has the old option `interpolation_points` change it to `feature_scaling_points`:
+    if "interpolation_points" in filtermap["parameters"]:
+        filtermap["parameters"]["feature_scaling_points"] = filtermap["parameters"].pop(
+            "interpolation_points"
+        )
+
     # use order defined in runcard.
     runcard_flavours = [f"{basis.elementlabel(ref_fl['fl'])}" for ref_fl in previous_exponents]
     for i, fl in enumerate(runcard_flavours):
@@ -523,7 +529,13 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
             if largex_args is not None:
                 betas = np.clip(betas, **largex_args)
         previous_exponents[i]["smallx"] = [fmt(alpha) for alpha in alphas]
-        previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
+        # Regardless of whether there was a large x in the original runcard
+        # drop it if feature scaling is set, to avoid future mistakes
+        if filtermap["parameters"].get("feature_scaling_points") is None:
+            previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
+        else:
+            # NB previous exponents is = filtermap (see above), if it dies here it dies in real life
+            previous_exponents[i].pop("largex", None)
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
         yaml_rt.dump(filtermap, path)
