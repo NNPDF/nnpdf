@@ -479,8 +479,8 @@ def check_photonQED_exists(theoryid, fiatlux):
       luxset = fiatlux['luxset']
       try:
           _ = FallbackLoader().check_photonQED(theoryid, luxset)
-      except FileNotFoundError:
-          raise CheckError(f"Photon QED set for TheoryID {theoryid.id} and luxset {luxset} not found.")
+      except FileNotFoundError as e:
+          raise CheckError(f"Photon QED set for TheoryID {theoryid.id} and luxset {luxset} not found.") from e
 
 
 @make_argcheck

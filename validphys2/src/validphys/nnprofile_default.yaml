@@ -63,7 +63,7 @@ eko_urls:
 eko_index: 'ekodata.json'
 
 photon_qed_urls:
-    - 'https://nnpdf.nikhef.nl/nnpdf/photons_qed/'
+    - 'https://data.nnpdf.science/photons/'
 
 photon_qed_index: 'photondata.json'
 

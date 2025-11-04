@@ -217,12 +217,11 @@ class Loader(LoaderBase):
             eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.tar")
         }
     
-    @property
-    @functools.lru_cache
+    @functools.cached_property
     def available_photons_qed(self):
         """Return a string token for each of the available theories"""
         return {
-            eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.npz")
+            photon_path.name.split("photon_")[1] for photon_path in self._photons_qed_path.glob("photon_*")
         }
 
     @property
@@ -324,7 +323,7 @@ class Loader(LoaderBase):
     @functools.lru_cache
     def check_photonQED(self, theoryID, luxset):
         """Check the Photon QED set exists and return the path to it"""
-        photon_qed_path = self._photons_qed_path / f"photon_qed_{theoryID.id}_{luxset}"
+        photon_qed_path = self._photons_qed_path / f"photon_theoryID_{theoryID.id}_fit_{luxset}"
         if not photon_qed_path.exists():
             raise PhotonQEDNotFound(f"Could not find Photon QED set {photon_qed_path} in theory: {theoryID}")
         return photon_qed_path
@@ -922,7 +921,7 @@ class RemoteLoader(LoaderBase):
     @property
     @functools.lru_cache
     def remote_photons_qed(self):
-        token = 'photon_qed_'
+        token = 'photon_'
         rt = self.remote_files(self.photon_qed_urls, self.photon_qed_index, thing="photons_qed")
         return {k[len(token) :]: v for k, v in rt.items()}
 
@@ -1148,15 +1147,15 @@ class RemoteLoader(LoaderBase):
 
     def download_photonQED(self, thid, luxset: str):
         """Download the Photon set for a given theory ID"""
-        # thid = str(thid)
-        # remote = self.remote_photons_qed
-        # key = f"{thid}_{luxset}"
-        # if key not in remote:
-        #     raise PhotonQEDNotFound(f"Photon QED set for TheoryID {thid} and luxset {luxset} is not available in the remote server")
-        # # Check that we have the theory we need
-        # target_path = self._photon_qed_path / f"photon_qed_{int(thid)}_{luxset}.tar"
-        # download_file(remote[key], target_path)
-        log.warning("Downloading Photon QED sets is not implemented yet.")
+        thid = thid.id
+        remote = self.remote_photons_qed
+        key = f"theoryID_{thid}_fit_{luxset}"
+        if key not in remote:
+            raise PhotonQEDNotFound(f"Photon QED set for TheoryID {thid} and luxset {luxset} is not available in the remote server")
+        # Check that we have the theory we need
+        target_path = self._photons_qed_path
+        download_and_extract(remote[key], target_path)
+        
     
     def download_vp_output_file(self, filename, **kwargs):
         try:
