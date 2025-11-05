@@ -14,6 +14,7 @@ single batch instead. So callbacks must use ``on_batch_end``.
 
 import logging
 from time import time
+import pathlib
 
 from keras import backend as K
 from keras.callbacks import Callback, TensorBoard
@@ -22,7 +23,6 @@ import numpy as np
 from .operations import decorator_compiler
 
 log = logging.getLogger(__name__)
-
 
 class CallbackStep(Callback):
     """
@@ -117,10 +117,13 @@ class StoppingCallback(CallbackStep):
             will be set to true
     """
 
-    def __init__(self, stopping_object, log_freq=100):
+    def __init__(self, stopping_object, log_freq=100, savedir=None):
         super().__init__()
         self.log_freq = log_freq
         self.stopping_object = stopping_object
+        if savedir is not None:
+            self.savedir = savedir / "weights"
+            self.savedir.mkdir(parents=True, exist_ok=True)
 
     def on_step_end(self, epoch, logs=None):
         """Function to be called at the end of every epoch
@@ -137,6 +140,10 @@ class StoppingCallback(CallbackStep):
         # but it needs to be run every epoch, which makes no sense
         if K.backend() == "jax":
             _ = self.model.compute_losses()
+        
+        # Save parameters for NTK
+        if self.savedir is not None and ((epoch + 1) % self.log_freq) == 0:
+          self.model.save_weights(self.savedir / f"params_epoch_{epoch}.h5")
 
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
         if self.stopping_object.stop_here():

@@ -112,6 +112,7 @@ class ModelTrainer:
         theoryid=None,
         lux_params=None,
         replicas=None,
+        replicadir=None
     ):
         """
         Parameters
@@ -168,6 +169,7 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
+        self.replicadir = replicadir
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -710,7 +712,7 @@ class ModelTrainer:
         In the same way, every ``PUSH_INTEGRABILITY_EACH`` epochs the integrability
         will be multiplied by their respective integrability multipliers
         """
-        callback_st = callbacks.StoppingCallback(stopping_object)
+        callback_st = callbacks.StoppingCallback(stopping_object, savedir=self.replicadir)
         callback_pos = callbacks.LagrangeCallback(
             self.training["posdatasets"],
             self.training["posmultipliers"],

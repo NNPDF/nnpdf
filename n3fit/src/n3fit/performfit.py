@@ -197,6 +197,7 @@ def performfit(
             theoryid=theoryid,
             lux_params=fiatlux,
             replicas=replica_idxs,
+            replicadir = replica_path / f"replica_{replica_idxs[0]}"
         )
 
         # This is just to give a descriptive name to the fit function
