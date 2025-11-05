@@ -39,7 +39,8 @@ def main():
     theoryID = loader.check_theoryID(runcard["theory"]["theoryid"])
     fiatlux_params = runcard.get("fiatlux", None)
     fiatlux_params['luxset'] = loader.check_pdf(fiatlux_params['luxset'])
-
+    if fiatlux_params.get('additional_errors', False):
+        fiatlux_params['additional_errors'] = loader.check_pdf("LUXqed17_plus_PDF4LHC15_nnlo_100")
     Photon(theoryID, fiatlux_params, replicas=replicas, save_to_disk=True, force_computation=True)
 
 if __name__ == "__main__":
