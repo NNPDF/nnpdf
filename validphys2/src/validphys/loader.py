@@ -218,7 +218,7 @@ class Loader(LoaderBase):
         }
     
     @functools.cached_property
-    def available_photons_qed(self):
+    def available_photons(self):
         """Return a string token for each of the available theories"""
         return {
             photon_path.name.split("photon_")[1] for photon_path in self._photons_qed_path.glob("photon_*")
@@ -323,9 +323,9 @@ class Loader(LoaderBase):
     @functools.lru_cache
     def check_photonQED(self, theoryID, luxset):
         """Check the Photon QED set exists and return the path to it"""
-        photon_qed_path = self._photons_qed_path / f"photon_theoryID_{theoryID.id}_fit_{luxset}"
+        photon_qed_path = self._photons_qed_path / f"photon_theoryID_{int(theoryID)}_fit_{luxset}"
         if not photon_qed_path.exists():
-            raise PhotonQEDNotFound(f"Could not find Photon QED set {photon_qed_path} in theory: {theoryID}")
+            raise PhotonQEDNotFound(f"Could not find Photon QED set {photon_qed_path} in theory: {int(theoryID)}")
         return photon_qed_path
 
     @property
@@ -920,9 +920,9 @@ class RemoteLoader(LoaderBase):
     
     @property
     @functools.lru_cache
-    def remote_photons_qed(self):
+    def remote_photons(self):
         token = 'photon_'
-        rt = self.remote_files(self.photon_qed_urls, self.photon_qed_index, thing="photons_qed")
+        rt = self.remote_files(self.photon_qed_urls, self.photon_qed_index, thing="photons")
         return {k[len(token) :]: v for k, v in rt.items()}
 
     @property
@@ -960,8 +960,8 @@ class RemoteLoader(LoaderBase):
         return list(self.remote_ekos)
     
     @property
-    def downloadable_photonsQED(self):
-        return list(self.remote_photons_qed)
+    def downloadable_photons(self):
+        return list(self.remote_photons)
 
     @property
     def lhapdf_pdfs(self):
@@ -1147,8 +1147,7 @@ class RemoteLoader(LoaderBase):
 
     def download_photonQED(self, thid, luxset: str):
         """Download the Photon set for a given theory ID"""
-        thid = thid.id
-        remote = self.remote_photons_qed
+        remote = self.remote_photons
         key = f"theoryID_{thid}_fit_{luxset}"
         if key not in remote:
             raise PhotonQEDNotFound(f"Photon QED set for TheoryID {thid} and luxset {luxset} is not available in the remote server")
