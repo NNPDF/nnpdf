@@ -184,7 +184,7 @@ class SetupFitConfig(Config):
         # Check fiatlux configuration
         fiatlux = file_content.get('fiatlux')
         if fiatlux is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset')
+            SETUPFIT_FIXED_CONFIG['actions_'].append('theory::fiatlux check_photonQED_exists')
             if fiatlux.get("additional_errors"):
                 SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
 
