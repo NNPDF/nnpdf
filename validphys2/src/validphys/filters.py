@@ -479,6 +479,24 @@ def check_luxset(luxset):
     log.info(f'{luxset} Lux pdf checked.')
 
 
+def check_photonQED_exists(theoryid, fiatlux):
+    """Check that the Photon QED set for this theoryid and luxset exists"""
+    if fiatlux is not None:
+      from validphys.loader import FallbackLoader
+      luxset = fiatlux['luxset']
+      try:
+          _ = FallbackLoader().check_photonQED(theoryid.id, luxset)
+          log.info(f"Photon QED set found for {theoryid.id} with luxset {luxset}.")
+      except FileNotFoundError:
+          log.warning(f"No Photon QED set found for {theoryid} with luxset {luxset} and "\
+                      "will be compute using FiatLux. This may impact performance.")
+          
+          # Since the photon is missing and will be computed on the fly, check
+          # the luxset exists
+          luxset.load()
+          log.info(f'{luxset} Lux pdf checked.')
+
+
 def check_unpolarized_bc(unpolarized_bc):
     """Check that unpolarized PDF bound can be loaded normally."""
     unpolarized_bc.load()
