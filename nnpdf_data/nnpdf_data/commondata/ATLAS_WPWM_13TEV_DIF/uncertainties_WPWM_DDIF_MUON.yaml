@@ -2,211 +2,211 @@ definitions:
   LUMI:
     description: LUMI
     treatment: MULT
-    correlation: ATLASLUMI16
+    correlation: ATLASLUMIRUNII
   Data stat. unc.:
     description: Data stat. unc.
     treatment: ADD
-    correlation: CORR
+    correlation: UNCORR
   Sig. stat. unc.:
     description: Sig. stat. unc.
     treatment: ADD
-    correlation: CORR
+    correlation: UNCORR
   Bkg. stat. unc.:
     description: Bkg. stat. unc.
     treatment: ADD
-    correlation: CORR
+    correlation: UNCORR
   Alternative MC unf. unc.:
     description: Alternative MC unf. unc.
     treatment: ADD
-    correlation: CORR
+    correlation: UNCORR
   Basic unf. unc.:
     description: Basic unf. unc.
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JES Flavor Composition:
     description: JES Flavor Composition
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JES Pileup RhoTopology:
     description: JES Pileup RhoTopology
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JES Pileup OffsetMu:
     description: JES Pileup OffsetMu
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JES Pileup OffsetNPV:
     description: JES Pileup OffsetNPV
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JES EtaIntercalib Model:
     description: JES EtaIntercalib Model
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JES Flavor Response:
     description: JES Flavor Response
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JER EffectiveNP 1:
     description: JER EffectiveNP 1
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JER EffectiveNP 2:
     description: JER EffectiveNP 2
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JER EffectiveNP 3:
     description: JER EffectiveNP 3
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JER EffectiveNP 4:
     description: JER EffectiveNP 4
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JER EffectiveNP 5:
     description: JER EffectiveNP 5
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JER EffectiveNP 6:
     description: JER EffectiveNP 6
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JER EffectiveNP 7rest:
     description: JER EffectiveNP 7rest
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   JER DataVsMC MC16:
     description: JER DataVsMC MC16
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   $E_T^{miss}$ SoftTrk Scale:
     description: $E_T^{miss}$ SoftTrk Scale
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   $E_T^{miss}$ SoftTrk ResoPara:
     description: $E_T^{miss}$ SoftTrk ResoPara
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   $E_T^{miss}$ SoftTrk ResoPerp:
     description: $E_T^{miss}$ SoftTrk ResoPerp
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Muon Resolution MS:
     description: Muon Resolution MS
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Muon Scale:
     description: Muon Scale
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Muon SF Identification Syst:
     description: Muon SF Identification Syst
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Muon SF Isolation Syst:
     description: Muon SF Isolation Syst
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Muon SF Trigger Syst:
     description: Muon SF Trigger Syst
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Bad Muon Veto:
     description: Bad Muon Veto
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Muon Sagitta Global:
     description: Muon Sagitta Global
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Muon Sagitta PTextra:
     description: Muon Sagitta PTextra
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Pileup:
     description: Pileup
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   MJ MU $E_T^{miss}$:
     description: MJ MU $E_T^{miss}$
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   MJ MU d0cut:
     description: MJ MU d0cut
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   MJ MU MC Scaling:
     description: MJ MU MC Scaling
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   MJ MU jet mult:
     description: MJ MU jet mult
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   MJ MU Shape:
     description: MJ MU Shape
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   MJ MU dphi:
     description: MJ MU dphi
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   $t\bar{t}$ $p_T$-hard:
     description: $t\bar{t}$ $p_T$-hard
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   $t\bar{t}$ FSR:
     description: $t\bar{t}$ FSR
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   $t\bar{t}$ hadronization:
     description: $t\bar{t}$ hadronization
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   $t\bar{t}$ hdamp:
     description: $t\bar{t}$ hdamp
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   $t\bar{t}$ NNPDF:
     description: $t\bar{t}$ NNPDF
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   tW Diagram Removel:
     description: tW Diagram Removel
-    treatment: ADD
-    correlation: UNCORR
+    treatment: MULT
+    correlation: CORR
   tW DS hdamp:
     description: tW DS hdamp
-    treatment: ADD
-    correlation: UNCORR
+    treatment: MULT
+    correlation: CORR
   RW inverted setup 2D:
     description: RW inverted setup 2D
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   RW Fixed order vs PS $p_T(t)$:
     description: RW Fixed order vs PS $p_T(t)$
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   RW Fixed order vs PS $m(t\bar{t})$:
     description: RW Fixed order vs PS $m(t\bar{t})$
-    treatment: ADD
+    treatment: MULT
     correlation: CORR
   Norm. $W\rightarrow\tau\nu$ by 5%:
     description: Norm. $W\rightarrow\tau\nu$ by 5%
     treatment: MULT
-    correlation: UNCORR
+    correlation: CORR
   Norm. Single top by 4%:
     description: Norm. Single top by 4%
     treatment: MULT
-    correlation: UNCORR
+    correlation: CORR
   Norm. Diboson by 6%:
     description: Norm. Diboson by 6%
     treatment: MULT
-    correlation: UNCORR
+    correlation: CORR
   Norm. Z by 5%:
     description: Norm. Z by 5%
     treatment: MULT
-    correlation: UNCORR
+    correlation: CORR
 bins:
 - LUMI: 5.74675400e-05
   Data stat. unc.: 1.02020000e-04
@@ -832,630 +832,6 @@ bins:
   Norm. Single top by 4%: 2.19470000e-06
   Norm. Diboson by 6%: 8.17300000e-06
   Norm. Z by 5%: 7.04530000e-05
-- LUMI: 3.56119800e-05
-  Data stat. unc.: 8.97e-05
-  Sig. stat. unc.: 5.93110000e-05
-  Bkg. stat. unc.: 2.09350000e-05
-  Alternative MC unf. unc.: 1.81986578e-05
-  Basic unf. unc.: 1.44868730e-05
-  JES Flavor Composition: 1.96360000e-05
-  JES Pileup RhoTopology: 2.43490000e-05
-  JES Pileup OffsetMu: 1.92360000e-05
-  JES Pileup OffsetNPV: 2.57760000e-06
-  JES EtaIntercalib Model: 2.88350000e-06
-  JES Flavor Response: 3.54190000e-05
-  JER EffectiveNP 1: 3.12840000e-05
-  JER EffectiveNP 2: 2.52540000e-05
-  JER EffectiveNP 3: 2.00570000e-06
-  JER EffectiveNP 4: 9.64160000e-07
-  JER EffectiveNP 5: 8.54620000e-07
-  JER EffectiveNP 6: 1.15750000e-05
-  JER EffectiveNP 7rest: 1.51650000e-05
-  JER DataVsMC MC16: 8.44310000e-06
-  $E_T^{miss}$ SoftTrk Scale: 5.74180000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 4.13146079e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.18169120e-05
-  Muon Resolution MS: 7.63930000e-07
-  Muon Scale: 6.22750000e-06
-  Muon SF Identification Syst: 5.85500000e-05
-  Muon SF Isolation Syst: 1.48600000e-05
-  Muon SF Trigger Syst: 4.55e-05
-  Bad Muon Veto: 1.43070000e-06
-  Muon Sagitta Global: 5.15910000e-05
-  Muon Sagitta PTextra: 4.08330000e-06
-  Pileup: 8.29200000e-06
-  MJ MU $E_T^{miss}$: 1.44208401e-05
-  MJ MU d0cut: 2.01154161e-05
-  MJ MU MC Scaling: 4.43090000e-05
-  MJ MU jet mult: 4.23468486e-05
-  MJ MU Shape: 5.40910807e-06
-  MJ MU dphi: 2.60300000e-05
-  $t\bar{t}$ $p_T$-hard: 9.62500634e-06
-  $t\bar{t}$ FSR: 1.96740000e-05
-  $t\bar{t}$ hadronization: 7.58967343e-06
-  $t\bar{t}$ hdamp: 1.58670000e-05
-  $t\bar{t}$ NNPDF: 5.29020000e-05
-  tW Diagram Removel: 2.98033982e-05
-  tW DS hdamp: 9.68020000e-06
-  RW inverted setup 2D: 1.15761616e-05
-  RW Fixed order vs PS $p_T(t)$: 5.24664170e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 9.09413277e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 3.17860000e-06
-  Norm. Single top by 4%: 1.38770000e-05
-  Norm. Diboson by 6%: 1.46870000e-05
-  Norm. Z by 5%: 8.29410000e-06
-- LUMI: 3.45371300e-05
-  Data stat. unc.: 7.28470000e-05
-  Sig. stat. unc.: 6.49270000e-05
-  Bkg. stat. unc.: 1.74480000e-05
-  Alternative MC unf. unc.: 1.90066595e-05
-  Basic unf. unc.: 1.36329719e-05
-  JES Flavor Composition: 1.51750000e-05
-  JES Pileup RhoTopology: 2.25800000e-05
-  JES Pileup OffsetMu: 1.90970000e-05
-  JES Pileup OffsetNPV: 2.15410000e-06
-  JES EtaIntercalib Model: 6.55930000e-07
-  JES Flavor Response: 3.50320000e-05
-  JER EffectiveNP 1: 2.83520000e-05
-  JER EffectiveNP 2: 2.13190000e-05
-  JER EffectiveNP 3: 2.62940000e-06
-  JER EffectiveNP 4: 1.91480000e-06
-  JER EffectiveNP 5: 3.79120000e-06
-  JER EffectiveNP 6: 9.42940000e-06
-  JER EffectiveNP 7rest: 8.27480000e-06
-  JER DataVsMC MC16: 7.45800000e-06
-  $E_T^{miss}$ SoftTrk Scale: 5.34040000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 3.90690040e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.86974838e-05
-  Muon Resolution MS: 1.37380000e-06
-  Muon Scale: 6.12810000e-06
-  Muon SF Identification Syst: 5.41020000e-05
-  Muon SF Isolation Syst: 1.42700000e-05
-  Muon SF Trigger Syst: 4.38200000e-05
-  Bad Muon Veto: 1.17760000e-06
-  Muon Sagitta Global: 4.48470000e-05
-  Muon Sagitta PTextra: 3.89320000e-06
-  Pileup: 2.58390000e-06
-  MJ MU $E_T^{miss}$: 1.32934814e-05
-  MJ MU d0cut: 1.86706556e-05
-  MJ MU MC Scaling: 4.04300000e-05
-  MJ MU jet mult: 3.86587376e-05
-  MJ MU Shape: 4.19164956e-06
-  MJ MU dphi: 2.45490000e-05
-  $t\bar{t}$ $p_T$-hard: 9.54273392e-06
-  $t\bar{t}$ FSR: 1.90740000e-05
-  $t\bar{t}$ hadronization: 7.32709453e-06
-  $t\bar{t}$ hdamp: 1.58080000e-05
-  $t\bar{t}$ NNPDF: 5.10250000e-05
-  tW Diagram Removel: 2.73187714e-05
-  tW DS hdamp: 9.18700000e-06
-  RW inverted setup 2D: 1.13891001e-05
-  RW Fixed order vs PS $p_T(t)$: 5.10799104e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 8.85424373e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.71950000e-06
-  Norm. Single top by 4%: 1.31160000e-05
-  Norm. Diboson by 6%: 1.39710000e-05
-  Norm. Z by 5%: 8.60920000e-06
-- LUMI: 3.65556900e-05
-  Data stat. unc.: 7.42040000e-05
-  Sig. stat. unc.: 5.35440000e-05
-  Bkg. stat. unc.: 1.76530000e-05
-  Alternative MC unf. unc.: 2.29895104e-05
-  Basic unf. unc.: 1.42824910e-05
-  JES Flavor Composition: 1.16160000e-05
-  JES Pileup RhoTopology: 2.05080000e-05
-  JES Pileup OffsetMu: 2.12e-05
-  JES Pileup OffsetNPV: 2.99620000e-06
-  JES EtaIntercalib Model: 2.30480000e-06
-  JES Flavor Response: 3.32380000e-05
-  JER EffectiveNP 1: 2.37240000e-05
-  JER EffectiveNP 2: 1.36350000e-05
-  JER EffectiveNP 3: 5.44110000e-06
-  JER EffectiveNP 4: 3.72420000e-06
-  JER EffectiveNP 5: 6.11790000e-06
-  JER EffectiveNP 6: 5.04310000e-06
-  JER EffectiveNP 7rest: 1.35570000e-06
-  JER DataVsMC MC16: 5.52490000e-06
-  $E_T^{miss}$ SoftTrk Scale: 5.70490000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 4.16861328e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 3.72027193e-05
-  Muon Resolution MS: 1.45900000e-06
-  Muon Scale: 8.07060000e-06
-  Muon SF Identification Syst: 5.48720000e-05
-  Muon SF Isolation Syst: 1.49530000e-05
-  Muon SF Trigger Syst: 4.58950000e-05
-  Bad Muon Veto: 1.31030000e-06
-  Muon Sagitta Global: 4.21330000e-05
-  Muon Sagitta PTextra: 3.69360000e-06
-  Pileup: 6.12520000e-06
-  MJ MU $E_T^{miss}$: 1.16544965e-05
-  MJ MU d0cut: 1.73755052e-05
-  MJ MU MC Scaling: 3.69460000e-05
-  MJ MU jet mult: 3.53349514e-05
-  MJ MU Shape: 4.29972953e-06
-  MJ MU dphi: 2.16230000e-05
-  $t\bar{t}$ $p_T$-hard: 8.11829534e-06
-  $t\bar{t}$ FSR: 1.85550000e-05
-  $t\bar{t}$ hadronization: 6.82540601e-06
-  $t\bar{t}$ hdamp: 1.26570000e-05
-  $t\bar{t}$ NNPDF: 4.87030000e-05
-  tW Diagram Removel: 2.46254324e-05
-  tW DS hdamp: 8.51560000e-06
-  RW inverted setup 2D: 1.09846662e-05
-  RW Fixed order vs PS $p_T(t)$: 4.94552467e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 8.57114002e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.99160000e-06
-  Norm. Single top by 4%: 1.29740000e-05
-  Norm. Diboson by 6%: 1.42660000e-05
-  Norm. Z by 5%: 9.11110000e-06
-- LUMI: 3.41138300e-05
-  Data stat. unc.: 7.73860000e-05
-  Sig. stat. unc.: 5.10540000e-05
-  Bkg. stat. unc.: 1.83370000e-05
-  Alternative MC unf. unc.: 2.27937886e-05
-  Basic unf. unc.: 1.30016394e-05
-  JES Flavor Composition: 1.10410000e-05
-  JES Pileup RhoTopology: 1.54090000e-05
-  JES Pileup OffsetMu: 1.63690000e-05
-  JES Pileup OffsetNPV: 2.30500000e-06
-  JES EtaIntercalib Model: 5.35010000e-06
-  JES Flavor Response: 2.19630000e-05
-  JER EffectiveNP 1: 8.37050000e-06
-  JER EffectiveNP 2: 2.41250000e-06
-  JER EffectiveNP 3: 6.71360000e-06
-  JER EffectiveNP 4: 6.16060000e-06
-  JER EffectiveNP 5: 5.78130000e-06
-  JER EffectiveNP 6: 2.46060000e-06
-  JER EffectiveNP 7rest: 8.89160000e-06
-  JER DataVsMC MC16: 4.93250000e-06
-  $E_T^{miss}$ SoftTrk Scale: 4.81890000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 3.72027193e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 3.32501794e-05
-  Muon Resolution MS: 1.42840000e-06
-  Muon Scale: 8.74300000e-06
-  Muon SF Identification Syst: 4.94330000e-05
-  Muon SF Isolation Syst: 1.36460000e-05
-  Muon SF Trigger Syst: 4.13580000e-05
-  Bad Muon Veto: 1.15770000e-06
-  Muon Sagitta Global: 3.58790000e-05
-  Muon Sagitta PTextra: 4.53320000e-06
-  Pileup: 1.07810000e-05
-  MJ MU $E_T^{miss}$: 8.87290881e-06
-  MJ MU d0cut: 1.44434824e-05
-  MJ MU MC Scaling: 3.23830000e-05
-  MJ MU jet mult: 3.08972819e-05
-  MJ MU Shape: 3.53754057e-06
-  MJ MU dphi: 1.90090000e-05
-  $t\bar{t}$ $p_T$-hard: 5.35065135e-06
-  $t\bar{t}$ FSR: 1.79170000e-05
-  $t\bar{t}$ hadronization: 6.50359097e-06
-  $t\bar{t}$ hdamp: 4.84200000e-06
-  $t\bar{t}$ NNPDF: 4.41890000e-05
-  tW Diagram Removel: 2.07837437e-05
-  tW DS hdamp: 5.19730000e-06
-  RW inverted setup 2D: 1.02043773e-05
-  RW Fixed order vs PS $p_T(t)$: 4.61851348e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 8.00320056e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 3.08430000e-06
-  Norm. Single top by 4%: 1.17180000e-05
-  Norm. Diboson by 6%: 1.46840000e-05
-  Norm. Z by 5%: 9.68460000e-06
-- LUMI: 3.39013500e-05
-  Data stat. unc.: 6.87390000e-05
-  Sig. stat. unc.: 6.03510000e-05
-  Bkg. stat. unc.: 1.62490000e-05
-  Alternative MC unf. unc.: 3.05109410e-05
-  Basic unf. unc.: 1.22724460e-05
-  JES Flavor Composition: 1.45730000e-05
-  JES Pileup RhoTopology: 1.14120000e-05
-  JES Pileup OffsetMu: 9.37020000e-06
-  JES Pileup OffsetNPV: 7.29200000e-07
-  JES EtaIntercalib Model: 9.20770000e-06
-  JES Flavor Response: 1.34890000e-05
-  JER EffectiveNP 1: 6.57850000e-07
-  JER EffectiveNP 2: 9.69170000e-06
-  JER EffectiveNP 3: 7.15580000e-06
-  JER EffectiveNP 4: 9.17630000e-06
-  JER EffectiveNP 5: 5.43720000e-06
-  JER EffectiveNP 6: 6.23500000e-06
-  JER EffectiveNP 7rest: 1.26190000e-05
-  JER DataVsMC MC16: 4.49130000e-06
-  $E_T^{miss}$ SoftTrk Scale: 3.56800000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 3.48419340e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.65254921e-05
-  Muon Resolution MS: 5.82630000e-07
-  Muon Scale: 1.35630000e-05
-  Muon SF Identification Syst: 4.77820000e-05
-  Muon SF Isolation Syst: 1.31040000e-05
-  Muon SF Trigger Syst: 3.70580000e-05
-  Bad Muon Veto: 1.13160000e-06
-  Muon Sagitta Global: 3.47260000e-05
-  Muon Sagitta PTextra: 4.99380000e-06
-  Pileup: 7.60230000e-06
-  MJ MU $E_T^{miss}$: 7.83007071e-06
-  MJ MU d0cut: 1.05733770e-05
-  MJ MU MC Scaling: 2.72530000e-05
-  MJ MU jet mult: 2.75818194e-05
-  MJ MU Shape: 2.62656845e-06
-  MJ MU dphi: 1.66330000e-05
-  $t\bar{t}$ $p_T$-hard: 3.01610667e-06
-  $t\bar{t}$ FSR: 1.66800000e-05
-  $t\bar{t}$ hadronization: 5.74018958e-06
-  $t\bar{t}$ hdamp: 1.13060000e-06
-  $t\bar{t}$ NNPDF: 3.95460000e-05
-  tW Diagram Removel: 1.97678959e-05
-  tW DS hdamp: 1.34720000e-06
-  RW inverted setup 2D: 9.38858140e-06
-  RW Fixed order vs PS $p_T(t)$: 4.20455334e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 7.28543871e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 3.00210000e-06
-  Norm. Single top by 4%: 1.06770000e-05
-  Norm. Diboson by 6%: 1.35960000e-05
-  Norm. Z by 5%: 1.05830000e-05
-- LUMI: 3.51953200e-05
-  Data stat. unc.: 5.97480000e-05
-  Sig. stat. unc.: 4.88030000e-05
-  Bkg. stat. unc.: 1.48130000e-05
-  Alternative MC unf. unc.: 5.08010502e-05
-  Basic unf. unc.: 1.15597071e-05
-  JES Flavor Composition: 1.71690000e-05
-  JES Pileup RhoTopology: 5.19200000e-06
-  JES Pileup OffsetMu: 7.33370000e-06
-  JES Pileup OffsetNPV: 5.20740000e-07
-  JES EtaIntercalib Model: 1.83610000e-06
-  JES Flavor Response: 9.94220000e-06
-  JER EffectiveNP 1: 2.30180000e-05
-  JER EffectiveNP 2: 2.29360000e-05
-  JER EffectiveNP 3: 5.93080000e-06
-  JER EffectiveNP 4: 6.65220000e-06
-  JER EffectiveNP 5: 7.03650000e-07
-  JER EffectiveNP 6: 4.68790000e-06
-  JER EffectiveNP 7rest: 1.01600000e-05
-  JER DataVsMC MC16: 6.89610000e-06
-  $E_T^{miss}$ SoftTrk Scale: 2.66690000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 3.32475813e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.57382750e-05
-  Muon Resolution MS: 3.83400000e-06
-  Muon Scale: 3.11970000e-05
-  Muon SF Identification Syst: 4.77720000e-05
-  Muon SF Isolation Syst: 1.24120000e-05
-  Muon SF Trigger Syst: 2.98800000e-05
-  Bad Muon Veto: 2.47500000e-06
-  Muon Sagitta Global: 3.67550000e-05
-  Muon Sagitta PTextra: 2.15440000e-05
-  Pileup: 4.77860000e-06
-  MJ MU $E_T^{miss}$: 2.02271244e-05
-  MJ MU d0cut: 2.24250545e-05
-  MJ MU MC Scaling: 2.84230000e-05
-  MJ MU jet mult: 3.01893588e-05
-  MJ MU Shape: 2.19563421e-05
-  MJ MU dphi: 2.64450000e-05
-  $t\bar{t}$ $p_T$-hard: 1.84861783e-06
-  $t\bar{t}$ FSR: 1.38330000e-05
-  $t\bar{t}$ hadronization: 4.17311661e-06
-  $t\bar{t}$ hdamp: 1.83330000e-06
-  $t\bar{t}$ NNPDF: 3.61550000e-05
-  tW Diagram Removel: 1.79743573e-05
-  tW DS hdamp: 2.06610000e-06
-  RW inverted setup 2D: 7.52957127e-06
-  RW Fixed order vs PS $p_T(t)$: 3.41248650e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 5.90949755e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 3.07710000e-06
-  Norm. Single top by 4%: 8.42820000e-06
-  Norm. Diboson by 6%: 6.47640000e-06
-  Norm. Z by 5%: 1.48310000e-05
-- LUMI: 3.44939700e-05
-  Data stat. unc.: 6.34770000e-05
-  Sig. stat. unc.: 5.02790000e-05
-  Bkg. stat. unc.: 1.57250000e-05
-  Alternative MC unf. unc.: 6.27348803e-05
-  Basic unf. unc.: 9.63539864e-06
-  JES Flavor Composition: 1.63610000e-05
-  JES Pileup RhoTopology: 3.94930000e-06
-  JES Pileup OffsetMu: 7.21020000e-06
-  JES Pileup OffsetNPV: 3.60860000e-07
-  JES EtaIntercalib Model: 5.32740000e-07
-  JES Flavor Response: 9.14200000e-06
-  JER EffectiveNP 1: 2.51770000e-05
-  JER EffectiveNP 2: 2.60680000e-05
-  JER EffectiveNP 3: 7.37720000e-06
-  JER EffectiveNP 4: 8.26440000e-06
-  JER EffectiveNP 5: 2.03140000e-07
-  JER EffectiveNP 6: 5.54290000e-06
-  JER EffectiveNP 7rest: 1.23670000e-05
-  JER DataVsMC MC16: 8.01310000e-06
-  $E_T^{miss}$ SoftTrk Scale: 2.58840000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 3.22031546e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.56152994e-05
-  Muon Resolution MS: 4.41150000e-06
-  Muon Scale: 3.25650000e-05
-  Muon SF Identification Syst: 4.66230000e-05
-  Muon SF Isolation Syst: 1.21490000e-05
-  Muon SF Trigger Syst: 2.82480000e-05
-  Bad Muon Veto: 2.64580000e-06
-  Muon Sagitta Global: 3.62920000e-05
-  Muon Sagitta PTextra: 2.48710000e-05
-  Pileup: 6.39070000e-06
-  MJ MU $E_T^{miss}$: 2.11273698e-05
-  MJ MU d0cut: 2.34113402e-05
-  MJ MU MC Scaling: 2.78570000e-05
-  MJ MU jet mult: 3.01640408e-05
-  MJ MU Shape: 2.36892589e-05
-  MJ MU dphi: 2.68800000e-05
-  $t\bar{t}$ $p_T$-hard: 1.55425579e-06
-  $t\bar{t}$ FSR: 1.31660000e-05
-  $t\bar{t}$ hadronization: 4.05048742e-06
-  $t\bar{t}$ hdamp: 2.09410000e-06
-  $t\bar{t}$ NNPDF: 3.48250000e-05
-  tW Diagram Removel: 1.72711446e-05
-  tW DS hdamp: 2.12760000e-06
-  RW inverted setup 2D: 7.14921291e-06
-  RW Fixed order vs PS $p_T(t)$: 3.23027476e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 5.59365808e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 3.00960000e-06
-  Norm. Single top by 4%: 7.95560000e-06
-  Norm. Diboson by 6%: 5.68800000e-06
-  Norm. Z by 5%: 1.49720000e-05
-- LUMI: 3.28215200e-05
-  Data stat. unc.: 5.86540000e-05
-  Sig. stat. unc.: 5.56290000e-05
-  Bkg. stat. unc.: 1.39580000e-05
-  Alternative MC unf. unc.: 5.75863592e-05
-  Basic unf. unc.: 9.02485073e-06
-  JES Flavor Composition: 1.99700000e-05
-  JES Pileup RhoTopology: 5.45430000e-06
-  JES Pileup OffsetMu: 1.12900000e-05
-  JES Pileup OffsetNPV: 1.66650000e-06
-  JES EtaIntercalib Model: 8.26890000e-06
-  JES Flavor Response: 9.56180000e-06
-  JER EffectiveNP 1: 2.98350000e-05
-  JER EffectiveNP 2: 3.13470000e-05
-  JER EffectiveNP 3: 1.05730000e-05
-  JER EffectiveNP 4: 1.50220000e-05
-  JER EffectiveNP 5: 1.24570000e-06
-  JER EffectiveNP 6: 1.04790000e-05
-  JER EffectiveNP 7rest: 1.85440000e-05
-  JER DataVsMC MC16: 8.32080000e-06
-  $E_T^{miss}$ SoftTrk Scale: 2.93600000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 2.69056772e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.54195777e-05
-  Muon Resolution MS: 5.11500000e-06
-  Muon Scale: 3.27730000e-05
-  Muon SF Identification Syst: 4.31990000e-05
-  Muon SF Isolation Syst: 1.08210000e-05
-  Muon SF Trigger Syst: 2.53140000e-05
-  Bad Muon Veto: 3.13560000e-06
-  Muon Sagitta Global: 3.51130000e-05
-  Muon Sagitta PTextra: 4.47690000e-05
-  Pileup: 1.44250000e-05
-  MJ MU $E_T^{miss}$: 2.33481832e-05
-  MJ MU d0cut: 2.64343828e-05
-  MJ MU MC Scaling: 2.50300000e-05
-  MJ MU jet mult: 2.63549668e-05
-  MJ MU Shape: 2.37334262e-05
-  MJ MU dphi: 2.28420000e-05
-  $t\bar{t}$ $p_T$-hard: 4.23434461e-07
-  $t\bar{t}$ FSR: 1.10730000e-05
-  $t\bar{t}$ hadronization: 3.87182638e-06
-  $t\bar{t}$ hdamp: 5.72390000e-06
-  $t\bar{t}$ NNPDF: 3.18670000e-05
-  tW Diagram Removel: 1.37559475e-05
-  tW DS hdamp: 4.38280000e-06
-  RW inverted setup 2D: 5.67445825e-06
-  RW Fixed order vs PS $p_T(t)$: 2.56508064e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 4.43967923e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.58790000e-06
-  Norm. Single top by 4%: 6.55950000e-06
-  Norm. Diboson by 6%: 1.21620000e-05
-  Norm. Z by 5%: 1.74400000e-05
-- LUMI: 3.08942600e-05
-  Data stat. unc.: 5.55950000e-05
-  Sig. stat. unc.: 3.98580000e-05
-  Bkg. stat. unc.: 1.31720000e-05
-  Alternative MC unf. unc.: 3.82246293e-05
-  Basic unf. unc.: 1.13830379e-05
-  JES Flavor Composition: 2.01080000e-05
-  JES Pileup RhoTopology: 6.88360000e-06
-  JES Pileup OffsetMu: 1.39590000e-05
-  JES Pileup OffsetNPV: 2.84240000e-06
-  JES EtaIntercalib Model: 1.05220000e-05
-  JES Flavor Response: 1.13510000e-05
-  JER EffectiveNP 1: 3.17170000e-05
-  JER EffectiveNP 2: 2.85700000e-05
-  JER EffectiveNP 3: 5.61250000e-06
-  JER EffectiveNP 4: 1.06960000e-05
-  JER EffectiveNP 5: 1.34120000e-06
-  JER EffectiveNP 6: 9.97590000e-06
-  JER EffectiveNP 7rest: 1.02030000e-05
-  JER DataVsMC MC16: 7.71450000e-06
-  $E_T^{miss}$ SoftTrk Scale: 3.53680000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 2.57045000e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.80678833e-05
-  Muon Resolution MS: 5.19600000e-06
-  Muon Scale: 2.95070000e-05
-  Muon SF Identification Syst: 3.97480000e-05
-  Muon SF Isolation Syst: 9.68150000e-06
-  Muon SF Trigger Syst: 2.28730000e-05
-  Bad Muon Veto: 3.37820000e-06
-  Muon Sagitta Global: 3.59780000e-05
-  Muon Sagitta PTextra: 5.23480000e-05
-  Pileup: 1.86900000e-05
-  MJ MU $E_T^{miss}$: 2.31960984e-05
-  MJ MU d0cut: 2.65347822e-05
-  MJ MU MC Scaling: 2.27900000e-05
-  MJ MU jet mult: 2.82046687e-05
-  MJ MU Shape: 2.63609473e-05
-  MJ MU dphi: 2.69040000e-05
-  $t\bar{t}$ $p_T$-hard: 4.29687164e-07
-  $t\bar{t}$ FSR: 1.19310000e-05
-  $t\bar{t}$ hadronization: 3.17839983e-06
-  $t\bar{t}$ hdamp: 4.73420000e-06
-  $t\bar{t}$ NNPDF: 3.07420000e-05
-  tW Diagram Removel: 8.93911422e-06
-  tW DS hdamp: 5.07080000e-06
-  RW inverted setup 2D: 4.63990431e-06
-  RW Fixed order vs PS $p_T(t)$: 2.11197615e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 3.65367458e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.50830000e-06
-  Norm. Single top by 4%: 5.19380000e-06
-  Norm. Diboson by 6%: 1.21150000e-05
-  Norm. Z by 5%: 2.16980000e-05
-- LUMI: 3.05431700e-05
-  Data stat. unc.: 5.61210000e-05
-  Sig. stat. unc.: 4.56530000e-05
-  Bkg. stat. unc.: 1.26490000e-05
-  Alternative MC unf. unc.: 1.74304933e-05
-  Basic unf. unc.: 1.60084796e-05
-  JES Flavor Composition: 2.05550000e-05
-  JES Pileup RhoTopology: 1.02580000e-05
-  JES Pileup OffsetMu: 9.81820000e-06
-  JES Pileup OffsetNPV: 1.92900000e-06
-  JES EtaIntercalib Model: 2.55680000e-06
-  JES Flavor Response: 1.40810000e-05
-  JER EffectiveNP 1: 2.98750000e-05
-  JER EffectiveNP 2: 1.90160000e-05
-  JER EffectiveNP 3: 4.28740000e-06
-  JER EffectiveNP 4: 7.05470000e-07
-  JER EffectiveNP 5: 2.02230000e-08
-  JER EffectiveNP 6: 3.13840000e-07
-  JER EffectiveNP 7rest: 7.34520000e-06
-  JER DataVsMC MC16: 6.93350000e-06
-  $E_T^{miss}$ SoftTrk Scale: 3.55700000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 2.47726567e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 3.03420660e-05
-  Muon Resolution MS: 4.92360000e-06
-  Muon Scale: 2.41010000e-05
-  Muon SF Identification Syst: 3.92730000e-05
-  Muon SF Isolation Syst: 8.85140000e-06
-  Muon SF Trigger Syst: 2.12990000e-05
-  Bad Muon Veto: 3.94810000e-06
-  Muon Sagitta Global: 3.98940000e-05
-  Muon Sagitta PTextra: 5.62010000e-05
-  Pileup: 1.41330000e-05
-  MJ MU $E_T^{miss}$: 2.05438969e-05
-  MJ MU d0cut: 2.40733366e-05
-  MJ MU MC Scaling: 1.82880000e-05
-  MJ MU jet mult: 2.69860623e-05
-  MJ MU Shape: 2.52584969e-05
-  MJ MU dphi: 2.47230000e-05
-  $t\bar{t}$ $p_T$-hard: 1.20559396e-06
-  $t\bar{t}$ FSR: 1.31350000e-05
-  $t\bar{t}$ hadronization: 2.35186519e-06
-  $t\bar{t}$ hdamp: 1.48030000e-06
-  $t\bar{t}$ NNPDF: 2.85840000e-05
-  tW Diagram Removel: 3.58430594e-06
-  tW DS hdamp: 5.41140000e-06
-  RW inverted setup 2D: 3.60309869e-06
-  RW Fixed order vs PS $p_T(t)$: 1.58413367e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 2.73949816e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.29020000e-06
-  Norm. Single top by 4%: 4.09820000e-06
-  Norm. Diboson by 6%: 1.11220000e-05
-  Norm. Z by 5%: 2.54040000e-05
-- LUMI: 2.58860400e-05
-  Data stat. unc.: 5.97610000e-05
-  Sig. stat. unc.: 4.62110000e-05
-  Bkg. stat. unc.: 1.26410000e-05
-  Alternative MC unf. unc.: 7.59331074e-06
-  Basic unf. unc.: 1.66623288e-05
-  JES Flavor Composition: 1.60440000e-05
-  JES Pileup RhoTopology: 1.09480000e-05
-  JES Pileup OffsetMu: 3.28780000e-06
-  JES Pileup OffsetNPV: 6.52670000e-07
-  JES EtaIntercalib Model: 7.55180000e-06
-  JES Flavor Response: 1.44420000e-05
-  JER EffectiveNP 1: 2.55320000e-05
-  JER EffectiveNP 2: 2.49480000e-06
-  JER EffectiveNP 3: 1.00210000e-05
-  JER EffectiveNP 4: 8.57780000e-06
-  JER EffectiveNP 5: 1.09910000e-06
-  JER EffectiveNP 6: 1.13430000e-05
-  JER EffectiveNP 7rest: 1.78850000e-05
-  JER DataVsMC MC16: 5.78810000e-06
-  $E_T^{miss}$ SoftTrk Scale: 2.93060000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 2.30284815e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.74521393e-05
-  Muon Resolution MS: 3.88410000e-06
-  Muon Scale: 1.64460000e-05
-  Muon SF Identification Syst: 3.37340000e-05
-  Muon SF Isolation Syst: 7.01660000e-06
-  Muon SF Trigger Syst: 1.72010000e-05
-  Bad Muon Veto: 4.63150000e-06
-  Muon Sagitta Global: 3.57520000e-05
-  Muon Sagitta PTextra: 4.80550000e-05
-  Pileup: 6.65760000e-06
-  MJ MU $E_T^{miss}$: 1.43489558e-05
-  MJ MU d0cut: 1.72059816e-05
-  MJ MU MC Scaling: 1.22800000e-05
-  MJ MU jet mult: 1.87877581e-05
-  MJ MU Shape: 1.69126101e-05
-  MJ MU dphi: 1.72160000e-05
-  $t\bar{t}$ $p_T$-hard: 1.94821075e-06
-  $t\bar{t}$ FSR: 1.10530000e-05
-  $t\bar{t}$ hadronization: 1.47622690e-06
-  $t\bar{t}$ hdamp: 5.98890000e-06
-  $t\bar{t}$ NNPDF: 2.66320000e-05
-  tW Diagram Removel: 1.22395370e-06
-  tW DS hdamp: 5.33420000e-06
-  RW inverted setup 2D: 2.60413839e-06
-  RW Fixed order vs PS $p_T(t)$: 1.14791667e-05
-  RW Fixed order vs PS $m(t\bar{t})$: 1.98415080e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.22950000e-06
-  Norm. Single top by 4%: 2.66070000e-06
-  Norm. Diboson by 6%: 9.99450000e-06
-  Norm. Z by 5%: 3.02300000e-05
-- LUMI: 2.45480800e-05
-  Data stat. unc.: 5.43570000e-05
-  Sig. stat. unc.: 3.82830000e-05
-  Bkg. stat. unc.: 1.10830000e-05
-  Alternative MC unf. unc.: 7.20082803e-06
-  Basic unf. unc.: 1.69325287e-05
-  JES Flavor Composition: 1.62850000e-05
-  JES Pileup RhoTopology: 1.14170000e-05
-  JES Pileup OffsetMu: 1.69450000e-06
-  JES Pileup OffsetNPV: 8.18420000e-07
-  JES EtaIntercalib Model: 1.52490000e-05
-  JES Flavor Response: 2.01170000e-05
-  JER EffectiveNP 1: 2.25120000e-05
-  JER EffectiveNP 2: 5.29150000e-06
-  JER EffectiveNP 3: 1.20250000e-05
-  JER EffectiveNP 4: 1.78390000e-05
-  JER EffectiveNP 5: 2.69930000e-06
-  JER EffectiveNP 6: 1.58150000e-05
-  JER EffectiveNP 7rest: 2.08080000e-05
-  JER DataVsMC MC16: 4.77820000e-06
-  $E_T^{miss}$ SoftTrk Scale: 2.25610000e-05
-  $E_T^{miss}$ SoftTrk ResoPara: 2.42807542e-05
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.41872235e-05
-  Muon Resolution MS: 3.54970000e-06
-  Muon Scale: 1.39130000e-05
-  Muon SF Identification Syst: 3.28990000e-05
-  Muon SF Isolation Syst: 6.22730000e-06
-  Muon SF Trigger Syst: 1.54210000e-05
-  Bad Muon Veto: 4.91460000e-06
-  Muon Sagitta Global: 3.58780000e-05
-  Muon Sagitta PTextra: 4.53580000e-05
-  Pileup: 3.01590000e-06
-  MJ MU $E_T^{miss}$: 7.32461331e-06
-  MJ MU d0cut: 8.55516730e-06
-  MJ MU MC Scaling: 5.67700000e-06
-  MJ MU jet mult: 8.67321545e-06
-  MJ MU Shape: 8.09032272e-06
-  MJ MU dphi: 8.28130000e-06
-  $t\bar{t}$ $p_T$-hard: 1.60587091e-06
-  $t\bar{t}$ FSR: 7.63840000e-06
-  $t\bar{t}$ hadronization: 1.30657253e-06
-  $t\bar{t}$ hdamp: 6.06150000e-06
-  $t\bar{t}$ NNPDF: 2.22800000e-05
-  tW Diagram Removel: 4.52073921e-06
-  tW DS hdamp: 7.32e-06
-  RW inverted setup 2D: 1.74599382e-06
-  RW Fixed order vs PS $p_T(t)$: 7.17484727e-06
-  RW Fixed order vs PS $m(t\bar{t})$: 1.23919575e-05
-  Norm. $W\rightarrow\tau\nu$ by 5%: 1.94030000e-06
-  Norm. Single top by 4%: 2.03300000e-06
-  Norm. Diboson by 6%: 8.79290000e-06
-  Norm. Z by 5%: 3.61950000e-05
 - LUMI: 1.23130500e-05
   Data stat. unc.: 4.13220000e-05
   Sig. stat. unc.: 2.21990000e-05
@@ -2080,6 +1456,1462 @@ bins:
   Norm. Single top by 4%: 3.29950000e-07
   Norm. Diboson by 6%: 1.16620000e-06
   Norm. Z by 5%: 8.64970000e-06
+- LUMI: 2.89578700e-06
+  Data stat. unc.: 9.91610000e-06
+  Sig. stat. unc.: 4.82740000e-06
+  Bkg. stat. unc.: 1.64520000e-06
+  Alternative MC unf. unc.: 1.87988134e-06
+  Basic unf. unc.: 9.75664220e-08
+  JES Flavor Composition: 1.50140000e-07
+  JES Pileup RhoTopology: 1.24620000e-07
+  JES Pileup OffsetMu: 1.33940000e-07
+  JES Pileup OffsetNPV: 1.62320000e-07
+  JES EtaIntercalib Model: 2.73950000e-08
+  JES Flavor Response: 3.99160000e-07
+  JER EffectiveNP 1: 1.78660000e-06
+  JER EffectiveNP 2: 1.57150000e-06
+  JER EffectiveNP 3: 4.60240000e-08
+  JER EffectiveNP 4: 3.06320000e-08
+  JER EffectiveNP 5: 1.72550000e-06
+  JER EffectiveNP 6: 7.19760000e-08
+  JER EffectiveNP 7rest: 2.71070000e-08
+  JER DataVsMC MC16: 8.57270000e-08
+  $E_T^{miss}$ SoftTrk Scale: 2.57620000e-07
+  $E_T^{miss}$ SoftTrk ResoPara: 6.98414847e-07
+  $E_T^{miss}$ SoftTrk ResoPerp: 4.18472135e-07
+  Muon Resolution MS: 2.75440000e-07
+  Muon Scale: 7.54290000e-07
+  Muon SF Identification Syst: 3.01840000e-06
+  Muon SF Isolation Syst: 2.24700000e-06
+  Muon SF Trigger Syst: 2.49810000e-06
+  Bad Muon Veto: 5.30280000e-08
+  Muon Sagitta Global: 3.81510000e-06
+  Muon Sagitta PTextra: 5.37270000e-08
+  Pileup: 6.61410000e-08
+  MJ MU $E_T^{miss}$: 2.07277951e-07
+  MJ MU d0cut: 1.52730672e-06
+  MJ MU MC Scaling: 1.85150000e-06
+  MJ MU jet mult: 1.37947000e-06
+  MJ MU Shape: 3.08729396e-07
+  MJ MU dphi: 1.67560000e-06
+  $t\bar{t}$ $p_T$-hard: 1.26344446e-06
+  $t\bar{t}$ FSR: 8.28430000e-07
+  $t\bar{t}$ hadronization: 2.65817837e-06
+  $t\bar{t}$ hdamp: 1.16160000e-06
+  $t\bar{t}$ NNPDF: 9.98300000e-07
+  tW Diagram Removel: 3.80193813e-06
+  tW DS hdamp: 1.01060000e-06
+  RW inverted setup 2D: 6.62102402e-07
+  RW Fixed order vs PS $p_T(t)$: 9.25088336e-07
+  RW Fixed order vs PS $m(t\bar{t})$: 1.62171917e-06
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.74290000e-07
+  Norm. Single top by 4%: 4.00920000e-07
+  Norm. Diboson by 6%: 7.45180000e-07
+  Norm. Z by 5%: 7.46600000e-07
+- LUMI: 2.79834500e-06
+  Data stat. unc.: 7.88440000e-06
+  Sig. stat. unc.: 4.32030000e-06
+  Bkg. stat. unc.: 1.26430000e-06
+  Alternative MC unf. unc.: 1.88455788e-06
+  Basic unf. unc.: 2.66510658e-08
+  JES Flavor Composition: 8.73360000e-08
+  JES Pileup RhoTopology: 1.39400000e-07
+  JES Pileup OffsetMu: 1.66440000e-07
+  JES Pileup OffsetNPV: 1.58630000e-08
+  JES EtaIntercalib Model: 6.83850000e-08
+  JES Flavor Response: 4.22060000e-07
+  JER EffectiveNP 1: 9.20020000e-07
+  JER EffectiveNP 2: 7.47230000e-07
+  JER EffectiveNP 3: 1.29260000e-08
+  JER EffectiveNP 4: 1.30170000e-08
+  JER EffectiveNP 5: 4.99190000e-07
+  JER EffectiveNP 6: 4.06560000e-08
+  JER EffectiveNP 7rest: 5.76690000e-09
+  JER DataVsMC MC16: 3.44200000e-08
+  $E_T^{miss}$ SoftTrk Scale: 2.97290000e-07
+  $E_T^{miss}$ SoftTrk ResoPara: 4.35532836e-07
+  $E_T^{miss}$ SoftTrk ResoPerp: 1.88100718e-07
+  Muon Resolution MS: 1.55100000e-07
+  Muon Scale: 6.47040000e-07
+  Muon SF Identification Syst: 2.79620000e-06
+  Muon SF Isolation Syst: 2.13880000e-06
+  Muon SF Trigger Syst: 2.24970000e-06
+  Bad Muon Veto: 7.23360000e-08
+  Muon Sagitta Global: 3.55160000e-06
+  Muon Sagitta PTextra: 6.42090000e-07
+  Pileup: 9.59180000e-08
+  MJ MU $E_T^{miss}$: 1.20758776e-07
+  MJ MU d0cut: 9.54605030e-07
+  MJ MU MC Scaling: 1.16040000e-06
+  MJ MU jet mult: 9.38031667e-07
+  MJ MU Shape: 2.73672688e-07
+  MJ MU dphi: 1.17210000e-06
+  $t\bar{t}$ $p_T$-hard: 3.76859615e-07
+  $t\bar{t}$ FSR: 6.71150000e-07
+  $t\bar{t}$ hadronization: 2.21815087e-06
+  $t\bar{t}$ hdamp: 7.04170000e-07
+  $t\bar{t}$ NNPDF: 8.52920000e-07
+  tW Diagram Removel: 1.79120034e-06
+  tW DS hdamp: 6.17290000e-08
+  RW inverted setup 2D: 5.83891648e-07
+  RW Fixed order vs PS $p_T(t)$: 8.03117318e-07
+  RW Fixed order vs PS $m(t\bar{t})$: 1.40746449e-06
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.69110000e-07
+  Norm. Single top by 4%: 3.54410000e-07
+  Norm. Diboson by 6%: 7.07800000e-07
+  Norm. Z by 5%: 8.46650000e-07
+- LUMI: 2.50693200e-06
+  Data stat. unc.: 6.00790000e-06
+  Sig. stat. unc.: 3.60840000e-06
+  Bkg. stat. unc.: 9.76500000e-07
+  Alternative MC unf. unc.: 1.90811377e-06
+  Basic unf. unc.: 5.76556413e-07
+  JES Flavor Composition: 3.20610000e-07
+  JES Pileup RhoTopology: 1.87900000e-07
+  JES Pileup OffsetMu: 1.58330000e-07
+  JES Pileup OffsetNPV: 1.73330000e-09
+  JES EtaIntercalib Model: 7.45040000e-08
+  JES Flavor Response: 3.42330000e-07
+  JER EffectiveNP 1: 6.81840000e-07
+  JER EffectiveNP 2: 3.39820000e-07
+  JER EffectiveNP 3: 1.38670000e-07
+  JER EffectiveNP 4: 2.43110000e-08
+  JER EffectiveNP 5: 3.79190000e-07
+  JER EffectiveNP 6: 1.02990000e-07
+  JER EffectiveNP 7rest: 1.05760000e-07
+  JER DataVsMC MC16: 1.03870000e-07
+  $E_T^{miss}$ SoftTrk Scale: 3.64630000e-07
+  $E_T^{miss}$ SoftTrk ResoPara: 3.51259904e-07
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.37325602e-07
+  Muon Resolution MS: 1.93220000e-07
+  Muon Scale: 8.22300000e-07
+  Muon SF Identification Syst: 2.90910000e-06
+  Muon SF Isolation Syst: 1.90210000e-06
+  Muon SF Trigger Syst: 1.88620000e-06
+  Bad Muon Veto: 6.59550000e-09
+  Muon Sagitta Global: 3.64940000e-06
+  Muon Sagitta PTextra: 1.96060000e-06
+  Pileup: 1.42430000e-07
+  MJ MU $E_T^{miss}$: 2.09136706e-07
+  MJ MU d0cut: 7.83876305e-07
+  MJ MU MC Scaling: 9.00870000e-07
+  MJ MU jet mult: 7.15376185e-07
+  MJ MU Shape: 2.40703101e-08
+  MJ MU dphi: 8.86010000e-07
+  $t\bar{t}$ $p_T$-hard: 3.75855025e-07
+  $t\bar{t}$ FSR: 5.03630000e-07
+  $t\bar{t}$ hadronization: 1.66294198e-06
+  $t\bar{t}$ hdamp: 4.79250000e-07
+  $t\bar{t}$ NNPDF: 7.93820000e-07
+  tW Diagram Removel: 1.31713804e-06
+  tW DS hdamp: 1.37140000e-07
+  RW inverted setup 2D: 4.95522416e-07
+  RW Fixed order vs PS $p_T(t)$: 6.67844150e-07
+  RW Fixed order vs PS $m(t\bar{t})$: 1.17043333e-06
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.41750000e-07
+  Norm. Single top by 4%: 2.95270000e-07
+  Norm. Diboson by 6%: 6.19740000e-07
+  Norm. Z by 5%: 9.48380000e-07
+- LUMI: 1.87173300e-06
+  Data stat. unc.: 7.03710000e-06
+  Sig. stat. unc.: 5.39870000e-06
+  Bkg. stat. unc.: 1.30270000e-06
+  Alternative MC unf. unc.: 1.23270056e-06
+  Basic unf. unc.: 1.02312241e-06
+  JES Flavor Composition: 1.13710000e-06
+  JES Pileup RhoTopology: 3.70390000e-07
+  JES Pileup OffsetMu: 2.49440000e-07
+  JES Pileup OffsetNPV: 8.88340000e-08
+  JES EtaIntercalib Model: 1.87400000e-07
+  JES Flavor Response: 3.17480000e-07
+  JER EffectiveNP 1: 1.28710000e-07
+  JER EffectiveNP 2: 9.06340000e-07
+  JER EffectiveNP 3: 5.90330000e-08
+  JER EffectiveNP 4: 3.46340000e-08
+  JER EffectiveNP 5: 3.02140000e-08
+  JER EffectiveNP 6: 1.14810000e-07
+  JER EffectiveNP 7rest: 1.25610000e-07
+  JER DataVsMC MC16: 1.26920000e-07
+  $E_T^{miss}$ SoftTrk Scale: 4.59170000e-07
+  $E_T^{miss}$ SoftTrk ResoPara: 1.94691171e-07
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.14124781e-07
+  Muon Resolution MS: 1.45170000e-06
+  Muon Scale: 1.29990000e-06
+  Muon SF Identification Syst: 3.58680000e-06
+  Muon SF Isolation Syst: 1.40730000e-06
+  Muon SF Trigger Syst: 1.08920000e-06
+  Bad Muon Veto: 1.69220000e-07
+  Muon Sagitta Global: 4.32540000e-06
+  Muon Sagitta PTextra: 9.22330000e-06
+  Pileup: 2.04480000e-07
+  MJ MU $E_T^{miss}$: 5.93123031e-07
+  MJ MU d0cut: 5.95630933e-07
+  MJ MU MC Scaling: 4.54370000e-07
+  MJ MU jet mult: 4.48261096e-07
+  MJ MU Shape: 7.72442699e-07
+  MJ MU dphi: 2.64260000e-07
+  $t\bar{t}$ $p_T$-hard: 6.95903373e-08
+  $t\bar{t}$ FSR: 2.52110000e-07
+  $t\bar{t}$ hadronization: 2.18662754e-07
+  $t\bar{t}$ hdamp: 3.26690000e-07
+  $t\bar{t}$ NNPDF: 7.69360000e-07
+  tW Diagram Removel: 3.91261617e-07
+  tW DS hdamp: 7.42930000e-07
+  RW inverted setup 2D: 3.11379434e-07
+  RW Fixed order vs PS $p_T(t)$: 4.01662582e-07
+  RW Fixed order vs PS $m(t\bar{t})$: 7.03792865e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: 1.74830000e-07
+  Norm. Single top by 4%: 1.89360000e-07
+  Norm. Diboson by 6%: 4.25210000e-07
+  Norm. Z by 5%: 1.28370000e-06
+- LUMI: 1.36551600e-06
+  Data stat. unc.: 5.78880000e-06
+  Sig. stat. unc.: 2.84430000e-06
+  Bkg. stat. unc.: 1.16540000e-06
+  Alternative MC unf. unc.: 2.33774897e-07
+  Basic unf. unc.: 9.52887752e-07
+  JES Flavor Composition: 8.33300000e-07
+  JES Pileup RhoTopology: 2.39910000e-07
+  JES Pileup OffsetMu: 1.03500000e-07
+  JES Pileup OffsetNPV: 9.13240000e-09
+  JES EtaIntercalib Model: 5.09700000e-08
+  JES Flavor Response: 1.64590000e-07
+  JER EffectiveNP 1: 1.80130000e-08
+  JER EffectiveNP 2: 8.60300000e-07
+  JER EffectiveNP 3: 2.98090000e-08
+  JER EffectiveNP 4: 1.28670000e-07
+  JER EffectiveNP 5: 3.04260000e-08
+  JER EffectiveNP 6: 1.37390000e-07
+  JER EffectiveNP 7rest: 1.53060000e-07
+  JER DataVsMC MC16: 9.81170000e-08
+  $E_T^{miss}$ SoftTrk Scale: 1.34010000e-07
+  $E_T^{miss}$ SoftTrk ResoPara: 3.35065229e-08
+  $E_T^{miss}$ SoftTrk ResoPerp: 6.41205209e-08
+  Muon Resolution MS: 1.33120000e-06
+  Muon Scale: 1.06320000e-06
+  Muon SF Identification Syst: 3.01350000e-06
+  Muon SF Isolation Syst: 9.98380000e-07
+  Muon SF Trigger Syst: 8.19870000e-07
+  Bad Muon Veto: 2.62740000e-07
+  Muon Sagitta Global: 3.63270000e-06
+  Muon Sagitta PTextra: 9.03030000e-06
+  Pileup: 4.40310000e-08
+  MJ MU $E_T^{miss}$: 3.79580482e-07
+  MJ MU d0cut: 3.01422136e-07
+  MJ MU MC Scaling: 2.23630000e-07
+  MJ MU jet mult: 2.42662088e-07
+  MJ MU Shape: 4.37550675e-07
+  MJ MU dphi: 2.66100000e-07
+  $t\bar{t}$ $p_T$-hard: 1.09006618e-08
+  $t\bar{t}$ FSR: 4.33890000e-07
+  $t\bar{t}$ hadronization: 1.62760814e-07
+  $t\bar{t}$ hdamp: 4.35770000e-07
+  $t\bar{t}$ NNPDF: 6.66860000e-07
+  tW Diagram Removel: 2.36156467e-07
+  tW DS hdamp: 5.62770000e-07
+  RW inverted setup 2D: 1.74365555e-07
+  RW Fixed order vs PS $p_T(t)$: 2.36883929e-07
+  RW Fixed order vs PS $m(t\bar{t})$: 4.13960143e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: 1.10970000e-07
+  Norm. Single top by 4%: 1.00440000e-07
+  Norm. Diboson by 6%: 3.14550000e-07
+  Norm. Z by 5%: 1.27920000e-06
+- LUMI: 8.23775000e-07
+  Data stat. unc.: 5.19300000e-06
+  Sig. stat. unc.: 1.27290000e-06
+  Bkg. stat. unc.: 1.20090000e-06
+  Alternative MC unf. unc.: 1.44366435e-06
+  Basic unf. unc.: 5.94976773e-07
+  JES Flavor Composition: 4.78820000e-07
+  JES Pileup RhoTopology: 1.34580000e-07
+  JES Pileup OffsetMu: 3.87010000e-08
+  JES Pileup OffsetNPV: 1.35740000e-08
+  JES EtaIntercalib Model: 1.56640000e-09
+  JES Flavor Response: 9.32180000e-08
+  JER EffectiveNP 1: 3.43160000e-08
+  JER EffectiveNP 2: 5.36230000e-07
+  JER EffectiveNP 3: 3.66980000e-09
+  JER EffectiveNP 4: 1.01130000e-07
+  JER EffectiveNP 5: 2.33230000e-08
+  JER EffectiveNP 6: 7.01530000e-08
+  JER EffectiveNP 7rest: 1.00330000e-07
+  JER DataVsMC MC16: 6.03070000e-08
+  $E_T^{miss}$ SoftTrk Scale: 1.98980000e-09
+  $E_T^{miss}$ SoftTrk ResoPara: 6.16843914e-08
+  $E_T^{miss}$ SoftTrk ResoPerp: 1.53710849e-07
+  Muon Resolution MS: 8.21940000e-07
+  Muon Scale: 6.32870000e-07
+  Muon SF Identification Syst: 1.84380000e-06
+  Muon SF Isolation Syst: 5.88480000e-07
+  Muon SF Trigger Syst: 5.47800000e-07
+  Bad Muon Veto: 2.51390000e-07
+  Muon Sagitta Global: 2.25780000e-06
+  Muon Sagitta PTextra: 5.93900000e-06
+  Pileup: 3.91520000e-08
+  MJ MU $E_T^{miss}$: 5.96551480e-07
+  MJ MU d0cut: 5.10850971e-07
+  MJ MU MC Scaling: 4.63990000e-07
+  MJ MU jet mult: 4.03476057e-07
+  MJ MU Shape: 6.44115054e-07
+  MJ MU dphi: 4.38950000e-07
+  $t\bar{t}$ $p_T$-hard: 2.14237364e-10
+  $t\bar{t}$ FSR: 4.29080000e-07
+  $t\bar{t}$ hadronization: 2.16618934e-07
+  $t\bar{t}$ hdamp: 3.88980000e-07
+  $t\bar{t}$ NNPDF: 4.40350000e-07
+  tW Diagram Removel: 1.12314835e-07
+  tW DS hdamp: 2.90050000e-07
+  RW inverted setup 2D: 7.59357055e-08
+  RW Fixed order vs PS $p_T(t)$: 1.12834450e-07
+  RW Fixed order vs PS $m(t\bar{t})$: 1.96466523e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: 4.84360000e-08
+  Norm. Single top by 4%: 4.68940000e-08
+  Norm. Diboson by 6%: 1.78940000e-07
+  Norm. Z by 5%: 9.72410000e-07
+- LUMI: 6.05045100e-07
+  Data stat. unc.: 3.26610000e-06
+  Sig. stat. unc.: 1.47200000e-06
+  Bkg. stat. unc.: 4.32510000e-07
+  Alternative MC unf. unc.: 8.70961749e-07
+  Basic unf. unc.: 1.21702550e-07
+  JES Flavor Composition: 1.46060000e-07
+  JES Pileup RhoTopology: 5.34340000e-08
+  JES Pileup OffsetMu: 3.64200000e-08
+  JES Pileup OffsetNPV: 1.56310000e-08
+  JES EtaIntercalib Model: 7.48580000e-08
+  JES Flavor Response: 3.61100000e-08
+  JER EffectiveNP 1: 1.02940000e-07
+  JER EffectiveNP 2: 9.80060000e-08
+  JER EffectiveNP 3: 8.74570000e-08
+  JER EffectiveNP 4: 1.33130000e-07
+  JER EffectiveNP 5: 1.26800000e-07
+  JER EffectiveNP 6: 4.04040000e-08
+  JER EffectiveNP 7rest: 1.20100000e-07
+  JER DataVsMC MC16: 9.01420000e-08
+  $E_T^{miss}$ SoftTrk Scale: 8.92330000e-08
+  $E_T^{miss}$ SoftTrk ResoPara: 9.87701973e-09
+  $E_T^{miss}$ SoftTrk ResoPerp: 3.55616012e-08
+  Muon Resolution MS: 2.36780000e-08
+  Muon Scale: 7.61080000e-08
+  Muon SF Identification Syst: 1.01760000e-06
+  Muon SF Isolation Syst: 4.29480000e-07
+  Muon SF Trigger Syst: 4.78270000e-07
+  Bad Muon Veto: 6.83490000e-09
+  Muon Sagitta Global: 1.28270000e-06
+  Muon Sagitta PTextra: 9.31140000e-09
+  Pileup: 3.17490000e-07
+  MJ MU $E_T^{miss}$: 1.44377049e-08
+  MJ MU d0cut: 1.45230863e-07
+  MJ MU MC Scaling: 1.69420000e-07
+  MJ MU jet mult: 1.22344063e-07
+  MJ MU Shape: 3.49458571e-08
+  MJ MU dphi: 1.58720000e-07
+  $t\bar{t}$ $p_T$-hard: 8.29609036e-08
+  $t\bar{t}$ FSR: 1.36300000e-07
+  $t\bar{t}$ hadronization: 1.68519883e-07
+  $t\bar{t}$ hdamp: 2.60020000e-07
+  $t\bar{t}$ NNPDF: 1.41250000e-07
+  tW Diagram Removel: 3.55278262e-07
+  tW DS hdamp: 3.70560000e-08
+  RW inverted setup 2D: 7.84558394e-08
+  RW Fixed order vs PS $p_T(t)$: 7.72520641e-08
+  RW Fixed order vs PS $m(t\bar{t})$: 1.36390341e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: 5.22600000e-08
+  Norm. Single top by 4%: 4.86110000e-08
+  Norm. Diboson by 6%: 1.22590000e-07
+  Norm. Z by 5%: 1.29520000e-07
+- LUMI: 5.17505000e-07
+  Data stat. unc.: 2.47860000e-06
+  Sig. stat. unc.: 1.59340000e-06
+  Bkg. stat. unc.: 2.99140000e-07
+  Alternative MC unf. unc.: 7.12634984e-07
+  Basic unf. unc.: 1.04087593e-07
+  JES Flavor Composition: 1.16910000e-07
+  JES Pileup RhoTopology: 4.62170000e-08
+  JES Pileup OffsetMu: 2.56530000e-08
+  JES Pileup OffsetNPV: 2.48370000e-08
+  JES EtaIntercalib Model: 5.83250000e-08
+  JES Flavor Response: 1.29480000e-08
+  JER EffectiveNP 1: 9.49500000e-08
+  JER EffectiveNP 2: 8.47550000e-08
+  JER EffectiveNP 3: 3.58830000e-08
+  JER EffectiveNP 4: 4.98580000e-08
+  JER EffectiveNP 5: 2.16330000e-08
+  JER EffectiveNP 6: 3.77680000e-09
+  JER EffectiveNP 7rest: 3.08560000e-08
+  JER DataVsMC MC16: 4.74730000e-08
+  $E_T^{miss}$ SoftTrk Scale: 9.77660000e-08
+  $E_T^{miss}$ SoftTrk ResoPara: 4.95063422e-08
+  $E_T^{miss}$ SoftTrk ResoPerp: 5.22118056e-08
+  Muon Resolution MS: 3.09570000e-08
+  Muon Scale: 6.66210000e-08
+  Muon SF Identification Syst: 8.54080000e-07
+  Muon SF Isolation Syst: 3.62330000e-07
+  Muon SF Trigger Syst: 3.85490000e-07
+  Bad Muon Veto: 1.62490000e-08
+  Muon Sagitta Global: 1.15360000e-06
+  Muon Sagitta PTextra: 1.85130000e-07
+  Pileup: 1.93430000e-07
+  MJ MU $E_T^{miss}$: 5.25383965e-09
+  MJ MU d0cut: 6.93495022e-08
+  MJ MU MC Scaling: 8.12250000e-08
+  MJ MU jet mult: 6.14936268e-08
+  MJ MU Shape: 2.56707250e-08
+  MJ MU dphi: 8.64970000e-08
+  $t\bar{t}$ $p_T$-hard: 7.22741501e-08
+  $t\bar{t}$ FSR: 1.18160000e-07
+  $t\bar{t}$ hadronization: 1.52299228e-07
+  $t\bar{t}$ hdamp: 2.05510000e-07
+  $t\bar{t}$ NNPDF: 1.10080000e-07
+  tW Diagram Removel: 2.52870758e-07
+  tW DS hdamp: 1.72370000e-08
+  RW inverted setup 2D: 6.36606614e-08
+  RW Fixed order vs PS $p_T(t)$: 5.89789281e-08
+  RW Fixed order vs PS $m(t\bar{t})$: 1.04330080e-07
+  Norm. $W\rightarrow\tau\nu$ by 5%: 4.46450000e-08
+  Norm. Single top by 4%: 2.94130000e-08
+  Norm. Diboson by 6%: 1.09460000e-07
+  Norm. Z by 5%: 1.23170000e-07
+- LUMI: 4.41510200e-07
+  Data stat. unc.: 1.78340000e-06
+  Sig. stat. unc.: 1.18300000e-06
+  Bkg. stat. unc.: 2.18510000e-07
+  Alternative MC unf. unc.: 5.13301917e-07
+  Basic unf. unc.: 2.71654849e-07
+  JES Flavor Composition: 9.57690000e-08
+  JES Pileup RhoTopology: 3.66410000e-08
+  JES Pileup OffsetMu: 1.90670000e-08
+  JES Pileup OffsetNPV: 2.00120000e-08
+  JES EtaIntercalib Model: 4.28780000e-08
+  JES Flavor Response: 9.74970000e-09
+  JER EffectiveNP 1: 8.39740000e-08
+  JER EffectiveNP 2: 6.14320000e-08
+  JER EffectiveNP 3: 3.46610000e-08
+  JER EffectiveNP 4: 4.08050000e-08
+  JER EffectiveNP 5: 2.35340000e-08
+  JER EffectiveNP 6: 8.53450000e-09
+  JER EffectiveNP 7rest: 2.43180000e-08
+  JER DataVsMC MC16: 3.74910000e-08
+  $E_T^{miss}$ SoftTrk Scale: 7.07550000e-08
+  $E_T^{miss}$ SoftTrk ResoPara: 4.34311740e-08
+  $E_T^{miss}$ SoftTrk ResoPerp: 4.11665176e-08
+  Muon Resolution MS: 6.12580000e-08
+  Muon Scale: 1.07650000e-07
+  Muon SF Identification Syst: 7.67930000e-07
+  Muon SF Isolation Syst: 3.07570000e-07
+  Muon SF Trigger Syst: 3.13040000e-07
+  Bad Muon Veto: 4.09900000e-09
+  Muon Sagitta Global: 1.05140000e-06
+  Muon Sagitta PTextra: 3.78950000e-07
+  Pileup: 1.57180000e-07
+  MJ MU $E_T^{miss}$: 3.88476328e-09
+  MJ MU d0cut: 4.71848708e-08
+  MJ MU MC Scaling: 5.41800000e-08
+  MJ MU jet mult: 3.96366440e-08
+  MJ MU Shape: 1.65220327e-08
+  MJ MU dphi: 5.77290000e-08
+  $t\bar{t}$ $p_T$-hard: 5.97661452e-08
+  $t\bar{t}$ FSR: 9.72920000e-08
+  $t\bar{t}$ hadronization: 1.23607806e-07
+  $t\bar{t}$ hdamp: 1.71990000e-07
+  $t\bar{t}$ NNPDF: 9.53700000e-08
+  tW Diagram Removel: 2.14774300e-07
+  tW DS hdamp: 2.70010000e-08
+  RW inverted setup 2D: 5.16159801e-08
+  RW Fixed order vs PS $p_T(t)$: 4.71325666e-08
+  RW Fixed order vs PS $m(t\bar{t})$: 8.33679355e-08
+  Norm. $W\rightarrow\tau\nu$ by 5%: 3.67840000e-08
+  Norm. Single top by 4%: 2.34360000e-08
+  Norm. Diboson by 6%: 9.00530000e-08
+  Norm. Z by 5%: 1.18720000e-07
+- LUMI: 3.25957600e-07
+  Data stat. unc.: 2.15440000e-06
+  Sig. stat. unc.: 1.60490000e-06
+  Bkg. stat. unc.: 2.96060000e-07
+  Alternative MC unf. unc.: 2.33298584e-07
+  Basic unf. unc.: 4.70537583e-07
+  JES Flavor Composition: 7.21170000e-08
+  JES Pileup RhoTopology: 2.19540000e-08
+  JES Pileup OffsetMu: 1.24950000e-08
+  JES Pileup OffsetNPV: 1.17770000e-08
+  JES EtaIntercalib Model: 1.38700000e-08
+  JES Flavor Response: 7.65420000e-09
+  JER EffectiveNP 1: 5.52210000e-08
+  JER EffectiveNP 2: 2.42560000e-08
+  JER EffectiveNP 3: 1.73380000e-08
+  JER EffectiveNP 4: 4.07540000e-09
+  JER EffectiveNP 5: 2.01690000e-08
+  JER EffectiveNP 6: 7.69620000e-09
+  JER EffectiveNP 7rest: 6.36050000e-09
+  JER DataVsMC MC16: 1.03990000e-08
+  $E_T^{miss}$ SoftTrk Scale: 2.38670000e-08
+  $E_T^{miss}$ SoftTrk ResoPara: 3.89157175e-08
+  $E_T^{miss}$ SoftTrk ResoPerp: 1.87511820e-08
+  Muon Resolution MS: 1.70570000e-07
+  Muon Scale: 2.44080000e-07
+  Muon SF Identification Syst: 7.32770000e-07
+  Muon SF Isolation Syst: 2.23790000e-07
+  Muon SF Trigger Syst: 1.80780000e-07
+  Bad Muon Veto: 6.40990000e-08
+  Muon Sagitta Global: 1.03370000e-06
+  Muon Sagitta PTextra: 2.14910000e-06
+  Pileup: 8.09430000e-08
+  MJ MU $E_T^{miss}$: 6.60177477e-09
+  MJ MU d0cut: 1.77453696e-09
+  MJ MU MC Scaling: 7.51970000e-09
+  MJ MU jet mult: 1.33327906e-08
+  MJ MU Shape: 1.20481454e-08
+  MJ MU dphi: 1.00260000e-08
+  $t\bar{t}$ $p_T$-hard: 3.84402696e-08
+  $t\bar{t}$ FSR: 5.87880000e-08
+  $t\bar{t}$ hadronization: 6.48323938e-08
+  $t\bar{t}$ hdamp: 1.11880000e-07
+  $t\bar{t}$ NNPDF: 7.66030000e-08
+  tW Diagram Removel: 1.29583381e-07
+  tW DS hdamp: 8.52670000e-08
+  RW inverted setup 2D: 2.96561739e-08
+  RW Fixed order vs PS $p_T(t)$: 2.46314945e-08
+  RW Fixed order vs PS $m(t\bar{t})$: 4.35316329e-08
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.31160000e-08
+  Norm. Single top by 4%: 1.34220000e-08
+  Norm. Diboson by 6%: 5.89080000e-08
+  Norm. Z by 5%: 1.36480000e-07
+- LUMI: 1.56695700e-07
+  Data stat. unc.: 1.45630000e-06
+  Sig. stat. unc.: 2.44920000e-07
+  Bkg. stat. unc.: 2.65150000e-07
+  Alternative MC unf. unc.: 3.37516081e-08
+  Basic unf. unc.: 2.91079798e-07
+  JES Flavor Composition: 3.15320000e-08
+  JES Pileup RhoTopology: 1.27200000e-08
+  JES Pileup OffsetMu: 4.86220000e-09
+  JES Pileup OffsetNPV: 3.37270000e-10
+  JES EtaIntercalib Model: 3.25690000e-09
+  JES Flavor Response: 1.08440000e-08
+  JER EffectiveNP 1: 2.16640000e-08
+  JER EffectiveNP 2: 5.37960000e-09
+  JER EffectiveNP 3: 3.03790000e-08
+  JER EffectiveNP 4: 2.77620000e-08
+  JER EffectiveNP 5: 2.27750000e-08
+  JER EffectiveNP 6: 1.17730000e-08
+  JER EffectiveNP 7rest: 3.07380000e-09
+  JER DataVsMC MC16: 2.99290000e-08
+  $E_T^{miss}$ SoftTrk Scale: 2.46650000e-08
+  $E_T^{miss}$ SoftTrk ResoPara: 2.38053063e-09
+  $E_T^{miss}$ SoftTrk ResoPerp: 1.41318025e-08
+  Muon Resolution MS: 1.08290000e-07
+  Muon Scale: 1.27090000e-07
+  Muon SF Identification Syst: 3.55010000e-07
+  Muon SF Isolation Syst: 1.04640000e-07
+  Muon SF Trigger Syst: 9.09640000e-08
+  Bad Muon Veto: 5.43030000e-08
+  Muon Sagitta Global: 5.43580000e-07
+  Muon Sagitta PTextra: 1.53210000e-06
+  Pileup: 4.94870000e-08
+  MJ MU $E_T^{miss}$: 3.72585251e-08
+  MJ MU d0cut: 3.44372082e-08
+  MJ MU MC Scaling: 2.61010000e-08
+  MJ MU jet mult: 2.68825168e-08
+  MJ MU Shape: 4.40815591e-08
+  MJ MU dphi: 2.00700000e-08
+  $t\bar{t}$ $p_T$-hard: 1.63765404e-08
+  $t\bar{t}$ FSR: 2.77490000e-08
+  $t\bar{t}$ hadronization: 3.17025920e-08
+  $t\bar{t}$ hdamp: 5.09350000e-08
+  $t\bar{t}$ NNPDF: 4.10920000e-08
+  tW Diagram Removel: 4.96042031e-08
+  tW DS hdamp: 3.38790000e-08
+  RW inverted setup 2D: 1.44167249e-08
+  RW Fixed order vs PS $p_T(t)$: 1.49813735e-08
+  RW Fixed order vs PS $m(t\bar{t})$: 2.62838710e-08
+  Norm. $W\rightarrow\tau\nu$ by 5%: 1.01440000e-08
+  Norm. Single top by 4%: 4.84400000e-09
+  Norm. Diboson by 6%: 3.45420000e-08
+  Norm. Z by 5%: 1.06040000e-07
+- LUMI: 7.65841000e-08
+  Data stat. unc.: 1.18620000e-06
+  Sig. stat. unc.: 2.14370000e-07
+  Bkg. stat. unc.: 9.82700000e-08
+  Alternative MC unf. unc.: 7.63427374e-10
+  Basic unf. unc.: 1.42270653e-07
+  JES Flavor Composition: 2.19360000e-08
+  JES Pileup RhoTopology: 7.25580000e-09
+  JES Pileup OffsetMu: 2.74630000e-09
+  JES Pileup OffsetNPV: 8.79910000e-10
+  JES EtaIntercalib Model: 2.49580000e-09
+  JES Flavor Response: 1.05170000e-08
+  JER EffectiveNP 1: 1.73240000e-08
+  JER EffectiveNP 2: 9.78170000e-09
+  JER EffectiveNP 3: 3.98650000e-08
+  JER EffectiveNP 4: 4.21520000e-08
+  JER EffectiveNP 5: 1.73850000e-08
+  JER EffectiveNP 6: 8.68960000e-09
+  JER EffectiveNP 7rest: 1.91720000e-10
+  JER DataVsMC MC16: 4.65450000e-08
+  $E_T^{miss}$ SoftTrk Scale: 1.82650000e-08
+  $E_T^{miss}$ SoftTrk ResoPara: 2.73334938e-10
+  $E_T^{miss}$ SoftTrk ResoPerp: 7.48999391e-09
+  Muon Resolution MS: 8.41720000e-08
+  Muon Scale: 6.32080000e-08
+  Muon SF Identification Syst: 1.71410000e-07
+  Muon SF Isolation Syst: 5.05060000e-08
+  Muon SF Trigger Syst: 4.91120000e-08
+  Bad Muon Veto: 4.03210000e-08
+  Muon Sagitta Global: 3.12520000e-07
+  Muon Sagitta PTextra: 9.21100000e-07
+  Pileup: 3.66860000e-08
+  MJ MU $E_T^{miss}$: 1.85997850e-09
+  MJ MU d0cut: 1.88452140e-09
+  MJ MU MC Scaling: 1.47160000e-09
+  MJ MU jet mult: 1.88292504e-09
+  MJ MU Shape: 2.04390656e-09
+  MJ MU dphi: 1.70890000e-09
+  $t\bar{t}$ $p_T$-hard: 4.68493763e-09
+  $t\bar{t}$ FSR: 4.33960000e-09
+  $t\bar{t}$ hadronization: 5.59227244e-09
+  $t\bar{t}$ hdamp: 1.01070000e-08
+  $t\bar{t}$ NNPDF: 8.08220000e-09
+  tW Diagram Removel: 2.26153874e-08
+  tW DS hdamp: 1.63450000e-08
+  RW inverted setup 2D: 2.80713474e-09
+  RW Fixed order vs PS $p_T(t)$: 2.65748555e-09
+  RW Fixed order vs PS $m(t\bar{t})$: 4.64241578e-09
+  Norm. $W\rightarrow\tau\nu$ by 5%: 3.73530000e-09
+  Norm. Single top by 4%: 2.09180000e-09
+  Norm. Diboson by 6%: 8.26960000e-09
+  Norm. Z by 5%: 5.28090000e-08
+- LUMI: 4.08791600e-08
+  Data stat. unc.: 3.53840000e-07
+  Sig. stat. unc.: 2.81860000e-07
+  Bkg. stat. unc.: 2.97020000e-08
+  Alternative MC unf. unc.: 6.15059902e-08
+  Basic unf. unc.: 6.16125113e-08
+  JES Flavor Composition: 8.81930000e-09
+  JES Pileup RhoTopology: 5.27650000e-09
+  JES Pileup OffsetMu: 5.10300000e-09
+  JES Pileup OffsetNPV: 9.34190000e-10
+  JES EtaIntercalib Model: 5.31700000e-09
+  JES Flavor Response: 2.73590000e-09
+  JER EffectiveNP 1: 5.66130000e-09
+  JER EffectiveNP 2: 1.52480000e-08
+  JER EffectiveNP 3: 9.31390000e-09
+  JER EffectiveNP 4: 8.36660000e-09
+  JER EffectiveNP 5: 3.92290000e-09
+  JER EffectiveNP 6: 8.12240000e-09
+  JER EffectiveNP 7rest: 8.69230000e-09
+  JER DataVsMC MC16: 2.32720000e-09
+  $E_T^{miss}$ SoftTrk Scale: 8.05860000e-09
+  $E_T^{miss}$ SoftTrk ResoPara: 7.91850328e-09
+  $E_T^{miss}$ SoftTrk ResoPerp: 4.85164752e-09
+  Muon Resolution MS: 1.22530000e-08
+  Muon Scale: 8.47720000e-09
+  Muon SF Identification Syst: 8.30490000e-08
+  Muon SF Isolation Syst: 2.78920000e-08
+  Muon SF Trigger Syst: 3.09710000e-08
+  Bad Muon Veto: 1.32430000e-09
+  Muon Sagitta Global: 1.84250000e-07
+  Muon Sagitta PTextra: 2.57360000e-09
+  Pileup: 3.67940000e-09
+  MJ MU $E_T^{miss}$: 2.69061274e-11
+  MJ MU d0cut: 1.40064119e-09
+  MJ MU MC Scaling: 1.35200000e-09
+  MJ MU jet mult: 7.09686697e-10
+  MJ MU Shape: 1.03775824e-09
+  MJ MU dphi: 1.58840000e-09
+  $t\bar{t}$ $p_T$-hard: 2.63349665e-09
+  $t\bar{t}$ FSR: 2.13320000e-09
+  $t\bar{t}$ hadronization: 2.49094887e-09
+  $t\bar{t}$ hdamp: 5.58880000e-09
+  $t\bar{t}$ NNPDF: 8.53560000e-10
+  tW Diagram Removel: 7.17311521e-09
+  tW DS hdamp: 2.72010000e-08
+  RW inverted setup 2D: 1.43431127e-09
+  RW Fixed order vs PS $p_T(t)$: 2.74495412e-10
+  RW Fixed order vs PS $m(t\bar{t})$: 4.00519429e-10
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.91970000e-09
+  Norm. Single top by 4%: 1.20080000e-09
+  Norm. Diboson by 6%: 7.71770000e-09
+  Norm. Z by 5%: 6.57930000e-09
+- LUMI: 2.80913500e-08
+  Data stat. unc.: 3.14090000e-07
+  Sig. stat. unc.: 2.03230000e-08
+  Bkg. stat. unc.: 2.56300000e-08
+  Alternative MC unf. unc.: 2.10548096e-09
+  Basic unf. unc.: 8.81873669e-08
+  JES Flavor Composition: 2.50250000e-10
+  JES Pileup RhoTopology: 1.50670000e-09
+  JES Pileup OffsetMu: 4.78e-11
+  JES Pileup OffsetNPV: 1.37410000e-10
+  JES EtaIntercalib Model: 4.60040000e-10
+  JES Flavor Response: 1.15810000e-09
+  JER EffectiveNP 1: 8.25810000e-09
+  JER EffectiveNP 2: 3.99260000e-09
+  JER EffectiveNP 3: 4.77660000e-09
+  JER EffectiveNP 4: 5.61020000e-09
+  JER EffectiveNP 5: 6.15770000e-09
+  JER EffectiveNP 6: 6.36860000e-09
+  JER EffectiveNP 7rest: 6.05240000e-09
+  JER DataVsMC MC16: 9.64780000e-10
+  $E_T^{miss}$ SoftTrk Scale: 3.64410000e-09
+  $E_T^{miss}$ SoftTrk ResoPara: 2.24950099e-10
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.97765515e-09
+  Muon Resolution MS: 2.43060000e-08
+  Muon Scale: 1.32220000e-08
+  Muon SF Identification Syst: 5.57830000e-08
+  Muon SF Isolation Syst: 1.84280000e-08
+  Muon SF Trigger Syst: 2.04420000e-08
+  Bad Muon Veto: 8.86630000e-10
+  Muon Sagitta Global: 1.31140000e-07
+  Muon Sagitta PTextra: 2.54760000e-08
+  Pileup: 3.73420000e-09
+  MJ MU $E_T^{miss}$: 1.24111694e-10
+  MJ MU d0cut: 2.93285151e-09
+  MJ MU MC Scaling: 3.34360000e-09
+  MJ MU jet mult: 2.40323156e-09
+  MJ MU Shape: 9.47171984e-10
+  MJ MU dphi: 3.14610000e-09
+  $t\bar{t}$ $p_T$-hard: 1.46678723e-09
+  $t\bar{t}$ FSR: 1.78400000e-09
+  $t\bar{t}$ hadronization: 1.79249938e-09
+  $t\bar{t}$ hdamp: 3.94650000e-09
+  $t\bar{t}$ NNPDF: 1.69170000e-09
+  tW Diagram Removel: 4.50532396e-10
+  tW DS hdamp: 1.76450000e-08
+  RW inverted setup 2D: 1.10877232e-09
+  RW Fixed order vs PS $p_T(t)$: 7.67956687e-10
+  RW Fixed order vs PS $m(t\bar{t})$: 1.37698039e-09
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.03860000e-09
+  Norm. Single top by 4%: 8.60840000e-10
+  Norm. Diboson by 6%: 4.38320000e-09
+  Norm. Z by 5%: 5.23110000e-09
+- LUMI: 7.94285100e-09
+  Data stat. unc.: 1.42100000e-07
+  Sig. stat. unc.: 1.26400000e-08
+  Bkg. stat. unc.: 1.54540000e-08
+  Alternative MC unf. unc.: 1.15796257e-08
+  Basic unf. unc.: 5.52680092e-08
+  JES Flavor Composition: 3.20250000e-10
+  JES Pileup RhoTopology: 1.91660000e-12
+  JES Pileup OffsetMu: 3.64330000e-10
+  JES Pileup OffsetNPV: 3.10050000e-10
+  JES EtaIntercalib Model: 4.27440000e-10
+  JES Flavor Response: 5.84680000e-10
+  JER EffectiveNP 1: 1.32900000e-09
+  JER EffectiveNP 2: 7.03990000e-10
+  JER EffectiveNP 3: 1.48340000e-09
+  JER EffectiveNP 4: 2.71390000e-09
+  JER EffectiveNP 5: 2.12340000e-09
+  JER EffectiveNP 6: 1.57250000e-09
+  JER EffectiveNP 7rest: 1.71980000e-09
+  JER DataVsMC MC16: 1.42040000e-11
+  $E_T^{miss}$ SoftTrk Scale: 1.21810000e-10
+  $E_T^{miss}$ SoftTrk ResoPara: 1.83190354e-09
+  $E_T^{miss}$ SoftTrk ResoPerp: 5.84212077e-10
+  Muon Resolution MS: 1.67410000e-08
+  Muon Scale: 1.01130000e-08
+  Muon SF Identification Syst: 4.69730000e-08
+  Muon SF Isolation Syst: 5.12330000e-09
+  Muon SF Trigger Syst: 4.39480000e-09
+  Bad Muon Veto: 5.98140000e-09
+  Muon Sagitta Global: 4.93440000e-08
+  Muon Sagitta PTextra: 1.59660000e-07
+  Pileup: 9.39490000e-10
+  MJ MU $E_T^{miss}$: 2.25023099e-10
+  MJ MU d0cut: 3.83925984e-10
+  MJ MU MC Scaling: 3.96080000e-10
+  MJ MU jet mult: 3.74228563e-10
+  MJ MU Shape: 2.37672012e-10
+  MJ MU dphi: 3.34130000e-10
+  $t\bar{t}$ $p_T$-hard: 7.15181099e-10
+  $t\bar{t}$ FSR: 9.66390000e-10
+  $t\bar{t}$ hadronization: 1.29765247e-09
+  $t\bar{t}$ hdamp: 1.90230000e-09
+  $t\bar{t}$ NNPDF: 2.74350000e-09
+  tW Diagram Removel: 1.37957847e-08
+  tW DS hdamp: 1.67900000e-08
+  RW inverted setup 2D: 5.88368999e-10
+  RW Fixed order vs PS $p_T(t)$: 4.59296573e-10
+  RW Fixed order vs PS $m(t\bar{t})$: 8.12747521e-10
+  Norm. $W\rightarrow\tau\nu$ by 5%: 6.09820000e-10
+  Norm. Single top by 4%: 1.03400000e-09
+  Norm. Diboson by 6%: 3.38250000e-09
+  Norm. Z by 5%: 3.48940000e-09
+- LUMI: 1.50977000e-09
+  Data stat. unc.: 6.30640000e-08
+  Sig. stat. unc.: 5.43820000e-09
+  Bkg. stat. unc.: 6.80860000e-09
+  Alternative MC unf. unc.: 5.15622865e-09
+  Basic unf. unc.: 1.54810701e-08
+  JES Flavor Composition: 2.26490000e-10
+  JES Pileup RhoTopology: 3.58840000e-10
+  JES Pileup OffsetMu: 3.03770000e-10
+  JES Pileup OffsetNPV: 1.04770000e-10
+  JES EtaIntercalib Model: 3.34410000e-11
+  JES Flavor Response: 2.65690000e-10
+  JER EffectiveNP 1: 1.31920000e-09
+  JER EffectiveNP 2: 2.51310000e-09
+  JER EffectiveNP 3: 9.85700000e-10
+  JER EffectiveNP 4: 2.05060000e-09
+  JER EffectiveNP 5: 1.07500000e-09
+  JER EffectiveNP 6: 1.24360000e-09
+  JER EffectiveNP 7rest: 2.12030000e-09
+  JER DataVsMC MC16: 5.22560000e-10
+  $E_T^{miss}$ SoftTrk Scale: 8.61920000e-10
+  $E_T^{miss}$ SoftTrk ResoPara: 2.30587924e-10
+  $E_T^{miss}$ SoftTrk ResoPerp: 7.11050158e-11
+  Muon Resolution MS: 2.82500000e-09
+  Muon Scale: 2.17640000e-09
+  Muon SF Identification Syst: 8.38380000e-09
+  Muon SF Isolation Syst: 9.94980000e-10
+  Muon SF Trigger Syst: 8.55540000e-10
+  Bad Muon Veto: 1.45020000e-09
+  Muon Sagitta Global: 1.40320000e-08
+  Muon Sagitta PTextra: 5.25960000e-08
+  Pileup: 2.54930000e-09
+  MJ MU $E_T^{miss}$: 7.70284960e-11
+  MJ MU d0cut: 6.94227683e-11
+  MJ MU MC Scaling: 5.89960000e-11
+  MJ MU jet mult: 6.13908193e-11
+  MJ MU Shape: 8.63825699e-11
+  MJ MU dphi: 6.07730000e-11
+  $t\bar{t}$ $p_T$-hard: 8.22472986e-11
+  $t\bar{t}$ FSR: 6.89510000e-11
+  $t\bar{t}$ hadronization: 1.94994280e-10
+  $t\bar{t}$ hdamp: 1.77050000e-10
+  $t\bar{t}$ NNPDF: 3.31700000e-10
+  tW Diagram Removel: 1.60976802e-11
+  tW DS hdamp: 8.21240000e-11
+  RW inverted setup 2D: 4.72338915e-11
+  RW Fixed order vs PS $p_T(t)$: 5.41508364e-11
+  RW Fixed order vs PS $m(t\bar{t})$: 9.59815955e-11
+  Norm. $W\rightarrow\tau\nu$ by 5%: 5.60190000e-11
+  Norm. Single top by 4%: 1.57880000e-11
+  Norm. Diboson by 6%: 3.16650000e-10
+  Norm. Z by 5%: 6.78750000e-10
+- LUMI: 3.56119800e-05
+  Data stat. unc.: 8.97e-05
+  Sig. stat. unc.: 5.93110000e-05
+  Bkg. stat. unc.: 2.09350000e-05
+  Alternative MC unf. unc.: 1.81986578e-05
+  Basic unf. unc.: 1.44868730e-05
+  JES Flavor Composition: 1.96360000e-05
+  JES Pileup RhoTopology: 2.43490000e-05
+  JES Pileup OffsetMu: 1.92360000e-05
+  JES Pileup OffsetNPV: 2.57760000e-06
+  JES EtaIntercalib Model: 2.88350000e-06
+  JES Flavor Response: 3.54190000e-05
+  JER EffectiveNP 1: 3.12840000e-05
+  JER EffectiveNP 2: 2.52540000e-05
+  JER EffectiveNP 3: 2.00570000e-06
+  JER EffectiveNP 4: 9.64160000e-07
+  JER EffectiveNP 5: 8.54620000e-07
+  JER EffectiveNP 6: 1.15750000e-05
+  JER EffectiveNP 7rest: 1.51650000e-05
+  JER DataVsMC MC16: 8.44310000e-06
+  $E_T^{miss}$ SoftTrk Scale: 5.74180000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 4.13146079e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.18169120e-05
+  Muon Resolution MS: 7.63930000e-07
+  Muon Scale: 6.22750000e-06
+  Muon SF Identification Syst: 5.85500000e-05
+  Muon SF Isolation Syst: 1.48600000e-05
+  Muon SF Trigger Syst: 4.55e-05
+  Bad Muon Veto: 1.43070000e-06
+  Muon Sagitta Global: 5.15910000e-05
+  Muon Sagitta PTextra: 4.08330000e-06
+  Pileup: 8.29200000e-06
+  MJ MU $E_T^{miss}$: 1.44208401e-05
+  MJ MU d0cut: 2.01154161e-05
+  MJ MU MC Scaling: 4.43090000e-05
+  MJ MU jet mult: 4.23468486e-05
+  MJ MU Shape: 5.40910807e-06
+  MJ MU dphi: 2.60300000e-05
+  $t\bar{t}$ $p_T$-hard: 9.62500634e-06
+  $t\bar{t}$ FSR: 1.96740000e-05
+  $t\bar{t}$ hadronization: 7.58967343e-06
+  $t\bar{t}$ hdamp: 1.58670000e-05
+  $t\bar{t}$ NNPDF: 5.29020000e-05
+  tW Diagram Removel: 2.98033982e-05
+  tW DS hdamp: 9.68020000e-06
+  RW inverted setup 2D: 1.15761616e-05
+  RW Fixed order vs PS $p_T(t)$: 5.24664170e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 9.09413277e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 3.17860000e-06
+  Norm. Single top by 4%: 1.38770000e-05
+  Norm. Diboson by 6%: 1.46870000e-05
+  Norm. Z by 5%: 8.29410000e-06
+- LUMI: 3.45371300e-05
+  Data stat. unc.: 7.28470000e-05
+  Sig. stat. unc.: 6.49270000e-05
+  Bkg. stat. unc.: 1.74480000e-05
+  Alternative MC unf. unc.: 1.90066595e-05
+  Basic unf. unc.: 1.36329719e-05
+  JES Flavor Composition: 1.51750000e-05
+  JES Pileup RhoTopology: 2.25800000e-05
+  JES Pileup OffsetMu: 1.90970000e-05
+  JES Pileup OffsetNPV: 2.15410000e-06
+  JES EtaIntercalib Model: 6.55930000e-07
+  JES Flavor Response: 3.50320000e-05
+  JER EffectiveNP 1: 2.83520000e-05
+  JER EffectiveNP 2: 2.13190000e-05
+  JER EffectiveNP 3: 2.62940000e-06
+  JER EffectiveNP 4: 1.91480000e-06
+  JER EffectiveNP 5: 3.79120000e-06
+  JER EffectiveNP 6: 9.42940000e-06
+  JER EffectiveNP 7rest: 8.27480000e-06
+  JER DataVsMC MC16: 7.45800000e-06
+  $E_T^{miss}$ SoftTrk Scale: 5.34040000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 3.90690040e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.86974838e-05
+  Muon Resolution MS: 1.37380000e-06
+  Muon Scale: 6.12810000e-06
+  Muon SF Identification Syst: 5.41020000e-05
+  Muon SF Isolation Syst: 1.42700000e-05
+  Muon SF Trigger Syst: 4.38200000e-05
+  Bad Muon Veto: 1.17760000e-06
+  Muon Sagitta Global: 4.48470000e-05
+  Muon Sagitta PTextra: 3.89320000e-06
+  Pileup: 2.58390000e-06
+  MJ MU $E_T^{miss}$: 1.32934814e-05
+  MJ MU d0cut: 1.86706556e-05
+  MJ MU MC Scaling: 4.04300000e-05
+  MJ MU jet mult: 3.86587376e-05
+  MJ MU Shape: 4.19164956e-06
+  MJ MU dphi: 2.45490000e-05
+  $t\bar{t}$ $p_T$-hard: 9.54273392e-06
+  $t\bar{t}$ FSR: 1.90740000e-05
+  $t\bar{t}$ hadronization: 7.32709453e-06
+  $t\bar{t}$ hdamp: 1.58080000e-05
+  $t\bar{t}$ NNPDF: 5.10250000e-05
+  tW Diagram Removel: 2.73187714e-05
+  tW DS hdamp: 9.18700000e-06
+  RW inverted setup 2D: 1.13891001e-05
+  RW Fixed order vs PS $p_T(t)$: 5.10799104e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 8.85424373e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.71950000e-06
+  Norm. Single top by 4%: 1.31160000e-05
+  Norm. Diboson by 6%: 1.39710000e-05
+  Norm. Z by 5%: 8.60920000e-06
+- LUMI: 3.65556900e-05
+  Data stat. unc.: 7.42040000e-05
+  Sig. stat. unc.: 5.35440000e-05
+  Bkg. stat. unc.: 1.76530000e-05
+  Alternative MC unf. unc.: 2.29895104e-05
+  Basic unf. unc.: 1.42824910e-05
+  JES Flavor Composition: 1.16160000e-05
+  JES Pileup RhoTopology: 2.05080000e-05
+  JES Pileup OffsetMu: 2.12e-05
+  JES Pileup OffsetNPV: 2.99620000e-06
+  JES EtaIntercalib Model: 2.30480000e-06
+  JES Flavor Response: 3.32380000e-05
+  JER EffectiveNP 1: 2.37240000e-05
+  JER EffectiveNP 2: 1.36350000e-05
+  JER EffectiveNP 3: 5.44110000e-06
+  JER EffectiveNP 4: 3.72420000e-06
+  JER EffectiveNP 5: 6.11790000e-06
+  JER EffectiveNP 6: 5.04310000e-06
+  JER EffectiveNP 7rest: 1.35570000e-06
+  JER DataVsMC MC16: 5.52490000e-06
+  $E_T^{miss}$ SoftTrk Scale: 5.70490000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 4.16861328e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 3.72027193e-05
+  Muon Resolution MS: 1.45900000e-06
+  Muon Scale: 8.07060000e-06
+  Muon SF Identification Syst: 5.48720000e-05
+  Muon SF Isolation Syst: 1.49530000e-05
+  Muon SF Trigger Syst: 4.58950000e-05
+  Bad Muon Veto: 1.31030000e-06
+  Muon Sagitta Global: 4.21330000e-05
+  Muon Sagitta PTextra: 3.69360000e-06
+  Pileup: 6.12520000e-06
+  MJ MU $E_T^{miss}$: 1.16544965e-05
+  MJ MU d0cut: 1.73755052e-05
+  MJ MU MC Scaling: 3.69460000e-05
+  MJ MU jet mult: 3.53349514e-05
+  MJ MU Shape: 4.29972953e-06
+  MJ MU dphi: 2.16230000e-05
+  $t\bar{t}$ $p_T$-hard: 8.11829534e-06
+  $t\bar{t}$ FSR: 1.85550000e-05
+  $t\bar{t}$ hadronization: 6.82540601e-06
+  $t\bar{t}$ hdamp: 1.26570000e-05
+  $t\bar{t}$ NNPDF: 4.87030000e-05
+  tW Diagram Removel: 2.46254324e-05
+  tW DS hdamp: 8.51560000e-06
+  RW inverted setup 2D: 1.09846662e-05
+  RW Fixed order vs PS $p_T(t)$: 4.94552467e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 8.57114002e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.99160000e-06
+  Norm. Single top by 4%: 1.29740000e-05
+  Norm. Diboson by 6%: 1.42660000e-05
+  Norm. Z by 5%: 9.11110000e-06
+- LUMI: 3.41138300e-05
+  Data stat. unc.: 7.73860000e-05
+  Sig. stat. unc.: 5.10540000e-05
+  Bkg. stat. unc.: 1.83370000e-05
+  Alternative MC unf. unc.: 2.27937886e-05
+  Basic unf. unc.: 1.30016394e-05
+  JES Flavor Composition: 1.10410000e-05
+  JES Pileup RhoTopology: 1.54090000e-05
+  JES Pileup OffsetMu: 1.63690000e-05
+  JES Pileup OffsetNPV: 2.30500000e-06
+  JES EtaIntercalib Model: 5.35010000e-06
+  JES Flavor Response: 2.19630000e-05
+  JER EffectiveNP 1: 8.37050000e-06
+  JER EffectiveNP 2: 2.41250000e-06
+  JER EffectiveNP 3: 6.71360000e-06
+  JER EffectiveNP 4: 6.16060000e-06
+  JER EffectiveNP 5: 5.78130000e-06
+  JER EffectiveNP 6: 2.46060000e-06
+  JER EffectiveNP 7rest: 8.89160000e-06
+  JER DataVsMC MC16: 4.93250000e-06
+  $E_T^{miss}$ SoftTrk Scale: 4.81890000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 3.72027193e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 3.32501794e-05
+  Muon Resolution MS: 1.42840000e-06
+  Muon Scale: 8.74300000e-06
+  Muon SF Identification Syst: 4.94330000e-05
+  Muon SF Isolation Syst: 1.36460000e-05
+  Muon SF Trigger Syst: 4.13580000e-05
+  Bad Muon Veto: 1.15770000e-06
+  Muon Sagitta Global: 3.58790000e-05
+  Muon Sagitta PTextra: 4.53320000e-06
+  Pileup: 1.07810000e-05
+  MJ MU $E_T^{miss}$: 8.87290881e-06
+  MJ MU d0cut: 1.44434824e-05
+  MJ MU MC Scaling: 3.23830000e-05
+  MJ MU jet mult: 3.08972819e-05
+  MJ MU Shape: 3.53754057e-06
+  MJ MU dphi: 1.90090000e-05
+  $t\bar{t}$ $p_T$-hard: 5.35065135e-06
+  $t\bar{t}$ FSR: 1.79170000e-05
+  $t\bar{t}$ hadronization: 6.50359097e-06
+  $t\bar{t}$ hdamp: 4.84200000e-06
+  $t\bar{t}$ NNPDF: 4.41890000e-05
+  tW Diagram Removel: 2.07837437e-05
+  tW DS hdamp: 5.19730000e-06
+  RW inverted setup 2D: 1.02043773e-05
+  RW Fixed order vs PS $p_T(t)$: 4.61851348e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 8.00320056e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 3.08430000e-06
+  Norm. Single top by 4%: 1.17180000e-05
+  Norm. Diboson by 6%: 1.46840000e-05
+  Norm. Z by 5%: 9.68460000e-06
+- LUMI: 3.39013500e-05
+  Data stat. unc.: 6.87390000e-05
+  Sig. stat. unc.: 6.03510000e-05
+  Bkg. stat. unc.: 1.62490000e-05
+  Alternative MC unf. unc.: 3.05109410e-05
+  Basic unf. unc.: 1.22724460e-05
+  JES Flavor Composition: 1.45730000e-05
+  JES Pileup RhoTopology: 1.14120000e-05
+  JES Pileup OffsetMu: 9.37020000e-06
+  JES Pileup OffsetNPV: 7.29200000e-07
+  JES EtaIntercalib Model: 9.20770000e-06
+  JES Flavor Response: 1.34890000e-05
+  JER EffectiveNP 1: 6.57850000e-07
+  JER EffectiveNP 2: 9.69170000e-06
+  JER EffectiveNP 3: 7.15580000e-06
+  JER EffectiveNP 4: 9.17630000e-06
+  JER EffectiveNP 5: 5.43720000e-06
+  JER EffectiveNP 6: 6.23500000e-06
+  JER EffectiveNP 7rest: 1.26190000e-05
+  JER DataVsMC MC16: 4.49130000e-06
+  $E_T^{miss}$ SoftTrk Scale: 3.56800000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 3.48419340e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.65254921e-05
+  Muon Resolution MS: 5.82630000e-07
+  Muon Scale: 1.35630000e-05
+  Muon SF Identification Syst: 4.77820000e-05
+  Muon SF Isolation Syst: 1.31040000e-05
+  Muon SF Trigger Syst: 3.70580000e-05
+  Bad Muon Veto: 1.13160000e-06
+  Muon Sagitta Global: 3.47260000e-05
+  Muon Sagitta PTextra: 4.99380000e-06
+  Pileup: 7.60230000e-06
+  MJ MU $E_T^{miss}$: 7.83007071e-06
+  MJ MU d0cut: 1.05733770e-05
+  MJ MU MC Scaling: 2.72530000e-05
+  MJ MU jet mult: 2.75818194e-05
+  MJ MU Shape: 2.62656845e-06
+  MJ MU dphi: 1.66330000e-05
+  $t\bar{t}$ $p_T$-hard: 3.01610667e-06
+  $t\bar{t}$ FSR: 1.66800000e-05
+  $t\bar{t}$ hadronization: 5.74018958e-06
+  $t\bar{t}$ hdamp: 1.13060000e-06
+  $t\bar{t}$ NNPDF: 3.95460000e-05
+  tW Diagram Removel: 1.97678959e-05
+  tW DS hdamp: 1.34720000e-06
+  RW inverted setup 2D: 9.38858140e-06
+  RW Fixed order vs PS $p_T(t)$: 4.20455334e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 7.28543871e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 3.00210000e-06
+  Norm. Single top by 4%: 1.06770000e-05
+  Norm. Diboson by 6%: 1.35960000e-05
+  Norm. Z by 5%: 1.05830000e-05
+- LUMI: 3.51953200e-05
+  Data stat. unc.: 5.97480000e-05
+  Sig. stat. unc.: 4.88030000e-05
+  Bkg. stat. unc.: 1.48130000e-05
+  Alternative MC unf. unc.: 5.08010502e-05
+  Basic unf. unc.: 1.15597071e-05
+  JES Flavor Composition: 1.71690000e-05
+  JES Pileup RhoTopology: 5.19200000e-06
+  JES Pileup OffsetMu: 7.33370000e-06
+  JES Pileup OffsetNPV: 5.20740000e-07
+  JES EtaIntercalib Model: 1.83610000e-06
+  JES Flavor Response: 9.94220000e-06
+  JER EffectiveNP 1: 2.30180000e-05
+  JER EffectiveNP 2: 2.29360000e-05
+  JER EffectiveNP 3: 5.93080000e-06
+  JER EffectiveNP 4: 6.65220000e-06
+  JER EffectiveNP 5: 7.03650000e-07
+  JER EffectiveNP 6: 4.68790000e-06
+  JER EffectiveNP 7rest: 1.01600000e-05
+  JER DataVsMC MC16: 6.89610000e-06
+  $E_T^{miss}$ SoftTrk Scale: 2.66690000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 3.32475813e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.57382750e-05
+  Muon Resolution MS: 3.83400000e-06
+  Muon Scale: 3.11970000e-05
+  Muon SF Identification Syst: 4.77720000e-05
+  Muon SF Isolation Syst: 1.24120000e-05
+  Muon SF Trigger Syst: 2.98800000e-05
+  Bad Muon Veto: 2.47500000e-06
+  Muon Sagitta Global: 3.67550000e-05
+  Muon Sagitta PTextra: 2.15440000e-05
+  Pileup: 4.77860000e-06
+  MJ MU $E_T^{miss}$: 2.02271244e-05
+  MJ MU d0cut: 2.24250545e-05
+  MJ MU MC Scaling: 2.84230000e-05
+  MJ MU jet mult: 3.01893588e-05
+  MJ MU Shape: 2.19563421e-05
+  MJ MU dphi: 2.64450000e-05
+  $t\bar{t}$ $p_T$-hard: 1.84861783e-06
+  $t\bar{t}$ FSR: 1.38330000e-05
+  $t\bar{t}$ hadronization: 4.17311661e-06
+  $t\bar{t}$ hdamp: 1.83330000e-06
+  $t\bar{t}$ NNPDF: 3.61550000e-05
+  tW Diagram Removel: 1.79743573e-05
+  tW DS hdamp: 2.06610000e-06
+  RW inverted setup 2D: 7.52957127e-06
+  RW Fixed order vs PS $p_T(t)$: 3.41248650e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 5.90949755e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 3.07710000e-06
+  Norm. Single top by 4%: 8.42820000e-06
+  Norm. Diboson by 6%: 6.47640000e-06
+  Norm. Z by 5%: 1.48310000e-05
+- LUMI: 3.44939700e-05
+  Data stat. unc.: 6.34770000e-05
+  Sig. stat. unc.: 5.02790000e-05
+  Bkg. stat. unc.: 1.57250000e-05
+  Alternative MC unf. unc.: 6.27348803e-05
+  Basic unf. unc.: 9.63539864e-06
+  JES Flavor Composition: 1.63610000e-05
+  JES Pileup RhoTopology: 3.94930000e-06
+  JES Pileup OffsetMu: 7.21020000e-06
+  JES Pileup OffsetNPV: 3.60860000e-07
+  JES EtaIntercalib Model: 5.32740000e-07
+  JES Flavor Response: 9.14200000e-06
+  JER EffectiveNP 1: 2.51770000e-05
+  JER EffectiveNP 2: 2.60680000e-05
+  JER EffectiveNP 3: 7.37720000e-06
+  JER EffectiveNP 4: 8.26440000e-06
+  JER EffectiveNP 5: 2.03140000e-07
+  JER EffectiveNP 6: 5.54290000e-06
+  JER EffectiveNP 7rest: 1.23670000e-05
+  JER DataVsMC MC16: 8.01310000e-06
+  $E_T^{miss}$ SoftTrk Scale: 2.58840000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 3.22031546e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.56152994e-05
+  Muon Resolution MS: 4.41150000e-06
+  Muon Scale: 3.25650000e-05
+  Muon SF Identification Syst: 4.66230000e-05
+  Muon SF Isolation Syst: 1.21490000e-05
+  Muon SF Trigger Syst: 2.82480000e-05
+  Bad Muon Veto: 2.64580000e-06
+  Muon Sagitta Global: 3.62920000e-05
+  Muon Sagitta PTextra: 2.48710000e-05
+  Pileup: 6.39070000e-06
+  MJ MU $E_T^{miss}$: 2.11273698e-05
+  MJ MU d0cut: 2.34113402e-05
+  MJ MU MC Scaling: 2.78570000e-05
+  MJ MU jet mult: 3.01640408e-05
+  MJ MU Shape: 2.36892589e-05
+  MJ MU dphi: 2.68800000e-05
+  $t\bar{t}$ $p_T$-hard: 1.55425579e-06
+  $t\bar{t}$ FSR: 1.31660000e-05
+  $t\bar{t}$ hadronization: 4.05048742e-06
+  $t\bar{t}$ hdamp: 2.09410000e-06
+  $t\bar{t}$ NNPDF: 3.48250000e-05
+  tW Diagram Removel: 1.72711446e-05
+  tW DS hdamp: 2.12760000e-06
+  RW inverted setup 2D: 7.14921291e-06
+  RW Fixed order vs PS $p_T(t)$: 3.23027476e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 5.59365808e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 3.00960000e-06
+  Norm. Single top by 4%: 7.95560000e-06
+  Norm. Diboson by 6%: 5.68800000e-06
+  Norm. Z by 5%: 1.49720000e-05
+- LUMI: 3.28215200e-05
+  Data stat. unc.: 5.86540000e-05
+  Sig. stat. unc.: 5.56290000e-05
+  Bkg. stat. unc.: 1.39580000e-05
+  Alternative MC unf. unc.: 5.75863592e-05
+  Basic unf. unc.: 9.02485073e-06
+  JES Flavor Composition: 1.99700000e-05
+  JES Pileup RhoTopology: 5.45430000e-06
+  JES Pileup OffsetMu: 1.12900000e-05
+  JES Pileup OffsetNPV: 1.66650000e-06
+  JES EtaIntercalib Model: 8.26890000e-06
+  JES Flavor Response: 9.56180000e-06
+  JER EffectiveNP 1: 2.98350000e-05
+  JER EffectiveNP 2: 3.13470000e-05
+  JER EffectiveNP 3: 1.05730000e-05
+  JER EffectiveNP 4: 1.50220000e-05
+  JER EffectiveNP 5: 1.24570000e-06
+  JER EffectiveNP 6: 1.04790000e-05
+  JER EffectiveNP 7rest: 1.85440000e-05
+  JER DataVsMC MC16: 8.32080000e-06
+  $E_T^{miss}$ SoftTrk Scale: 2.93600000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 2.69056772e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.54195777e-05
+  Muon Resolution MS: 5.11500000e-06
+  Muon Scale: 3.27730000e-05
+  Muon SF Identification Syst: 4.31990000e-05
+  Muon SF Isolation Syst: 1.08210000e-05
+  Muon SF Trigger Syst: 2.53140000e-05
+  Bad Muon Veto: 3.13560000e-06
+  Muon Sagitta Global: 3.51130000e-05
+  Muon Sagitta PTextra: 4.47690000e-05
+  Pileup: 1.44250000e-05
+  MJ MU $E_T^{miss}$: 2.33481832e-05
+  MJ MU d0cut: 2.64343828e-05
+  MJ MU MC Scaling: 2.50300000e-05
+  MJ MU jet mult: 2.63549668e-05
+  MJ MU Shape: 2.37334262e-05
+  MJ MU dphi: 2.28420000e-05
+  $t\bar{t}$ $p_T$-hard: 4.23434461e-07
+  $t\bar{t}$ FSR: 1.10730000e-05
+  $t\bar{t}$ hadronization: 3.87182638e-06
+  $t\bar{t}$ hdamp: 5.72390000e-06
+  $t\bar{t}$ NNPDF: 3.18670000e-05
+  tW Diagram Removel: 1.37559475e-05
+  tW DS hdamp: 4.38280000e-06
+  RW inverted setup 2D: 5.67445825e-06
+  RW Fixed order vs PS $p_T(t)$: 2.56508064e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 4.43967923e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.58790000e-06
+  Norm. Single top by 4%: 6.55950000e-06
+  Norm. Diboson by 6%: 1.21620000e-05
+  Norm. Z by 5%: 1.74400000e-05
+- LUMI: 3.08942600e-05
+  Data stat. unc.: 5.55950000e-05
+  Sig. stat. unc.: 3.98580000e-05
+  Bkg. stat. unc.: 1.31720000e-05
+  Alternative MC unf. unc.: 3.82246293e-05
+  Basic unf. unc.: 1.13830379e-05
+  JES Flavor Composition: 2.01080000e-05
+  JES Pileup RhoTopology: 6.88360000e-06
+  JES Pileup OffsetMu: 1.39590000e-05
+  JES Pileup OffsetNPV: 2.84240000e-06
+  JES EtaIntercalib Model: 1.05220000e-05
+  JES Flavor Response: 1.13510000e-05
+  JER EffectiveNP 1: 3.17170000e-05
+  JER EffectiveNP 2: 2.85700000e-05
+  JER EffectiveNP 3: 5.61250000e-06
+  JER EffectiveNP 4: 1.06960000e-05
+  JER EffectiveNP 5: 1.34120000e-06
+  JER EffectiveNP 6: 9.97590000e-06
+  JER EffectiveNP 7rest: 1.02030000e-05
+  JER DataVsMC MC16: 7.71450000e-06
+  $E_T^{miss}$ SoftTrk Scale: 3.53680000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 2.57045000e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.80678833e-05
+  Muon Resolution MS: 5.19600000e-06
+  Muon Scale: 2.95070000e-05
+  Muon SF Identification Syst: 3.97480000e-05
+  Muon SF Isolation Syst: 9.68150000e-06
+  Muon SF Trigger Syst: 2.28730000e-05
+  Bad Muon Veto: 3.37820000e-06
+  Muon Sagitta Global: 3.59780000e-05
+  Muon Sagitta PTextra: 5.23480000e-05
+  Pileup: 1.86900000e-05
+  MJ MU $E_T^{miss}$: 2.31960984e-05
+  MJ MU d0cut: 2.65347822e-05
+  MJ MU MC Scaling: 2.27900000e-05
+  MJ MU jet mult: 2.82046687e-05
+  MJ MU Shape: 2.63609473e-05
+  MJ MU dphi: 2.69040000e-05
+  $t\bar{t}$ $p_T$-hard: 4.29687164e-07
+  $t\bar{t}$ FSR: 1.19310000e-05
+  $t\bar{t}$ hadronization: 3.17839983e-06
+  $t\bar{t}$ hdamp: 4.73420000e-06
+  $t\bar{t}$ NNPDF: 3.07420000e-05
+  tW Diagram Removel: 8.93911422e-06
+  tW DS hdamp: 5.07080000e-06
+  RW inverted setup 2D: 4.63990431e-06
+  RW Fixed order vs PS $p_T(t)$: 2.11197615e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 3.65367458e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.50830000e-06
+  Norm. Single top by 4%: 5.19380000e-06
+  Norm. Diboson by 6%: 1.21150000e-05
+  Norm. Z by 5%: 2.16980000e-05
+- LUMI: 3.05431700e-05
+  Data stat. unc.: 5.61210000e-05
+  Sig. stat. unc.: 4.56530000e-05
+  Bkg. stat. unc.: 1.26490000e-05
+  Alternative MC unf. unc.: 1.74304933e-05
+  Basic unf. unc.: 1.60084796e-05
+  JES Flavor Composition: 2.05550000e-05
+  JES Pileup RhoTopology: 1.02580000e-05
+  JES Pileup OffsetMu: 9.81820000e-06
+  JES Pileup OffsetNPV: 1.92900000e-06
+  JES EtaIntercalib Model: 2.55680000e-06
+  JES Flavor Response: 1.40810000e-05
+  JER EffectiveNP 1: 2.98750000e-05
+  JER EffectiveNP 2: 1.90160000e-05
+  JER EffectiveNP 3: 4.28740000e-06
+  JER EffectiveNP 4: 7.05470000e-07
+  JER EffectiveNP 5: 2.02230000e-08
+  JER EffectiveNP 6: 3.13840000e-07
+  JER EffectiveNP 7rest: 7.34520000e-06
+  JER DataVsMC MC16: 6.93350000e-06
+  $E_T^{miss}$ SoftTrk Scale: 3.55700000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 2.47726567e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 3.03420660e-05
+  Muon Resolution MS: 4.92360000e-06
+  Muon Scale: 2.41010000e-05
+  Muon SF Identification Syst: 3.92730000e-05
+  Muon SF Isolation Syst: 8.85140000e-06
+  Muon SF Trigger Syst: 2.12990000e-05
+  Bad Muon Veto: 3.94810000e-06
+  Muon Sagitta Global: 3.98940000e-05
+  Muon Sagitta PTextra: 5.62010000e-05
+  Pileup: 1.41330000e-05
+  MJ MU $E_T^{miss}$: 2.05438969e-05
+  MJ MU d0cut: 2.40733366e-05
+  MJ MU MC Scaling: 1.82880000e-05
+  MJ MU jet mult: 2.69860623e-05
+  MJ MU Shape: 2.52584969e-05
+  MJ MU dphi: 2.47230000e-05
+  $t\bar{t}$ $p_T$-hard: 1.20559396e-06
+  $t\bar{t}$ FSR: 1.31350000e-05
+  $t\bar{t}$ hadronization: 2.35186519e-06
+  $t\bar{t}$ hdamp: 1.48030000e-06
+  $t\bar{t}$ NNPDF: 2.85840000e-05
+  tW Diagram Removel: 3.58430594e-06
+  tW DS hdamp: 5.41140000e-06
+  RW inverted setup 2D: 3.60309869e-06
+  RW Fixed order vs PS $p_T(t)$: 1.58413367e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 2.73949816e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.29020000e-06
+  Norm. Single top by 4%: 4.09820000e-06
+  Norm. Diboson by 6%: 1.11220000e-05
+  Norm. Z by 5%: 2.54040000e-05
+- LUMI: 2.58860400e-05
+  Data stat. unc.: 5.97610000e-05
+  Sig. stat. unc.: 4.62110000e-05
+  Bkg. stat. unc.: 1.26410000e-05
+  Alternative MC unf. unc.: 7.59331074e-06
+  Basic unf. unc.: 1.66623288e-05
+  JES Flavor Composition: 1.60440000e-05
+  JES Pileup RhoTopology: 1.09480000e-05
+  JES Pileup OffsetMu: 3.28780000e-06
+  JES Pileup OffsetNPV: 6.52670000e-07
+  JES EtaIntercalib Model: 7.55180000e-06
+  JES Flavor Response: 1.44420000e-05
+  JER EffectiveNP 1: 2.55320000e-05
+  JER EffectiveNP 2: 2.49480000e-06
+  JER EffectiveNP 3: 1.00210000e-05
+  JER EffectiveNP 4: 8.57780000e-06
+  JER EffectiveNP 5: 1.09910000e-06
+  JER EffectiveNP 6: 1.13430000e-05
+  JER EffectiveNP 7rest: 1.78850000e-05
+  JER DataVsMC MC16: 5.78810000e-06
+  $E_T^{miss}$ SoftTrk Scale: 2.93060000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 2.30284815e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.74521393e-05
+  Muon Resolution MS: 3.88410000e-06
+  Muon Scale: 1.64460000e-05
+  Muon SF Identification Syst: 3.37340000e-05
+  Muon SF Isolation Syst: 7.01660000e-06
+  Muon SF Trigger Syst: 1.72010000e-05
+  Bad Muon Veto: 4.63150000e-06
+  Muon Sagitta Global: 3.57520000e-05
+  Muon Sagitta PTextra: 4.80550000e-05
+  Pileup: 6.65760000e-06
+  MJ MU $E_T^{miss}$: 1.43489558e-05
+  MJ MU d0cut: 1.72059816e-05
+  MJ MU MC Scaling: 1.22800000e-05
+  MJ MU jet mult: 1.87877581e-05
+  MJ MU Shape: 1.69126101e-05
+  MJ MU dphi: 1.72160000e-05
+  $t\bar{t}$ $p_T$-hard: 1.94821075e-06
+  $t\bar{t}$ FSR: 1.10530000e-05
+  $t\bar{t}$ hadronization: 1.47622690e-06
+  $t\bar{t}$ hdamp: 5.98890000e-06
+  $t\bar{t}$ NNPDF: 2.66320000e-05
+  tW Diagram Removel: 1.22395370e-06
+  tW DS hdamp: 5.33420000e-06
+  RW inverted setup 2D: 2.60413839e-06
+  RW Fixed order vs PS $p_T(t)$: 1.14791667e-05
+  RW Fixed order vs PS $m(t\bar{t})$: 1.98415080e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 2.22950000e-06
+  Norm. Single top by 4%: 2.66070000e-06
+  Norm. Diboson by 6%: 9.99450000e-06
+  Norm. Z by 5%: 3.02300000e-05
+- LUMI: 2.45480800e-05
+  Data stat. unc.: 5.43570000e-05
+  Sig. stat. unc.: 3.82830000e-05
+  Bkg. stat. unc.: 1.10830000e-05
+  Alternative MC unf. unc.: 7.20082803e-06
+  Basic unf. unc.: 1.69325287e-05
+  JES Flavor Composition: 1.62850000e-05
+  JES Pileup RhoTopology: 1.14170000e-05
+  JES Pileup OffsetMu: 1.69450000e-06
+  JES Pileup OffsetNPV: 8.18420000e-07
+  JES EtaIntercalib Model: 1.52490000e-05
+  JES Flavor Response: 2.01170000e-05
+  JER EffectiveNP 1: 2.25120000e-05
+  JER EffectiveNP 2: 5.29150000e-06
+  JER EffectiveNP 3: 1.20250000e-05
+  JER EffectiveNP 4: 1.78390000e-05
+  JER EffectiveNP 5: 2.69930000e-06
+  JER EffectiveNP 6: 1.58150000e-05
+  JER EffectiveNP 7rest: 2.08080000e-05
+  JER DataVsMC MC16: 4.77820000e-06
+  $E_T^{miss}$ SoftTrk Scale: 2.25610000e-05
+  $E_T^{miss}$ SoftTrk ResoPara: 2.42807542e-05
+  $E_T^{miss}$ SoftTrk ResoPerp: 2.41872235e-05
+  Muon Resolution MS: 3.54970000e-06
+  Muon Scale: 1.39130000e-05
+  Muon SF Identification Syst: 3.28990000e-05
+  Muon SF Isolation Syst: 6.22730000e-06
+  Muon SF Trigger Syst: 1.54210000e-05
+  Bad Muon Veto: 4.91460000e-06
+  Muon Sagitta Global: 3.58780000e-05
+  Muon Sagitta PTextra: 4.53580000e-05
+  Pileup: 3.01590000e-06
+  MJ MU $E_T^{miss}$: 7.32461331e-06
+  MJ MU d0cut: 8.55516730e-06
+  MJ MU MC Scaling: 5.67700000e-06
+  MJ MU jet mult: 8.67321545e-06
+  MJ MU Shape: 8.09032272e-06
+  MJ MU dphi: 8.28130000e-06
+  $t\bar{t}$ $p_T$-hard: 1.60587091e-06
+  $t\bar{t}$ FSR: 7.63840000e-06
+  $t\bar{t}$ hadronization: 1.30657253e-06
+  $t\bar{t}$ hdamp: 6.06150000e-06
+  $t\bar{t}$ NNPDF: 2.22800000e-05
+  tW Diagram Removel: 4.52073921e-06
+  tW DS hdamp: 7.32e-06
+  RW inverted setup 2D: 1.74599382e-06
+  RW Fixed order vs PS $p_T(t)$: 7.17484727e-06
+  RW Fixed order vs PS $m(t\bar{t})$: 1.23919575e-05
+  Norm. $W\rightarrow\tau\nu$ by 5%: 1.94030000e-06
+  Norm. Single top by 4%: 2.03300000e-06
+  Norm. Diboson by 6%: 8.79290000e-06
+  Norm. Z by 5%: 3.61950000e-05
 - LUMI: 6.24799100e-06
   Data stat. unc.: 3.26410000e-05
   Sig. stat. unc.: 1.87290000e-05
@@ -2704,318 +3536,6 @@ bins:
   Norm. Single top by 4%: 1.93220000e-07
   Norm. Diboson by 6%: 1.47070000e-06
   Norm. Z by 5%: 4.89030000e-06
-- LUMI: 2.89578700e-06
-  Data stat. unc.: 9.91610000e-06
-  Sig. stat. unc.: 4.82740000e-06
-  Bkg. stat. unc.: 1.64520000e-06
-  Alternative MC unf. unc.: 1.87988134e-06
-  Basic unf. unc.: 9.75664220e-08
-  JES Flavor Composition: 1.50140000e-07
-  JES Pileup RhoTopology: 1.24620000e-07
-  JES Pileup OffsetMu: 1.33940000e-07
-  JES Pileup OffsetNPV: 1.62320000e-07
-  JES EtaIntercalib Model: 2.73950000e-08
-  JES Flavor Response: 3.99160000e-07
-  JER EffectiveNP 1: 1.78660000e-06
-  JER EffectiveNP 2: 1.57150000e-06
-  JER EffectiveNP 3: 4.60240000e-08
-  JER EffectiveNP 4: 3.06320000e-08
-  JER EffectiveNP 5: 1.72550000e-06
-  JER EffectiveNP 6: 7.19760000e-08
-  JER EffectiveNP 7rest: 2.71070000e-08
-  JER DataVsMC MC16: 8.57270000e-08
-  $E_T^{miss}$ SoftTrk Scale: 2.57620000e-07
-  $E_T^{miss}$ SoftTrk ResoPara: 6.98414847e-07
-  $E_T^{miss}$ SoftTrk ResoPerp: 4.18472135e-07
-  Muon Resolution MS: 2.75440000e-07
-  Muon Scale: 7.54290000e-07
-  Muon SF Identification Syst: 3.01840000e-06
-  Muon SF Isolation Syst: 2.24700000e-06
-  Muon SF Trigger Syst: 2.49810000e-06
-  Bad Muon Veto: 5.30280000e-08
-  Muon Sagitta Global: 3.81510000e-06
-  Muon Sagitta PTextra: 5.37270000e-08
-  Pileup: 6.61410000e-08
-  MJ MU $E_T^{miss}$: 2.07277951e-07
-  MJ MU d0cut: 1.52730672e-06
-  MJ MU MC Scaling: 1.85150000e-06
-  MJ MU jet mult: 1.37947000e-06
-  MJ MU Shape: 3.08729396e-07
-  MJ MU dphi: 1.67560000e-06
-  $t\bar{t}$ $p_T$-hard: 1.26344446e-06
-  $t\bar{t}$ FSR: 8.28430000e-07
-  $t\bar{t}$ hadronization: 2.65817837e-06
-  $t\bar{t}$ hdamp: 1.16160000e-06
-  $t\bar{t}$ NNPDF: 9.98300000e-07
-  tW Diagram Removel: 3.80193813e-06
-  tW DS hdamp: 1.01060000e-06
-  RW inverted setup 2D: 6.62102402e-07
-  RW Fixed order vs PS $p_T(t)$: 9.25088336e-07
-  RW Fixed order vs PS $m(t\bar{t})$: 1.62171917e-06
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.74290000e-07
-  Norm. Single top by 4%: 4.00920000e-07
-  Norm. Diboson by 6%: 7.45180000e-07
-  Norm. Z by 5%: 7.46600000e-07
-- LUMI: 2.79834500e-06
-  Data stat. unc.: 7.88440000e-06
-  Sig. stat. unc.: 4.32030000e-06
-  Bkg. stat. unc.: 1.26430000e-06
-  Alternative MC unf. unc.: 1.88455788e-06
-  Basic unf. unc.: 2.66510658e-08
-  JES Flavor Composition: 8.73360000e-08
-  JES Pileup RhoTopology: 1.39400000e-07
-  JES Pileup OffsetMu: 1.66440000e-07
-  JES Pileup OffsetNPV: 1.58630000e-08
-  JES EtaIntercalib Model: 6.83850000e-08
-  JES Flavor Response: 4.22060000e-07
-  JER EffectiveNP 1: 9.20020000e-07
-  JER EffectiveNP 2: 7.47230000e-07
-  JER EffectiveNP 3: 1.29260000e-08
-  JER EffectiveNP 4: 1.30170000e-08
-  JER EffectiveNP 5: 4.99190000e-07
-  JER EffectiveNP 6: 4.06560000e-08
-  JER EffectiveNP 7rest: 5.76690000e-09
-  JER DataVsMC MC16: 3.44200000e-08
-  $E_T^{miss}$ SoftTrk Scale: 2.97290000e-07
-  $E_T^{miss}$ SoftTrk ResoPara: 4.35532836e-07
-  $E_T^{miss}$ SoftTrk ResoPerp: 1.88100718e-07
-  Muon Resolution MS: 1.55100000e-07
-  Muon Scale: 6.47040000e-07
-  Muon SF Identification Syst: 2.79620000e-06
-  Muon SF Isolation Syst: 2.13880000e-06
-  Muon SF Trigger Syst: 2.24970000e-06
-  Bad Muon Veto: 7.23360000e-08
-  Muon Sagitta Global: 3.55160000e-06
-  Muon Sagitta PTextra: 6.42090000e-07
-  Pileup: 9.59180000e-08
-  MJ MU $E_T^{miss}$: 1.20758776e-07
-  MJ MU d0cut: 9.54605030e-07
-  MJ MU MC Scaling: 1.16040000e-06
-  MJ MU jet mult: 9.38031667e-07
-  MJ MU Shape: 2.73672688e-07
-  MJ MU dphi: 1.17210000e-06
-  $t\bar{t}$ $p_T$-hard: 3.76859615e-07
-  $t\bar{t}$ FSR: 6.71150000e-07
-  $t\bar{t}$ hadronization: 2.21815087e-06
-  $t\bar{t}$ hdamp: 7.04170000e-07
-  $t\bar{t}$ NNPDF: 8.52920000e-07
-  tW Diagram Removel: 1.79120034e-06
-  tW DS hdamp: 6.17290000e-08
-  RW inverted setup 2D: 5.83891648e-07
-  RW Fixed order vs PS $p_T(t)$: 8.03117318e-07
-  RW Fixed order vs PS $m(t\bar{t})$: 1.40746449e-06
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.69110000e-07
-  Norm. Single top by 4%: 3.54410000e-07
-  Norm. Diboson by 6%: 7.07800000e-07
-  Norm. Z by 5%: 8.46650000e-07
-- LUMI: 2.50693200e-06
-  Data stat. unc.: 6.00790000e-06
-  Sig. stat. unc.: 3.60840000e-06
-  Bkg. stat. unc.: 9.76500000e-07
-  Alternative MC unf. unc.: 1.90811377e-06
-  Basic unf. unc.: 5.76556413e-07
-  JES Flavor Composition: 3.20610000e-07
-  JES Pileup RhoTopology: 1.87900000e-07
-  JES Pileup OffsetMu: 1.58330000e-07
-  JES Pileup OffsetNPV: 1.73330000e-09
-  JES EtaIntercalib Model: 7.45040000e-08
-  JES Flavor Response: 3.42330000e-07
-  JER EffectiveNP 1: 6.81840000e-07
-  JER EffectiveNP 2: 3.39820000e-07
-  JER EffectiveNP 3: 1.38670000e-07
-  JER EffectiveNP 4: 2.43110000e-08
-  JER EffectiveNP 5: 3.79190000e-07
-  JER EffectiveNP 6: 1.02990000e-07
-  JER EffectiveNP 7rest: 1.05760000e-07
-  JER DataVsMC MC16: 1.03870000e-07
-  $E_T^{miss}$ SoftTrk Scale: 3.64630000e-07
-  $E_T^{miss}$ SoftTrk ResoPara: 3.51259904e-07
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.37325602e-07
-  Muon Resolution MS: 1.93220000e-07
-  Muon Scale: 8.22300000e-07
-  Muon SF Identification Syst: 2.90910000e-06
-  Muon SF Isolation Syst: 1.90210000e-06
-  Muon SF Trigger Syst: 1.88620000e-06
-  Bad Muon Veto: 6.59550000e-09
-  Muon Sagitta Global: 3.64940000e-06
-  Muon Sagitta PTextra: 1.96060000e-06
-  Pileup: 1.42430000e-07
-  MJ MU $E_T^{miss}$: 2.09136706e-07
-  MJ MU d0cut: 7.83876305e-07
-  MJ MU MC Scaling: 9.00870000e-07
-  MJ MU jet mult: 7.15376185e-07
-  MJ MU Shape: 2.40703101e-08
-  MJ MU dphi: 8.86010000e-07
-  $t\bar{t}$ $p_T$-hard: 3.75855025e-07
-  $t\bar{t}$ FSR: 5.03630000e-07
-  $t\bar{t}$ hadronization: 1.66294198e-06
-  $t\bar{t}$ hdamp: 4.79250000e-07
-  $t\bar{t}$ NNPDF: 7.93820000e-07
-  tW Diagram Removel: 1.31713804e-06
-  tW DS hdamp: 1.37140000e-07
-  RW inverted setup 2D: 4.95522416e-07
-  RW Fixed order vs PS $p_T(t)$: 6.67844150e-07
-  RW Fixed order vs PS $m(t\bar{t})$: 1.17043333e-06
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.41750000e-07
-  Norm. Single top by 4%: 2.95270000e-07
-  Norm. Diboson by 6%: 6.19740000e-07
-  Norm. Z by 5%: 9.48380000e-07
-- LUMI: 1.87173300e-06
-  Data stat. unc.: 7.03710000e-06
-  Sig. stat. unc.: 5.39870000e-06
-  Bkg. stat. unc.: 1.30270000e-06
-  Alternative MC unf. unc.: 1.23270056e-06
-  Basic unf. unc.: 1.02312241e-06
-  JES Flavor Composition: 1.13710000e-06
-  JES Pileup RhoTopology: 3.70390000e-07
-  JES Pileup OffsetMu: 2.49440000e-07
-  JES Pileup OffsetNPV: 8.88340000e-08
-  JES EtaIntercalib Model: 1.87400000e-07
-  JES Flavor Response: 3.17480000e-07
-  JER EffectiveNP 1: 1.28710000e-07
-  JER EffectiveNP 2: 9.06340000e-07
-  JER EffectiveNP 3: 5.90330000e-08
-  JER EffectiveNP 4: 3.46340000e-08
-  JER EffectiveNP 5: 3.02140000e-08
-  JER EffectiveNP 6: 1.14810000e-07
-  JER EffectiveNP 7rest: 1.25610000e-07
-  JER DataVsMC MC16: 1.26920000e-07
-  $E_T^{miss}$ SoftTrk Scale: 4.59170000e-07
-  $E_T^{miss}$ SoftTrk ResoPara: 1.94691171e-07
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.14124781e-07
-  Muon Resolution MS: 1.45170000e-06
-  Muon Scale: 1.29990000e-06
-  Muon SF Identification Syst: 3.58680000e-06
-  Muon SF Isolation Syst: 1.40730000e-06
-  Muon SF Trigger Syst: 1.08920000e-06
-  Bad Muon Veto: 1.69220000e-07
-  Muon Sagitta Global: 4.32540000e-06
-  Muon Sagitta PTextra: 9.22330000e-06
-  Pileup: 2.04480000e-07
-  MJ MU $E_T^{miss}$: 5.93123031e-07
-  MJ MU d0cut: 5.95630933e-07
-  MJ MU MC Scaling: 4.54370000e-07
-  MJ MU jet mult: 4.48261096e-07
-  MJ MU Shape: 7.72442699e-07
-  MJ MU dphi: 2.64260000e-07
-  $t\bar{t}$ $p_T$-hard: 6.95903373e-08
-  $t\bar{t}$ FSR: 2.52110000e-07
-  $t\bar{t}$ hadronization: 2.18662754e-07
-  $t\bar{t}$ hdamp: 3.26690000e-07
-  $t\bar{t}$ NNPDF: 7.69360000e-07
-  tW Diagram Removel: 3.91261617e-07
-  tW DS hdamp: 7.42930000e-07
-  RW inverted setup 2D: 3.11379434e-07
-  RW Fixed order vs PS $p_T(t)$: 4.01662582e-07
-  RW Fixed order vs PS $m(t\bar{t})$: 7.03792865e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: 1.74830000e-07
-  Norm. Single top by 4%: 1.89360000e-07
-  Norm. Diboson by 6%: 4.25210000e-07
-  Norm. Z by 5%: 1.28370000e-06
-- LUMI: 1.36551600e-06
-  Data stat. unc.: 5.78880000e-06
-  Sig. stat. unc.: 2.84430000e-06
-  Bkg. stat. unc.: 1.16540000e-06
-  Alternative MC unf. unc.: 2.33774897e-07
-  Basic unf. unc.: 9.52887752e-07
-  JES Flavor Composition: 8.33300000e-07
-  JES Pileup RhoTopology: 2.39910000e-07
-  JES Pileup OffsetMu: 1.03500000e-07
-  JES Pileup OffsetNPV: 9.13240000e-09
-  JES EtaIntercalib Model: 5.09700000e-08
-  JES Flavor Response: 1.64590000e-07
-  JER EffectiveNP 1: 1.80130000e-08
-  JER EffectiveNP 2: 8.60300000e-07
-  JER EffectiveNP 3: 2.98090000e-08
-  JER EffectiveNP 4: 1.28670000e-07
-  JER EffectiveNP 5: 3.04260000e-08
-  JER EffectiveNP 6: 1.37390000e-07
-  JER EffectiveNP 7rest: 1.53060000e-07
-  JER DataVsMC MC16: 9.81170000e-08
-  $E_T^{miss}$ SoftTrk Scale: 1.34010000e-07
-  $E_T^{miss}$ SoftTrk ResoPara: 3.35065229e-08
-  $E_T^{miss}$ SoftTrk ResoPerp: 6.41205209e-08
-  Muon Resolution MS: 1.33120000e-06
-  Muon Scale: 1.06320000e-06
-  Muon SF Identification Syst: 3.01350000e-06
-  Muon SF Isolation Syst: 9.98380000e-07
-  Muon SF Trigger Syst: 8.19870000e-07
-  Bad Muon Veto: 2.62740000e-07
-  Muon Sagitta Global: 3.63270000e-06
-  Muon Sagitta PTextra: 9.03030000e-06
-  Pileup: 4.40310000e-08
-  MJ MU $E_T^{miss}$: 3.79580482e-07
-  MJ MU d0cut: 3.01422136e-07
-  MJ MU MC Scaling: 2.23630000e-07
-  MJ MU jet mult: 2.42662088e-07
-  MJ MU Shape: 4.37550675e-07
-  MJ MU dphi: 2.66100000e-07
-  $t\bar{t}$ $p_T$-hard: 1.09006618e-08
-  $t\bar{t}$ FSR: 4.33890000e-07
-  $t\bar{t}$ hadronization: 1.62760814e-07
-  $t\bar{t}$ hdamp: 4.35770000e-07
-  $t\bar{t}$ NNPDF: 6.66860000e-07
-  tW Diagram Removel: 2.36156467e-07
-  tW DS hdamp: 5.62770000e-07
-  RW inverted setup 2D: 1.74365555e-07
-  RW Fixed order vs PS $p_T(t)$: 2.36883929e-07
-  RW Fixed order vs PS $m(t\bar{t})$: 4.13960143e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: 1.10970000e-07
-  Norm. Single top by 4%: 1.00440000e-07
-  Norm. Diboson by 6%: 3.14550000e-07
-  Norm. Z by 5%: 1.27920000e-06
-- LUMI: 8.23775000e-07
-  Data stat. unc.: 5.19300000e-06
-  Sig. stat. unc.: 1.27290000e-06
-  Bkg. stat. unc.: 1.20090000e-06
-  Alternative MC unf. unc.: 1.44366435e-06
-  Basic unf. unc.: 5.94976773e-07
-  JES Flavor Composition: 4.78820000e-07
-  JES Pileup RhoTopology: 1.34580000e-07
-  JES Pileup OffsetMu: 3.87010000e-08
-  JES Pileup OffsetNPV: 1.35740000e-08
-  JES EtaIntercalib Model: 1.56640000e-09
-  JES Flavor Response: 9.32180000e-08
-  JER EffectiveNP 1: 3.43160000e-08
-  JER EffectiveNP 2: 5.36230000e-07
-  JER EffectiveNP 3: 3.66980000e-09
-  JER EffectiveNP 4: 1.01130000e-07
-  JER EffectiveNP 5: 2.33230000e-08
-  JER EffectiveNP 6: 7.01530000e-08
-  JER EffectiveNP 7rest: 1.00330000e-07
-  JER DataVsMC MC16: 6.03070000e-08
-  $E_T^{miss}$ SoftTrk Scale: 1.98980000e-09
-  $E_T^{miss}$ SoftTrk ResoPara: 6.16843914e-08
-  $E_T^{miss}$ SoftTrk ResoPerp: 1.53710849e-07
-  Muon Resolution MS: 8.21940000e-07
-  Muon Scale: 6.32870000e-07
-  Muon SF Identification Syst: 1.84380000e-06
-  Muon SF Isolation Syst: 5.88480000e-07
-  Muon SF Trigger Syst: 5.47800000e-07
-  Bad Muon Veto: 2.51390000e-07
-  Muon Sagitta Global: 2.25780000e-06
-  Muon Sagitta PTextra: 5.93900000e-06
-  Pileup: 3.91520000e-08
-  MJ MU $E_T^{miss}$: 5.96551480e-07
-  MJ MU d0cut: 5.10850971e-07
-  MJ MU MC Scaling: 4.63990000e-07
-  MJ MU jet mult: 4.03476057e-07
-  MJ MU Shape: 6.44115054e-07
-  MJ MU dphi: 4.38950000e-07
-  $t\bar{t}$ $p_T$-hard: 2.14237364e-10
-  $t\bar{t}$ FSR: 4.29080000e-07
-  $t\bar{t}$ hadronization: 2.16618934e-07
-  $t\bar{t}$ hdamp: 3.88980000e-07
-  $t\bar{t}$ NNPDF: 4.40350000e-07
-  tW Diagram Removel: 1.12314835e-07
-  tW DS hdamp: 2.90050000e-07
-  RW inverted setup 2D: 7.59357055e-08
-  RW Fixed order vs PS $p_T(t)$: 1.12834450e-07
-  RW Fixed order vs PS $m(t\bar{t})$: 1.96466523e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: 4.84360000e-08
-  Norm. Single top by 4%: 4.68940000e-08
-  Norm. Diboson by 6%: 1.78940000e-07
-  Norm. Z by 5%: 9.72410000e-07
 - LUMI: 1.32791700e-06
   Data stat. unc.: 7.55220000e-06
   Sig. stat. unc.: 5.68890000e-06
@@ -3328,318 +3848,6 @@ bins:
   Norm. Single top by 4%: 3.94210000e-08
   Norm. Diboson by 6%: 3.06060000e-07
   Norm. Z by 5%: 6.28910000e-07
-- LUMI: 6.05045100e-07
-  Data stat. unc.: 3.26610000e-06
-  Sig. stat. unc.: 1.47200000e-06
-  Bkg. stat. unc.: 4.32510000e-07
-  Alternative MC unf. unc.: 8.70961749e-07
-  Basic unf. unc.: 1.21702550e-07
-  JES Flavor Composition: 1.46060000e-07
-  JES Pileup RhoTopology: 5.34340000e-08
-  JES Pileup OffsetMu: 3.64200000e-08
-  JES Pileup OffsetNPV: 1.56310000e-08
-  JES EtaIntercalib Model: 7.48580000e-08
-  JES Flavor Response: 3.61100000e-08
-  JER EffectiveNP 1: 1.02940000e-07
-  JER EffectiveNP 2: 9.80060000e-08
-  JER EffectiveNP 3: 8.74570000e-08
-  JER EffectiveNP 4: 1.33130000e-07
-  JER EffectiveNP 5: 1.26800000e-07
-  JER EffectiveNP 6: 4.04040000e-08
-  JER EffectiveNP 7rest: 1.20100000e-07
-  JER DataVsMC MC16: 9.01420000e-08
-  $E_T^{miss}$ SoftTrk Scale: 8.92330000e-08
-  $E_T^{miss}$ SoftTrk ResoPara: 9.87701973e-09
-  $E_T^{miss}$ SoftTrk ResoPerp: 3.55616012e-08
-  Muon Resolution MS: 2.36780000e-08
-  Muon Scale: 7.61080000e-08
-  Muon SF Identification Syst: 1.01760000e-06
-  Muon SF Isolation Syst: 4.29480000e-07
-  Muon SF Trigger Syst: 4.78270000e-07
-  Bad Muon Veto: 6.83490000e-09
-  Muon Sagitta Global: 1.28270000e-06
-  Muon Sagitta PTextra: 9.31140000e-09
-  Pileup: 3.17490000e-07
-  MJ MU $E_T^{miss}$: 1.44377049e-08
-  MJ MU d0cut: 1.45230863e-07
-  MJ MU MC Scaling: 1.69420000e-07
-  MJ MU jet mult: 1.22344063e-07
-  MJ MU Shape: 3.49458571e-08
-  MJ MU dphi: 1.58720000e-07
-  $t\bar{t}$ $p_T$-hard: 8.29609036e-08
-  $t\bar{t}$ FSR: 1.36300000e-07
-  $t\bar{t}$ hadronization: 1.68519883e-07
-  $t\bar{t}$ hdamp: 2.60020000e-07
-  $t\bar{t}$ NNPDF: 1.41250000e-07
-  tW Diagram Removel: 3.55278262e-07
-  tW DS hdamp: 3.70560000e-08
-  RW inverted setup 2D: 7.84558394e-08
-  RW Fixed order vs PS $p_T(t)$: 7.72520641e-08
-  RW Fixed order vs PS $m(t\bar{t})$: 1.36390341e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: 5.22600000e-08
-  Norm. Single top by 4%: 4.86110000e-08
-  Norm. Diboson by 6%: 1.22590000e-07
-  Norm. Z by 5%: 1.29520000e-07
-- LUMI: 5.17505000e-07
-  Data stat. unc.: 2.47860000e-06
-  Sig. stat. unc.: 1.59340000e-06
-  Bkg. stat. unc.: 2.99140000e-07
-  Alternative MC unf. unc.: 7.12634984e-07
-  Basic unf. unc.: 1.04087593e-07
-  JES Flavor Composition: 1.16910000e-07
-  JES Pileup RhoTopology: 4.62170000e-08
-  JES Pileup OffsetMu: 2.56530000e-08
-  JES Pileup OffsetNPV: 2.48370000e-08
-  JES EtaIntercalib Model: 5.83250000e-08
-  JES Flavor Response: 1.29480000e-08
-  JER EffectiveNP 1: 9.49500000e-08
-  JER EffectiveNP 2: 8.47550000e-08
-  JER EffectiveNP 3: 3.58830000e-08
-  JER EffectiveNP 4: 4.98580000e-08
-  JER EffectiveNP 5: 2.16330000e-08
-  JER EffectiveNP 6: 3.77680000e-09
-  JER EffectiveNP 7rest: 3.08560000e-08
-  JER DataVsMC MC16: 4.74730000e-08
-  $E_T^{miss}$ SoftTrk Scale: 9.77660000e-08
-  $E_T^{miss}$ SoftTrk ResoPara: 4.95063422e-08
-  $E_T^{miss}$ SoftTrk ResoPerp: 5.22118056e-08
-  Muon Resolution MS: 3.09570000e-08
-  Muon Scale: 6.66210000e-08
-  Muon SF Identification Syst: 8.54080000e-07
-  Muon SF Isolation Syst: 3.62330000e-07
-  Muon SF Trigger Syst: 3.85490000e-07
-  Bad Muon Veto: 1.62490000e-08
-  Muon Sagitta Global: 1.15360000e-06
-  Muon Sagitta PTextra: 1.85130000e-07
-  Pileup: 1.93430000e-07
-  MJ MU $E_T^{miss}$: 5.25383965e-09
-  MJ MU d0cut: 6.93495022e-08
-  MJ MU MC Scaling: 8.12250000e-08
-  MJ MU jet mult: 6.14936268e-08
-  MJ MU Shape: 2.56707250e-08
-  MJ MU dphi: 8.64970000e-08
-  $t\bar{t}$ $p_T$-hard: 7.22741501e-08
-  $t\bar{t}$ FSR: 1.18160000e-07
-  $t\bar{t}$ hadronization: 1.52299228e-07
-  $t\bar{t}$ hdamp: 2.05510000e-07
-  $t\bar{t}$ NNPDF: 1.10080000e-07
-  tW Diagram Removel: 2.52870758e-07
-  tW DS hdamp: 1.72370000e-08
-  RW inverted setup 2D: 6.36606614e-08
-  RW Fixed order vs PS $p_T(t)$: 5.89789281e-08
-  RW Fixed order vs PS $m(t\bar{t})$: 1.04330080e-07
-  Norm. $W\rightarrow\tau\nu$ by 5%: 4.46450000e-08
-  Norm. Single top by 4%: 2.94130000e-08
-  Norm. Diboson by 6%: 1.09460000e-07
-  Norm. Z by 5%: 1.23170000e-07
-- LUMI: 4.41510200e-07
-  Data stat. unc.: 1.78340000e-06
-  Sig. stat. unc.: 1.18300000e-06
-  Bkg. stat. unc.: 2.18510000e-07
-  Alternative MC unf. unc.: 5.13301917e-07
-  Basic unf. unc.: 2.71654849e-07
-  JES Flavor Composition: 9.57690000e-08
-  JES Pileup RhoTopology: 3.66410000e-08
-  JES Pileup OffsetMu: 1.90670000e-08
-  JES Pileup OffsetNPV: 2.00120000e-08
-  JES EtaIntercalib Model: 4.28780000e-08
-  JES Flavor Response: 9.74970000e-09
-  JER EffectiveNP 1: 8.39740000e-08
-  JER EffectiveNP 2: 6.14320000e-08
-  JER EffectiveNP 3: 3.46610000e-08
-  JER EffectiveNP 4: 4.08050000e-08
-  JER EffectiveNP 5: 2.35340000e-08
-  JER EffectiveNP 6: 8.53450000e-09
-  JER EffectiveNP 7rest: 2.43180000e-08
-  JER DataVsMC MC16: 3.74910000e-08
-  $E_T^{miss}$ SoftTrk Scale: 7.07550000e-08
-  $E_T^{miss}$ SoftTrk ResoPara: 4.34311740e-08
-  $E_T^{miss}$ SoftTrk ResoPerp: 4.11665176e-08
-  Muon Resolution MS: 6.12580000e-08
-  Muon Scale: 1.07650000e-07
-  Muon SF Identification Syst: 7.67930000e-07
-  Muon SF Isolation Syst: 3.07570000e-07
-  Muon SF Trigger Syst: 3.13040000e-07
-  Bad Muon Veto: 4.09900000e-09
-  Muon Sagitta Global: 1.05140000e-06
-  Muon Sagitta PTextra: 3.78950000e-07
-  Pileup: 1.57180000e-07
-  MJ MU $E_T^{miss}$: 3.88476328e-09
-  MJ MU d0cut: 4.71848708e-08
-  MJ MU MC Scaling: 5.41800000e-08
-  MJ MU jet mult: 3.96366440e-08
-  MJ MU Shape: 1.65220327e-08
-  MJ MU dphi: 5.77290000e-08
-  $t\bar{t}$ $p_T$-hard: 5.97661452e-08
-  $t\bar{t}$ FSR: 9.72920000e-08
-  $t\bar{t}$ hadronization: 1.23607806e-07
-  $t\bar{t}$ hdamp: 1.71990000e-07
-  $t\bar{t}$ NNPDF: 9.53700000e-08
-  tW Diagram Removel: 2.14774300e-07
-  tW DS hdamp: 2.70010000e-08
-  RW inverted setup 2D: 5.16159801e-08
-  RW Fixed order vs PS $p_T(t)$: 4.71325666e-08
-  RW Fixed order vs PS $m(t\bar{t})$: 8.33679355e-08
-  Norm. $W\rightarrow\tau\nu$ by 5%: 3.67840000e-08
-  Norm. Single top by 4%: 2.34360000e-08
-  Norm. Diboson by 6%: 9.00530000e-08
-  Norm. Z by 5%: 1.18720000e-07
-- LUMI: 3.25957600e-07
-  Data stat. unc.: 2.15440000e-06
-  Sig. stat. unc.: 1.60490000e-06
-  Bkg. stat. unc.: 2.96060000e-07
-  Alternative MC unf. unc.: 2.33298584e-07
-  Basic unf. unc.: 4.70537583e-07
-  JES Flavor Composition: 7.21170000e-08
-  JES Pileup RhoTopology: 2.19540000e-08
-  JES Pileup OffsetMu: 1.24950000e-08
-  JES Pileup OffsetNPV: 1.17770000e-08
-  JES EtaIntercalib Model: 1.38700000e-08
-  JES Flavor Response: 7.65420000e-09
-  JER EffectiveNP 1: 5.52210000e-08
-  JER EffectiveNP 2: 2.42560000e-08
-  JER EffectiveNP 3: 1.73380000e-08
-  JER EffectiveNP 4: 4.07540000e-09
-  JER EffectiveNP 5: 2.01690000e-08
-  JER EffectiveNP 6: 7.69620000e-09
-  JER EffectiveNP 7rest: 6.36050000e-09
-  JER DataVsMC MC16: 1.03990000e-08
-  $E_T^{miss}$ SoftTrk Scale: 2.38670000e-08
-  $E_T^{miss}$ SoftTrk ResoPara: 3.89157175e-08
-  $E_T^{miss}$ SoftTrk ResoPerp: 1.87511820e-08
-  Muon Resolution MS: 1.70570000e-07
-  Muon Scale: 2.44080000e-07
-  Muon SF Identification Syst: 7.32770000e-07
-  Muon SF Isolation Syst: 2.23790000e-07
-  Muon SF Trigger Syst: 1.80780000e-07
-  Bad Muon Veto: 6.40990000e-08
-  Muon Sagitta Global: 1.03370000e-06
-  Muon Sagitta PTextra: 2.14910000e-06
-  Pileup: 8.09430000e-08
-  MJ MU $E_T^{miss}$: 6.60177477e-09
-  MJ MU d0cut: 1.77453696e-09
-  MJ MU MC Scaling: 7.51970000e-09
-  MJ MU jet mult: 1.33327906e-08
-  MJ MU Shape: 1.20481454e-08
-  MJ MU dphi: 1.00260000e-08
-  $t\bar{t}$ $p_T$-hard: 3.84402696e-08
-  $t\bar{t}$ FSR: 5.87880000e-08
-  $t\bar{t}$ hadronization: 6.48323938e-08
-  $t\bar{t}$ hdamp: 1.11880000e-07
-  $t\bar{t}$ NNPDF: 7.66030000e-08
-  tW Diagram Removel: 1.29583381e-07
-  tW DS hdamp: 8.52670000e-08
-  RW inverted setup 2D: 2.96561739e-08
-  RW Fixed order vs PS $p_T(t)$: 2.46314945e-08
-  RW Fixed order vs PS $m(t\bar{t})$: 4.35316329e-08
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.31160000e-08
-  Norm. Single top by 4%: 1.34220000e-08
-  Norm. Diboson by 6%: 5.89080000e-08
-  Norm. Z by 5%: 1.36480000e-07
-- LUMI: 1.56695700e-07
-  Data stat. unc.: 1.45630000e-06
-  Sig. stat. unc.: 2.44920000e-07
-  Bkg. stat. unc.: 2.65150000e-07
-  Alternative MC unf. unc.: 3.37516081e-08
-  Basic unf. unc.: 2.91079798e-07
-  JES Flavor Composition: 3.15320000e-08
-  JES Pileup RhoTopology: 1.27200000e-08
-  JES Pileup OffsetMu: 4.86220000e-09
-  JES Pileup OffsetNPV: 3.37270000e-10
-  JES EtaIntercalib Model: 3.25690000e-09
-  JES Flavor Response: 1.08440000e-08
-  JER EffectiveNP 1: 2.16640000e-08
-  JER EffectiveNP 2: 5.37960000e-09
-  JER EffectiveNP 3: 3.03790000e-08
-  JER EffectiveNP 4: 2.77620000e-08
-  JER EffectiveNP 5: 2.27750000e-08
-  JER EffectiveNP 6: 1.17730000e-08
-  JER EffectiveNP 7rest: 3.07380000e-09
-  JER DataVsMC MC16: 2.99290000e-08
-  $E_T^{miss}$ SoftTrk Scale: 2.46650000e-08
-  $E_T^{miss}$ SoftTrk ResoPara: 2.38053063e-09
-  $E_T^{miss}$ SoftTrk ResoPerp: 1.41318025e-08
-  Muon Resolution MS: 1.08290000e-07
-  Muon Scale: 1.27090000e-07
-  Muon SF Identification Syst: 3.55010000e-07
-  Muon SF Isolation Syst: 1.04640000e-07
-  Muon SF Trigger Syst: 9.09640000e-08
-  Bad Muon Veto: 5.43030000e-08
-  Muon Sagitta Global: 5.43580000e-07
-  Muon Sagitta PTextra: 1.53210000e-06
-  Pileup: 4.94870000e-08
-  MJ MU $E_T^{miss}$: 3.72585251e-08
-  MJ MU d0cut: 3.44372082e-08
-  MJ MU MC Scaling: 2.61010000e-08
-  MJ MU jet mult: 2.68825168e-08
-  MJ MU Shape: 4.40815591e-08
-  MJ MU dphi: 2.00700000e-08
-  $t\bar{t}$ $p_T$-hard: 1.63765404e-08
-  $t\bar{t}$ FSR: 2.77490000e-08
-  $t\bar{t}$ hadronization: 3.17025920e-08
-  $t\bar{t}$ hdamp: 5.09350000e-08
-  $t\bar{t}$ NNPDF: 4.10920000e-08
-  tW Diagram Removel: 4.96042031e-08
-  tW DS hdamp: 3.38790000e-08
-  RW inverted setup 2D: 1.44167249e-08
-  RW Fixed order vs PS $p_T(t)$: 1.49813735e-08
-  RW Fixed order vs PS $m(t\bar{t})$: 2.62838710e-08
-  Norm. $W\rightarrow\tau\nu$ by 5%: 1.01440000e-08
-  Norm. Single top by 4%: 4.84400000e-09
-  Norm. Diboson by 6%: 3.45420000e-08
-  Norm. Z by 5%: 1.06040000e-07
-- LUMI: 7.65841000e-08
-  Data stat. unc.: 1.18620000e-06
-  Sig. stat. unc.: 2.14370000e-07
-  Bkg. stat. unc.: 9.82700000e-08
-  Alternative MC unf. unc.: 7.63427374e-10
-  Basic unf. unc.: 1.42270653e-07
-  JES Flavor Composition: 2.19360000e-08
-  JES Pileup RhoTopology: 7.25580000e-09
-  JES Pileup OffsetMu: 2.74630000e-09
-  JES Pileup OffsetNPV: 8.79910000e-10
-  JES EtaIntercalib Model: 2.49580000e-09
-  JES Flavor Response: 1.05170000e-08
-  JER EffectiveNP 1: 1.73240000e-08
-  JER EffectiveNP 2: 9.78170000e-09
-  JER EffectiveNP 3: 3.98650000e-08
-  JER EffectiveNP 4: 4.21520000e-08
-  JER EffectiveNP 5: 1.73850000e-08
-  JER EffectiveNP 6: 8.68960000e-09
-  JER EffectiveNP 7rest: 1.91720000e-10
-  JER DataVsMC MC16: 4.65450000e-08
-  $E_T^{miss}$ SoftTrk Scale: 1.82650000e-08
-  $E_T^{miss}$ SoftTrk ResoPara: 2.73334938e-10
-  $E_T^{miss}$ SoftTrk ResoPerp: 7.48999391e-09
-  Muon Resolution MS: 8.41720000e-08
-  Muon Scale: 6.32080000e-08
-  Muon SF Identification Syst: 1.71410000e-07
-  Muon SF Isolation Syst: 5.05060000e-08
-  Muon SF Trigger Syst: 4.91120000e-08
-  Bad Muon Veto: 4.03210000e-08
-  Muon Sagitta Global: 3.12520000e-07
-  Muon Sagitta PTextra: 9.21100000e-07
-  Pileup: 3.66860000e-08
-  MJ MU $E_T^{miss}$: 1.85997850e-09
-  MJ MU d0cut: 1.88452140e-09
-  MJ MU MC Scaling: 1.47160000e-09
-  MJ MU jet mult: 1.88292504e-09
-  MJ MU Shape: 2.04390656e-09
-  MJ MU dphi: 1.70890000e-09
-  $t\bar{t}$ $p_T$-hard: 4.68493763e-09
-  $t\bar{t}$ FSR: 4.33960000e-09
-  $t\bar{t}$ hadronization: 5.59227244e-09
-  $t\bar{t}$ hdamp: 1.01070000e-08
-  $t\bar{t}$ NNPDF: 8.08220000e-09
-  tW Diagram Removel: 2.26153874e-08
-  tW DS hdamp: 1.63450000e-08
-  RW inverted setup 2D: 2.80713474e-09
-  RW Fixed order vs PS $p_T(t)$: 2.65748555e-09
-  RW Fixed order vs PS $m(t\bar{t})$: 4.64241578e-09
-  Norm. $W\rightarrow\tau\nu$ by 5%: 3.73530000e-09
-  Norm. Single top by 4%: 2.09180000e-09
-  Norm. Diboson by 6%: 8.26960000e-09
-  Norm. Z by 5%: 5.28090000e-08
 - LUMI: 2.38981900e-07
   Data stat. unc.: 2.21010000e-06
   Sig. stat. unc.: 1.81810000e-06
@@ -3952,214 +4160,6 @@ bins:
   Norm. Single top by 4%: 2.49200000e-09
   Norm. Diboson by 6%: 2.72720000e-08
   Norm. Z by 5%: 4.63320000e-08
-- LUMI: 4.08791600e-08
-  Data stat. unc.: 3.53840000e-07
-  Sig. stat. unc.: 2.81860000e-07
-  Bkg. stat. unc.: 2.97020000e-08
-  Alternative MC unf. unc.: 6.15059902e-08
-  Basic unf. unc.: 6.16125113e-08
-  JES Flavor Composition: 8.81930000e-09
-  JES Pileup RhoTopology: 5.27650000e-09
-  JES Pileup OffsetMu: 5.10300000e-09
-  JES Pileup OffsetNPV: 9.34190000e-10
-  JES EtaIntercalib Model: 5.31700000e-09
-  JES Flavor Response: 2.73590000e-09
-  JER EffectiveNP 1: 5.66130000e-09
-  JER EffectiveNP 2: 1.52480000e-08
-  JER EffectiveNP 3: 9.31390000e-09
-  JER EffectiveNP 4: 8.36660000e-09
-  JER EffectiveNP 5: 3.92290000e-09
-  JER EffectiveNP 6: 8.12240000e-09
-  JER EffectiveNP 7rest: 8.69230000e-09
-  JER DataVsMC MC16: 2.32720000e-09
-  $E_T^{miss}$ SoftTrk Scale: 8.05860000e-09
-  $E_T^{miss}$ SoftTrk ResoPara: 7.91850328e-09
-  $E_T^{miss}$ SoftTrk ResoPerp: 4.85164752e-09
-  Muon Resolution MS: 1.22530000e-08
-  Muon Scale: 8.47720000e-09
-  Muon SF Identification Syst: 8.30490000e-08
-  Muon SF Isolation Syst: 2.78920000e-08
-  Muon SF Trigger Syst: 3.09710000e-08
-  Bad Muon Veto: 1.32430000e-09
-  Muon Sagitta Global: 1.84250000e-07
-  Muon Sagitta PTextra: 2.57360000e-09
-  Pileup: 3.67940000e-09
-  MJ MU $E_T^{miss}$: 2.69061274e-11
-  MJ MU d0cut: 1.40064119e-09
-  MJ MU MC Scaling: 1.35200000e-09
-  MJ MU jet mult: 7.09686697e-10
-  MJ MU Shape: 1.03775824e-09
-  MJ MU dphi: 1.58840000e-09
-  $t\bar{t}$ $p_T$-hard: 2.63349665e-09
-  $t\bar{t}$ FSR: 2.13320000e-09
-  $t\bar{t}$ hadronization: 2.49094887e-09
-  $t\bar{t}$ hdamp: 5.58880000e-09
-  $t\bar{t}$ NNPDF: 8.53560000e-10
-  tW Diagram Removel: 7.17311521e-09
-  tW DS hdamp: 2.72010000e-08
-  RW inverted setup 2D: 1.43431127e-09
-  RW Fixed order vs PS $p_T(t)$: 2.74495412e-10
-  RW Fixed order vs PS $m(t\bar{t})$: 4.00519429e-10
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.91970000e-09
-  Norm. Single top by 4%: 1.20080000e-09
-  Norm. Diboson by 6%: 7.71770000e-09
-  Norm. Z by 5%: 6.57930000e-09
-- LUMI: 2.80913500e-08
-  Data stat. unc.: 3.14090000e-07
-  Sig. stat. unc.: 2.03230000e-08
-  Bkg. stat. unc.: 2.56300000e-08
-  Alternative MC unf. unc.: 2.10548096e-09
-  Basic unf. unc.: 8.81873669e-08
-  JES Flavor Composition: 2.50250000e-10
-  JES Pileup RhoTopology: 1.50670000e-09
-  JES Pileup OffsetMu: 4.78e-11
-  JES Pileup OffsetNPV: 1.37410000e-10
-  JES EtaIntercalib Model: 4.60040000e-10
-  JES Flavor Response: 1.15810000e-09
-  JER EffectiveNP 1: 8.25810000e-09
-  JER EffectiveNP 2: 3.99260000e-09
-  JER EffectiveNP 3: 4.77660000e-09
-  JER EffectiveNP 4: 5.61020000e-09
-  JER EffectiveNP 5: 6.15770000e-09
-  JER EffectiveNP 6: 6.36860000e-09
-  JER EffectiveNP 7rest: 6.05240000e-09
-  JER DataVsMC MC16: 9.64780000e-10
-  $E_T^{miss}$ SoftTrk Scale: 3.64410000e-09
-  $E_T^{miss}$ SoftTrk ResoPara: 2.24950099e-10
-  $E_T^{miss}$ SoftTrk ResoPerp: 2.97765515e-09
-  Muon Resolution MS: 2.43060000e-08
-  Muon Scale: 1.32220000e-08
-  Muon SF Identification Syst: 5.57830000e-08
-  Muon SF Isolation Syst: 1.84280000e-08
-  Muon SF Trigger Syst: 2.04420000e-08
-  Bad Muon Veto: 8.86630000e-10
-  Muon Sagitta Global: 1.31140000e-07
-  Muon Sagitta PTextra: 2.54760000e-08
-  Pileup: 3.73420000e-09
-  MJ MU $E_T^{miss}$: 1.24111694e-10
-  MJ MU d0cut: 2.93285151e-09
-  MJ MU MC Scaling: 3.34360000e-09
-  MJ MU jet mult: 2.40323156e-09
-  MJ MU Shape: 9.47171984e-10
-  MJ MU dphi: 3.14610000e-09
-  $t\bar{t}$ $p_T$-hard: 1.46678723e-09
-  $t\bar{t}$ FSR: 1.78400000e-09
-  $t\bar{t}$ hadronization: 1.79249938e-09
-  $t\bar{t}$ hdamp: 3.94650000e-09
-  $t\bar{t}$ NNPDF: 1.69170000e-09
-  tW Diagram Removel: 4.50532396e-10
-  tW DS hdamp: 1.76450000e-08
-  RW inverted setup 2D: 1.10877232e-09
-  RW Fixed order vs PS $p_T(t)$: 7.67956687e-10
-  RW Fixed order vs PS $m(t\bar{t})$: 1.37698039e-09
-  Norm. $W\rightarrow\tau\nu$ by 5%: 2.03860000e-09
-  Norm. Single top by 4%: 8.60840000e-10
-  Norm. Diboson by 6%: 4.38320000e-09
-  Norm. Z by 5%: 5.23110000e-09
-- LUMI: 7.94285100e-09
-  Data stat. unc.: 1.42100000e-07
-  Sig. stat. unc.: 1.26400000e-08
-  Bkg. stat. unc.: 1.54540000e-08
-  Alternative MC unf. unc.: 1.15796257e-08
-  Basic unf. unc.: 5.52680092e-08
-  JES Flavor Composition: 3.20250000e-10
-  JES Pileup RhoTopology: 1.91660000e-12
-  JES Pileup OffsetMu: 3.64330000e-10
-  JES Pileup OffsetNPV: 3.10050000e-10
-  JES EtaIntercalib Model: 4.27440000e-10
-  JES Flavor Response: 5.84680000e-10
-  JER EffectiveNP 1: 1.32900000e-09
-  JER EffectiveNP 2: 7.03990000e-10
-  JER EffectiveNP 3: 1.48340000e-09
-  JER EffectiveNP 4: 2.71390000e-09
-  JER EffectiveNP 5: 2.12340000e-09
-  JER EffectiveNP 6: 1.57250000e-09
-  JER EffectiveNP 7rest: 1.71980000e-09
-  JER DataVsMC MC16: 1.42040000e-11
-  $E_T^{miss}$ SoftTrk Scale: 1.21810000e-10
-  $E_T^{miss}$ SoftTrk ResoPara: 1.83190354e-09
-  $E_T^{miss}$ SoftTrk ResoPerp: 5.84212077e-10
-  Muon Resolution MS: 1.67410000e-08
-  Muon Scale: 1.01130000e-08
-  Muon SF Identification Syst: 4.69730000e-08
-  Muon SF Isolation Syst: 5.12330000e-09
-  Muon SF Trigger Syst: 4.39480000e-09
-  Bad Muon Veto: 5.98140000e-09
-  Muon Sagitta Global: 4.93440000e-08
-  Muon Sagitta PTextra: 1.59660000e-07
-  Pileup: 9.39490000e-10
-  MJ MU $E_T^{miss}$: 2.25023099e-10
-  MJ MU d0cut: 3.83925984e-10
-  MJ MU MC Scaling: 3.96080000e-10
-  MJ MU jet mult: 3.74228563e-10
-  MJ MU Shape: 2.37672012e-10
-  MJ MU dphi: 3.34130000e-10
-  $t\bar{t}$ $p_T$-hard: 7.15181099e-10
-  $t\bar{t}$ FSR: 9.66390000e-10
-  $t\bar{t}$ hadronization: 1.29765247e-09
-  $t\bar{t}$ hdamp: 1.90230000e-09
-  $t\bar{t}$ NNPDF: 2.74350000e-09
-  tW Diagram Removel: 1.37957847e-08
-  tW DS hdamp: 1.67900000e-08
-  RW inverted setup 2D: 5.88368999e-10
-  RW Fixed order vs PS $p_T(t)$: 4.59296573e-10
-  RW Fixed order vs PS $m(t\bar{t})$: 8.12747521e-10
-  Norm. $W\rightarrow\tau\nu$ by 5%: 6.09820000e-10
-  Norm. Single top by 4%: 1.03400000e-09
-  Norm. Diboson by 6%: 3.38250000e-09
-  Norm. Z by 5%: 3.48940000e-09
-- LUMI: 1.50977000e-09
-  Data stat. unc.: 6.30640000e-08
-  Sig. stat. unc.: 5.43820000e-09
-  Bkg. stat. unc.: 6.80860000e-09
-  Alternative MC unf. unc.: 5.15622865e-09
-  Basic unf. unc.: 1.54810701e-08
-  JES Flavor Composition: 2.26490000e-10
-  JES Pileup RhoTopology: 3.58840000e-10
-  JES Pileup OffsetMu: 3.03770000e-10
-  JES Pileup OffsetNPV: 1.04770000e-10
-  JES EtaIntercalib Model: 3.34410000e-11
-  JES Flavor Response: 2.65690000e-10
-  JER EffectiveNP 1: 1.31920000e-09
-  JER EffectiveNP 2: 2.51310000e-09
-  JER EffectiveNP 3: 9.85700000e-10
-  JER EffectiveNP 4: 2.05060000e-09
-  JER EffectiveNP 5: 1.07500000e-09
-  JER EffectiveNP 6: 1.24360000e-09
-  JER EffectiveNP 7rest: 2.12030000e-09
-  JER DataVsMC MC16: 5.22560000e-10
-  $E_T^{miss}$ SoftTrk Scale: 8.61920000e-10
-  $E_T^{miss}$ SoftTrk ResoPara: 2.30587924e-10
-  $E_T^{miss}$ SoftTrk ResoPerp: 7.11050158e-11
-  Muon Resolution MS: 2.82500000e-09
-  Muon Scale: 2.17640000e-09
-  Muon SF Identification Syst: 8.38380000e-09
-  Muon SF Isolation Syst: 9.94980000e-10
-  Muon SF Trigger Syst: 8.55540000e-10
-  Bad Muon Veto: 1.45020000e-09
-  Muon Sagitta Global: 1.40320000e-08
-  Muon Sagitta PTextra: 5.25960000e-08
-  Pileup: 2.54930000e-09
-  MJ MU $E_T^{miss}$: 7.70284960e-11
-  MJ MU d0cut: 6.94227683e-11
-  MJ MU MC Scaling: 5.89960000e-11
-  MJ MU jet mult: 6.13908193e-11
-  MJ MU Shape: 8.63825699e-11
-  MJ MU dphi: 6.07730000e-11
-  $t\bar{t}$ $p_T$-hard: 8.22472986e-11
-  $t\bar{t}$ FSR: 6.89510000e-11
-  $t\bar{t}$ hadronization: 1.94994280e-10
-  $t\bar{t}$ hdamp: 1.77050000e-10
-  $t\bar{t}$ NNPDF: 3.31700000e-10
-  tW Diagram Removel: 1.60976802e-11
-  tW DS hdamp: 8.21240000e-11
-  RW inverted setup 2D: 4.72338915e-11
-  RW Fixed order vs PS $p_T(t)$: 5.41508364e-11
-  RW Fixed order vs PS $m(t\bar{t})$: 9.59815955e-11
-  Norm. $W\rightarrow\tau\nu$ by 5%: 5.60190000e-11
-  Norm. Single top by 4%: 1.57880000e-11
-  Norm. Diboson by 6%: 3.16650000e-10
-  Norm. Z by 5%: 6.78750000e-10
 - LUMI: 1.87521900e-08
   Data stat. unc.: 2.56750000e-07
   Sig. stat. unc.: 1.27580000e-08

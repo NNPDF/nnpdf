@@ -2,7 +2,7 @@ definitions:
   LUMI:
     description: LUMI
     treatment: MULT
-    correlation: ATLASLUMI16
+    correlation: ATLASLUMIRUNII
   Stat. unc.:
     description: Stat. unc.
     treatment: ADD
@@ -14,7 +14,7 @@ definitions:
   Alternative MC unf. unc.:
     description: Alternative MC unf. unc.
     treatment: ADD
-    correlation: CORR
+    correlation: UNCORR
   Basic unf. unc.:
     description: Basic unf. unc.
     treatment: ADD
@@ -130,7 +130,7 @@ definitions:
   Electron Eff. ChargeMisID (stat.):
     description: Electron Eff. ChargeMisID (stat.)
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ChargeMisID (syst.):
     description: Electron Eff. ChargeMisID (syst.)
     treatment: ADD
@@ -142,63 +142,63 @@ definitions:
   Electron Eff. ID High-$p_T$ Eta1:
     description: Electron Eff. ID High-$p_T$ Eta1
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta2:
     description: Electron Eff. ID High-$p_T$ Eta2
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta3:
     description: Electron Eff. ID High-$p_T$ Eta3
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta4:
     description: Electron Eff. ID High-$p_T$ Eta4
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta5:
     description: Electron Eff. ID High-$p_T$ Eta5
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta6:
     description: Electron Eff. ID High-$p_T$ Eta6
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta7:
     description: Electron Eff. ID High-$p_T$ Eta7
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta9:
     description: Electron Eff. ID High-$p_T$ Eta9
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta10:
     description: Electron Eff. ID High-$p_T$ Eta10
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta11:
     description: Electron Eff. ID High-$p_T$ Eta11
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID High-$p_T$ Eta12:
     description: Electron Eff. ID High-$p_T$ Eta12
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID SIMP3:
     description: Electron Eff. ID SIMP3
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID SIMP4:
     description: Electron Eff. ID SIMP4
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID SIMP11:
     description: Electron Eff. ID SIMP11
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Electron Eff. ID SIMP15:
     description: Electron Eff. ID SIMP15
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Pileup:
     description: Pileup
     treatment: ADD
@@ -238,43 +238,43 @@ definitions:
   Multijet Electron $E_T^{miss}$:
     description: Multijet Electron $E_T^{miss}$
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Multijet Electron mix$E_T^{miss}$:
     description: Multijet Electron mix$E_T^{miss}$
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Multijet Electron MC Shape:
     description: Multijet Electron MC Shape
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Multijet Electron MC Scaling:
     description: Multijet Electron MC Scaling
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   $tW$ Diagram Removal:
     description: $tW$ Diagram Removal
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   $tW$ DS hdamp:
     description: $tW$ DS hdamp
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Norm. $W\rightarrow\tau\nu$ by 5%:
     description: Norm. $W\rightarrow\tau\nu$ by 5%
-    treatment: MULT
-    correlation: UNCORR
+    treatment: ADD
+    correlation: CORR
   Norm. $Z$ by 5%:
     description: Norm. $Z$ by 5%
-    treatment: MULT
-    correlation: UNCORR
+    treatment: ADD
+    correlation: CORR
   Norm. Single top by 4%$:
     description: Norm. Single top by 4%$
-    treatment: MULT
-    correlation: UNCORR
+    treatment: ADD
+    correlation: CORR
   Norm. Diboson by 6%:
     description: Norm. Diboson by 6%
-    treatment: MULT
-    correlation: UNCORR
+    treatment: ADD
+    correlation: CORR
   Muon Resolution MS:
     description: Muon Resolution MS
     treatment: ADD
@@ -310,27 +310,27 @@ definitions:
   Muon Multijet $E_T^{miss}$:
     description: Muon Multijet $E_T^{miss}$
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Muon Multijet $d_0^{sig}$:
     description: Muon Multijet $d_0^{sig}$
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Muon Multijet MC Scaling:
     description: Muon Multijet MC Scaling
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Muon Multijet Jet Multiplicity:
     description: Muon Multijet Jet Multiplicity
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Muon Multijet MC Shape:
     description: Muon Multijet MC Shape
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
   Muon Multijet $\Delta\phi(\mu,E_T^{miss})$:
     description: Muon Multijet $\Delta\phi(\mu,E_T^{miss})$
     treatment: ADD
-    correlation: UNCORR
+    correlation: CORR
 bins:
 - LUMI: 1.79769700e-04
   Stat. unc.: 8.30580000e-05
