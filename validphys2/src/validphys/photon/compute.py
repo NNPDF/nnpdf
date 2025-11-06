@@ -268,7 +268,7 @@ class Photon:
     
     def load_photon(self):
       """Load the photon resource using the Loader class."""
-      path_to_photon = loader.check_photonQED(self.theoryid, self.luxpdfset._name)
+      path_to_photon = loader.check_photonQED(self.theoryid.id, self.luxpdfset._name)
       log.info(f"Loading photon QED set from {path_to_photon}")
 
       interpolator = []
