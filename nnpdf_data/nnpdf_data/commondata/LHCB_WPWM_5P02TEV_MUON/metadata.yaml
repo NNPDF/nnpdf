@@ -22,7 +22,7 @@ implemented_observables:
   tables: "+" 
   ndata: 12 
   observable:
-    description: r"differential corss section $d\sigma/dp_T$ for $W^+$"
+    description: r"differential cross section $d\sigma/dp_T$ for $W^+$"
     label: r"$d\sigma / dp_T$"
     units: "[pb/GeV]"
   kinematics:
@@ -38,7 +38,7 @@ implemented_observables:
 
   theory:
     FK_tables: 
-    - - LHCB_WPWM_5P02TEV_WP
+    - - LHCB_WPWM_5P02TEV_WP # placeholder names
       - LHCB_WPWM_5P02TEV_WM
 
   plotting:
@@ -51,7 +51,7 @@ implemented_observables:
   tables: "-" 
   ndata: 12 
   observable:
-    description: r"differential corss section $d\sigma/dp_T$ for $W^-$"
+    description: r"differential cross section $d\sigma/dp_T$ for $W^-$"
     label: r"$d\sigma / dp_T$"
     units: "[pb/GeV]" 
   kinematics:
@@ -67,7 +67,7 @@ implemented_observables:
   
   theory:
     FK_tables: 
-    - - LHCB_WPWM_5P02TEV_WP
+    - - LHCB_WPWM_5P02TEV_WP # placeholder names
       - LHCB_WPWM_5P02TEV_WM
 
   plotting:
