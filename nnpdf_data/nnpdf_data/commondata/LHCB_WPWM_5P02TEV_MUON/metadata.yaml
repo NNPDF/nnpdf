@@ -19,7 +19,7 @@ nnpdf_metadata:
 implemented_observables:
 - observable_name: "DIFWP"
   process_type: "DY_CC_PT" # not sure if this is the right process type
-  tables: "+" 
+  tables: ["+"] 
   ndata: 12 
   observable:
     description: r"differential cross section $d\sigma/dp_T$ for $W^+$"
@@ -48,7 +48,7 @@ implemented_observables:
 
 - observable_name: "DIFWM" 
   process_type: "DY_CC_PT" 
-  tables: "-" 
+  tables: ["-"] 
   ndata: 12 
   observable:
     description: r"differential cross section $d\sigma/dp_T$ for $W^-$"

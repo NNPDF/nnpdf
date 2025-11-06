@@ -48,7 +48,7 @@ def read_metadata() -> tuple[int, int, list]:
     nb_datapoints = content["implemented_observables"][0]["ndata"]
     tables = []
     for i in range(2):
-        tables.append(content['implemented_observables'][i]["tables"])
+        tables.append(content['implemented_observables'][i]["tables"][0])
     # tables = content["implemented_observables"][0]["tables"]
 
     return version, nb_datapoints, tables
