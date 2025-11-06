@@ -97,7 +97,6 @@ class Photon:
             self.compute_photon_set()
             return
             
-
         try:
           self.load_photon()
         except PhotonQEDNotFound:
