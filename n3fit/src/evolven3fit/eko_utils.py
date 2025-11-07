@@ -64,10 +64,12 @@ def construct_eko_cards(
 
     # Generate the q2grid
     q2_grid = utils.generate_q2grid(
-        mu0,
-        q_fin,
-        q_points,
-        {
+        Q0=mu0,
+        Qmin=1.0,
+        Qmax=1E5,
+        total_points=50,
+        total_points_ic=6,
+        match_dict={
             "mc": theory["mc"],
             "mb": theory["mb"],
             "kcThr": theory["kcThr"],
