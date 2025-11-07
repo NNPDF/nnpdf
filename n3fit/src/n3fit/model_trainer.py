@@ -928,7 +928,6 @@ class ModelTrainer:
         else:
             # read hyperparameter values from hyperopt results
             for rep, seed in zip(self.replicas, self._nn_seeds):
-                import pdb; pdb.set_trace()
                 activations = [hyperopt_params["activation_per_layer"][rep-1]] * (len(hyperopt_params["nodes_per_layer"][rep-1])-1)
                 # last layer activation is always linear
                 activations.append('linear')
