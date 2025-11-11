@@ -405,8 +405,8 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
         smallx = flavour_dict["smallx"]
         if smallx[0] > smallx[1]:
             raise CheckError(f"Wrong smallx range for flavour {name}: {smallx}")
-        largex = flavour_dict["largex"]
-        if largex[0] > largex[1]:
+        largex = flavour_dict.get("largex")
+        if largex is not None and largex[0] > largex[1]:
             raise CheckError(f"Wrong largex range for flavour {name}: {largex}")
         if name in flavs:
             raise CheckError(f"Repeated flavour name: {name}. Check basis dictionary")
