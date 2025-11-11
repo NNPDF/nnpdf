@@ -13,7 +13,7 @@ hepdata:
   url: 'https://www.hepdata.net/record/ins2895869'
   version: 2
 implemented_observables:
-- observable_name: DIF_LEP
+- observable_name: DIF-LEP
   observable:
     description: Combined Born-level single-differential cross-section in the $l^+$ and $l^-$ channels in sequence
     label: ATLAS $W$ 13 TeV Differential 
@@ -48,16 +48,16 @@ implemented_observables:
         description: W boson squared mass
         label: '$m_W^2$'
         units: 'GeV$^2$'
-    file: kinematics_DIF_LEP.yaml
+    file: kinematics_DIF-LEP.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - uncertainties_DIF_LEP.yaml
-  data_central: data_DIF_LEP.yaml
+  - uncertainties_DIF-LEP.yaml
+  data_central: data_DIF-LEP.yaml
 
-- observable_name: DIF_MUON
+- observable_name: DIF-MUON
   observable:
     description:  Born-level single-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence
     label: ATLAS $W$ 13 TeV Differential 
@@ -92,16 +92,16 @@ implemented_observables:
         description: center of mass energy
         label: '$\sqrt{s}$'
         units: 'GeV'
-    file: kinematics_DIF_MUON.yaml
+    file: kinematics_DIF-MUON.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - uncertainties_DIF_MUON.yaml
-  data_central: data_DIF_MUON.yaml
+  - uncertainties_DIF-MUON.yaml
+  data_central: data_DIF-MUON.yaml
 
-- observable_name: DDIF_LEP
+- observable_name: DDIF-LEP
   observable:
     description:  Combined Born-level double-differential cross-section in the $l^+$ and $l^-$ channels in sequence # Should I separate observables in bins of m_T^W?
     label: ATLAS $W$ 13 TeV Double-Differential 
@@ -136,16 +136,16 @@ implemented_observables:
         description: center of mass energy
         label: '$\sqrt{s}$'
         units: 'GeV'
-    file: kinematics_DDIF_LEP.yaml
+    file: kinematics_DDIF-LEP.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - uncertainties_DDIF_LEP.yaml
-  data_central: data_DDIF_LEP.yaml
+  - uncertainties_DDIF-LEP.yaml
+  data_central: data_DDIF-LEP.yaml
 
-- observable_name: DDIF_MU
+- observable_name: DDIF-MU
   observable:
     description:  Combined Born-level double-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence # Should I separate observables in bins of m_T^W?
     label: ATLAS $W$ 13 TeV Double-Differential 
@@ -185,11 +185,11 @@ implemented_observables:
         description: center of mass energy
         label: '$\sqrt{s}$'
         units: 'GeV'
-    file: kinematics_DDIF_MU.yaml
+    file: kinematics_DDIF-MU.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - uncertainties_DDIF_MU.yaml
-  data_central: data_DDIF_MU.yaml
+  - uncertainties_DDIF-MU.yaml
+  data_central: data_DDIF-MU.yaml
