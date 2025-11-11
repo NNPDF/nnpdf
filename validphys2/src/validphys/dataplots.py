@@ -289,12 +289,11 @@ def _plot_fancy_impl(
     # Due to numbers numerically close to zero, `shifts_from_systematics` may
     # randomly fails. If a LinAlgError is raised, shifts are not included in
     # the final plot.
-    use_shift = with_shift.copy()
     if with_shift:
         try:
             shifts, alpha = shifts_from_systematics(lcd_wc,theory_predictions)
         except np.linalg.LinAlgError:
-            use_shift = False
+            with_shift = False
     
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
         # We modify the table, so we pass only the label columns
@@ -302,12 +301,12 @@ def _plot_fancy_impl(
         cv = np.full(ndata, np.nan)
         err = np.full(ndata, np.nan)
         # Shift the theory when with_shift option is True
-        if i==1 and use_shift:
+        if i==1 and with_shift:
             cv[mask] = result.central_value + shifts
         else:
             cv[mask] = result.central_value           
         # Retain only the uncorrelated part of the error if shifting the data
-        if i==0 and use_shift:
+        if i==0 and with_shift:
             err[mask] = alpha
         else:
             err[mask] = result.std_error
@@ -334,7 +333,7 @@ def _plot_fancy_impl(
         min_vals = []
         max_vals = []
         fig, ax = plotutils.subplots()
-        if use_shift:
+        if with_shift:
             ax.set_title(
                 "{} {} (unshifted)".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by))
             )
