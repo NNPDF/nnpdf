@@ -293,7 +293,8 @@ def _plot_fancy_impl(
         try:
             shifts, alpha = shifts_from_systematics(lcd_wc,theory_predictions)
         except np.linalg.LinAlgError:
-            log.warning("Error occurred in computing systematic shifts. These will be disregarded in the plots.")
+            log.warning("Error occurred in computing systematic shifts for " \
+                        f"{info.ds_metadata.name}. These will be disregarded in the plots.")
             with_shift = False
     
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
