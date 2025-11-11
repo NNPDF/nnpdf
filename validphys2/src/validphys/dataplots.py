@@ -286,13 +286,14 @@ def _plot_fancy_impl(
     cvcols = []
 
     # Compute systematic shifts
-    # Due to numbers numerically close to zero, `shifts_from_systematics` may
+    # For unknown reasons, `shifts_from_systematics` may
     # randomly fails. If a LinAlgError is raised, shifts are not included in
     # the final plot.
     if with_shift:
         try:
             shifts, alpha = shifts_from_systematics(lcd_wc,theory_predictions)
         except np.linalg.LinAlgError:
+            log.warning("Error occurred in computing systematic shifts. These will be disregarded in the plots.")
             with_shift = False
     
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
@@ -333,14 +334,11 @@ def _plot_fancy_impl(
         min_vals = []
         max_vals = []
         fig, ax = plotutils.subplots()
-        if with_shift:
-            ax.set_title(
-                "{} {} (unshifted)".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by))
-            )
-        else:
-            ax.set_title(
-                "{} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by))
-            )
+
+        title = f"{info.dataset_label} {info.group_label(samefig_vals, info.figure_by)}"
+        if not with_shift:
+            title += " (unshifted)"
+        ax.set_title(title)
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
 
