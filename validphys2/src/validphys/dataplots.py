@@ -335,10 +335,13 @@ def _plot_fancy_impl(
         max_vals = []
         fig, ax = plotutils.subplots()
 
-        title = f"{info.dataset_label} {info.group_label(samefig_vals, info.figure_by)}"
-        if not with_shift:
-            title += " (unshifted)"
-        ax.set_title(title)
+        if with_shift:
+            shift_label = "(shifted)"
+        else:
+            shift_label = "(unshifted)"
+        ax.set_title(
+            "{} {} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by, shift_label))
+        )
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
 
