@@ -340,7 +340,7 @@ def _plot_fancy_impl(
         else:
             shift_label = "(unshifted)"
         ax.set_title(
-            "{} {} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by, shift_label))
+            "{} {} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by), shift_label)
         )
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
