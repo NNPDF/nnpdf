@@ -1252,7 +1252,7 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
 
 @figure
-def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=False):
+def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=True):
     """Plot an errorbar spanning the central 68% CI of a positivity
     observable as well as a point indicating the central value (according
     to the ``pdf.stats_class.central_value()``).
