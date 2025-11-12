@@ -1270,8 +1270,9 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     xvals = []
 
     if pos_use_kin:
+        kin_label = posset.kin_variables[0]
         kin_name = KIN_NAMES[0]
-        ax.set_xlabel(kin_name)
+        ax.set_xlabel(kin_label)
         xvals = posset.kinematics[kin_name].values
     else:
         ax.set_xlabel('idat')
