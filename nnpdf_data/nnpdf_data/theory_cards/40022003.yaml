@@ -1,6 +1,6 @@
-ID: '40_022_000'
-Comments: Same as 40_022_003, but alphas=0.115
-PTO: 2
+ID: '40_022_003'
+Comments: Mcharm variation. NNPDF4.0 NNLO QCD, TTBAR at fully NNLO instead of K-factors,
+  non-TTBAR from theory 40_008_005 and grids from 4001, alphas=0.118, mc = 1.41GeV, kcThr = 1.070921985815603
 FNS: FONLL-C
 DAMP: 0
 IC: 1
@@ -37,5 +37,5 @@ SIN2TW: 0.23126
 TMC: 1
 MP: 0.938
 Qref: 91.2
-alphas: 0.115
+alphas: 0.118
 alphaqed: 0.0077553

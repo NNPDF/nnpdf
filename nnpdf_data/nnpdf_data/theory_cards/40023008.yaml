@@ -1,5 +1,5 @@
-ID: '40_022_000'
-Comments: Same as 40_022_003, but alphas=0.115
+ID: '40_023_008'
+Comments: Same as 40_023_003, but alphas=0.123
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
@@ -11,9 +11,9 @@ XIF: 1.0
 NfFF: 5
 QED: 0
 HQ: POLE
-mc: 1.41
+mc: 1.61
 Qmc: 1.51
-kcThr: 1.070921985815603
+kcThr: 0.937888198757764
 mb: 4.92
 Qmb: 4.92
 kbThr: 1.0
@@ -37,5 +37,5 @@ SIN2TW: 0.23126
 TMC: 1
 MP: 0.938
 Qref: 91.2
-alphas: 0.115
+alphas: 0.123
 alphaqed: 0.0077553
