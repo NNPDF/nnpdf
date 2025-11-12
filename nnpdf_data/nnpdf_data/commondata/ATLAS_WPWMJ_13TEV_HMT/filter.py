@@ -111,17 +111,17 @@ def get_data(observable=None):
 
         kin_values = input["independent_variables"][0]["values"]
         kin_name = input["independent_variables"][0]["header"]["name"]
-
+        
         if kin_name == "$m_T^W$":  # Single differential
             kin_label = "m_T^W"
             for kin_value in kin_values:
                 kin = {
-                    'm_T^W': {
+                    'mt': {
                         'min': kin_value['low'],
                         'mid': 0.5 * (kin_value['low'] + kin_value['high']),
                         'max': kin_value['high'],
                     },
-                    'm_W2': {'min': None, 'mid': 6.46174823e03, 'max': None},
+                    'M2': {'min': None, 'mid': 6.46174823e03, 'max': None},
                 }
                 kinematics.append(kin)
 
@@ -130,13 +130,13 @@ def get_data(observable=None):
             mt_low, mt_high = mt_bins[table_num]
             for kin_value in kin_values:
                 kin = {
-                    'abs_eta': {
+                    'eta': {
                         'min': kin_value['low'],
                         'mid': 0.5 * (kin_value['low'] + kin_value['high']),
                         'max': kin_value['high'],
                     },
-                    'm_T^W': {'min': mt_low, 'mid': 0.5 * (mt_low + mt_high), 'max': mt_high},
-                    'm_W2': {'min': None, 'mid': 6.46174823e03, 'max': None},
+                    'mt': {'min': mt_low, 'mid': 0.5 * (mt_low + mt_high), 'max': mt_high},
+                    'M2': {'min': None, 'mid': 6.46174823e03, 'max': None},
                 }
                 kinematics.append(kin)
             table_num += 1

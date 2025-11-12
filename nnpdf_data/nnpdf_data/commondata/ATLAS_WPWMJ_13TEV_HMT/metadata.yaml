@@ -1,4 +1,4 @@
-setname: ATLAS_WPWM_13TEV_HMT
+setname: ATLAS_WPWMJ_13TEV_HMT
 version: 1
 version_comment: Initial Implementation
 nnpdf_metadata:
@@ -18,7 +18,7 @@ implemented_observables:
     description: Combined Born-level single-differential cross-section in the $l^+$ and $l^-$ channels in sequence
     label: ATLAS $W$ 13 TeV Differential 
     units: 'pb/GeV'
-  process_type: INC
+  process_type: DY_CC_PT
   tables: [38, 39]
   npoints: [24]
   ndata: 24
@@ -27,24 +27,24 @@ implemented_observables:
     y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
     figure_by:
     - boson
-    extra_labels:
-      ' ':
-      - $W^+$
-      - $W^-$
-      boson:
-      - W
-      - W
+    # extra_labels:
+    #   ' ':
+    #   - $W^+$
+    #   - $W^-$
+    #   boson:
+    #   - W
+    #   - W
     plot_x: '$m_T^W$'
   kinematic_coverage:
-  - m_T^W
-  - m_W2
+  - mt
+  - M2
   kinematics:
     variables:
-      m_T^W:
+      mt:
         description: Transverse mass of the W boson
         label: '$m_T^W$'
         units: 'GeV'
-      m_W2:
+      M2:
         description: W boson squared mass
         label: '$m_W^2$'
         units: 'GeV$^2$'
@@ -53,6 +53,7 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
+    - - FK_ATLAS_WPWMJ_13TEV_MMT_DIF-LEP
   data_uncertainties:
   - uncertainties_DIF-LEP.yaml
   data_central: data_DIF-LEP.yaml
@@ -62,7 +63,7 @@ implemented_observables:
     description:  Born-level single-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence
     label: ATLAS $W$ 13 TeV Differential 
     units: 'pb/GeV'
-  process_type: INC
+  process_type: DY_CC_PT
   tables: [20,21]
   npoints: [24]
   ndata: 24
@@ -71,24 +72,24 @@ implemented_observables:
     y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
     figure_by:
     - boson
-    extra_labels:
-      ' ':
-      - $W^+$
-      - $W^-$
-      boson:
-      - W
-      - W
+    # extra_labels:
+    #   ' ':
+    #   - $W^+$
+    #   - $W^-$
+    #   boson:
+    #   - W
+    #   - W
     plot_x: '$m_T^W$'
   kinematic_coverage:
-  - m_T^W
-  - m_W2
+  - mt
+  - M2
   kinematics:
     variables:
-      m_T^W:
+      mt:
         description: Transverse mass of the W boson
         label: '$m_T^W$'
         units: 'GeV'
-      m_W2:
+      M2:
         description: W boson squared mass
         label: '$m_W^2$'
         units: 'GeV$^2$'
@@ -97,6 +98,7 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
+    - - FK_ATLAS_WPWMJ_13TEV_MMT_DIF-MUON
   data_uncertainties:
   - uncertainties_DIF-MUON.yaml
   data_central: data_DIF-MUON.yaml
@@ -106,7 +108,7 @@ implemented_observables:
     description:  Combined Born-level double-differential cross-section in the $l^+$ and $l^-$ channels in sequence # Should I separate observables in bins of m_T^W?
     label: ATLAS $W$ 13 TeV Double-Differential 
     units: 'pb/GeV'
-  process_type: INC
+  process_type: DY_CC_PT
   tables: [44,45,46,47,48,49,50,51,52,53]
   npoints: []
   ndata: 80
@@ -115,24 +117,24 @@ implemented_observables:
     y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
     figure_by:
     - boson
-    extra_labels:
-      boson:
+    # extra_labels:
+    #   boson:
     plot_x: '$m_T^W$'
   kinematic_coverage:
-  - abs_eta
-  - m_T^W
-  - m_W2
+  - eta
+  - mt
+  - M2
   kinematics:
     variables:
-      abs_eta:
+      eta:
         description: Absolute lepton pseudorapidity
         label: '$|\eta|$'
         units: ''
-      m_T^W:
+      mt:
         description: Transverse mass of the W boson
         label: '$m_T^W$'
         units: 'GeV'
-      m_W2:
+      M2:
         description: W boson squared mass
         label: '$m_W^2$'
         units: 'GeV$^2$'
@@ -141,6 +143,7 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
+    - - FK_ATLAS_WPWMJ_13TEV_MMT_DDIF-LEP
   data_uncertainties:
   - uncertainties_DDIF-LEP.yaml
   data_central: data_DDIF-LEP.yaml
@@ -150,7 +153,7 @@ implemented_observables:
     description:  Combined Born-level double-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence # Should I separate observables in bins of m_T^W?
     label: ATLAS $W$ 13 TeV Double-Differential 
     units: 'pb/GeV'
-  process_type: INC
+  process_type: DY_CC_PT
   tables: [23,24,25,26,27,28,29,30,31,32]
   npoints: []
   ndata: 80
@@ -159,29 +162,29 @@ implemented_observables:
     y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
     figure_by:
     - boson
-    extra_labels:
-      ' ':
-      - $W^-$
-      - $W^+$
-      boson:
-      - W
-      - W
+    # extra_labels:
+    #   ' ':
+    #   - $W^-$
+    #   - $W^+$
+    #   boson:
+    #   - W
+    #   - W
     plot_x: '$m_T^W$'
   kinematic_coverage:
-  - abs_eta
-  - m_T^W
-  - m_W2
+  - eta
+  - mt
+  - M2
   kinematics:
     variables:
-      abs_eta:
+      eta:
         description: Absolute lepton pseudorapidity
         label: '$|\eta|$'
         units: ''
-      m_T^W:
+      mt:
         description: Transverse mass of the W boson
         label: '$m_T^W$'
         units: 'GeV'
-      m_W2:
+      M2:
         description: W boson squared mass
         label: '$m_W^2$'
         units: 'GeV$^2$'
@@ -190,6 +193,7 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
+    - - FK_ATLAS_WPWMJ_13TEV_MMT_DDIF-MUON
   data_uncertainties:
   - uncertainties_DDIF-MUON.yaml
   data_central: data_DDIF-MUON.yaml
