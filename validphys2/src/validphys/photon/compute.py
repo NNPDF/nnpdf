@@ -296,11 +296,12 @@ class Photon:
       self.integral = np.stack(integral, axis=-1)
       return
     
-def compute_photon(theoryid, fiatlux, force_fiatlux=False):
+def compute_photon(theoryid, fiatlux):
     """Function to compute the photon PDF set.""" 
     luxset = fiatlux['luxset'].load()
+    force_compute = fiatlux.get('compute_in_setupfit', False)
     replicas = list(range(1, luxset.n_members))
-    Photon(theoryid, fiatlux, replicas=replicas, save_to_disk=True, force_computation=force_fiatlux)
+    Photon(theoryid, fiatlux, replicas=replicas, save_to_disk=True, force_computation=force_compute)
 
 
     
