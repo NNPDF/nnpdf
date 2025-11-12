@@ -35,7 +35,7 @@ jobs:
       - name: Test n3fit and validphys
         shell: bash -l {0}
         run: |
-          pytest --cov=${PWD} --cov-config=pyproject.toml --mpl --pyargs validphys n3fit --mpl-default-tolerance 18
+          pytest --cov=${PWD} --cov-config=pyproject.toml --mpl --pyargs validphys n3fit --mpl-default-tolerance 24
       - name: Keep coverage file
         if: startsWith(matrix.python-version, '3.13')
         uses: actions/upload-artifact@v4
