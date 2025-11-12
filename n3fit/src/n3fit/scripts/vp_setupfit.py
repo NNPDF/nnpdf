@@ -37,10 +37,10 @@ from ruamel.yaml import error
 from reportengine import colors
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
-from validphys.loader import Loader, TheoryNotFound
+from validphys.loader import FallbackLoader, TheoryNotFound, PhotonQEDNotFound
 from validphys.utils import yaml_safe
 
-l = Loader()
+loader = FallbackLoader()
 
 SETUPFIT_FIXED_CONFIG = dict(
     actions_=[
@@ -57,6 +57,7 @@ SETUPFIT_PROVIDERS = [
     'validphys.filters',
     'validphys.results',
     'validphys.theorycovariance.construction',
+    'validphys.photon.compute'
 ]
 
 SETUPFIT_DEFAULTS = dict(use_cuts='internal')
@@ -155,7 +156,7 @@ class SetupFitConfig(Config):
                 SETUPFIT_FIXED_CONFIG['theory']['theoryid'] = closuredict['faketheoryid']
                 # download theoryid since it will be used in the fit
                 try:
-                    l.check_theoryID(file_content['theory']['theoryid'])
+                    loader.check_theoryID(file_content['theory']['theoryid'])
                 except TheoryNotFound as e:
                     log.warning(e)
             filter_action = 'datacuts::closuretest::theory::fitting filter'
@@ -184,9 +185,25 @@ class SetupFitConfig(Config):
         # Check fiatlux configuration
         fiatlux = file_content.get('fiatlux')
         if fiatlux is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append('theory::fiatlux check_photonQED_exists')
-            if fiatlux.get("additional_errors"):
-                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
+            luxset = fiatlux['luxset']
+            theoryid = file_content['theory']['theoryid']
+            force_compute = fiatlux.get('force_computation', False)
+            try:
+                _ = loader.check_photonQED(theoryid, luxset)
+                log.info(f"Photon QED set found for {theoryid} with luxset {luxset}.")
+            except PhotonQEDNotFound:
+                log.warning(f"No photon set found for {theoryid} with luxset {luxset}. It "\
+                            "will be computed using FiatLux. This may impact performance.")
+                force_compute = True
+
+            if force_compute:
+              log.info("Forcing photon computation with FiatLux.")
+              # Since the photon will be computed, check that the luxset and additional_errors exist
+              SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset_exists')
+              if fiatlux.get("additional_errors"):
+                  SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
+              SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux::theory compute_photon')
+
 
         # Check positivity bound
         if file_content.get('positivity_bound') is not None:
