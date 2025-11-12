@@ -66,7 +66,7 @@ def get_kinematics(hepdata: dict, bin_index: list) -> list:
 
     Returns
     -------
-    list of kinematics bins, i.e. list of dics of form [{p_T: {min: , max: , mid: }, m_W2: {...}]
+    list of kinematics bins, i.e. list of dics of form [{pT: {min: , max: , mid: }, m_W2: {...}]
 
     """
     ptbins = hepdata["independent_variables"][0]["values"]
@@ -76,7 +76,7 @@ def get_kinematics(hepdata: dict, bin_index: list) -> list:
         ptmin = float(ptbins[bins]["low"])
         ptmax = float(ptbins[bins]["high"])
         kin_value = {
-            "p_T": {"min": ptmin, "mid": 0.5 * (ptmin + ptmax), "max": ptmax},
+            "pT": {"min": ptmin, "mid": 0.5 * (ptmin + ptmax), "max": ptmax},
             "m_W2": {"min": None, "mid": MW_VALUE ** 2, "max": None},
             "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
@@ -367,7 +367,7 @@ def main_filter() -> None:
     """
     version, nb_data, tables = read_metadata()
 
-    kinematics = {} # bins of p_T, m_W2, sqrts, read from data
+    kinematics = {} # bins of pT, m_W2, sqrts, read from data
     data_central = {} # cetral values of diff XS, read from data
     uncertainties = {} # sys and stat uncertainties for each bin
     lum_unc = {} # luminosity uncertainty, calculated as 2% of each central value
