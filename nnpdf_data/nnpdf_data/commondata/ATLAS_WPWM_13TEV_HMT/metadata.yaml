@@ -80,18 +80,18 @@ implemented_observables:
       - W
     plot_x: '$m_T^W$'
   kinematic_coverage:
+  - m_T^W
   - m_W2
-  - sqrts
   kinematics:
     variables:
+      m_T^W:
+        description: Transverse mass of the W boson
+        label: '$m_T^W$'
+        units: 'GeV'
       m_W2:
         description: W boson squared mass
         label: '$m_W^2$'
         units: 'GeV$^2$'
-      sqrts:
-        description: center of mass energy
-        label: '$\sqrt{s}$'
-        units: 'GeV'
     file: kinematics_DIF-MUON.yaml
   theory:
     conversion_factor: 1.0
@@ -120,8 +120,8 @@ implemented_observables:
     plot_x: '$m_T^W$'
   kinematic_coverage:
   - abs_eta
+  - m_T^W
   - m_W2
-  - sqrts
   kinematics:
     variables:
       abs_eta:
@@ -132,10 +132,10 @@ implemented_observables:
         description: Transverse mass of the W boson
         label: '$m_T^W$'
         units: 'GeV'
-      sqrts:
-        description: center of mass energy
-        label: '$\sqrt{s}$'
-        units: 'GeV'
+      m_W2:
+        description: W boson squared mass
+        label: '$m_W^2$'
+        units: 'GeV$^2$'
     file: kinematics_DDIF-LEP.yaml
   theory:
     conversion_factor: 1.0
@@ -145,7 +145,7 @@ implemented_observables:
   - uncertainties_DDIF-LEP.yaml
   data_central: data_DDIF-LEP.yaml
 
-- observable_name: DDIF-MU
+- observable_name: DDIF-MUON
   observable:
     description:  Combined Born-level double-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence # Should I separate observables in bins of m_T^W?
     label: ATLAS $W$ 13 TeV Double-Differential 
@@ -169,8 +169,8 @@ implemented_observables:
     plot_x: '$m_T^W$'
   kinematic_coverage:
   - abs_eta
+  - m_T^W
   - m_W2
-  - sqrts
   kinematics:
     variables:
       abs_eta:
@@ -181,15 +181,15 @@ implemented_observables:
         description: Transverse mass of the W boson
         label: '$m_T^W$'
         units: 'GeV'
-      sqrts:
-        description: center of mass energy
-        label: '$\sqrt{s}$'
-        units: 'GeV'
-    file: kinematics_DDIF-MU.yaml
+      m_W2:
+        description: W boson squared mass
+        label: '$m_W^2$'
+        units: 'GeV$^2$'
+    file: kinematics_DDIF-MUON.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
   data_uncertainties:
-  - uncertainties_DDIF-MU.yaml
-  data_central: data_DDIF-MU.yaml
+  - uncertainties_DDIF-MUON.yaml
+  data_central: data_DDIF-MUON.yaml
