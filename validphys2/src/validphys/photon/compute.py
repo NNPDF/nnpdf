@@ -3,6 +3,7 @@
 import logging
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
+from joblib import Parallel, delayed, effective_n_jobs
 
 import numpy as np
 from scipy.integrate import trapezoid
@@ -125,10 +126,8 @@ class Photon:
         # set fiatlux
         mb_thr = theory["kbThr"] * theory["mb"]
         mt_thr = theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100
-        interpolator = []
-        integral = []
 
-        for replica in self.replicas:
+        def process_single_replica(replica):
             # As input replica for the photon computation we take the MOD of the luxset_members to
             # avoid failing due to limited number of replicas in the luxset
             photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
@@ -198,19 +197,29 @@ class Photon:
 
             photon_Q0 = pdfs_final[ph_id]
             photon_array = XGRID * photon_Q0
+            return (photon_array, photonreplica)
+        
 
-            if self.save_to_disk:
-                path_to_photon = loader._photons_qed_path / f"photon_theoryID_{self.theoryid.id}_fit_{self.luxpdfset._name}"
-                path_to_photon.mkdir(parents=True, exist_ok=True)
-                np.savez_compressed(path_to_photon / f"replica_{photonreplica}.npz",photon_array=photon_array)
-                log.info(f"Saved photon replica {photonreplica} to {path_to_photon}")
+        log.info(f"Starting computation of the photon using {effective_n_jobs(-1)} effective cores...")
+        photon_tuples = Parallel(n_jobs=-1)(delayed(process_single_replica(replica)) for replica in self.replicas)
 
-            interpolator.append(interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic"))
-            integral.append(trapezoid(photon_array, XGRID))
+        interpolator = []
+        integral = []
+
+        # If saving to disk, create the directory
+        if self.save_to_disk:
+          path_to_photon.mkdir(parents=True, exist_ok=True)
+
+        for photon_array, photonreplica in photon_tuples:
+          if self.save_to_disk:
+              path_to_photon = loader._photons_qed_path / f"photon_theoryID_{self.theoryid.id}_fit_{self.luxpdfset._name}"
+              np.savez_compressed(path_to_photon / f"replica_{photonreplica}.npz",photon_array=photon_array)
+              log.info(f"Saved photon replica {photonreplica} to {path_to_photon}")
+
+          interpolator.append(interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic"))
+          integral.append(trapezoid(photon_array, XGRID))
 
         integral = np.stack(integral, axis=-1)
-
-
         self.integral = integral
         self.interpolator = interpolator
 
@@ -286,3 +295,12 @@ class Photon:
       self.interpolator = interpolator
       self.integral = np.stack(integral, axis=-1)
       return
+    
+def compute_photon(theoryid, fiatlux, force_fiatlux=False):
+    """Function to compute the photon PDF set.""" 
+    luxset = fiatlux['luxset'].load()
+    replicas = list(range(1, luxset.n_members))
+    Photon(theoryid, fiatlux, replicas=replicas, save_to_disk=True, force_computation=force_fiatlux)
+
+
+    
