@@ -169,7 +169,7 @@ class Photon:
           lux.PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
           photon_qin = np.array(
-            [self.lux[replica].EvaluatePhoton(x, self.q_in**2).total for x in XGRID]
+            [lux.EvaluatePhoton(x, self.q_in**2).total for x in XGRID]
         )
           photon_qin += self.generate_errors(replica)
 
