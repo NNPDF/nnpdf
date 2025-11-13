@@ -1,0 +1,167 @@
+dependent_variables:
+- header: {name: '$\rho(\text{Jet-veto }p_{T}\text{ threshold})$'}
+  qualifiers:
+  - {name: 'Statistical correlation for cross section', value: 'WW production'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 27'}
+  - {name: 'M(ELECTRON,MUON)', units: 'GEV', value: '> 55'}
+  - {name: 'PT(ELECTRON,MUON)', units: 'GEV', value: '> 30'}
+  - {name: 'ETMISS', units: 'GEV', value: '> 20'}
+  - {name: 'ABS(ETARAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 35'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - {value: 1.0}
+  - {value: 0.9507}
+  - {value: 0.9092}
+  - {value: 0.8695}
+  - {value: 0.8371}
+  - {value: 0.8075}
+  - {value: 0.7818}
+  - {value: 0.9507}
+  - {value: 1.0}
+  - {value: 0.9563}
+  - {value: 0.9146}
+  - {value: 0.8805}
+  - {value: 0.8493}
+  - {value: 0.8223}
+  - {value: 0.9092}
+  - {value: 0.9563}
+  - {value: 1.0}
+  - {value: 0.9563}
+  - {value: 0.9207}
+  - {value: 0.8881}
+  - {value: 0.8599}
+  - {value: 0.8695}
+  - {value: 0.9146}
+  - {value: 0.9563}
+  - {value: 1.0}
+  - {value: 0.9628}
+  - {value: 0.9287}
+  - {value: 0.8991}
+  - {value: 0.8371}
+  - {value: 0.8805}
+  - {value: 0.9207}
+  - {value: 0.9628}
+  - {value: 1.0}
+  - {value: 0.9646}
+  - {value: 0.9339}
+  - {value: 0.8075}
+  - {value: 0.8493}
+  - {value: 0.8881}
+  - {value: 0.9287}
+  - {value: 0.9646}
+  - {value: 1.0}
+  - {value: 0.9682}
+  - {value: 0.7818}
+  - {value: 0.8223}
+  - {value: 0.8599}
+  - {value: 0.8991}
+  - {value: 0.9339}
+  - {value: 0.9682}
+  - {value: 1.0}
+independent_variables:
+- header: {name: '$\text{Jet-veto }p_{T}\text{ threshold}\text{ [GeV]}$'}
+  values:
+  - {value: 30.0}
+  - {value: 30.0}
+  - {value: 30.0}
+  - {value: 30.0}
+  - {value: 30.0}
+  - {value: 30.0}
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 35.0}
+  - {value: 35.0}
+  - {value: 35.0}
+  - {value: 35.0}
+  - {value: 35.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 40.0}
+  - {value: 40.0}
+  - {value: 40.0}
+  - {value: 40.0}
+  - {value: 40.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 45.0}
+  - {value: 45.0}
+  - {value: 45.0}
+  - {value: 45.0}
+  - {value: 45.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 50.0}
+  - {value: 50.0}
+  - {value: 50.0}
+  - {value: 50.0}
+  - {value: 50.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 55.0}
+  - {value: 55.0}
+  - {value: 55.0}
+  - {value: 55.0}
+  - {value: 55.0}
+  - {value: 55.0}
+  - {value: 60.0}
+  - {value: 60.0}
+  - {value: 60.0}
+  - {value: 60.0}
+  - {value: 60.0}
+  - {value: 60.0}
+  - {value: 60.0}
+- header: {name: '$\text{Jet-veto }p_{T}\text{ threshold}\text{ [GeV]}$'}
+  values:
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 60.0}
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 60.0}
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 60.0}
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 60.0}
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 60.0}
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 60.0}
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 60.0}
