@@ -36,7 +36,7 @@ from validphys.filters import (
     default_filter_rules_input,
     default_filter_settings_input,
 )
-from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
+from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas, match_datasets_by_name
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
     DataNotFoundError,
@@ -981,14 +981,12 @@ class CoreConfig(configparser.Config):
         for spec in dataspecs:
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
-
                 names = {}
                 for dsin in data_input:
                     cd = self.produce_commondata(dataset_input=dsin)
                     proc = get_info(cd).nnpdf31_process
                     ds = dsin.name
                     names[(proc, ds)] = dsin
-
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
         res = []
@@ -1004,6 +1002,34 @@ class CoreConfig(configparser.Config):
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
         return res
 
+    def produce_matched_excluded_datasets_by_name(self, dataspecs):
+        """Like produce_matched_datasets_from_dataspecs but for all datasets excluded from the fit.""" 
+        self._check_dataspecs_type(dataspecs)
+        loader = Loader()
+    
+        implemented = set(loader.implemented_datasets)
+        all_used = []
+
+    
+        for spec in dataspecs:
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, data_input = self.parse_from_(None, "data_input", write=False)
+                names = {}
+                for dsin in data_input:
+                    cd = self.produce_commondata(dataset_input=dsin)
+                    proc = get_info(cd).nnpdf31_process
+                    ds = dsin.name
+                    names[(proc, ds)] = dsin
+                all_used.append(names)
+
+        used_union = {ds for d in all_used for (_, ds) in d.keys()} 
+        excluded_set = implemented - used_union 
+        excluded_list = [{"dataset_name": ds} for ds in sorted(excluded_set)] 
+        return excluded_list
+
+    def produce_matched_excluded_datasets_from_dataspecs(self, dataspecs):
+        return self.produce_matched_excluded_datasets_by_name(dataspecs)
+
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
         """Like produce_matched_datasets_from_dataspecs but for positivity datasets."""
         self._check_dataspecs_type(dataspecs)
@@ -1014,7 +1040,6 @@ class CoreConfig(configparser.Config):
                 names = {(p.name): (p) for p in pos}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
-
         res = []
         for k in used_set:
             inres = {"posdataset_name": k}
@@ -1027,6 +1052,32 @@ class CoreConfig(configparser.Config):
             res.append(inres)
         res.sort(key=lambda x: (x["posdataset_name"]))
         return res
+
+
+    def produce_matched_excluded_positivity_by_name(self, dataspecs):
+        """Like produce_matched_positivity_from_dataspecs but for all positivity datasets excluded from the fit."""
+        self._check_dataspecs_type(dataspecs)
+        loader = Loader()
+        implemented_pos = {
+            d for d in loader.implemented_datasets if d.startswith("NNPDF_POS_")
+        }
+ 
+        all_used = []
+        for spec in dataspecs:
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, pos = self.parse_from_(None, "posdatasets", write=False)
+                used = {p.name for p in pos}
+                all_used.append(used)
+    
+        used_union = set.union(*all_used) if all_used else set()
+        excluded_set = implemented_pos - used_union
+
+        excluded_list = [{"posdataset_name": ds} for ds in sorted(excluded_set)]
+        return excluded_list
+    
+    def produce_matched_excluded_positivity_from_dataspecs(self, dataspecs):
+        return self.produce_matched_excluded_positivity_by_name(dataspecs)
+ 
 
     def produce_dataspecs_with_matched_cuts(self, dataspecs):
         """Take a list of namespaces (dataspecs), resolve ``dataset`` within

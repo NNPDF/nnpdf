@@ -68,7 +68,6 @@ class CompareFitApp(App):
             help="Use LUX basis (which include the photon) for the report",
             action='store_true',
         )
-
         parser.set_defaults()
 
     def try_complete_args(self):
@@ -178,6 +177,11 @@ class CompareFitApp(App):
             args['config_yml'] = comparefittemplates.template_pol_path
         else:
             args['config_yml'] = comparefittemplates.template_path
+
+        #if args.get('current_fit') and args.get('reference_fit'):
+        #    if self.check_identical_theory_cuts_covmat(args):
+        log.info("Using excluded comparecard: identical theory cuts/covmat detected.")
+        args['config_yml'] = comparefittemplates.template_with_excluded_path
         return args
 
     def complete_mapping(self):
@@ -223,8 +227,6 @@ class CompareFitApp(App):
                     'unpolarized_bc': {'from_': 'positivity_bound'},
                 }
             )
-        if self.check_identical_theory_cuts_covmat():
-            autosettings['extra_dataset_page'] = True
         return autosettings
 
 
@@ -240,12 +242,10 @@ class CompareFitApp(App):
     
     def check_identical_theory_cuts_covmat(self):
         args = self.args
-        l = self.environment.loader
-        resultspath = l.resultspath
-        
-        current_runcard_path = str(resultspath) + "/" + str(args['current_fit']) + "/filter.yml" 
-        reference_runcard_path = str(resultspath) + "/" + str(args['reference_fit']) + "/filter.yml"
-        
+        l = self.environment.loader 
+        current_runcard_path = l.check_fit(args['current_fit']).path / "filter.yml"
+        reference_runcard_path = l.check_fit(args['reference_fit']).path / "filter.yml"  
+       
         with open(current_runcard_path) as fc:
             with open(reference_runcard_path) as fr:
                 current_runcard = yaml_safe.load(fc)
@@ -253,13 +253,11 @@ class CompareFitApp(App):
         
         current_thcovmat = current_runcard.get("theorycovmatconfig")
         reference_thcovmat = reference_runcard.get("theorycovmatconfig")
-
-        same_theoryid = current_runcard.get("theory").get("theoryid") == reference_runcard.get("theory").get("theoryid")
+        same_theoryid = current_runcard.get("theory", {}).get("theoryid") == reference_runcard.get("theory", {}).get("theoryid")
         same_datacuts = current_runcard.get("datacuts") == reference_runcard.get("datacuts")
-        same_thcovmat = (current_thcovmat == reference_thcovmat or (current_thcovmat is None and reference_thcovmat is None))
-
+        same_thcovmat = (current_thcovmat == reference_thcovmat)
         return same_theoryid and same_datacuts and same_thcovmat
-            
+
 
 def main():
     a = CompareFitApp()
