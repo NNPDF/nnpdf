@@ -291,9 +291,10 @@ def compute_photon(theoryid, fiatlux):
     force_compute = fiatlux.get('compute_in_setupfit', False)
     replicas = list(range(1, luxset.n_members))
 
+    # Return None and avoid pickling issues with the phoyon class.
+    def wrapper_fn(replica, theoryid, fiatlux, force_compute):
+        Photon(theoryid, fiatlux, replicas=[replica], save_to_disk=True, force_computation=force_compute)
+        return None
+    
     log.info(f"Starting computation of the photon using {effective_n_jobs(-1)} effective cores...")
-    _ = Parallel(n_jobs=-1)(delayed(Photon)(theoryid, fiatlux, replicas=[replica], save_to_disk=True, force_computation=force_compute) for replica in replicas)
-    
-
-
-    
+    _ = Parallel(n_jobs=-1)(delayed(wrapper_fn)(replica=replica, theoryid=theoryid, fiatlux=fiatlux, force_compute=force_compute) for replica in replicas)
