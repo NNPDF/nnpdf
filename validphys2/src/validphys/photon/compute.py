@@ -2,7 +2,6 @@
 
 import logging
 import tempfile
-from concurrent.futures import ThreadPoolExecutor
 from joblib import Parallel, delayed, effective_n_jobs
 
 import numpy as np
