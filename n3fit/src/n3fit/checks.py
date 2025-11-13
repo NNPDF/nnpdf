@@ -482,9 +482,9 @@ def check_photonQED_exists(theoryid, fiatlux):
           _ = Loader().check_photonQED(theoryid.id, luxset)
           log.info(f"Photon QED set found for {theoryid.id} with luxset {luxset}.")
       except FileNotFoundError:
-          log.warning(f"No Photon QED set found for {theoryid} with luxset {luxset} and "\
-                      "will be compute using FiatLux. This may impact performance. Make"
-                      "sure vp-setupfit has been run prior to the fit to download necessary resources.")
+          log.warning(f"No Photon QED set found for {theoryid} with luxset {luxset}. It "\
+                      "will be compute using FiatLux. This may impact performance. Make "
+                      "sure vp-setupfit has been run prior to n3fit to download necessary resources.")
 
 
 @make_argcheck
