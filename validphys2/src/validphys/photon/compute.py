@@ -127,82 +127,6 @@ class Photon:
         mb_thr = theory["kbThr"] * theory["mb"]
         mt_thr = theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100
 
-        def process_single_replica(replica):
-            # As input replica for the photon computation we take the MOD of the luxset_members to
-            # avoid failing due to limited number of replicas in the luxset
-            photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
-
-            f2lo = sf.F2LO(self.luxpdfset.members[photonreplica], theory)
-
-            if theory["PTO"] > 0:
-                f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[photonreplica])
-                fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[photonreplica])
-                if not np.isclose(f2.q2_max, fl.q2_max):
-                    log.error(
-                        "FKtables for FIATLUX_DIS_F2 and FIATLUX_DIS_FL have two different q2_max"
-                    )
-                self.fiatlux_runcard["q2_max"] = float(f2.q2_max)
-            else:
-                f2 = f2lo
-                fl = sf.FLLO()
-                # using a default value for q2_max
-                self.fiatlux_runcard["q2_max"] = 1e8
-
-            alpha = Alpha(theory, self.fiatlux_runcard["q2_max"])
-            with tempfile.NamedTemporaryFile(mode="w") as tmp:
-                yaml.dump(self.fiatlux_runcard, tmp)
-                lux = fiatlux.FiatLux(tmp.name)
-
-            # we have a dict but fiatlux wants a yaml file
-            # TODO : once that fiatlux will allow dictionaries
-            # pass directly fiatlux_runcard
-            lux.PlugAlphaQED(alpha.alpha_em, alpha.qref)
-            lux.InsertInelasticSplitQ([mb_thr, mt_thr])
-            lux.PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
-
-            # Evaluate photon for every point in the grid xgrid
-            def evaluate_at_x(x):
-              return lux.EvaluatePhoton(x, self.q_in**2).total
-            
-            with ThreadPoolExecutor() as executor:
-                photon_qin = np.array(list(executor.map(evaluate_at_x, XGRID)))
-
-            photon_qin += self.generate_errors(replica)
-
-            # fiatlux computes x * gamma(x)
-            photon_qin /= XGRID
-
-            # Load eko and reshape it
-            with EKO.read(self.path_to_eko_photon) as eko_photon:
-                # TODO : if the eko has not the correct grid we have to reshape it
-                # it has to be done inside vp-setupfit
-                
-                # NB: the eko should contain a single operator
-                for _, elem in eko_photon.items():
-                    eko_op = elem.operator
-
-                    pdfs_init = np.zeros_like(eko_op[0, 0])
-                    for j, pid in enumerate(basis_rotation.flavor_basis_pids):
-                        if pid == 22:
-                            pdfs_init[j] = photon_qin
-                            ph_id = j
-                        elif pid not in self.luxpdfset.flavors:
-                            continue
-                        else:
-                            pdfs_init[j] = np.array(
-                                [self.luxpdfset.xfxQ(x, self.q_in, photonreplica, pid) / x for x in XGRID]
-                            )
-
-                    pdfs_final = np.einsum("ajbk,bk", eko_op, pdfs_init)
-
-            photon_Q0 = pdfs_final[ph_id]
-            photon_array = XGRID * photon_Q0
-            return (photon_array, photonreplica)
-        
-
-        log.info(f"Starting computation of the photon using {effective_n_jobs(-1)} effective cores...")
-        photon_tuples = Parallel(n_jobs=-1)(delayed(process_single_replica(replica)) for replica in self.replicas)
-
         interpolator = []
         integral = []
 
@@ -211,7 +135,71 @@ class Photon:
           path_to_photon = loader._photons_qed_path / f"photon_theoryID_{self.theoryid.id}_fit_{self.luxpdfset._name}"
           path_to_photon.mkdir(parents=True, exist_ok=True)
 
-        for photon_array, photonreplica in photon_tuples:
+        for replica in self.replicas:
+          # As input replica for the photon computation we take the MOD of the luxset_members to
+          # avoid failing due to limited number of replicas in the luxset
+          photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
+
+          f2lo = sf.F2LO(self.luxpdfset.members[photonreplica], theory)
+
+          if theory["PTO"] > 0:
+              f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[photonreplica])
+              fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[photonreplica])
+              if not np.isclose(f2.q2_max, fl.q2_max):
+                  log.error(
+                      "FKtables for FIATLUX_DIS_F2 and FIATLUX_DIS_FL have two different q2_max"
+                  )
+              self.fiatlux_runcard["q2_max"] = float(f2.q2_max)
+          else:
+              f2 = f2lo
+              fl = sf.FLLO()
+              # using a default value for q2_max
+              self.fiatlux_runcard["q2_max"] = 1e8
+
+          alpha = Alpha(theory, self.fiatlux_runcard["q2_max"])
+          with tempfile.NamedTemporaryFile(mode="w") as tmp:
+              yaml.dump(self.fiatlux_runcard, tmp)
+              lux = fiatlux.FiatLux(tmp.name)
+
+          # we have a dict but fiatlux wants a yaml file
+          # TODO : once that fiatlux will allow dictionaries
+          # pass directly fiatlux_runcard
+          lux.PlugAlphaQED(alpha.alpha_em, alpha.qref)
+          lux.InsertInelasticSplitQ([mb_thr, mt_thr])
+          lux.PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
+
+          photon_qin = np.array(lux.EvaluatePhoton(x, self.q_in**2).total for x in XGRID)
+          photon_qin += self.generate_errors(replica)
+
+          # fiatlux computes x * gamma(x)
+          photon_qin /= XGRID
+
+          # Load eko and reshape it
+          with EKO.read(self.path_to_eko_photon) as eko_photon:
+              # TODO : if the eko has not the correct grid we have to reshape it
+              # it has to be done inside vp-setupfit
+              
+              # NB: the eko should contain a single operator
+              for _, elem in eko_photon.items():
+                  eko_op = elem.operator
+
+                  pdfs_init = np.zeros_like(eko_op[0, 0])
+                  for j, pid in enumerate(basis_rotation.flavor_basis_pids):
+                      if pid == 22:
+                          pdfs_init[j] = photon_qin
+                          ph_id = j
+                      elif pid not in self.luxpdfset.flavors:
+                          continue
+                      else:
+                          pdfs_init[j] = np.array(
+                              [self.luxpdfset.xfxQ(x, self.q_in, photonreplica, pid) / x for x in XGRID]
+                          )
+
+                  pdfs_final = np.einsum("ajbk,bk", eko_op, pdfs_init)
+
+          photon_Q0 = pdfs_final[ph_id]
+          photon_array = XGRID * photon_Q0
+
           if self.save_to_disk:
               np.savez_compressed(path_to_photon / f"replica_{photonreplica}.npz",photon_array=photon_array)
               log.info(f"Saved photon replica {photonreplica} to {path_to_photon}")
@@ -301,7 +289,10 @@ def compute_photon(theoryid, fiatlux):
     luxset = fiatlux['luxset'].load()
     force_compute = fiatlux.get('compute_in_setupfit', False)
     replicas = list(range(1, luxset.n_members))
-    Photon(theoryid, fiatlux, replicas=replicas, save_to_disk=True, force_computation=force_compute)
+
+    log.info(f"Starting computation of the photon using {effective_n_jobs(-1)} effective cores...")
+    _ = Parallel(n_jobs=-1)(delayed(Photon)(theoryid, fiatlux, replicas=[replica], save_to_disk=True, force_computation=force_compute) for replica in replicas)
+    
 
 
     
