@@ -23,8 +23,12 @@ located in the ``nnpdf`` git repository at
 
 where a separate ``CommonData`` file is stored for each *Dataset* with the
 filename format described in :ref:`dataset-naming-convention`.
-The data is installed as part of the python package of ``nnpdf``,
+The data is installed as part of the python package of ``nnpdf`` or ``nnpdf_data``.
 all data files to be installed must have a ``.yaml`` extension.
+
+It is possible to add extra sources of data by adding a ``data_path`` variable
+to the ``nnprofile.yaml`` file (see :ref:`nnprofile`).
+The extra sources will always be searched before the default path.
 
 
 Theory lookup table

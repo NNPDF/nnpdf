@@ -283,12 +283,12 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
         T = np.divide(T,alpha)
     
         # Construct the matrices A and B (Eq. 9)
-        A = np.identity(n_corr_syst) + np.matmul(beta.T,beta)
+        A = np.identity(n_corr_syst) + np.matmul(beta.T, beta)
         A_inverse = np.linalg.inv(A)
-        B = np.matmul(D-T,beta)
+        B = np.matmul(D-T, beta)
     
         # Compute the nuisance parameters r (Eq. 8)
-        r = np.matmul(np.linalg.inv(A),B)
+        r = np.matmul(A_inverse, B)
     
         # Compute the shifts
         shifts = - np.matmul(beta*alpha[:, np.newaxis], r)

@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ######################################################################################
-description: Starting runcard for the NNPDF4.1 series of fits. Work In Progress
+description: Runcard for the NNPDF4.1 series of fits; WIP
 
 ######################################################################################
 dataset_inputs:
@@ -28,7 +28,6 @@ dataset_inputs:
 - {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, frac: 0.75}
 - {dataset: DYE866_Z0_800GEV_PXSEC, frac: 0.75}
 - {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, frac: 0.75}
-# - {dataset: DYE906_Z0_120GEV_DW_PDXSECRATIO, frac: 0.75}
 - {dataset: CDF_Z0_1P96TEV_ZRAP, frac: 0.75}
 - {dataset: D0_Z0_1P96TEV_ZRAP, frac: 0.75}
 - {dataset: D0_WPWM_1P96TEV_ASY, frac: 0.75}
@@ -40,7 +39,6 @@ dataset_inputs:
 - {dataset: ATLAS_Z0_7TEV_46FB_CC-Y, frac: 0.75}
 - {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, frac: 0.75}
 - {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y, frac: 0.75}
-# - {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, frac: 0.75, variant: legacy}
 - {dataset: ATLAS_Z0_13TEV_TOT, frac: 0.75, cfac: [NRM]}
 - {dataset: ATLAS_WPWM_13TEV_TOT, frac: 0.75, cfac: [NRM]}
 - {dataset: ATLAS_WJ_8TEV_WP-PT, frac: 0.75}
@@ -89,18 +87,22 @@ dataset_inputs:
 - {dataset: LHCB_Z0_13TEV_DIMUON-Y, frac: 0.75}
 - {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75}
 
-
 ################################################################################
 datacuts:
-  t0pdfset: 250917-jcm-001
+  t0pdfset: 251105-jcm-nnpdf41-mhou
   q2min: 3.49
   w2min: 12.5
 theory:
   theoryid: 41_000_000
+theorycovmatconfig:
+  point_prescriptions: [7 point]
+  pdf: 251105-jcm-nnpdf41-mhou
+  use_thcovmat_in_fitting: true
+  use_thcovmat_in_sampling: true
 
-trvlseed: 1953065998
-nnseed: 1589400026
-mcseed: 2135943670
+trvlseed: 422789893
+nnseed: 1065290715
+mcseed: 819764265
 genrep: true
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [70, 50, 25, 20, 9]
@@ -121,25 +123,25 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   layer_type: dense
   dropout: 0.0
   threshold_chi2: 3.5
-  interpolation_points: 5
+  interpolation_points: 5 
 fitting:
   fitbasis: CCBAR_ASYMM  # EVOL (7), EVOLQED (8), etc.
   savepseudodata: true
   basis:
-  - {fl: sng, trainable: false, smallx: [1.103, 1.12], largex: [1.461, 3.778]}
-  - {fl: g, trainable: false, smallx: [0.8737, 1.088], largex: [2.204, 4.431]}
-  - {fl: v, trainable: false, smallx: [0.5051, 0.6847], largex: [1.526, 2.557]}
-  - {fl: v3, trainable: false, smallx: [0.1932, 0.4309], largex: [1.73, 2.559]}
-  - {fl: v8, trainable: false, smallx: [0.5645, 0.7228], largex: [1.566, 2.662]}
-  - {fl: t3, trainable: false, smallx: [-0.4244, 1.0], largex: [1.75, 2.939]}
-  - {fl: t8, trainable: false, smallx: [0.6677, 0.9282], largex: [1.55, 3.504]}
-  - {fl: t15, trainable: false, smallx: [1.087, 1.136], largex: [1.503, 3.379]}
-  - {fl: v15, trainable: false, smallx: [0.4713, 0.7641], largex: [1.464, 3.851]}
+  - {fl : sng, trainable : false, smallx : [1.095, 1.146], largex   : [0., 0.]}
+  - {fl : g, trainable   : false, smallx : [0.7978, 1.087], largex  : [0., 0.]}
+  - {fl : v, trainable   : false, smallx : [0.4775, 0.6577], largex : [0., 0.]}
+  - {fl : v3, trainable  : false, smallx : [0.1068, 0.493], largex  : [0., 0.]}
+  - {fl : v8, trainable  : false, smallx : [0.5914, 0.7776], largex : [0., 0.]}
+  - {fl : t3, trainable  : false, smallx : [-0.3737, 1.0], largex   : [0., 0.]}
+  - {fl : t8, trainable  : false, smallx : [0.5771, 0.9486], largex : [0., 0.]}
+  - {fl : t15, trainable : false, smallx : [1.062, 1.153], largex   : [0., 0.]}
+  - {fl : v15, trainable : false, smallx : [0.4515, 0.7648], largex : [0., 0.]}
 
 ################################################################################
 positivity:
   posdatasets:
-    # Positivity of MSbar PDFs
+  # Positivity of MSbar PDFs
   - {dataset: NNPDF_POS_100GEV_XUQ, maxlambda: 1e6}
   - {dataset: NNPDF_POS_100GEV_XUB, maxlambda: 1e6}
   - {dataset: NNPDF_POS_100GEV_XDQ, maxlambda: 1e6}
