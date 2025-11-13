@@ -192,8 +192,9 @@ class SetupFitConfig(Config):
                 _ = loader.check_photonQED(theoryid, luxset)
                 log.info(f"Photon QED set found for {theoryid} with luxset {luxset}.")
             except PhotonQEDNotFound:
-                log.warning(f"No photon set found for {theoryid} with luxset {luxset}. Set "\
-                            "compute_in_setupfit to true in the runcard. Otherwise n3fit" \
+                log.warning(f"No photon set found for {theoryid} with luxset {luxset}. Consider "\
+                            "using `compute_in_setupfit` in the runcard to compute all replicas of the photon "
+                            "in vp-setupfit. Otherwise n3fit " \
                             "will take care of the photon computation. May impact performance.")
 
             if force_compute:
