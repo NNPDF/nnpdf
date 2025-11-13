@@ -110,6 +110,10 @@ description:
 dataset_inputs:
   from_: fit
 
+excluded_datasets:
+  use_cuts: "fromfit"
+  from_: excluded
+
 dataspecs:
   - theoryid:
       from_: current

@@ -282,6 +282,35 @@ fits_replica_data = collect('replica_data', ('fits',))
 all_datasets = collect('dataset', ('data',))
 fits_datasets = collect('all_datasets', ('fits', 'fitinputcontext'))
 
+#def match_excluded_datasets_by_name(match_datasets_by_name):
+#    """Like produce_matched_datasets_from_dataspecs but for all datasets excluded from the fit."""
+#    self._check_dataspecs_type(dataspecs)
+#    loader = Loader()
+#
+#    implemented = set(loader.implemented_datasets)
+#    all_used = []
+#
+#    for spec in dataspecs:
+#        with self.set_context(ns=self._curr_ns.new_child(spec)):
+#            _, data_input = self.parse_from_(None, "data_input", write=False)
+#            names = {}
+#            for dsin in data_input:
+#                cd = self.produce_commondata(dataset_input=dsin)
+#                proc = get_info(cd).nnpdf31_process
+#                ds = dsin.name
+#                names[(proc, ds)] = dsin
+#            all_used.append(names)
+#
+#    used_union = {ds for d in all_used for (_, ds) in d.keys()}
+#    excluded_set = implemented - used_union
+
+#    datasetcomp = match_datasets_by_name()
+
+
+#    return excluded_set
+
+
+
 
 @make_argcheck
 def _assert_two_fits(fits):
