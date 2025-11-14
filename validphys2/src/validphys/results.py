@@ -271,9 +271,6 @@ def groups_index(groups_data, diagonal_basis=True):
 
     columns = ["group", "dataset", "id"]
     df = pd.DataFrame(records, columns=columns)
-    if diagonal_basis:
-        df["dataset"] = [f"eigenmode {i}" for i in range(len(df["dataset"]))]
-        df["id"] = np.arange(len(df), dtype=int)
     df.set_index(columns, inplace=True)
 
     return df.index
