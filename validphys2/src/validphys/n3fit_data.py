@@ -143,7 +143,7 @@ class _Masks(TupleComp):
         super().__init__(group_name, seed)
 
 
-def diagonal_masks(data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=1.0):
+def diagonal_masks(data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=0.75):
 
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
