@@ -45,7 +45,10 @@ elif K.backend() == "tensorflow":
         tf.config.run_functions_eagerly(flag)
 
     def set_threading(threads, cores):
-        """Set the Tensorflow inter and intra parallelism options"""
+        """Set the Tensorflow inter and intra parallelism options.
+        Make sure that the TensorFloat 32 type is off regardless of whether it is available.
+        """
+        tf.config.experimental.enable_tensor_float_32_execution(False)
         log.info("Setting the number of cores to: %d", cores)
         try:
             tf.config.threading.set_inter_op_parallelism_threads(threads)
@@ -164,6 +167,8 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
 
     if double_precision:
         K.set_floatx('float64')
+    else:
+        K.set_floatx('float32')
 
     # Set the number of cores depending on the user choice of max_cores
     # if debug mode and no number of cores set by the user, set to 1
