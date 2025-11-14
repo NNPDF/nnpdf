@@ -69,13 +69,13 @@ elif K.backend() == "jax":
     tensor_to_numpy_or_python = lambda x: np.array(x.block_until_ready())
     decorator_compiler = lambda f: f
 elif K.backend() == "tensorflow":
-    tensor_to_numpy_or_python = lambda x: x.numpy()
+    tensor_to_numpy_or_python = lambda x: x.numpy().astype(K.floatx())
     import tensorflow as tf
 
     decorator_compiler = tf.function
 
 dict_to_numpy_or_python = lambda ret: {k: tensor_to_numpy_or_python(i) for k, i in ret.items()}
-variable_to_numpy = lambda x: x.numpy()
+variable_to_numpy = lambda x: x.numpy().astype(K.floatx())
 
 
 def as_layer(operation, op_args=None, op_kwargs=None, **kwargs):
