@@ -3,8 +3,8 @@ import pathlib
 import numpy as np
 from validphys.utils import yaml_safe
 
-from .q2grids import Q2GRID_NNPDF40
-
+from q2grids import Q2GRID_NNPDF40
+LAMBDA2 = 0.0625
 
 def read_runcard(usr_path):
     """Read the runcard and return the relevant information for evolven3fit"""
@@ -44,8 +44,7 @@ def generate_q2grid(Q0, Qmin, Qmax, match_dict, total_points, total_points_ic, l
         return Q2GRID_NNPDF40
     # Otherwise dynamically create the grid from Q2_min --> Q2_max
         Q2_min = Qmin**2 # 1.0**2
-        Q2_max = Qmax**2 # 1e5**2                    
-        LAMBDA2 = 0.0625                  
+        Q2_max = Qmax**2 # 1e5**2                  
         
         # Collect all node Q2's from Q0^2 --> Q2_max
         q0_2 = Q0**2
@@ -88,8 +87,6 @@ def generate_q2grid(Q0, Qmin, Qmax, match_dict, total_points, total_points_ic, l
 
         # Combine all subgrids and return as an array
         q2_full = np.concatenate(grids)
-        q2_full[0] = Q2_min
-        q2_full[-1] = Q2_max
         return q2_full
     
 def check_is_a_fit(config_folder):
