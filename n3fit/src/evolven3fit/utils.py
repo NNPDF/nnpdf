@@ -28,21 +28,29 @@ def t_to_Q2(t: float, lambda2) -> float:
 
 def generate_q2grid(Q0, Qmin, Qmax, match_dict, total_points, total_points_ic, legacy40=False):
     """Generate the q2grid used in the final evolved pdfs or use the default grid if legacy40 is set. 
-    The grid uses log(log(Q2/Lambda2)) spacing between the points, with Lambda2=0.0625.
+    
+    The grid uses $\log(\log(Q^2/\text{`LAMBDA2`})) spacing between the points.
 
-    The grid from Q2_min --> mc is made separately from the rest to be able to let it contain at
-    least 5 points. The rest of the grids contains the same loglog spacing from threshold to threshold.
+    The grid from `Q2_min` --> `mc` is made separately from the rest to be able to let it contain at
+    least 5 points. The reason for this is to always have some points in the intrinsic charm regime.
+    The rest of the grids contains the same loglog spacing from threshold to threshold. 
+    
+    Since the grid needs to contain the $Q^2$ values `Q2_min`, `mc`^2, `Q0`^2, `mb`^2 and `Q2_max`,
+    we divide the grid in batches that have these values as boundaries, and add them together 
+    at the end. The batches ad boundaries are thus like this:
 
     Q2_min --> mc^2 --> Q0^2 --> mb^2 --> Q2_max
 
-    match_dict contains the quark mass thresholds and factors. Factor is the number to be 
-    multiplied to mass in order to obtain the relative matching scale.
+    `match_dict` contains the quark mass thresholds and factors. This "factor" is the number to be 
+    multiplied to mass in order to obtain the relative matching scale (e.g. `match_dict["kbThr"]`
+    in the case of the bottom threshold).
     """
     
     # If flag --legacy40 is set return handmade legacy grid
     if legacy40:
         return Q2GRID_NNPDF40
     # Otherwise dynamically create the grid from Q2_min --> Q2_max
+    else:
         Q2_min = Qmin**2 # 1.0**2
         Q2_max = Qmax**2 # 1e5**2                  
         

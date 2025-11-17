@@ -1,5 +1,5 @@
 """
-Definition of NNPDF40 legacy grid.
+Definition of LHAPDF evolution grid.
 """
 
 import numpy as np
