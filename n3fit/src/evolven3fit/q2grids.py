@@ -4,7 +4,6 @@ Definition of NNPDF40 legacy grid.
 
 import numpy as np
 
-
 Q2GRID_NNPDF40 = (
     np.array(
         [
