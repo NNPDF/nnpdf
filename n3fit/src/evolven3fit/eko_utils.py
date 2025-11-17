@@ -66,7 +66,7 @@ def construct_eko_cards(
     q2_grid = utils.generate_q2grid(
         Q0=mu0,
         Qmin=1.0,
-        Qmax=1E5,
+        Qmax=1e5,
         total_points=50,
         total_points_ic=6,
         match_dict={
