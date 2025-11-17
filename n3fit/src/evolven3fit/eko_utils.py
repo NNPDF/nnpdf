@@ -76,7 +76,7 @@ def construct_eko_cards(
             "kbThr": theory["kbThr"],
         },
         legacy40=legacy40,
-    )    
+    )
 
     masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2
     thresholds_ratios = np.array([thresholds["c"], thresholds["b"], thresholds["t"]]) ** 2
