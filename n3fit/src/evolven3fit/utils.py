@@ -3,7 +3,7 @@ import pathlib
 import numpy as np
 from validphys.utils import yaml_safe
 
-from q2grids import Q2GRID_NNPDF40
+from .q2grids import Q2GRID_NNPDF40
 LAMBDA2 = 0.0625
 
 def read_runcard(usr_path):
