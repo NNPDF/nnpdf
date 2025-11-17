@@ -44,7 +44,6 @@ def generate_q2grid(Q0, Qmin, Qmax, match_dict, total_points, total_points_ic, l
     if legacy40:
         return Q2GRID_NNPDF40
     # Otherwise dynamically create the grid from Q2_min --> Q2_max
-    else: 
         Q2_min = Qmin**2 # 1.0**2
         Q2_max = Qmax**2 # 1e5**2                    
         LAMBDA2 = 0.0625                  
