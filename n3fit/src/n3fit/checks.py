@@ -9,7 +9,7 @@ import os
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STATS
 from reportengine.checks import CheckError, make_argcheck
-from validphys.loader import FallbackLoader
+from validphys.loader import FallbackLoader, Loader
 from validphys.pdfbases import check_basis
 
 log = logging.getLogger(__name__)
@@ -452,13 +452,20 @@ def check_deprecated_options(fitting):
     for option in nnfit_options:
         if option in fitting:
             log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
-
+        
 
 @make_argcheck
-def check_multireplica_qed(replicas, fiatlux):
+def check_photonQED_exists(theoryid, fiatlux):
+    """Check that the Photon QED set for this theoryid and luxset exists"""
     if fiatlux is not None:
-        if len(replicas) > 1:
-            raise CheckError("At the moment, running a multireplica QED fits is not allowed.")
+      luxset = fiatlux['luxset']
+      try:
+          _ = Loader().check_photonQED(theoryid.id, luxset)
+          log.info(f"Photon QED set found for {theoryid.id} with luxset {luxset}.")
+      except FileNotFoundError:
+          log.warning(f"No Photon QED set found for {theoryid} with luxset {luxset}. It "\
+                      "will be compute using FiatLux. This may impact performance. Make "
+                      "sure vp-setupfit has been run prior to n3fit to download necessary resources.")
 
 
 @make_argcheck
