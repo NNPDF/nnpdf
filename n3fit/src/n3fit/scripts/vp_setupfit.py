@@ -187,17 +187,21 @@ class SetupFitConfig(Config):
         if fiatlux is not None:
             luxset = fiatlux['luxset']
             theoryid = file_content['theory']['theoryid']
-            force_compute = fiatlux.get('compute_in_setupfit', False)
+            compute_in_setupfit = fiatlux.get('compute_in_setupfit', False)
             try:
                 _ = loader.check_photonQED(theoryid, luxset)
                 log.info(f"Photon QED set found for {theoryid} with luxset {luxset}.")
             except PhotonQEDNotFound:
-                log.warning(f"No photon set found for {theoryid} with luxset {luxset}. Consider "\
-                            "using `compute_in_setupfit` in the runcard to compute all replicas of the photon "
-                            "in vp-setupfit. Otherwise n3fit " \
-                            "will take care of the photon computation. May impact performance.")
+                if compute_in_setupfit:
+                  log.warning(f"Photon QED set for {theoryid} with luxset {luxset} not found. " \
+                              "It will be computed in vp-setupfit.")
+                else:
+                  log.warning(f"No photon set found for {theoryid} with luxset {luxset}. Consider "\
+                              "using `compute_in_setupfit` in the runcard to compute all replicas of the photon "
+                              "in vp-setupfit. Otherwise n3fit " \
+                              "will take care of the photon computation. May impact performance.")
 
-            if force_compute:
+            if compute_in_setupfit:
               log.info("Forcing photon computation with FiatLux.")
               # Since the photon will be computed, check that the luxset and additional_errors exist
               SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset_exists')
