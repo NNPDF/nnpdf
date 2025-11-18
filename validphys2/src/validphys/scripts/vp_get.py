@@ -57,6 +57,9 @@ def main():
     tp = args.resource_type
     name = args.resource_name
 
+    if len(name) > 1 and tp != 'photonQED':
+        sys.exit("Only 'photonQED' resource type requires theoryID and luxset.")
+
     try:
         f = getattr(l, f'check_{tp}')
     except AttributeError as e:
