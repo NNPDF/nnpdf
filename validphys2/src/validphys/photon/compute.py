@@ -19,7 +19,6 @@ from . import structure_functions as sf
 from .alpha import Alpha
 
 log = logging.getLogger(__name__)
-loader = Loader()
 
 # not the complete fiatlux runcard since some parameters are set in the code
 FIATLUX_DEFAULT = {
@@ -131,6 +130,7 @@ class Photon:
 
         # If saving to disk, create the directory
         if self.save_to_disk:
+          loader = Loader()
           path_to_photon = loader._photons_qed_path / f"photon_theoryID_{self.theoryid.id}_fit_{self.luxpdfset._name}"
           path_to_photon.mkdir(parents=True, exist_ok=True)
 
@@ -265,6 +265,7 @@ class Photon:
     
     def load_photon(self):
       """Load the photon resource using the Loader class."""
+      loader = Loader()
       path_to_photon = loader.check_photonQED(self.theoryid.id, self.luxpdfset._name)
       log.info(f"Loading photon QED set from {path_to_photon}")
 
