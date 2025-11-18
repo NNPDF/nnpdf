@@ -203,7 +203,7 @@ class SetupFitConfig(Config):
               SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset_exists')
               if fiatlux.get("additional_errors"):
                   SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
-              SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux::theory compute_photon')
+              SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux::theory compute_photon_to_disk')
 
 
         # Check positivity bound

@@ -286,7 +286,7 @@ class Photon:
       self.integral = np.stack(integral, axis=-1)
       return
     
-def compute_photon(theoryid, fiatlux):
+def compute_photon_to_disk(theoryid, fiatlux, maxcores):
     """Function to compute the photon PDF set.""" 
     luxset = fiatlux['luxset'].load()
     force_compute = fiatlux.get('compute_in_setupfit', False)
@@ -294,8 +294,8 @@ def compute_photon(theoryid, fiatlux):
 
     # Return None and avoid pickling issues with the phoyon class.
     def wrapper_fn(replica, theoryid, fiatlux, force_compute):
-        Photon(theoryid, fiatlux, replicas=[replica], save_to_disk=True, force_computation=force_compute)
+        Photon(theoryid, fiatlux, replicas=[replica], save_to_disk=force_compute, force_computation=force_compute)
         return None
     
-    log.info(f"Starting computation of the photon using {effective_n_jobs(-1)} effective cores...")
-    _ = Parallel(n_jobs=-1)(delayed(wrapper_fn)(replica=replica, theoryid=theoryid, fiatlux=fiatlux, force_compute=force_compute) for replica in replicas)
+    log.info(f"Starting computation of the photon using {maxcores} effective cores...")
+    _ = Parallel(n_jobs=maxcores)(delayed(wrapper_fn)(replica=replica, theoryid=theoryid, fiatlux=fiatlux, force_compute=force_compute) for replica in replicas)
