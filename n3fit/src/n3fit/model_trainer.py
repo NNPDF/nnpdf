@@ -868,9 +868,15 @@ class ModelTrainer:
                 hyperopt_params = json.load(file)
 
         # Preprocess some hyperparameters
-        epochs = int(params["epochs"])
-        stopping_patience = params["stopping_patience"]
-        stopping_epochs = int(epochs * stopping_patience)
+        if self.mode_hyperopt:
+            epochs = int(params["epochs"])
+            stopping_patience = params["stopping_patience"]
+            stopping_epochs = int(epochs * stopping_patience)
+        else:
+            epochs = int(hyperopt_params["epochs"][self.replicas[0]-1])
+            stopping_patience = hyperopt_params["stopping_patience"][self.replicas[0]-1]
+            stopping_epochs = int(epochs * stopping_patience)
+
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
@@ -1012,9 +1018,19 @@ class ModelTrainer:
                 threshold_chi2=threshold_chi2,
             )
             
-            # Compile each of the models with the right parameters
-            for model in models.values():
-                model.compile(**params["optimizer"])
+            if self.mode_hyperopt:
+                # Compile each of the models with the right parameters
+                for model in models.values():
+                    model.compile(**params["optimizer"])
+            else:
+                # Proper way of doing this? Not sure how optimizer parameters should be treated
+                optimizer_params = {}
+                optimizer_params["clipnorm"] = hyperopt_params['clipnorm'][self.replicas[0]-1]
+                optimizer_params["learning_rate"] = hyperopt_params['learning_rate'][self.replicas[0]-1]
+                optimizer_params["optimizer_name"] = hyperopt_params['optimizer'][self.replicas[0]-1]
+
+                for model in models.values():
+                    model.compile(**optimizer_params)
             
             self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
