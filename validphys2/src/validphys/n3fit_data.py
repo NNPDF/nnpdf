@@ -476,6 +476,7 @@ def fitting_data_dict(
 
     if diag_rot is not None:
         expdata = diag_rot @ expdata
+        expdata_true = diag_rot @ expdata_true
 
     expdata_tr = expdata[tr_mask].reshape(1, -1)
     expdata_vl = expdata[vl_mask].reshape(1, -1)
