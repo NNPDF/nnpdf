@@ -2,11 +2,11 @@ import pathlib
 
 from ._version import __version__
 from .commondataparser import parse_new_metadata
+from .utils import get_nnpdf_profile
 from .validphys_compatibility import legacy_to_new_map
 
-path_vpdata = pathlib.Path(__file__).parent
-path_commondata = path_vpdata / "commondata"
-theory_cards = path_vpdata / "theory_cards"
+# path_commondata = path_vpdata / "commondata"
+THEORY_CARDS_PATH = pathlib.Path(__file__).parent / "theory_cards"
 
 
 def load_dataset_metadata(dataset_name, variant=None):
@@ -17,5 +17,14 @@ def load_dataset_metadata(dataset_name, variant=None):
         dataset_name, variant = legacy_to_new_map(dataset_name)
 
     setname, observable = dataset_name.rsplit("_", 1)
-    metadata_file = path_commondata / setname / "metadata.yaml"
+
+    profile_data_paths = get_nnpdf_profile()["data_path"]
+
+    for data_path in profile_data_paths:
+        metadata_file = data_path / "commondata" / setname / "metadata.yaml"
+        if metadata_file.exists():
+            break
+    else:
+        raise FileNotFoundError(f"Metadata file for {dataset_name} not found")
+
     return parse_new_metadata(metadata_file, observable, variant=variant)

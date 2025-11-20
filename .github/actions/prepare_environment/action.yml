@@ -19,7 +19,7 @@ inputs:
   python-version:
     required: true
     description: "Python version to use"
-    default: "3.12"
+    default: "3.13"
 
 runs:
   using: "composite"
@@ -33,7 +33,9 @@ runs:
         auto-update-conda: true
         activate-environment: nnpdf_environment
         conda-remove-defaults: true
-    - name: Add NETRC
+    - name: Add NETRC and cleanup cache
       shell: bash -l {0}
       run: |
+        sudo rm -rf /opt/hostedtoolcache/Python/3.9*
+        sudo rm -rf /opt/hostedtoolcache/CodeQL
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
