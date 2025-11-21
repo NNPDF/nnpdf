@@ -62,17 +62,19 @@ def construct_eko_cards(
 
     # construct mugrid
 
-    # Generate the q2grid, if q_fin and q_points are None, use `nf0` to select a default
+    # Generate the q2grid
     q2_grid = utils.generate_q2grid(
-        mu0,
-        q_fin,
-        q_points,
-        {
-            theory["mc"]: thresholds["c"],
-            theory["mb"]: thresholds["b"],
-            theory["mt"]: thresholds["t"],
+        Q0=mu0,
+        Qmin=1.0,
+        Qmax=1e5,
+        total_points=50,
+        total_points_ic=6,
+        match_dict={
+            "mc": theory["mc"],
+            "mb": theory["mb"],
+            "kcThr": theory["kcThr"],
+            "kbThr": theory["kbThr"],
         },
-        theory["nf0"],
         legacy40=legacy40,
     )
 
