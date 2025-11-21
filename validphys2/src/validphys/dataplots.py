@@ -259,7 +259,6 @@ def _plot_fancy_impl(
     -------
     A generator over figures.
     """
-
     info = get_info(commondata, normalize=(normalize_to is not None))
 
     table = kitable(commondata, info)
@@ -269,7 +268,6 @@ def _plot_fancy_impl(
     # Compute shifts due to the correlated part of the exp cov matrix
     lcd_wc = loaded_commondata_with_cuts(commondata,cutlist[0])
     theory_predictions = results[1].central_value
-    shifts, alpha = shifts_from_systematics(lcd_wc,theory_predictions)
     
     # This is easier than cheking every time
     if labellist is None:
@@ -286,6 +284,18 @@ def _plot_fancy_impl(
         norm_cv, _ = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
         
     cvcols = []
+
+    # Compute systematic shifts
+    # For unknown reasons, `shifts_from_systematics` may
+    # randomly fails. If a LinAlgError is raised, shifts are not included in
+    # the final plot.
+    if with_shift:
+        try:
+            shifts, alpha = shifts_from_systematics(lcd_wc,theory_predictions)
+        except np.linalg.LinAlgError:
+            log.warning("Error occurred in computing systematic shifts for " \
+                        f"{info.ds_metadata.name}. These will be disregarded in the plots.")
+            with_shift = False
     
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
         # We modify the table, so we pass only the label columns
@@ -325,8 +335,13 @@ def _plot_fancy_impl(
         min_vals = []
         max_vals = []
         fig, ax = plotutils.subplots()
+
+        if with_shift:
+            shift_label = "(shifted)"
+        else:
+            shift_label = "(unshifted)"
         ax.set_title(
-            "{} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by))
+            "{} {} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by), shift_label)
         )
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
@@ -1237,7 +1252,7 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
 
 @figure
-def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=False):
+def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=True):
     """Plot an errorbar spanning the central 68% CI of a positivity
     observable as well as a point indicating the central value (according
     to the ``pdf.stats_class.central_value()``).
@@ -1255,8 +1270,9 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     xvals = []
 
     if pos_use_kin:
+        kin_label = posset.kin_variables[0]
         kin_name = KIN_NAMES[0]
-        ax.set_xlabel(kin_name)
+        ax.set_xlabel(kin_label)
         xvals = posset.kinematics[kin_name].values
     else:
         ax.set_xlabel('idat')

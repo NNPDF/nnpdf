@@ -8,7 +8,6 @@ import logging
 import mimetypes
 import os
 import pathlib
-import pkgutil
 import re
 import shutil
 import sys
@@ -18,9 +17,11 @@ import urllib.parse as urls
 
 import requests
 
+from nnpdf_data import THEORY_CARDS_PATH
 from nnpdf_data.commondataparser import parse_new_metadata, parse_set_metadata
 from nnpdf_data.coredata import generate_path_filtered_data
-from nnpdf_data.validphys_compatibility import legacy_to_new_map, legacy_to_new_mapping, path_vpdata
+from nnpdf_data.utils import get_nnpdf_profile
+from nnpdf_data.validphys_compatibility import legacy_to_new_map, legacy_to_new_mapping
 from reportengine import filefinder
 from validphys import lhaindex
 from validphys.core import (
@@ -41,7 +42,6 @@ from validphys.core import (
 from validphys.utils import tempfile_cleaner, yaml_safe
 
 log = logging.getLogger(__name__)
-NNPDF_DIR = "NNPDF"
 
 
 class LoaderError(Exception):
@@ -116,88 +116,14 @@ class InconsistentMetaDataError(LoaderError):
     pass
 
 
-def _get_nnpdf_profile(profile_path=None):
-    """Returns the NNPDF profile as a dictionary
-
-    If no ``profile_path`` is provided it will be autodiscovered in the following order:
-
-    1. Environment variable $NNPDF_PROFILE_PATH
-    2. ${XDG_CONFIG_HOME}/NNPDF/nnprofile.yaml (usually ~/.config/nnprofile)
-
-    Any value not filled by 1 or 2 will then be filled by the default values
-    found within the validphys python package `nnporfile_default.yaml`
-
-    If ``nnpdf_share`` is set to the special key ``RELATIVE_TO_PYTHON``
-    the python prefix (``Path(sys.prefix)/"share"/"NNPDF"``) will be used
-
-    """
-
-    home_config = pathlib.Path().home() / ".config"
-    config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / NNPDF_DIR
-
-    # Set all default values
-    profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
-    profile_dict = yaml_safe.load(profile_content)
-    # including the data_path to the validphys package
-    profile_dict.setdefault("data_path", path_vpdata)
-
-    # Look at profile path
-    if profile_path is None:
-        profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
-
-    # If profile_path is still none and there is a .config/NNPDF/nnprofile.yaml, read that
-    if profile_path is None:
-        if (config_nnprofile := config_folder / "nnprofile.yaml").exists():
-            profile_path = config_nnprofile
-        elif (config_nnprofile := config_folder / "nnprofile.yml").exists():
-            profile_path = config_nnprofile
-
-    if profile_path is not None:
-        with open(profile_path, encoding="utf-8") as f:
-            profile_entries = yaml_safe.load(f)
-            if profile_entries is not None:
-                profile_dict.update(profile_entries)
-
-    nnpdf_share = profile_dict.get("nnpdf_share")
-    if nnpdf_share is None:
-        if profile_path is not None:
-            raise ValueError(
-                f"`nnpdf_share` is not set in {profile_path}, please set it, e.g.: nnpdf_share: `.local/share/NNPDF`"
-            )
-        raise ValueError(
-            "`nnpdf_share` not found in validphys, something is very wrong with the installation"
-        )
-
-    if nnpdf_share == "RELATIVE_TO_PYTHON":
-        nnpdf_share = pathlib.Path(sys.prefix) / "share" / NNPDF_DIR
-
-    # At this point nnpdf_share needs to be a path to somewhere
-    nnpdf_share = pathlib.Path(nnpdf_share)
-
-    # Make sure that we expand any ~ or ~<username>
-    nnpdf_share = nnpdf_share.expanduser()
-
-    # Make sure we can either write to this directory or it exists
-    try:
-        nnpdf_share.mkdir(exist_ok=True, parents=True)
-    except PermissionError as e:
-        raise FileNotFoundError(
-            f"{nnpdf_share} does not exist and you haven't got permissions to create it!"
-        ) from e
-
-    # Now read all paths and define them as relative to nnpdf_share (unless given as absolute)
-    for var in [
-        "results_path",
-        "theories_path",
-        "validphys_cache_path",
-        "hyperscan_path",
-        "ekos_path",
-    ]:
-        # if there are any problems setting or getting these variable erroring out is more than justified
-        absolute_var = nnpdf_share / pathlib.Path(profile_dict[var]).expanduser()
-        profile_dict[var] = absolute_var.absolute().as_posix()
-
-    return profile_dict
+def _fail_nicely_DataNotFoundError(setname):
+    """Fail with a DataNotFoundError, but try to check whether the dataset exist in the
+    translation layer, and if it does, offer the translation to the user."""
+    new_name, _ = legacy_to_new_map(setname, None)
+    err = ""
+    if new_name != setname:
+        err = f"\nNote that old names are no longer accepted. Perhaps you meant {new_name}"
+    raise DataNotFoundError(f"Dataset {setname} not found. Is the name correct? {err}")
 
 
 class LoaderBase:
@@ -210,16 +136,13 @@ class LoaderBase:
     def __init__(self, profile=None):
         if not isinstance(profile, dict):
             # If profile is a path, a str or None, read it from the default path
-            profile = _get_nnpdf_profile(profile)
+            profile = get_nnpdf_profile(profile)
 
         # Retrieve important paths from the profile if not given
-        datapath = pathlib.Path(profile["data_path"])
+        datapaths = [pathlib.Path(i) for i in profile["data_path"]]
         theories_path = pathlib.Path(profile["theories_path"])
         resultspath = pathlib.Path(profile["results_path"])
         ekos_path = pathlib.Path(profile["ekos_path"])
-
-        if not datapath.exists():
-            raise LoaderError(f"The data path {datapath} does not exist.")
 
         # Create the theories and results paths if they don't exist already
         theories_path.mkdir(exist_ok=True, parents=True)
@@ -227,7 +150,7 @@ class LoaderBase:
         resultspath.mkdir(exist_ok=True, parents=True)
 
         # And save them up
-        self.datapath = datapath
+        self.commondata_folders = tuple(datapaths)
         self._theories_path = theories_path
         self._ekos_path = ekos_path
         self.resultspath = resultspath
@@ -312,18 +235,15 @@ class Loader(LoaderBase):
         are "fake" (integrability/positivity) or are missing some information.
         """
         datasets = []
-        for metadata_file in self.commondata_folder.glob("*/metadata.yaml"):
-            datasets += parse_set_metadata(metadata_file).allowed_datasets
+        for commondata_folder in self.commondata_folders:
+            for metadata_file in commondata_folder.glob("*/metadata.yaml"):
+                datasets += parse_set_metadata(metadata_file).allowed_datasets
         return datasets
 
     @property
     @functools.lru_cache
     def available_pdfs(self):
         return lhaindex.expand_local_names('*')
-
-    @property
-    def commondata_folder(self):
-        return self.datapath / 'commondata'
 
     def check_commondata(
         self, setname, sysnum=None, use_fitcommondata=False, fit=None, variant=None
@@ -356,16 +276,15 @@ class Loader(LoaderBase):
         # Get data folder and observable name and check for existence
         try:
             setfolder, observable_name = setname.rsplit("_", 1)
-            set_path = self.commondata_folder / setfolder
-            if not set_path.exists():
-                # Go down to the exception
-                raise ValueError
         except ValueError:
-            new_name, _ = legacy_to_new_map(setname, None)
-            err = ""
-            if new_name != setname:
-                err = f"\nNote that old names are no longer accepted. Perhaps you meant {new_name}"
-            raise DataNotFoundError(f"Dataset {setname} not found. Is the name correct? {err}")
+            _fail_nicely_DataNotFoundError(setname)
+
+        for commondata_folder in self.commondata_folders:
+            set_path = commondata_folder / setfolder
+            if set_path.exists():
+                break
+        else:
+            _fail_nicely_DataNotFoundError(setname)
 
         metadata_path = set_path / "metadata.yaml"
         metadata = parse_new_metadata(metadata_path, observable_name, variant=variant)
@@ -390,12 +309,11 @@ class Loader(LoaderBase):
     @property
     def theorydb_folder(self):
         """Checks theory db file exists and returns path to it"""
-        dbpath = self.datapath / "theory_cards"
-        if not dbpath.is_dir():
-            raise TheoryDataBaseNotFound(
-                f"could not find theory db folder. Directory not found at {dbpath}"
-            )
-        return dbpath
+        if THEORY_CARDS_PATH.exists():
+            return THEORY_CARDS_PATH
+        raise TheoryDataBaseNotFound(
+            f"could not find theory db folder. Directory not found at {THEORY_CARDS_PATH}"
+        )
 
     def check_fktable(self, theoryID, setname, cfac):
         _, theopath = self.check_theoryID(theoryID)
