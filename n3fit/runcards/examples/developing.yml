@@ -49,7 +49,7 @@ theory:
 trvlseed: 1
 nnseed: 2
 mcseed: 3
-load: 'developing.weights.h5'
+# load: 'developing.weights.h5'
 genrep: true   # true = generate MC replicas, false = use real data
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
@@ -69,7 +69,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
       multiplier: 1.10
   stopping_patience: 0.1 # percentage of the number of epochs
   layer_type: 'dense'
-  dropout: 0.001
+  dropout: 0.01
   interpolation_points: 7
 
 fitting:
