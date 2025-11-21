@@ -8,8 +8,8 @@ on:
 
 # some general variables
 env:
-  N3FIT_MAXNREP: 20 # total number of replicas to fit
-  POSTFIT_NREP: 12 # requested replicas for postfit
+  N3FIT_MAXNREP: 30 # total number of replicas to fit
+  POSTFIT_NREP: 15 # requested minimum replicas for postfit
   REFERENCE_SET: NNBOT-955eb2bcc-2025-06-17 # reference set for exact results
   STABLE_REFERENCE_SET: NNBOT-955eb2bcc-2025-06-17 # reference set for last tag
   PYTHONHASHSEED: "0"
