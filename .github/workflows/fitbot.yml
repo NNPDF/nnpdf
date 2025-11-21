@@ -9,7 +9,7 @@ on:
 # some general variables
 env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
-  POSTFIT_NREP: 16 # requested replicas for postfit
+  POSTFIT_NREP: 12 # requested replicas for postfit
   REFERENCE_SET: NNBOT-955eb2bcc-2025-06-17 # reference set for exact results
   STABLE_REFERENCE_SET: NNBOT-955eb2bcc-2025-06-17 # reference set for last tag
   PYTHONHASHSEED: "0"
@@ -55,12 +55,12 @@ jobs:
         cd $RUNFOLDER
         cp developing.yml $RUNCARD.yml
         vp-setupfit $RUNCARD.yml
-    # run n3fit replicas sequentially
+    # try running the n3fit replicas in parallel
     - name: Running n3fit
       shell: bash -l {0}
       run: |
         cd $RUNFOLDER
-        for ((i=1; i<=$N3FIT_MAXNREP; i+=1)); do n3fit $RUNCARD.yml $i ; done
+        n3fit $RUNCARD.yml 1 -r $N3FIT_MAXNREP
     # performing DGLAP
     - name: Running dglap
       shell: bash -l {0}
@@ -79,7 +79,7 @@ jobs:
       run: |
         conda activate nnpdfenv
         cd $RUNFOLDER
-        postfit $POSTFIT_NREP $RUNCARD
+        postfit $POSTFIT_NREP $RUNCARD --at-least-nrep
         res=$(vp-upload $RUNCARD 2>&1)
         echo ${res}
         while echo ${res} | grep ERROR >/dev/null

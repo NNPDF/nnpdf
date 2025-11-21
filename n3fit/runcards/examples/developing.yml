@@ -60,7 +60,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 1.e-5
     learning_rate: 3.e-3
     optimizer_name: Nadam
-  epochs: 3000
+  epochs: 5000
   integrability:
     initial:
     multiplier: 1.03
