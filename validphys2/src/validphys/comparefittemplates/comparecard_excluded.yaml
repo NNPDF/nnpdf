@@ -99,7 +99,7 @@ lumi_report:
   meta: Null
   template: lumi.md
 
-template: report.md
+template: report_with_excluded.md
 
 positivity:
   from_: fit
@@ -112,7 +112,11 @@ dataset_inputs:
 
 excluded_datasets:
   use_cuts: "fromfit"
-  from_: excluded
+  from_: dataspecs
+
+excluded_positivity:
+  use_cuts: "fromfit"
+  from_: dataspecs
 
 dataspecs:
   - theoryid:
