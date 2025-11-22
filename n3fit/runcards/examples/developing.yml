@@ -20,47 +20,56 @@ dataset_inputs:
 - {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, frac: 0.75}
 - {dataset: ATLAS_Z0_7TEV_36PB_ETA, frac: 0.75}
 - {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, frac: 0.75}
+- {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA, frac: 0.75}
+- {dataset: ATLAS_Z0_7TEV_46FB_CC-Y, frac: 0.75}
+- {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, frac: 0.75}
 - {dataset: ATLAS_WPWM_13TEV_TOT, frac: 0.75, cfac: [NRM]}
 - {dataset: ATLAS_WJ_8TEV_WP-PT, frac: 0.75}
 - {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75}
 - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75}
 - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75}
 - {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, variant: legacy_data}
+- {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, frac: 0.75}
+- {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, frac: 0.75}
 - {dataset: CMS_WPWM_7TEV_MUON_ASY, frac: 0.75}
 - {dataset: CMS_Z0_7TEV_DIMUON_2D, frac: 0.75}
 - {dataset: CMS_WPWM_8TEV_MUON_Y, frac: 0.75}
+- {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, variant: legacy_data}
+- {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, frac: 0.75}
 - {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, frac: 0.75}
 - {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 0.75}
 - {dataset: LHCB_Z0_7TEV_DIELECTRON_Y, frac: 0.75}
 - {dataset: LHCB_WPWM_7TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
+- {dataset: LHCB_WPWM_8TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
+- {dataset: LHCB_Z0_8TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
 - {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75}
 
 ############################################################
 datacuts:
-  t0pdfset: 251023-jcm-nnpdf41-001 # PDF set to generate t0 covmat
-  q2min   : 3.49                # Q2 minimum
-  w2min   : 12.5                # W2 minimum
+  t0pdfset: 251105-jcm-nnpdf41-mhou
+  q2min: 3.49
+  w2min: 12.5
 
 ############################################################
 theory:
-  theoryid: 41000000
+  theoryid: 41_000_000
 
 ############################################################
 trvlseed: 1
 nnseed: 2
 mcseed: 3
-load: 'developing.weights.h5'
+# load: 'developing.weights.h5'
 genrep: true   # true = generate MC replicas, false = use real data
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-  nodes_per_layer: [50, 35, 25, 8]
+  nodes_per_layer: [20, 20, 32, 9]
   activation_per_layer: ['tanh', 'sigmoid', 'sigmoid', 'linear']
   initializer: 'glorot_normal'
   optimizer:
-    clipnorm: 1.e-5
-    learning_rate: 3.e-3
+    clipnorm: 5.e-5
+    learning_rate: 6.e-3
     optimizer_name: Nadam
-  epochs: 5000
+  epochs: 10000
   integrability:
     initial:
     multiplier: 1.03
@@ -69,34 +78,35 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
       multiplier: 1.10
   stopping_patience: 0.1 # percentage of the number of epochs
   layer_type: 'dense'
-  dropout: 0.001
+  dropout: 0.01
   interpolation_points: 7
 
 fitting:
-  fitbasis: EVOL
-  savepseudodata: False
+  fitbasis: CCBAR_ASYMM
+  savepseudodata: true
   basis:
-  - {fl: sng , trainable: false , smallx: [1.093   , 1.121]  , largex: [0., 0.]}
-  - {fl: g   , trainable: false , smallx: [0.8329  , 1.071]  , largex: [0., 0.]}
-  - {fl: v   , trainable: false , smallx: [0.5202  , 0.7431] , largex: [0., 0.]}
-  - {fl: v3  , trainable: false , smallx: [0.1205  , 0.4839] , largex: [0., 0.]}
-  - {fl: v8  , trainable: false , smallx: [0.5864  , 0.7987] , largex: [0., 0.]}
-  - {fl: t3  , trainable: false , smallx: [-0.5019 , 1.126]  , largex: [0., 0.]}
-  - {fl: t8  , trainable: false , smallx: [0.6305  , 0.8806] , largex: [0., 0.]}
-  - {fl: t15 , trainable: false , smallx: [1.087   , 1.139]  , largex: [0., 0.]}
+  - {fl : sng, trainable : false, smallx : [1.095, 1.146], largex   : [0., 0.]}
+  - {fl : g, trainable   : false, smallx : [0.7978, 1.087], largex  : [0., 0.]}
+  - {fl : v, trainable   : false, smallx : [0.4775, 0.6577], largex : [0., 0.]}
+  - {fl : v3, trainable  : false, smallx : [0.1068, 0.493], largex  : [0., 0.]}
+  - {fl : v8, trainable  : false, smallx : [0.5914, 0.7776], largex : [0., 0.]}
+  - {fl : t3, trainable  : false, smallx : [-0.3737, 1.0], largex   : [0., 0.]}
+  - {fl : t8, trainable  : false, smallx : [0.5771, 0.9486], largex : [0., 0.]}
+  - {fl : t15, trainable : false, smallx : [1.062, 1.153], largex   : [0., 0.]}
+  - {fl : v15, trainable : false, smallx : [0.4515, 0.7648], largex : [0., 0.]}
 
 ############################################################
 positivity:
   posdatasets:
-  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
-  - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_XDB, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XSQ, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XUQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XUB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XDQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XDB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XSQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XSB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XCQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XCB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XGL, maxlambda: 1e6}
 
 integrability:
   integdatasets:
@@ -105,4 +115,4 @@ integrability:
 
 ############################################################
 debug: True
-maxcores: 4
+maxcores: 8
