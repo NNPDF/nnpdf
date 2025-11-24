@@ -1,6 +1,7 @@
 import pathlib
 
 import numpy as np
+
 from validphys.utils import yaml_safe
 
 from .q2grids import Q2GRID_NNPDF40
