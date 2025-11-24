@@ -31,8 +31,10 @@ hyperscan_path: hyperscan
 validphys_cache_path: vp-cache
 ekos_path: ekos
 
-# Starting from nnpdf > 4.0.7 the data is bundled together with the vp installation
-# data_path: <be careful when filling in the data path with custom values>
+# It is possible to add extra folders in which to find data by filling up the data_path variable
+# the default path within the nnpdf_data package will always be added albeit with lower priority.
+# The data path should be equivalent to the `commondata` folder within the `nnpdf_data` package.
+# data_path: [/custom/data/path, /more/data]
 
 # Remote resource locations
 fit_urls:

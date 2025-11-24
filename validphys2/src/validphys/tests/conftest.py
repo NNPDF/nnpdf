@@ -70,10 +70,12 @@ HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 40_000_000
 THEORY_QED = 40_000_100
 FIT_3REPLICAS = "FIT_3REPLICAS_250616"
+FIT_3REPLICAS_DIAG = "FIT_3REPLICAS_251114"
 FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_250616_diffcuts"
 FIT = "NNPDF40_nnlo_like_CI_testing_250616"
 FIT_ITERATED = "NNPDF40_nnlo_like_CI_testing_250616_iterated"
 PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_250616"
+PSEUDODATA_FIT_DIAG = "pseudodata_test_fit_n3fit_251104"
 # These fits contain _only_ data
 MULTICLOSURE_FITS = ["250618-test-multiclosure-001", "250618-test-multiclosure-002"]
 

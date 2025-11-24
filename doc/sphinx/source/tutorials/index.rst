@@ -45,6 +45,7 @@ Closure tests
    :maxdepth: 1
 
    ./closuretest.rst
+   ./inconsistent_closuretests.rst
    ./closureestimators.rst
 
 Special PDF sets
