@@ -346,3 +346,58 @@ The figure above provides a schematic representation of this feature scaling met
 2. ``[number of points]`` points are kept (dark blue), while other points are discarded (light blue).
 3. A cubic spline function is used to do the interpolation between the points that have not been
    discarded.
+
+
+Diagonal basis
+--------------
+
+Performing the training and validation split without diagonalising the :math:`t_0` covmat :math:`C_{0}` neglects
+any correlations that may be present between training and validation data. To remedy this,
+we rotate to a basis in which the correlation matrix is diagonal before performing any training/validation split.
+Starting from the definition of the :math:`\chi^2` function in the NNPDF methodology, we have
+
+.. math::
+
+    \chi^2 &= (D-T)^T C_0^{-1} (D-T) \\
+           &= (D-T)^T R^{-1} R C_0^{-1} R R^{-1} (D-T) \\
+           &= (D-T)^T R^{-1} \left( R^{-1} C_0 R^{-1} \right)^{-1} R^{-1} (D-T) \\
+           &\equiv \tilde{\epsilon}^T \rho^{-1} \tilde{\epsilon} \, ,
+
+where we have defined :math:`\tilde{\epsilon} \equiv R^{-1}(D-T)` and :math:`\rho = R^{-1} C_0 R^{-1}`.
+
+Choosing :math:`R_{ii} = \sqrt{C_{0, ii}}`, we have that :math:`R^{-1} C_0 R^{-1}` coincides with the usual definition of the correlation matrix.
+
+Next, we move to the basis in which :math:`\rho` is diagonal. Writing :math:`\rho = \tilde{U}^T \tilde{\Lambda} \tilde{U}`, we find
+
+.. math::
+
+    \chi^2 &= \tilde{\epsilon}^T \rho^{-1} \tilde{\epsilon} \\
+           &= \tilde{\epsilon}^T (\tilde{U}^T \tilde{\Lambda} \tilde{U})^{-1} \tilde{\epsilon} \\
+           &= \tilde{\epsilon}^T \tilde{U}^T \tilde{\Lambda}^{-1} \tilde{U} \tilde{\epsilon} \\
+           &\equiv \dbtilde{\epsilon}^T \tilde{\Lambda}^{-1} \dbtilde{\epsilon} \, ,
+
+where on the last line we have defined
+
+.. math::
+
+    \dbtilde{\epsilon} \equiv \tilde{U}\tilde{\epsilon} = \tilde{U}R^{-1}(D-T).
+
+In index notation, this reads
+
+.. math::
+
+    \dbtilde{\epsilon_i} = \tilde{U}_{ij} \frac{(D-T)_j}{\sqrt{C_{0, jj}}}
+
+The transformed data :math:`\dbtilde{\epsilon}` is statistically independent in the diagonal basis of the correlation matrix :math:`\rho`.
+Computing the covariance of :math:`\dbtilde{\epsilon}`,
+
+.. math::
+
+    \mathbb{E}[\dbtilde{\epsilon}\dbtilde{\epsilon}^T]
+      &= \mathbb{E} \big[ (\tilde{U} R^{-1}(D-T)) (\tilde{U} R^{-1}(D-T))^T \big] \\
+      &= \tilde{U} R^{-1} \mathbb{E}[(D-T)(D-T)^T] R^{-1} \tilde{U}^T \\
+      &= \tilde{U} \rho \tilde{U}^T \\
+      &= \tilde{U}\tilde{U}^T \tilde{\Lambda} \tilde{U}\tilde{U}^T \\
+      &= \tilde{\Lambda} \, ,
+
+we find that it is diagonal, which demonstrates that the training/validation data are statistically independent indeed.
