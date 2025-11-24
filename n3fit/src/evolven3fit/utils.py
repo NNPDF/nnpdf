@@ -51,52 +51,51 @@ def generate_q2grid(Q0, Qmin, Qmax, match_dict, total_points, total_points_ic, l
     if legacy40:
         return Q2GRID_NNPDF40
     # Otherwise dynamically create the grid from Q2_min --> Q2_max
-    else:
-        Q2_min = Qmin**2 # 1.0**2
-        Q2_max = Qmax**2 # 1e5**2                  
+    Q2_min = Qmin**2 # 1.0**2
+    Q2_max = Qmax**2 # 1e5**2                  
+    
+    # Collect all node Q2's from Q0^2 --> Q2_max
+    q0_2 = Q0**2
+    node_Q2 = [q0_2, (match_dict["mb"]*match_dict["kbThr"])**2, Q2_max]
         
-        # Collect all node Q2's from Q0^2 --> Q2_max
-        q0_2 = Q0**2
-        node_Q2 = [q0_2, (match_dict["mb"]*match_dict["kbThr"])**2, Q2_max]
-            
-        # Make initial uniform grid in t from Q0^2 --> Q2_max
-        t_min = Q2_to_t(q0_2, LAMBDA2)
-        t_max = Q2_to_t(Q2_max, LAMBDA2)
-        t_vals = np.linspace(t_min, t_max, total_points)
-        q2_vals = t_to_Q2(t_vals, LAMBDA2)
+    # Make initial uniform grid in t from Q0^2 --> Q2_max
+    t_min = Q2_to_t(q0_2, LAMBDA2)
+    t_max = Q2_to_t(Q2_max, LAMBDA2)
+    t_vals = np.linspace(t_min, t_max, total_points)
+    q2_vals = t_to_Q2(t_vals, LAMBDA2)
+    
+    # Count how many points fall into each subgrid
+    n_intervals = len(node_Q2) - 1
+    nQpoints = np.zeros(n_intervals, dtype=int)
+    subgridindex = 0
         
-        # Count how many points fall into each subgrid
-        n_intervals = len(node_Q2) - 1
-        nQpoints = np.zeros(n_intervals, dtype=int)
-        subgridindex = 0
-            
-        for q2 in q2_vals:
-            while subgridindex < n_intervals - 1 and q2 >= node_Q2[subgridindex + 1]:
-                subgridindex += 1
-            nQpoints[subgridindex] += 1
-        
-        # Make t grid from Q2_min --> Q0^2
-        t_min_ic = Q2_to_t(Q2_min, LAMBDA2)
-        t_max_ic = Q2_to_t((match_dict["mc"]*match_dict["kcThr"])**2, LAMBDA2)
-        t_vals_ic = np.linspace(t_min_ic, t_max_ic, total_points_ic)
-        q2_vals_ic = t_to_Q2(t_vals_ic, LAMBDA2)
+    for q2 in q2_vals:
+        while subgridindex < n_intervals - 1 and q2 >= node_Q2[subgridindex + 1]:
+            subgridindex += 1
+        nQpoints[subgridindex] += 1
+    
+    # Make t grid from Q2_min --> Q0^2
+    t_min_ic = Q2_to_t(Q2_min, LAMBDA2)
+    t_max_ic = Q2_to_t((match_dict["mc"]*match_dict["kcThr"])**2, LAMBDA2)
+    t_vals_ic = np.linspace(t_min_ic, t_max_ic, total_points_ic)
+    q2_vals_ic = t_to_Q2(t_vals_ic, LAMBDA2)
 
-        # Now build each subgrid to contain the points we want
-        grids = []
-        grids.append(q2_vals_ic)
-        for i in range(len(node_Q2) - 1):
-            q2_lo, q2_hi = node_Q2[i], node_Q2[i + 1]
-            t_lo, t_hi = Q2_to_t(q2_lo, LAMBDA2), Q2_to_t(q2_hi, LAMBDA2)
-            npts = int(nQpoints[i])
-            t_subgr = np.linspace(t_lo, t_hi, npts)
-            q2_subgr = t_to_Q2(t_subgr, LAMBDA2)
-            if i < n_intervals - 1:
-                q2_subgr = q2_subgr[:-1]
-            grids.append(q2_subgr)
+    # Now build each subgrid to contain the points we want
+    grids = []
+    grids.append(q2_vals_ic)
+    for i in range(len(node_Q2) - 1):
+        q2_lo, q2_hi = node_Q2[i], node_Q2[i + 1]
+        t_lo, t_hi = Q2_to_t(q2_lo, LAMBDA2), Q2_to_t(q2_hi, LAMBDA2)
+        npts = int(nQpoints[i])
+        t_subgr = np.linspace(t_lo, t_hi, npts)
+        q2_subgr = t_to_Q2(t_subgr, LAMBDA2)
+        if i < n_intervals - 1:
+            q2_subgr = q2_subgr[:-1]
+        grids.append(q2_subgr)
 
-        # Combine all subgrids and return as an array
-        q2_full = np.concatenate(grids)
-        return q2_full
+    # Combine all subgrids and return as an array
+    q2_full = np.concatenate(grids)
+    return q2_full
     
 def check_is_a_fit(config_folder):
     """Check if config_folder is a fit folder, i.e. if it contains the filter.yml file
