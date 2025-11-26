@@ -36,8 +36,6 @@ def _eko_theory_from_nnpdf_theory(nnpdf_theory):
 
 def construct_eko_cards(
     nnpdf_theory,
-    q_fin,
-    q_points,
     x_grid,
     op_card_dict: Optional[Dict[str, Any]] = None,
     theory_card_dict: Optional[Dict[str, Any]] = None,

@@ -46,11 +46,25 @@ def generate_q2grid(Q0, Qmin, Qmax, match_dict, total_points, total_points_ic, l
     multiplied to mass in order to obtain the relative matching scale (e.g. `match_dict["kbThr"]`
     in the case of the bottom threshold).
     """
-    
+
     # If flag --legacy40 is set return handmade legacy grid
     if legacy40:
         return Q2GRID_NNPDF40
+    
     # Otherwise dynamically create the grid from Q2_min --> Q2_max
+
+    if Q0 < Qmin:
+        raise ValueError("Q0 cannot be smaller than Qmin because the grid needs to contain Q0")
+
+    if Qmax < Qmin:
+        raise ValueError("Qmax cannot be smaller than Qmin")
+    
+    if total_points <= 5:
+        raise ValueError("You need minimally 6 points (total_points > 5)")
+    
+    if total_points_ic < 2 and Qmin < 1.502:
+        raise ValueError("You need minimally 2 points below Q0 (total_points_ic > 1)")
+
     Q2_min = Qmin**2 # 1.0**2
     Q2_max = Qmax**2 # 1e5**2                  
     
