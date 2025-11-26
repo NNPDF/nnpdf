@@ -118,7 +118,7 @@ def test_utils():
 def test_eko_utils(tmp_path, nnpdf_theory_card):
     # Testing construct eko cards
     q_ini = 1.0
-    q_fin = 100
+    q_fin = 1e5
     x_grid = [1.0e-3, 0.1, 1.0]
     pto = 2
     comments = "Test"
