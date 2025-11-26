@@ -69,7 +69,8 @@ class Photon:
         self.save_to_disk = save_to_disk
         self.q_in = q_in
         self.luxpdfset = lux_params["luxset"].load()
-        self.luxpdfset_members = self.luxpdfset.n_members - 1  #
+        self.luxpdfset_members = self.luxpdfset.n_members - 1
+        self.path_to_eko_photon = self.theoryid.path / "eko_photon.tar"
 
         # Compute or load photon_qin
         if force_computation:
@@ -88,15 +89,14 @@ class Photon:
         log.info(f"Loading photon QED set from {path_to_photon}")
 
         # Load the needed replicas
-        photon_qin_array = []
+        photon_qin_array = {}
         for replica in self.replicas:
             # As input replica for the photon computation we take the MOD of the luxset_members to
             # avoid failing due to limited number of replicas in the luxset
             photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
             photon_qin = np.load(path_to_photon / f"replica_{photonreplica}.npz")["photon_qin"]
-            photon_qin_array.append(photon_qin)
+            photon_qin_array[replica] = photon_qin
 
-        photon_qin_array = np.stack(photon_qin_array, axis=0)
         return photon_qin_array
 
     def _compute_photon_set(self):
@@ -149,7 +149,7 @@ class Photon:
             )
             path_to_photon.mkdir(parents=True, exist_ok=True)
 
-        photon_qin_array = []
+        photon_qin_array = {}
         for replica in replicas:
             # Avoid failing due to limited number of replicas in the luxset
             photonreplica = (replica % self.luxpdfset_members) or self.luxpdfset_members
@@ -180,9 +180,8 @@ class Photon:
                 )
                 log.info(f"Saved photon replica {photonreplica} to {path_to_photon}")
 
-            photon_qin_array.append(photon_qin)
+            photon_qin_array[replica] = photon_qin
 
-        photon_qin_array = np.stack(photon_qin_array, axis=0)
         return photon_qin_array
 
     def _setup_fiatlux_runcard(self):
@@ -206,7 +205,7 @@ class Photon:
     @property
     def error_matrix(self):
         """Generate error matrix to be used in generate_errors."""
-        if "additional_errors" not in self.lux_params:
+        if not self.lux_params["additional_errors"]:
             return None
         extra_set = self.lux_params["additional_errors"].load()
         qs = [self.q_in] * len(XGRID)
@@ -241,8 +240,7 @@ class Photon:
         interpolator = []
         integral = []
 
-        path_to_eko_photon = self.theoryid.path / "eko_photon.tar"
-        with EKO.read(path_to_eko_photon) as eko_photon:
+        with EKO.read(self.path_to_eko_photon) as eko_photon:
             # Check that qin mathces with the one in the EKO
             if not np.isclose(self.q_in, np.sqrt(eko_photon.mu20)):
                 log.error(
@@ -262,7 +260,7 @@ class Photon:
                     pdfs_init = np.zeros_like(eko_op[0, 0])
                     for j, pid in enumerate(basis_rotation.flavor_basis_pids):
                         if pid == 22:
-                            pdfs_init[j] = photon_qin_array[replica - 1]
+                            pdfs_init[j] = photon_qin_array[replica]
                             ph_id = j
                         elif pid not in self.luxpdfset.flavors:
                             continue
