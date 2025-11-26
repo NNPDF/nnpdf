@@ -5,7 +5,9 @@ import numpy as np
 from validphys.utils import yaml_safe
 
 from .q2grids import Q2GRID_NNPDF40
+
 LAMBDA2 = 0.0625
+
 
 def read_runcard(usr_path):
     """Read the runcard and return the relevant information for evolven3fit"""
@@ -23,60 +25,75 @@ def Q2_to_t(q2: float, lambda2) -> float:
     """Map to define loglog spacing of the Q2grid"""
     return np.log(np.log(q2 / lambda2))
 
+
 def t_to_Q2(t: float, lambda2) -> float:
     """Map to go from the loglog spacing back to Q2"""
     return lambda2 * np.exp(np.exp(t))
 
+
 def generate_q2grid(Q0, Qmin, Qmax, match_dict, total_points, total_points_ic, legacy40=False):
-    """Generate the q2grid used in the final evolved pdfs or use the default grid if legacy40 is set. 
-    
+    """Generate the q2grid used in the final evolved pdfs or use the default grid if legacy40 is set.
+
     The grid uses $\log(\log(Q^2/\text{`LAMBDA2`})) spacing between the points.
 
     The grid from `Q2_min` --> `mc` is made separately from the rest to be able to let it contain at
     least 5 points. The reason for this is to always have some points in the intrinsic charm regime.
-    The rest of the grids contains the same loglog spacing from threshold to threshold. 
-    
+    The rest of the grids contains the same loglog spacing from threshold to threshold.
+
     Since the grid needs to contain the $Q^2$ values `Q2_min`, `mc`^2, `Q0`^2, `mb`^2 and `Q2_max`,
-    we divide the grid in batches that have these values as boundaries, and add them together 
+    we divide the grid in batches that have these values as boundaries, and add them together
     at the end. The batches ad boundaries are thus like this:
 
     Q2_min --> mc^2 --> Q0^2 --> mb^2 --> Q2_max
 
-    `match_dict` contains the quark mass thresholds and factors. This "factor" is the number to be 
+    `match_dict` contains the quark mass thresholds and factors. This "factor" is the number to be
     multiplied to mass in order to obtain the relative matching scale (e.g. `match_dict["kbThr"]`
     in the case of the bottom threshold).
     """
-    
+
     # If flag --legacy40 is set return handmade legacy grid
     if legacy40:
         return Q2GRID_NNPDF40
     # Otherwise dynamically create the grid from Q2_min --> Q2_max
-    Q2_min = Qmin**2 # 1.0**2
-    Q2_max = Qmax**2 # 1e5**2                  
-    
+
+    if Q0 < Qmin:
+        raise ValueError("Q0 cannot be smaller than Qmin because the grid needs to contain Q0")
+
+    if Qmax < Qmin:
+        raise ValueError("Qmax cannot be smaller than Qmin")
+
+    if total_points <= 5:
+        raise ValueError("You need minimally 6 points (total_points > 5)")
+
+    if total_points_ic < 2 and Qmin < 1.502:
+        raise ValueError("You need minimally 2 points below Q0 (total_points_ic > 1)")
+
+    Q2_min = Qmin**2  # 1.0**2
+    Q2_max = Qmax**2  # 1e5**2
+
     # Collect all node Q2's from Q0^2 --> Q2_max
     q0_2 = Q0**2
-    node_Q2 = [q0_2, (match_dict["mb"]*match_dict["kbThr"])**2, Q2_max]
-        
+    node_Q2 = [q0_2, (match_dict["mb"] * match_dict["kbThr"]) ** 2, Q2_max]
+
     # Make initial uniform grid in t from Q0^2 --> Q2_max
     t_min = Q2_to_t(q0_2, LAMBDA2)
     t_max = Q2_to_t(Q2_max, LAMBDA2)
     t_vals = np.linspace(t_min, t_max, total_points)
     q2_vals = t_to_Q2(t_vals, LAMBDA2)
-    
+
     # Count how many points fall into each subgrid
     n_intervals = len(node_Q2) - 1
     nQpoints = np.zeros(n_intervals, dtype=int)
     subgridindex = 0
-        
+
     for q2 in q2_vals:
         while subgridindex < n_intervals - 1 and q2 >= node_Q2[subgridindex + 1]:
             subgridindex += 1
         nQpoints[subgridindex] += 1
-    
+
     # Make t grid from Q2_min --> Q0^2
     t_min_ic = Q2_to_t(Q2_min, LAMBDA2)
-    t_max_ic = Q2_to_t((match_dict["mc"]*match_dict["kcThr"])**2, LAMBDA2)
+    t_max_ic = Q2_to_t((match_dict["mc"] * match_dict["kcThr"]) ** 2, LAMBDA2)
     t_vals_ic = np.linspace(t_min_ic, t_max_ic, total_points_ic)
     q2_vals_ic = t_to_Q2(t_vals_ic, LAMBDA2)
 
@@ -96,7 +113,8 @@ def generate_q2grid(Q0, Qmin, Qmax, match_dict, total_points, total_points_ic, l
     # Combine all subgrids and return as an array
     q2_full = np.concatenate(grids)
     return q2_full
-    
+
+
 def check_is_a_fit(config_folder):
     """Check if config_folder is a fit folder, i.e. if it contains the filter.yml file
     and the nnfit folder."""

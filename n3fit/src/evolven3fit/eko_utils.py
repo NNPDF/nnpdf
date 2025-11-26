@@ -36,8 +36,6 @@ def _eko_theory_from_nnpdf_theory(nnpdf_theory):
 
 def construct_eko_cards(
     nnpdf_theory,
-    q_fin,
-    q_points,
     x_grid,
     op_card_dict: Optional[Dict[str, Any]] = None,
     theory_card_dict: Optional[Dict[str, Any]] = None,
@@ -66,7 +64,7 @@ def construct_eko_cards(
     q2_grid = utils.generate_q2grid(
         Q0=mu0,
         Qmin=1.0,
-        Qmax=1e5,
+        Qmax=100,
         total_points=50,
         total_points_ic=6,
         match_dict={
