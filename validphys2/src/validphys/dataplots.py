@@ -1253,7 +1253,6 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     posset = posdataset.load_commondata()
     ndata = posset.ndata
     xvals = []
-    import pdb; pdb.set_trace()
 
     if pos_use_kin:
         kin_name = KIN_NAMES[0]
