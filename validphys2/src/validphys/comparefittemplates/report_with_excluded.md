@@ -16,11 +16,8 @@ We are comparing:
 Datasets excluded from fit
 --------------------------
 {@with matched_excluded_datasets_by_name@}
-({@plot_fancy@})
+[Plots for {@dataset_name@}]({@plot_fancy@})
 {@endwith@}
-
-
-
 
 
 Code versions

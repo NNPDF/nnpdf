@@ -1038,38 +1038,27 @@ class CoreConfig(configparser.Config):
         intersection = set.intersection(*(set(d) for d in all_used))
         excluded_set = union - intersection
 
-        excluded_ds_names = []
+        excluded_datasets = []
+        excluded_dataset_names = []
         for names in all_used:
-
             for k in excluded_set:
                 if k in names:
-
-                    excluded_ds_names.append(names[k])
+                    excluded_datasets.append(names[k])
+                    excluded_dataset_names.append(k)
 
         more_info = {
             "pdfs": [i["pdf"] for i in dataspecs],
             "theoryid": dataspecs[0]["theoryid"],
-            "fit": dataspecs[0]["fit"],
+            "fit": dataspecs[1]["fit"],
         }
-        return [{"dataset_input": dsin, **more_info} for dsin in excluded_ds_names]
-
-        #used_union = {ds for d in all_used for (_, ds) in d.keys()} 
-        #excluded_list = [{"dataset_name": ds} for ds in sorted(excluded_set)] 
-        #return excluded_list
-        #res = []
-        #excluded_set = all_used - used_union
-        #for k in excluded_set:
-        #    inres = {"process": k[0], "dataset_name": k[1]}
-        #    inner_spec_list = inres["dataspecs"] = []
-        #    for ispec, spec in enumerate(dataspecs):
-        #        mapping = all_used[ispec]
-        #        if k in mapping:
-        #            d = ChainMap({"dataset_input": all_used[ispec][k]}, spec)
-        #            inner_spec_list.append(d)
-        #    res.append(inres)
-        #res.sort(key = lambda x: (x["process"], x["dataset_name"]))
-        #return res
-
+        return [
+            {
+                "dataset_input": dsin, 
+                "dataset_name": dsin.name,
+                **more_info
+            } 
+            for dsin in excluded_datasets
+        ]
 
     def produce_matched_excluded_datasets_from_dataspecs(self, dataspecs):
         return self.produce_matched_excluded_datasets_by_name(dataspecs)
@@ -1096,39 +1085,6 @@ class CoreConfig(configparser.Config):
             res.append(inres)
         res.sort(key=lambda x: (x["posdataset_name"]))
         return res
-
-
-    def produce_matched_excluded_positivity_by_name(self, dataspecs):
-        """Like produce_matched_positivity_from_dataspecs but for all positivity datasets excluded from the fit."""
-        self._check_dataspecs_type(dataspecs)
-        all_used = []
-        for spec in dataspecs:
-            with self.set_context(ns=self._curr_ns.new_child(spec)):
-                _, pos = self.parse_from_(None, "posdatasets", write=False)
-                used = {(p.name): (p) for p in pos}
-                all_used.append(used)
-    
-        union = set.union(*(set(d) for d in all_used))
-        intersection = set.intersection(*(set(d) for d in all_used))
-        excluded_set = union - intersection
-        print(excluded_set)
-        excluded_list = [{"posdataset_name": ds} for ds in sorted(excluded_set)]
-        print(excluded_list)
-        #res = []
-        #for k in excluded_set:
-        #    inres = {"posdataset_name": k}
-        #    l = inres["dataspecs"] = []
-        #    for ispec, spec in enumerate(dataspecs):
-        #        d = ChainMap({"posdataset": all_used[ispec][k]}, spec)
-        #        l.append(d)
-        #    res.append(d)
-        #res.sort(key=lambda x: (x["posdataset_name"]))
-        #return res
-        return excluded_list
-    
-    def produce_matched_excluded_positivity_from_dataspecs(self, dataspecs):
-        return self.produce_matched_excluded_positivity_by_name(dataspecs)
- 
 
     def produce_dataspecs_with_matched_cuts(self, dataspecs):
         """Take a list of namespaces (dataspecs), resolve ``dataset`` within
