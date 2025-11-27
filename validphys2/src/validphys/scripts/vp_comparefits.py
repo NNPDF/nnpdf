@@ -1,3 +1,4 @@
+import time
 import logging
 import os
 import sys
@@ -261,8 +262,11 @@ class CompareFitApp(App):
 
 
 def main():
+    time1 = time.time()
     a = CompareFitApp()
     a.main()
+    time2 = time.time()
+    print("TIME TAKEN: ", time2-time1)
 
 
 if __name__ == '__main__':
