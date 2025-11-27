@@ -133,11 +133,15 @@ def test_eko_utils(tmp_path, nnpdf_theory_card):
     assert (
         t_card_dict["order"][0] == pto + 1
     )  # This is due to a different convention in eko orders due to QED
-    print(op_card_dict["mugrid"])
     np.testing.assert_allclose(op_card_dict["xgrid"], x_grid)
     # We should find two entries for each threshold energy,
     # one for nf=3(4) and another one for nf=4(5)
-    for n in {(1.51, 3), (1.51, 4), (4.92, 4), (4.92, 5)}:
+    for n in {
+        (nnpdf_theory_card["mc"], 3),
+        (nnpdf_theory_card["mc"], 4),
+        (nnpdf_theory_card["mb"], 4),
+        (nnpdf_theory_card["mb"], 5),
+    }:
         assert any(np.allclose(n, x) for x in op_card_dict["mugrid"])
 
     # Testing if the endpoints are correct

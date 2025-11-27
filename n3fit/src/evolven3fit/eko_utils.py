@@ -43,11 +43,11 @@ def construct_eko_cards(
 ):
     """
     Return the theory and operator cards used to construct the eko.
-    nnpdf_theory is a NNPDF theory card for which we are computing the operator card and eko
-    q_fin is the final point of the q grid while q_points is the number of points of the grid.
+    nnpdf_theory is a NNPDF theory card for which we are computing the operator card.
     x_grid is the x grid to be used.
     op_card_dict and theory_card_dict are optional updates that can be provided respectively to the
     operator card and to the theory card.
+    legacy40 is a flag that can be set if you want to use the old grid from NNPDF4.0
     """
     theory, thresholds = load_theory(nnpdf_theory, theory_card_dict)
 
