@@ -11,14 +11,11 @@ We are comparing:
 
 {@ summarise_fits @}
 
-
-
 Datasets excluded from fit
 --------------------------
 {@with matched_excluded_datasets_by_name@}
 [Plots for {@dataset_name@}]({@plot_fancy@})
 {@endwith@}
-
 
 Code versions
 -------------
