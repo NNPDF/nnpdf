@@ -105,16 +105,16 @@ Dataset plots
 [Plots for {@dataset_name@}]({@dataset_report report@})
 {@endwith@}
 
+Datasets excluded from the fit
+--------------------------
+{@with matched_excluded_datasets_by_name@}
+Plots for {@dataset_name@}{@plot_fancy@}
+{@endwith@}
+
 Positivity
 ----------
 {@with matched_positivity_from_dataspecs@}
 {@plot_dataspecs_positivity@}
-{@endwith@}
-
-Datasets excluded from the fit
---------------------------
-{@with matched_excluded_datasets_by_name@}
-[Plots for {@dataset_name@}]({@plot_fancy@})
 {@endwith@}
 
 Dataset differences and cuts
