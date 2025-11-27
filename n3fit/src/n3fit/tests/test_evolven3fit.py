@@ -73,27 +73,36 @@ def check_lhapdf_dat(dat_path, info):
 
 def test_generate_q2grid():
     """Tests the creation of the default grids is as expected"""
-    # nf 3 or 4 q0 = 1.0
-    grid = utils.generate_q2grid(None, None, None, {}, 3)
-    assert grid[0] == 1.0**2
-    grid = utils.generate_q2grid(None, None, None, {}, 4)
-    assert grid[0] == 1.0**2
 
-    for nf in [1, 2, 6]:
-        with pytest.raises(NotImplementedError):
-            grid = utils.generate_q2grid(None, None, None, {}, nf)
+    # Test if the correct errors are given
+    with pytest.raises(TypeError):
+        grid = utils.generate_q2grid(None, None, None, {}, None, None)
 
     with pytest.raises(ValueError):
-        grid = utils.generate_q2grid(None, None, None, {})
+        grid = utils.generate_q2grid(
+            1, 1, 1, {"mc": 1.502, "mb": 4.936, "kcThr": 1, "kbThr": 1}, 1, 1
+        )
 
-    matched_grid = utils.generate_q2grid(1.65, 1.0e5, 100, {4.92: 2.0, 100: 1.0})
-    t1 = 4.92 * 2.0
-    t2 = 100.0 * 1.0
+    # Test if the grid contains the threshold values and the boundaries
+    matched_grid = utils.generate_q2grid(
+        1.65,
+        1.0,
+        100,
+        {"mc": 1.502, "mb": 4.936, "kcThr": 1, "kbThr": 1},
+        total_points=10,
+        total_points_ic=3,
+    )
 
-    np.testing.assert_allclose((1.65) ** 2, matched_grid[0])
-    np.testing.assert_allclose((1.0e5) ** 2, matched_grid[-1])
-    assert t1**2 in matched_grid
-    assert t2**2 in matched_grid
+    for n in {1.502, 1.65, 4.936}:
+        assert any(np.allclose(n**2, x) for x in matched_grid)
+
+    np.testing.assert_allclose((1.0) ** 2, matched_grid[0])
+    np.testing.assert_allclose((100.0) ** 2, matched_grid[-1])
+
+    # Test the legacy40 grid
+    legacy40 = utils.generate_q2grid(1, 1, 1, {}, 1, 1, legacy40=True)
+    np.testing.assert_allclose((1.65) ** 2, legacy40[0])
+    np.testing.assert_allclose((1e5) ** 2, legacy40[-1])
 
 
 def test_utils():
@@ -108,15 +117,13 @@ def test_utils():
 
 def test_eko_utils(tmp_path, nnpdf_theory_card):
     # Testing construct eko cards
-    q_fin = 100
-    q_points = 5
+    q_ini = 1.0
+    q_fin = 1e5
     x_grid = [1.0e-3, 0.1, 1.0]
     pto = 2
     comments = "Test"
     t_card, op_card = eko_utils.construct_eko_cards(
         nnpdf_theory_card,
-        q_fin,
-        q_points,
         x_grid,
         op_card_dict={"configs": {"interpolation_polynomial_degree": 2}},
         theory_card_dict={"Comments": comments},
@@ -127,15 +134,20 @@ def test_eko_utils(tmp_path, nnpdf_theory_card):
         t_card_dict["order"][0] == pto + 1
     )  # This is due to a different convention in eko orders due to QED
     np.testing.assert_allclose(op_card_dict["xgrid"], x_grid)
-    # In theory 399 the charm threshold is at 1.51
-    # and we should find two entries, one for nf=3 and another one for nf=4
-    np.testing.assert_allclose(op_card_dict["mugrid"][0], (1.51, 3))
-    np.testing.assert_allclose(op_card_dict["mugrid"][1], (1.51, 4))
-    # Then (with the number of points we chosen it will happen in position 2,3
-    # we will find the bottom threshold at two different nf
-    np.testing.assert_allclose(op_card_dict["mugrid"][2], (4.92, 4))
-    np.testing.assert_allclose(op_card_dict["mugrid"][3], (4.92, 5))
+    # We should find two entries for each threshold energy,
+    # one for nf=3(4) and another one for nf=4(5)
+    for n in {
+        (nnpdf_theory_card["mc"], 3),
+        (nnpdf_theory_card["mc"], 4),
+        (nnpdf_theory_card["mb"], 4),
+        (nnpdf_theory_card["mb"], 5),
+    }:
+        assert any(np.allclose(n, x) for x in op_card_dict["mugrid"])
+
+    # Testing if the endpoints are correct
+    np.testing.assert_allclose(op_card_dict["mugrid"][0], (q_ini, 3))
     np.testing.assert_allclose(op_card_dict["mugrid"][-1], (q_fin, 5))
+
     # Testing computation of eko
     save_path = tmp_path / "ekotest.tar"
     runner.solve(t_card, op_card, save_path)
