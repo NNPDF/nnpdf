@@ -36,7 +36,7 @@ from validphys.filters import (
     default_filter_rules_input,
     default_filter_settings_input,
 )
-from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
+from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas, match_datasets_by_name
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
     DataNotFoundError,
@@ -981,14 +981,12 @@ class CoreConfig(configparser.Config):
         for spec in dataspecs:
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
-
                 names = {}
                 for dsin in data_input:
                     cd = self.produce_commondata(dataset_input=dsin)
                     proc = get_info(cd).nnpdf31_process
                     ds = dsin.name
                     names[(proc, ds)] = dsin
-
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
         res = []
@@ -997,12 +995,31 @@ class CoreConfig(configparser.Config):
             # TODO: Should this have the same name?
             inner_spec_list = inres["dataspecs"] = []
             for ispec, spec in enumerate(dataspecs):
-                # Passing spec by referene
+                # Passing spec by reference
                 d = ChainMap({"dataset_input": all_names[ispec][k]}, spec)
                 inner_spec_list.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
         return res
+
+    def produce_matched_excluded_datasets_by_name(self, dataspecs):
+        """
+        Return excluded datasets, each tagged with the more_info from the dataspecs they came from. Set up to work with plot_fancy.
+        """
+        dinputs_a = dataspecs[0]["dataset_inputs"]
+        dinputs_b = dataspecs[1]["dataset_inputs"]
+        # some fancy logic
+        more_info = {
+                "pdfs": [i["pdf"] for i in dataspecs],
+                "theoryid": dataspecs[0]["theoryid"],
+                "fit": dataspecs[0]["fit"] # The fancy logic will put here the _right_ fit since this is used for the cuts
+        }
+        return [{"dataset_input": i,
+                 "dataset_name": i.name, 
+                 **more_info} for i in dinputs_b[1:3]]
+
+    def produce_matched_excluded_datasets_from_dataspecs(self, dataspecs):
+        return self.produce_matched_excluded_datasets_by_name(dataspecs)
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
         """Like produce_matched_datasets_from_dataspecs but for positivity datasets."""
@@ -1014,7 +1031,6 @@ class CoreConfig(configparser.Config):
                 names = {(p.name): (p) for p in pos}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
-
         res = []
         for k in used_set:
             inres = {"posdataset_name": k}
