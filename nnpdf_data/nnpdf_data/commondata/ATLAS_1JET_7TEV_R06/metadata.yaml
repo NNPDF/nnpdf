@@ -1,0 +1,68 @@
+setname: ATLAS_1JET_7TEV_R06
+version: 1
+version_comment: Dataset excluded in NNPDF4.0. First implementation in the new commondata format.
+arXiv:
+  url: https://arxiv.org/abs/1410.8857
+iNSPIRE:
+  url: https://inspirehep.net/literature/1325553
+hepdata:
+  url: https://www.hepdata.net/record/ins1325553
+  version: 1
+  tables:
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+nnpdf_metadata:
+  nnpdf31_process: JETS
+  experiment: ATLAS
+
+implemented_observables:
+- observable_name: PTY
+  observable:
+    description: Double-differential inclusive jet cross-section as functions of jet transverse momentum and the absolute jet rapidity.
+    label: r"$10^{3*qbin} d^2\sigma/dp_Td|y|$"
+    units: '[pb/GeV]'
+  ndata: 140
+  tables:
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  process_type: JET
+  plotting:
+    dataset_label: ATLAS jets 7 TeV, R=0.6
+    x_scale: log
+    plot_x: pT
+    figure_by:
+    - y
+  kinematic_coverage:
+  - y
+  - pT
+  - sqrts
+  kinematics:
+    variables:
+      y:
+        description: jet rapidity
+        label: $|y|$
+        units: ''
+      pT:
+        description: jet transverse momentum
+        label: $k_{T}$
+        units: GeV
+      sqrts:
+        description: center of mass energy
+        label: r"$\sqrt(s)$"
+        units: GeV
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  theory:
+    FK_tables:
+    - -
+    operation: 'null'
