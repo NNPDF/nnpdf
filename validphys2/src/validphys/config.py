@@ -1002,21 +1002,76 @@ class CoreConfig(configparser.Config):
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
         return res
 
+#    def produce_matched_excluded_datasets_by_name(self, dataspecs):
+#        """
+#        Return excluded datasets, each tagged with the more_info from the dataspecs they came from. Set up to work with plot_fancy.
+#        """
+#        dinputs_a = dataspecs[0]["dataset_inputs"]
+#        dinputs_b = dataspecs[1]["dataset_inputs"]
+#        # some fancy logic
+#        more_info = {
+#                "pdfs": [i["pdf"] for i in dataspecs],
+#                "theoryid": dataspecs[0]["theoryid"],
+#                "fit": dataspecs[0]["fit"] # The fancy logic will put here the _right_ fit since this is used for the cuts
+#        }
+#        return [{"dataset_input": i,
+#                 "dataset_name": i.name, 
+#                 **more_info} for i in dinputs_b[1:3]]
+
     def produce_matched_excluded_datasets_by_name(self, dataspecs):
+        """Return excluded datasets, each tagged with the more_info from the dataspecs they came from."""
         """
+        Like produce_matched_datasets_from_dataspecs, but for excluded datasets from a fit comparison.
         Return excluded datasets, each tagged with the more_info from the dataspecs they came from. Set up to work with plot_fancy.
         """
-        dinputs_a = dataspecs[0]["dataset_inputs"]
-        dinputs_b = dataspecs[1]["dataset_inputs"]
-        # some fancy logic
-        more_info = {
-                "pdfs": [i["pdf"] for i in dataspecs],
-                "theoryid": dataspecs[0]["theoryid"],
-                "fit": dataspecs[0]["fit"] # The fancy logic will put here the _right_ fit since this is used for the cuts
+
+        self._check_dataspecs_type(dataspecs)
+        loader = Loader()
+
+        # (proc, ds) -> list of (dsin, spec)
+        all_sets = {}
+
+        for spec in dataspecs:
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, data_input = self.parse_from_(None, "data_input", write=False)
+                for dsin in data_input:
+                    cd = self.produce_commondata(dataset_input=dsin)
+                    proc = get_info(cd).nnpdf31_process
+                    ds = dsin.name
+                    key = (proc, ds)
+
+                    # add (dsin, spec) to the set containing (proc, ds)
+                    if key not in all_sets:
+                        all_sets[key] = []
+                    all_sets[key].append((dsin, spec))
+
+        excluded_keys = {
+            k for k, occurences_for_key in all_sets.items()
+            if len(occurences_for_key) < len(dataspecs) # criterion for if a set (represented by a key) is excluded: not being part of _all_ dataspecs
         }
-        return [{"dataset_input": i,
-                 "dataset_name": i.name, 
-                 **more_info} for i in dinputs_b[1:3]]
+
+        def build_more_info(dataspec):
+            """Builds extra information that plot_fancy needs to digest, for the dataspec from which the excluded set originates."""
+            return {
+                "pdfs": [i["pdf"] for i in dataspecs],
+                "theoryid": dataspec["theoryid"],
+                "fit": dataspec["fit"],
+            }
+
+        res = []
+        # some fancy logic
+        for key in excluded_keys:
+            for dsin, spec in all_sets[key]:
+                res.append(
+                    {
+                        "dataset_input": dsin,
+                        "dataset_name": dsin.name,
+                        **build_more_info(spec),
+                    }
+                        ) 
+        return res
+
+
 
     def produce_matched_excluded_datasets_from_dataspecs(self, dataspecs):
         return self.produce_matched_excluded_datasets_by_name(dataspecs)
