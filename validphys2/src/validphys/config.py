@@ -1018,8 +1018,7 @@ class CoreConfig(configparser.Config):
 #                 "dataset_name": i.name, 
 #                 **more_info} for i in dinputs_b[1:3]]
 
-    def produce_matched_excluded_datasets_by_name(self, dataspecs):
-        """Return excluded datasets, each tagged with the more_info from the dataspecs they came from."""
+    def produce_mismatched_datasets_by_name(self, dataspecs):
         """
         Like produce_matched_datasets_from_dataspecs, but for excluded datasets from a fit comparison.
         Return excluded datasets, each tagged with the more_info from the dataspecs they came from. Set up to work with plot_fancy.
@@ -1071,10 +1070,6 @@ class CoreConfig(configparser.Config):
                         ) 
         return res
 
-
-
-    def produce_matched_excluded_datasets_from_dataspecs(self, dataspecs):
-        return self.produce_matched_excluded_datasets_by_name(dataspecs)
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
         """Like produce_matched_datasets_from_dataspecs but for positivity datasets."""

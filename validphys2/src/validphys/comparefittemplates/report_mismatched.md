@@ -105,10 +105,10 @@ Dataset plots
 [Plots for {@dataset_name@}]({@dataset_report report@})
 {@endwith@}
 
-Datasets excluded from the fit
+Mismatched datasets
 --------------------------
-{@with matched_excluded_datasets_by_name@}
-Plots for {@dataset_name@}{@plot_fancy@}
+{@with mismatched_datasets_by_name@}
+[Plots for {@dataset_name@}]({@mismatched_report report@})
 {@endwith@}
 
 Positivity
