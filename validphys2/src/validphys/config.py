@@ -1014,42 +1014,43 @@ class CoreConfig(configparser.Config):
         # (proc, ds) -> list of (dsin, spec)
         all_sets = {}
 
+#        for spec in dataspecs:
+#            with self.set_context(ns=self._curr_ns.new_child(spec)):
+#                _, data_input = self.parse_from_(None, "data_input", write=False)
+#                for dsin in data_input:
+#                    cd = self.produce_commondata(dataset_input=dsin)
+#                    proc = get_info(cd).nnpdf31_process
+#                    ds = dsin.name
+#                    key = (proc, ds)
+#
+#                    # add (dsin, spec) to the set containing (proc, ds)
+#                    if key not in all_sets:
+#                        all_sets[key] = []
+#                    all_sets[key].append((dsin, spec))
+#        dataset_inputs = dataspecs[0].as_input()["dataset_inputs"]
+        mismatched_dinputs = []
         for spec in dataspecs:
-            with self.set_context(ns=self._curr_ns.new_child(spec)):
-                _, data_input = self.parse_from_(None, "data_input", write=False)
-                for dsin in data_input:
-                    cd = self.produce_commondata(dataset_input=dsin)
-                    proc = get_info(cd).nnpdf31_process
-                    ds = dsin.name
-                    key = (proc, ds)
+            for dinput in spec["dataset_inputs"]:
+                # check whether the dataset exists in any of the others
+                if any( dinput not in s["dataset_inputs"] for s in dataspecs ):
+                    mismatched_dinputs.append( (dinput, spec) )
 
-                    # add (dsin, spec) to the set containing (proc, ds)
-                    if key not in all_sets:
-                        all_sets[key] = []
-                    all_sets[key].append((dsin, spec))
-
-        excluded_keys = {
-            k for k, occurences_for_key in all_sets.items()
-            if len(occurences_for_key) < len(dataspecs) # criterion for if a set (represented by a key) is excluded: not being part of _all_ dataspecs
-        }
-
-        def build_more_info(dataspec):
-            """Builds extra information that plot_fancy needs to digest, for the dataspec from which the excluded set originates."""
-            return {
-                "pdfs": [i["pdf"] for i in dataspecs],
-                "theoryid": dataspec["theoryid"],
-                "fit": dataspec["fit"],
-            }
+       # excluded_keys = {
+       #     k for k, occurences_for_key in all_sets.items()
+       #     if len(occurences_for_key) < len(dataspecs) # criterion for if a set (represented by a key) is excluded: not being part of _all_ dataspecs
+       # }
 
         res = []
         # some fancy logic
-        for key in excluded_keys:
-            for dsin, spec in all_sets[key]:
+#        for key in excluded_keys:
+        for dsin, spec in mismatched_dinputs:
                 res.append(
                     {
                         "dataset_input": dsin,
                         "dataset_name": dsin.name,
-                        **build_more_info(spec),
+                        "theoryid": spec["theoryid"],
+                        "pdfs": [i["pdf"] for i in dataspecs],
+                        "fit": spec["fit"],
                     }
                         ) 
         return res

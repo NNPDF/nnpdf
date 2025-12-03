@@ -123,6 +123,8 @@ dataspecs:
       from_: current
     speclabel:
       from_: current
+    dataset_inputs:
+      from_: fit
 
   - theoryid:
       from_: reference
@@ -132,6 +134,8 @@ dataspecs:
       from_: reference
     speclabel:
       from_: reference
+    dataset_inputs:
+      from_: fit
       
 t0_info:
   - use_t0: True
