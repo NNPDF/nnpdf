@@ -1002,26 +1002,10 @@ class CoreConfig(configparser.Config):
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
         return res
 
-#    def produce_matched_excluded_datasets_by_name(self, dataspecs):
-#        """
-#        Return excluded datasets, each tagged with the more_info from the dataspecs they came from. Set up to work with plot_fancy.
-#        """
-#        dinputs_a = dataspecs[0]["dataset_inputs"]
-#        dinputs_b = dataspecs[1]["dataset_inputs"]
-#        # some fancy logic
-#        more_info = {
-#                "pdfs": [i["pdf"] for i in dataspecs],
-#                "theoryid": dataspecs[0]["theoryid"],
-#                "fit": dataspecs[0]["fit"] # The fancy logic will put here the _right_ fit since this is used for the cuts
-#        }
-#        return [{"dataset_input": i,
-#                 "dataset_name": i.name, 
-#                 **more_info} for i in dinputs_b[1:3]]
-
     def produce_mismatched_datasets_by_name(self, dataspecs):
         """
-        Like produce_matched_datasets_from_dataspecs, but for excluded datasets from a fit comparison.
-        Return excluded datasets, each tagged with the more_info from the dataspecs they came from. Set up to work with plot_fancy.
+        Like produce_matched_datasets_from_dataspecs, but for mismatched datasets from a fit comparison.
+        Returns the mismatched datasets, each tagged with more_info from the dataspecs they came from. Set up to work with plot_fancy.
         """
 
         self._check_dataspecs_type(dataspecs)
@@ -1069,7 +1053,6 @@ class CoreConfig(configparser.Config):
                     }
                         ) 
         return res
-
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
         """Like produce_matched_datasets_from_dataspecs but for positivity datasets."""
