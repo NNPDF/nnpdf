@@ -227,7 +227,7 @@ class CompareFitApp(App):
         are_the_same = self.check_identical_theory_cuts_covmat()
         if are_the_same:
             log.info("Using excluded comparecard: identical theory cuts/covmat detected")
-            autosettings["template"] = "report_with_excluded.md"
+            autosettings["template"] = "report_mismatched.md"
             args['config_yml'] = comparefittemplates.template_with_excluded_path
         return autosettings
 

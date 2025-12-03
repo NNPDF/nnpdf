@@ -99,9 +99,9 @@ lumi_report:
   meta: Null
   template: lumi.md
 
-excluded_datasets:
-  use_cuts: "fromfit"
-  from_: excluded
+mismatched_report:
+  meta: Null
+  template: mismatched.md
 
 template: report.md
 
@@ -123,8 +123,6 @@ dataspecs:
       from_: current
     speclabel:
       from_: current
-    dataset_inputs:
-      from_: fit
 
   - theoryid:
       from_: reference
@@ -134,8 +132,6 @@ dataspecs:
       from_: reference
     speclabel:
       from_: reference
-    dataset_inputs:
-      from_: fit
       
 t0_info:
   - use_t0: True
