@@ -21,7 +21,7 @@ def load_dataset_metadata(dataset_name, variant=None):
     profile_data_paths = get_nnpdf_profile()["data_path"]
 
     for data_path in profile_data_paths:
-        metadata_file = data_path / "commondata" / setname / "metadata.yaml"
+        metadata_file = data_path / setname / "metadata.yaml"
         if metadata_file.exists():
             break
     else:
