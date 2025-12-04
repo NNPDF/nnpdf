@@ -873,8 +873,9 @@ class ModelTrainer:
             stopping_patience = params["stopping_patience"]
             stopping_epochs = int(epochs * stopping_patience)
         else:
-            epochs = int(hyperopt_params["epochs"][self.replicas[0]-1])
-            stopping_patience = hyperopt_params["stopping_patience"][self.replicas[0]-1]
+            idx_hyperparamters = self.replicas[0]%10
+            epochs = int(hyperopt_params["epochs"][idx_hyperparamters])
+            stopping_patience = hyperopt_params["stopping_patience"][idx_hyperparamters]
             stopping_epochs = int(epochs * stopping_patience)
 
 
@@ -934,17 +935,18 @@ class ModelTrainer:
         else:
             # read hyperparameter values from hyperopt results
             for rep, seed in zip(self.replicas, self._nn_seeds):
-                activations = [hyperopt_params["activation_per_layer"][rep-1]] * (len(hyperopt_params["nodes_per_layer"][rep-1])-1)
+                idx_hyperparamters = rep%10
+                activations = [hyperopt_params["activation_per_layer"][idx_hyperparamters]] * (len(hyperopt_params["nodes_per_layer"][idx_hyperparamters])-1)
                 # last layer activation is always linear
                 activations.append('linear')
 
                 tmp = model_gen.ReplicaSettings(
                     seed=seed,
-                    nodes=hyperopt_params["nodes_per_layer"][rep-1],
+                    nodes=hyperopt_params["nodes_per_layer"][idx_hyperparamters],
                     activations=activations,
-                    initializer=hyperopt_params["initializer"][rep-1],
-                    architecture=hyperopt_params["layer_type"][rep-1],
-                    dropout_rate=hyperopt_params["dropout"][rep-1],
+                    initializer=hyperopt_params["initializer"][idx_hyperparamters],
+                    architecture=hyperopt_params["layer_type"][idx_hyperparamters],
+                    dropout_rate=hyperopt_params["dropout"][idx_hyperparamters],
                     regularizer=params.get("regularizer"),
                     regularizer_args=params.get("regularizer_args"),
                 )
@@ -1024,11 +1026,11 @@ class ModelTrainer:
                     model.compile(**params["optimizer"])
             else:
                 # Proper way of doing this? Not sure how optimizer parameters should be treated
+                idx_hyperparamters = self.replicas[0]%10
                 optimizer_params = {}
-                optimizer_params["clipnorm"] = hyperopt_params['clipnorm'][self.replicas[0]-1]
-                optimizer_params["learning_rate"] = hyperopt_params['learning_rate'][self.replicas[0]-1]
-                optimizer_params["optimizer_name"] = hyperopt_params['optimizer'][self.replicas[0]-1]
-
+                optimizer_params["clipnorm"] = hyperopt_params['clipnorm'][idx_hyperparamters]
+                optimizer_params["learning_rate"] = hyperopt_params['learning_rate'][idx_hyperparamters]
+                optimizer_params["optimizer_name"] = hyperopt_params['optimizer'][idx_hyperparamters]
                 for model in models.values():
                     model.compile(**optimizer_params)
             
