@@ -12,6 +12,7 @@ between iterations while at the same time keeping the amount of redundant calls 
 from collections import namedtuple
 from itertools import zip_longest
 import logging
+import json
 
 import numpy as np
 
@@ -859,11 +860,24 @@ class ModelTrainer:
             for key in self._hyperkeys:
                 log.info(" > > Testing %s = %s", key, params[key])
             params = self._hyperopt_override(params)
+            
+        # if not doing hyperot, read the input hyperopt file containing 
+        # different samples
+        else:
+            with open(params['hyperopt_res'], 'r') as file:
+                hyperopt_params = json.load(file)
 
         # Preprocess some hyperparameters
-        epochs = int(params["epochs"])
-        stopping_patience = params["stopping_patience"]
-        stopping_epochs = int(epochs * stopping_patience)
+        if self.mode_hyperopt:
+            epochs = int(params["epochs"])
+            stopping_patience = params["stopping_patience"]
+            stopping_epochs = int(epochs * stopping_patience)
+        else:
+            idx_hyperparamters = self.replicas[0]%10
+            epochs = int(hyperopt_params["epochs"][idx_hyperparamters])
+            stopping_patience = hyperopt_params["stopping_patience"][idx_hyperparamters]
+            stopping_epochs = int(epochs * stopping_patience)
+
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
@@ -905,19 +919,38 @@ class ModelTrainer:
 
         # Prepare the settings for all replica
         replicas_settings = []
-        for seed in self._nn_seeds:
-            # WIP here the sampling will happen when necessary
-            tmp = model_gen.ReplicaSettings(
-                seed=seed,
-                nodes=params["nodes_per_layer"],
-                activations=params["activation_per_layer"],
-                initializer=params["initializer"],
-                architecture=params["layer_type"],
-                dropout_rate=params["dropout"],
-                regularizer=params.get("regularizer"),
-                regularizer_args=params.get("regularizer_args"),
-            )
-            replicas_settings.append(tmp)
+        if self.mode_hyperopt:
+            for seed in self._nn_seeds:
+                tmp = model_gen.ReplicaSettings(
+                    seed=seed,
+                    nodes=params["nodes_per_layer"],
+                    activations=params["activation_per_layer"],
+                    initializer=params["initializer"],
+                    architecture=params["layer_type"],
+                    dropout_rate=params["dropout"],
+                    regularizer=params.get("regularizer"),
+                    regularizer_args=params.get("regularizer_args"),
+                )
+                replicas_settings.append(tmp)
+        else:
+            # read hyperparameter values from hyperopt results
+            for rep, seed in zip(self.replicas, self._nn_seeds):
+                idx_hyperparamters = rep%10
+                activations = [hyperopt_params["activation_per_layer"][idx_hyperparamters]] * (len(hyperopt_params["nodes_per_layer"][idx_hyperparamters])-1)
+                # last layer activation is always linear
+                activations.append('linear')
+
+                tmp = model_gen.ReplicaSettings(
+                    seed=seed,
+                    nodes=hyperopt_params["nodes_per_layer"][idx_hyperparamters],
+                    activations=activations,
+                    initializer=hyperopt_params["initializer"][idx_hyperparamters],
+                    architecture=hyperopt_params["layer_type"][idx_hyperparamters],
+                    dropout_rate=hyperopt_params["dropout"][idx_hyperparamters],
+                    regularizer=params.get("regularizer"),
+                    regularizer_args=params.get("regularizer_args"),
+                )
+                replicas_settings.append(tmp)
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -986,11 +1019,21 @@ class ModelTrainer:
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
             )
-
-            # Compile each of the models with the right parameters
-            for model in models.values():
-                model.compile(**params["optimizer"])
-
+            
+            if self.mode_hyperopt:
+                # Compile each of the models with the right parameters
+                for model in models.values():
+                    model.compile(**params["optimizer"])
+            else:
+                # Proper way of doing this? Not sure how optimizer parameters should be treated
+                idx_hyperparamters = self.replicas[0]%10
+                optimizer_params = {}
+                optimizer_params["clipnorm"] = hyperopt_params['clipnorm'][idx_hyperparamters]
+                optimizer_params["learning_rate"] = hyperopt_params['learning_rate'][idx_hyperparamters]
+                optimizer_params["optimizer_name"] = hyperopt_params['optimizer'][idx_hyperparamters]
+                for model in models.values():
+                    model.compile(**optimizer_params)
+            
             self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
