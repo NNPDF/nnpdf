@@ -5,9 +5,6 @@
 description: "NNPDF4.0 methodology fit with theory covariance matrix (with both 3 and 9pt prescription at the same time to showcase the composition of theory covmats)"
 
 ##########################################################################################
-# frac: training fraction
-# ewk: apply ewk k-factors
-# sys: systematics treatment (see systypes)
 dataset_inputs:
 - {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
@@ -39,6 +36,7 @@ nnseed: 2080989803
 mcseed: 75955222
 save: false
 genrep: true      # true = generate MC replicas, false = use real data
+diagonal_basis: false
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [25, 20, 8]

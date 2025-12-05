@@ -31,7 +31,7 @@ genrep: True    # on = generate MC replicas, False = use real data
 trvlseed: 3
 nnseed: 2
 mcseed: 1
-diagonal_basis: True
+diagonal_basis: False
 
 load: "weights.weights.h5"
 
