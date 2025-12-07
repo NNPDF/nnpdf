@@ -86,11 +86,11 @@ jobs:
         tar -czf ${RUNCARD}.tar.gz ${RUNCARD}
         echo "PATH_TO_SAVE=${PWD}/${RUNCARD}.tar.gz" >> ${GITHUB_ENV}
     - name: Keep the fit as an artifact
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.RUNCARD }}.tar.gz
-          path: ${{ env.PATH_TO_SAVE }}
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.RUNCARD }}.tar.gz
+        path: ${{ env.PATH_TO_SAVE }}
     - name: Building and upload report
       shell: bash -l {0}
       run: |
