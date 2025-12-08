@@ -241,15 +241,14 @@ class CompareFitApp(App):
         return self.config_class(c, environment=self.environment)
     
     def check_identical_theory_cuts_covmat(self):
+        """ 
+        Checks whether the theory ID, data cuts, and thcovmat are the same between the two fits.    
+        In the affirmative case, a mismatched datasets page will be added to the report.
+        """
         args = self.args
         l = self.environment.loader 
-        current_runcard_path = l.check_fit(args['current_fit']).path / "filter.yml"
-        reference_runcard_path = l.check_fit(args['reference_fit']).path / "filter.yml"  
-       
-        with open(current_runcard_path) as fc:
-            with open(reference_runcard_path) as fr:
-                current_runcard = yaml_safe.load(fc)
-                reference_runcard = yaml_safe.load(fr)
+        current_runcard = l.check_fit(args['current_fit']).as_input()
+        reference_runcard = l.check_fit(args['reference_fit']).as_input()
         
         current_thcovmat = current_runcard.get("theorycovmatconfig")
         reference_thcovmat = reference_runcard.get("theorycovmatconfig")
