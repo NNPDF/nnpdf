@@ -36,8 +36,6 @@ def _eko_theory_from_nnpdf_theory(nnpdf_theory):
 
 def construct_eko_cards(
     nnpdf_theory,
-    q_fin,
-    q_points,
     x_grid,
     op_card_dict: Optional[Dict[str, Any]] = None,
     theory_card_dict: Optional[Dict[str, Any]] = None,
@@ -45,11 +43,11 @@ def construct_eko_cards(
 ):
     """
     Return the theory and operator cards used to construct the eko.
-    nnpdf_theory is a NNPDF theory card for which we are computing the operator card and eko
-    q_fin is the final point of the q grid while q_points is the number of points of the grid.
+    nnpdf_theory is a NNPDF theory card for which we are computing the operator card.
     x_grid is the x grid to be used.
     op_card_dict and theory_card_dict are optional updates that can be provided respectively to the
     operator card and to the theory card.
+    legacy40 is a flag that can be set if you want to use the old grid from NNPDF4.0
     """
     theory, thresholds = load_theory(nnpdf_theory, theory_card_dict)
 
@@ -62,17 +60,19 @@ def construct_eko_cards(
 
     # construct mugrid
 
-    # Generate the q2grid, if q_fin and q_points are None, use `nf0` to select a default
+    # Generate the q2grid
     q2_grid = utils.generate_q2grid(
-        mu0,
-        q_fin,
-        q_points,
-        {
-            theory["mc"]: thresholds["c"],
-            theory["mb"]: thresholds["b"],
-            theory["mt"]: thresholds["t"],
+        Q0=mu0,
+        Qmin=1.0,
+        Qmax=1e5,
+        total_points=50,
+        total_points_ic=6,
+        match_dict={
+            "mc": theory["mc"],
+            "mb": theory["mb"],
+            "kcThr": theory["kcThr"],
+            "kbThr": theory["kbThr"],
         },
-        theory["nf0"],
         legacy40=legacy40,
     )
 
