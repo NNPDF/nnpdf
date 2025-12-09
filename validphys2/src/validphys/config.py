@@ -36,7 +36,7 @@ from validphys.filters import (
     default_filter_rules_input,
     default_filter_settings_input,
 )
-from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
+from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas, match_datasets_by_name
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
     DataNotFoundError,
@@ -981,14 +981,12 @@ class CoreConfig(configparser.Config):
         for spec in dataspecs:
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
-
                 names = {}
                 for dsin in data_input:
                     cd = self.produce_commondata(dataset_input=dsin)
                     proc = get_info(cd).nnpdf31_process
                     ds = dsin.name
                     names[(proc, ds)] = dsin
-
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
         res = []
@@ -997,11 +995,41 @@ class CoreConfig(configparser.Config):
             # TODO: Should this have the same name?
             inner_spec_list = inres["dataspecs"] = []
             for ispec, spec in enumerate(dataspecs):
-                # Passing spec by referene
+                # Passing spec by reference
                 d = ChainMap({"dataset_input": all_names[ispec][k]}, spec)
                 inner_spec_list.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
+        return res
+
+    def produce_mismatched_datasets_by_name(self, dataspecs):
+        """
+        Like produce_matched_datasets_from_dataspecs, but for mismatched datasets from a fit comparison.
+        Returns the mismatched datasets, each tagged with more_info from the dataspecs they came from. Set up to work with plot_fancy.
+        """
+
+        self._check_dataspecs_type(dataspecs)
+
+        mismatched_dinputs = []
+        for spec in dataspecs:
+            for dinput in spec["dataset_inputs"]:
+                # check whether the dataset exists in any of the other dataspecs
+                if any( dinput not in s["dataset_inputs"] for s in dataspecs ):
+                    # append (proc, ds) -> list of (dinput, spec)
+                    mismatched_dinputs.append( (dinput, spec) )
+        
+        res = []
+        # prepare output for plot_fancy
+        for dsin, spec in mismatched_dinputs:
+            res.append(
+                {
+                    "dataset_input": dsin,
+                    "dataset_name": dsin.name,
+                    "theoryid": spec["theoryid"],
+                    "pdfs": [i["pdf"] for i in dataspecs],
+                    "fit": spec["fit"],
+                }
+                    ) 
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
@@ -1014,7 +1042,6 @@ class CoreConfig(configparser.Config):
                 names = {(p.name): (p) for p in pos}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
-
         res = []
         for k in used_set:
             inres = {"posdataset_name": k}

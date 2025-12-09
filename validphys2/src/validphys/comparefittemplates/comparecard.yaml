@@ -99,6 +99,26 @@ lumi_report:
   meta: Null
   template: lumi.md
 
+mismatched_information:
+  meta: Null
+  actions_:
+    - report
+  
+  # Datasets will go to their own page
+  mismatched_report:
+    meta: Null
+    template: mismatched.md
+
+  template_text: |
+    Mismatched datasets
+    ---------------------
+    The following plots corresponds to datasets which are not available in one of the fits.
+
+    {@with mismatched_datasets_by_name@}
+    [Plots for {@dataset_name@}]({@mismatched_report report@})
+    {@endwith@}
+
+
 template: report.md
 
 positivity:
@@ -119,6 +139,8 @@ dataspecs:
       from_: current
     speclabel:
       from_: current
+    dataset_inputs:
+      from_: fit
 
   - theoryid:
       from_: reference
@@ -128,6 +150,8 @@ dataspecs:
       from_: reference
     speclabel:
       from_: reference
+    dataset_inputs:
+      from_: fit
       
 t0_info:
   - use_t0: True
