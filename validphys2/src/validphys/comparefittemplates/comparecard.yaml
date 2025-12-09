@@ -99,9 +99,25 @@ lumi_report:
   meta: Null
   template: lumi.md
 
-mismatched_report:
+mismatched_information:
   meta: Null
-  template: mismatched.md
+  actions_:
+    - report
+  
+  # Datasets will go to their own page
+  mismatched_report:
+    meta: Null
+    template: mismatched.md
+
+  template_text: |
+    Mismatched datasets
+    ---------------------
+    The following plots corresponds to datasets which are not available in one of the fits.
+
+    {@with mismatched_datasets_by_name@}
+    [Plots for {@dataset_name@}]({@mismatched_report report@})
+    {@endwith@}
+
 
 template: report.md
 

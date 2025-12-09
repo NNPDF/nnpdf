@@ -225,8 +225,11 @@ class CompareFitApp(App):
             )
         are_the_same = self.check_identical_theory_cuts_covmat()
         if are_the_same:
-            log.info("Adding mismatched datasets page: identical theory cuts/covmat detected")
-            autosettings["template"] = "report_mismatched.md"
+            log.info("Adding mismatched datasets page: identical theory, data cuts and covmat detected")
+        else:
+            autosettings["mismatched_information"] = {
+            "template_text": "Mismatched datasets cannot be shown due to cuts theory, data cuts and/or covmat not being identical"
+            }
         return autosettings
 
 
