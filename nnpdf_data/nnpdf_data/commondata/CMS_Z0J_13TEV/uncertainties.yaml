@@ -36,24 +36,6 @@ definitions:
     treatment: MULT
     type: CORR
 bins:
-- Data stat.: 0.0038014
-  Unfolding stat.: 0.0054221
-  Unfolding model: 0.0022625
-  Int. luminosity: 0.0097317
-  Lepton energy: 0.0038791
-  Efficiency: 0.0075232
-  Backgrounds: 0.0070066
-  Jet energy: 2.5797e-05
-  Others: 0.003445
-- Data stat.: 0.00537
-  Unfolding stat.: 0.0080736
-  Unfolding model: 0.00083117
-  Int. luminosity: 0.020417
-  Lepton energy: 0.0057278
-  Efficiency: 0.017875
-  Backgrounds: 0.0023014
-  Jet energy: 0.00010122
-  Others: 0.010074
 - Data stat.: 0.0057125
   Unfolding stat.: 0.0088198
   Unfolding model: 0.0038192
@@ -180,42 +162,6 @@ bins:
   Backgrounds: 2.2307e-07
   Jet energy: 1.5048e-09
   Others: 2.5187e-07
-- Data stat.: 0.033758
-  Unfolding stat.: 0.04768
-  Unfolding model: 0.14415
-  Int. luminosity: 0.10357
-  Lepton energy: 0.060863
-  Efficiency: 0.065207
-  Backgrounds: 0.0079841
-  Jet energy: 0.00023528
-  Others: 0.0145
-- Data stat.: 0.050774
-  Unfolding stat.: 0.071665
-  Unfolding model: 0.075111
-  Int. luminosity: 0.27698
-  Lepton energy: 0.11393
-  Efficiency: 0.15961
-  Backgrounds: 0.0013584
-  Jet energy: 0.00084474
-  Others: 0.10611
-- Data stat.: 0.05936
-  Unfolding stat.: 0.083694
-  Unfolding model: 0.043083
-  Int. luminosity: 0.38526
-  Lepton energy: 0.14786
-  Efficiency: 0.22292
-  Backgrounds: 0.00052205
-  Jet energy: 0.0013554
-  Others: 0.093684
-- Data stat.: 0.064057
-  Unfolding stat.: 0.090387
-  Unfolding model: 0.14566
-  Int. luminosity: 0.43835
-  Lepton energy: 0.10023
-  Efficiency: 0.24028
-  Backgrounds: 0.0013208
-  Jet energy: 0.001982
-  Others: 0.17601
 - Data stat.: 0.065327
   Unfolding stat.: 0.092835
   Unfolding model: 0.056038
@@ -513,24 +459,6 @@ bins:
   Backgrounds: 2.0173e-07
   Jet energy: 5.681e-08
   Others: 4.0387e-07
-- Data stat.: 0.0024144
-  Unfolding stat.: 0.0016044
-  Unfolding model: 0.0009968
-  Int. luminosity: 0.0042776
-  Lepton energy: 0.0025046
-  Efficiency: 0.0033588
-  Backgrounds: 0.0022937
-  Jet energy: 6.8547e-05
-  Others: 0.0010266
-- Data stat.: 0.0032749
-  Unfolding stat.: 0.0022634
-  Unfolding model: 0.00067199
-  Int. luminosity: 0.0090521
-  Lepton energy: 0.005342
-  Efficiency: 0.007863
-  Backgrounds: 0.0014098
-  Jet energy: 0.00014384
-  Others: 0.0028117
 - Data stat.: 0.0035125
   Unfolding stat.: 0.002462
   Unfolding model: 0.0018979
@@ -657,24 +585,6 @@ bins:
   Backgrounds: 4.7202e-07
   Jet energy: 7.0224e-08
   Others: 2.7446e-07
-- Data stat.: 0.00092483
-  Unfolding stat.: 0.0004549
-  Unfolding model: 0.00051431
-  Int. luminosity: 0.00050336
-  Lepton energy: 0.00044193
-  Efficiency: 0.00058632
-  Backgrounds: 0.00065072
-  Jet energy: 2.9174e-05
-  Others: 0.00025561
-- Data stat.: 0.0011511
-  Unfolding stat.: 0.00058874
-  Unfolding model: 0.00062821
-  Int. luminosity: 0.001006
-  Lepton energy: 0.00070283
-  Efficiency: 0.0013597
-  Backgrounds: 0.00062716
-  Jet energy: 2.4119e-05
-  Others: 0.00039271
 - Data stat.: 0.0012611
   Unfolding stat.: 0.0006568
   Unfolding model: 0.00047534
@@ -774,24 +684,6 @@ bins:
   Backgrounds: 2.395e-06
   Jet energy: 3.8535e-07
   Others: 1.5562e-07
-- Data stat.: 0.00025654
-  Unfolding stat.: 7.3288e-05
-  Unfolding model: 0.00011534
-  Int. luminosity: 3.5644e-05
-  Lepton energy: 7.6262e-05
-  Efficiency: 5.3118e-05
-  Backgrounds: 4.7014e-05
-  Jet energy: 2.8126e-07
-  Others: 1.0691e-05
-- Data stat.: 0.00037499
-  Unfolding stat.: 0.00011066
-  Unfolding model: 0.00018716
-  Int. luminosity: 7.8404e-05
-  Lepton energy: 4.9356e-05
-  Efficiency: 0.00012792
-  Backgrounds: 8.2519e-05
-  Jet energy: 4.1687e-07
-  Others: 2.671e-05
 - Data stat.: 0.00037839
   Unfolding stat.: 0.00011649
   Unfolding model: 0.00014386

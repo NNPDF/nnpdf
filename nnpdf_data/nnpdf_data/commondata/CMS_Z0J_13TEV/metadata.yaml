@@ -24,13 +24,13 @@ implemented_observables:
     label: CMS $Z$ $p_T$ 13 TeV $(p_T^{ll},m_{ll})$
     units: "[pb/GeV]"
 
-  ndata: 95
+  ndata: 83
   tables: ["50-76","76-106","106-170","170-350","350-1000"]
   process_type: DY_NC_PT
 
   plotting:
     dataset_label: CMS $Z$ $p_T$ 13 TeV $(p_T^{ll},M_{ll})$
-    y_label: $d\sigma/dp_T(\\ell\\ell)$ (pb/GeV)
+    y_label: $d\sigma/dp_T(\ell\ell)$ (pb/GeV)
     figure_by:
     - m_ll
     x_scale: log
@@ -53,7 +53,7 @@ implemented_observables:
   - uncertainties.yaml
 
   theory:
-    conversion_factor: 1000.0
+    conversion_factor: 1e-3
     operation: 'null'
     FK_tables:
       - - CMS_Z0J_13TEV_PT-MLLBIN1

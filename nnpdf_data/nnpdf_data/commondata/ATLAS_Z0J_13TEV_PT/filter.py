@@ -1,101 +1,94 @@
 """
-
+This file contains the piece of code needed to implement the ATLAS ZpT 
+measurement at 13 TeV. We consider the combined electron-muon measurement, for
+which a total uncorrelated and a total correlated ucnertainties are given. The 
+measurement is normalised to the fiducial cross section, therefore there is no
+luminosity ucnertainty. The first three bins in pT are cropped, because of
+the impossiblity of producing theoretical predictions.
 """
 
-from filter_utils import get_data_values, get_kinematics, get_systematics
 import yaml
 
-UNCORRELATED_SYS = ["Stat (Data)", "Stat (MC)", "Efficiencies (Uncorellated)"]
-
-
-def filter_ATLAS_Z_13TEV_PT_data_kinetic():
+def get_tables():
     """
-    writes data central values and kinematics
-    to respective .yaml file
+    Get the Hepdata table
     """
-    with open("metadata.yaml", "r") as file:
-        metadata = yaml.safe_load(file)
+    hepdata_tables = ["rawdata/HEPData-ins1768911-v3-Table_4a.yaml"]
 
-    version = metadata["hepdata"]["version"]
+    return hepdata_tables
 
-    # tables for Z->l+l- observable
-    tables = metadata["implemented_observables"][0]["tables"]
+def get_all():
+    """
+    Returns data, kinematics and uncertainties for dumping in the .yaml files
+    """
+    data_central = []
+    kinematics = []
+    uncertainties = []
 
-    kin = get_kinematics(tables, version)
-    central_values = get_data_values(tables, version)
+    hepdata_tables = get_tables()
+    for table in hepdata_tables:
+        with open(table, 'r') as f:
+            input = yaml.safe_load(f)
+            
+        # Central values
+        data_values = input["dependent_variables"][0]["values"]
+        for data_value in data_values:
+            data_central.append(data_value["value"])
+        # Kinematic bins
+        kin_values = input["independent_variables"][0]["values"]
+        for kin_value in kin_values:
+            kin = {
+                'pT': {'min': kin_value['low'],
+                       'mid': 0.5 * (kin_value['low'] + kin_value['high']),
+                       'max': kin_value['high']},
+                'm_Z2': {'min': 'null', 'mid': '8317.44', 'max': 'null'},
+                'sqrts':  {'min': 'null', 'mid': '13000', 'max': 'null'}}
+               
+            kinematics.append(kin)
+        # Uncertainties
+        i = 0
+        for data_value in data_values:
+            errors = data_value["errors"]
+            uncertainty = {}
+            for error in errors:
+                uncertainty[error["label"]] = float(error["symerror"].replace('%',''))*data_central[i]/100.
+                uncertainty.update(uncertainty)
+                
+            uncertainties.append(uncertainty)
+            i = i+1
 
+    n=3
+    return (data_central[n:], kinematics[n:], uncertainties[n:])
+
+def filter_ATLAS_Z0J_13TEV_PT():
+    """
+    Dumps data, kinematics, and uncertainties on .yaml files
+    """
+    central_values, kinematics, uncertainties = get_all()
+    # Central values
     data_central_yaml = {"data_central": central_values}
-    kinematics_yaml = {"bins": kin}
+    # Kinematics
+    kinematics_yaml = {"bins": kinematics}
+    # Uncertainties
+    treatment = {"correlated uncertainty": "ADD",
+                 "uncorrelated uncertainty": "ADD",}
+    correlation = {"correlated uncertainty": "CORR",
+                 "uncorrelated uncertainty": "UNCORR",}
+    definitions = {}
+    for key,value in uncertainties[0].items():
+        definition = {key :
+                      {"description": key,
+                       "treatment": treatment[key],
+                       "type": correlation[key]}}
+        definitions.update(definition)
+    uncertainties_yaml = {"definitions": definitions,"bins": uncertainties}
 
-    # write central values and kinematics to yaml file
     with open("data.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
-
     with open("kinematics.yaml", "w") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
-
-
-def filter_ATLAS_Z_13TEV_PT_uncertainties():
-    """
-    writes uncertainties to respective .yaml file
-    """
-
-    with open("metadata.yaml", "r") as file:
-        metadata = yaml.safe_load(file)
-
-    version = metadata["hepdata"]["version"]
-    # tables for Z->l+l- observable
-    tables = metadata["implemented_observables"][0]["tables"]
-
-    systematics_LL = get_systematics(tables, version)
-
-    systematics = {"LL": systematics_LL}
-
-    # error definition
-    error_definitions = {}
-    errors = {}
-
-    for obs in ["LL"]:
-
-        error_definitions[obs] = {}
-
-        for sys in systematics[obs]:
-
-            if sys[0]['name'] in UNCORRELATED_SYS:
-                error_definitions[obs][sys[0]['name']] = {
-                    "description": f"{sys[0]['name']} from HEPDATA",
-                    "treatment": "ADD",
-                    "type": "UNCORR",
-                }
-
-            else:
-                error_definitions[obs][sys[0]['name']] = {
-                    "description": f"{sys[0]['name']} from HEPDATA",
-                    "treatment": "ADD",
-                    "type": "CORR",
-                }
-
-        # TODO:
-        # store error in dict
-        errors[obs] = []
-
-        central_values = get_data_values(tables, version)
-
-        for i in range(len(central_values)):
-            error_value = {}
-
-            for sys in systematics[obs]:
-                error_value[sys[0]['name']] = float(sys[0]['values'][i])
-
-            errors[obs].append(error_value)
-
-        uncertainties_yaml = {"definitions": error_definitions[obs], "bins": errors[obs]}
-
-        # write uncertainties
-        with open(f"uncertainties.yaml", 'w') as file:
-            yaml.dump(uncertainties_yaml, file, sort_keys=False)
-
-
+    with open("uncertainties.yaml", "w") as file:
+        yaml.dump(uncertainties_yaml, file, sort_keys=False)
+        
 if __name__ == "__main__":
-    filter_ATLAS_Z_13TEV_PT_data_kinetic()
-    filter_ATLAS_Z_13TEV_PT_uncertainties()
+    filter_ATLAS_Z0J_13TEV_PT()

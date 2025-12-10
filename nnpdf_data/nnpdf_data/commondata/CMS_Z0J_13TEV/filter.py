@@ -44,6 +44,10 @@ def get_all():
 
     hepdata_tables = get_tables()
     for table in hepdata_tables:
+        if (table=="rawdata/HEPData-ins2079374-v1-pT_ll_mass_76-106.yaml"):
+            n = 4
+        else:
+            n=2
         with open(table, 'r') as f:
             input = yaml.safe_load(f)
         ranges = list(map(int, re.search(r"mass_(\d+)-(\d+)", table).groups()))
@@ -54,11 +58,12 @@ def get_all():
             
         # Central values
         data_values = input["dependent_variables"][0]["values"]
-        for data_value in data_values:
+        for data_value in data_values[n:]:
             data_central.append(data_value["value"])
+            
         # Kinematic bins
         kin_values = input["independent_variables"][0]["values"]
-        for kin_value in kin_values:
+        for kin_value in kin_values[n:]:
             kin = {
                 'pT': {'min': kin_value['low'],
                        'mid': 0.5 * (kin_value['low'] + kin_value['high']),
@@ -66,7 +71,7 @@ def get_all():
                 'm_ll': {'min': min_mll, 'mid': mid_mll, 'max': max_mll},}
             kinematics.append(kin)
         # Uncertainties
-        for data_value in data_values:
+        for data_value in data_values[n:]:
             errors = data_value["errors"]
             uncertainty = {}
             for error in errors:
@@ -74,7 +79,7 @@ def get_all():
                 uncertainty.update(uncertainty)
 
             uncertainties.append(uncertainty)
-
+        
     return (data_central, kinematics, uncertainties)
 
 def filter_CMS_Z0J_13TEV_PT():

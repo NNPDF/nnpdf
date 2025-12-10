@@ -1,21 +1,5 @@
 bins:
 - pT:
-    min: 0.0
-    mid: 1.0
-    max: 2.0
-  m_ll:
-    min: 50
-    mid: 63.0
-    max: 76
-- pT:
-    min: 2.0
-    mid: 3.0
-    max: 4.0
-  m_ll:
-    min: 50
-    mid: 63.0
-    max: 76
-- pT:
     min: 4.0
     mid: 5.0
     max: 6.0
@@ -127,38 +111,6 @@ bins:
     min: 50
     mid: 63.0
     max: 76
-- pT:
-    min: 0.0
-    mid: 0.5
-    max: 1.0
-  m_ll:
-    min: 76
-    mid: 91.0
-    max: 106
-- pT:
-    min: 1.0
-    mid: 1.5
-    max: 2.0
-  m_ll:
-    min: 76
-    mid: 91.0
-    max: 106
-- pT:
-    min: 2.0
-    mid: 2.5
-    max: 3.0
-  m_ll:
-    min: 76
-    mid: 91.0
-    max: 106
-- pT:
-    min: 3.0
-    mid: 3.5
-    max: 4.0
-  m_ll:
-    min: 76
-    mid: 91.0
-    max: 106
 - pT:
     min: 4.0
     mid: 4.5
@@ -424,22 +376,6 @@ bins:
     mid: 91.0
     max: 106
 - pT:
-    min: 0.0
-    mid: 1.0
-    max: 2.0
-  m_ll:
-    min: 106
-    mid: 138.0
-    max: 170
-- pT:
-    min: 2.0
-    mid: 3.0
-    max: 4.0
-  m_ll:
-    min: 106
-    mid: 138.0
-    max: 170
-- pT:
     min: 4.0
     mid: 5.0
     max: 6.0
@@ -552,22 +488,6 @@ bins:
     mid: 138.0
     max: 170
 - pT:
-    min: 0.0
-    mid: 1.0
-    max: 2.0
-  m_ll:
-    min: 170
-    mid: 260.0
-    max: 350
-- pT:
-    min: 2.0
-    mid: 3.0
-    max: 4.0
-  m_ll:
-    min: 170
-    mid: 260.0
-    max: 350
-- pT:
     min: 4.0
     mid: 5.0
     max: 6.0
@@ -655,22 +575,6 @@ bins:
     min: 170
     mid: 260.0
     max: 350
-- pT:
-    min: 0.0
-    mid: 1.0
-    max: 2.0
-  m_ll:
-    min: 350
-    mid: 675.0
-    max: 1000
-- pT:
-    min: 2.0
-    mid: 3.0
-    max: 4.0
-  m_ll:
-    min: 350
-    mid: 675.0
-    max: 1000
 - pT:
     min: 4.0
     mid: 5.0
