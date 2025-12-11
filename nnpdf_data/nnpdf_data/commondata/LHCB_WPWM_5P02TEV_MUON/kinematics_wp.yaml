@@ -1,0 +1,145 @@
+bins:
+- pT:
+    min: 28.0
+    mid: 29.0
+    max: 30.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 30.0
+    mid: 31.0
+    max: 32.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 32.0
+    mid: 33.0
+    max: 34.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 34.0
+    mid: 35.0
+    max: 36.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 36.0
+    mid: 37.0
+    max: 38.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 38.0
+    mid: 39.0
+    max: 40.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 40.0
+    mid: 41.0
+    max: 42.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 42.0
+    mid: 43.0
+    max: 44.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 44.0
+    mid: 45.0
+    max: 46.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 46.0
+    mid: 47.0
+    max: 48.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 48.0
+    mid: 49.0
+    max: 50.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
+- pT:
+    min: 50.0
+    mid: 51.0
+    max: 52.0
+  m_W2:
+    min: null
+    mid: 6.46383840e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 5020.0
+    max: null
