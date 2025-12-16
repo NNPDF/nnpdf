@@ -108,30 +108,51 @@ def get_errors(hepdata: dict) -> tuple:
         (central_values, df_errors) where df_errors is a pandas DataFrame
     """
     central_values = []
-    df_errors = pd.DataFrame()
+    stat_errors = []
+    sys_errors_list = []
+    sys_names = []
     
     for i, bin in enumerate(hepdata["dependent_variables"][0]["values"]):
-        error_sources = []
         shift_cv = 0
-        error_names = []
+        bin_sys_errors = []
         
+        # First pass: collect systematic names from first bin
+        if i == 0:
+            for source in bin["errors"]:
+                if source["label"] != "stat":
+                    sys_names.append(source["label"])
+        
+        # Process errors
         for source in bin["errors"]:
-            error_names.append(source["label"])
-            
-            if "asymerror" in source:
-                delta_min = source["asymerror"]["minus"]
-                delta_plus = source["asymerror"]["plus"]
-                se_delta, se_sigma = se(delta_plus, delta_min)
-                error_sources.append(se_sigma)
-                shift_cv += se_delta
-            elif "symerror" in source:
-                se_sigma = source["symerror"]
-                error_sources.append(se_sigma)
+            if source["label"] == "stat":
+                # Statistical uncertainty
+                if "asymerror" in source:
+                    delta_min = source["asymerror"]["minus"]
+                    delta_plus = source["asymerror"]["plus"]
+                    se_delta, se_sigma = se(delta_plus, delta_min)
+                    stat_errors.append(se_sigma)
+                    shift_cv += se_delta
+                elif "symerror" in source:
+                    stat_errors.append(source["symerror"])
+            else:
+                # Systematic uncertainty
+                if "asymerror" in source:
+                    delta_min = source["asymerror"]["minus"]
+                    delta_plus = source["asymerror"]["plus"]
+                    se_delta, se_sigma = se(delta_plus, delta_min)
+                    bin_sys_errors.append(se_sigma)
+                    shift_cv += se_delta
+                elif "symerror" in source:
+                    bin_sys_errors.append(source["symerror"])
         
-        df_bin = pd.DataFrame([error_sources], columns=error_names, index=[f"bin {i}"])
-        df_errors = pd.concat([df_errors, df_bin])
+        sys_errors_list.append(bin_sys_errors)
         cv_i = bin["value"] + shift_cv
         central_values.append(cv_i * 1000)  # Convert to fb
+    
+    # Create DataFrame with stat as first column, then systematics
+    df_errors = pd.DataFrame(sys_errors_list, columns=sys_names)
+    df_errors.insert(0, 'stat', stat_errors)
+    df_errors.index = [f"bin {i}" for i in range(len(central_values))]
     
     return central_values, df_errors
 
@@ -155,10 +176,10 @@ def format_uncertainties(uncs: dict) -> list:
     for i in range(n_bins):
         errors = {}
         if "statistics" in uncs:
-            errors["stat"] = float(uncs["statistics"].loc[f"bin {i}"].values.item())
+            errors["stat"] = float(abs(uncs["statistics"].loc[f"bin {i}"].values.item()))
         
         for j, unc in enumerate(uncs["systematics"].loc[f"bin {i}"].values):
-            errors[f"sys_corr_{j + 1}"] = float(unc)
+            errors[f"sys_corr_{j + 1}"] = float(abs(unc))
         
         combined_errors.append(errors)
     
