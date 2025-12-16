@@ -24,8 +24,8 @@ definitions:
     treatment: MULT
     type: CORR
   sys_corr_6:
-    description: sys,Muon TrigEff Stat.
-    treatment: MULT
+    description: stat,Muon TrigEff Stat.
+    treatment: ADD
     type: CORR
   sys_corr_7:
     description: sys,Muon RecoEff Syst
@@ -44,17 +44,17 @@ definitions:
     treatment: MULT
     type: CORR
   sys_corr_11:
-    description: sys,Muon RecoEff Stat
-    treatment: MULT
+    description: stat,Muon RecoEff Stat
+    treatment: ADD
     type: CORR
   sys_corr_12:
     description: sys,SoftTrkScale
     treatment: MULT
-    type: CORR
+    type: UNCORR
   sys_corr_13:
     description: sys,SoftTrkResoCorr
     treatment: MULT
-    type: CORR
+    type: UNCORR
   sys_corr_14:
     description: sys,MET Jet Syst 0
     treatment: MULT
@@ -186,10 +186,10 @@ definitions:
   sys_corr_46:
     description: sys,F/B Compatibility
     treatment: MULT
-    type: CORR
+    type: UNCORR
   sys_corr_47:
-    description: sys,MC stat. unc
-    treatment: MULT
+    description: stat,MC stat. unc
+    treatment: ADD
     type: UNCORR
 bins:
 - stat: 0.06
