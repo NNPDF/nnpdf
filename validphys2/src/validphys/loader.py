@@ -216,12 +216,13 @@ class Loader(LoaderBase):
         return {
             eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.tar")
         }
-    
+
     @functools.cached_property
     def available_photons(self):
         """Return a string token for each of the available theories"""
         return {
-            photon_path.name.split("photon_")[1] for photon_path in self._photons_qed_path.glob("photon_*")
+            photon_path.name.split("photon_")[1]
+            for photon_path in self._photons_qed_path.glob("photon_*")
         }
 
     @property
@@ -319,13 +320,15 @@ class Loader(LoaderBase):
         if not eko_path.exists():
             raise EkoNotFound(f"Could not find eko {eko_path} in theory: {theoryID}")
         return eko_path
-    
+
     @functools.lru_cache
     def check_photonQED(self, theoryID, luxset):
         """Check the Photon QED set exists and return the path to it"""
         photon_qed_path = self._photons_qed_path / f"photon_theoryID_{int(theoryID)}_fit_{luxset}"
         if not photon_qed_path.exists():
-            raise PhotonQEDNotFound(f"Could not find Photon QED set {photon_qed_path} in theory: {int(theoryID)}")
+            raise PhotonQEDNotFound(
+                f"Could not find Photon QED set {photon_qed_path} in theory: {int(theoryID)}"
+            )
         return photon_qed_path
 
     @property
@@ -837,12 +840,12 @@ class RemoteLoader(LoaderBase):
     @_key_or_loader_error
     def eko_urls(self):
         return self.nnprofile['eko_urls']
-    
+
     @property
     @_key_or_loader_error
     def photon_qed_index(self):
         return self.nnprofile['photon_qed_index']
-    
+
     @property
     @_key_or_loader_error
     def photon_qed_urls(self):
@@ -917,7 +920,7 @@ class RemoteLoader(LoaderBase):
         token = 'eko_'
         rt = self.remote_files(self.eko_urls, self.eko_index, thing="ekos")
         return {k[len(token) :]: v for k, v in rt.items()}
-    
+
     @property
     @functools.lru_cache
     def remote_photons(self):
@@ -958,7 +961,7 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_ekos(self):
         return list(self.remote_ekos)
-    
+
     @property
     def downloadable_photons(self):
         return list(self.remote_photons)
@@ -1150,12 +1153,13 @@ class RemoteLoader(LoaderBase):
         remote = self.remote_photons
         key = f"theoryID_{thid}_fit_{luxset}"
         if key not in remote:
-            raise PhotonQEDNotFound(f"Photon QED set for TheoryID {thid} and luxset {luxset} is not available in the remote server")
+            raise PhotonQEDNotFound(
+                f"Photon QED set for TheoryID {thid} and luxset {luxset} is not available in the remote server."
+            )
         # Check that we have the theory we need
         target_path = self._photons_qed_path
         download_and_extract(remote[key], target_path)
-        
-    
+
     def download_vp_output_file(self, filename, **kwargs):
         try:
             root_url = self.nnprofile['reports_root_url']

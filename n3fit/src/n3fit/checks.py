@@ -464,27 +464,24 @@ def check_deprecated_options(fitting, parameters):
         raise CheckError(
             "`interpolation_points` no longer accepted, please change to `feature_scaling_points`"
         )
-
-
-@make_argcheck
-def check_multireplica_qed(replicas, fiatlux):
-    if fiatlux is not None:
-        if len(replicas) > 1:
-            raise CheckError("At the moment, running a multireplica QED fits is not allowed.")
         
 
 @make_argcheck
 def check_photonQED_exists(theoryid, fiatlux):
     """Check that the Photon QED set for this theoryid and luxset exists"""
     if fiatlux is not None:
-      luxset = fiatlux['luxset']
-      try:
-          _ = Loader().check_photonQED(theoryid.id, luxset)
-          log.info(f"Photon QED set found for {theoryid.id} with luxset {luxset}.")
-      except FileNotFoundError:
-          log.warning(f"No Photon QED set found for {theoryid} with luxset {luxset}. It "\
-                      "will be compute using FiatLux. This may impact performance. Make "
-                      "sure vp-setupfit has been run prior to n3fit to download necessary resources.")
+        luxset = fiatlux['luxset']
+        try:
+            _ = Loader().check_photonQED(theoryid.id, luxset)
+            log.info(f"Photon QED set found for {theoryid.id} with luxset {luxset}.")
+        except FileNotFoundError:
+            log.warning(
+                f"No Photon QED set found for {theoryid} with luxset {luxset}. It "
+                "will be computed using FiatLux. This may impact performance. It "
+                "is recommended to precompute the photon set before running the fit. "
+                "Refer to https://docs.nnpdf.science/tutorials/run-qed-fit.html for more details "
+                "on precomputing photon PDF sets."
+            )
 
 
 @make_argcheck

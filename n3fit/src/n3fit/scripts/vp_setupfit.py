@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-    setup-fit - prepare and apply data cuts before fit
-    setup-fit constructs the fit [results] folder where data used by nnfit
-    will be stored.
+setup-fit - prepare and apply data cuts before fit
+setup-fit constructs the fit [results] folder where data used by nnfit
+will be stored.
 """
 
 # Implementation notes
@@ -37,7 +37,7 @@ from ruamel.yaml import error
 from reportengine import colors
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
-from validphys.loader import FallbackLoader, TheoryNotFound, PhotonQEDNotFound
+from validphys.loader import FallbackLoader, PhotonQEDNotFound, TheoryNotFound
 from validphys.utils import yaml_safe
 
 loader = FallbackLoader()
@@ -57,7 +57,7 @@ SETUPFIT_PROVIDERS = [
     'validphys.filters',
     'validphys.results',
     'validphys.theorycovariance.construction',
-    'validphys.photon.compute'
+    'validphys.photon.compute',
 ]
 
 SETUPFIT_DEFAULTS = dict(use_cuts='internal')
@@ -193,22 +193,25 @@ class SetupFitConfig(Config):
                 log.info(f"Photon QED set found for {theoryid} with luxset {luxset}.")
             except PhotonQEDNotFound:
                 if compute_in_setupfit:
-                  log.warning(f"Photon QED set for {theoryid} with luxset {luxset} not found. " \
-                              "It will be computed in vp-setupfit.")
+                    log.warning(
+                        f"Photon QED set for theory {theoryid} with luxset {luxset} not found. "
+                        "It will be computed in vp-setupfit."
+                    )
                 else:
-                  log.warning(f"No photon set found for {theoryid} with luxset {luxset}. Consider "\
-                              "using `compute_in_setupfit` in the runcard to compute all replicas of the photon "
-                              "in vp-setupfit. Otherwise n3fit " \
-                              "will take care of the photon computation. May impact performance.")
+                    log.warning(
+                        f"No photon set found for theory {theoryid} with luxset {luxset}. Consider "
+                        "using `compute_in_setupfit` in the runcard to compute all replicas of the photon "
+                        "in vp-setupfit. Otherwise n3fit "
+                        "will take care of the photon computation. May impact performance."
+                    )
 
             if compute_in_setupfit:
-              log.info("Forcing photon computation with FiatLux.")
-              # Since the photon will be computed, check that the luxset and additional_errors exist
-              SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset_exists')
-              if fiatlux.get("additional_errors"):
-                  SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
-              SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux::theory compute_photon_to_disk')
-
+                log.info("Forcing photon computation with FiatLux during setupfit.")
+                # Since the photon will be computed, check that the luxset and additional_errors exist
+                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset_exists')
+                if fiatlux.get("additional_errors"):
+                    SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
+                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux::theory compute_photon_to_disk')
 
         # Check positivity bound
         if file_content.get('positivity_bound') is not None:
