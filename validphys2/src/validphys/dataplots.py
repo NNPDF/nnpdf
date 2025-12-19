@@ -447,13 +447,6 @@ def _plot_fancy_impl(
             lb = labellist[normalize_to]
             ax.set_ylabel(f"Ratio to {lb if lb else norm_result.label}")
 
-        # rebuild the limtis of the plot 
-        if min_vals and max_vals:
-            ymin = min(min_vals)
-            ymax = max(max_vals)
-            margin = 0.05 * (ymax - ymin)
-            ax.set_ylim(ymin - margin, ymax + margin)
-
         ax.legend().set_zorder(100000)
         ax.set_xlabel(info.xlabel)
         fig.tight_layout()
