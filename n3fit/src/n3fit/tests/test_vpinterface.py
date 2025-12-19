@@ -28,7 +28,7 @@ def generate_n3pdf(layers=1, members=1, name="n3fit"):
 @given(integers(1, 3), integers(0, 3))
 @example(1, 3)
 @example(3, 0)
-@settings(deadline=25000, max_examples=5)
+@settings(deadline=12000, max_examples=5)
 def test_N3PDF(members, layers):
     """Test the N3PDF class produces the right members and atributes
     for several different combinations of the number of layers and members
