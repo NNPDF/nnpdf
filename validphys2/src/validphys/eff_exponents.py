@@ -331,8 +331,11 @@ def previous_effective_exponents_table(fit: FitSpec):
     )
     basis = checked["basis"]
     flavours = checked["flavours"]
-    prev_a_bounds = [runcard_fl['smallx'] for runcard_fl in fitting["basis"]]
-    prev_b_bounds = [runcard_fl['largex'] for runcard_fl in fitting["basis"]]
+    prev_a_bounds = []
+    prev_b_bounds = []
+    for runcard_fl in fitting["basis"]:
+        prev_a_bounds.append(runcard_fl.get("smallx", (0.0, 0.0)))
+        prev_b_bounds.append(runcard_fl.get("largex", (0.0, 0.0)))
     # make single list alternating alpha and beta bounds
     data = [vals for pair in zip(prev_a_bounds, prev_b_bounds) for vals in pair]
     flavours_label = [f"${basis.elementlabel(fl)}$" for fl in flavours]
@@ -449,6 +452,10 @@ def effective_exponents_table_internal(next_effective_exponents_table, *, fit=No
         # have to call action here in case fit is None
         previous_table = previous_effective_exponents_table(fit)
         df = pd.concat((previous_table, next_effective_exponents_table), axis=1)
+
+        if "feature_scaling_points" in fit.as_input()["parameters"]:
+            # Drop the beta if feature scaling points is enabled
+            df.loc[df.index.get_level_values(1) == r'$\beta$', :] = None
     else:
         df = next_effective_exponents_table
     return df
