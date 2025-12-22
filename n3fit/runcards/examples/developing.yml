@@ -81,7 +81,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   stopping_patience: 0.1 # percentage of the number of epochs
   layer_type: 'dense'
   dropout: 0.01
-  interpolation_points: 7
+  feature_scaling_points: 7
 
 fitting:
   fitbasis: CCBAR_ASYMM
