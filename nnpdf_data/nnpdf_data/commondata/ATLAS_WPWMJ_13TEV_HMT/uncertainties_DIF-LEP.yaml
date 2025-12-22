@@ -2,335 +2,335 @@ definitions:
   LUMI:
     description: LUMI
     treatment: MULT
-    correlation: ATLASLUMIRUNII
+    type: ATLASLUMIRUNII
   Stat. unc.:
     description: Stat. unc.
     treatment: ADD
-    correlation: UNCORR
+    type: UNCORR
   Uncor. syst. unc.:
     description: Uncor. syst. unc.
     treatment: ADD
-    correlation: UNCORR
+    type: UNCORR
   Alternative MC unf. unc.:
     description: Alternative MC unf. unc.
     treatment: ADD
-    correlation: UNCORR
+    type: UNCORR
   Basic unf. unc.:
     description: Basic unf. unc.
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $E_T^{miss}$ SoftTrk Scale:
     description: $E_T^{miss}$ SoftTrk Scale
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $E_T^{miss}$ SoftTrk ResoPara:
     description: $E_T^{miss}$ SoftTrk ResoPara
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $E_T^{miss}$ SoftTrk ResoPerp:
     description: $E_T^{miss}$ SoftTrk ResoPerp
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale Zee (syst.):
     description: Electron Scale Zee (syst.)
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale  S12:
     description: Electron Scale  S12
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale PS B12:
     description: Electron Scale PS B12
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale MATID:
     description: Electron Scale MATID
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale MATCRYO:
     description: Electron Scale MATCRYO
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale L1GAIN:
     description: Electron Scale L1GAIN
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale L2GAIN:
     description: Electron Scale L2GAIN
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale LARELECUNCOV:
     description: Electron Scale LARELECUNCOV
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale LARCALIB:
     description: Electron Scale LARCALIB
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Scale PS:
     description: Electron Scale PS
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JER DataVsMC MC16:
     description: JER DataVsMC MC16
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 1:
     description: JER EffectiveNP 1
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 2:
     description: JER EffectiveNP 2
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 3:
     description: JER EffectiveNP 3
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 4:
     description: JER EffectiveNP 4
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 5:
     description: JER EffectiveNP 5
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 6:
     description: JER EffectiveNP 6
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 7rest:
     description: JER EffectiveNP 7rest
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JES EtaIntercalib Model:
     description: JES EtaIntercalib Model
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JES Flavor Composition:
     description: JES Flavor Composition
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JES Flavor Response:
     description: JES Flavor Response
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JES Pileup OffsetMu:
     description: JES Pileup OffsetMu
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JES Pileup OffsetNPV:
     description: JES Pileup OffsetNPV
     treatment: ADD
-    correlation: CORR
+    type: CORR
   JES Pileup RhoTopology:
     description: JES Pileup RhoTopology
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ChargeMisID (stat.):
     description: Electron Eff. ChargeMisID (stat.)
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ChargeMisID (syst.):
     description: Electron Eff. ChargeMisID (syst.)
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. Isol:
     description: Electron Eff. Isol
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta1:
     description: Electron Eff. ID High-$p_T$ Eta1
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta2:
     description: Electron Eff. ID High-$p_T$ Eta2
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta3:
     description: Electron Eff. ID High-$p_T$ Eta3
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta4:
     description: Electron Eff. ID High-$p_T$ Eta4
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta5:
     description: Electron Eff. ID High-$p_T$ Eta5
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta6:
     description: Electron Eff. ID High-$p_T$ Eta6
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta7:
     description: Electron Eff. ID High-$p_T$ Eta7
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta9:
     description: Electron Eff. ID High-$p_T$ Eta9
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta10:
     description: Electron Eff. ID High-$p_T$ Eta10
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta11:
     description: Electron Eff. ID High-$p_T$ Eta11
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID High-$p_T$ Eta12:
     description: Electron Eff. ID High-$p_T$ Eta12
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID SIMP3:
     description: Electron Eff. ID SIMP3
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID SIMP4:
     description: Electron Eff. ID SIMP4
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID SIMP11:
     description: Electron Eff. ID SIMP11
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Electron Eff. ID SIMP15:
     description: Electron Eff. ID SIMP15
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Pileup:
     description: Pileup
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ FSR:
     description: $t\bar{t}$ FSR
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ $p_T$-hard:
     description: $t\bar{t}$ $p_T$-hard
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ hadronization:
     description: $t\bar{t}$ hadronization
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ hdamp:
     description: $t\bar{t}$ hdamp
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ RW inverted setup 2D:
     description: $t\bar{t}$ RW inverted setup 2D
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ RW Fixed order vs PS $p_T(t)$:
     description: $t\bar{t}$ RW Fixed order vs PS $p_T(t)$
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$:
     description: $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ PDF:
     description: $t\bar{t}$ PDF
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Multijet Electron $E_T^{miss}$:
     description: Multijet Electron $E_T^{miss}$
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Multijet Electron mix$E_T^{miss}$:
     description: Multijet Electron mix$E_T^{miss}$
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Multijet Electron MC Shape:
     description: Multijet Electron MC Shape
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Multijet Electron MC Scaling:
     description: Multijet Electron MC Scaling
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $tW$ Diagram Removal:
     description: $tW$ Diagram Removal
     treatment: ADD
-    correlation: CORR
+    type: CORR
   $tW$ DS hdamp:
     description: $tW$ DS hdamp
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Norm. $W\rightarrow\tau\nu$ by 5%:
     description: Norm. $W\rightarrow\tau\nu$ by 5%
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Norm. $Z$ by 5%:
     description: Norm. $Z$ by 5%
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Norm. Single top by 4%$:
     description: Norm. Single top by 4%$
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Norm. Diboson by 6%:
     description: Norm. Diboson by 6%
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Resolution MS:
     description: Muon Resolution MS
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Scale:
     description: Muon Scale
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Eff. Identification:
     description: Muon Eff. Identification
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Eff. Isolation:
     description: Muon Eff. Isolation
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Eff. Trigger:
     description: Muon Eff. Trigger
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Bad Muon Veto:
     description: Bad Muon Veto
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Sagitta Global:
     description: Muon Sagitta Global
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Sagitta $p_T$-extra:
     description: Muon Sagitta $p_T$-extra
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Multijet $E_T^{miss}$:
     description: Muon Multijet $E_T^{miss}$
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Multijet $d_0^{sig}$:
     description: Muon Multijet $d_0^{sig}$
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Multijet MC Scaling:
     description: Muon Multijet MC Scaling
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Multijet Jet Multiplicity:
     description: Muon Multijet Jet Multiplicity
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Multijet MC Shape:
     description: Muon Multijet MC Shape
     treatment: ADD
-    correlation: CORR
+    type: CORR
   Muon Multijet $\Delta\phi(\mu,E_T^{miss})$:
     description: Muon Multijet $\Delta\phi(\mu,E_T^{miss})$
     treatment: ADD
-    correlation: CORR
+    type: CORR
 bins:
 - LUMI: 1.79769700e-04
   Stat. unc.: 8.30580000e-05

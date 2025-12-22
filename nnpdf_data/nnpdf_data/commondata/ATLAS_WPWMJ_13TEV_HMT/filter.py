@@ -249,13 +249,13 @@ def filter_ATLAS_WPWM_13TEV_DIF(observable=None):
             definitions[unc["name"]] = {
                 "description": unc["name"],
                 "treatment": treatment[unc["name"]],
-                "correlation": correlation[unc["name"]],
+                "type": correlation[unc["name"]],
             }
         else:
             definitions[unc["name"]] = {
                 "description": unc["name"],
                 "treatment": treatment["Others"],
-                "correlation": correlation["Others"],
+                "type": correlation["Others"],
             }
 
     ndata = len(central_values)

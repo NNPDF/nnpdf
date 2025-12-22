@@ -2,211 +2,211 @@ definitions:
   LUMI:
     description: LUMI
     treatment: MULT
-    correlation: ATLASLUMIRUNII
+    type: ATLASLUMIRUNII
   Data stat. unc.:
     description: Data stat. unc.
     treatment: ADD
-    correlation: UNCORR
+    type: UNCORR
   Sig. stat. unc.:
     description: Sig. stat. unc.
     treatment: ADD
-    correlation: UNCORR
+    type: UNCORR
   Bkg. stat. unc.:
     description: Bkg. stat. unc.
     treatment: ADD
-    correlation: UNCORR
+    type: UNCORR
   Alternative MC unf. unc.:
     description: Alternative MC unf. unc.
     treatment: ADD
-    correlation: UNCORR
+    type: UNCORR
   Basic unf. unc.:
     description: Basic unf. unc.
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JES Flavor Composition:
     description: JES Flavor Composition
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JES Pileup RhoTopology:
     description: JES Pileup RhoTopology
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JES Pileup OffsetMu:
     description: JES Pileup OffsetMu
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JES Pileup OffsetNPV:
     description: JES Pileup OffsetNPV
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JES EtaIntercalib Model:
     description: JES EtaIntercalib Model
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JES Flavor Response:
     description: JES Flavor Response
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 1:
     description: JER EffectiveNP 1
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 2:
     description: JER EffectiveNP 2
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 3:
     description: JER EffectiveNP 3
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 4:
     description: JER EffectiveNP 4
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 5:
     description: JER EffectiveNP 5
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 6:
     description: JER EffectiveNP 6
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JER EffectiveNP 7rest:
     description: JER EffectiveNP 7rest
     treatment: MULT
-    correlation: CORR
+    type: CORR
   JER DataVsMC MC16:
     description: JER DataVsMC MC16
     treatment: MULT
-    correlation: CORR
+    type: CORR
   $E_T^{miss}$ SoftTrk Scale:
     description: $E_T^{miss}$ SoftTrk Scale
     treatment: MULT
-    correlation: CORR
+    type: CORR
   $E_T^{miss}$ SoftTrk ResoPara:
     description: $E_T^{miss}$ SoftTrk ResoPara
     treatment: MULT
-    correlation: CORR
+    type: CORR
   $E_T^{miss}$ SoftTrk ResoPerp:
     description: $E_T^{miss}$ SoftTrk ResoPerp
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Muon Resolution MS:
     description: Muon Resolution MS
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Muon Scale:
     description: Muon Scale
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Muon SF Identification Syst:
     description: Muon SF Identification Syst
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Muon SF Isolation Syst:
     description: Muon SF Isolation Syst
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Muon SF Trigger Syst:
     description: Muon SF Trigger Syst
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Bad Muon Veto:
     description: Bad Muon Veto
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Muon Sagitta Global:
     description: Muon Sagitta Global
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Muon Sagitta PTextra:
     description: Muon Sagitta PTextra
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Pileup:
     description: Pileup
     treatment: MULT
-    correlation: CORR
+    type: CORR
   MJ MU $E_T^{miss}$:
     description: MJ MU $E_T^{miss}$
     treatment: MULT
-    correlation: CORR
+    type: CORR
   MJ MU d0cut:
     description: MJ MU d0cut
     treatment: MULT
-    correlation: CORR
+    type: CORR
   MJ MU MC Scaling:
     description: MJ MU MC Scaling
     treatment: MULT
-    correlation: CORR
+    type: CORR
   MJ MU jet mult:
     description: MJ MU jet mult
     treatment: MULT
-    correlation: CORR
+    type: CORR
   MJ MU Shape:
     description: MJ MU Shape
     treatment: MULT
-    correlation: CORR
+    type: CORR
   MJ MU dphi:
     description: MJ MU dphi
     treatment: MULT
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ $p_T$-hard:
     description: $t\bar{t}$ $p_T$-hard
     treatment: MULT
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ FSR:
     description: $t\bar{t}$ FSR
     treatment: MULT
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ hadronization:
     description: $t\bar{t}$ hadronization
     treatment: MULT
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ hdamp:
     description: $t\bar{t}$ hdamp
     treatment: MULT
-    correlation: CORR
+    type: CORR
   $t\bar{t}$ NNPDF:
     description: $t\bar{t}$ NNPDF
     treatment: MULT
-    correlation: CORR
+    type: CORR
   tW Diagram Removel:
     description: tW Diagram Removel
     treatment: MULT
-    correlation: CORR
+    type: CORR
   tW DS hdamp:
     description: tW DS hdamp
     treatment: MULT
-    correlation: CORR
+    type: CORR
   RW inverted setup 2D:
     description: RW inverted setup 2D
     treatment: MULT
-    correlation: CORR
+    type: CORR
   RW Fixed order vs PS $p_T(t)$:
     description: RW Fixed order vs PS $p_T(t)$
     treatment: MULT
-    correlation: CORR
+    type: CORR
   RW Fixed order vs PS $m(t\bar{t})$:
     description: RW Fixed order vs PS $m(t\bar{t})$
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Norm. $W\rightarrow\tau\nu$ by 5%:
     description: Norm. $W\rightarrow\tau\nu$ by 5%
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Norm. Single top by 4%:
     description: Norm. Single top by 4%
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Norm. Diboson by 6%:
     description: Norm. Diboson by 6%
     treatment: MULT
-    correlation: CORR
+    type: CORR
   Norm. Z by 5%:
     description: Norm. Z by 5%
     treatment: MULT
-    correlation: CORR
+    type: CORR
 bins:
 - LUMI: 1.75818900e-04
   Data stat. unc.: 8.74720000e-05

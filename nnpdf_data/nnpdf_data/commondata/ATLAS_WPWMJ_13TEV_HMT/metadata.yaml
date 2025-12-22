@@ -18,23 +18,45 @@ implemented_observables:
     description: Combined Born-level single-differential cross-section in the $l^+$ and $l^-$ channels in sequence
     label: ATLAS $W$ 13 TeV Differential 
     units: 'pb/GeV'
-  process_type: DY_CC_PT
+  process_type: DY_W_MT
   tables: [38, 39]
   npoints: [24]
   ndata: 24
   plotting:
     dataset_label: ATLAS $W$ 13 TeV Differential
     y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
-    figure_by:
-    - boson
-    # extra_labels:
-    #   ' ':
-    #   - $W^+$
-    #   - $W^-$
-    #   boson:
-    #   - W
-    #   - W
-    plot_x: '$m_T^W$'
+    line_by:
+    - Boson
+    normalize:
+      figure_by:
+      - Boson
+    extra_labels:
+      Boson:
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+    plot_x: mt
   kinematic_coverage:
   - mt
   - M2
@@ -50,10 +72,11 @@ implemented_observables:
         units: 'GeV$^2$'
     file: kinematics_DIF-LEP.yaml
   theory:
-    conversion_factor: 1.0
+    conversion_factor: 0.001
     operation: 'null'
     FK_tables:
-    - - FK_ATLAS_WPWMJ_13TEV_MMT_DIF-LEP
+    - - FK_ATLAS_WPWM_13TEV_HMT_DIP-LEP-WP
+      - FK_ATLAS_WPWM_13TEV_HMT_DIP-LEP-WM
   data_uncertainties:
   - uncertainties_DIF-LEP.yaml
   data_central: data_DIF-LEP.yaml
@@ -63,7 +86,7 @@ implemented_observables:
     description:  Born-level single-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence
     label: ATLAS $W$ 13 TeV Differential 
     units: 'pb/GeV'
-  process_type: DY_CC_PT
+  process_type: DY_W_MT
   tables: [20,21]
   npoints: [24]
   ndata: 24
