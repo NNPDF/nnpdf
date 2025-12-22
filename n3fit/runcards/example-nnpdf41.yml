@@ -127,21 +127,22 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   layer_type: dense
   dropout: 0.0
   threshold_chi2: 3.5
-  interpolation_points: 5
+  feature_scaling_points: 5
 
 fitting:
   fitbasis: CCBAR_ASYMM  # EVOL (7), EVOLQED (8), etc.
   savepseudodata: true
   basis:
-  - {fl : sng, trainable : false, smallx : [1.095, 1.146], largex   : [0., 0.]}
-  - {fl : g, trainable   : false, smallx : [0.7978, 1.087], largex  : [0., 0.]}
-  - {fl : v, trainable   : false, smallx : [0.4775, 0.6577], largex : [0., 0.]}
-  - {fl : v3, trainable  : false, smallx : [0.1068, 0.493], largex  : [0., 0.]}
-  - {fl : v8, trainable  : false, smallx : [0.5914, 0.7776], largex : [0., 0.]}
-  - {fl : t3, trainable  : false, smallx : [-0.3737, 1.0], largex   : [0., 0.]}
-  - {fl : t8, trainable  : false, smallx : [0.5771, 0.9486], largex : [0., 0.]}
-  - {fl : t15, trainable : false, smallx : [1.062, 1.153], largex   : [0., 0.]}
-  - {fl : v15, trainable : false, smallx : [0.4515, 0.7648], largex : [0., 0.]}
+  - {fl : sng , trainable : false , smallx : [1.095   , 1.146]  }
+  - {fl : g   , trainable : false , smallx : [0.7978  , 1.087]  }
+  - {fl : v   , trainable : false , smallx : [0.4775  , 0.6577] }
+  - {fl : v3  , trainable : false , smallx : [0.1068  , 0.493]  }
+  - {fl : v8  , trainable : false , smallx : [0.5914  , 0.7776] }
+  - {fl : t3  , trainable : false , smallx : [-0.3737 , 1.0]    }
+  - {fl : t8  , trainable : false , smallx : [0.5771  , 0.9486] }
+  - {fl : t15 , trainable : false , smallx : [1.062   , 1.153]  }
+  - {fl : v15 , trainable : false , smallx : [0.4515  , 0.7648] }
+
 
 ################################################################################
 positivity:
