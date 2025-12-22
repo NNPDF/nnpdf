@@ -36,7 +36,7 @@ from validphys.filters import (
     default_filter_rules_input,
     default_filter_settings_input,
 )
-from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas, match_datasets_by_name
+from validphys.fitdata import fitted_replica_indexes, match_datasets_by_name, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
     DataNotFoundError,
@@ -1006,18 +1006,37 @@ class CoreConfig(configparser.Config):
         """
         Like produce_matched_datasets_from_dataspecs, but for mismatched datasets from a fit comparison.
         Returns the mismatched datasets, each tagged with more_info from the dataspecs they came from. Set up to work with plot_fancy.
+
+        Datasets are considered a mismatch if the name is different and if the variant is different.
         """
 
         self._check_dataspecs_type(dataspecs)
 
-        mismatched_dinputs = []
+        # Parse the data for the comparison so that only variant and dataset are actually tested
+        parsed_data = []
         for spec in dataspecs:
-            for dinput in spec["dataset_inputs"]:
-                # check whether the dataset exists in any of the other dataspecs
-                if any( dinput not in s["dataset_inputs"] for s in dataspecs ):
-                    # append (proc, ds) -> list of (dinput, spec)
-                    mismatched_dinputs.append( (dinput, spec) )
-        
+            tmp = [(i.name, i.variant) for i in spec["dataset_inputs"]]
+            parsed_data.append((spec, tmp))
+
+        # TODO:
+        # This is a convoluted way of checking whether there are mismatches
+        # between the lists of dataset inputs of a list of specs.
+        # This is not going to win any codegolf tournaments
+        already_mismatched = []
+        mismatched_dinputs = []
+        for spec, parsed_dinputs in parsed_data:
+            for spec_to_check, parsed_dinputs_to_check in parsed_data:
+                if spec == spec_to_check:
+                    continue
+                for i, parsed_dinput in enumerate(parsed_dinputs):
+                    # Use a list of already mismatched data to avoid duplicates
+                    if parsed_dinput in already_mismatched:
+                        continue
+                    if parsed_dinput not in parsed_dinputs_to_check:
+                        dinput = spec["dataset_inputs"][i]
+                        mismatched_dinputs.append((dinput, spec))
+                        already_mismatched.append(parsed_dinput)
+
         res = []
         # prepare output for plot_fancy
         for dsin, spec in mismatched_dinputs:
@@ -1029,7 +1048,7 @@ class CoreConfig(configparser.Config):
                     "pdfs": [i["pdf"] for i in dataspecs],
                     "fit": spec["fit"],
                 }
-                    ) 
+            )
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
