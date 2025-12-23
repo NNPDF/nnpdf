@@ -217,22 +217,23 @@ class N3FitConfig(Config):
         # This needs to be imported here because it needs Tensorflow and n3fit
         from n3fit.hyper_optimization.hyper_scan import HyperScanner
 
+        extra_args = {}
+
         if hyperscan_config is None or hyperopt is None:
             return None
-        if hyperopt and self.environment.restart:
-            hyperscan_config.update({'restart': 'true'})
-        if hyperopt and self.environment.parallel_hyperopt:
+
+        if self.environment.parallel_hyperopt:
             hyperscan_config.update({'parallel': 'true'})
-            hyperscan_config.update(
-                {
-                    'db_host': self.environment.db_host,
-                    'db_port': self.environment.db_port,
-                    'db_name': self.environment.db_name,
-                    'output_path': self.environment.output_path.name,
-                    'num_mongo_workers': self.environment.num_mongo_workers,
-                }
+
+            db_path = (
+                self.environment.output_path / "nnfit" / "replica_1" / self.environment.db_name
             )
-        return HyperScanner(parameters, hyperscan_config)
+            extra_args = {
+                "db_host": self.environment.db_host,
+                "db_port": self.environment.db_port,
+                "db_path": db_path,
+            }
+        return HyperScanner(parameters, hyperscan_config, **extra_args)
 
 
 class N3FitApp(App):
@@ -262,14 +263,13 @@ class N3FitApp(App):
             return ivalue
 
         parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
-        parser.add_argument("--restart", help="Enable hyperopt restarts", action="store_true")
         parser.add_argument(
             "--parallel-hyperopt",
             help="Enable hyperopt run in parallel with MongoDB",
             action="store_true",
         )
         parser.add_argument("--db-host", help="MongoDB host", default="localhost")
-        parser.add_argument("--db-port", help="MongoDB port", default=27017)
+        parser.add_argument("--db-port", help="MongoDB port", default=27017, type=int)
         parser.add_argument("--db-name", help="MongoDB dataset name", default="hyperopt-db")
         parser.add_argument(
             "--num-mongo-workers",
@@ -290,15 +290,10 @@ class N3FitApp(App):
         args = super().get_commandline_arguments(cmdline)
 
         # Validate dependencies related to the --hyperopt argument
-        if args["hyperopt"] is None:
-            if args["restart"]:
-                raise argparse.ArgumentError(
-                    None, "The --restart option requires --hyperopt to be set."
-                )
-            if args["parallel_hyperopt"]:
-                raise argparse.ArgumentError(
-                    None, "The --parallel-hyperopt option requires --hyperopt to be set."
-                )
+        if args["hyperopt"] is None and args["parallel_hyperopt"]:
+            raise argparse.ArgumentError(
+                None, "The --parallel-hyperopt option requires --hyperopt to be set."
+            )
 
         if args["output"] is None:
             args["output"] = pathlib.Path(args["config_yml"]).stem
@@ -314,12 +309,10 @@ class N3FitApp(App):
                 replicas = [replica]
             self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
-            self.environment.restart = self.args["restart"]
             self.environment.parallel_hyperopt = self.args["parallel_hyperopt"]
             self.environment.db_host = self.args["db_host"]
             self.environment.db_port = self.args["db_port"]
             self.environment.db_name = self.args["db_name"]
-            self.environment.num_mongo_workers = self.args["num_mongo_workers"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")
