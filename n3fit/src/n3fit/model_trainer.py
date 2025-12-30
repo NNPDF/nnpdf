@@ -112,6 +112,7 @@ class ModelTrainer:
         theoryid=None,
         lux_params=None,
         replicas=None,
+        training=True,
     ):
         """
         Parameters
@@ -168,6 +169,7 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
+        self.training_model = training
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -511,6 +513,7 @@ class ModelTrainer:
         all_integ_initial,
         epochs,
         interpolation_points,
+        vb_layers,
     ):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
@@ -577,6 +580,7 @@ class ModelTrainer:
                 invcovmat_tr=experiment_data["invcovmat"][i],
                 invcovmat_vl=experiment_data["invcovmat_vl"][i],
                 n_replicas=len(self.replicas),
+                vb_layers=vb_layers,
             )
 
             # Save the input(s) corresponding to this experiment
@@ -610,6 +614,7 @@ class ModelTrainer:
                 training_data=training_data,
                 validation_data=training_data,
                 n_replicas=len(self.replicas),
+                vb_layers=vb_layers,
             )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
@@ -639,6 +644,7 @@ class ModelTrainer:
                 positivity_initial=integ_initial,
                 integrability=True,
                 n_replicas=len(self.replicas),
+                vb_layers=vb_layers,
             )
             # The input list is still common
             self.input_list.append(integ_layer["inputs"])
@@ -651,6 +657,187 @@ class ModelTrainer:
         # Store a reference to the interpolator as self._scaler
         if interpolation_points:
             self._scaler = generate_scaler(self.input_list, interpolation_points)
+
+    def _generate_static_data(
+        self,
+        all_pos_multiplier,
+        all_pos_initial,
+        all_integ_multiplier,
+        all_integ_initial,
+        epochs,
+        interpolation_points,
+    ):
+        """
+        Same as _generate_observables but this only handles (all) the static data preparation 
+        (stacking masks, calculating initial/multiplier values) that are common across all k-folds/replicas.
+        """
+        # First reset the dictionaries
+        self._reset_observables()
+        log.info("Generating static data for layers")
+    
+        # validphys has generated the self.exp_info information replica-by-replica
+        # Here we transpose all information for convenience so that the loop over observables
+        # and the vectorization over replicas is made explicit
+        experiment_data = {
+            "trmask": [],
+            "vlmask": [],
+            "expdata": [],
+            "expdata_vl": [],
+            "invcovmat": [],
+            "invcovmat_vl": [],
+        }
+
+        # Loop over datasets
+        for i in range(len(self.exp_info[0])):
+            # Loop over data fields
+            for key, value in experiment_data.items():
+                replica_data = []
+                # Loop over replicas
+                for replica in self.exp_info:
+                    if key in ["expdata", "expdata_vl"]:
+                        # Save the data with shape (ndata) instead of (1, ndata)
+                        replica_data.append(replica[i][key][0])
+                    else:
+                        replica_data.append(replica[i][key])
+                # Stack
+                value.append(np.stack(replica_data))
+    
+        # Store experiment_data on self for later use
+        self._experiment_data = experiment_data
+    
+        # Also store the calculated positivity/integrability parameters
+        self._pos_params = []
+        for pos_dict in self.pos_info:
+            positivity_steps = int(epochs / PUSH_POSITIVITY_EACH)
+            max_lambda = pos_dict["lambda"]
+            pos_initial, pos_multiplier = _LM_initial_and_multiplier(
+                all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
+            )
+            self._pos_params.append({
+                "dict": pos_dict, 
+                "initial": pos_initial, 
+                "multiplier": pos_multiplier
+            })
+        
+        self._integ_params = []
+        for integ_dict in self.integ_info:
+            integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
+            max_lambda = integ_dict["lambda"]
+            integ_initial, integ_multiplier = _LM_initial_and_multiplier(
+                all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
+            )
+            self._integ_params.append({
+                "dict": integ_dict, 
+                "initial": integ_initial, 
+                "multiplier": integ_multiplier
+            })
+        
+        # Store a reference to the interpolator as self._scaler
+        if interpolation_points:
+            # Note: input_list would still be empty here
+            self._interpolation_points = interpolation_points
+        
+        # The self.input_list is still empty, and the output dictionaries are empty.
+        # The next step will fill them.
+
+    def _generate_replica_losses(self, vb_layers):
+        """
+        Generates the model-specific observable layers and loss functions
+        using the extracted vb_layers from the current replica's model.
+        """
+    
+        # Clear dynamic lists and dictionaries for the new replica's setup
+        self.training["output"].clear()
+        self.validation["output"].clear()
+        self.experimental["output"].clear()
+        self.input_list.clear()
+    
+        # Experimental Data Loss Setup (uses vb_layers)
+        for i, exp_dict in enumerate(self.exp_info[0]):
+            if not self.mode_hyperopt:
+                log.info("Generating layers for experiment %s", exp_dict["name"])
+
+            exp_layer = model_gen.observable_generator(
+                exp_dict,
+                self.boundary_condition,
+                training_mask_array=self._experiment_data["trmask"][i],
+                validation_mask_array=self._experiment_data["vlmask"][i],
+                training_data=self._experiment_data["expdata"][i],
+                validation_data=self._experiment_data["expdata_vl"][i],
+                invcovmat_tr=self._experiment_data["invcovmat"][i],
+                invcovmat_vl=self._experiment_data["invcovmat_vl"][i],
+                n_replicas=len(self.replicas),
+                vb_layers=vb_layers,  
+            )
+
+            self.input_list.append(exp_layer["inputs"])
+            self.training["output"].append(exp_layer["output_tr"])
+            self.validation["output"].append(exp_layer["output_vl"])
+            self.experimental["output"].append(exp_layer["output"])
+
+        # Positivity Penalty Setup (uses vb_layers) 
+        self.training["posmultipliers"].clear()
+        self.training["posinitials"].clear()
+    
+        for param_set in self._pos_params:
+            pos_dict = param_set["dict"]
+            pos_initial = param_set["initial"]
+            pos_multiplier = param_set["multiplier"]
+        
+            if not self.mode_hyperopt:
+                log.info("Generating positivity penalty for %s", pos_dict["name"])
+
+            num_experiments = len(self.exp_info)
+            replica_masks = np.stack([pos_dict["trmask"]] * num_experiments)
+            training_data = np.stack([pos_dict["expdata"].flatten()] * num_experiments)
+
+            pos_layer = model_gen.observable_generator(
+                pos_dict,
+                self.boundary_condition,
+                positivity_initial=pos_initial,
+                training_mask_array=replica_masks,
+                training_data=training_data,
+                validation_data=training_data,
+                n_replicas=len(self.replicas),
+                vb_layers=vb_layers, 
+            )
+        
+            self.input_list.append(pos_layer["inputs"])
+            self.training["output"].append(pos_layer["output_tr"])
+            self.validation["output"].append(pos_layer["output_tr"])
+            self.training["posmultipliers"].append(pos_multiplier)
+            self.training["posinitials"].append(pos_initial)
+
+
+        # Integrability Penalty Setup (uses vb_layers) 
+        self.training["integmultipliers"].clear()
+        self.training["integinitials"].clear()
+    
+        for param_set in self._integ_params:
+            integ_dict = param_set["dict"]
+            integ_initial = param_set["initial"]
+            integ_multiplier = param_set["multiplier"]
+        
+            if not self.mode_hyperopt:
+                log.info("Generating integrability penalty for %s", integ_dict["name"])
+
+            integ_layer = model_gen.observable_generator(
+                integ_dict,
+                self.boundary_condition,
+                positivity_initial=integ_initial,
+                integrability=True,
+                n_replicas=len(self.replicas),
+                vb_layers=vb_layers, 
+            )
+        
+            self.input_list.append(integ_layer["inputs"])
+            self.training["output"].append(integ_layer["output_tr"])
+            self.training["integmultipliers"].append(integ_multiplier)
+            self.training["integinitials"].append(integ_initial)
+        
+        # Final Static Setup (Requires full input_list) 
+        if hasattr(self, '_interpolation_points'):
+            self._scaler = generate_scaler(self.input_list, self._interpolation_points)
 
     def _prepare_reporting(self, partition):
         """Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
@@ -700,7 +887,7 @@ class ModelTrainer:
 
         return reporting_list
 
-    def _train_and_fit(self, training_model, stopping_object, epochs=100) -> bool:
+    def _train_and_fit(self, train_model, stopping_object, epochs=100) -> bool:
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -722,7 +909,7 @@ class ModelTrainer:
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
 
-        training_model.perform_fit(
+        train_model.perform_fit(
             epochs=epochs,
             verbose=False,
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
@@ -870,7 +1057,19 @@ class ModelTrainer:
         # when k-folding, these are the same for all folds
         positivity_dict = params.get("positivity", {})
         integrability_dict = params.get("integrability", {})
-        self._generate_observables(
+
+        '''self._generate_observables(
+            positivity_dict.get("multiplier"),
+            positivity_dict.get("initial"),
+            integrability_dict.get("multiplier"),
+            integrability_dict.get("initial"),
+            epochs,
+            params.get("interpolation_points"),
+            vb_layers,
+        )'''
+
+        # Call the new static data preparation function once
+        self._generate_static_data(
             positivity_dict.get("multiplier"),
             positivity_dict.get("initial"),
             integrability_dict.get("multiplier"),
@@ -878,6 +1077,7 @@ class ModelTrainer:
             epochs,
             params.get("feature_scaling_points"),
         )
+
         threshold_pos = positivity_dict.get("threshold", 1e-6)
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
 
@@ -893,9 +1093,6 @@ class ModelTrainer:
         trvl_phi2_per_fold = []
         trvl_logp_per_fold = []
         trvl_chi2exp_per_fold = []
-
-        # Generate the grid in x, note this is the same for all partitions
-        xinput = self._xgrid_generation()
 
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
@@ -941,7 +1138,19 @@ class ModelTrainer:
                 impose_sumrule=self.impose_sumrule,
                 scaler=self._scaler,
                 photons=photons,
+                training=self.training_model,
             )
+
+            vb_layers = [
+                layer for layer in pdf_model.layers
+                if layer.__class__.__name__ == 'VBDense' 
+            ]
+
+            # Call the dynamic loss setup function for this replica
+            self._generate_replica_losses(vb_layers=vb_layers)
+
+            # Generate the grid in x, note this is the same for all partitions
+            xinput = self._xgrid_generation()
 
             if photons:
                 if self._scaler:  # select only the non-scaled input

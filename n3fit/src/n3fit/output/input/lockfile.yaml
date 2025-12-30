@@ -1,0 +1,125 @@
+pdfs:
+- from_: current
+- from_: reference
+fits:
+- from_: current
+- from_: reference
+use_cuts: fromfit
+use_weights_in_covmat: false
+Q: 1.651
+Scales:
+- Q: 1.651
+  Scaletitle: Q = 1.65 GeV
+- Q: 100
+  Scaletitle: Q = 100 GeV
+PDFnormalize:
+- Normtitle: Absolute
+- normalize_to: 2
+  Normtitle: Ratio
+Basespecs:
+- basis: CCBAR_ASYMM_FLAVOUR
+  Basistitle: Flavour basis
+- basis: CCBAR_ASYMM
+  Basistitle: Evolution basis
+PDFscalespecs:
+- xscale: log
+  Xscaletitle: Log
+- xscale: linear
+  Xscaletitle: Linear
+Energies:
+- sqrts: 13000
+  Energytitle: 13 TeV
+lumi_channels:
+- gg
+- gq
+- qq
+- qqbar
+- uubar
+- ddbar
+- udbar
+- dubar
+Distspecs:
+- ymin: 0
+  ymax: 20
+pos_use_kin: true
+dataset_report:
+  meta:
+  template: data.md
+pdf_report:
+  meta:
+  template: pdf.md
+exponents_report:
+  meta:
+  template: exponents.md
+lumi_report:
+  meta:
+  template: lumi.md
+template: report.md
+positivity:
+  from_: fit
+description:
+  from_: fit
+dataset_inputs:
+  from_: fit
+dataspecs:
+- theoryid:
+    from_: current
+  pdf:
+    from_: current
+  fit:
+    from_: current
+  speclabel:
+    from_: current
+- theoryid:
+    from_: reference
+  pdf:
+    from_: reference
+  fit:
+    from_: reference
+  speclabel:
+    from_: reference
+t0_info:
+- use_t0: true
+  datacuts:
+    from_: fit
+  t0pdfset:
+    from_: datacuts
+Normalize:
+  normalize_to: 2
+Datanorm:
+  normalize_to: data
+DataGroups:
+- metadata_group: nnpdf31_process
+- metadata_group: experiment
+ProcessGroup:
+  metadata_group: nnpdf31_process
+actions_:
+- report(main=true)
+meta:
+  title: BNN_integrated_result
+  author: Dakshansh
+  keywords:
+  - bayesian
+current:
+  fit: &id001
+    id: Basic_runcard
+    label: Current Fit
+  pdf: *id001
+  theory:
+    from_: fit
+  theoryid:
+    from_: theory
+  speclabel: Current Fit
+reference:
+  fit: &id002
+    id: NNPDF40_nlo_as_01180_qed
+    label: Reference Fit
+  pdf: *id002
+  theory:
+    from_: fit
+  theoryid:
+    from_: theory
+  speclabel: Reference Fit
+use_thcovmat_if_present: false
+data_grouping_recorded_spec_:
+  standard_report: experiment

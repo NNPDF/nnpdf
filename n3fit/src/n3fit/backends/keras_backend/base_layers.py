@@ -16,15 +16,21 @@ the `custom_activations` dictionary with the following structure:
 
 The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
+import numpy as np
+import keras.backend as K
+import tensorflow as tf
+import math
+from scipy.stats import norm
 
 from keras.layers import Dense as KerasDense
-from keras.layers import Dropout, Lambda
+from keras.layers import Dropout, Lambda, Layer
 from keras.layers import Input  # pylint: disable=unused-import
 from keras.layers import LSTM, Concatenate
 from keras.regularizers import l1_l2
 
 from . import operations as ops
 from .MetaLayer import MetaLayer
+from contextlib import contextmanager
 
 
 # Custom activation functions
@@ -74,14 +80,101 @@ def LSTM_modified(**kwargs):
 
     return ReshapedLSTM
 
+class VBDense(Layer):
+    def __init__(self, out_features: int, in_features: int, prior_prec: float = 0.01, 
+                 map: bool = False, std_init: float = -9, lbound=-30, ubound=11, training = True):
+        super().__init__()
+        self.output_dim = out_features
+        self.input_dim = in_features
+        self.map = map
+        self.prior_prec = tf.cast(prior_prec, tf.float64)
+        self.random = None
+        self.eps = 1e-12 if K.floatx() == 'float64' else 1e-8
+        self.std_init = tf.cast(std_init, tf.float64)
+        self.lbound = lbound
+        self.ubound = ubound
+        self.training = training
+
+    def build(self, input_shape):
+        self.bias = self.add_weight(
+            name='bias', 
+            shape=(self.output_dim,), 
+            initializer='glorot_normal', 
+            trainable=True, 
+            dtype=tf.float64
+            )
+        
+        self.mu_w = self.add_weight(
+            name='mu_w', 
+            shape=(self.output_dim, self.input_dim), 
+            initializer='glorot_normal', 
+            trainable=True, 
+            dtype=tf.float64
+            )
+        
+        self.logsig2_w = self.add_weight(
+            name='logsig2_w', 
+            shape=(self.output_dim, self.input_dim), 
+            initializer='glorot_normal', 
+            trainable=True,
+            dtype=tf.float64,
+            ) 
+        
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        stdv = 1.0 / tf.math.sqrt(tf.cast(self.input_dim, dtype=tf.float64))
+        self.bias.assign(tf.zeros_like(self.bias))
+        self.mu_w.assign(tf.random.normal(tf.shape(self.mu_w), mean=0, stddev=stdv, dtype=tf.float64))
+        #self.logsig2_w.assign(tf.random.normal(tf.shape(self.logsig2_w), mean=0.001, stddev=self.std_init, dtype=tf.float64))
+        initial_logsig2 = tf.constant(self.std_init, dtype=tf.float64) 
+        self.logsig2_w.assign(tf.fill(tf.shape(self.logsig2_w), initial_logsig2))
+
+    def reset_random(self):
+        self.random = None
+        self.map = False
+
+    def kl_loss(self) -> tf.Tensor:
+        logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
+        kl = 0.5 * tf.reduce_sum((self.prior_prec*(tf.math.pow(self.mu_w,2)+tf.math.exp(logsig2_w))
+                                - logsig2_w - tf.constant(1.0, dtype=tf.float64) - tf.math.log(self.prior_prec)))
+        return kl
+        
+    def call(self, input: tf.Tensor) -> tf.Tensor:
+        # Ensure input is tf.float64
+        input = tf.cast(input, tf.float64)
+    
+        if self.training:
+            mu_out = tf.matmul(input, tf.cast(self.mu_w, input.dtype), transpose_b=True) + tf.cast(self.bias, input.dtype)
+            logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
+            s2_w = tf.math.exp(logsig2_w)
+            input2 = tf.math.pow(input, 2)
+            var_out = tf.matmul(input2, s2_w, transpose_b=True) + tf.cast(self.eps, input.dtype)
+        
+            return mu_out + tf.math.sqrt(var_out) * tf.random.normal(shape=tf.shape(mu_out), dtype=input.dtype)
+    
+        else:
+            # During inference, use MAP estimation (posterior mean) for deterministic output
+            mu_out = tf.matmul(input, tf.cast(self.mu_w, input.dtype), transpose_b=True) + tf.cast(self.bias, input.dtype)
+            return mu_out
+
+
 
 class Dense(KerasDense, MetaLayer):
+<<<<<<< Updated upstream
 
     def __init__(self, *args, **kwargs):
         # In Keras == 3.13, np.int() is not accepted by Dense
         if "units" in kwargs:
             kwargs["units"] = int(kwargs["units"])
         super().__init__(*args, **kwargs)
+=======
+    def __init__(self, **kwargs):
+        # Set default dtype to tf.float64 if not provided
+        if 'dtype' not in kwargs:
+            kwargs['dtype'] = tf.float64
+        super().__init__(**kwargs)
+>>>>>>> Stashed changes
 
 
 def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_kwargs):
@@ -133,7 +226,6 @@ doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_siz
 
     return apply_dense
 
-
 layers = {
     "dense": (
         Dense,
@@ -142,6 +234,7 @@ layers = {
             "units": 5,
             "activation": "sigmoid",
             "kernel_regularizer": None,
+            "dtype": tf.float64,
         },
     ),
     "dense_per_flavour": (
@@ -151,11 +244,20 @@ layers = {
             "units": 5,
             "activation": "sigmoid",
             "basis_size": 8,
+            "dtype": tf.float64,
         },
     ),
     "LSTM": (
         LSTM_modified,
         {"kernel_initializer": "glorot_normal", "units": 5, "activation": "sigmoid"},
+    ),
+    "VBDense": (
+        VBDense,
+        {   
+            "in_features" : 10,
+            "out_features" : 8,
+            "training": "False", 
+        },
     ),
     "dropout": (Dropout, {"rate": 0.0}),
     "concatenate": (Concatenate, {}),
@@ -173,7 +275,7 @@ def base_layer_selector(layer_name, **kwargs):
 
     Parameters
     ----------
-        `layer_name
+        `layer_name`
             str with the name of the layer
         `**kwargs`
             extra optional arguments to pass to the layer (beyond their defaults)

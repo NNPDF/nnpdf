@@ -1,0 +1,6 @@
+module	NNPDF40_nlo_as_01180_qed
+keras	2.11.0
+tensorflow	2.11.0, mkl=False
+numpy	1.24.4
+nnpdf	4.0.7.173+g82a4b70e0-dev
+validphys	4.0.7.173+g82a4b70e0-dev

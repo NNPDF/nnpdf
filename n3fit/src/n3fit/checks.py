@@ -135,11 +135,12 @@ def check_initializer(initializer):
 def check_layer_type_implemented(parameters):
     """Checks whether the layer_type is implemented"""
     layer_type = parameters.get("layer_type")
-    implemented_types = ["dense", "dense_per_flavour"]
-    if layer_type not in implemented_types:
-        raise CheckError(
-            f"Layer type {layer_type} not implemented, must be one of {implemented_types}"
-        )
+    implemented_types = ["dense", "dense_per_flavour", "VBDense"]
+    for idx, layer in enumerate(layer_type):
+        if layer not in implemented_types:
+            raise CheckError(
+                f"Layer type {layer} not implemented, must be one of {implemented_types}"
+            )
 
 
 def check_dropout(parameters):
@@ -149,11 +150,12 @@ def check_dropout(parameters):
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
     layer_type = parameters.get("layer_type")
-    if dropout is not None and dropout > 0.0 and layer_type == "dense_per_flavour":
-        raise CheckError(
-            "Dropout is not compatible with the dense_per_flavour layer type, "
-            "please use instead `parameters::layer_type: dense`"
-        )
+    for idx, layer in enumerate(layer_type):
+        if dropout is not None and dropout > 0.0 and layer == "dense_per_flavour":
+            raise CheckError(
+                "Dropout is not compatible with the dense_per_flavour layer type, "
+                "please use instead `parameters::layer_type: dense`"
+            )
 
 
 def check_tensorboard(tensorboard):
@@ -406,6 +408,12 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
         smallx = flavour_dict["smallx"]
         if smallx[0] > smallx[1]:
             raise CheckError(f"Wrong smallx range for flavour {name}: {smallx}")
+<<<<<<< Updated upstream
+=======
+        largex = flavour_dict.get("largex")
+        if largex is not None and largex[0] > largex[1]:
+            raise CheckError(f"Wrong largex range for flavour {name}: {largex}")
+>>>>>>> Stashed changes
         if name in flavs:
             raise CheckError(f"Repeated flavour name: {name}. Check basis dictionary")
         flavs.append(name)
@@ -439,10 +447,11 @@ def check_consistent_parallel(parameters, parallel_models):
     """
     if not parallel_models:
         return
-    if parameters.get("layer_type") not in ("dense"):
-        raise CheckError(
-            "Parallelization has only been tested with layer_type=='dense', set `parallel_models: false`"
-        )
+    for layer in parameters.get("layer_type"):
+        if layer not in ("dense"):
+            raise CheckError(
+                "Parallelization has only been tested with layer_type=='dense', set `parallel_models: false`"
+            )
 
 
 @make_argcheck

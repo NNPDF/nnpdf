@@ -27,11 +27,11 @@ trvlseed: 1551864071
 nnseed: 676150632
 mcseed: 619859729
 save: false
-genrep: true      # true = generate MC replicas, false = use real data
+genrep: false      # true = generate MC replicas, false = use real data
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-  nodes_per_layer: [25, 20, 8]
-  activation_per_layer: [tanh, tanh, linear]
+  nodes_per_layer: [15, 10, 8]
+  activation_per_layer: ['gelu', 'gelu', 'gelu']
   initializer: glorot_normal
   optimizer:
     clipnorm: 6.073e-6
@@ -45,7 +45,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     initial: 10
     multiplier:
   stopping_patience: 0.1
-  layer_type: dense
+  layer_type: ["dense", "dense", "VBDense"]
   dropout: 0.0
   threshold_chi2: 3.5
 

@@ -16,11 +16,11 @@ It contains functions to generate:
     which takes an array of (x) as input and outputs the value of the PDF
     for each replica, for each x for each flavour.
 """
+import tensorflow as tf
+import numpy as np
 
 from dataclasses import asdict, dataclass, field
-from typing import Callable
-
-import numpy as np
+from typing import Callable, Union
 
 from n3fit.backends import (
     NN_LAYER_ALL_REPLICAS,
@@ -47,6 +47,7 @@ from n3fit.layers import (
 from n3fit.layers.observable import is_unique
 from n3fit.msr import generate_msr_model_and_grid
 from validphys.photon.compute import Photon
+from n3fit.backends.keras_backend.base_layers import VBDense
 
 from n3fit.backends import regularizer_selector  # isort: skip isort and black don't agree
 
@@ -75,6 +76,7 @@ class ObservableWrapper:
     positivity: bool = False
     data: np.array = None
     rotation: ObsRotation = None  # only used for diagonal covmat
+    vb_layers: list[VBDense] = None
 
     def _generate_loss(self, mask=None):
         """Generates the corresponding loss function depending on the values the wrapper
@@ -83,7 +85,7 @@ class ObservableWrapper:
             covmat_matrix = self.covmat
             invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
-                invcovmat_matrix, self.data, mask, covmat=covmat_matrix, name=self.name
+                invcovmat_matrix, self.data, mask, covmat=covmat_matrix, vb_layers = self.vb_layers, name=self.name
             )
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
@@ -135,6 +137,7 @@ def observable_generator(
     positivity_initial=1.0,
     integrability=False,
     n_replicas=1,
+    vb_layers=None,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -278,6 +281,7 @@ def observable_generator(
             multiplier=positivity_initial,
             positivity=not integrability,
             integrability=integrability,
+            vb_layers=vb_layers,
         )
 
         layer_info = {
@@ -296,6 +300,7 @@ def observable_generator(
         invcovmat=invcovmat_tr,
         data=training_data,
         rotation=obsrot,
+        vb_layers=vb_layers,
     )
 
     out_vl = ObservableWrapper(
@@ -306,6 +311,7 @@ def observable_generator(
         invcovmat=invcovmat_vl,
         data=validation_data,
         rotation=obsrot,
+        vb_layers=vb_layers,
     )
 
     # experimental data has already been rotated if diagonal basis is requested
@@ -317,7 +323,12 @@ def observable_generator(
         invcovmat=spec_dict["invcovmat_true"],
         covmat=spec_dict["covmat"],
         data=spec_dict["expdata_true"],
+<<<<<<< Updated upstream
         rotation=obsrot,
+=======
+        rotation=None,
+        vb_layers=vb_layers,
+>>>>>>> Stashed changes
     )
 
     layer_info = {
@@ -342,8 +353,8 @@ class ReplicaSettings:
             nodes of each of the layers, starting at the first hidden layer
         activations: list[str]
             list of activation functions, should be of equal length as nodes
-        architecture: str
-            select the architecture of the neural network used for the replica,
+        architecture: list[str]
+            list of architecture per layer; select the architecture of the neural network used for the replica,
             e.g. ``dense`` or ``dense_per_flavour``
         initializer: str
             initializer to be used for this replica
@@ -358,7 +369,7 @@ class ReplicaSettings:
     seed: int
     nodes: list[int]
     activations: list[str]
-    architecture: str = "dense"
+    architecture: Union[str, list[str]]
     initializer: str = "glorot_normal"
     dropout_rate: float = 0.0
     regularizer: str = None
@@ -394,6 +405,7 @@ def generate_pdf_model(
     impose_sumrule: str = None,
     scaler: Callable = None,
     photons: Photon = None,
+    training = False,
 ):
     """
     Generation of the full PDF model which will be used to determine the full PDF.
@@ -443,8 +455,8 @@ def generate_pdf_model(
                     list of activation functions to apply to each layer
                 initializer_name: str
                     selects the initializer of the weights of the NN. Default: glorot_normal
-                layer_type: str
-                    selects the type of architecture of the NN. Default: dense
+                layer_type: list[str]
+                    selects the type of architecture per layer of the NN. Default: dense
                 seed: int
                     the initialization seed for the NN
                 dropout: float
@@ -483,6 +495,7 @@ def generate_pdf_model(
         "impose_sumrule": impose_sumrule,
         "scaler": scaler,
         "photons": photons,
+        "training": False,
     }
 
     pdf_model = _pdfNN_layer_generator(replicas_settings, **shared_config)
@@ -522,6 +535,7 @@ def _pdfNN_layer_generator(
     scaler: Callable = None,
     photons: Photon = None,
     replica_axis: bool = True,
+    training: bool = True,
 ):
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -538,7 +552,7 @@ def _pdfNN_layer_generator(
     is the rotation from the fitting basis to the physical basis needed for the
     convolution with the fktables.
 
-    `layer_type` defines the architecture of the Neural Network, currently
+    `layer_type` defines the architecture per layer of the Neural Network, currently
     the following two options are implemented:
         - `dense`
             it will generate a densely connected networks where all nodes of layer n
@@ -671,7 +685,7 @@ def _pdfNN_layer_generator(
     # loop over the settings for all replicas and generate a list of NN per replica
     # which will be then stack together and built into a single (input -> output) MetaModel
     # all PDFs _must_ share the same input layer
-    x_input = Input(shape=(None, nn_input_dimensions), batch_size=1, name="NN_input")
+    x_input = Input(shape=(None, nn_input_dimensions), batch_size=1, name="NN_input", dtype=tf.float64)
 
     list_of_nn_pdfs = []
     for i, replica_settings in enumerate(replicas_settings):
@@ -804,11 +818,12 @@ def _generate_nn(
     seed: int = None,
     nodes: list[int] = None,
     activations: list[str] = None,
-    architecture: str = "dense",
+    architecture: Union[str,list[str]] = 'dense',
     initializer: str = None,
     dropout_rate: float = 0.0,
     regularizer: str = None,
     regularizer_args: dict = field(default_factory=dict),
+    training: bool = True
 ) -> MetaModel:
     """
     Create a Neural Network according to the input settings
@@ -839,20 +854,68 @@ def _generate_nn(
     # the output nodes of the layer
     # and the activation function
 
-    if architecture == "dense_per_flavour":
-        # Reset the last node in the list to be 1, we will then
-        # repeat it n-times
-        nodes = hidden_layers + [1]
+    '''if architecture_type == "dense_per_flavour":
+            # Reset the last node in the list to be 1, we will then
+            # repeat it n-times
+            nodes = hidden_layers + [1]
 
-        def layer_generator(i_layer, nodes_out, activation):
-            """Generate the ``i_layer``-th dense_per_flavour layer for all replicas."""
+            def layer_generator(i_layer, nodes_out, activation):
+                """Generate the ``i_layer``-th dense_per_flavour layer for all replicas."""
+                l_seed = int(seed + i_layer * n_flavours)
+                initializers = [
+                    MetaLayer.select_initializer(initializer, seed=l_seed + b)
+                    for b in range(n_flavours)
+                ]
+                layer = base_layer_selector(
+                    architecture_type,
+                    kernel_initializer=initializers,
+                    units=int(nodes_out),
+                    activation=activation,
+                    basis_size=n_flavours,
+                )
+                return layer
+
+    elif architecture_type == "dense":
+            
+            def layer_generator(i_layer, nodes_out, activation):
+                kini = MetaLayer.select_initializer(initializer, seed=int(seed + i_layer))
+                return base_layer_selector(
+                    architecture_type,
+                    kernel_initializer=kini,
+                    units=nodes_out,
+                    activation=activation,
+                    regularizer=reg,
+                )
+    
+    elif architecture_type == "VBDense":
+
+            def layer_generator(i_layer, nodes_out, activation):
+                return base_layer_selector(
+                    architecture_type,
+                    #kernel_initializer = tf.keras.initializers.HeNormal(seed = int(seed + i_layer)),
+                    #units = nodes_out,
+                    #activation = activation,
+                    #regularizer = reg,
+                )            
+
+    else:
+            raise ValueError(f"{architecture_type} not recognized during model generation")'''
+
+
+    def layer_generator(architecture_type, i_layer, nodes_out, activation):
+
+        if architecture_type == "dense_per_flavour":
+            # Reset the last node in the list to be 1, we will then
+            # repeat it n-times
+            nodes = hidden_layers + [1]
+
             l_seed = int(seed + i_layer * n_flavours)
             initializers = [
                 MetaLayer.select_initializer(initializer, seed=l_seed + b)
                 for b in range(n_flavours)
             ]
             layer = base_layer_selector(
-                architecture,
+                architecture_type,
                 kernel_initializer=initializers,
                 units=int(nodes_out),
                 activation=activation,
@@ -860,25 +923,35 @@ def _generate_nn(
             )
             return layer
 
-    elif architecture == "dense":
-
-        def layer_generator(i_layer, nodes_out, activation):
+        elif architecture_type == "dense":
+            
             kini = MetaLayer.select_initializer(initializer, seed=int(seed + i_layer))
             return base_layer_selector(
-                architecture,
+                architecture_type,
                 kernel_initializer=kini,
                 units=nodes_out,
                 activation=activation,
                 regularizer=reg,
             )
+    
+        elif architecture_type == "VBDense":
+            
+            return base_layer_selector(
+                architecture_type,
+                training = training
+                #kernel_initializer = tf.keras.initializers.HeNormal(seed = int(seed + i_layer)),
+                #units = nodes_out,
+                #activation = activation,
+                #regularizer = reg,
+            )            
 
-    else:
-        raise ValueError(f"{architecture=} not recognized during model generation")
+        else:
+            raise ValueError(f"{architecture_type} not recognized during model generation")
 
-    # Use the previous layer generator to generate all layers
+    # Generate different layer types 
     previous_layer = input_layer
-    for layer_idx, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-        layer = layer_generator(layer_idx, nodes_out, activation)
+    for layer_idx, (architecture_type, nodes_out, activation) in enumerate(zip(architecture, nodes, activations)):
+        layer = layer_generator(architecture_type=architecture_type, i_layer=layer_idx, nodes_out=nodes_out, activation=activation)
 
         # Apply the layer to the output of the previous one
         previous_layer = layer(previous_layer)
@@ -889,7 +962,7 @@ def _generate_nn(
             previous_layer = dropout_l(previous_layer)
 
     # In a dense-per-flavour, concatenate the last layer
-    if architecture == "dense_per_flavour":
+    if architecture_type == ["dense_per_flavour"]:
         concat = base_layer_selector("concatenate")
         previous_layer = concat(previous_layer)
 

@@ -9,10 +9,10 @@
 """
 
 import numpy as np
+import tensorflow as tf
 
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
-
 
 class LossInvcovmat(MetaLayer):
     """
@@ -39,11 +39,13 @@ class LossInvcovmat(MetaLayer):
     True
     """
 
-    def __init__(self, invcovmat, y_true, mask=None, covmat=None, **kwargs):
+    def __init__(self, invcovmat, y_true, mask=None, covmat=None, kl_weight_factor = 0.005, vb_layers = None, **kwargs):
         self._invcovmat = op.numpy_to_tensor(invcovmat)
         self._covmat = covmat
         self._y_true = op.numpy_to_tensor(y_true)
         self._ndata = y_true.shape[-1]
+        self.kl_weight_factor = kl_weight_factor
+        self.vb_layers = vb_layers
         if mask is None or all(mask):
             self._mask = None
         else:
@@ -93,6 +95,18 @@ class LossInvcovmat(MetaLayer):
         else:
             einstr = "bri, ij, brj -> r" if experimental_loss else "bri, rij, brj -> r"
             loss = op.einsum(einstr, obs_diff, self.kernel, obs_diff)
+
+        # compute kl loss
+        kl = 0
+        # Iterate over the actual layer instances
+        for layer_instance in self.vb_layers:
+            # Check if the instance has the method 
+            if hasattr(layer_instance, 'kl_loss'): 
+                kl += layer_instance.kl_loss()
+        kl = kl/tf.cast(self._ndata, dtype=loss.dtype)
+
+        loss += self.kl_weight_factor * kl
+
         return loss
 
 
@@ -182,6 +196,7 @@ class LossIntegrability(LossLagrange):
     def apply_loss(self, y_pred):
         y = y_pred * y_pred
         # Sum over the batch and the datapoints
+<<<<<<< Updated upstream
         return op.sum(y, axis=[0, -1])
 
 class LossHyperopt:
@@ -220,3 +235,6 @@ class LossHyperopt:
         return self.c * loss.numpy()
 
     
+=======
+        return op.sum(y, axis=[0, -1])
+>>>>>>> Stashed changes
