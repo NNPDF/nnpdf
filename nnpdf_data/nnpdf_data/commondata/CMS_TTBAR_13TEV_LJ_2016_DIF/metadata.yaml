@@ -57,5 +57,15 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_YT.yaml
+    mc_uncertainties:
+      data_uncertainties:
+        - uncertainties_legacy_YT.yaml
+        - mc_top_uncertainties_dSig_dyt.yaml
+      theory:
+        FK_tables:
+          - - CMS_TTBAR_13TEV_LJ_DIF_YT
+        conversion_factor: 0.2877   # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
+        operation: 'null'
+
   data_central: data_legacy_YT.yaml
   ported_from: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP
