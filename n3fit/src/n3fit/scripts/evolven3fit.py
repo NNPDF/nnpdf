@@ -185,8 +185,6 @@ def main():
         if args.actions == "produce_eko":
             tcard, opcard = eko_utils.construct_eko_cards(
                 nnpdf_theory,
-                args.q_fin,
-                args.q_points,
                 x_grid,
                 op_card_info,
                 theory_card_info,
