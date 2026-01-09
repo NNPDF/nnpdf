@@ -99,10 +99,7 @@ def linear_bin_function(
 
 
 def dis_pc_func(
-    delta_h: npt.ArrayLike,
-    nodes: npt.ArrayLike,
-    x: npt.ArrayLike,
-    Q2: npt.ArrayLike,
+    delta_h: npt.ArrayLike, nodes: npt.ArrayLike, x: npt.ArrayLike, Q2: npt.ArrayLike
 ) -> npt.ArrayLike:
     """
     This function builds the functional form of the power corrections for DIS-like processes.
@@ -132,10 +129,7 @@ def dis_pc_func(
 
 
 def jets_pc_func(
-    delta_h: npt.ArrayLike,
-    nodes: npt.ArrayLike,
-    pT: npt.ArrayLike,
-    rap: npt.ArrayLike,
+    delta_h: npt.ArrayLike, nodes: npt.ArrayLike, pT: npt.ArrayLike, rap: npt.ArrayLike
 ) -> npt.ArrayLike:
     """
     Same as `dis_pc_func`, but for jet data. Here, the kinematic pair consists of the rapidity
@@ -159,30 +153,6 @@ def jets_pc_func(
     """
     PC = linear_bin_function(rap, delta_h, nodes) / pT
     return PC
-
-
-# def jet_single_par(delta_h: float, pT: npt.ArrayLike, rap: npt.ArrayLike) -> npt.ArrayLike:
-#     ret = [delta_h for _ in range(rap.size)]
-#     return np.array(ret) / pT
-
-# def mult_jet_pc_single_par(dataset_sp, pdf, pc_nodes, pT, rap, pc_func_type: str = "step"):
-#     """
-#     As mult_jet_pc, but with one single shift for all rapidity bins.
-
-#     This function is meant to be for development purposes only. It will either substitute
-#     mult_jet_pc or be deleted in the future."""
-#     cuts = dataset_sp.cuts
-#     (fkspec,) = dataset_sp.fkspecs
-#     fk = fkspec.load_with_cuts(cuts)
-#     xsec = central_fk_predictions(fk, pdf)
-
-#     def func(y_values):
-#         assert y_values.size == 1
-#         ret = [y_values[0] for _ in range(rap.size)]
-#         ret = np.array(ret) / pT
-#         return np.multiply(ret, xsec.to_numpy()[:, 0])
-
-#     return func
 
 
 def mult_dis_pc(nodes, x, q2, dataset_sp, pdf):
@@ -272,6 +242,7 @@ def mult_dis_ratio_pc(p_nodes, d_nodes, x, q2, dataset_sp, pdf):
 
     return func
 
+
 def mult_jet_pc(nodes, pT, rap, dataset_sp, pdf):
     """
     As `mult_dis_pc`, but for jet data. The power corrections are defined as
@@ -294,6 +265,7 @@ def mult_jet_pc(nodes, pT, rap, dataset_sp, pdf):
         return np.multiply(result, xsec.to_numpy()[:, 0])
 
     return func
+
 
 def construct_pars_combs(parameters_dict):
     """Construct the combination of parameters (the ones that parametrize the power
@@ -335,6 +307,7 @@ def construct_pars_combs(parameters_dict):
 
     return combinations
 
+
 def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
     """
     Computes the shifts due to power corrections for a single dataset given
@@ -374,7 +347,9 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
         if exp_name == "NMC_NC_NOTFIXED_EM-F2":
             pc_func_ratio = mult_dis_ratio_pc(f2_p_nodes, f2_d_nodes, x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func_ratio(pars_pc['comb']['f2p'], pars_pc['comb']['f2d'])
+                deltas[pars_pc['label']] = pc_func_ratio(
+                    pars_pc['comb']['f2p'], pars_pc['comb']['f2d']
+                )
 
         # F2 proton traget
         elif exp_name in F2P_exps:
@@ -390,9 +365,8 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
 
         # EMC
         elif exp_name.startswith('EMC_NC_250GEV'):
-           raise NotImplementedError(
-                f"The {process_type} observable for {exp_name} "
-                "has not been implemented."
+            raise NotImplementedError(
+                f"The {process_type} observable for {exp_name} " "has not been implemented."
             )
 
         # HERA NC xsec
@@ -409,7 +383,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
 
         # NuTeV
         elif exp_name.startswith('NUTEV_CC'):
-            pc_func = mult_dis_pc(dis_cc_nodes  , x, q2, dataset_sp, pdf)
+            pc_func = mult_dis_pc(dis_cc_nodes, x, q2, dataset_sp, pdf)
             for pars_pc in pars_combs:
                 deltas[pars_pc['label']] = pc_func(pars_pc['comb']['dis_cc'])
 
@@ -434,10 +408,13 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
             deltas[pars_pc['label']] = pc_func(pars_pc['comb']['Hj'])
 
     elif process_type == 'DIJET':
-        
 
         if dataset_sp.commondata.metadata.experiment == 'ATLAS':
-            pc_jet_nodes = pc_dict["H2j_ATLAS"]['nodes'] if pc_dict.get("H2j_ATLAS") else pc_dict["H2j"]['nodes']
+            pc_jet_nodes = (
+                pc_dict["H2j_ATLAS"]['nodes']
+                if pc_dict.get("H2j_ATLAS")
+                else pc_dict["H2j"]['nodes']
+            )
             eta_star = (
                 dataset_sp.commondata.metadata.load_kinematics()['ystar']
                 .to_numpy()
@@ -450,10 +427,16 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
             )
             pc_func = mult_jet_pc(pc_jet_nodes, m_jj, eta_star, dataset_sp, pdf)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_ATLAS'] if pc_dict.get("H2j_ATLAS") else pars_pc['comb']['H2j'])
+                deltas[pars_pc['label']] = pc_func(
+                    pars_pc['comb']['H2j_ATLAS']
+                    if pc_dict.get("H2j_ATLAS")
+                    else pars_pc['comb']['H2j']
+                )
 
         elif dataset_sp.commondata.metadata.experiment == 'CMS':
-            pc_jet_nodes = pc_dict["H2j_CMS"]['nodes'] if pc_dict.get("H2j_CMS") else pc_dict["H2j"]['nodes']
+            pc_jet_nodes = (
+                pc_dict["H2j_CMS"]['nodes'] if pc_dict.get("H2j_CMS") else pc_dict["H2j"]['nodes']
+            )
             eta_diff = (
                 dataset_sp.commondata.metadata.load_kinematics()['ydiff']
                 .to_numpy()
@@ -466,7 +449,9 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
             )
             pc_func = mult_jet_pc(pc_jet_nodes, m_jj, eta_diff, dataset_sp, pdf)
             for pars_pc in pars_combs:
-                deltas[pars_pc['label']] = pc_func(pars_pc['comb']['H2j_CMS'] if pc_dict.get("H2j_CMS") else pars_pc['comb']['H2j'])
+                deltas[pars_pc['label']] = pc_func(
+                    pars_pc['comb']['H2j_CMS'] if pc_dict.get("H2j_CMS") else pars_pc['comb']['H2j']
+                )
 
         else:
             raise ValueError(
