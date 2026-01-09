@@ -3,7 +3,7 @@ construction.py
 Tools for constructing theory covariance matrices and computing their chi2s.
 """
 
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 import dataclasses
 import logging
 
@@ -531,7 +531,9 @@ def fromfile_covmat(covmatpath, groups_data_by_process, procs_index):
 
 
 @table
-def user_covmat(groups_data_by_process, procs_index, loaded_user_covmat_path, mult_factor_user_covmat):
+def user_covmat(
+    groups_data_by_process, procs_index, loaded_user_covmat_path, mult_factor_user_covmat
+):
     """
     General theory covariance matrix provided by the user.
     Useful for testing the impact of externally produced
@@ -541,7 +543,9 @@ def user_covmat(groups_data_by_process, procs_index, loaded_user_covmat_path, mu
     ``user_covmat_path`` in ``theorycovmatconfig`` in the
     runcard. For more information see documentation.
     """
-    return mult_factor_user_covmat * fromfile_covmat(loaded_user_covmat_path, groups_data_by_process, procs_index)
+    return mult_factor_user_covmat * fromfile_covmat(
+        loaded_user_covmat_path, groups_data_by_process, procs_index
+    )
 
 
 @table
