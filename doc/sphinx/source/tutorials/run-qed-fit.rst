@@ -11,14 +11,17 @@ Setting up the runcard
 ----------------------
 
 It is possible to perform a QED fit by adding a ``fiatlux`` block to the
-runcard. The following code snippet shows an example of a QED fit configuration:
+runcard. The following code snippet shows all the available options to set up
+a QED fit:
 
 .. code-block:: yaml
 
     fiatlux:
-      luxset: 251127-jcm-lh-qed-001
+      luxset: NNPDF40_nnlo_as_01180_qcd
       additional_errors: true
       luxseed: 1234567890
+      compute_in_setupfit: false
+      eps_base: 1e-5
 
 The parameters contained in the ``fiatlux`` block are:
 
@@ -27,8 +30,8 @@ The parameters contained in the ``fiatlux`` block are:
       <https://github.com/scarrazza/fiatlux/>`_. The code will use as many
       photon replicas as the number of replicas contained in the ``luxset``. If
       the user tries to generate a replica with ID higher than the maximum ID of
-      the ``luxset``, the code will start reusing photon replica from the first.
-      Being the LuxQED approach an iterated procedure, and given that some
+      the ``luxset``, the code will start reusing photon replica from the first
+      replica. Being the LuxQED approach an iterated procedure, and that some
       replicas do not pass the ``postfit`` selection criteria, the user should
       make sure that the number of replicas in the ``luxset`` is high enough
       such that in the final iteration there will be a number of replicas higher
@@ -45,14 +48,27 @@ The parameters contained in the ``fiatlux`` block are:
 * ``luxseed``
       The seed used to generate the additional errors of the LuxQED as in ``additional_errors``.
 
-The code uses both the ``fiatlux`` block and the ``theoryid`` specified in the
-runcard to identify the photon PDF set. As explained below, the code searches
-for precomputed photon PDF sets using the pair of ``luxset`` and ``theoryid``
-parameters, first locally and then on the NNPDF server (see
-:ref:`photon-resources` for details). The photon PDF set will be named
-``photon_theoryID_<theoryid>_fit_<luxset>``.
+* ``compute_in_setupfit``
+      Boolean flag to trigger the computation of the photon PDF set during
+      ``vp-setupfit``. By default, it is set to `false`. This is not required if
+      the photon PDF set is already available locally or on the NNPDF server.
+      See the :ref:`section below <running-with-photon-sets>` for more details.
 
-.. _photon-resources:
+* ``eps_base``
+      (optional) The base precision of the FiatLux computation, which controls
+      the precision on final integration of double integral. By default, it is
+      set to ``1e-5``. This parameter is used only if the photon PDF set is
+      generated on the fly, either during ``vp-setupfit`` or ``n3fit``. See
+      :ref:`Generating new Photon sets <generating-photon-sets>` for more
+      details.
+
+The code uses information contained in both the ``fiatlux`` block and the
+``theoryid`` specified in the runcard to identify the photon PDF set, which will
+be assigned the name ``photon_theoryID_<theoryid>_fit_<luxset>``. This name will
+be used to either look for existing photon PDF sets or to store newly generated
+ones, as explained below.
+
+.. _running-with-photon-sets:
 
 Running with Photon PDF sets
 -----------------------------
@@ -63,6 +79,8 @@ minimize the overhead due to the generation of photon PDF sets and avoid
 redundant computations, the code looks for precomputed photon resources either
 locally or on the NNPDF server. If a desired photon PDF set does not exist in
 either of the two locations, it will be computed on the fly and stored locally.
+If the user is satisfied with the new local photon PDF set, they can upload it to
+the NNPDF server following the instructions in :ref:`this section <generating-photon-sets>`.
 The following sections describe how to use existing photon PDF sets or generate
 new ones.
 
@@ -75,52 +93,48 @@ The desired photon PDF is specified by the ``luxset`` parameter in the
 ``fiatlux`` block and the ``theoryid``, as explained above. The code will first
 look for the photon PDF set in the local directory specified in the
 :ref:`profile file <nnprofile>`. If the set is not found locally, it will try to
-download it from the NNPDF server. The following is an example of running
-``vp-setupfit`` using the ``fiatlux`` block shown above:
+download it from the NNPDF server. If the photon PDF set is not found on the
+server either, and the user has not requested to compute it during
+``vp-setupfit`` through the flag ``compute_in_setupfit``, the photon replica
+will be computed as needed for the replica fitted during the execution of
+``n3fit`` (see :ref:`here <photon_n3fit>` for more details).
+
+The following is an example of running ``vp-setupfit`` using the
+``fiatlux`` block shown above and setting ``compute_in_setupfit: false``:
 
 .. code-block:: bash
 
     $ vp-setupfit qed_example_runcard.yml
-    [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_702_fit_251127-jcm-lh-qed-001 in theory: 702. Attempting to download it.
-    [INFO]: Downloading https://data.nnpdf.science/photons/photon_theoryID_702_fit_251127-jcm-lh-qed-001.tar.
+    [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed in theory: 40000100. Attempting to download it.
+    [INFO]: Downloading https://data.nnpdf.science/photons/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed.tar.
     [==================================================] (100%)
     [INFO]: Extracting archive to /opt/homebrew/Caskroom/miniconda/base/envs/nnpdf/share/NNPDF/photons_qed
-    [INFO]: Photon QED set found for 702 with luxset 251127-jcm-lh-qed-001.
+    [INFO]: Photon QED set found for 40000100 with luxset NNPDF40_nnlo_as_01180_qed.
     [WARNING]: Using q2min from runcard
     [WARNING]: Using w2min from runcard
     Using Keras backend
     [INFO]: All requirements processed and checked successfully. Executing actions.
     ...
 
-This will download and extract the photon PDF set in the local
+In this case, the desired photon PDF set was already stored and precomputed on
+the server. This is downloaded and extracted in the local
 ``photons_qed_path`` specified in the :ref:`profile file <nnprofile>`.
 
 The ``vp-list`` utility tool can be used to list all the available photon PDF
 sets locally and on the NNPDF server. To list the available photon PDF sets,
-just run:
+just run `vp-list photons` to see which photon PDF sets are available locally
+and which ones can be downloaded from the server. The user can manually download
+a photon PDF set using the ``vp-get`` tool as explained :ref:`here <download>`.
+For example:
 
 .. code-block:: bash
 
-   $ vp-list photons
-   [INFO]: The following photons are available locally:
-    - theoryID_702_fit_251127-jcm-lh-qed-001
-   [INFO]: The following photons are downloadable:
-    - theoryID_702_fit_251127-jcm-lh-qed-002
-
-In this example, there is one photon PDF set available locally, and one photon
-resource available on the NNPDF server precomputed with theory ID 702 and
-``251127-jcm-lh-qed-002`` as input PDF. The user can manually download a photon
-PDF set using the ``vp-get`` tool as explained :ref:`here <download>`. For
-example:
-
-.. code-block:: bash
-
-  $ vp-get photonQED 702 251127-jcm-lh-qed-002
-  [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_702_fit_251127-jcm-lh-qed-002 in theory: 702. Attempting to download it.
-  [INFO]: Downloading https://data.nnpdf.science/photons/photon_theoryID_702_fit_251127-jcm-lh-qed-002.tar.
+  $ vp-get photonQED 40000100 NNPDF40_nnlo_as_01180_qed
+  [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed in theory: 40000100. Attempting to download it.
+  [INFO]: Downloading https://data.nnpdf.science/photons/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed.tar.
   [==================================================] (100%)
   [INFO]: Extracting archive to /user/envs/nnpdf/share/NNPDF/photons_qed
-  PosixPath('/user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_702_fit_251127-jcm-lh-qed-002')
+  PosixPath('/user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed')
 
 As in the case of ``vp-setupfit``, this will download and extract the photon PDF
 set in the local ``photons_qed_path`` specified in the :ref:`profile file <nnprofile>`.
@@ -135,6 +149,7 @@ fit with ``n3fit`` as usual.
    more details.
 
 .. _generating-photon-sets:
+
 Generating new Photon PDF sets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If the desired photon PDF set is not available locally nor on the NNPDF server, the
@@ -162,8 +177,16 @@ prior to the evolution through EKO.
 
   Automatic upload to the NNPDF server through ``vp-upload`` is **not**
   supported at the moment. The user should manually create a ``tar`` archive
-  file containing the photon replicas and upload it to server. Refer to the
-  :ref:`profile file <nnprofile>` to find the remote URL where photon PDF sets are stored.
+  file containing the photon replicas
+
+  .. code-block:: bash
+
+      $ cd my_photon_folder
+      $ tar -czf my_photon.tgz *.npz
+
+  Once the archive file is created, the user can upload it to the server. Refer
+  to the :ref:`profile file <nnprofile>` to find the remote URL where photon PDF
+  sets are stored.
 
 
 Using ``vp-setupfit`` (preferred)
@@ -177,9 +200,9 @@ Using ``vp-setupfit`` (preferred)
   .. code-block:: bash
 
       $ vp-setupfit qed_example_runcard.yml
-      [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_703_fit_251127-jcm-lh-qed-001 in theory: 703. Attempting to download it.
-      [ERROR]: Resource not in the remote repository: Photon QED set for TheoryID 703 and luxset 251127-jcm-lh-qed-001 is not available in the remote server.
-      [WARNING]: Photon QED set for theory 703 with luxset 251127-jcm-lh-qed-001 not found. It will be computed in vp-setupfit.
+      [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qcd in theory: 40000100. Attempting to download it.
+      [ERROR]: Resource not in the remote repository: Photon QED set for TheoryID 40000100 and luxset NNPDF40_nnlo_as_01180_qcd is not available in the remote server.
+      [WARNING]: Photon QED set for theory 40000100 with luxset NNPDF40_nnlo_as_01180_qcd not found. It will be computed in vp-setupfit.
       [INFO]: Forcing photon computation with FiatLux during setupfit.
       [WARNING]: Using q2min from runcard
       [WARNING]: Using w2min from runcard
@@ -206,6 +229,7 @@ Using ``vp-setupfit`` (preferred)
   Once the preparation step is completed, and the photon PDF set is generated and stored
   locally, the user can proceed to run the fit with ``n3fit`` as usual.
 
+.. _photon_n3fit:
 Using ``n3fit`` (discouraged)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   If the user prefers to compute the photon PDF set during the fitting step with
@@ -222,9 +246,8 @@ Using ``n3fit`` (discouraged)
       $ n3fit qed_example_runcard.yml 1
       [INFO]: Creating replica output folder in /user/runcards/qed_example_runcard/nnfit/replica_1
       [WARNING]: Using q2min from runcard
-      [WARNING]: Using w2min from runcard
-      Using Keras backend
-      [WARNING]: No Photon QED set found for Theory 703 with luxset 251127-jcm-lh-qed-001. It will be computed using FiatLux. This may impact performance. It is recommended to precompute the photon set before running the fit. Refer to https://docs.nnpdf.science/tutorials/run-qed-fit.html for more details on precomputing photon PDF sets.
+      [WARNING]: Using w2min from runcard Using Keras backend
+      [WARNING]: No Photon QED set found for Theory 40000100 with luxset NNPDF40_nnlo_as_01180_qed. It will be computed using FiatLux. This may impact performance. It is recommended to precompute the photon set before running the fit. Refer to https://docs.nnpdf.science/tutorials/run-qed-fit.html for more details on precomputing photon PDF sets.
       [INFO]: All requirements processed and checked successfully. Executing actions.
 
   .. warning::
