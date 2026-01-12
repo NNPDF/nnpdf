@@ -4,12 +4,13 @@ import yaml
 
 from nnpdf_data.filter_utils.legacy_jets_utils import (
     TABLE_TO_RAPIDITY_ATLAS_1JET_7TEV_R06,
-    VARIANT_MAP,
     fill_df_ATLAS_1JET_7TEV_R06,
 )
 from nnpdf_data.filter_utils.utils import prettify_float
 
 yaml.add_representer(float, prettify_float)
+
+AVAILABLE_VARIANTS = ['nominal', 'weaker', 'stronger']
 
 
 def filter_ATLAS_1JET_7TEV_data_kinematics():
@@ -59,34 +60,16 @@ def filter_ATLAS_1JET_7TEV_data_kinematics():
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
-def filter_ATLAS_1JET_7TEV_data_central(variant='nominal'):
-    """
-    Write central data values in the data.yaml file.
-    """
-    with open("metadata.yaml") as file:
-        metadata = yaml.safe_load(file)
-
-    version = metadata["hepdata"]["version"]
-    tables = metadata["hepdata"]["tables"]
-
-    data_central = []
-    for table in tables:
-        hepdata_table = f"rawdata/HEPData-ins1325553-v{version}_table{table}.yaml"
-
-        with open(hepdata_table) as file:
-            input = yaml.safe_load(file)
-
-        values = input['dependent_variables'][VARIANT_MAP[variant]]['values']
-
-        for value in values:
-            data_central.append(value['value'])
-    return data_central
-
-
 def filter_ALTAS_1JET_7TEV_data_uncertainties(variant='nominal'):
     """
     Write uncertainties in the uncertainties.yaml file.
     """
+
+    if variant not in AVAILABLE_VARIANTS:
+        raise ValueError(
+            f"Variant {variant} not recognized. Available variants: {AVAILABLE_VARIANTS}"
+        )
+
     with open("metadata.yaml") as file:
         metadata = yaml.safe_load(file)
 
@@ -103,7 +86,7 @@ def filter_ALTAS_1JET_7TEV_data_uncertainties(variant='nominal'):
         cvs.append(cv)
 
     df_unc = pd.concat([df for df in dfs], axis=0)
-    cvs = np.stack(cvs, axis=0)
+    cvs = np.concatenate(cvs, axis=0)
 
     # statistical errors fully uncorrelated
     stat_errors = df_unc["stat"].to_numpy()
@@ -149,22 +132,24 @@ def filter_ALTAS_1JET_7TEV_data_uncertainties(variant='nominal'):
         error.append(error_value)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-
     if variant == 'nominal':
         filename = 'uncertainties.yaml'
     else:
         filename = f"uncertainties_{variant}.yaml"
-
     with open(filename, "w") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
     data_central_yaml = {"data_central": cvs.tolist()}
-
-    # write central values and kinematics to yaml file
-    with open("data.yaml", "w") as file:
+    if variant == 'nominal':
+        data_filename = 'data.yaml'
+    else:
+        data_filename = f"data_{variant}.yaml"
+    with open(data_filename, "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
 
 
 if __name__ == "__main__":
     filter_ATLAS_1JET_7TEV_data_kinematics()
-    filter_ALTAS_1JET_7TEV_data_uncertainties()
+    filter_ALTAS_1JET_7TEV_data_uncertainties('nominal')
+    filter_ALTAS_1JET_7TEV_data_uncertainties('weaker')
+    filter_ALTAS_1JET_7TEV_data_uncertainties('stronger')
