@@ -62,6 +62,15 @@ implemented_observables:
   data_central: data.yaml
   data_uncertainties:
   - uncertainties.yaml
+  variants:
+    weaker:
+      data_uncertainties:
+        - uncertainties_weaker.yaml
+      data_central: data_weaker.yaml
+    stronger:
+      data_uncertainties:
+        - uncertainties_stronger.yaml
+      data_central: data_stronger.yaml
   theory:
     FK_tables:
     - -
