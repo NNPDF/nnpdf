@@ -1162,10 +1162,8 @@ TABLE_TO_RAPIDITY_ATLAS_1JET_7TEV_R06 = {
     12: [2.5, 3.0],
 }
 
-VARIANT_MAP = {'nominal': 0, 'stronger': 1, 'weaker': 2}
 
-
-def HEP_table_to_df_ATLAS_1JET_7TEV_R06(table, version, variant='nominal'):
+def HEP_table_to_df_ATLAS_1JET_7TEV_R06(table):
     """
     Given hep data table, version, and variant, initialize a pandas DataFrame
     with index given by Ndata, columns by the uncertainties and np.nan entries.
@@ -1174,17 +1172,8 @@ def HEP_table_to_df_ATLAS_1JET_7TEV_R06(table, version, variant='nominal'):
     be either symmetric or asymmetric depending on the bin in pT. Hence, all
     JES uncertainties are treated as asymmetric here.
     """
-    hepdata_table = f"rawdata/HEPData-ins1325553-v{version}_table{table}.yaml"
-
-    with open(hepdata_table) as file:
-        card = yaml.safe_load(file)
-
-    # list of len ndata. Each entry is dict with
-    # keys errors and value
-    card = card['dependent_variables'][VARIANT_MAP[variant]]['values']
-
     columns = {}
-    errors = card[0]['errors']
+    errors = table[0]['errors']
     for err in errors:
         # treat all JES uncertainties as asymmetric
         if err['label'].startswith('sys,jes'):
@@ -1194,7 +1183,7 @@ def HEP_table_to_df_ATLAS_1JET_7TEV_R06(table, version, variant='nominal'):
             label = err['label'].replace(',', '_')
         columns[label] = np.nan
 
-    df_nan = pd.DataFrame(columns, index=range(1, len(card) + 1))
+    df_nan = pd.DataFrame(columns, index=range(1, len(table) + 1))
     return df_nan
 
 
@@ -1214,16 +1203,23 @@ def fill_df_ATLAS_1JET_7TEV_R06(table, version, variant='nominal'):
     """
     if variant == 'nominal':
         hepdata_table = f"rawdata/HEPData-ins1325553-v{version}_table{table}.yaml"
+    elif variant == 'stronger':
+        hepdata_table = f"rawdata/HEPData-ins1325553-v{version}_table{table}_stronger.yaml"
+    elif variant == 'weaker':
+        hepdata_table = f"rawdata/HEPData-ins1325553-v{version}_table{table}_weaker.yaml"
+    else:
+        raise ValueError(f"Unknown variant: {variant}")
 
     with open(hepdata_table) as file:
         card = yaml.safe_load(file)
 
     # list of len ndata. Each entry is dict with
     # keys errors and value
-    card = card['dependent_variables'][VARIANT_MAP[variant]]['values']
-    df = HEP_table_to_df_ATLAS_1JET_7TEV_R06(table, version, variant)
+    table = card['dependent_variables'][0]['values']
+    df = HEP_table_to_df_ATLAS_1JET_7TEV_R06(table)
+    cvs = []
 
-    for i, dat in enumerate(card):
+    for i, dat in enumerate(table):
         cv = float(dat['value'])
 
         for j, err in enumerate(dat['errors']):
@@ -1243,4 +1239,6 @@ def fill_df_ATLAS_1JET_7TEV_R06(table, version, variant='nominal'):
             else:
                 label = err['label'].replace(',', '_')
                 df.loc[df.index == i + 1, label] = float(err['symerror'].split('%')[0]) * cv / 100.0
-    return df, cv
+
+        cvs.append(cv)
+    return df, cvs
