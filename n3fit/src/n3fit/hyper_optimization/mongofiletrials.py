@@ -135,14 +135,16 @@ class MongodRunner:
         ]
         try:
             self.db_path.mkdir(exist_ok=True, parents=True)
+            # Since we are starting, overwrite host
+            self.db_host = platform.node()
             mongod = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             cmd_str = " ".join([str(i) for i in args])
-            hostname = platform.node()
-            log.info(f"Started MongoDB database at {hostname}:{self.db_path} with {cmd_str}")
-            self.db_path.with_suffix(".hostname").write_text(hostname)
+            self.db_path.with_suffix(".hostname").write_text(self.db_host)
+            log.info(f"Started MongoDB database at {self.db_host}:{self.db_path} with {cmd_str}")
             self._runner_job = mongod
         except OSError as err:
             msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
+            self.db_path.with_suffix(".hostname").unlink(missing_ok=True)
             raise EnvironmentError(msg) from err
 
     def stop(self):
