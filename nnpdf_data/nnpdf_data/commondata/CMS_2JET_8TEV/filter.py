@@ -25,27 +25,28 @@ def read_kinematics_and_centrals(tables: list) -> tuple:
         with open(f'rawdata/table_{table_num}.yaml', 'r') as file:
             kins = yaml.safe_load(file)
         # get ystar, yboost, sqrts bins:
-        current_yy_bin = dict()
-        for yy_dict in kins['dependent_variables'][0]['qualifiers']:
-            for k, v in yy_dict.items():
+        current_yys_bin = dict()
+        for yys_dict in kins['dependent_variables'][0]['qualifiers']:
+            for k, v in yys_dict.items():
                 if k == 'name':
-                    if v != 'SQRT(S)':
-                        bin_name = v.lower().replace('oost', '')
-                        current_yy_bin[bin_name] = dict()
+                    bin_name = v.lower().replace('(', '').replace(')', '')
+                    current_yys_bin[bin_name] = dict()
                 if k == 'value':
                     if type(v) == str:
                         lower = float(v[:3])
                         upper = float(v[-3:])
                         middle = (lower+upper)/2
-                        current_yy_bin[bin_name] = {'min': lower, 'mid': middle, 'max': upper}
+                        current_yys_bin[bin_name] = {'min': lower, 'mid': middle, 'max': upper}
+                    else:
+                        current_yys_bin[bin_name] = {'min': None, 'mid': v, 'max': None}
         # get the ptavg bins and combine them with yys bins
         for ptavg_dict in kins['independent_variables'][0]['values']:
             lower = ptavg_dict['low']
             upper = ptavg_dict['high']
             middle = (lower + upper)/2
             current_p_bin = {'pTavg': {'min': lower, 'mid': middle, 'max': upper}}
-            copy_yy = copy.deepcopy(current_yy_bin)
-            current_pyys_bin = copy_yy | current_p_bin
+            copy_yys = copy.deepcopy(current_yys_bin)
+            current_pyys_bin = current_p_bin | copy_yys
             bins.append(current_pyys_bin)
         # get the central values
         for vals in kins['dependent_variables'][0]['values']:
@@ -132,7 +133,7 @@ def aggregate_uncertainties(abs_errors, art_unc):
         current_dict = abs_errors[i]
         current_dict.pop('stat')
         art_unc_list = art_unc[i]
-        art_unc_dict = {f'art_unc_{j+1}': art_unc_list[j] for j in range(len(art_unc_list))}
+        art_unc_dict = {f'stat_art_unc_{j+1}': art_unc_list[j] for j in range(len(art_unc_list))}
         total_dict = current_dict | art_unc_dict
         all_uncertainties.append(total_dict)
     return all_uncertainties
@@ -142,7 +143,7 @@ def dump_uncertainties(all_unc):
     singular_art_unc_desc = {'description': 'artificial uncertainty originating correlated statistical uncertainties',
                              'treatment': 'ADD',
                              'type': 'CORR'}
-    all_art_unc_desc = {f'art_unc_{i+1}': singular_art_unc_desc.copy() for i in range(122)}
+    all_art_unc_desc = {f'stat_art_unc_{i+1}': singular_art_unc_desc.copy() for i in range(122)}
     other_unc = {
         'uncor': {'description': 'stems from residual effects of small inefficiencies in the jet identification',
                              'treatment': 'ADD',
