@@ -92,7 +92,7 @@ class MongodRunner:
             MongoDB database name. Defaults to "hyperopt-db".
     """
 
-    def __init__(self, db_path="hyperopt-db", db_host="localhost", db_port=27017):
+    def __init__(self, db_path="hyperopt-db", db_host=None, db_port=27017):
         self.db_path = db_path
         self.db_port = db_port
         self.db_host = db_host
@@ -108,7 +108,10 @@ class MongodRunner:
             return False
 
         # If it exists check the current hostname of the main node (if it exists)
-        if self.db_path.with_suffix(".hostname").exists():
+        if not self.db_path.with_suffix(".hostname").exists():
+            return False
+
+        if self.db_host is None:
             self.db_host = self.db_path.with_suffix(".hostname").read_text()
 
         mc = MongoClient(host=self.db_host, port=self.db_port, serverSelectionTimeoutMS=100)
@@ -135,10 +138,12 @@ class MongodRunner:
         ]
         try:
             self.db_path.mkdir(exist_ok=True, parents=True)
-            # Since we are starting, overwrite host
-            self.db_host = platform.node()
             mongod = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             cmd_str = " ".join([str(i) for i in args])
+            # The job starting the database gets to write the hostname down
+            # unless it has been set explicitly, in that case trust the user and use that
+            if self.db_host is None:
+                self.db_host = platform.node()
             self.db_path.with_suffix(".hostname").write_text(self.db_host)
             log.info(f"Started MongoDB database at {self.db_host}:{self.db_path} with {cmd_str}")
             self._runner_job = mongod

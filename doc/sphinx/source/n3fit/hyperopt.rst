@@ -115,8 +115,6 @@ All loss functions implemented in ``n3fit`` for the optimization of hyperparamet
 of all partitions as if they were equivalent.
 When they are not equivalent the ``weight`` flag should be used (see :ref:`hyperoptrc-label`)
 
-
-
 - Not all datasets should enter a partition: beware of extrapolation.
 
 Beyond the last dataset that has entered the fit we find ourselves in what is usually known as
@@ -465,21 +463,9 @@ The optimal approach for this combination is still under development.
 All the above options are implemented in the :class:`~n3fit.hyper_optimization.rewards.HyperLoss` class
 which is instantiated and monitored within :meth:`~n3fit.model_trainer.ModelTrainer.hyperparametrizable` method.
 
-Restarting hyperoptimization runs
----------------------------------
-
-In addition to the ``tries.json`` files, hyperparameter scans also produce ``tries.pkl`` `pickle <https://docs.python.org/3/library/pickle.html>`_ files,
-which are located in the same directory as the corresponding ``tries.json`` file.
-The generated ``tries.pkl`` file stores the complete history of a previous hyperoptimization run, making it possible to resume the process using the ``hyperopt`` framework.
-To achieve this, you can use the ``--restart`` option within the ``n3fit`` command, e.g.,:
-
-.. code-block:: bash
-
-   n3fit runcard.yml 1 -r 10 --hyperopt 20 --restart
-
-The above command example is effective when the number of saved trials in the ``test_run/nnfit/replica_1/tries.pkl`` is
-less than ``20``. If there are ``20`` or more saved trials, ``n3fit`` will simply terminate, displaying the best results.
-
+Note that a second hyperoptimization run with the same settings will always try to restart the previous one.
+If a complete new hyperoptimization is to be run, it is necessary to either remove the previous one or change
+the runcard name.
 
 Running hyperoptimizations in parallel with MongoDB
 ---------------------------------------------------
@@ -489,28 +475,37 @@ This functionality is provided by the :class:`~n3fit.hyper_optimization.mongofil
 which extends the capabilities of `hyperopt <https://github.com/hyperopt/hyperopt>`_'s `MongoTrials` and enables the
 simultaneous evaluation of multiple trials.
 
-To run a parallelized hyperopt search, use the following command:
+Note that the parallelization capabilities of hyperopt exposes MongoDB so that it can be accessed (in the given port)
+by an external computer.
+The most common situation is a node in a cluster acting as the server while all other jobs connect to it.
+It is also possible to run all jobs in the same node or across the internet with appropiate ``--db-host`` and ``--db-port`` variables.
+
+To run a parallelized hyperopt search, use the following command to run each of the parallel jobs:
 
 .. code-block:: bash
 
-  n3fit hyper-quickcard.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt --num-mongo-workers N
+  n3fit <runcard>.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt
 
-Here, ``N`` represents the number of MongoDB workers you wish to launch in parallel.
+Each of the runs will try to look into the ``<runcard>/nnfit/replica_1/hyperot-db`` folder.
+If it exists, it will try to connect to the database, failing that, it will consider that no database
+is currently on and will start an instance of ``mongodb`` for other jobs to connect before spawning its own job.
+
 Each mongo worker handles one trial in Hyperopt. So, launching more workers allows for the simultaneous calculation of a greater number of trials.
-Note that there is no need to manually launch MongoDB databases or mongo workers prior to using ``n3fit``,
+
+.. note::
+   Counting the number of trials in parallel runs can be tricky.
+   The total number of trials that ``n3fit`` will try to run is whatever is given by the ``N_trials`` variable,
+   and as soon as it is reached, the jobs that have that number will finish.
+   However, the database will not exit as long as there are workers connected to it, so if the first job is set
+   to run for 3 trials, while the second is set to run for 10, the first job will stay idle until the second one
+   does (by itself) the 4 to 10 trials.
+
+There is no need to manually launch MongoDB databases or mongo workers prior to using ``n3fit``,
 as the ``mongod`` and ``hyperopt-mongo-worker`` commands are automatically executed
 by :meth:`~n3fit.hyper_optimization.mongofiletrials.MongodRunner.start` and
 :meth:`~n3fit.hyper_optimization.mongofiletrials.MongoFileTrials.start_mongo_workers` methods, respectivelly.
-By default, the ``host`` and ``port`` arguments are set to ``localhost`` and ``27017``. The database is named ``hyperopt-db-output_name``, where
-``output_name`` is set to the name of the runcard. If the ``n3fit -o OUTPUT`` option is provided, ``output_name`` is set to ``OUTPUT``, with the database being referred to as ``hyperopt-db-OUTPUT``.
-If necessary, it is possible to modify all the above settings using the ``n3fit --db-host`` , ``n3fit --db-port`` and ``n3fit --db-name`` options.
-
-To resume a hyperopt experiment, add the ``--restart`` option to the ``n3fit`` command:
-
-.. code-block:: bash
-
-  n3fit hyper-quickcard.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt --num-mongo-workers N --restart
-
-Note that, unlike in serial execution, parallel hyperoptimization runs do not generate ``tries.pkl`` files.
-Instead, MongoDB databases are saved as ``hyperopt-db-output_name.tar.gz`` files inside ``replica_path`` directory.
-These are conveniently extracted for reuse in restart runs.
+Beware, however, of race conditions when starting the database.
+Make sure the second job is submitted with some delay with respect to the first.
+By default, the ``port`` and ``host`` arguments are set to ``27017`` and the hostname of the first job respectively.
+The database is named ``hyperopt-db`` and store in the ``replica_1`` folder of the current run.
+Note that the database is not uploaded to the server when using ``vp-upload`` unless ``--upload-db`` is explicitly specified.
