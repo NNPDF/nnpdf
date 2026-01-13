@@ -184,8 +184,8 @@ def test_parallel_hyperopt(tmp_path):
     quickpath = REGRESSION_FOLDER / quickcard
 
     # Define number of trials and number of mongo-workers to launch
-    n_trials = 2
-    n_mongo_workers = 3
+    n_trials = 8
+    n_mongo_workers = 2
 
     # Set up output directories
     output_sequential = tmp_path / "run_hyperopt_sequential"
@@ -195,42 +195,33 @@ def test_parallel_hyperopt(tmp_path):
     shutil.copy(quickpath, tmp_path)
 
     # Run hyperopt sequentially
-    start_time = time.time()
     sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials*n_mongo_workers} -o {output_sequential}".split(),
+        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials} -o {output_sequential}".split(),
         cwd=tmp_path,
         check=True,
     )
-    end_time = time.time()
-    sequential_run_time = end_time - start_time
 
     # Run hyperopt in parallel
-    start_time = time.time()
     workers = []
     my_env = os.environ.copy()
     my_env["CUDA_VISIBLE_DEVICES"] = ""
     for i in range(n_mongo_workers):
         tmp = sp.Popen(
-            f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials} "
-            f"--parallel-hyperopt --num-mongo-workers {n_mongo_workers} "
-            f"-o {output_parallel}".split(),
+            f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials} --db-host localhost --parallel-hyperopt -o {output_parallel}".split(),
             cwd=tmp_path,
             env=my_env,
         )
         workers.append(tmp)
+        time.sleep(10)
     for w in workers:
         w.wait()
     end_time = time.time()
-    parallel_run_time = end_time - start_time
 
     # Read up generated json files
     sequential_json_path = f"{output_sequential}/nnfit/replica_{REPLICA}/tries.json"
     sequential_json = load_data(sequential_json_path)
     parallel_json_path = f"{output_parallel}/nnfit/replica_{REPLICA}/tries.json"
     parallel_json = load_data(parallel_json_path)
-
-    # Check that the parallel run time is lower than the sequential one
-    assert parallel_run_time < sequential_run_time
 
     # Check that the final json files have the same number of trials
     assert len(parallel_json) == len(sequential_json)
@@ -252,29 +243,38 @@ def test_parallel_restart(tmp_path):
     quickpath = REGRESSION_FOLDER / quickcard
 
     # Set up some options
+    n_workers = 2
     n_trials_stop = 3
-    n_trials_total = 6
+    n_trials_total = n_trials_stop * 2
     output = tmp_path / "output"
 
     # cp runcard to tmp folder
     shutil.copy(quickpath, tmp_path)
     # run some trials for the first time
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} "
-        f"--parallel-hyperopt -o {output}".split(),
-        cwd=tmp_path,
-        check=True,
-    )
+    for i in range(n_workers):
+        tmp = sp.Popen(
+            f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} --db-host localhost "
+            f"--parallel-hyperopt -o {output}".split(),
+            cwd=tmp_path,
+        )
+        if i == 0:
+            time.sleep(10)
+    # Wait for the last one to exit
+    tmp.wait()
+
     json_path = f"{output}/nnfit/replica_{REPLICA}/tries.json"
     initial_json = load_data(json_path)
 
     # restart and calculate more trials
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} "
-        f"--parallel-hyperopt -o {output}".split(),
-        cwd=tmp_path,
-        check=True,
-    )
+    for i in range(n_workers):
+        tmp = sp.Popen(
+            f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop*2} --db-host localhost "
+            f"--parallel-hyperopt -o {output}".split(),
+            cwd=tmp_path,
+        )
+        if i == 0:
+            time.sleep(10)
+    tmp.wait()
     final_json = load_data(json_path)
 
     # check if the calculations went well

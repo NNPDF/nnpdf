@@ -268,15 +268,11 @@ class N3FitApp(App):
             help="Enable hyperopt run in parallel with MongoDB",
             action="store_true",
         )
-        parser.add_argument("--db-host", help="MongoDB host", default="localhost")
+        parser.add_argument(
+            "--db-host", help="MongoDB host, if not given the hostname of the computer will be used"
+        )
         parser.add_argument("--db-port", help="MongoDB port", default=27017, type=int)
         parser.add_argument("--db-name", help="MongoDB dataset name", default="hyperopt-db")
-        parser.add_argument(
-            "--num-mongo-workers",
-            help="Number of mongo workers to be launched simultaneously",
-            type=check_positive,
-            default=1,
-        )
         parser.add_argument("replica", help="MC replica number", type=check_positive)
         parser.add_argument(
             "-r",
