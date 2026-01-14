@@ -106,7 +106,6 @@ def construct_eko_cards(
 
 def construct_eko_photon_cards(
     nnpdf_theory,
-    q_fin,
     x_grid,
     q_gamma,
     op_card_dict: Optional[Dict[str, Any]] = None,
@@ -114,8 +113,8 @@ def construct_eko_photon_cards(
 ):
     """
     Return the theory and operator cards used to construct the eko_photon.
-    nnpdf_theory is a NNPDF theory card for which we are computing the operator card and eko
-    q_fin is the final point of the q grid while q_points is the number of points of the grid.
+    nnpdf_theory is a NNPDF theory card for which we are computing the operator card and eko.
+    The q grid ends at Q0.
     x_grid is the x grid to be used.
     op_card_dict and theory_card_dict are optional updates that can be provided respectively to the
     operator card and to the theory card.
