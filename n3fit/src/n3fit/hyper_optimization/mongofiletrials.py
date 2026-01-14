@@ -103,20 +103,21 @@ class MongodRunner:
         from pymongo import MongoClient
         from pymongo.errors import ServerSelectionTimeoutError
 
-        if not self.db_path.exists():
-            # If the db doesn't exist no need to look further.
+        # If the db doesn't exist, and we didn't get a target to find it, no need to look further
+        if not self.db_path.exists() and self.db_host is None:
             return False
 
-        # If it exists check the current hostname of the main node (if it exists)
-        if not self.db_path.with_suffix(".hostname").exists():
-            return False
-
+        # If the db exists, check whether we know how to connect:
         if self.db_host is None:
-            self.db_host = self.db_path.with_suffix(".hostname").read_text()
+            if (hostfile := self.db_path.with_suffix(".hostname")).exists():
+                possible_host = hostfile.read_text()
+        else:
+            possible_host = self.db_host
 
-        mc = MongoClient(host=self.db_host, port=self.db_port, serverSelectionTimeoutMS=100)
+        mc = MongoClient(host=possible_host, port=self.db_port, serverSelectionTimeoutMS=100)
         try:
             mc.admin.command("ismaster")
+            self.db_host = possible_host
             log.info(f"Database up at {self.db_host}:{self.db_port}")
         except ServerSelectionTimeoutError:
             mc.close()
