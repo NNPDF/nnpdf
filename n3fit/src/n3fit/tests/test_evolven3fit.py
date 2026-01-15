@@ -157,7 +157,7 @@ def test_eko_utils(tmp_path, nnpdf_theory_card):
 
     # Testing if you can produce an eko with the CLI, then kill the job after 60 seconds
     with pytest.raises(sp.TimeoutExpired):
-        sp.run(f"evolven3fit produce_eko 41000000 test.tar".split(), cwd=tmp_path, timeout=60)
+        sp.run(f"evolven3fit produce_eko 40000000 test.tar".split(), cwd=tmp_path, timeout=60)
 
 
 # Keep old theory 399 and 398 EKOs here to avoid having to download many GB of data
