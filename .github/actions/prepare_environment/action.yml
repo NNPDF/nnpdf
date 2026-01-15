@@ -14,6 +14,10 @@ name: Prepare a conda environment for NNPDF installation
 # Remember that these actions are only available after checking out the repository,
 # which should always be the first step!
 # - uses: actions/checkout@v4
+#
+# This action also removes part of the cache of the runner to avoid using too much storage
+# (see at the bottom)
+# It would probably be clever to start using a different runner though TODO
 
 inputs:
   python-version:
@@ -38,4 +42,5 @@ runs:
       run: |
         sudo rm -rf /opt/hostedtoolcache/Python/3.9*
         sudo rm -rf /opt/hostedtoolcache/CodeQL
+        sudo rm -rf /usr/local/lib/android/sdk
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
