@@ -1,0 +1,1207 @@
+dependent_variables:
+- header: {name: D2(SIG)/DPT(JET)/DYRAP, units: PB*GEV**-1}
+  qualifiers:
+  - {name: ABS(YRAP), value: 2.5-3.0}
+  - {name: Correlation assumptions, value: Weaker}
+  - {name: R, value: '0.6'}
+  - {name: RE, value: P P --> JET X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.5%}
+    - asymerror: {minus: -0.9%, plus: 1.1%}
+      label: sys,jes0
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys,jes1
+    - asymerror: {minus: -2.8%, plus: 3.2%}
+      label: sys,jes2
+    - asymerror: {minus: -0.9%, plus: 1.1%}
+      label: sys,jes3
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys,jes5
+    - asymerror: {minus: -1.9%, plus: 2.2%}
+      label: sys,jes6
+    - {label: 'sys,jes7', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes8
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys,jes9
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes10
+    - {label: 'sys,jes11', symerror: 0.5%}
+    - {label: 'sys,jes12', symerror: 0.4%}
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys,jes13
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys,jes14
+    - {label: 'sys,jes15', symerror: 0.0%}
+    - {label: 'sys,jes16', symerror: 0.0%}
+    - {label: 'sys,jes17', symerror: 0.0%}
+    - {label: 'sys,jes18', symerror: 0.0%}
+    - {label: 'sys,jes19', symerror: 0.0%}
+    - {label: 'sys,jes20', symerror: 0.0%}
+    - {label: 'sys,jes21', symerror: 0.0%}
+    - {label: 'sys,jes22', symerror: 0.0%}
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes25
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes26
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes27
+    - {label: 'sys,jes28', symerror: 0.3%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys,jes29
+    - asymerror: {minus: -0.5%, plus: 0.6%}
+      label: sys,jes30
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys,jes31
+    - {label: 'sys,jes32', symerror: 0.0%}
+    - {label: 'sys,jes33', symerror: 0.0%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes36
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes37
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes38
+    - {label: 'sys,jes39', symerror: 0.0%}
+    - {label: 'sys,jes40', symerror: 0.0%}
+    - {label: 'sys,jes41', symerror: 0.0%}
+    - {label: 'sys,jes42', symerror: 0.0%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys,jes56
+    - asymerror: {minus: -16.0%, plus: 20.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 6.5%, plus: -5.9%}
+      label: sys,jes59
+    - asymerror: {minus: 0.7%, plus: -0.4%}
+      label: sys,jes60
+    - asymerror: {minus: 2.5%, plus: -1.9%}
+      label: sys,jes61
+    - {label: 'sys,jes62', symerror: 1.4%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys,jes63
+    - asymerror: {minus: -3.0%, plus: 3.5%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 13.0%}
+    - {label: 'sys,jar', symerror: 2.6%}
+    - {label: 'sys,unfold', symerror: 0.1%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 1360.0
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys,jes0
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys,jes1
+    - asymerror: {minus: -3.2%, plus: 3.0%}
+      label: sys,jes2
+    - {label: 'sys,jes3', symerror: 0.9%}
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes5
+    - asymerror: {minus: -1.9%, plus: 1.7%}
+      label: sys,jes6
+    - asymerror: {minus: 0.0%, plus: -0.1%}
+      label: sys,jes7
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes8
+    - {label: 'sys,jes9', symerror: 0.7%}
+    - {label: 'sys,jes10', symerror: 0.1%}
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys,jes11
+    - {label: 'sys,jes12', symerror: 0.4%}
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys,jes13
+    - {label: 'sys,jes14', symerror: 0.7%}
+    - {label: 'sys,jes15', symerror: 0.0%}
+    - {label: 'sys,jes16', symerror: 0.0%}
+    - {label: 'sys,jes17', symerror: 0.0%}
+    - {label: 'sys,jes18', symerror: 0.0%}
+    - {label: 'sys,jes19', symerror: 0.0%}
+    - {label: 'sys,jes20', symerror: 0.0%}
+    - {label: 'sys,jes21', symerror: 0.0%}
+    - {label: 'sys,jes22', symerror: 0.0%}
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes25
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes26
+    - {label: 'sys,jes27', symerror: 0.1%}
+    - {label: 'sys,jes28', symerror: 0.2%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys,jes29
+    - {label: 'sys,jes30', symerror: 0.5%}
+    - {label: 'sys,jes31', symerror: 0.5%}
+    - {label: 'sys,jes32', symerror: 0.1%}
+    - {label: 'sys,jes33', symerror: 0.0%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes36
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes37
+    - {label: 'sys,jes38', symerror: 0.1%}
+    - {label: 'sys,jes39', symerror: 0.0%}
+    - {label: 'sys,jes40', symerror: 0.0%}
+    - {label: 'sys,jes41', symerror: 0.0%}
+    - {label: 'sys,jes42', symerror: 0.0%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.2%, plus: 1.1%}
+      label: sys,jes56
+    - asymerror: {minus: -17.0%, plus: 20.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 6.3%, plus: -6.1%}
+      label: sys,jes59
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys,jes60
+    - asymerror: {minus: 2.1%, plus: -2.1%}
+      label: sys,jes61
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys,jes62
+    - {label: 'sys,jes63', symerror: 0.4%}
+    - asymerror: {minus: -2.9%, plus: 2.8%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 10.0%}
+    - {label: 'sys,jar', symerror: 2.3%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 520.0
+  - errors:
+    - {label: stat, symerror: 2.2%}
+    - {label: 'sys,jes0', symerror: 1.0%}
+    - asymerror: {minus: -1.5%, plus: 1.4%}
+      label: sys,jes1
+    - asymerror: {minus: -3.6%, plus: 3.2%}
+      label: sys,jes2
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys,jes3
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes4
+    - {label: 'sys,jes5', symerror: 0.5%}
+    - asymerror: {minus: -1.9%, plus: 1.6%}
+      label: sys,jes6
+    - {label: 'sys,jes7', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes8
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys,jes9
+    - {label: 'sys,jes10', symerror: 0.1%}
+    - {label: 'sys,jes11', symerror: 0.6%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes12
+    - {label: 'sys,jes13', symerror: 1.2%}
+    - asymerror: {minus: -0.8%, plus: 0.7%}
+      label: sys,jes14
+    - {label: 'sys,jes15', symerror: 0.1%}
+    - {label: 'sys,jes16', symerror: 0.0%}
+    - {label: 'sys,jes17', symerror: 0.0%}
+    - {label: 'sys,jes18', symerror: 0.0%}
+    - {label: 'sys,jes19', symerror: 0.1%}
+    - {label: 'sys,jes20', symerror: 0.0%}
+    - {label: 'sys,jes21', symerror: 0.1%}
+    - {label: 'sys,jes22', symerror: 0.1%}
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - {label: 'sys,jes25', symerror: 0.0%}
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.1%}
+    - {label: 'sys,jes28', symerror: 0.1%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys,jes29
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes30
+    - {label: 'sys,jes31', symerror: 0.6%}
+    - asymerror: {minus: -0.1%, plus: 0.4%}
+      label: sys,jes32
+    - {label: 'sys,jes33', symerror: 0.0%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes36
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes37
+    - {label: 'sys,jes38', symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes39
+    - {label: 'sys,jes40', symerror: 0.0%}
+    - {label: 'sys,jes41', symerror: 0.0%}
+    - {label: 'sys,jes42', symerror: 0.0%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.3%, plus: 1.1%}
+      label: sys,jes56
+    - asymerror: {minus: -18.0%, plus: 21.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 6.2%, plus: -6.3%}
+      label: sys,jes59
+    - asymerror: {minus: 0.4%, plus: -0.5%}
+      label: sys,jes60
+    - asymerror: {minus: 2.1%, plus: -2.4%}
+      label: sys,jes61
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys,jes62
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes63
+    - asymerror: {minus: -2.8%, plus: 2.5%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 9.0%}
+    - {label: 'sys,jar', symerror: 2.1%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 204.0
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - asymerror: {minus: -1.1%, plus: 1.0%}
+      label: sys,jes0
+    - asymerror: {minus: -2.1%, plus: 1.7%}
+      label: sys,jes1
+    - asymerror: {minus: -4.1%, plus: 3.6%}
+      label: sys,jes2
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys,jes3
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes4
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes5
+    - asymerror: {minus: -1.8%, plus: 1.6%}
+      label: sys,jes6
+    - {label: 'sys,jes7', symerror: 0.1%}
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - asymerror: {minus: -0.8%, plus: 0.6%}
+      label: sys,jes9
+    - {label: 'sys,jes10', symerror: 0.1%}
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys,jes11
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys,jes12
+    - asymerror: {minus: -1.4%, plus: 1.2%}
+      label: sys,jes13
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys,jes14
+    - {label: 'sys,jes15', symerror: 0.1%}
+    - {label: 'sys,jes16', symerror: 0.0%}
+    - {label: 'sys,jes17', symerror: 0.0%}
+    - {label: 'sys,jes18', symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys,jes19
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes20
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys,jes21
+    - {label: 'sys,jes22', symerror: 0.1%}
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - {label: 'sys,jes25', symerror: 0.0%}
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes27
+    - {label: 'sys,jes28', symerror: 0.1%}
+    - {label: 'sys,jes29', symerror: 0.2%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys,jes30
+    - asymerror: {minus: -0.7%, plus: 0.5%}
+      label: sys,jes31
+    - asymerror: {minus: -0.2%, plus: 0.6%}
+      label: sys,jes32
+    - {label: 'sys,jes33', symerror: 0.0%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes36
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes37
+    - {label: 'sys,jes38', symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes39
+    - {label: 'sys,jes40', symerror: 0.1%}
+    - {label: 'sys,jes41', symerror: 0.0%}
+    - {label: 'sys,jes42', symerror: 0.0%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.5%, plus: 1.2%}
+      label: sys,jes56
+    - asymerror: {minus: -19.0%, plus: 22.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 5.7%, plus: -6.1%}
+      label: sys,jes59
+    - asymerror: {minus: 0.5%, plus: -0.6%}
+      label: sys,jes60
+    - asymerror: {minus: 2.1%, plus: -2.6%}
+      label: sys,jes61
+    - {label: 'sys,jes62', symerror: 1.0%}
+    - {label: 'sys,jes63', symerror: 0.5%}
+    - asymerror: {minus: -2.9%, plus: 2.4%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 8.4%}
+    - {label: 'sys,jar', symerror: 1.9%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 82.0
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - {label: 'sys,jes0', symerror: 1.0%}
+    - asymerror: {minus: -2.5%, plus: 2.1%}
+      label: sys,jes1
+    - asymerror: {minus: -4.5%, plus: 4.0%}
+      label: sys,jes2
+    - asymerror: {minus: -0.8%, plus: 0.7%}
+      label: sys,jes3
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes4
+    - {label: 'sys,jes5', symerror: 0.4%}
+    - asymerror: {minus: -1.7%, plus: 1.5%}
+      label: sys,jes6
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys,jes7
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys,jes9
+    - {label: 'sys,jes10', symerror: 0.1%}
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys,jes11
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes12
+    - asymerror: {minus: -1.4%, plus: 1.2%}
+      label: sys,jes13
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys,jes14
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys,jes15
+    - {label: 'sys,jes16', symerror: 0.1%}
+    - {label: 'sys,jes17', symerror: 0.1%}
+    - {label: 'sys,jes18', symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys,jes19
+    - {label: 'sys,jes20', symerror: 0.1%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys,jes21
+    - {label: 'sys,jes22', symerror: 0.2%}
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - {label: 'sys,jes25', symerror: 0.0%}
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.0%}
+    - {label: 'sys,jes28', symerror: 0.1%}
+    - {label: 'sys,jes29', symerror: 0.1%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys,jes30
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes31
+    - asymerror: {minus: -0.4%, plus: 0.6%}
+      label: sys,jes32
+    - {label: 'sys,jes33', symerror: 0.1%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - {label: 'sys,jes36', symerror: 0.0%}
+    - {label: 'sys,jes37', symerror: 0.0%}
+    - {label: 'sys,jes38', symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes39
+    - {label: 'sys,jes40', symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes41
+    - {label: 'sys,jes42', symerror: 0.0%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.5%, plus: 1.4%}
+      label: sys,jes56
+    - asymerror: {minus: -21.0%, plus: 24.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 5.0%, plus: -5.5%}
+      label: sys,jes59
+    - asymerror: {minus: 0.5%, plus: -0.6%}
+      label: sys,jes60
+    - asymerror: {minus: 2.1%, plus: -2.4%}
+      label: sys,jes61
+    - asymerror: {minus: -1.1%, plus: 1.0%}
+      label: sys,jes62
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes63
+    - asymerror: {minus: -2.8%, plus: 2.4%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 8.4%}
+    - {label: 'sys,jar', symerror: 2.0%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 31.0
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - {label: 'sys,jes0', symerror: 0.9%}
+    - asymerror: {minus: -2.8%, plus: 2.6%}
+      label: sys,jes1
+    - asymerror: {minus: -4.8%, plus: 4.6%}
+      label: sys,jes2
+    - {label: 'sys,jes3', symerror: 0.6%}
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - {label: 'sys,jes5', symerror: 0.3%}
+    - {label: 'sys,jes6', symerror: 1.4%}
+    - {label: 'sys,jes7', symerror: 0.4%}
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - {label: 'sys,jes9', symerror: 0.6%}
+    - {label: 'sys,jes10', symerror: 0.1%}
+    - {label: 'sys,jes11', symerror: 0.4%}
+    - {label: 'sys,jes12', symerror: 0.4%}
+    - asymerror: {minus: -1.4%, plus: 1.3%}
+      label: sys,jes13
+    - {label: 'sys,jes14', symerror: 0.9%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes15
+    - {label: 'sys,jes16', symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes17
+    - {label: 'sys,jes18', symerror: 0.1%}
+    - {label: 'sys,jes19', symerror: 0.3%}
+    - {label: 'sys,jes20', symerror: 0.2%}
+    - {label: 'sys,jes21', symerror: 0.3%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys,jes22
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes25
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.0%}
+    - {label: 'sys,jes28', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes29
+    - {label: 'sys,jes30', symerror: 0.2%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys,jes31
+    - asymerror: {minus: -0.5%, plus: 0.6%}
+      label: sys,jes32
+    - {label: 'sys,jes33', symerror: 0.2%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - {label: 'sys,jes36', symerror: 0.0%}
+    - {label: 'sys,jes37', symerror: 0.0%}
+    - {label: 'sys,jes38', symerror: 0.1%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes39
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes40
+    - {label: 'sys,jes41', symerror: 0.1%}
+    - {label: 'sys,jes42', symerror: 0.0%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - {label: 'sys,jes56', symerror: 1.5%}
+    - asymerror: {minus: -22.0%, plus: 26.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 4.9%, plus: -5.0%}
+      label: sys,jes59
+    - asymerror: {minus: 0.5%, plus: -0.4%}
+      label: sys,jes60
+    - asymerror: {minus: 2.1%, plus: -2.2%}
+      label: sys,jes61
+    - {label: 'sys,jes62', symerror: 1.1%}
+    - {label: 'sys,jes63', symerror: 0.5%}
+    - asymerror: {minus: -2.6%, plus: 2.5%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 8.9%}
+    - {label: 'sys,jar', symerror: 2.3%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 11.4
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys,jes0
+    - asymerror: {minus: -3.2%, plus: 3.3%}
+      label: sys,jes1
+    - asymerror: {minus: -5.3%, plus: 5.5%}
+      label: sys,jes2
+    - {label: 'sys,jes3', symerror: 0.6%}
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys,jes5
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys,jes6
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes7
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - {label: 'sys,jes9', symerror: 0.6%}
+    - {label: 'sys,jes10', symerror: 0.1%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys,jes11
+    - {label: 'sys,jes12', symerror: 0.4%}
+    - asymerror: {minus: -1.4%, plus: 1.6%}
+      label: sys,jes13
+    - asymerror: {minus: -1.0%, plus: 1.2%}
+      label: sys,jes14
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes15
+    - {label: 'sys,jes16', symerror: 0.1%}
+    - {label: 'sys,jes17', symerror: 0.2%}
+    - {label: 'sys,jes18', symerror: 0.1%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys,jes19
+    - {label: 'sys,jes20', symerror: 0.3%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys,jes21
+    - {label: 'sys,jes22', symerror: 0.3%}
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes25
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.0%}
+    - {label: 'sys,jes28', symerror: 0.0%}
+    - {label: 'sys,jes29', symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes30
+    - {label: 'sys,jes31', symerror: 0.3%}
+    - {label: 'sys,jes32', symerror: 0.5%}
+    - {label: 'sys,jes33', symerror: 0.3%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - {label: 'sys,jes36', symerror: 0.0%}
+    - {label: 'sys,jes37', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys,jes38
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes39
+    - {label: 'sys,jes40', symerror: 0.2%}
+    - {label: 'sys,jes41', symerror: 0.2%}
+    - {label: 'sys,jes42', symerror: 0.1%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys,jes56
+    - asymerror: {minus: -23.0%, plus: 29.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 5.6%, plus: -5.5%}
+      label: sys,jes59
+    - asymerror: {minus: 0.6%, plus: -0.4%}
+      label: sys,jes60
+    - asymerror: {minus: 2.3%, plus: -2.2%}
+      label: sys,jes61
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys,jes62
+    - {label: 'sys,jes63', symerror: 0.5%}
+    - asymerror: {minus: -2.6%, plus: 2.8%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 9.7%}
+    - {label: 'sys,jar', symerror: 2.7%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 4.3
+  - errors:
+    - {label: stat, symerror: 3.9%}
+    - asymerror: {minus: -0.6%, plus: 0.8%}
+      label: sys,jes0
+    - asymerror: {minus: -3.6%, plus: 3.9%}
+      label: sys,jes1
+    - asymerror: {minus: -5.8%, plus: 6.2%}
+      label: sys,jes2
+    - {label: 'sys,jes3', symerror: 0.5%}
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys,jes5
+    - asymerror: {minus: -1.0%, plus: 1.2%}
+      label: sys,jes6
+    - {label: 'sys,jes7', symerror: 0.5%}
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - {label: 'sys,jes9', symerror: 0.6%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes10
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys,jes11
+    - {label: 'sys,jes12', symerror: 0.4%}
+    - asymerror: {minus: -1.4%, plus: 1.7%}
+      label: sys,jes13
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys,jes14
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes15
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes16
+    - {label: 'sys,jes17', symerror: 0.3%}
+    - {label: 'sys,jes18', symerror: 0.2%}
+    - {label: 'sys,jes19', symerror: 0.4%}
+    - {label: 'sys,jes20', symerror: 0.4%}
+    - asymerror: {minus: -0.5%, plus: 0.6%}
+      label: sys,jes21
+    - {label: 'sys,jes22', symerror: 0.4%}
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - {label: 'sys,jes25', symerror: 0.1%}
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.0%}
+    - {label: 'sys,jes28', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes29
+    - {label: 'sys,jes30', symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys,jes31
+    - {label: 'sys,jes32', symerror: 0.4%}
+    - {label: 'sys,jes33', symerror: 0.3%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - {label: 'sys,jes36', symerror: 0.0%}
+    - {label: 'sys,jes37', symerror: 0.0%}
+    - {label: 'sys,jes38', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes39
+    - {label: 'sys,jes40', symerror: 0.2%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys,jes41
+    - {label: 'sys,jes42', symerror: 0.1%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.8%, plus: 2.1%}
+      label: sys,jes56
+    - asymerror: {minus: -25.0%, plus: 32.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 7.1%, plus: -6.9%}
+      label: sys,jes59
+    - asymerror: {minus: 0.6%, plus: -0.4%}
+      label: sys,jes60
+    - asymerror: {minus: 2.4%, plus: -2.2%}
+      label: sys,jes61
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys,jes62
+    - {label: 'sys,jes63', symerror: 0.5%}
+    - asymerror: {minus: -2.6%, plus: 2.8%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 10.0%}
+    - {label: 'sys,jar', symerror: 2.9%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 1.5
+  - errors:
+    - {label: stat, symerror: 6.2%}
+    - asymerror: {minus: -0.5%, plus: 0.6%}
+      label: sys,jes0
+    - asymerror: {minus: -3.7%, plus: 4.2%}
+      label: sys,jes1
+    - asymerror: {minus: -6.1%, plus: 6.7%}
+      label: sys,jes2
+    - {label: 'sys,jes3', symerror: 0.4%}
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes5
+    - asymerror: {minus: -0.8%, plus: 1.0%}
+      label: sys,jes6
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys,jes7
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - {label: 'sys,jes9', symerror: 0.5%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes10
+    - {label: 'sys,jes11', symerror: 0.2%}
+    - {label: 'sys,jes12', symerror: 0.4%}
+    - asymerror: {minus: -1.3%, plus: 1.6%}
+      label: sys,jes13
+    - asymerror: {minus: -1.2%, plus: 1.4%}
+      label: sys,jes14
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes15
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes16
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys,jes17
+    - {label: 'sys,jes18', symerror: 0.3%}
+    - {label: 'sys,jes19', symerror: 0.4%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes20
+    - asymerror: {minus: -0.6%, plus: 0.7%}
+      label: sys,jes21
+    - {label: 'sys,jes22', symerror: 0.4%}
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - {label: 'sys,jes25', symerror: 0.1%}
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.0%}
+    - {label: 'sys,jes28', symerror: 0.0%}
+    - {label: 'sys,jes29', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes30
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes31
+    - {label: 'sys,jes32', symerror: 0.3%}
+    - {label: 'sys,jes33', symerror: 0.3%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - {label: 'sys,jes36', symerror: 0.0%}
+    - {label: 'sys,jes37', symerror: 0.0%}
+    - {label: 'sys,jes38', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes39
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes40
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys,jes41
+    - {label: 'sys,jes42', symerror: 0.2%}
+    - {label: 'sys,jes43', symerror: 0.0%}
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.4%, plus: 2.2%}
+      label: sys,jes56
+    - asymerror: {minus: -26.0%, plus: 33.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 9.3%, plus: -8.3%}
+      label: sys,jes59
+    - asymerror: {minus: 0.5%, plus: -0.4%}
+      label: sys,jes60
+    - asymerror: {minus: 2.4%, plus: -2.2%}
+      label: sys,jes61
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys,jes62
+    - {label: 'sys,jes63', symerror: 0.4%}
+    - asymerror: {minus: -2.5%, plus: 2.6%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 12.0%}
+    - {label: 'sys,jar', symerror: 2.9%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 0.486
+  - errors:
+    - {label: stat, symerror: 9.4%}
+    - {label: 'sys,jes0', symerror: 0.4%}
+    - asymerror: {minus: -4.0%, plus: 4.7%}
+      label: sys,jes1
+    - asymerror: {minus: -6.6%, plus: 7.4%}
+      label: sys,jes2
+    - {label: 'sys,jes3', symerror: 0.3%}
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes5
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys,jes6
+    - asymerror: {minus: -0.3%, plus: 0.5%}
+      label: sys,jes7
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys,jes9
+    - asymerror: {minus: 0.0%, plus: 0.2%}
+      label: sys,jes10
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes11
+    - {label: 'sys,jes12', symerror: 0.4%}
+    - asymerror: {minus: -1.4%, plus: 1.6%}
+      label: sys,jes13
+    - asymerror: {minus: -1.3%, plus: 1.5%}
+      label: sys,jes14
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes15
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes16
+    - asymerror: {minus: -0.3%, plus: 0.5%}
+      label: sys,jes17
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys,jes18
+    - asymerror: {minus: -0.3%, plus: 0.5%}
+      label: sys,jes19
+    - {label: 'sys,jes20', symerror: 0.6%}
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys,jes21
+    - asymerror: {minus: -0.3%, plus: 0.5%}
+      label: sys,jes22
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes25
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.0%}
+    - {label: 'sys,jes28', symerror: 0.0%}
+    - {label: 'sys,jes29', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes30
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes31
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes32
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys,jes33
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - {label: 'sys,jes36', symerror: 0.0%}
+    - {label: 'sys,jes37', symerror: 0.0%}
+    - {label: 'sys,jes38', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes39
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes40
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys,jes41
+    - {label: 'sys,jes42', symerror: 0.2%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes43
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -1.2%, plus: 2.2%}
+      label: sys,jes56
+    - asymerror: {minus: -26.0%, plus: 35.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 11.0%, plus: -8.7%}
+      label: sys,jes59
+    - asymerror: {minus: 0.4%, plus: -0.3%}
+      label: sys,jes60
+    - asymerror: {minus: 2.4%, plus: -2.4%}
+      label: sys,jes61
+    - asymerror: {minus: -1.4%, plus: 1.6%}
+      label: sys,jes62
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes63
+    - asymerror: {minus: -2.4%, plus: 2.6%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 13.0%}
+    - {label: 'sys,jar', symerror: 3.0%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 0.177
+  - errors:
+    - {label: stat, symerror: 14.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys,jes0
+    - asymerror: {minus: -5.1%, plus: 6.0%}
+      label: sys,jes1
+    - asymerror: {minus: -7.9%, plus: 9.0%}
+      label: sys,jes2
+    - {label: 'sys,jes3', symerror: 0.3%}
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.2%}
+      label: sys,jes5
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys,jes6
+    - asymerror: {minus: -0.2%, plus: 0.6%}
+      label: sys,jes7
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - {label: 'sys,jes9', symerror: 0.7%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes10
+    - asymerror: {minus: 0.0%, plus: 0.2%}
+      label: sys,jes11
+    - asymerror: {minus: -0.6%, plus: 0.4%}
+      label: sys,jes12
+    - asymerror: {minus: -1.8%, plus: 2.0%}
+      label: sys,jes13
+    - asymerror: {minus: -1.8%, plus: 1.9%}
+      label: sys,jes14
+    - {label: 'sys,jes15', symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes16
+    - asymerror: {minus: -0.2%, plus: 0.8%}
+      label: sys,jes17
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys,jes18
+    - asymerror: {minus: -0.2%, plus: 0.7%}
+      label: sys,jes19
+    - asymerror: {minus: -0.8%, plus: 1.0%}
+      label: sys,jes20
+    - asymerror: {minus: -1.0%, plus: 1.3%}
+      label: sys,jes21
+    - asymerror: {minus: -0.3%, plus: 0.7%}
+      label: sys,jes22
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes25
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.0%}
+    - {label: 'sys,jes28', symerror: 0.0%}
+    - {label: 'sys,jes29', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes30
+    - asymerror: {minus: 0.0%, plus: 0.2%}
+      label: sys,jes31
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes32
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys,jes33
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - {label: 'sys,jes36', symerror: 0.0%}
+    - {label: 'sys,jes37', symerror: 0.0%}
+    - {label: 'sys,jes38', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes39
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes40
+    - {label: 'sys,jes41', symerror: 0.3%}
+    - asymerror: {minus: -0.2%, plus: 0.4%}
+      label: sys,jes42
+    - asymerror: {minus: 0.0%, plus: 0.4%}
+      label: sys,jes43
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - {label: 'sys,jes49', symerror: 0.0%}
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -2.4%, plus: 2.1%}
+      label: sys,jes56
+    - asymerror: {minus: -27.0%, plus: 39.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: 9.9%, plus: -7.0%}
+      label: sys,jes59
+    - asymerror: {minus: 0.5%, plus: -0.3%}
+      label: sys,jes60
+    - asymerror: {minus: 2.5%, plus: -2.9%}
+      label: sys,jes61
+    - asymerror: {minus: -1.2%, plus: 1.5%}
+      label: sys,jes62
+    - {label: 'sys,jes63', symerror: 0.6%}
+    - asymerror: {minus: -2.5%, plus: 2.9%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 16.0%}
+    - {label: 'sys,jar', symerror: 3.6%}
+    - {label: 'sys,unfold', symerror: 0.0%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 0.0289
+  - errors:
+    - {label: stat, symerror: 12.0%}
+    - {label: 'sys,jes0', symerror: 0.3%}
+    - asymerror: {minus: -9.6%, plus: 10.0%}
+      label: sys,jes1
+    - asymerror: {minus: -13.0%, plus: 15.0%}
+      label: sys,jes2
+    - {label: 'sys,jes3', symerror: 0.3%}
+    - {label: 'sys,jes4', symerror: 0.0%}
+    - {label: 'sys,jes5', symerror: 0.0%}
+    - {label: 'sys,jes6', symerror: 0.3%}
+    - asymerror: {minus: -0.1%, plus: 0.6%}
+      label: sys,jes7
+    - {label: 'sys,jes8', symerror: 0.0%}
+    - {label: 'sys,jes9', symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes10
+    - {label: 'sys,jes11', symerror: 0.0%}
+    - {label: 'sys,jes12', symerror: 0.3%}
+    - asymerror: {minus: -2.5%, plus: 3.2%}
+      label: sys,jes13
+    - asymerror: {minus: -3.6%, plus: 3.8%}
+      label: sys,jes14
+    - {label: 'sys,jes15', symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.3%}
+      label: sys,jes16
+    - asymerror: {minus: -0.2%, plus: 1.0%}
+      label: sys,jes17
+    - asymerror: {minus: -0.5%, plus: 1.7%}
+      label: sys,jes18
+    - asymerror: {minus: -0.2%, plus: 0.9%}
+      label: sys,jes19
+    - asymerror: {minus: -1.1%, plus: 1.7%}
+      label: sys,jes20
+    - asymerror: {minus: -1.6%, plus: 2.8%}
+      label: sys,jes21
+    - asymerror: {minus: -0.2%, plus: 0.9%}
+      label: sys,jes22
+    - {label: 'sys,jes23', symerror: 0.0%}
+    - {label: 'sys,jes24', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes25
+    - {label: 'sys,jes26', symerror: 0.0%}
+    - {label: 'sys,jes27', symerror: 0.0%}
+    - {label: 'sys,jes28', symerror: 0.0%}
+    - {label: 'sys,jes29', symerror: 0.0%}
+    - {label: 'sys,jes30', symerror: 0.0%}
+    - {label: 'sys,jes31', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes32
+    - {label: 'sys,jes33', symerror: 0.1%}
+    - {label: 'sys,jes34', symerror: 0.0%}
+    - {label: 'sys,jes35', symerror: 0.0%}
+    - {label: 'sys,jes36', symerror: 0.0%}
+    - {label: 'sys,jes37', symerror: 0.0%}
+    - {label: 'sys,jes38', symerror: 0.0%}
+    - {label: 'sys,jes39', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes40
+    - {label: 'sys,jes41', symerror: 0.3%}
+    - {label: 'sys,jes42', symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.7%}
+      label: sys,jes43
+    - {label: 'sys,jes44', symerror: 0.0%}
+    - {label: 'sys,jes45', symerror: 0.0%}
+    - {label: 'sys,jes46', symerror: 0.0%}
+    - {label: 'sys,jes47', symerror: 0.0%}
+    - {label: 'sys,jes48', symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys,jes49
+    - {label: 'sys,jes50', symerror: 0.0%}
+    - {label: 'sys,jes51', symerror: 0.0%}
+    - {label: 'sys,jes52', symerror: 0.0%}
+    - {label: 'sys,jes53', symerror: 0.0%}
+    - {label: 'sys,jes54', symerror: 0.0%}
+    - {label: 'sys,jes55', symerror: 0.0%}
+    - asymerror: {minus: -2.0%, plus: 3.2%}
+      label: sys,jes56
+    - asymerror: {minus: -35.0%, plus: 51.0%}
+      label: sys,jes57
+    - {label: 'sys,jes58', symerror: 0.0%}
+    - asymerror: {minus: -3.3%, plus: 4.1%}
+      label: sys,jes59
+    - {label: 'sys,jes60', symerror: 0.9%}
+    - asymerror: {minus: 6.2%, plus: -5.5%}
+      label: sys,jes61
+    - asymerror: {minus: -0.3%, plus: 1.4%}
+      label: sys,jes62
+    - {label: 'sys,jes63', symerror: 0.3%}
+    - asymerror: {minus: -3.4%, plus: 3.0%}
+      label: sys,jes64
+    - {label: 'sys,jer', symerror: 29.0%}
+    - {label: 'sys,jar', symerror: 11.0%}
+    - {label: 'sys,unfold', symerror: 0.6%}
+    - {label: 'sys,qual', symerror: 0.3%}
+    - {label: 'sys,lumi', symerror: 1.8%}
+    value: 0.000892
+independent_variables:
+- header: {name: PT(JET), units: GEV}
+  values:
+  - {high: 116.0, low: 100.0}
+  - {high: 134.0, low: 116.0}
+  - {high: 152.0, low: 134.0}
+  - {high: 172.0, low: 152.0}
+  - {high: 194.0, low: 172.0}
+  - {high: 216.0, low: 194.0}
+  - {high: 240.0, low: 216.0}
+  - {high: 264.0, low: 240.0}
+  - {high: 290.0, low: 264.0}
+  - {high: 318.0, low: 290.0}
+  - {high: 376.0, low: 318.0}
+  - {high: 478.0, low: 376.0}
