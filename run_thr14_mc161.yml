@@ -1,0 +1,129 @@
+#
+# Configuration file for n3fit
+#
+######################################################################################
+description: NNLO fit for mc variation project. mc=1.61, matching scale =1.4
+
+######################################################################################
+dataset_inputs:
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, frac: 0.75, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, frac: 0.75, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_300GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75, variant: legacy}
+
+################################################################################
+datacuts:
+  t0pdfset: 240701-02-rs-nnpdf40-baseline
+  q2min: 3.49
+  w2min: 12.5
+
+################################################################################
+# NNLO QCD TRN evolution
+theory:
+  theoryid: 40_026_003
+
+################################################################################
+trvlseed: 591866982
+nnseed: 945709987
+mcseed: 519562661
+genrep: true
+diagonal_basis: false
+
+################################################################################
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [25, 20, 8]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 17000
+  positivity:
+    initial: 184.8
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+fitting:
+  fitbasis: EVOL
+  savepseudodata: True
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.089, 1.119], largex: [1.475, 3.119]}
+  - {fl: g, trainable: false, smallx: [0.7504, 1.098], largex: [2.814, 5.669]}
+  - {fl: v, trainable: false, smallx: [0.479, 0.7384], largex: [1.549, 3.532]}
+  - {fl: v3, trainable: false, smallx: [0.1073, 0.4397], largex: [1.733, 3.458]}
+  - {fl: v8, trainable: false, smallx: [0.5507, 0.7837], largex: [1.516, 3.356]}
+  - {fl: t3, trainable: false, smallx: [-0.4506, 0.9305], largex: [1.745, 3.424]}
+  - {fl: t8, trainable: false, smallx: [0.5877, 0.8687], largex: [1.522, 3.515]}
+  - {fl: t15, trainable: false, smallx: [1.089, 1.141], largex: [1.492, 3.222]}
+
+################################################################################
+positivity:
+  posdatasets:
+  # # Positivity Lagrange Multiplier
+  # - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}
+  # - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
+  # - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
+  # - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
+  # - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
+  # - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
+  # - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
+  # - {dataset: NNPDF_POS_2P24GEV_F2C, maxlambda: 1e6}
+  # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XUB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XDQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XDB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XSQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
+
+added_filter_rules:
+  # - dataset: NNPDF_POS_2P24GEV_FLL
+  #   rule: "x > 5.0e-7"
+  - dataset: NNPDF_POS_2P24GEV_F2C
+    rule: "x < 0.74"
+  - dataset: NNPDF_POS_2P24GEV_XGL
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSB
+    rule: "x > 0.1"
+
+integrability:
+  integdatasets:
+  - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
+
+################################################################################
+debug: false
+maxcores: 8
