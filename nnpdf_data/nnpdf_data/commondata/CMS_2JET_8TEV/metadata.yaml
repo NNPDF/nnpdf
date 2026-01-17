@@ -1,0 +1,58 @@
+setname: "CMS_2JET_8TEV"
+version: 1
+version_comment: "Implementation of the dataset excluded from NNPDF4.0"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1705.02628"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1598460"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1598460"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIJET"
+  experiment: "CMS"
+
+implemented_observables:
+- observable_name: 3D
+  process_type: DIJET
+  tables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  ndata: [31, 26, 14, 23, 17, 11] # listed per (y*, yb) bin, sum 122
+  observable:
+    description: "Triple-differential dijet cross-section as a function of the average transverse momentum, half rapidity separation and the boost of two leading jets"
+    label: r"\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}"
+    units: "[pb/GeV]"
+  kinematics:
+    file: kinematics.yaml
+    variables: # need to fix inline math here because load_yaml breaks down
+      pTavg: {description: "average transverse momentum of the two leading jets", label: '\(p_{\text{T,avg}}\)', units: "GeV"}
+      ystar: {description: "half rapidity separation of the two leading jets", label: "$y^*$", units: ""}
+      yboost: {description: "the boost of the two leading jets", label: "$y_\text{b}$", units: ""}
+      sqrts: {description: "centre-of-mass energy", label: '\sqrt{s}', units: "TeV"}
+  kinematic_coverage: [pTavg, ystar, yboost, sqrts]
+  # Data
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  variants:
+    legacy:
+      theory:
+        FK_tables:
+          - - CMS_2JET_8TEV_3D
+  # Theory
+  theory:
+    FK_tables:
+    - - CMS_2JET_8TEV_3D
+    operation: 'null'
+    conversion_factor: 1000.0 # from TeV to GeV
+
+  # Plotting
+  plotting:
+    dataset_label: "CMS dijets 8 TeV"
+    plot_x: pTavg
+    y_label: r"\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}"
+    figure_by:
+    - ystar
+    - yboost
