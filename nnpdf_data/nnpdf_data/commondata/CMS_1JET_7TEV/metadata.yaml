@@ -1,0 +1,42 @@
+setname: CMS_1JET_7TEV
+version: 1
+version_comment: reimplementation of a dataset excluded from nnpdf40
+
+arXiv:
+  url: https://arxiv.org/abs/1406.0324
+iNSPIRE:
+  url: https://inspirehep.net/literature/1298810
+hepdata:
+  url: https://www.hepdata.net/record/ins1298810
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: JETS
+  experiment: CMS
+
+implemented_observables:
+- observable_name: R07
+  process_type: JET
+  tables: [7, 8, 9, 10, 11, 12]
+  ndata: 158
+  observable:
+    description: Double differential inclusive jet cross-section as a function of jet transverse momentum and absolute jet rapidity with jet radius parameter R=0.7
+    label: r"$d^2\sigma / dp_Tdy$"
+    units: '[pb/GeV]'
+  kinematics:
+    file: kinematics_R07.yaml
+    variables:
+      pT: {description: jet transverse momentum, label: r"$p_T$" , units: GeV}
+      y: {description: jet rapidity, label: r"$|y|$" , units: ''}
+      sqrts: {description: centre of mass energy, label: r"$\sqrt(s)$", units: GeV}
+  kinematic_coverage: [pT, y, sqrts]
+  data_central: data_R07.yaml
+  data_uncertainties: uncertainties_R07.yamml
+  theory:
+    FK_tables:
+      - - CMS_1JET_7TEV_R07
+  plotting:
+    dataset_label: "CMS 1JET 7TeV with R=0.7"
+    plot_x: pT
+    y_label: r"$d^2\sigma / dp_Tdy$"
+    
