@@ -31,7 +31,8 @@ implemented_observables:
       sqrts: {description: centre of mass energy, label: r"$\sqrt(s)$", units: GeV}
   kinematic_coverage: [pT, y, sqrts]
   data_central: data_R07.yaml
-  data_uncertainties: uncertainties_R07.yamml
+  data_uncertainties: 
+    - uncertainties_R07.yaml
   theory:
     FK_tables:
       - - CMS_1JET_7TEV_R07
