@@ -7,6 +7,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{+}$
+    max: null
 - mt:
     min: 250.0
     mid: 275.0
@@ -14,6 +18,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{+}$
     max: null
 - mt:
     min: 300.0
@@ -23,6 +31,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{+}$
+    max: null
 - mt:
     min: 350.0
     mid: 387.5
@@ -30,6 +42,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{+}$
     max: null
 - mt:
     min: 425.0
@@ -39,6 +55,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{+}$
+    max: null
 - mt:
     min: 500.0
     mid: 550.0
@@ -46,6 +66,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{+}$
     max: null
 - mt:
     min: 600.0
@@ -55,6 +79,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{+}$
+    max: null
 - mt:
     min: 750.0
     mid: 825.0
@@ -62,6 +90,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{+}$
     max: null
 - mt:
     min: 900.0
@@ -71,6 +103,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{+}$
+    max: null
 - mt:
     min: 1100.0
     mid: 1250.0
@@ -78,6 +114,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{+}$
     max: null
 - mt:
     min: 1400.0
@@ -87,6 +127,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{+}$
+    max: null
 - mt:
     min: 2000.0
     mid: 3500.0
@@ -94,6 +138,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{+}$
     max: null
 - mt:
     min: 200.0
@@ -103,6 +151,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{-}$
+    max: null
 - mt:
     min: 250.0
     mid: 275.0
@@ -110,6 +162,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{-}$
     max: null
 - mt:
     min: 300.0
@@ -119,6 +175,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{-}$
+    max: null
 - mt:
     min: 350.0
     mid: 387.5
@@ -126,6 +186,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{-}$
     max: null
 - mt:
     min: 425.0
@@ -135,6 +199,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{-}$
+    max: null
 - mt:
     min: 500.0
     mid: 550.0
@@ -142,6 +210,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{-}$
     max: null
 - mt:
     min: 600.0
@@ -151,6 +223,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{-}$
+    max: null
 - mt:
     min: 750.0
     mid: 825.0
@@ -158,6 +234,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{-}$
     max: null
 - mt:
     min: 900.0
@@ -167,6 +247,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{-}$
+    max: null
 - mt:
     min: 1100.0
     mid: 1250.0
@@ -174,6 +258,10 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{-}$
     max: null
 - mt:
     min: 1400.0
@@ -183,6 +271,10 @@ bins:
     min: null
     mid: 6.46174823e+03
     max: null
+  charge:
+    min: null
+    mid: $W^{-}$
+    max: null
 - mt:
     min: 2000.0
     mid: 3500.0
@@ -190,4 +282,8 @@ bins:
   M2:
     min: null
     mid: 6.46174823e+03
+    max: null
+  charge:
+    min: null
+    mid: $W^{-}$
     max: null

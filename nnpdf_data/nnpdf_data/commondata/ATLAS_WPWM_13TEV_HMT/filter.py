@@ -100,6 +100,10 @@ def get_data(observable=None):
     ]
 
     for table in hepdata_tables:
+        if 'plus' in table:
+            charge = '$W^{+}$'
+        if 'minus' in table:
+            charge = '$W^{-}$'
 
         with open(table, "r") as f:
             input = yaml.safe_load(f)
@@ -111,7 +115,7 @@ def get_data(observable=None):
 
         kin_values = input["independent_variables"][0]["values"]
         kin_name = input["independent_variables"][0]["header"]["name"]
-        
+
         if kin_name == "$m_T^W$":  # Single differential
             kin_label = "m_T^W"
             for kin_value in kin_values:
@@ -122,6 +126,7 @@ def get_data(observable=None):
                         'max': kin_value['high'],
                     },
                     'M2': {'min': None, 'mid': 6.46174823e03, 'max': None},
+                    'charge': {'min': None, 'mid': charge, 'max': None},
                 }
                 kinematics.append(kin)
 
@@ -136,7 +141,7 @@ def get_data(observable=None):
                         'max': kin_value['high'],
                     },
                     'mt': {'min': mt_low, 'mid': 0.5 * (mt_low + mt_high), 'max': mt_high},
-                    'M2': {'min': None, 'mid': 6.46174823e03, 'max': None},
+                    'charge': {'min': None, 'mid': charge, 'max': None},
                 }
                 kinematics.append(kin)
             table_num += 1
