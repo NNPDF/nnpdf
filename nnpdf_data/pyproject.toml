@@ -35,7 +35,7 @@ include = [
 python = "^3.9"
 "ruamel.yaml" = "*"
 validobj = "*"
-pandas = "*"
+pandas = "<3"
 numpy = "*"
 # Required to run filters: `filter_files_dependencies`
 scipy = {version = "*", optional = true}
