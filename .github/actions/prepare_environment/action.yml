@@ -32,7 +32,7 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
         use-mamba: true
-        channels: https://packages.nnpdf.science/public,conda-forge
+        channels: conda-forge
         show-channel-urls: true
         auto-update-conda: true
         activate-environment: nnpdf_environment

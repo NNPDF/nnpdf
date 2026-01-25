@@ -214,9 +214,8 @@ def dataset_inputs_covmat_from_systematics(
         special_corrs.append(sys_errors.loc[:, ~is_intra_dataset_error])
 
     # concat systematics across datasets
-    special_sys = pd.concat(special_corrs, axis=0, sort=False)
     # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
-    special_sys.fillna(0, inplace=True)
+    special_sys = pd.concat(special_corrs, axis=0, sort=False).fillna(0)
     diag = la.block_diag(*block_diags)
     covmat = diag + special_sys.to_numpy() @ special_sys.to_numpy().T
     if use_weights_in_covmat:
@@ -811,7 +810,7 @@ def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
     # old to new names mapping
     new_names = {d[0]: legacy_to_new_map(d[0])[0] for d in tmp.index}
-    tmp.rename(columns=new_names, index=new_names, level=0, inplace=True)
+    tmp = tmp.rename(columns=new_names, index=new_names, level=0)
     # reorder
     bb = [str(i) for i in data]
     return tmp.reindex(index=bb, columns=bb, level=0)
