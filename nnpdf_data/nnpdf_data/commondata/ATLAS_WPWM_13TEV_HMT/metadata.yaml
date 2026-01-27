@@ -122,6 +122,8 @@ implemented_observables:
       normalize:
         figure_by:
           - charge
+        line_by:
+          - mt
       plot_x: eta
     kinematic_coverage:
       - eta
