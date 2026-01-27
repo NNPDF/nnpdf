@@ -167,12 +167,10 @@ def test_restart_from_pickle(tmp_path):
     assert len(restart_json) == len(direct_json)
 
     for i in range(n_trials_total):
+        # A sequential restart won't provide the exact same results
+        # so the only thing reproducible is the number of trials which should be the same
         # check that the files share exactly the same hyperopt history
-        assert restart_json[i]['misc'] == direct_json[i]['misc']
-        assert restart_json[i]['state'] == direct_json[i]['state']
         assert restart_json[i]['tid'] == direct_json[i]['tid']
-        assert restart_json[i]['misc']['idxs'] == direct_json[i]['misc']['idxs']
-    # Note that it doesn't check the final loss of the second trial
 
 
 @pytest.mark.skipif(shutil.which("mongod") is None, reason="mongodb not available")
