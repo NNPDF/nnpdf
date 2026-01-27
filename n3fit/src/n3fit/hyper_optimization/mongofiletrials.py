@@ -130,7 +130,8 @@ class MongodRunner:
             "mongod",
             "-quiet",
             "--wiredTigerCacheSizeGB",
-            "16",
+            # NB: 16GB seemed reasonable for cineca's cluster, not benchmarked beyond that
+            os.environ.get("HYPEROPT_MONGO_CACHE_SIZE", "16"),
             "--dbpath",
             self.db_path,
             "--port",
@@ -282,8 +283,6 @@ class MongoFileTrials(MongoTrials):
             args.append("--no-subprocesses")
 
         # start the worker as a subprocess
-        # TODO FIX FIXME
-        # The mongotrials should not have to know anything about the outside world, each run will use the GPU it has access to and it is on the user to select the right one
         try:
             my_env = os.environ.copy()
             my_env["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"

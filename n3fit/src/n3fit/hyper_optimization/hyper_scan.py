@@ -151,8 +151,9 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         if pickle_file_to_load.exists():
             log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
             trials = FileTrials.from_pkl(pickle_file_to_load)
-        # Instantiate `FileTrials`
-        trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+        else:
+            # Instantiate `FileTrials`
+            trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
 
     # Initialize seed for hyperopt
     trials.rstate = np.random.default_rng(HYPEROPT_SEED)

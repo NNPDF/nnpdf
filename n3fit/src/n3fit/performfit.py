@@ -217,7 +217,7 @@ def performfit(
 
             # TODO: save everything to a hyperopt folder instead
             # Save everything to replica_1 regardless of which replicas are we running
-            replica_path_set = replica_path / f"replica_1"
+            replica_path_set = replica_path / "replica_1"
             hyper_scan_wrapper(
                 replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
             )

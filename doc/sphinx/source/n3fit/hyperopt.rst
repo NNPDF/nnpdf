@@ -486,8 +486,8 @@ To run a parallelized hyperopt search, use the following command to run each of 
 
   n3fit <runcard>.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt
 
-Each of the runs will try to look into the ``<runcard>/nnfit/replica_1/hyperot-db`` folder.
-If it exists, it will try to connect to the database, failing that, it will consider that no database
+Each of the runs will try to look into the ``<runcard>/nnfit/replica_1/hyperopt-db`` folder.
+If it exists, it will try to connect to the database, otherwise it will consider that no database
 is currently on and will start an instance of ``mongodb`` for other jobs to connect before spawning its own job.
 
 Each mongo worker handles one trial in Hyperopt. So, launching more workers allows for the simultaneous calculation of a greater number of trials.
