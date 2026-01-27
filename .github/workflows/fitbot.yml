@@ -12,7 +12,7 @@ env:
   POSTFIT_NREP: 15 # requested minimum replicas for postfit
   # IMPORTANT
   # WHEN CHANGING THE REFERENCE SET, THE NEW REFERENCE MUST BE MANUALLY UPLOADED TO THE SERVER
-  REFERENCE_SET: NNBOT-99108504e-2025-11-22 # reference set for exact results
+  REFERENCE_SET: NNNBOT-1a81255f3-2026-01-27 # reference set for exact results
   STABLE_REFERENCE_SET: NNBOT-99108504e-2025-11-22 # reference set for last tag
   PYTHONHASHSEED: "0"
 

@@ -62,7 +62,7 @@ python = ">=3.9"
 matplotlib = "^3.9"
 pineappl = "^1.0.0"
 # TODO: make the code compatible with pandas 3
-pandas = "<3"
+pandas = "*"
 numpy = "*"
 "ruamel.yaml" = {version = ">=0.19.1", extras=["oldlibyaml"]}
 validobj = "*"
