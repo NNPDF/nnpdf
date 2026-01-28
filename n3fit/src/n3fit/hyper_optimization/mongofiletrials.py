@@ -165,8 +165,12 @@ class MongodRunner:
         except Exception as err:
             log.error(f"Failed to stop mongod: {err}")
 
-    def __del__(self):
-        # Change it to a context manager
+    def __enter__(self):
+        if not self.is_up():
+            self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
 
 

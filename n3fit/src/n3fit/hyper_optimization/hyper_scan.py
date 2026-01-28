@@ -13,6 +13,7 @@ you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the minimization).
 """
 
+import contextlib
 import copy
 import logging
 
@@ -130,52 +131,54 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     # Tell the trainer we are doing hpyeropt
     model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
 
-    # Generate the trials object, as a MongoFileTrial or a simple sequential FileTrial
+    # Prepare the context manager in the parallel case (and an empty one otherwise)
     if hyperscanner.parallel_hyperopt:
-        # If we are running in parallel:
-        # 1) Check whether the database is already on, start it otherwise
-        if not hyperscanner.mongod_runner.is_up():
-            hyperscanner.mongod_runner.start()
-
-        # Instantiate `MongoFileTrials` as trials to give to the worker later
-        trials = MongoFileTrials(
-            replica_path_set,
-            hyperscanner.mongod_runner,
-            num_workers=1,  # Only one worker per n3fit job will run
-            parameters=hyperscanner.as_dict(),
-        )
+        runner_ctx = hyperscanner.mongod_runner
+        # Upon entering the context it will check whether the database is up
+        # and, if not, it will start it
     else:
-        # If we are not running in parallel, check whether there's a pickle to load and restart
-        # For sequential hyperopt restarts, reset the state of `FileTrials` saved in the pickle file
-        pickle_file_to_load = replica_path_set / "tries.pkl"
-        if pickle_file_to_load.exists():
-            log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
-            trials = FileTrials.from_pkl(pickle_file_to_load)
+        runner_ctx = contextlib.nullcontext()
+
+    with runner_ctx:
+        # Generate the trials object, as a MongoFileTrial or a simple sequential FileTrial
+        if hyperscanner.parallel_hyperopt:
+            # Instantiate `MongoFileTrials` as trials to give to the worker later
+            trials = MongoFileTrials(
+                replica_path_set,
+                hyperscanner.mongod_runner,
+                num_workers=1,  # Only one worker per n3fit job will run
+                parameters=hyperscanner.as_dict(),
+            )
         else:
-            # Instantiate `FileTrials`
-            trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+            # If we are not running in parallel, check whether there's a pickle to load and restart
+            # For sequential hyperopt restarts, reset the state of `FileTrials` saved in the pickle file
+            pickle_file_to_load = replica_path_set / "tries.pkl"
+            if pickle_file_to_load.exists():
+                log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
+                trials = FileTrials.from_pkl(pickle_file_to_load)
+            else:
+                # Instantiate `FileTrials`
+                trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
 
-    # Initialize seed for hyperopt
-    trials.rstate = np.random.default_rng(HYPEROPT_SEED)
-    # And prepare the generic arguments to fmin
-    fmin_args = {
-        "fn": model_trainer.hyperparametrizable,
-        "space": hyperscanner.as_dict(),
-        "algo": hyperopt.tpe.suggest,
-        "max_evals": max_evals,
-        "trials": trials,
-        "rstate": trials.rstate,
-    }
+        # Initialize seed for hyperopt
+        trials.rstate = np.random.default_rng(HYPEROPT_SEED)
+        # And prepare the generic arguments to fmin
+        fmin_args = {
+            "fn": model_trainer.hyperparametrizable,
+            "space": hyperscanner.as_dict(),
+            "algo": hyperopt.tpe.suggest,
+            "max_evals": max_evals,
+            "trials": trials,
+            "rstate": trials.rstate,
+        }
 
-    if hyperscanner.parallel_hyperopt:
-        trials.start_mongo_workers()
-        # TODO benchmark how the behaviour depends on max_queue_len (if it does)
-        hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=12)
-        trials.stop_mongo_workers()
-        # stop mongod command and compress database
-        hyperscanner.mongod_runner.stop()
-    else:
-        hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
+        if hyperscanner.parallel_hyperopt:
+            trials.start_mongo_workers()
+            # TODO benchmark how the behaviour depends on max_queue_len (if it does)
+            hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=12)
+            trials.stop_mongo_workers()
+        else:
+            hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
 
 
 class ActivationStr:
