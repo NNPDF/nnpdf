@@ -15,6 +15,7 @@ REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regression_fits")
 
 # Avoid always round-number replicas or 1/2
 runcard_and_replicas = {
+    "no_positivity": 316,
     "normal_fit": 72,
     "central": 16,
     "no_diagonal": 45,
