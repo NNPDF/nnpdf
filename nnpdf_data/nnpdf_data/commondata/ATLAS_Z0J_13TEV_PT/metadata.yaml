@@ -48,6 +48,10 @@ implemented_observables:
   data_central: data.yaml
   data_uncertainties:
   - uncertainties.yaml
+  variants:
+    decorr:
+      data_uncertainties:
+      - uncertainties_decorr.yaml
 
     # Theory
   theory:
