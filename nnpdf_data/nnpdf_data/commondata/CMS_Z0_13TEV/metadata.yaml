@@ -2,13 +2,13 @@ setname: CMS_Z0_13TEV
 version: 1
 version_comment: 'Initial implementation' 
 arXiv: 
-  url: https://arxiv.org/abs/2202.12327
-  journal: JHEP 2022 (2022) 08, 063
+  url: https://arxiv.org/abs/2408.07622 
+  journal: Phys.Lett.B 866 (2025) 139526
 iNSPIRE:
-  url: https://inspirehep.net/literature/1952936
+  url: https://inspirehep.net/literature/2818125
 hepdata:
-  url: https://www.hepdata.net/record/ins2038801
-  version: 1
+  url: https://www.hepdata.net/record/ins2818125
+  version: 2
 
 nnpdf_metadata:
   nnpdf31_process: "DY NC"
@@ -21,8 +21,8 @@ implemented_observables:
     label: "A_{FB}"
     units: ""
   process_type: DY_MLL
-  tables: [2]
-  ndata: 7
+  tables: [Figure_8,Correlation_coefficients_between_A4_values_of_Figure_8]
+  ndata: 53
   plotting:
     dataset_label: 'CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined' 
     plot_x: m_ll
@@ -31,6 +31,10 @@ implemented_observables:
   - m_ll
   kinematics:
     variables:
+      y:
+        description: "dilepton rapidity"
+        label: "$|y|$"
+        units: ""
       m_ll:
         description: "dilepton mass"
         label: "$m_{ll}$"
@@ -39,10 +43,6 @@ implemented_observables:
   data_central: data_AFB.yaml
   data_uncertainties:
   - uncertainties_AFB.yaml
-  variants:
-     breakdown:
-       data_uncertainties:
-       - uncertainties_breakdown_AFB.yaml
   theory:
     FK_tables:
     - - CMS_Z0_13TEV_FWD
