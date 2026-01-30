@@ -813,3 +813,11 @@ scale_variations_for:
 
   - theoryid: 40_007_012 # N3LO, alphas=0.125, ModEv=EXA
     variations: *n3lo
+
+  - theoryid: 40_024_003 # NNLO QCD, ModEv=EXA, mcharm=1.51, alphas=0.118
+    variations:
+
+      # mcharm variations
+      (1.41): 40_025_003
+      (1.51): 40_024_003
+      (1.61): 40_026_003
