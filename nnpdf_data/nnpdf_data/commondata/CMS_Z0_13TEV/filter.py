@@ -1,298 +1,102 @@
 """
 This file contains the piece of code needed to implement the CMS AFB 
-measurement at 13 TeV. The treatment of uncertainties is ambiguous,
-therefore two variants are implemented. One in which there are only two 
-uncertainties: a statistical and a systematic uncertainty. The other
-in which the full breakdown of uncertainties is taken from Table 1
-of the paper. Note that the Table is in principle valid only for the 
-first  invariant mass bin.
+measurement at 13 TeV. Uncertainties are obtained by combining the correlation
+matrix and the total uncertainty provided on Hepdata, after which a covariance
+matrix is constructed, which is finally decomposed into Ndat artificial
+uncertainties
 """
 
 import yaml
 
-def get_kinematics():
+def get_tables():
     """
-    returns the relevant kinematics values.
-
+    Get the Hepdata tables, given the tables and version specified in metadata 
     """
-    kin = []
-
-    hepdata_table = f"rawdata/HEPData-ins2038801-v1-Table_2.yaml"
-
-    with open(hepdata_table, 'r') as file:
-        input = yaml.safe_load(file)
-
-    for m in input["independent_variables"][0]['values']:
-        kin_value = {
-            'm_ll': {'min': m['low'], 'mid': 0.5 * (m['low'] + m['high']), 'max': m['high']},
-        }
-
-        kin.append(kin_value)
-
-    del kin[-1]
+    prefix = "rawdata/HEPData-ins2818125"
+    with open("metadata.yaml", "r") as file:
+        metadata = yaml.safe_load(file)
         
-    return kin
-
-def get_data_values():
-    """
-    returns the central data.
-
-    """
-    data = []
-
-    hepdata_table = f"rawdata/HEPData-ins2038801-v1-Table_2.yaml"
-
-    with open(hepdata_table, 'r') as file:
-        input = yaml.safe_load(file)
-        
-    values = input['dependent_variables'][2]['values']
-
-    for value in values:
-        data.append(value['value'])
-
-    del data[-1]
-        
-    return data
-
-def get_uncertainties(variant=None):
-    """
-    returns error definitions and error values.
-
-    """
-    tot_err = []
-    hepdata_table = f"rawdata/HEPData-ins2038801-v1-Table_2.yaml"
-    error_defs = {}
-
+    version = metadata["hepdata"]["version"]
+    tables = metadata["implemented_observables"][0]["tables"]
+    hepdata_tables = []
     
-    with open(hepdata_table, 'r') as file:
-        input = yaml.safe_load(file)
+    for table in tables:
+        hepdata_tables.append(f"{prefix}-v{version}-{table}.yaml")
+    return hepdata_tables
 
-    values = input['dependent_variables'][2]
+def get_all():
+    """
+    Returns data, kinematics and uncertainties for dumping in the .yaml files
+    """
+    data_central = []
+    kinematics = []
+    uncertainties = []
+    hepdata_tables = get_tables()
 
-    error_defs['stat'] = {
-        "description": "Statistical uncertainties",
-        "treatment": "ADD",
-        "type": "UNCORR",
-    }
+    table=hepdata_tables[0]
+    with open(table, 'r') as f:
+        input = yaml.safe_load(f)
     
-    if variant == "":    
-        error_defs['sys'] = {
-            "description": "Systematic uncertainties",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        }
-        for err in values['values']:
-            tot_err.append({
-                'stat': err['errors'][0]['symerror'],
-                'sys': err['errors'][1]['symerror'],
-            })
-    elif variant == "_breakdown":
-        error_defs['sys_pdfs'] = {
-            "description": "PDF uncertainty", 
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_mcbg'] = {
-            "description": "Statistical uncertainties in templates", # correlation
-            "treatment": "ADD",
-            "type": "UNCORR",
-        }
-        
-        error_defs['sys_aplhas'] = {
-            "description": "Variations of strong coupling, mu_R and mu_F", # event reweighting
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_dy'] = {
-            "description": "DY cross section uncertainty", # overall unc on whole MC event
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_pileup'] = {
-            "description": "Uncertainty from difference in measured and simulated pileup", # reweighting 
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_fidcor'] = {
-            "description": "Fiducial corrections", # unc depends on mass, scaling factor per mass bin?
-            "treatment": "MULT",
-            "type": "UNCORR",
-        }
-        
-        error_defs['sys_ttbar'] = {
-            "description": "ttbar cross section uncertainty", # overall unc on whole MC event
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_dypt'] = {
-            "description": "Uncertainty from mismodelling of the pt spectrum", # reweighting determined per mass bin
-            "treatment": "MULT",
-            "type": "UNCORR",
-        }
-        
-        error_defs['sys_emushape'] = {
-            "description": "Uncertainty from the electron muon background shape", # per cos\theta bin, correlated accross mass bins
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_lumi'] = {
-            "description": "Integrated luminosity uncertainty",
-            "treatment": "MULT",
-            "type": "CMSLUMI16",
-        }
-        
-        error_defs['sys_eid'] = {
-            "description": "Uncertainty from electron identification/isolation", 
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_enorm'] = {
-            "description": "Electron MisID normalisation", # one variation on all bins, acts as scale factor
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_eshape'] = {
-            "description": "Electron MisID shape", # variations in template shape, does not have to be coherent accross bins
-            "treatment": "ADD",
-            "type": "UNCORR",
-        }
-        
-        error_defs['sys_btag'] = {
-            "description": "Uncertainty from b tagging", # scalings depend only on jet flav, pt and rapidity not on mass
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_ptmiss'] = {
-            "description": "Missing pt modelling uncertainty", # estimated by changing jet energy and simulating whole thingagain
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_muid'] = {
-            "description": "Uncertainty from muon identification/isolation", # same accross mass bins I think?
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_mushape'] = {
-            "description": "Muon MisID shape", # variations in template shape, does not have to be coherent accross bins
-            "treatment": "ADD",
-            "type": "UNCORR",
-        }
-        
-        error_defs['sys_phph'] = {
-            "description": "gamma gamma --> ll cross section uncertainty", # overall unc on whole MC event
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_munorm'] = {
-            "description": "Muon MisID normalisation", # one variation on all bins, acts as scale factor
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_etrig'] = {
-            "description": "Electron trigger uncertainty", # Not sure if it is indeed mult, but I would suppose so?
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_diboson'] = {
-            "description": "Diboson cross section uncertainty", # overall unc on whole MC event
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_erec'] = {
-            "description": "Electron reconstruction efficiency", # efficiency correction to all total events with electrons
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_mumom'] = {
-            "description": "Muon momentum scale corrections", 
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_emom'] = {
-            "description": "Electron momentum scale corrections", 
-            "treatment": "MULT",
-            "type": "CORR",
-        }
-        
-        error_defs['sys_mutrig'] = {
-            "description": "Muon trigger uncertainty", 
-            "treatment": "MULT",
-            "type": "CORR",
-        }       
-        for err in values['values']: 
-            tot_err.append({
-                'stat': err['errors'][0]['symerror'],
-                'sys_pdfs': 0.0081,
-                'sys_mcbg': 0.0041,
-                'sys_aplhas': 0.0033,
-                'sys_dy': 0.003,
-                'sys_pileup': 0.0028,
-                'sys_fidcor': 0.0027,
-                'sys_ttbar': 0.0027,
-                'sys_dypt': 0.0021,
-                'sys_emushape': 0.0018,
-                'sys_lumi': 0.0012,
-                'sys_eid': 0.001,
-                'sys_enorm': 0.0009,
-                'sys_eshape': 0.0008,
-                'sys_btag': 0.0008,
-                'sys_ptmiss': 0.0007,
-                'sys_muid': 0.0006,
-                'sys_mushape': 0.0005,
-                'sys_phph': 0.0004,
-                'sys_munorm': 0.0004,
-                'sys_etrig': 0.0004,
-                'sys_diboson': 0.0002,
-                'sys_erec': 0.0002,
-                'sys_mumom': 0.0001,
-                'sys_emom': 0.0001,
-                'sys_mutrig': 0.0001,
-            })
-    else:
-        print("Variant not implemented")
-        exit()
+    # Central values
+    data_values = input["dependent_variables"][4]["values"]
+    for data_value in data_values:
+        data_central.append(data_value["value"])
 
-    del tot_err[-1]
+    # Kinematic bins
+    kin_values_yll_min = input["dependent_variables"][0]["values"]
+    kin_values_yll_max = input["dependent_variables"][1]["values"]
+    kin_values_mll_min = input["dependent_variables"][2]["values"]
+    kin_values_mll_max = input["dependent_variables"][3]["values"]
+    
+    for i in range(len(kin_values_yll_min)):
+        kin = {
+            'y': {'min': kin_values_yll_min[i]["value"],
+                  'mid': 0.5 * (kin_values_yll_min[i]["value"] + kin_values_yll_max[i]["value"]),
+                  'max': kin_values_yll_max[i]["value"]},
+            'mll': {'min': kin_values_mll_min[i]["value"],
+                    'mid': 0.5 * (kin_values_mll_min[i]["value"] + kin_values_mll_max[i]["value"]),
+                    'max': kin_values_mll_max[i]["value"]}}
+        kinematics.append(kin)
         
-    return {'uncertainties': tot_err, 'error defs': error_defs}
+    # Uncertainties
+    for data_value in data_values:
+        errors = data_value["errors"]
+        uncertainty = {}
+        for error in errors:
+            uncertainty[error["label"]] = error["symerror"]
+            uncertainty.update(uncertainty)
+        uncertainties.append(uncertainty)
 
-def dump_to_yaml(variant=None):
+    return(data_central, kinematics, uncertainties)
+ 
+def filter_CMS_Z0_13TEV_PT():
+    """
+    Dumps data, kinematics, and uncertainties on .yaml files
+    """
+    #central_values, kinematics, uncertainties = get_all()
+    central_values, kinematics, uncertainties = get_all()
+    # Central values
+    data_central_yaml = {"data_central": central_values}
+    # Kinematics
+    kinematics_yaml = {"bins": kinematics}
+    # Uncertainties
+    treatment = {"A4 uncertainty": "ADD"}
+    correlation = {"A4 uncertainty": "UNCORR"}
+    definitions = {}
+    for key,value in uncertainties[0].items():
+        definition = {key :
+                      {"description": key,
+                       "treatment": treatment[key],
+                       "type": correlation[key]}}
+        definitions.update(definition)
+    uncertainties_yaml = {"definitions": definitions,"bins": uncertainties}
 
-    data = get_data_values()
-    kinematics = get_kinematics()
+    with open("data_AFB.yaml", "w") as file:
+        yaml.dump(data_central_yaml, file, sort_keys=False)  
+    with open("kinematics_AFB.yaml", "w") as file:
+        yaml.dump(kinematics_yaml, file, sort_keys=False)
+    with open("uncertainties_AFB.yaml", "w") as file:
+        yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
-    with open(f"data_AFB.yaml", "w") as file:
-        yaml.dump({"data_central": data}, file, sort_keys=False)
-
-    with open(f"kinematics_AFB.yaml", "w") as file:
-        yaml.dump({"bins": kinematics}, file, sort_keys=False)
-
-    with open(f"uncertainties{variant}_AFB.yaml", "w") as file:
-        yaml.dump({"definitions": get_uncertainties(variant)['error defs'], "bins": get_uncertainties(variant)['uncertainties']}, file, sort_keys=False)
-
-    return 
-
-dump_to_yaml(variant="")
-dump_to_yaml(variant="_breakdown")
-
-
-
-
-
+if __name__ == "__main__":
+    filter_CMS_Z0_13TEV_PT()
