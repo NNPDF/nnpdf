@@ -72,19 +72,16 @@ implemented_observables:
     plotting:
       dataset_label: ATLAS $W$ 13 TeV Differential
       y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
-      figure_by:
-        - boson
-      # extra_labels:
-      #   ' ':
-      #   - $W^+$
-      #   - $W^-$
-      #   boson:
-      #   - W
-      #   - W
-      plot_x: "$m_T^W$"
+      line_by:
+        - charge
+      normalize:
+        figure_by:
+          - charge
+      plot_x: mt
     kinematic_coverage:
       - mt
       - M2
+      - charge
     kinematics:
       variables:
         mt:
@@ -95,12 +92,17 @@ implemented_observables:
           description: W boson squared mass
           label: "$m_W^2$"
           units: "GeV$^2$"
+        charge:
+          description: W boson charge
+          label: "charge"
+          units: ""
       file: kinematics_DIF-MUON.yaml
     theory:
       conversion_factor: 0.001
       operation: "null"
       FK_tables:
-        - - FK_ATLAS_WPWMJ_13TEV_MMT_DIF-MUON
+        - - FK_ATLAS_WPWM_13TEV_HMT_DIP-LEP-WP #Should this be the same as the lep observables?
+          - FK_ATLAS_WPWM_13TEV_HMT_DIP-LEP-WM
     data_uncertainties:
       - uncertainties_DIF-MUON.yaml
     data_central: data_DIF-MUON.yaml
@@ -175,98 +177,17 @@ implemented_observables:
       dataset_label: ATLAS $W$ 13 TeV Double-Differential
       y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
       line_by:
-        - Boson
+        - mt
       normalize:
         figure_by:
-          - Boson
-      extra_labels:
-        Boson:
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^+$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-          - $W^-$
-      plot_x: $eta$
-
+          - charge
+        line_by:
+          - mt
+      plot_x: eta
     kinematic_coverage:
       - eta
       - mt
-      - M2
+      - charge
     kinematics:
       variables:
         eta:
@@ -277,16 +198,25 @@ implemented_observables:
           description: Transverse mass of the W boson
           label: "$m_T^W$"
           units: "GeV"
-        M2:
-          description: W boson squared mass
-          label: "$m_W^2$"
-          units: "GeV$^2$"
+        charge:
+          description: W boson charge
+          label: "charge"
+          units: ""
       file: kinematics_DDIF-MUON.yaml
     theory:
-      conversion_factor: 0.001
+      conversion_factor: 0.002
       operation: "null"
       FK_tables:
-        - - FK_ATLAS_WPWMJ_13TEV_MMT_DDIF-MUON
+        - - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-0
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-1
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-2
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-3
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-4
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-0
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-1
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-2
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-3
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-4
     data_uncertainties:
       - uncertainties_DDIF-MUON.yaml
     data_central: data_DDIF-MUON.yaml
