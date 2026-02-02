@@ -5,7 +5,7 @@ Systematic uncertainties are implemented starting from the breakdown
 available on HepData. The correlation treatment follows the approach mentioned
 in the paper (see Sect. 7): all uncertainties are treated as fully correlated,
 except those coming from the unfolding model, which are treated as fully 
-uncorrelated. a statistical covariance matrix is provided on Hepdata, however
+uncorrelated. A statistical covariance matrix is provided on Hepdata, however
 this is not used because it reports only partial correlations.
 """
 
@@ -21,7 +21,7 @@ def get_tables(obs=None):
 
     prefix = "rawdata/"
     if obs==None:
-        print("Observable not available. Please choose between on of the two:")
+        print("Observable not available. Please choose between one of the two:")
         print("2d_mass_ak8")
         print("3d_madd_ak8")
         exit(1)

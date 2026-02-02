@@ -17,20 +17,20 @@ nnpdf_metadata:
   experiment: "CMS"
 
 implemented_observables:
-- observable_name: M12-YMAX-R04
+- observable_name: M12-YMAX-R08
   observable:
-    description: "Double-differential dijet cross-section for anti-kT jets with R=0.4 as a function of the dijet invariant mass and the absolute rapidity of the outermost jet"
+    description: "Double-differential dijet cross-section for anti-kT jets with R=0.8 as a function of the dijet invariant mass and the absolute rapidity of the outermost jet"
     label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy$ [pb/GeV]"
     units: ""
 
   ndata: 92
-  tables: ["2d_mass_ak4"]
+  tables: ["2d_mass_ak8"]
   process_type: DIJET
 
   kinematic_coverage: [ymax, m_jj, sqrts]
 
   plotting:
-    dataset_label: "CMS dijets (2D) 13 TeV (R=0.4)"
+    dataset_label: "CMS dijets (2D) 13 TeV (R=0.8)"
     x_scale: log
     plot_x: m_jj
     figure_by:
@@ -43,13 +43,13 @@ implemented_observables:
       sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
     file: kinematics_2d_mass_ak8.yaml
 
-  data_central: data_2d_mass_ak4.yaml
+  data_central: data_2d_mass_ak8.yaml
   data_uncertainties:
-  - uncertainties_2d_mass_ak4.yaml
+  - uncertainties_2d_mass_ak8.yaml
 
   theory:
     FK_tables:
-    - - CMS_2JET_13TEV_2D_R04
+    - - CMS_2JET_13TEV_2D_R08
     operation: 'null'
 
 - observable_name: M12-YSTAR-YB-R08
