@@ -54,8 +54,8 @@ implemented_observables:
       conversion_factor: 0.001
       operation: "null"
       FK_tables:
-        - - FK_ATLAS_WPWM_13TEV_HMT_DIP-LEP-WP
-          - FK_ATLAS_WPWM_13TEV_HMT_DIP-LEP-WM
+        - - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WP
+          - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WM
     data_uncertainties:
       - uncertainties_DIF-LEP.yaml
     data_central: data_DIF-LEP.yaml
@@ -101,8 +101,8 @@ implemented_observables:
       conversion_factor: 0.001
       operation: "null"
       FK_tables:
-        - - FK_ATLAS_WPWM_13TEV_HMT_DIP-LEP-WP #Should this be the same as the lep observables?
-          - FK_ATLAS_WPWM_13TEV_HMT_DIP-LEP-WM
+        - - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WP #Should this be the same as the lep observables?
+          - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WM
     data_uncertainties:
       - uncertainties_DIF-MUON.yaml
     data_central: data_DIF-MUON.yaml
