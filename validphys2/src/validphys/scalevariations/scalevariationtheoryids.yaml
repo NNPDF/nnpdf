@@ -8,6 +8,18 @@
 # theoryid` here is using the t0theoryid, which by default is equal to theoryid
 # but can be set separately
 
+## 4.1 combinations
+# NNLO EXA (4.1 settings, as = 0.118)
+nnlo_41: &nnlo_41
+  # Only 7-points available
+  (0.5, 0.5) : 41_000_012
+  (0.5, 1)   : 41_000_011
+  (1, 0.5)   : 41_000_010
+  (1, 1)     : 41_000_000
+  (1, 2)     : 41_000_013
+  (2, 1)     : 41_000_014
+  (2, 2)     : 41_000_015
+
 nnlo_qed: &nnlo_qed
   # alphas variations
   (0.106): 40_003_000
@@ -88,7 +100,7 @@ nnlo_trn: &nnlo_trn
   (2, 1): 711
   (2, 2): 712
 
-nnlo: &nnlo
+nnlo_exa_40: &nnlo_exa_40
   # alphas variations
   (0.106): 40_008_000
   (0.114): 40_008_001
@@ -412,6 +424,12 @@ n3lo: &n3lo
   (0.130): 40_007_013
 
 scale_variations_for:
+  # 4.1 series:
+  # NNLO EXA alphas=0.118
+  - theoryid: 41_000_000
+    variations: *nnlo_41
+
+  # 4.0 series:
   # NLO alphas=0.117
   - theoryid: 834
     variations: *nlo
@@ -426,7 +444,7 @@ scale_variations_for:
 
   # NNLO, alphas=0.117
   - theoryid: 807
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.118
   - theoryid: 708
@@ -442,56 +460,56 @@ scale_variations_for:
 
   # NNLO, alphas=0.119
   - theoryid: 808
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.114, ModEV=EXA
   - theoryid: 40_008_001
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.115, ModEV=EXA
   - theoryid: 40_008_002
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.116, ModEV=EXA
   - theoryid: 40_008_003
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.117, ModEV=EXA
   - theoryid: 40_008_004
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.118, ModEV=EXA
   - theoryid: 40_008_005
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.119, ModEV=EXA
   - theoryid: 40_008_006
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
 
   # NNLO, alphas=0.120, ModEV=EXA
   - theoryid: 40_008_007
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.121, ModEV=EXA
   - theoryid: 40_008_008
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.122, ModEV=EXA
   - theoryid: 40_008_009
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.123, ModEV=EXA
   - theoryid: 40_008_010
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.124, ModEV=EXA
   - theoryid: 40_008_011
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO, alphas=0.125, ModEV=EXA
   - theoryid: 40_008_012
-    variations: *nnlo
+    variations: *nnlo_exa_40
 
   # NNLO+QED, alphas=0.114
   - theoryid: 40_003_001
@@ -684,8 +702,42 @@ scale_variations_for:
       central DIS: 40_005_000
       upper bound DIS: 40_005_016
       # IHOU + MHOU missing prescription
-      (1, 0.5 hadronic): 1025 # As 1018 but DIS from 1000
-      (1, 2 hadronic): 1026 # As 1021 but DIS from 1000
+      (1, 0.5 hadronic): 40_005_017 # As 40_005_022 but DIS from 40_005_000
+      (1, 2 hadronic): 40_005_018 # As 40_005_025 but DIS from 40_005_000
+
+  # N3LO: MHOU + IHOU perturbative charm
+  - theoryid: 40_005_027
+    variations:
+      (0, 0, 0, 0, 0, 0, 0): 40_005_027 # central th
+      (1, 0, 0, 0, 0, 0, 0): 40_005_028 # anomalous dimensions variations
+      (2, 0, 0, 0, 0, 0, 0): 40_005_029
+      (0, 1, 0, 0, 0, 0, 0): 40_005_030
+      (0, 2, 0, 0, 0, 0, 0): 40_005_031
+      (0, 0, 1, 0, 0, 0, 0): 40_005_032
+      (0, 0, 2, 0, 0, 0, 0): 40_005_033
+      (0, 0, 0, 1, 0, 0, 0): 40_005_034
+      (0, 0, 0, 2, 0, 0, 0): 40_005_035
+      (0, 0, 0, 0, 1, 0, 0): 40_005_036
+      (0, 0, 0, 0, 2, 0, 0): 40_005_037
+      (0, 0, 0, 0, 0, 1, 0): 40_005_038
+      (0, 0, 0, 0, 0, 2, 0): 40_005_039
+      (0, 0, 0, 0, 0, 0, 1): 40_005_040
+      (0, 0, 0, 0, 0, 0, 2): 40_005_041
+      (1, 1): 40_005_027
+      (0.5, 1): 40_005_046 # scale variations
+      (2, 1): 40_005_047
+      (0.5, 0.5): 40_005_048
+      (1, 0.5): 40_005_049
+      (2, 0.5): 40_005_050
+      (0.5, 2): 40_005_051
+      (1, 2): 40_005_052
+      (2, 2): 40_005_053
+      lower bound DIS: 40_005_042 # DIS coeff functions fact variations
+      central DIS: 40_005_027
+      upper bound DIS: 40_005_043
+      # IHOU + MHOU missing prescription
+      (1, 0.5 hadronic): 40_005_044 # As 40_005_049 but DIS from 40_005_027
+      (1, 2 hadronic): 40_005_045 # As 40_005_052 but DIS from 40_005_027
 
   - theoryid: 809 # NNLO, alphas=0.120
     variations: *nnlo_trn

@@ -50,6 +50,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_2JET_13TEV_2D_R08
+
     operation: 'null'
 
 - observable_name: M12-YSTAR-YB-R08

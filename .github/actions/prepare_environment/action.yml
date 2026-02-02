@@ -14,12 +14,16 @@ name: Prepare a conda environment for NNPDF installation
 # Remember that these actions are only available after checking out the repository,
 # which should always be the first step!
 # - uses: actions/checkout@v4
+#
+# This action also removes part of the cache of the runner to avoid using too much storage
+# (see at the bottom)
+# It would probably be clever to start using a different runner though TODO
 
 inputs:
   python-version:
     required: true
     description: "Python version to use"
-    default: "3.12"
+    default: "3.13"
 
 runs:
   using: "composite"
@@ -28,12 +32,15 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
         use-mamba: true
-        channels: https://packages.nnpdf.science/public,conda-forge
+        channels: conda-forge
         show-channel-urls: true
         auto-update-conda: true
         activate-environment: nnpdf_environment
         conda-remove-defaults: true
-    - name: Add NETRC
+    - name: Add NETRC and cleanup cache
       shell: bash -l {0}
       run: |
+        sudo rm -rf /opt/hostedtoolcache/Python/3.9*
+        sudo rm -rf /opt/hostedtoolcache/CodeQL
+        sudo rm -rf /usr/local/lib/android/sdk
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc

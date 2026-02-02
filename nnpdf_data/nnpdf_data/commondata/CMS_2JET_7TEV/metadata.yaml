@@ -1,8 +1,6 @@
 setname: "CMS_2JET_7TEV"
-
-version: 0
-
-version_comment: "Initial implementation"
+version: 1
+version_comment: "Added a 'legacy' variant and changed the observable name to exploit the translation layer"
 
 # References
 arXiv:
@@ -14,49 +12,48 @@ hepdata:
   version: 1
   tables: [6, 7, 8, 9, 10]
 
-
 nnpdf_metadata:
   nnpdf31_process: "DIJET"
   experiment: "CMS"
 
-
 implemented_observables:
-- observable_name: M12Y
+- observable_name: M12-Y
   observable:
     description: "Double-differential dijet cross-sections as functions of dijet mass and rapidity separation of the two highest-pT jets."
     label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy$ [pb/GeV]"
     units: ""
-
   ndata: 54
-
   tables: [6, 7, 8, 9, 10]
   process_type: DIJET
-
-    # Plotting
+  # Plotting
   kinematic_coverage: [ydiff, m_jj, sqrts]
-
   plotting:
     dataset_label: "CMS dijets 7 TeV"
     x_scale: log
     plot_x: m_jj
     figure_by:
     - ydiff
-
   kinematics:
     variables:
       ydiff: {description: "rapidity separation", label: "$y$", units: ""}
       m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
       sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
     file: kinematics.yaml
-
-    # Data
+  # Data
   data_central: data.yaml
   data_uncertainties:
   - uncertainties.yaml
-
-
-    # Theory
+  variants:
+    legacy:
+      theory:
+        FK_tables:
+          - - CMS_2JET_7TEV
+  # Theory
   theory:
     FK_tables:
-    - - CMS_2JET_7TEV
+    - - CMS_2JET_7TEV_M12Y_BIN1
+      - CMS_2JET_7TEV_M12Y_BIN2
+      - CMS_2JET_7TEV_M12Y_BIN3
+      - CMS_2JET_7TEV_M12Y_BIN4
+      - CMS_2JET_7TEV_M12Y_BIN5
     operation: 'null'

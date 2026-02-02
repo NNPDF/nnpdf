@@ -67,7 +67,7 @@ dataset_inputs:
 - {dataset: CMS_Z0_7TEV_DIMUON_2D, frac: 0.75}
 - {dataset: CMS_WPWM_8TEV_MUON_Y, frac: 0.75, variant: legacy}
 - {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [NRM], variant: legacy_10}
-- {dataset: CMS_2JET_7TEV_M12Y, frac: 0.75}
+- {dataset: CMS_2JET_7TEV_M12-Y, frac: 0.75, variant: legacy}
 - {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, variant: legacy}
 - {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
 - {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
@@ -105,6 +105,7 @@ trvlseed: 591866982
 nnseed: 945709987
 mcseed: 519562661
 genrep: true
+diagonal_basis: false
 
 ################################################################################
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer

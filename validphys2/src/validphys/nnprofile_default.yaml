@@ -30,14 +30,16 @@ theories_path: theories
 hyperscan_path: hyperscan
 validphys_cache_path: vp-cache
 ekos_path: ekos
+photons_qed_path: photons_qed
 
-# Starting from nnpdf > 4.0.7 the data is bundled together with the vp installation
-# data_path: <be careful when filling in the data path with custom values>
+# It is possible to add extra folders in which to find data by filling up the data_path variable
+# the default path within the nnpdf_data package will always be added albeit with lower priority.
+# The data path should be equivalent to the `commondata` folder within the `nnpdf_data` package.
+# data_path: [/custom/data/path, /more/data]
 
 # Remote resource locations
 fit_urls:
     - 'https://data.nnpdf.science/fits/'
-    - 'https://nnpdf.web.cern.ch/nnpdf/fits/'
 
 fit_index: 'fitdata.json'
 
@@ -47,16 +49,23 @@ hyperscan_urls:
 hyperscan_index: 'hyperscandata.json'
 
 theory_urls:
+    - 'https://nnpdf.nikhef.nl/nnpdf/theories/'
     - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
     - 'https://nnpdf.web.cern.ch/nnpdf/tables_box/'
 
 theory_index: 'theorydata.json'
 
 eko_urls:
+    - 'https://nnpdf.nikhef.nl/nnpdf/ekos/'
     - 'https://nnpdf.web.cern.ch/nnpdf/ekos/'
     - 'https://nnpdf.web.cern.ch/nnpdf/ekos_box/'
 
 eko_index: 'ekodata.json'
+
+photon_qed_urls:
+    - 'https://data.nnpdf.science/photons/'
+
+photon_qed_index: 'photondata.json'
 
 lhapdf_urls:
     - 'http://lhapdfsets.web.cern.ch/lhapdfsets/current/'
