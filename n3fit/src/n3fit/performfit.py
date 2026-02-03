@@ -111,7 +111,7 @@ def performfit(
             ``load``.
         load: None, str
             model file from which to load weights from.
-        hyperscanner: dict
+        hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
             dictionary containing the details of the hyperscanner
         hyperopt: int
             if given, number of hyperopt iterations to run
@@ -215,7 +215,9 @@ def performfit(
         if hyperopt:
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
-            replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
+            # TODO: save everything to a hyperopt folder instead
+            # Save everything to replica_1 regardless of which replicas are we running
+            replica_path_set = replica_path / "replica_1"
             hyper_scan_wrapper(
                 replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
             )

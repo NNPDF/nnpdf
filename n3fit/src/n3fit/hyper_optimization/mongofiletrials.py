@@ -1,13 +1,28 @@
 """
-    Hyperopt trial object for parallel hyperoptimization with MongoDB.
-    Data are fetched from MongoDB databases and stored in the form of json and tar.gz files within the nnfit folder.
+Hyperopt trial object for parallel hyperoptimization with MongoDB.
+Data are fetched from MongoDB databases and stored within the nnfit folder.
+
+The workflow when running parallel hyperopt with mongodb is as follows:
+    1. Submit the main "server" job. This can be submitted as part of n3fit or as a separate job,
+    e.g., in the login node, running only the database.
+    The main server job can run itself a worker job.
+    2. Submit the worker jobs. The workers each run a single job.
+
+Each of the workers need to run with the --parallel-hyperopt flag and --hyperopt <number of trials>,
+where the number of trials is per-worker (so, for 1000 each, 2 workers, will give 2000 trials total).
+Each job will first try to connect to the database and, failing that, will try to start the database.
+
+The database is stored in the folder for the replica 1 (together with the trials) so that it gets
+stored with vp-upload, allowing for a continuation of the fit.
 """
 
 import json
 import logging
 import os
+from pathlib import Path
+import platform
 import subprocess
-import tarfile
+import time
 
 from bson import SON, ObjectId
 from hyperopt.mongoexp import MongoTrials
@@ -71,47 +86,92 @@ class MongodRunner:
     ----------
         db_port: int
             MongoDB database connection port. Defaults to 27017.
+        db_host: str
+            hostname of the database
         db_name: str
             MongoDB database name. Defaults to "hyperopt-db".
     """
 
-    def __init__(self, db_name="hyperopt-db", db_port=27017):
-        self.db_name = db_name
+    def __init__(self, db_path="hyperopt-db", db_host=None, db_port=27017):
+        self.db_path = db_path
         self.db_port = db_port
+        self.db_host = db_host
+        self._runner_job = None
 
-    def ensure_database_dir_exists(self):
-        """Check if MongoDB database directory exists."""
-        if not os.path.exists(f"{self.db_name}"):
-            log.info(f"Creating MongoDB database dir {self.db_name}")
-            os.makedirs(self.db_name, exist_ok=True)
+    def is_up(self):
+        """Checks whether the database is up."""
+        from pymongo import MongoClient
+        from pymongo.errors import ServerSelectionTimeoutError
+
+        # If the db doesn't exist, and we didn't get a target to find it, no need to look further
+        if not self.db_path.exists() and self.db_host is None:
+            return False
+
+        # If the db exists, check whether we know how to connect:
+        if self.db_host is None:
+            if (hostfile := self.db_path.with_suffix(".hostname")).exists():
+                possible_host = hostfile.read_text()
+        else:
+            possible_host = self.db_host
+
+        mc = MongoClient(host=possible_host, port=self.db_port, serverSelectionTimeoutMS=100)
+        try:
+            mc.admin.command("ismaster")
+            self.db_host = possible_host
+            log.info(f"Database up at {self.db_host}:{self.db_port}")
+        except ServerSelectionTimeoutError:
+            mc.close()
+            return False
+        return True
 
     def start(self):
         """Starts the MongoDB instance via `mongod` command."""
         args = [
             "mongod",
             "-quiet",
+            "--wiredTigerCacheSizeGB",
+            # NB: 16GB seemed reasonable for cineca's cluster, not benchmarked beyond that
+            os.environ.get("HYPEROPT_MONGO_CACHE_SIZE", "16"),
             "--dbpath",
-            self.db_name,
+            self.db_path,
             "--port",
             str(self.db_port),
-            "--directoryperdb",
+            "--bind_ip_all",
         ]
         try:
+            self.db_path.mkdir(exist_ok=True, parents=True)
             mongod = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            log.info(f"Started MongoDB database {self.db_name}")
-            return mongod
+            cmd_str = " ".join([str(i) for i in args])
+            # The job starting the database gets to write the hostname down
+            # unless it has been set explicitly, in that case trust the user and use that
+            if self.db_host is None:
+                self.db_host = platform.node()
+            self.db_path.with_suffix(".hostname").write_text(self.db_host)
+            log.info(f"Started MongoDB database at {self.db_host}:{self.db_path} with {cmd_str}")
+            self._runner_job = mongod
         except OSError as err:
             msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
+            self.db_path.with_suffix(".hostname").unlink(missing_ok=True)
             raise EnvironmentError(msg) from err
 
-    def stop(self, mongod):
+    def stop(self):
         """Stops `mongod` command."""
+        if self._runner_job is None:
+            return
         try:
-            mongod.terminate()
-            mongod.wait()
-            log.info(f"Stopped mongod")
+            self._runner_job.terminate()
+            self._runner_job.wait()
+            log.info("Stopped mongod")
         except Exception as err:
             log.error(f"Failed to stop mongod: {err}")
+
+    def __enter__(self):
+        if not self.is_up():
+            self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
 
 
 class MongoFileTrials(MongoTrials):
@@ -122,12 +182,8 @@ class MongoFileTrials(MongoTrials):
     ----------
         replica_path: path
             Replica folder as generated by n3fit.
-        db_host: str
-            MongoDB database connection host. Defaults to "localhost".
-        db_port: int
-            MongoDB database connection port. Defaults to 27017.
-        db_name: str
-            MongoDB database name. Defaults to "hyperopt-db".
+        mongod_runner: :py:class:MongodRunner
+            Instance of MongodRunner with parameters such as db_host or db_port defining the database
         num_workers: int
             Number of MongoDB workers to be initiated concurrently. Defaults to 1.
         parameters: dict
@@ -137,42 +193,26 @@ class MongoFileTrials(MongoTrials):
     """
 
     def __init__(
-        self,
-        replica_path,
-        db_host="localhost",
-        db_port=27017,
-        db_name="hyperopt-db",
-        num_workers=1,
-        parameters=None,
-        *args,
-        **kwargs,
+        self, replica_path, mongod_runner, *args, num_workers=1, parameters=None, **kwargs
     ):
-        self.db_host = db_host
-        self.db_port = str(db_port)
-        self.db_name = db_name
         self.num_workers = num_workers
-        self.mongotrials_arg = (
-            f"mongo://{self.db_host}:{self.db_port}/{self._process_db_name(self.db_name)}/jobs"
-        )
+
+        # Define the connection string
+        db_name = Path(mongod_runner.db_path).name
+        host = mongod_runner.db_host
+        port = mongod_runner.db_port
+        self._mongo_str = f"{host}:{port}/{db_name}"
+
         self.workers = []
-        self.output_folder_name = replica_path.parts[-3]
+        self._runname = replica_path.parts[-3]  # corresponds to the runcard/runfolder name
 
         self._store_trial = False
         self._json_file = replica_path / "tries.json"
-        self.database_tar_file = replica_path / f"{self.db_name}.tar.gz"
         self._parameters = parameters
         self._rstate = None
         self._dynamic_trials = []
 
-        super().__init__(self.mongotrials_arg, *args, **kwargs)
-
-    def _process_db_name(self, db_name):
-        """Checks if db_name contains a slash, indicating a "directory/db" format."""
-        if '/' in db_name:
-            # Split the string by '/' and take the last part as the db name
-            db_name_parts = db_name.split('/')
-            db_name = db_name_parts[-1]
-        return db_name
+        super().__init__(f"mongo://{self._mongo_str}/jobs", *args, **kwargs)
 
     @property
     def rstate(self):
@@ -231,52 +271,38 @@ class MongoFileTrials(MongoTrials):
         if not num_gpus_available:
             log.warning("No GPUs found in the system.")
 
-        # launch mongo workers
-        for i in range(self.num_workers):
-            # construct the command to start a hyperopt-mongo-worker
-            args = [
-                "hyperopt-mongo-worker",
-                "--mongo",
-                f"{self.db_host}:{self.db_port}/{self.db_name}",
-            ]
-            if workdir:
-                args.extend(["--workdir", workdir])
-            if exp_key:
-                args.extend(["--exp-key", exp_key])
-            if poll_interval:
-                args.extend(["--poll-interval", str(poll_interval)])
-            if max_consecutive_failures:
-                args.extend(["--max-consecutive-failures", str(max_consecutive_failures)])
-            if reserve_timeout:
-                args.extend(["--reserve-timeout", str(reserve_timeout)])
-            if no_subprocesses:
-                args.append("--no-subprocesses")
+        # construct the command to start a hyperopt-mongo-worker
+        args = ["hyperopt-mongo-worker", "--mongo", self._mongo_str]
+        if workdir:
+            args.extend(["--workdir", workdir])
+        if exp_key:
+            args.extend(["--exp-key", exp_key])
+        if poll_interval:
+            args.extend(["--poll-interval", str(poll_interval)])
+        if max_consecutive_failures:
+            args.extend(["--max-consecutive-failures", str(max_consecutive_failures)])
+        if reserve_timeout:
+            args.extend(["--reserve-timeout", str(reserve_timeout)])
+        if no_subprocesses:
+            args.append("--no-subprocesses")
 
-            # start the worker as a subprocess
-            try:
-                my_env = os.environ.copy()
+        # start the worker as a subprocess
+        try:
+            my_env = os.environ.copy()
+            my_env["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
-                if num_gpus_available:
-                    # set CUDA_VISIBLE_DEVICES environment variable
-                    # the GPU index assigned to each worker i is given by mod(i, num_gpus_available)
-                    my_env["CUDA_VISIBLE_DEVICES"] = str(i % num_gpus_available)
-                    # set tensorflow memory growth
-                    my_env["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
-                    # avoid memory fragmentation issues?
-                    # my_env["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
-
-                # create log files to redirect the mongo-workers output
-                mongo_workers_logfile = f"mongo-worker_{i+1}_{self.output_folder_name}.log"
-                with open(mongo_workers_logfile, mode='w', encoding="utf-8") as log_file:
-                    # run mongo workers
-                    worker = subprocess.Popen(
-                        args, env=my_env, stdout=log_file, stderr=subprocess.STDOUT
-                    )
-                    self.workers.append(worker)
-                log.info(f"Started mongo worker {i+1}/{self.num_workers}")
-            except OSError as err:
-                msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
-                raise EnvironmentError(msg) from err
+            # create log files to redirect the mongo-workers output
+            mongo_workers_logfile = f"mongo-worker_{self._runname}_{time.time()}.log"
+            with open(mongo_workers_logfile, mode='w', encoding="utf-8") as log_file:
+                # run mongo workers
+                worker = subprocess.Popen(
+                    args, env=my_env, stdout=log_file, stderr=subprocess.STDOUT
+                )
+                self.workers.append(worker)
+            log.info("Started mongo worker")
+        except OSError as err:
+            msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
+            raise EnvironmentError(msg) from err
 
     def stop_mongo_workers(self):
         """Terminates all active mongo workers."""
@@ -289,40 +315,3 @@ class MongoFileTrials(MongoTrials):
                 log.error(
                     f"Failed to stop mongo worker {self.workers.index(worker)+1}/{self.num_workers}: {err}"
                 )
-
-    def compress_mongodb_database(self):
-        """Saves MongoDB database as tar file"""
-        # check if the database exist
-        if not os.path.exists(f"{self.db_name}"):
-            raise FileNotFoundError(
-                f"The MongoDB database directory '{self.db_name}' does not exist. "
-                "Ensure it has been initiated correctly and it is in your path."
-            )
-        # create the tar.gz file
-        try:
-            log.info(f"Compressing MongoDB database into {self.database_tar_file}")
-            with tarfile.open(self.database_tar_file, "w:gz") as tar:
-                tar.add(self.db_name)
-        except tarfile.TarError as err:
-            raise RuntimeError(f"Error compressing the database: {err}")
-
-    @staticmethod
-    def extract_mongodb_database(database_tar_file, path=os.getcwd()):
-        """Untar MongoDB database for use in restarts."""
-        # check if the database tar file exist
-        if not os.path.exists(f"{database_tar_file}"):
-            raise FileNotFoundError(
-                f"The MongoDB database tar file '{database_tar_file}' does not exist."
-            )
-        # check of the provided file is a tar type
-        if not tarfile.is_tarfile(database_tar_file):
-            raise tarfile.ReadError(
-                f"The file '{database_tar_file}' provided is not a tar file type."
-            )
-        # extract tar file
-        try:
-            log.info(f"Extracting MongoDB database {database_tar_file} to {path}")
-            with tarfile.open(f"{database_tar_file}") as tar:
-                tar.extractall(path)
-        except tarfile.TarError as err:
-            raise RuntimeError(f"Error extracting the database: {err}")
