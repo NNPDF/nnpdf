@@ -39,7 +39,7 @@ def read_table(table_no: int):
         y_dict = {'y': {'min': ymin, 'mid': ymid, 'max': ymax}}
         sqrts_dict = {'sqrts': {'min': None, 'mid': sqrts_val, 'max': None}}
         pT_dict = {'pT': {'min': ptbin['low'], 'mid': (ptbin['low']+ptbin['high'])/2, 'max': ptbin['high']}}
-        bins_in_table.append(y_dict | sqrts_dict | pT_dict)
+        bins_in_table.append(y_dict | pT_dict | sqrts_dict)
     
     # read the central values and the uncertainties
     central_values = list()
