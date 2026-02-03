@@ -1,9 +1,17 @@
 bins:
-- pTavg:
+- yb:
+    min: 0.0
+    mid: 0.5
+    max: 1.0
+  ystar:
+    min: 0.0
+    mid: 0.5
+    max: 1.0
+  pTavg:
     min: 133.0
     mid: 143.0
     max: 153.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -11,15 +19,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 153.0
     mid: 163.5
     max: 174.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -27,15 +31,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 174.0
     mid: 185.0
     max: 196.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -43,15 +43,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 196.0
     mid: 208.0
     max: 220.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -59,15 +55,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 220.0
     mid: 232.5
     max: 245.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -75,15 +67,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 245.0
     mid: 258.5
     max: 272.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -91,15 +79,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 272.0
     mid: 286.0
     max: 300.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -107,15 +91,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 300.0
     mid: 315.0
     max: 330.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -123,15 +103,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 330.0
     mid: 346.0
     max: 362.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -139,15 +115,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 362.0
     mid: 378.5
     max: 395.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -155,15 +127,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 395.0
     mid: 412.5
     max: 430.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -171,15 +139,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 430.0
     mid: 449.0
     max: 468.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -187,15 +151,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 468.0
     mid: 487.5
     max: 507.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -203,15 +163,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 507.0
     mid: 527.5
     max: 548.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -219,15 +175,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 548.0
     mid: 570.0
     max: 592.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -235,15 +187,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 592.0
     mid: 615.0
     max: 638.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -251,15 +199,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 638.0
     mid: 662.0
     max: 686.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -267,15 +211,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 686.0
     mid: 711.5
     max: 737.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -283,15 +223,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 737.0
     mid: 763.5
     max: 790.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -299,15 +235,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 790.0
     mid: 818.0
     max: 846.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -315,15 +247,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 846.0
     mid: 875.5
     max: 905.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -331,15 +259,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 905.0
     mid: 936.0
     max: 967.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -347,15 +271,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 967.0
     mid: 999.5
     max: 1032.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -363,15 +283,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1032.0
     mid: 1066.5
     max: 1101.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -379,15 +295,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1101.0
     mid: 1136.5
     max: 1172.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -395,15 +307,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1172.0
     mid: 1210.0
     max: 1248.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -411,15 +319,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1248.0
     mid: 1287.5
     max: 1327.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -427,15 +331,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1327.0
     mid: 1368.5
     max: 1410.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -443,15 +343,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1410.0
     mid: 1453.5
     max: 1497.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -459,15 +355,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1497.0
     mid: 1542.5
     max: 1588.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -475,31 +367,23 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1588.0
     mid: 1686.0
     max: 1784.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
   ystar:
-    min: 0.0
-    mid: 0.5
-    max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+    min: 1.0
+    mid: 1.5
+    max: 2.0
+  pTavg:
     min: 133.0
     mid: 143.0
     max: 153.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -507,15 +391,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 153.0
     mid: 163.5
     max: 174.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -523,15 +403,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 174.0
     mid: 185.0
     max: 196.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -539,15 +415,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 196.0
     mid: 208.0
     max: 220.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -555,15 +427,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 220.0
     mid: 232.5
     max: 245.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -571,15 +439,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 245.0
     mid: 258.5
     max: 272.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -587,15 +451,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 272.0
     mid: 286.0
     max: 300.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -603,15 +463,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 300.0
     mid: 315.0
     max: 330.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -619,15 +475,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 330.0
     mid: 346.0
     max: 362.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -635,15 +487,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 362.0
     mid: 378.5
     max: 395.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -651,15 +499,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 395.0
     mid: 412.5
     max: 430.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -667,15 +511,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 430.0
     mid: 449.0
     max: 468.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -683,15 +523,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 468.0
     mid: 487.5
     max: 507.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -699,15 +535,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 507.0
     mid: 527.5
     max: 548.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -715,15 +547,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 548.0
     mid: 570.0
     max: 592.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -731,15 +559,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 592.0
     mid: 615.0
     max: 638.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -747,15 +571,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 638.0
     mid: 662.0
     max: 686.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -763,15 +583,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 686.0
     mid: 711.5
     max: 737.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -779,15 +595,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 737.0
     mid: 763.5
     max: 790.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -795,15 +607,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 790.0
     mid: 818.0
     max: 846.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -811,15 +619,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 846.0
     mid: 875.5
     max: 905.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -827,15 +631,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 905.0
     mid: 936.0
     max: 967.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -843,15 +643,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 967.0
     mid: 999.5
     max: 1032.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -859,15 +655,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1032.0
     mid: 1066.5
     max: 1101.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -875,15 +667,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1101.0
     mid: 1136.5
     max: 1172.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -891,31 +679,23 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 1172.0
     mid: 1210.0
     max: 1248.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
   ystar:
-    min: 1.0
-    mid: 1.5
-    max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+    min: 2.0
+    mid: 2.5
+    max: 3.0
+  pTavg:
     min: 133.0
     mid: 143.0
     max: 153.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -923,15 +703,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 153.0
     mid: 163.5
     max: 174.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -939,15 +715,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 174.0
     mid: 185.0
     max: 196.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -955,15 +727,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 196.0
     mid: 208.0
     max: 220.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -971,15 +739,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 220.0
     mid: 232.5
     max: 245.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -987,15 +751,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 245.0
     mid: 258.5
     max: 272.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -1003,15 +763,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 272.0
     mid: 286.0
     max: 300.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -1019,15 +775,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 300.0
     mid: 315.0
     max: 330.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -1035,15 +787,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 330.0
     mid: 346.0
     max: 362.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -1051,15 +799,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 362.0
     mid: 378.5
     max: 395.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -1067,15 +811,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 395.0
     mid: 412.5
     max: 430.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -1083,15 +823,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 430.0
     mid: 449.0
     max: 468.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -1099,15 +835,11 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 468.0
     mid: 487.5
     max: 507.0
-  yboost:
+- yb:
     min: 0.0
     mid: 0.5
     max: 1.0
@@ -1115,31 +847,23 @@ bins:
     min: 2.0
     mid: 2.5
     max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 507.0
     mid: 527.5
     max: 548.0
-  yboost:
+- yb:
+    min: 1.0
+    mid: 1.5
+    max: 2.0
+  ystar:
     min: 0.0
     mid: 0.5
     max: 1.0
-  ystar:
-    min: 2.0
-    mid: 2.5
-    max: 3.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 133.0
     mid: 143.0
     max: 153.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1147,15 +871,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 153.0
     mid: 163.5
     max: 174.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1163,15 +883,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 174.0
     mid: 185.0
     max: 196.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1179,15 +895,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 196.0
     mid: 208.0
     max: 220.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1195,15 +907,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 220.0
     mid: 232.5
     max: 245.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1211,15 +919,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 245.0
     mid: 258.5
     max: 272.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1227,15 +931,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 272.0
     mid: 286.0
     max: 300.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1243,15 +943,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 300.0
     mid: 315.0
     max: 330.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1259,15 +955,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 330.0
     mid: 346.0
     max: 362.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1275,15 +967,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 362.0
     mid: 378.5
     max: 395.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1291,15 +979,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 395.0
     mid: 412.5
     max: 430.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1307,15 +991,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 430.0
     mid: 449.0
     max: 468.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1323,15 +1003,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 468.0
     mid: 487.5
     max: 507.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1339,15 +1015,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 507.0
     mid: 527.5
     max: 548.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1355,15 +1027,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 548.0
     mid: 570.0
     max: 592.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1371,15 +1039,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 592.0
     mid: 615.0
     max: 638.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1387,15 +1051,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 638.0
     mid: 662.0
     max: 686.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1403,15 +1063,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 686.0
     mid: 711.5
     max: 737.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1419,15 +1075,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 737.0
     mid: 763.5
     max: 790.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1435,15 +1087,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 790.0
     mid: 818.0
     max: 846.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1451,15 +1099,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 846.0
     mid: 875.5
     max: 905.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1467,15 +1111,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 905.0
     mid: 936.0
     max: 967.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1483,31 +1123,23 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 967.0
     mid: 999.5
     max: 1032.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
   ystar:
-    min: 0.0
-    mid: 0.5
-    max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+    min: 1.0
+    mid: 1.5
+    max: 2.0
+  pTavg:
     min: 133.0
     mid: 143.0
     max: 153.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1515,15 +1147,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 153.0
     mid: 163.5
     max: 174.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1531,15 +1159,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 174.0
     mid: 185.0
     max: 196.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1547,15 +1171,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 196.0
     mid: 208.0
     max: 220.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1563,15 +1183,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 220.0
     mid: 232.5
     max: 245.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1579,15 +1195,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 245.0
     mid: 258.5
     max: 272.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1595,15 +1207,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 272.0
     mid: 286.0
     max: 300.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1611,15 +1219,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 300.0
     mid: 315.0
     max: 330.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1627,15 +1231,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 330.0
     mid: 346.0
     max: 362.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1643,15 +1243,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 362.0
     mid: 378.5
     max: 395.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1659,15 +1255,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 395.0
     mid: 412.5
     max: 430.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1675,15 +1267,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 430.0
     mid: 449.0
     max: 468.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1691,15 +1279,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 468.0
     mid: 487.5
     max: 507.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1707,15 +1291,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 507.0
     mid: 527.5
     max: 548.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1723,15 +1303,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 548.0
     mid: 570.0
     max: 592.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1739,15 +1315,11 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 592.0
     mid: 615.0
     max: 638.0
-  yboost:
+- yb:
     min: 1.0
     mid: 1.5
     max: 2.0
@@ -1755,31 +1327,23 @@ bins:
     min: 1.0
     mid: 1.5
     max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 638.0
     mid: 662.0
     max: 686.0
-  yboost:
-    min: 1.0
-    mid: 1.5
-    max: 2.0
+- yb:
+    min: 2.0
+    mid: 2.5
+    max: 3.0
   ystar:
-    min: 1.0
-    mid: 1.5
-    max: 2.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+    min: 0.0
+    mid: 0.5
+    max: 1.0
+  pTavg:
     min: 133.0
     mid: 143.0
     max: 153.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1787,15 +1351,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 153.0
     mid: 163.5
     max: 174.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1803,15 +1363,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 174.0
     mid: 185.0
     max: 196.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1819,15 +1375,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 196.0
     mid: 208.0
     max: 220.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1835,15 +1387,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 220.0
     mid: 232.5
     max: 245.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1851,15 +1399,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 245.0
     mid: 258.5
     max: 272.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1867,15 +1411,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 272.0
     mid: 286.0
     max: 300.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1883,15 +1423,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 300.0
     mid: 315.0
     max: 330.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1899,15 +1435,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 330.0
     mid: 346.0
     max: 362.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1915,15 +1447,11 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 362.0
     mid: 378.5
     max: 395.0
-  yboost:
+- yb:
     min: 2.0
     mid: 2.5
     max: 3.0
@@ -1931,23 +1459,7 @@ bins:
     min: 0.0
     mid: 0.5
     max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
-- pTavg:
+  pTavg:
     min: 395.0
     mid: 412.5
     max: 430.0
-  yboost:
-    min: 2.0
-    mid: 2.5
-    max: 3.0
-  ystar:
-    min: 0.0
-    mid: 0.5
-    max: 1.0
-  sqrts:
-    min: null
-    mid: 8
-    max: null
