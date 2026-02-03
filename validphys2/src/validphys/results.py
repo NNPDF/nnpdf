@@ -270,8 +270,7 @@ def groups_index(groups_data, diagonal_basis=True):
                 )
 
     columns = ["group", "dataset", "id"]
-    df = pd.DataFrame(records, columns=columns)
-    df.set_index(columns, inplace=True)
+    df = pd.DataFrame(records, columns=columns).set_index(columns)
 
     return df.index
 

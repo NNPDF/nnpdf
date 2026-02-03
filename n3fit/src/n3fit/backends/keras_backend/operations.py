@@ -46,6 +46,7 @@ from keras.ops import (
     expand_dims,
     leaky_relu,
     reshape,
+    nan_to_num,
     repeat,
     split,
     sum,
@@ -290,3 +291,8 @@ def tensor_splitter(ishape, split_sizes, axis=2, name="splitter"):
         lambda x: Kops.split(x, indices, axis=axis), output_shape=oshapes, name=name
     )
     return sp_layer
+
+
+def nansum(x, *args, **kwargs):
+    """Like np.nansum, returns the sum treating NaN as 0.0 (and inf as a very large number)."""
+    return sum(nan_to_num(x), *args, **kwargs)

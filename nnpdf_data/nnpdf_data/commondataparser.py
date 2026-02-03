@@ -625,7 +625,7 @@ class ObservableMetaData:
                 for i in range(3 - ncol):
                     dbin[f"extra_{i}"] = d
 
-            kin_dict[bin_index] = pd.DataFrame(dbin).stack()
+            kin_dict[bin_index] = pd.DataFrame(dbin).stack().dropna()
 
         if len(kin_dict) != self.ndata:
             raise ValueError(

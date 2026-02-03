@@ -61,9 +61,10 @@ vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
 python = ">=3.9"
 matplotlib = "^3.9"
 pineappl = "^1.0.0"
+# TODO: make the code compatible with pandas 3
 pandas = "*"
 numpy = "*"
-"ruamel.yaml" = "*"
+"ruamel.yaml" = {version = ">=0.19.1", extras=["oldlibyaml"]}
 validobj = "*"
 prompt_toolkit = "*"
 reportengine = ">=0.32"
