@@ -73,5 +73,5 @@ implemented_observables:
       data_central: data_stronger.yaml
   theory:
     FK_tables:
-    - -
+    - - ATLAS_1JET_7TEV_R06_PTY
     operation: 'null'
