@@ -25,28 +25,27 @@ def read_kinematics_and_centrals(tables: list) -> tuple:
         with open(f'rawdata/table_{table_num}.yaml', 'r') as file:
             kins = yaml.safe_load(file)
         # get ystar, yboost, sqrts bins:
-        current_yys_bin = dict()
-        for yys_dict in kins['dependent_variables'][0]['qualifiers']:
-            for k, v in yys_dict.items():
+        current_yy_bin = dict()
+        for yy_dict in kins['dependent_variables'][0]['qualifiers']:
+            for k, v in yy_dict.items():
                 if k == 'name':
-                    bin_name = v.lower().replace('(', '').replace(')', '')
-                    current_yys_bin[bin_name] = dict()
+                    if v != 'SQRT(S)':
+                        bin_name = v.lower().replace('oost', '')
+                        current_yy_bin[bin_name] = dict()
                 if k == 'value':
                     if type(v) == str:
                         lower = float(v[:3])
                         upper = float(v[-3:])
                         middle = (lower+upper)/2
-                        current_yys_bin[bin_name] = {'min': lower, 'mid': middle, 'max': upper}
-                    else:
-                        current_yys_bin[bin_name] = {'min': None, 'mid': v, 'max': None}
+                        current_yy_bin[bin_name] = {'min': lower, 'mid': middle, 'max': upper}
         # get the ptavg bins and combine them with yys bins
         for ptavg_dict in kins['independent_variables'][0]['values']:
             lower = ptavg_dict['low']
             upper = ptavg_dict['high']
             middle = (lower + upper)/2
             current_p_bin = {'pTavg': {'min': lower, 'mid': middle, 'max': upper}}
-            copy_yys = copy.deepcopy(current_yys_bin)
-            current_pyys_bin = current_p_bin | copy_yys
+            copy_yy = copy.deepcopy(current_yy_bin)
+            current_pyys_bin = copy_yy | current_p_bin
             bins.append(current_pyys_bin)
         # get the central values
         for vals in kins['dependent_variables'][0]['values']:
