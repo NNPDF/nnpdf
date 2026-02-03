@@ -30,7 +30,7 @@ implemented_observables:
       yb: {description: "the boost of the two leading jets", label: "$y_\text{b}$", units: ""}
       ystar: {description: "half rapidity separation of the two leading jets", label: "$y^*$", units: ""}
       pTavg: {description: "average transverse momentum of the two leading jets", label: '\(p_{\text{T,avg}}\)', units: "GeV"}
-  kinematic_coverage: [yb, star pTavg]
+  kinematic_coverage: [yb, star, pTavg]
   # Data
   data_central: data.yaml
   data_uncertainties:
