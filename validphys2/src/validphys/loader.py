@@ -17,7 +17,7 @@ import urllib.parse as urls
 
 import requests
 
-from nnpdf_data import THEORY_CARDS_PATH
+from nnpdf_data import CFACTOR_PATH, THEORY_CARDS_PATH
 from nnpdf_data.commondataparser import parse_new_metadata, parse_set_metadata
 from nnpdf_data.coredata import generate_path_filtered_data
 from nnpdf_data.utils import get_nnpdf_profile
@@ -405,11 +405,22 @@ class Loader(LoaderBase):
         _, theopath = self.check_theoryID(theoryID)
         cf = []
         for cfactor in cfactors:
-            cfactorpath = theopath / "cfactor" / f"CF_{cfactor}_{setname}.dat"
-            if not cfactorpath.exists():
+            filename = f"CF_{cfactor}_{setname}.dat"
+            theory_cfactor = theopath / "cfactor" / filename
+            internal_cfactor = CFACTOR_PATH / filename
+            if theory_cfactor.exists() and internal_cfactor.exists():
+                log.warning(
+                    f"cfactor for {filename} found both internally and in {theory_cfactor}. The theory cfactor takes precedence."
+                )
+
+            if theory_cfactor.exists():
+                cfactorpath = theory_cfactor
+            elif internal_cfactor.exists():
+                cfactorpath = internal_cfactor
+            else:
                 msg = (
-                    f"Could not find cfactor '{cfactor}' for FKTable {setname}."
-                    f"File {cfactorpath} does not exist in {theoryID}"
+                    f"Could not find cfactor '{cfactor}' for FKTable {setname}.\n"
+                    f"File {filename} does not exist in {theopath}/cfactor or in {CFACTOR_PATH}"
                 )
                 raise CfactorNotFound(msg)
             cf.append(cfactorpath)
