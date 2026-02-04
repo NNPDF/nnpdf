@@ -22,36 +22,34 @@ implemented_observables:
   ndata: 122 # 31 + 26 + 14 + 23 + 17 + 11
   observable:
     description: "Triple-differential dijet cross-section as a function of the average transverse momentum, half rapidity separation and the boost of two leading jets"
-    label: r"\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}"
+    label: r"$\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}$"
     units: "[pb/GeV]"
   kinematics:
     file: kinematics.yaml
     variables: # need to fix inline math here because load_yaml breaks down
-      yb: {description: "the boost of the two leading jets", label: "$y_\text{b}$", units: ""}
+      yb: {description: "the boost of the two leading jets", label: "$y_{b}$", units: ""}
       ystar: {description: "half rapidity separation of the two leading jets", label: "$y^*$", units: ""}
-      pTavg: {description: "average transverse momentum of the two leading jets", label: '\(p_{\text{T,avg}}\)', units: "GeV"}
-  kinematic_coverage: [yb, star, pTavg]
+      pTavg: {description: "average transverse momentum of the two leading jets", label: '$p_{\text{T,avg}}$', units: "GeV"}
+  kinematic_coverage: [yb, ystar, pTavg]
   # Data
   data_central: data.yaml
-  data_uncertainties:
-  - uncertainties.yaml
-  variants:
-    legacy:
-      theory:
-        FK_tables:
-          - - CMS_2JET_8TEV_3D
+  data_uncertainties: [uncertainties.yaml]
   # Theory
   theory:
     FK_tables:
-    - - CMS_2JET_8TEV_3D
-    operation: 'null'
-    conversion_factor: 1000.0 # from TeV to GeV
+    - - CMS_2JET_8TEV_3D_0
+      - CMS_2JET_8TEV_3D_1
+      - CMS_2JET_8TEV_3D_2
+      - CMS_2JET_8TEV_3D_3
+      - CMS_2JET_8TEV_3D_4
+      - CMS_2JET_8TEV_3D_5
+    operation: 'null' # from TeV to GeV
 
   # Plotting
   plotting:
     dataset_label: "CMS dijets 8 TeV"
     plot_x: pTavg
-    y_label: r"\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}"
+    y_label: r"$\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}$"
     figure_by:
     - ystar
-    - yboost
+    - yb

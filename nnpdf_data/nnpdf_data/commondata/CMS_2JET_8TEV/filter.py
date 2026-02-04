@@ -132,7 +132,7 @@ def aggregate_uncertainties(abs_errors, art_unc):
         current_dict = abs_errors[i]
         current_dict.pop('stat')
         art_unc_list = art_unc[i]
-        art_unc_dict = {f'stat_art_unc_{j+1}': art_unc_list[j] for j in range(len(art_unc_list))}
+        art_unc_dict = {f'art_unc_{j+1}': art_unc_list[j] for j in range(len(art_unc_list))}
         total_dict = current_dict | art_unc_dict
         all_uncertainties.append(total_dict)
     return all_uncertainties
@@ -142,7 +142,7 @@ def dump_uncertainties(all_unc):
     singular_art_unc_desc = {'description': 'artificial uncertainty originating correlated statistical uncertainties',
                              'treatment': 'ADD',
                              'type': 'CORR'}
-    all_art_unc_desc = {f'stat_art_unc_{i+1}': singular_art_unc_desc.copy() for i in range(122)}
+    all_art_unc_desc = {f'art_unc_{i+1}': singular_art_unc_desc.copy() for i in range(122)}
     other_unc = {
         'uncor': {'description': 'stems from residual effects of small inefficiencies in the jet identification',
                              'treatment': 'ADD',
