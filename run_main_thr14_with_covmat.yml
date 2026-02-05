@@ -35,10 +35,10 @@ datacuts:
 ################################################################################
 # NNLO QCD TRN evolution
 theory:
-  theoryid: 40_024_003
+  theoryid: 40_027_003
 
 theorycovmatconfig:
-  point_prescriptions: ["mcharm 1.51 1.41 1.61"]
+  point_prescriptions: ["mcharm 1.5 1 2"]
   # theoryids:
   #   from_: scale_variation_theories
   pdf: run_main_thr14
