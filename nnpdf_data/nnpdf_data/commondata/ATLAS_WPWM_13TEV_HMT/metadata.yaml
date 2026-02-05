@@ -1,6 +1,6 @@
 setname: ATLAS_WPWM_13TEV_HMT
 version: 1
-version_comment: Initial Implementation
+version_comment: Only combined channel to be used as EW corrections are not available for the dimuon channel.
 nnpdf_metadata:
   nnpdf31_process: DY_W_MT CC
   experiment: ATLAS
