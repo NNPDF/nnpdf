@@ -1,0 +1,72 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.1140002012252808,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 0.8256968259811401,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.5798380374908447,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.24698171019554138,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.557892382144928,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t3",
+      "smallx": 0.25965821743011475,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.6486636400222778,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t15",
+      "smallx": 1.1369062662124634,
+      "largex": 0.0,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 1100,
+  "best_epoch": 1078,
+  "erf_tr": 4.386785507202148,
+  "erf_vl": 2.743025779724121,
+  "chi2": 3.4394715894170167,
+  "pos_state": "POS_PASS",
+  "arc_lengths": [
+    1.9411007725625982,
+    1.2397349524353538,
+    1.1849557544788838,
+    1.0869983423244785,
+    10.304677401121229
+  ],
+  "integrability": [
+    0.003432749479544749,
+    9.31999693443153e-06,
+    1.5055138760322606e-05,
+    0.05471411207690857,
+    0.024066736688837187
+  ]
+}
