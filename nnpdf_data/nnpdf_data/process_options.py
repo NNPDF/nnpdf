@@ -365,11 +365,7 @@ DIJET = _Process(
 DIJET_3D = _Process(
     "DIJET",
     "DiJets production",
-<<<<<<< HEAD
-    accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff, _Vars.ymax, _Vars.yb),
-=======
     accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff, _Vars.ymax, _Vars.yb, _Vars.pTavg),
->>>>>>> implement_CMS_2JET_8TEV_3D
     xq2map_function=_dijets_xq2map,
 )
 
