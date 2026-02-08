@@ -70,6 +70,7 @@ implemented_observables:
     x_scale: log
     plot_x: m_jj
     figure_by:
+    - yb
     - ystar
 
   kinematics:
@@ -86,5 +87,19 @@ implemented_observables:
 
   theory:
     FK_tables:
-    - - CMS_2JET_13TEV_3D_R08
+    - - CMS_2JET_13TEV_00
+      - CMS_2JET_13TEV_01
+      - CMS_2JET_13TEV_02
+      - CMS_2JET_13TEV_03
+      - CMS_2JET_13TEV_04
+      - CMS_2JET_13TEV_05
+      - CMS_2JET_13TEV_06
+      - CMS_2JET_13TEV_07
+      - CMS_2JET_13TEV_08
+      - CMS_2JET_13TEV_09
+      - CMS_2JET_13TEV_10
+      - CMS_2JET_13TEV_11
+      - CMS_2JET_13TEV_12
+      - CMS_2JET_13TEV_13
+      - CMS_2JET_13TEV_14
     operation: 'null'
