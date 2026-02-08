@@ -26,6 +26,7 @@ class _Vars:
     yb = "yb"
     m_jj = "m_jj"
     pT2 = "pT2"
+    pTavg = 'pTavg'
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
@@ -364,7 +365,11 @@ DIJET = _Process(
 DIJET_3D = _Process(
     "DIJET",
     "DiJets production",
+<<<<<<< HEAD
     accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff, _Vars.ymax, _Vars.yb),
+=======
+    accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff, _Vars.ymax, _Vars.yb, _Vars.pTavg),
+>>>>>>> implement_CMS_2JET_8TEV_3D
     xq2map_function=_dijets_xq2map,
 )
 

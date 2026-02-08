@@ -1,0 +1,53 @@
+setname: "CMS_2JET_8TEV"
+version: 1
+version_comment: "Implementation of the dataset excluded from NNPDF4.0"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1705.02628"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1598460"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1598460"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIJET_3D"
+  experiment: "CMS"
+
+implemented_observables:
+- observable_name: 3D
+  process_type: DIJET
+  tables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  ndata: 122 # 31 + 26 + 14 + 23 + 17 + 11
+  observable:
+    description: "Triple-differential dijet cross-section as a function of the average transverse momentum, half rapidity separation and the boost of two leading jets"
+    label: r"$\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}$"
+    units: "[pb/GeV]"
+  kinematics:
+    file: kinematics.yaml
+    variables: # need to fix inline math here because load_yaml breaks down
+      yb: {description: "the boost of the two leading jets", label: "$y_{b}$", units: ""}
+      ystar: {description: "half rapidity separation of the two leading jets", label: "$y^*$", units: ""}
+      pTavg: {description: "average transverse momentum of the two leading jets", label: '$p_{\text{T,avg}}$', units: "GeV"}
+  kinematic_coverage: [yb, ystar, pTavg]
+  # Data
+  data_central: data.yaml
+  data_uncertainties: [uncertainties.yaml]
+  theory:
+    operation: 'null'
+    FK_tables:
+    - - CMS_2JET_8TEV_3D_BIN1
+      - CMS_2JET_8TEV_3D_BIN2
+      - CMS_2JET_8TEV_3D_BIN3
+      - CMS_2JET_8TEV_3D_BIN4
+      - CMS_2JET_8TEV_3D_BIN5
+      - CMS_2JET_8TEV_3D_BIN6
+  plotting:
+    dataset_label: "CMS dijets 8 TeV"
+    x_scale: log
+    plot_x: pTavg
+    y_label: r"$\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}$"
+    figure_by:
+    - ystar
+    - yb
