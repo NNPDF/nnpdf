@@ -34,20 +34,18 @@ implemented_observables:
   # Data
   data_central: data.yaml
   data_uncertainties: [uncertainties.yaml]
-  # Theory
   theory:
+    operation: 'null'
     FK_tables:
-    - - CMS_2JET_8TEV_3D_0
-      - CMS_2JET_8TEV_3D_1
-      - CMS_2JET_8TEV_3D_2
-      - CMS_2JET_8TEV_3D_3
-      - CMS_2JET_8TEV_3D_4
-      - CMS_2JET_8TEV_3D_5
-    operation: 'null' # from TeV to GeV
-
-  # Plotting
+    - - CMS_2JET_8TEV_3D_BIN1
+      - CMS_2JET_8TEV_3D_BIN2
+      - CMS_2JET_8TEV_3D_BIN3
+      - CMS_2JET_8TEV_3D_BIN4
+      - CMS_2JET_8TEV_3D_BIN5
+      - CMS_2JET_8TEV_3D_BIN6
   plotting:
     dataset_label: "CMS dijets 8 TeV"
+    x_scale: log
     plot_x: pTavg
     y_label: r"$\frac{d^{3}\sigma}{dp_{\text{T,avg}}dy^{*}dy_{\text{b}}}$"
     figure_by:
