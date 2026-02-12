@@ -15,7 +15,6 @@ from reportengine.table import table
 
 pass
 from validphys.checks import check_pc_parameters
-from validphys.core import PDF
 from validphys.results import results, results_central
 from validphys.theorycovariance.higher_twist_functions import compute_deltas_pc
 from validphys.theorycovariance.theorycovarianceutils import (
@@ -227,34 +226,31 @@ def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
 def covmat_power_corrections(deltas1, deltas2):
     """Returns the the theory covariance sub-matrix for power
     corrections. The two arguments `deltas1` and `deltas2` contain
-    the shifts for the firs and second experiment, respectively.
+    the shifts for the first and second experiment, respectively.
 
     The shifts are given in this form:
     ```
-    deltas1 = {shift1_label: array1_of_shifts1,
-               shift2_label: array1_of_shifts2,
-               shift3_label: array1_of_shifts3,
-               ...}
-    deltas2 = {shift1_label: array2_of_shifts1,
-               shift2_label: array2_of_shifts2,
-               shift3_label: array2_of_shifts3,
-               ...}
+    deltas1 = [array1_of_shifts1,
+               array1_of_shifts2,
+               array1_of_shifts3,
+               ...]
+    deltas2 = [array2_of_shifts1,
+               array2_of_shifts2,
+               array2_of_shifts3,
+               ...]
     ```
     The sub-matrix is computed using the 5-point prescription, thus
 
       s = array1_of_shifts1 X array2_of_shifts1 + array1_of_shifts2 X array2_of_shifts2 + ...
 
-    where `X` is the outer product.
+    where ``X`` is the outer product.
     """
-    # Check that `deltas1` and `deltas2` have the same shifts
-    if deltas1.keys() != deltas2.keys():
-        raise RuntimeError('The two dictionaries do not contain the same shifts.')
 
-    size1 = next(iter(deltas1.values())).size
-    size2 = next(iter(deltas2.values())).size
+    size1 = deltas1[0].size
+    size2 = deltas2[0].size
     s = np.zeros(shape=(size1, size2))
-    for shift in deltas1.keys():
-        s += np.outer(deltas1[shift], deltas2[shift])
+    for shift1, shift2 in zip(deltas1, deltas2):
+        s += np.outer(shift1, shift2)
     return s
 
 
@@ -367,12 +363,7 @@ def covs_pt_prescrip_mhou(combine_by_type, point_prescription):
 
 @check_pc_parameters
 def covs_pt_prescrip_pc(
-    combine_by_type,
-    point_prescription,
-    pdf: PDF,
-    pc_parameters,
-    pc_included_procs,
-    pc_excluded_exps,
+    combine_by_type, point_prescription, pdf, pc_parameters, pc_included_procs, pc_excluded_exps
 ):
     """Produces the sub-matrices of the theory covariance matrix for power
     corrections. Sub-matrices correspond to applying power corrected shifts
@@ -399,6 +390,11 @@ def covs_pt_prescrip_pc(
             if not (is_excluded_exp or is_included_proc):
                 deltas1 = compute_deltas_pc(data_spec1, pdf, pc_parameters)
                 deltas2 = compute_deltas_pc(data_spec2, pdf, pc_parameters)
+
+                # Convert deltas1 and deltas2 to the format expected by compute_covs_pt_prescrip
+                deltas1 = [np.array(deltas1[shift]) for shift in sorted(deltas1.keys())]
+                deltas2 = [np.array(deltas2[shift]) for shift in sorted(deltas2.keys())]
+
                 s = compute_covs_pt_prescrip(
                     point_prescription, exp_name1, deltas1, exp_name2, deltas2
                 )
