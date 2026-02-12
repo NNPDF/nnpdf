@@ -1323,8 +1323,10 @@ class CoreConfig(configparser.Config):
             f = user_covmat_fitting
 
         return f
-    
-    def produce_mult_factor_user_covmat(self, mult_factor: float = None, user_covmat_path: str = None):
+
+    def produce_mult_factor_user_covmat(
+        self, mult_factor: float = 1.0, user_covmat_path: str = None
+    ):
         """
         Multiplicative factors for the user covmat provided by mult_factors_user_covmat in the runcard.
         If no factors are provided, returns None.
@@ -1332,8 +1334,10 @@ class CoreConfig(configparser.Config):
         """
         # Check that if mult_factors is provided, user_covmat_paths is also provided
         if mult_factor is not None and user_covmat_path is None:
-            raise ConfigError("If mult_factors is provided, user_covmat_paths must also be provided.")
-            
+            raise ConfigError(
+                "If mult_factors is provided, user_covmat_paths must also be provided."
+            )
+
         if mult_factor is None:
             return 1.0 if user_covmat_path is not None else None
         else:
@@ -1945,18 +1949,7 @@ class CoreConfig(configparser.Config):
         if not fakedata:
             return validphys.filters.filter_real_data
         else:
-            # TODO we don't want to sample from the theory covmat for L1 data,
-            # but we do want to use the theory covmat for L2 data
-            if theorycovmatconfig is not None and theorycovmatconfig.get(
-                "use_thcovmat_in_fakedata_sampling"
-            ):
-                # NOTE: By the time we run theory covmat closure tests,
-                # hopefully the generation of pseudodata will be done in python.
-                raise ConfigError(
-                    "Generating L1 closure test data which samples from the theory "
-                    "covariance matrix has not been implemented yet."
-                )
-            elif inconsistent_fakedata:
+            if inconsistent_fakedata:
                 log.info("Using filter for inconsistent closure data")
                 return validphys.filters.filter_inconsistent_closure_data_by_experiment
 
@@ -1986,14 +1979,14 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_covs_pt_prescrip(self, point_prescription):
-        if point_prescription != 'power corrections':
-            from validphys.theorycovariance.construction import covs_pt_prescrip_mhou
-
-            f = covs_pt_prescrip_mhou
-        else:
+        if point_prescription == 'power corrections':
             from validphys.theorycovariance.construction import covs_pt_prescrip_pc
 
             f = covs_pt_prescrip_pc
+        else:
+            from validphys.theorycovariance.construction import covs_pt_prescrip_mhou
+
+            f = covs_pt_prescrip_mhou
 
         return f
 

@@ -33,10 +33,10 @@ datacuts:
 ################################################################################
 # NNLO QCD TRN evolution
 theory:
-  theoryid: 708
+  theoryid: 40_000_000
 
 theorycovmatconfig:
-  point_prescriptions: ["9 point", "power corrections"]
+  point_prescriptions: ["power corrections"]
   pc_parameters:
     H2p: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
     H2d: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
