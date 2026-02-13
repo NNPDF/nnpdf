@@ -49,7 +49,11 @@ implemented_observables:
 
   theory:
     FK_tables:
-    - - CMS_2JET_13TEV_2D_R08
+    - - CMS_2JET_13TEV_2D_BIN1
+      - CMS_2JET_13TEV_2D_BIN2
+      - CMS_2JET_13TEV_2D_BIN3
+      - CMS_2JET_13TEV_2D_BIN4
+      - CMS_2JET_13TEV_2D_BIN5
 
     operation: 'null'
 
@@ -86,5 +90,19 @@ implemented_observables:
 
   theory:
     FK_tables:
-    - - CMS_2JET_13TEV_3D_R08
+    - - CMS_2JET_13TEV_3D_BIN1
+      - CMS_2JET_13TEV_3D_BIN2
+      - CMS_2JET_13TEV_3D_BIN3
+      - CMS_2JET_13TEV_3D_BIN4
+      - CMS_2JET_13TEV_3D_BIN5
+      - CMS_2JET_13TEV_3D_BIN6
+      - CMS_2JET_13TEV_3D_BIN7
+      - CMS_2JET_13TEV_3D_BIN8
+      - CMS_2JET_13TEV_3D_BIN9
+      - CMS_2JET_13TEV_3D_BIN10
+      - CMS_2JET_13TEV_3D_BIN11
+      - CMS_2JET_13TEV_3D_BIN12
+      - CMS_2JET_13TEV_3D_BIN13
+      - CMS_2JET_13TEV_3D_BIN14
+      - CMS_2JET_13TEV_3D_BIN15
     operation: 'null'
