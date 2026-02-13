@@ -38,7 +38,7 @@ implemented_observables:
 
   kinematics:
     variables:
-      ymax: {description: "absolute rapidity of the outermost jet", label: "$|y_{\rm max}|$", units: ""}
+      ymax: {description: "absolute rapidity of the outermost jet", label: '$|y_{\rm max}|$', units: ""}
       m_jj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "GeV"}
       sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
     file: kinematics_2d_mass_ak8.yaml
