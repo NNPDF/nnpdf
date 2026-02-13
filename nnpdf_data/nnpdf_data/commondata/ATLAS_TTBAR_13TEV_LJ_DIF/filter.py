@@ -84,11 +84,6 @@ def processData():
     covMatArray_dSig_dyttBar_total = []
     covMatArray_dSig_dyttBar_total_norm = []
 
-    #         mttbar(9)|  pTt (8)|  yt(5)|  yttbar(7)
-    # mttbar|   803       801    802    810
-    # pTt   |   801t      798    799    808
-    # yt    |   802t      799t   800    809
-    # yttbar|   810t      808t   809t   812
     covMat_stat, artUnc_stat = artunc_1d.artunc()
     n_artUnc_stat = len(artUnc_stat)
 
@@ -104,11 +99,11 @@ def processData():
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dmttBar_total.append(covMatEl)
 
-    covMatArray_dSig_dmttBar_total = np.array(covMatArray_dSig_dmttBar_total)
-    covMatArray_dSig_dmttBar_stat = covMat_stat[:ndata_dSig_dmttBar, :ndata_dSig_dmttBar].flatten()
-    covMatArray_dSig_dmttBar_sys = covMatArray_dSig_dmttBar_total - covMatArray_dSig_dmttBar_stat
+    # covMatArray_dSig_dmttBar_total = np.array(covMatArray_dSig_dmttBar_total)
+    # covMatArray_dSig_dmttBar_stat = covMat_stat[:ndata_dSig_dmttBar, :ndata_dSig_dmttBar].flatten()
+    # covMatArray_dSig_dmttBar_sys = covMatArray_dSig_dmttBar_total - covMatArray_dSig_dmttBar_stat
 
-    artUncMat_dSig_dmttBar_sys = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar_sys)
+    # artUncMat_dSig_dmttBar_sys = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar_sys)
     artUncMat_dSig_dmttBar_lumiless = cta(ndata_dSig_dmttBar, llcm_mtt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
@@ -121,19 +116,21 @@ def processData():
         value_delta = 0
         error_value = {}
         error_value_lumiless = {}
+        # stat error is in the covariance matrix, so we skip the first error in the list, which is the total stat error
         # error_label = str(values[i]['errors'][0]['label'])
         # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        # for j in range(1, len(values[i]['errors'])):
-        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-        #     se_delta, se_sigma = se(plus, minus)
-        #     value_delta = value_delta + se_delta
-        #     error_label = values[i]['errors'][j]['label']
-        #     error_value[error_label] = se_sigma
-        data_central_value = values[i]['value']  # + value_delta
+        for j in range(1, len(values[i]['errors'])):
+            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+            se_delta, se_sigma = se(plus, minus)
+            value_delta = value_delta + se_delta
+            error_label = values[i]['errors'][j]['label']
+            error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] + value_delta
+
         data_central_dSig_dmttBar.append(data_central_value)
         for j in range(ndata_dSig_dmttBar):
-            error_value['ArtUnc_sys_' + str(j + 1)] = float(artUncMat_dSig_dmttBar_sys[i][j])
+            # error_value['ArtUnc_sys_' + str(j + 1)] = float(artUncMat_dSig_dmttBar_sys[i][j])
             error_value_lumiless['ArtUnc_' + str(j + 1)] = float(
                 artUncMat_dSig_dmttBar_lumiless[i][j]
             )
@@ -151,15 +148,19 @@ def processData():
     error_definition_dSig_dmttBar = {}
     error_definition_dSig_dmttBar_wo_lumi = {}
     # error_definition_dSig_dmttBar['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-    #     error_definition_dSig_dmttBar[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    for i in range(ndata_dSig_dmttBar):
-        error_definition_dSig_dmttBar['ArtUnc_sys_' + str(i + 1)] = {
-            'definition': 'artificial uncertainty ' + str(i + 1),
-            'treatment': 'ADD',
+    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+        error_definition_dSig_dmttBar[error_name] = {
+            'description': '',
+            'treatment': 'MULT',
             'type': 'CORR',
         }
+    for i in range(ndata_dSig_dmttBar):
+        # error_definition_dSig_dmttBar['ArtUnc_sys_' + str(i + 1)] = {
+        #     'definition': 'artificial uncertainty ' + str(i + 1),
+        #     'treatment': 'ADD',
+        #     'type': 'CORR',
+        # }
         error_definition_dSig_dmttBar_wo_lumi['ArtUnc_' + str(i + 1)] = {
             'definition': 'artificial uncertainty ' + str(i + 1),
             'treatment': 'ADD',
@@ -169,7 +170,7 @@ def processData():
         error_definition_dSig_dmttBar['ArtUnc_stat_' + str(i + 1)] = {
             'definition': 'artificial uncertainty ' + str(i + 1),
             'treatment': 'ADD',
-            'type': 'CORR',
+            'type': 'ATLAS13TEVTTBAR190807305unc' + str(i + 1),
         }
 
     data_central_dSig_dmttBar_yaml = {'data_central': data_central_dSig_dmttBar}
@@ -278,11 +279,11 @@ def processData():
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dpTt_total.append(covMatEl)
 
-    covMatArray_dSig_dpTt_total = np.array(covMatArray_dSig_dpTt_total)
-    covMatArray_dSig_dpTt_stat = covMat_stat[9:17, 9:17].flatten()
-    covMatArray_dSig_dpTt_sys = covMatArray_dSig_dpTt_total - covMatArray_dSig_dpTt_stat
+    # covMatArray_dSig_dpTt_total = np.array(covMatArray_dSig_dpTt_total)
+    # covMatArray_dSig_dpTt_stat = covMat_stat[9:17, 9:17].flatten()
+    # covMatArray_dSig_dpTt_sys = covMatArray_dSig_dpTt_total - covMatArray_dSig_dpTt_stat
 
-    artUncMat_dSig_dpTt_sys = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt_sys)
+    # artUncMat_dSig_dpTt_sys = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt_sys)
     artUncMat_dSig_dpTt_lumiless = cta(ndata_dSig_dpTt, llcm_ptt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
@@ -297,17 +298,17 @@ def processData():
         error_value_lumiless = {}
         # error_label = str(values[i]['errors'][0]['label'])
         # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        # for j in range(1, len(values[i]['errors'])):
-        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-        #     se_delta, se_sigma = se(plus, minus)
-        #     value_delta = value_delta + se_delta
-        #     error_label = values[i]['errors'][j]['label']
-        #     error_value[error_label] = se_sigma
+        for j in range(1, len(values[i]['errors'])):
+            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+            se_delta, se_sigma = se(plus, minus)
+            value_delta = value_delta + se_delta
+            error_label = values[i]['errors'][j]['label']
+            error_value[error_label] = se_sigma
         data_central_value = values[i]['value']  # + value_delta
         data_central_dSig_dpTt.append(data_central_value)
         for j in range(ndata_dSig_dpTt):
-            error_value['ArtUnc_sys_' + str(j + 1)] = float(artUncMat_dSig_dpTt_sys[i][j])
+            # error_value['ArtUnc_sys_' + str(j + 1)] = float(artUncMat_dSig_dpTt_sys[i][j])
             error_value_lumiless['ArtUnc_' + str(j + 1)] = float(artUncMat_dSig_dpTt_lumiless[i][j])
         for j in range(n_artUnc_stat):
             error_value['ArtUnc_stat_' + str(j + 1)] = float(
@@ -325,15 +326,19 @@ def processData():
     error_definition_dSig_dpTt = {}
     error_definition_dSig_dpTt_wo_lumi = {}
     # error_definition_dSig_dpTt['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-    #     error_definition_dSig_dpTt[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    for i in range(ndata_dSig_dpTt):
-        error_definition_dSig_dpTt['ArtUnc_sys_' + str(i + 1)] = {
-            'definition': 'artificial uncertainty ' + str(i + 1),
-            'treatment': 'ADD',
+    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+        error_definition_dSig_dpTt[error_name] = {
+            'description': '',
+            'treatment': 'MULT',
             'type': 'CORR',
         }
+    for i in range(ndata_dSig_dpTt):
+        # error_definition_dSig_dpTt['ArtUnc_sys_' + str(i + 1)] = {
+        #     'definition': 'artificial uncertainty ' + str(i + 1),
+        #     'treatment': 'ADD',
+        #     'type': 'CORR',
+        # }
         error_definition_dSig_dpTt_wo_lumi['ArtUnc_' + str(i + 1)] = {
             'definition': 'artificial uncertainty ' + str(i + 1),
             'treatment': 'ADD',
@@ -343,7 +348,7 @@ def processData():
         error_definition_dSig_dpTt['ArtUnc_stat_' + str(i + 1)] = {
             'definition': 'artificial uncertainty ' + str(i + 1),
             'treatment': 'ADD',
-            'type': 'CORR',
+            'type': 'ATLAS13TEVTTBAR190807305unc' + str(i + 1),
         }
 
     data_central_dSig_dpTt_yaml = {'data_central': data_central_dSig_dpTt}
@@ -452,11 +457,11 @@ def processData():
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dyt_total.append(covMatEl)
 
-    covMatArray_dSig_dyt_total = np.array(covMatArray_dSig_dyt_total)
-    covMatArray_dSig_dyt_stat = covMat_stat[17:22, 17:22].flatten()
-    covMatArray_dSig_dyt_sys = covMatArray_dSig_dyt_total - covMatArray_dSig_dyt_stat
-
-    artUncMat_dSig_dyt_sys = cta(ndata_dSig_dyt, covMatArray_dSig_dyt_sys)
+    # covMatArray_dSig_dyt_total = np.array(covMatArray_dSig_dyt_total)
+    # covMatArray_dSig_dyt_stat = covMat_stat[17:22, 17:22].flatten()
+    # covMatArray_dSig_dyt_sys = covMatArray_dSig_dyt_total - covMatArray_dSig_dyt_stat
+    #
+    # artUncMat_dSig_dyt_sys = cta(ndata_dSig_dyt, covMatArray_dSig_dyt_sys)
     artUncMat_dSig_dyt_lumiless = cta(ndata_dSig_dyt, llcm_yt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
@@ -471,17 +476,17 @@ def processData():
         error_value_lumiless = {}
         # error_label = str(values[i]['errors'][0]['label'])
         # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        # for j in range(1, len(values[i]['errors'])):
-        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-        #     se_delta, se_sigma = se(plus, minus)
-        #     value_delta = value_delta + se_delta
-        #     error_label = values[i]['errors'][j]['label']
-        #     error_value[error_label] = se_sigma
+        for j in range(1, len(values[i]['errors'])):
+            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+            se_delta, se_sigma = se(plus, minus)
+            value_delta = value_delta + se_delta
+            error_label = values[i]['errors'][j]['label']
+            error_value[error_label] = se_sigma
         data_central_value = values[i]['value']  # + value_delta
         data_central_dSig_dyt.append(data_central_value)
         for j in range(ndata_dSig_dyt):
-            error_value['ArtUnc_sys_' + str(j + 1)] = float(artUncMat_dSig_dyt_sys[i][j])
+            # error_value['ArtUnc_sys_' + str(j + 1)] = float(artUncMat_dSig_dyt_sys[i][j])
             error_value_lumiless['ArtUnc_' + str(j + 1)] = float(artUncMat_dSig_dyt_lumiless[i][j])
         for j in range(n_artUnc_stat):
             error_value['ArtUnc_stat_' + str(j + 1)] = float(
@@ -499,25 +504,29 @@ def processData():
     error_definition_dSig_dyt = {}
     error_definition_dSig_dyt_wo_lumi = {}
     # error_definition_dSig_dyt['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-    #     error_definition_dSig_dyt[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    for i in range(ndata_dSig_dyt):
-        error_definition_dSig_dyt['ArtUnc_sys_' + str(i + 1)] = {
-            'definition': 'artificial uncertainty ' + str(i + 1),
-            'treatment': 'ADD',
+    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+        error_definition_dSig_dyt[error_name] = {
+            'description': '',
+            'treatment': 'MULT',
             'type': 'CORR',
         }
+    for i in range(ndata_dSig_dyt):
+        # error_definition_dSig_dyt['ArtUnc_sys_' + str(i + 1)] = {
+        #     'definition': 'artificial uncertainty ' + str(i + 1),
+        #     'treatment': 'ADD',
+        #     'type': 'CORR',
+        # }
         error_definition_dSig_dyt_wo_lumi['ArtUnc_' + str(i + 1)] = {
             'definition': 'artificial uncertainty ' + str(i + 1),
             'treatment': 'ADD',
             'type': 'CORR',
         }
     for i in range(n_artUnc_stat):
-        error_definition_dSig_dmttBar['ArtUnc_stat_' + str(i + 1)] = {
+        error_definition_dSig_dpTt['ArtUnc_stat_' + str(i + 1)] = {
             'definition': 'artificial uncertainty ' + str(i + 1),
             'treatment': 'ADD',
-            'type': 'CORR',
+            'type': 'ATLAS13TEVTTBAR190807305unc' + str(i + 1),
         }
 
     data_central_dSig_dyt_yaml = {'data_central': data_central_dSig_dyt}
@@ -623,11 +632,11 @@ def processData():
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dyttBar_total.append(covMatEl)
 
-    covMatArray_dSig_dyttBar_total = np.array(covMatArray_dSig_dyttBar_total)
-    covMatArray_dSig_dyttBar_stat = covMat_stat[22:, 22:].flatten()
-    covMatArray_dSig_dyttBar_sys = covMatArray_dSig_dyttBar_total - covMatArray_dSig_dyttBar_stat
+    # covMatArray_dSig_dyttBar_total = np.array(covMatArray_dSig_dyttBar_total)
+    # covMatArray_dSig_dyttBar_stat = covMat_stat[22:, 22:].flatten()
+    # covMatArray_dSig_dyttBar_sys = covMatArray_dSig_dyttBar_total - covMatArray_dSig_dyttBar_stat
 
-    artUncMat_dSig_dyttBar_sys = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar_sys)
+    # artUncMat_dSig_dyttBar_sys = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar_sys)
     artUncMat_dSig_dyttBar_lumiless = cta(ndata_dSig_dyttBar, llcm_ytt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
@@ -642,17 +651,17 @@ def processData():
         error_value_lumiless = {}
         # error_label = str(values[i]['errors'][0]['label'])
         # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        # for j in range(1, len(values[i]['errors'])):
-        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-        #     se_delta, se_sigma = se(plus, minus)
-        #     value_delta = value_delta + se_delta
-        #     error_label = values[i]['errors'][j]['label']
-        #     error_value[error_label] = se_sigma
+        for j in range(1, len(values[i]['errors'])):
+            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+            se_delta, se_sigma = se(plus, minus)
+            value_delta = value_delta + se_delta
+            error_label = values[i]['errors'][j]['label']
+            error_value[error_label] = se_sigma
         data_central_value = values[i]['value']  # + value_delta
         data_central_dSig_dyttBar.append(data_central_value)
         for j in range(ndata_dSig_dyttBar):
-            error_value['ArtUnc_sys_' + str(j + 1)] = float(artUncMat_dSig_dyttBar_sys[i][j])
+            # error_value['ArtUnc_sys_' + str(j + 1)] = float(artUncMat_dSig_dyttBar_sys[i][j])
             error_value_lumiless['ArtUnc_' + str(j + 1)] = float(
                 artUncMat_dSig_dyttBar_lumiless[i][j]
             )
@@ -672,25 +681,29 @@ def processData():
     error_definition_dSig_dyttBar = {}
     error_definition_dSig_dyttBar_wo_lumi = {}
     # error_definition_dSig_dyttBar['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-    #     error_definition_dSig_dyttBar[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    for i in range(ndata_dSig_dyttBar):
-        error_definition_dSig_dyttBar['ArtUnc_sys_' + str(i + 1)] = {
-            'definition': 'artificial uncertainty ' + str(i + 1),
-            'treatment': 'ADD',
+    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+        error_definition_dSig_dyttBar[error_name] = {
+            'description': '',
+            'treatment': 'MULT',
             'type': 'CORR',
         }
+    for i in range(ndata_dSig_dyttBar):
+        # error_definition_dSig_dyttBar['ArtUnc_sys_' + str(i + 1)] = {
+        #     'definition': 'artificial uncertainty ' + str(i + 1),
+        #     'treatment': 'ADD',
+        #     'type': 'CORR',
+        # }
         error_definition_dSig_dyttBar_wo_lumi['ArtUnc_' + str(i + 1)] = {
             'definition': 'artificial uncertainty ' + str(i + 1),
             'treatment': 'ADD',
             'type': 'CORR',
         }
     for i in range(n_artUnc_stat):
-        error_definition_dSig_dyttBar['ArtUnc_stat_' + str(i + 1)] = {
+        error_definition_dSig_dpTt['ArtUnc_stat_' + str(i + 1)] = {
             'definition': 'artificial uncertainty ' + str(i + 1),
             'treatment': 'ADD',
-            'type': 'CORR',
+            'type': 'ATLAS13TEVTTBAR190807305unc' + str(i + 1),
         }
 
     data_central_dSig_dyttBar_yaml = {'data_central': data_central_dSig_dyttBar}
