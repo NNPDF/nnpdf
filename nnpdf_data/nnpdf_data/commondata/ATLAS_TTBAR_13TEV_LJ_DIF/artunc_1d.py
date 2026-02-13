@@ -20,10 +20,10 @@ def artunc():
             statArr.append(pta(statperc, datval))
 
     #         mttbar(9)|  pTt (8)|  yt(5)|  yttbar(7)
-    # mttbar|   803       801t    802t    810t
-    # pTt   |   801       798     799t    808t
-    # yt    |   802       799     800     809t
-    # yttbar|   810       808     809     812
+    # mttbar|   803       801    802    810
+    # pTt   |   801t      798    799    808
+    # yt    |   802t      799t   800    809
+    # yttbar|   810t      808t   809t   812
     ml803, ml801, ml802, ml810, ml798, ml799, ml808, ml800, ml809, ml812 = ([] for i in range(10))
 
     with open('rawdata/Table803.yaml', 'r') as file:
@@ -77,20 +77,20 @@ def artunc():
         ml812.append(input['dependent_variables'][0]['values'][i]['value'])
 
     mat803 = mtm(9, 9, ml803)
-    mat801 = mtm(8, 9, ml801)
+    mat801 = mtm(9, 8, ml801)
     mat801t = mat801.transpose()
-    mat802 = mtm(5, 9, ml802)
+    mat802 = mtm(9, 5, ml802)
     mat802t = mat802.transpose()
-    mat810 = mtm(7, 9, ml810)
-    mat810t = mat810.transpose()
+    mat810t = mtm(7, 9, ml810)
+    mat810 = mat810t.transpose()
     mat798 = mtm(8, 8, ml798)
-    mat799 = mtm(5, 8, ml799)
-    mat799t = mat799.transpose()
-    mat808 = mtm(7, 8, ml808)
-    mat808t = mat808.transpose()
+    mat799t = mtm(5, 8, ml799)
+    mat799 = mat799t.transpose()
+    mat808t = mtm(7, 8, ml808)
+    mat808 = mat808t.transpose()
     mat800 = mtm(5, 5, ml800)
-    mat809 = mtm(7, 5, ml809)
-    mat809t = mat809.transpose()
+    mat809t = mtm(7, 5, ml809)
+    mat809 = mat809t.transpose()
     mat812 = mtm(7, 7, ml812)
 
     cormatlist = cm(
@@ -98,27 +98,25 @@ def artunc():
         4,
         [
             mat803,
-            mat801t,
-            mat802t,
-            mat810t,
             mat801,
-            mat798,
-            mat799t,
-            mat808t,
             mat802,
-            mat799,
-            mat800,
-            mat809t,
             mat810,
+            mat801t,
+            mat798,
+            mat799,
             mat808,
+            mat802t,
+            mat799t,
+            mat800,
             mat809,
+            mat810t,
+            mat808t,
+            mat809t,
             mat812,
         ],
     )
 
-    covmatlist = ctc(statArr, cormatlist)
-    artunc = cta(29, covmatlist)
-    return artunc
-
-
-artunc()
+    covmatlist_stat = ctc(statArr, cormatlist)
+    covmat_stat = mtm(29, 29, covmatlist_stat)
+    artunc = cta(29, covmatlist_stat)
+    return covmat_stat, artunc

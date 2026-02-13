@@ -1,79 +1,398 @@
 definitions:
-  ArtUnc_1:
+  ArtUnc_sys1:
     definition: artificial uncertainty 1
     treatment: ADD
     type: CORR
-  ArtUnc_2:
+  ArtUnc_sys2:
     definition: artificial uncertainty 2
     treatment: ADD
     type: CORR
-  ArtUnc_3:
+  ArtUnc_sys3:
     definition: artificial uncertainty 3
     treatment: ADD
     type: CORR
-  ArtUnc_4:
+  ArtUnc_sys4:
     definition: artificial uncertainty 4
     treatment: ADD
     type: CORR
-  ArtUnc_5:
+  ArtUnc_sys5:
     definition: artificial uncertainty 5
     treatment: ADD
     type: CORR
-  ArtUnc_6:
+  ArtUnc_sys6:
     definition: artificial uncertainty 6
     treatment: ADD
     type: CORR
-  ArtUnc_7:
+  ArtUnc_sys7:
     definition: artificial uncertainty 7
     treatment: ADD
     type: CORR
+  ArtUnc_stat1:
+    definition: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat2:
+    definition: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat3:
+    definition: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat4:
+    definition: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat5:
+    definition: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat6:
+    definition: artificial uncertainty 6
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat7:
+    definition: artificial uncertainty 7
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat8:
+    definition: artificial uncertainty 8
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat9:
+    definition: artificial uncertainty 9
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat10:
+    definition: artificial uncertainty 10
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat11:
+    definition: artificial uncertainty 11
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat12:
+    definition: artificial uncertainty 12
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat13:
+    definition: artificial uncertainty 13
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat14:
+    definition: artificial uncertainty 14
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat15:
+    definition: artificial uncertainty 15
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat16:
+    definition: artificial uncertainty 16
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat17:
+    definition: artificial uncertainty 17
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat18:
+    definition: artificial uncertainty 18
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat19:
+    definition: artificial uncertainty 19
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat20:
+    definition: artificial uncertainty 20
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat21:
+    definition: artificial uncertainty 21
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat22:
+    definition: artificial uncertainty 22
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat23:
+    definition: artificial uncertainty 23
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat24:
+    definition: artificial uncertainty 24
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat25:
+    definition: artificial uncertainty 25
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat26:
+    definition: artificial uncertainty 26
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat27:
+    definition: artificial uncertainty 27
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat28:
+    definition: artificial uncertainty 28
+    treatment: ADD
+    type: CORR
+  ArtUnc_stat29:
+    definition: artificial uncertainty 29
+    treatment: ADD
+    type: CORR
 bins:
-- ArtUnc_1: 6.06978259e+01
-  ArtUnc_2: -1.58145590e+00
-  ArtUnc_3: 2.73152685e+00
-  ArtUnc_4: 3.62603682e+00
-  ArtUnc_5: 1.56069011e+00
-  ArtUnc_6: 1.10628199e+00
-  ArtUnc_7: -6.26845475e-02
-- ArtUnc_1: 6.03766330e+01
-  ArtUnc_2: -1.82916493e+00
-  ArtUnc_3: -3.70068647e+00
-  ArtUnc_4: 8.58149277e-01
-  ArtUnc_5: -2.40904273e+00
-  ArtUnc_6: -7.12150732e-01
-  ArtUnc_7: 1.25467243e+00
-- ArtUnc_1: 5.23727838e+01
-  ArtUnc_2: -2.07292753e+00
-  ArtUnc_3: -1.99864442e+00
-  ArtUnc_4: -2.27120565e+00
-  ArtUnc_5: 4.46369023e-01
-  ArtUnc_6: 6.00678555e-01
-  ArtUnc_7: -2.25421233e+00
-- ArtUnc_1: 4.32917349e+01
-  ArtUnc_2: 5.43478323e-01
-  ArtUnc_3: 1.83912376e+00
-  ArtUnc_4: -2.26053090e+00
-  ArtUnc_5: 2.09577109e+00
-  ArtUnc_6: -2.61840685e+00
-  ArtUnc_7: 8.88613555e-01
-- ArtUnc_1: 3.25405895e+01
-  ArtUnc_2: 2.51105045e+00
-  ArtUnc_3: 4.36347692e+00
-  ArtUnc_4: -2.01478958e+00
-  ArtUnc_5: -2.66402874e+00
-  ArtUnc_6: 1.25209783e+00
-  ArtUnc_7: 2.01384515e-01
-- ArtUnc_1: 2.28201175e+01
-  ArtUnc_2: 9.02009713e+00
-  ArtUnc_3: -1.94257704e+00
-  ArtUnc_4: 1.09536192e+00
-  ArtUnc_5: 3.94262099e-01
-  ArtUnc_6: -1.60306176e-01
-  ArtUnc_7: -4.74891161e-01
-- ArtUnc_1: 7.55581501e+00
-  ArtUnc_2: 5.18260722e-01
-  ArtUnc_3: -1.98089999e+00
-  ArtUnc_4: -1.92261136e+00
-  ArtUnc_5: 1.89313736e+00
-  ArtUnc_6: 2.73414889e+00
-  ArtUnc_7: 1.57833043e+00
+- ArtUnc_sys1: 6.06918113e+01
+  ArtUnc_sys2: 1.59078950e+00
+  ArtUnc_sys3: -2.59007136e+00
+  ArtUnc_sys4: -3.39151562e+00
+  ArtUnc_sys5: -1.57967701e+00
+  ArtUnc_sys6: -1.18231031e+00
+  ArtUnc_sys7: -1.71637224e-02
+  ArtUnc_stat1: -1.59053406e+00
+  ArtUnc_stat2: -2.77775696e-01
+  ArtUnc_stat3: 3.34595067e-01
+  ArtUnc_stat4: 3.29009917e-02
+  ArtUnc_stat5: -1.36544165e-01
+  ArtUnc_stat6: -1.10558783e-01
+  ArtUnc_stat7: -2.48501190e-01
+  ArtUnc_stat8: -1.23350357e-01
+  ArtUnc_stat9: 7.87569261e-02
+  ArtUnc_stat10: -1.27168596e-01
+  ArtUnc_stat11: -1.37284127e-01
+  ArtUnc_stat12: -1.54011017e-05
+  ArtUnc_stat13: 1.15077503e-05
+  ArtUnc_stat14: 2.71005847e-07
+  ArtUnc_stat15: 5.17951875e-06
+  ArtUnc_stat16: 4.68454092e-06
+  ArtUnc_stat17: -4.14440315e-06
+  ArtUnc_stat18: -6.44723880e-06
+  ArtUnc_stat19: 5.31452511e-06
+  ArtUnc_stat20: -1.66118733e-05
+  ArtUnc_stat21: 8.11103933e-06
+  ArtUnc_stat22: -1.63904202e-05
+  ArtUnc_stat23: 3.35094578e-06
+  ArtUnc_stat24: 1.98481492e-04
+  ArtUnc_stat25: 1.94075808e-06
+  ArtUnc_stat26: -6.00328830e-06
+  ArtUnc_stat27: 2.94517570e-07
+  ArtUnc_stat28: -4.77077433e-11
+  ArtUnc_stat29: -5.25605982e-09
+- ArtUnc_sys1: 6.03716804e+01
+  ArtUnc_sys2: 1.80386539e+00
+  ArtUnc_sys3: 3.61500433e+00
+  ArtUnc_sys4: -8.53754909e-01
+  ArtUnc_sys5: 2.32198915e+00
+  ArtUnc_sys6: 6.48104830e-01
+  ArtUnc_sys7: 1.16337548e+00
+  ArtUnc_stat1: -3.68600429e-01
+  ArtUnc_stat2: 9.75956617e-01
+  ArtUnc_stat3: -5.16246896e-01
+  ArtUnc_stat4: -3.79760112e-01
+  ArtUnc_stat5: -1.28034623e-01
+  ArtUnc_stat6: 3.29715661e-03
+  ArtUnc_stat7: 4.55453317e-01
+  ArtUnc_stat8: 3.37683091e-01
+  ArtUnc_stat9: -4.12144232e-01
+  ArtUnc_stat10: 4.89159556e-03
+  ArtUnc_stat11: -1.92773228e-01
+  ArtUnc_stat12: -1.69311649e-05
+  ArtUnc_stat13: 7.09293487e-06
+  ArtUnc_stat14: 1.06235403e-06
+  ArtUnc_stat15: 5.37670340e-06
+  ArtUnc_stat16: 4.90091322e-06
+  ArtUnc_stat17: -4.44298141e-06
+  ArtUnc_stat18: -6.42030478e-06
+  ArtUnc_stat19: 4.88448130e-06
+  ArtUnc_stat20: -1.62629364e-05
+  ArtUnc_stat21: 7.99293675e-06
+  ArtUnc_stat22: -1.61585313e-05
+  ArtUnc_stat23: 3.30100960e-06
+  ArtUnc_stat24: 1.94885502e-04
+  ArtUnc_stat25: 1.91257187e-06
+  ArtUnc_stat26: -5.90102124e-06
+  ArtUnc_stat27: 2.89721140e-07
+  ArtUnc_stat28: -4.65354826e-11
+  ArtUnc_stat29: -5.14258733e-09
+- ArtUnc_sys1: 5.23695000e+01
+  ArtUnc_sys2: 2.03613748e+00
+  ArtUnc_sys3: 1.90057940e+00
+  ArtUnc_sys4: 2.17942205e+00
+  ArtUnc_sys5: -3.78691703e-01
+  ArtUnc_sys6: -5.09925831e-01
+  ArtUnc_sys7: -2.11641907e+00
+  ArtUnc_stat1: 3.21194900e-01
+  ArtUnc_stat2: 1.14838011e+00
+  ArtUnc_stat3: 2.10850557e-01
+  ArtUnc_stat4: 8.82431720e-02
+  ArtUnc_stat5: -1.07482789e-01
+  ArtUnc_stat6: 4.14345237e-02
+  ArtUnc_stat7: -3.66874617e-01
+  ArtUnc_stat8: -3.90746672e-01
+  ArtUnc_stat9: 4.92119519e-01
+  ArtUnc_stat10: -1.42343152e-01
+  ArtUnc_stat11: 8.76781126e-02
+  ArtUnc_stat12: -1.76635266e-05
+  ArtUnc_stat13: 1.13048144e-05
+  ArtUnc_stat14: 1.08996185e-06
+  ArtUnc_stat15: 5.32117063e-06
+  ArtUnc_stat16: 4.21917925e-06
+  ArtUnc_stat17: -4.03853365e-06
+  ArtUnc_stat18: -7.77337092e-06
+  ArtUnc_stat19: 6.09249815e-06
+  ArtUnc_stat20: -1.87740453e-05
+  ArtUnc_stat21: 9.13829883e-06
+  ArtUnc_stat22: -1.85504507e-05
+  ArtUnc_stat23: 3.81043045e-06
+  ArtUnc_stat24: 2.25134320e-04
+  ArtUnc_stat25: 2.21290385e-06
+  ArtUnc_stat26: -6.81779360e-06
+  ArtUnc_stat27: 3.35089948e-07
+  ArtUnc_stat28: -5.40450039e-11
+  ArtUnc_stat29: -5.95354958e-09
+- ArtUnc_sys1: 4.32907383e+01
+  ArtUnc_sys2: -5.57604061e-01
+  ArtUnc_sys3: -1.77365967e+00
+  ArtUnc_sys4: 2.04141452e+00
+  ArtUnc_sys5: -1.97672017e+00
+  ArtUnc_sys6: 2.61313173e+00
+  ArtUnc_sys7: 7.94075110e-01
+  ArtUnc_stat1: 2.95066683e-01
+  ArtUnc_stat2: 1.29167494e-01
+  ArtUnc_stat3: 1.17508780e+00
+  ArtUnc_stat4: 1.77817532e-01
+  ArtUnc_stat5: -2.36544649e-02
+  ArtUnc_stat6: 8.58848954e-02
+  ArtUnc_stat7: 1.34650708e-01
+  ArtUnc_stat8: -1.30906750e-01
+  ArtUnc_stat9: -5.32839362e-01
+  ArtUnc_stat10: 2.69905445e-01
+  ArtUnc_stat11: -7.21965991e-02
+  ArtUnc_stat12: -1.71310381e-05
+  ArtUnc_stat13: 8.43001478e-06
+  ArtUnc_stat14: 4.45033985e-07
+  ArtUnc_stat15: 5.33210831e-06
+  ArtUnc_stat16: 4.55413269e-06
+  ArtUnc_stat17: -4.19662525e-06
+  ArtUnc_stat18: -6.82446559e-06
+  ArtUnc_stat19: 4.82759390e-06
+  ArtUnc_stat20: -1.61302587e-05
+  ArtUnc_stat21: 7.92799029e-06
+  ArtUnc_stat22: -1.59895882e-05
+  ArtUnc_stat23: 3.32330838e-06
+  ArtUnc_stat24: 1.94536108e-04
+  ArtUnc_stat25: 1.91080168e-06
+  ArtUnc_stat26: -5.88501846e-06
+  ArtUnc_stat27: 2.89084671e-07
+  ArtUnc_stat28: -4.75155274e-11
+  ArtUnc_stat29: -5.14524933e-09
+- ArtUnc_sys1: 3.25399045e+01
+  ArtUnc_sys2: -2.44102771e+00
+  ArtUnc_sys3: -4.34595132e+00
+  ArtUnc_sys4: 1.93005660e+00
+  ArtUnc_sys5: 2.55186325e+00
+  ArtUnc_sys6: -1.13452552e+00
+  ArtUnc_sys7: 1.90760256e-01
+  ArtUnc_stat1: 6.62983343e-02
+  ArtUnc_stat2: -2.91547316e-01
+  ArtUnc_stat3: 4.51387492e-01
+  ArtUnc_stat4: -1.00369343e+00
+  ArtUnc_stat5: 7.70812746e-02
+  ArtUnc_stat6: 2.14172698e-01
+  ArtUnc_stat7: 4.06401226e-01
+  ArtUnc_stat8: 4.77006968e-02
+  ArtUnc_stat9: 2.60960307e-01
+  ArtUnc_stat10: -2.41598655e-01
+  ArtUnc_stat11: 3.19028484e-01
+  ArtUnc_stat12: -1.06159661e-05
+  ArtUnc_stat13: 1.06427689e-05
+  ArtUnc_stat14: 1.17089066e-06
+  ArtUnc_stat15: 4.01900086e-06
+  ArtUnc_stat16: 2.27127917e-06
+  ArtUnc_stat17: -4.25157532e-06
+  ArtUnc_stat18: -6.27741319e-06
+  ArtUnc_stat19: 4.58863208e-06
+  ArtUnc_stat20: -1.38521957e-05
+  ArtUnc_stat21: 6.93758559e-06
+  ArtUnc_stat22: -1.38808732e-05
+  ArtUnc_stat23: 2.91450968e-06
+  ArtUnc_stat24: 1.69832829e-04
+  ArtUnc_stat25: 1.68023551e-06
+  ArtUnc_stat26: -5.12121280e-06
+  ArtUnc_stat27: 2.53163894e-07
+  ArtUnc_stat28: -4.08286824e-11
+  ArtUnc_stat29: -4.50037081e-09
+- ArtUnc_sys1: 2.28202537e+01
+  ArtUnc_sys2: -8.96590032e+00
+  ArtUnc_sys3: 1.88067080e+00
+  ArtUnc_sys4: -1.05405484e+00
+  ArtUnc_sys5: -3.67465964e-01
+  ArtUnc_sys6: 9.68574327e-02
+  ArtUnc_sys7: -4.34757835e-01
+  ArtUnc_stat1: -1.21241273e-01
+  ArtUnc_stat2: -1.08397403e-01
+  ArtUnc_stat3: -4.65512709e-01
+  ArtUnc_stat4: -5.52120361e-01
+  ArtUnc_stat5: 1.22042776e-01
+  ArtUnc_stat6: -1.71607383e-02
+  ArtUnc_stat7: -2.82036111e-01
+  ArtUnc_stat8: -5.90116057e-01
+  ArtUnc_stat9: -9.58289455e-02
+  ArtUnc_stat10: 6.01559795e-01
+  ArtUnc_stat11: 7.25038411e-02
+  ArtUnc_stat12: -2.16840014e-05
+  ArtUnc_stat13: 1.22414663e-05
+  ArtUnc_stat14: 3.25081664e-06
+  ArtUnc_stat15: 1.56784310e-06
+  ArtUnc_stat16: 3.07137334e-06
+  ArtUnc_stat17: -2.97774151e-06
+  ArtUnc_stat18: -5.85549413e-06
+  ArtUnc_stat19: 4.16518399e-06
+  ArtUnc_stat20: -1.23687137e-05
+  ArtUnc_stat21: 6.29197534e-06
+  ArtUnc_stat22: -1.24633022e-05
+  ArtUnc_stat23: 2.63931537e-06
+  ArtUnc_stat24: 1.53505110e-04
+  ArtUnc_stat25: 1.52613127e-06
+  ArtUnc_stat26: -4.65544461e-06
+  ArtUnc_stat27: 2.28556943e-07
+  ArtUnc_stat28: -3.76053514e-11
+  ArtUnc_stat29: -4.08699240e-09
+- ArtUnc_sys1: 7.55623704e+00
+  ArtUnc_sys2: -5.17157288e-01
+  ArtUnc_sys3: 1.94572197e+00
+  ArtUnc_sys4: 2.13336359e+00
+  ArtUnc_sys5: -1.79389257e+00
+  ArtUnc_sys6: -2.52551941e+00
+  ArtUnc_sys7: 1.45316239e+00
+  ArtUnc_stat1: -3.07918406e-02
+  ArtUnc_stat2: 2.66935816e-02
+  ArtUnc_stat3: -2.61213742e-01
+  ArtUnc_stat4: 1.57680628e-01
+  ArtUnc_stat5: 2.19890187e-01
+  ArtUnc_stat6: -9.79507905e-02
+  ArtUnc_stat7: -9.16511531e-02
+  ArtUnc_stat8: -4.87428664e-01
+  ArtUnc_stat9: -5.75206011e-01
+  ArtUnc_stat10: -5.34414536e-01
+  ArtUnc_stat11: 3.25001834e-01
+  ArtUnc_stat12: -1.08501856e-05
+  ArtUnc_stat13: 4.50642020e-06
+  ArtUnc_stat14: 1.77742343e-06
+  ArtUnc_stat15: 2.10333937e-06
+  ArtUnc_stat16: 4.94486544e-07
+  ArtUnc_stat17: -2.71028986e-06
+  ArtUnc_stat18: -3.71930788e-06
+  ArtUnc_stat19: 1.95364780e-06
+  ArtUnc_stat20: -7.03486186e-06
+  ArtUnc_stat21: 3.51183865e-06
+  ArtUnc_stat22: -7.01381809e-06
+  ArtUnc_stat23: 1.50169979e-06
+  ArtUnc_stat24: 8.65746358e-05
+  ArtUnc_stat25: 8.48317002e-07
+  ArtUnc_stat26: -2.61843223e-06
+  ArtUnc_stat27: 1.27767738e-07
+  ArtUnc_stat28: -2.06899702e-11
+  ArtUnc_stat29: -2.31064399e-09
