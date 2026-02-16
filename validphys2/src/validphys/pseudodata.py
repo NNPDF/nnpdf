@@ -190,21 +190,8 @@ def make_replica(
         return np.concatenate(
             [cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts]
         )
-    # Seed the numpy RNG with the seed and the name of the datasets in this run
-
-    # TODO: to be simplified after the reader is merged, together with an update of the regression tests
-    # this is necessary to reproduce exactly the results due to the replicas being generated with a hash
-    # Only when the sets are legacy (or coming from a legacy runcard) this shall be used
-    names_for_salt = []
-    for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
-        if loaded_cd.legacy_names is None:
-            names_for_salt.append(loaded_cd.setname)
-        else:
-            names_for_salt.append(loaded_cd.legacy_names[0])
-    name_salt = "-".join(names_for_salt)
-
-    name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
-    rng = np.random.default_rng(seed=replica_mcseed + name_seed)
+    # Seed the numpy RNG with the replica_mcseed
+    rng = np.random.default_rng(seed=replica_mcseed)
     # construct covmat
     covmat = dataset_inputs_sampling_covmat
     covmat_sqrt = sqrt_covmat(covmat)
