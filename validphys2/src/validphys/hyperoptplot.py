@@ -18,6 +18,7 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 from reportengine.figure import figure
 from reportengine.table import table
@@ -584,8 +585,7 @@ def hyperopt_table(hyperopt_dataframe):
     """
     drop_keys = ["hyper_losses_chi2", "hyper_losses_phi2", "hyper_losses_logp"]
     drop_keys += [f"layer_{idx}" for idx in range(1, 5)]
-    drop_keys += ["activation_per_layer_0"]
-
+    
     dataframe, _ = hyperopt_dataframe
     dataframe.drop(columns=drop_keys, inplace=True)
     dataframe.sort_values(by=["hyper_loss_chi2"], inplace=True)
@@ -683,6 +683,56 @@ def plot_activation_per_layer(hyperopt_dataframe):
     """
     dataframe, best_trial = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "activation_per_layer")
+    return fig
+
+@figure
+def plot_cumulative_logp_chi2(hyperopt_dataframe):
+    
+    results, _ = hyperopt_dataframe
+    mlogp_ = results['hyper_loss_logp'].to_numpy()
+    chi2_ = results['hyper_loss_chi2'].to_numpy()
+
+    # don t look at samples with -logp or chi2 too big
+    idx_ok = np.where(chi2_<5.)
+    fig, ax1 = plt.subplots()
+    color = 'tab:blue'
+    mlogp = mlogp_[idx_ok]
+    xlabels = np.arange(len(mlogp))
+    cum_average = np.cumsum(mlogp)/np.arange(1,len(mlogp)+1)
+    ax1.scatter(xlabels, cum_average, color=color, s=50, label="cum avg")
+    ax1.set_ylabel(r"$- \text{E}\left[\log p(\theta)\right]_{\text{trials}}$", color=color)
+    ax1.set_xlabel('number of trials')
+    ax1.tick_params(axis='y', labelcolor=color)
+
+    ax2 = ax1.twinx()
+    color = 'tab:red'    
+    chi2 = chi2_[idx_ok]
+    xlabels = np.arange(len(chi2))
+    cum_average_chi2 = np.cumsum(chi2)/np.arange(1,len(chi2)+1)
+    ax2.scatter(xlabels, cum_average_chi2, marker='*', color=color, s=50, label=r"$\chi^2(\theta)$", alpha=0.3)
+    ax2.set_ylabel(r"$\text{E}\left[\chi^2(\theta)\right]_{\text{trials}}$",  color=color)
+    ax2.tick_params(axis='y', labelcolor=color)
+    return fig
+
+@figure
+def plot_cumulative_loss(hyperopt_dataframe):
+    
+    results, _ = hyperopt_dataframe
+    
+    mloss_ = results['loss'].to_numpy()
+    chi2_ = results['hyper_loss_chi2'].to_numpy()
+    chi2exp = results['trvl_loss_chi2exp'].to_numpy()
+
+    idx_ok = np.where(chi2exp<1.35)
+    fig, ax = plt.subplots()
+    mloss = mloss_[idx_ok]    
+    xlabels = np.arange(len(mloss))
+    cum_average = np.cumsum(mloss)/np.arange(1,len(mloss)+1)
+    ax.scatter(xlabels, cum_average, s=50, label="cum avg")
+    ax.set_ylabel(r"loss")
+    ax.set_xlabel('number of trials')
+    ax.tick_params(axis='y')
+
     return fig
 
 
