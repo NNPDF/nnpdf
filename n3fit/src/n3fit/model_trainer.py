@@ -20,11 +20,11 @@ from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_ba
 from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
-import n3fit.hyper_optimization.rewards
 from n3fit.hyper_optimization.rewards import HyperLoss
+from n3fit.layers import losses
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
-from n3fit.vpinterface import N3PDF, compute_phi
+from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
 from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 
@@ -652,71 +652,6 @@ class ModelTrainer:
         if interpolation_points:
             self._scaler = generate_scaler(self.input_list, interpolation_points)
 
-    def _generate_pdf(
-        self,
-        nodes_per_layer,
-        activation_per_layer,
-        initializer,
-        layer_type,
-        dropout,
-        regularizer,
-        regularizer_args,
-        seed,
-        photons,
-    ):
-        """
-        Defines the internal variable layer_pdf
-        this layer takes any input (x) and returns the pdf value for that x
-
-        if the sumrule is being imposed, it also updates input_list with the
-        integrator_input tensor used to calculate the sumrule
-
-        Parameters:
-        -----------
-            nodes_per_layer: list
-                list of nodes each layer has
-            activation_per_layer: list
-                list of the activation function for each layer
-            initializer: str
-                initializer for the weights of the NN
-            layer_type: str
-                type of layer to be used
-            dropout: float
-                dropout to add at the end of the NN
-            regularizer: str
-                choice of regularizer to add to the dense layers of the NN
-            regularizer_args: dict
-                dictionary of arguments for the regularizer
-            seed: int
-                seed for the NN
-            photons: :py:class:`validphys.photon.compute.Photon`
-                function to compute the photon PDF
-        see model_gen.pdfNN_layer_generator for more information
-
-        Returns
-        -------
-            pdf_model: MetaModel
-                pdf model
-        """
-        log.info("Generating PDF models")
-        pdf_model = model_gen.generate_pdf_model(
-            nodes=nodes_per_layer,
-            activations=activation_per_layer,
-            layer_type=layer_type,
-            flav_info=self.flavinfo,
-            fitbasis=self.fitbasis,
-            seed=seed,
-            initializer_name=initializer,
-            dropout=dropout,
-            regularizer=regularizer,
-            regularizer_args=regularizer_args,
-            impose_sumrule=self.impose_sumrule,
-            scaler=self._scaler,
-            num_replicas=len(self.replicas),
-            photons=photons,
-        )
-        return pdf_model
-
     def _prepare_reporting(self, partition):
         """Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
         to select the bits necessary for reporting the chi2.
@@ -847,9 +782,23 @@ class ModelTrainer:
         exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 
-    def _filter_datagroupspec(self, datasets_partition):
-        """Takes a list of all input exp datasets as :class:`validphys.core.DataGroupSpec`
-        and select `DataSetSpec`s whose names are in datasets_partition.
+    def _filter_datagroupspec(self, datasets_partition, filter_in=True):
+        """Takes a list of strings with dataset names to either filter in or out
+        and returns instances of :class:`validphys.core.DataGroupSpec` which contain
+        either only the "in" datasets or all datasets minus the "out".
+        To control whether the dataset_partition should be selected or deselected
+        the ``filter_in`` variable must be set to either True (select) or False (deselect)
+
+        The use case of this function is to return a modified experiment group object
+        following the same criteria that is used during the training, but with only
+        a subset of datasets being considered.
+
+        Parameters
+        ----------
+            datasets_partition: List[str]
+                List with names of the datasets you want to select or deselect.
+            filter_in: bool
+                Whether the datasets should be selected in (True, default) or out (False)
 
         Parameters
         ----------
@@ -874,7 +823,7 @@ class ModelTrainer:
             # Now, loop over them
             for dataset in datagroup.datasets:
                 # Include `DataSetSpec`s whose names are in datasets_partition
-                if dataset.name in datasets_partition:
+                if (dataset.name in datasets_partition) == filter_in:
                     filtered_datasetspec.append(dataset)
 
             # List of filtered experiments as `DataGroupSpec`
@@ -927,7 +876,7 @@ class ModelTrainer:
             integrability_dict.get("multiplier"),
             integrability_dict.get("initial"),
             epochs,
-            params.get("interpolation_points"),
+            params.get("feature_scaling_points"),
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
@@ -939,46 +888,59 @@ class ModelTrainer:
         # And lists to save hyperopt utilities
         pdfs_per_fold = []
         exp_models = []
-        # phi evaluated over training/validation exp data
-        trvl_phi_per_fold = []
+        # Hyperopt metrics evaluated over training/validation exp data
+        trvl_chi2_per_fold = []
+        trvl_phi2_per_fold = []
+        trvl_logp_per_fold = []
+        trvl_chi2exp_per_fold = []
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
 
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
-            luxset_members = self.lux_params["luxset"].get_members() - 1  # -1 is for replica 0
-            # we take the MOD of the luxset_members to avoid failing due to limited number of
-            # replicas in the luxset
-            photonreplicas = tuple(r % luxset_members for r in self.replicas)
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=photonreplicas
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas
             )
         else:
             photons = None
+
+        # Prepare the settings for all replica
+        replicas_settings = []
+        for seed in self._nn_seeds:
+            # WIP here the sampling will happen when necessary
+            tmp = model_gen.ReplicaSettings(
+                seed=seed,
+                nodes=params["nodes_per_layer"],
+                activations=params["activation_per_layer"],
+                initializer=params["initializer"],
+                architecture=params["layer_type"],
+                dropout_rate=params["dropout"],
+                regularizer=params.get("regularizer"),
+                regularizer_args=params.get("regularizer_args"),
+            )
+            replicas_settings.append(tmp)
+
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
-            # Each partition of the kfolding needs to have its own separate model
-            # and the seed needs to be updated accordingly
-            seeds = self._nn_seeds
+
             if k > 0:
-                # generate random integers for each k-fold from the input `nnseeds`
-                # we generate new seeds to avoid the integer overflow that may
-                # occur when doing k*nnseeds
-                rngs = [np.random.default_rng(seed=seed) for seed in seeds]
-                seeds = [generator.integers(1, pow(2, 30)) * k for generator in rngs]
+                # When hyperoptimizing every patition takes the exact same model,
+                # only the seed needs to be updated,.
+                # Generate random integers for each k-fold from the input `nnseeds`
+                # this helps avoid the integer overflow that may occur when doing k*nnseeds
+                for seed, settings in zip(self._nn_seeds, replicas_settings):
+                    rng = np.random.default_rng(seed=seed)
+                    settings.seed = rng.integers(1, pow(2, 30)) * k
 
             # Generate the pdf model
-            pdf_model = self._generate_pdf(
-                params["nodes_per_layer"],
-                params["activation_per_layer"],
-                params["initializer"],
-                params["layer_type"],
-                params["dropout"],
-                params.get("regularizer", None),  # regularizer optional
-                params.get("regularizer_args", None),
-                seeds,
-                photons,
+            pdf_model = model_gen.generate_pdf_model(
+                replicas_settings=replicas_settings,
+                flav_info=self.flavinfo,
+                fitbasis=self.fitbasis,
+                impose_sumrule=self.impose_sumrule,
+                scaler=self._scaler,
+                photons=photons,
             )
 
             if photons:
@@ -1056,7 +1018,8 @@ class ModelTrainer:
                 # Extracting the necessary data to compute phi
                 # First, create a list of `validphys.core.DataGroupSpec`
                 # containing only exp datasets within the held out fold
-                experimental_data = self._filter_datagroupspec(partition["datasets"])
+                folded_datasets = partition["datasets"]
+                experimental_data = self._filter_datagroupspec(folded_datasets)
 
                 vplike_pdf = N3PDF(pdf_model.split_replicas())
                 if self.boundary_condition is not None:
@@ -1065,7 +1028,7 @@ class ModelTrainer:
                 # Compute per replica hyper losses
                 hyper_loss = self._hyper_loss.compute_loss(
                     penalties=penalties,
-                    kfold_loss=experimental_loss,
+                    experimental_loss=experimental_loss,
                     validation_loss=validation_loss,
                     pdf_object=vplike_pdf,
                     experimental_data=experimental_data,
@@ -1074,20 +1037,18 @@ class ModelTrainer:
 
                 # Create another list of `validphys.core.DataGroupSpec`
                 # containing now exp datasets that are included in the training/validation dataset
-                trvl_partitions = list(self.kpartitions)
-                trvl_partitions.pop(k)
-                trvl_exp_names = [
-                    exp_name for item in trvl_partitions for exp_name in item['datasets']
-                ]
-                trvl_data = self._filter_datagroupspec(trvl_exp_names)
-                # evaluate phi on training/validation exp set
-                trvl_phi = compute_phi(vplike_pdf, trvl_data)
+                trvl_data = self._filter_datagroupspec(folded_datasets, filter_in=False)
+                # Evaluate the hyperopt metrics on the training/validation experimental sets
+                hyper_metrics = compute_hyperopt_metrics(vplike_pdf, trvl_data)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
-                trvl_phi_per_fold.append(trvl_phi)
+                trvl_chi2_per_fold.append(hyper_metrics.chi2)
+                trvl_chi2exp_per_fold.append(hyper_metrics.chi2exp)
+                trvl_phi2_per_fold.append(hyper_metrics.phi2)
+                trvl_logp_per_fold.append(hyper_metrics.logp)
                 pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
 
@@ -1117,6 +1078,11 @@ class ModelTrainer:
             # Compute the loss over all folds for hyperopt
             final_hyper_loss = self._hyper_loss.reduce_over_folds(l_hyper)
 
+            # Add penalty term to ensure convergence
+            exp_chi2_fitted_data = np.average(trvl_chi2exp_per_fold)
+            expchi2_penalty = losses.LossHyperopt()
+            final_hyper_loss += expchi2_penalty(exp_chi2_fitted_data)
+
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file
             # by adding it to this dictionary
@@ -1127,10 +1093,15 @@ class ModelTrainer:
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
                     "validation_losses": l_valid,
-                    "trvl_losses_phi": np.array(trvl_phi_per_fold),
+                    "trvl_losses_chi2": np.array(trvl_chi2_per_fold),
+                    "trvl_losses_chi2exp": np.array(trvl_chi2exp_per_fold),
+                    "trvl_losses_phi2": np.array(trvl_phi2_per_fold),
+                    "trvl_losses_logp": np.array(trvl_logp_per_fold),
                     "experimental_losses": l_exper,
-                    "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
-                    "hyper_losses_phi": np.array(self._hyper_loss.phi2_vector),
+                    "hyper_losses": np.array(self._hyper_loss.exp_chi2_matrix),
+                    "hyper_losses_chi2": np.array(self._hyper_loss.hyper_chi2_vector),
+                    "hyper_losses_phi2": np.array(self._hyper_loss.hyper_phi2_vector),
+                    "hyper_losses_logp": np.array(self._hyper_loss.hyper_logp_vector),
                     "penalties": {
                         name: np.array(values)
                         for name, values in self._hyper_loss.penalties.items()

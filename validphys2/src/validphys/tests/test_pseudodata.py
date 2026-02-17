@@ -15,7 +15,14 @@ import pytest
 from validphys.api import API
 from validphys.covmats import dataset_t0_predictions
 from validphys.loader import Loader
-from validphys.tests.conftest import FIT, PDF, PSEUDODATA_FIT, SINGLE_DATASET, THEORYID_NEW
+from validphys.tests.conftest import (
+    FIT,
+    PDF,
+    PSEUDODATA_FIT,
+    PSEUDODATA_FIT_DIAG,
+    SINGLE_DATASET,
+    THEORYID,
+)
 
 
 def test_read_fit_pseudodata():
@@ -74,14 +81,17 @@ def test_no_savepseudodata():
 
 
 def test_read_matches_recreate():
-    reads = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
-    recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
-    for read, recreate in zip(reads, recreates):
-        # We ignore the absolute ordering of the dataframes and just check
-        # that they contain identical elements.
-        pd.testing.assert_frame_equal(read.pseudodata, recreate.pseudodata, check_like=True)
-        pd.testing.assert_index_equal(read.tr_idx, recreate.tr_idx, check_order=False)
-        pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)
+
+    for fit in [PSEUDODATA_FIT, PSEUDODATA_FIT_DIAG]:
+        diagonal_basis = True if fit == PSEUDODATA_FIT_DIAG else False
+        reads = API.read_fit_pseudodata(fit=fit, diagonal_basis=diagonal_basis)
+        recreates = API.recreate_fit_pseudodata(fit=fit, diagonal_basis=diagonal_basis)
+        for read, recreate in zip(reads, recreates):
+            # We ignore the absolute ordering of the dataframes and just check
+            # that they contain identical elements.
+            pd.testing.assert_frame_equal(read.pseudodata, recreate.pseudodata, check_like=True)
+            pd.testing.assert_index_equal(read.tr_idx, recreate.tr_idx, check_order=False)
+            pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)
 
 
 def test_level0_commondata_wc():
@@ -94,12 +104,12 @@ def test_level0_commondata_wc():
     l = Loader()
 
     datasetspec = l.check_dataset(
-        name=dataset['dataset'], variant=dataset['variant'], theoryid=THEORYID_NEW
+        name=dataset['dataset'], variant=dataset.get('variant'), theoryid=THEORYID
     )
     t0set = l.check_pdf(pdfname)
 
     l0_cd = API.level0_commondata_wc(
-        dataset_inputs=[dataset], use_cuts="internal", theoryid=THEORYID_NEW, fakepdf=pdfname
+        dataset_inputs=[dataset], use_cuts="internal", theoryid=THEORYID, fakepdf=pdfname
     )
     l0_vals = l0_cd[0].central_values
     assert_allclose(

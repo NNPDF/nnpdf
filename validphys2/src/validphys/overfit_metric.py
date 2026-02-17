@@ -8,6 +8,7 @@ produce the corresponding tables and figures.
 import logging
 
 import numpy as np
+import packaging
 import pandas as pd
 import scipy.stats as stats
 
@@ -71,42 +72,40 @@ def calculate_chi2s_per_replica(
         pseudodata replica
     """
     fit_name = fit_code_version.columns[0]
-    nnpdf_version = fit_code_version[fit_name]['nnpdf']
-    if nnpdf_version >= '4.0.5':
-        pp = []
-        for i, dss in enumerate(dataset_inputs):
-            preds_witout_cv = preds[i].drop(0, axis=1)
-            df = pd.concat({dss.name: preds_witout_cv}, names=["dataset"])
-            pp.append(df)
-
-        PDF_predictions = pd.concat(pp)
-
-        chi2s_per_replica = []
-        for enum, pdf_data_index in enumerate(recreate_pdf_pseudodata_no_table):
-            prediction_filter = pdf_data_index.val_idx.droplevel(level=0)
-            prediction_filter.rename(["dataset", "data"], inplace=True)
-            PDF_predictions_val = PDF_predictions.loc[prediction_filter]
-            PDF_predictions_val = PDF_predictions_val.values[:, enum]
-
-            new_val_pseudodata_list = _create_new_val_pseudodata(
-                pdf_data_index, recreate_pdf_pseudodata_no_table
-            )
-
-            invcovmat_vl = np.linalg.inv(
-                groups_covmat_no_table[pdf_data_index.val_idx].T[pdf_data_index.val_idx]
-            )
-
-            tmp = PDF_predictions_val - new_val_pseudodata_list
-
-            chi2 = np.einsum("ij,jk,ik->i", tmp, invcovmat_vl, tmp) / tmp.shape[1]
-            chi2s_per_replica.append(chi2)
-            ret = np.array(chi2s_per_replica)
-    else:
-        log.warning(
-            f"""Since {fit_name} pseudodata generation has changed,
-            hence the overfit metric cannot be determined."""
+    nnpdf_version = packaging.version.parse(fit_code_version[fit_name]['nnpdf'])
+    if nnpdf_version < packaging.version.parse("4.0.5"):
+        raise ValueError(
+            "The overfit metric can only be calculated with fits starting from version 4.0.5"
         )
-        ret = np.array(np.nan)
+
+    pp = []
+    for i, dss in enumerate(dataset_inputs):
+        preds_witout_cv = preds[i].drop(0, axis=1)
+        df = pd.concat({dss.name: preds_witout_cv}, names=["dataset"])
+        pp.append(df)
+
+    PDF_predictions = pd.concat(pp)
+
+    chi2s_per_replica = []
+    for enum, pdf_data_index in enumerate(recreate_pdf_pseudodata_no_table):
+        prediction_filter = pdf_data_index.val_idx.droplevel(level=0)
+        prediction_filter.rename(["dataset", "data"], inplace=True)
+        PDF_predictions_val = PDF_predictions.loc[prediction_filter]
+        PDF_predictions_val = PDF_predictions_val.values[:, enum]
+
+        new_val_pseudodata_list = _create_new_val_pseudodata(
+            pdf_data_index, recreate_pdf_pseudodata_no_table
+        )
+
+        invcovmat_vl = np.linalg.inv(
+            groups_covmat_no_table[pdf_data_index.val_idx].T[pdf_data_index.val_idx]
+        )
+
+        tmp = PDF_predictions_val - new_val_pseudodata_list
+
+        chi2 = np.einsum("ij,jk,ik->i", tmp, invcovmat_vl, tmp) / tmp.shape[1]
+        chi2s_per_replica.append(chi2)
+        ret = np.array(chi2s_per_replica)
 
     return ret
 

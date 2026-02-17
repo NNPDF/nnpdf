@@ -1,7 +1,5 @@
 """
 Filter for ATLAS_2JET_7TEV_R06
-
-Created on Mar  2023
 """
 
 import pandas as pd
@@ -159,7 +157,7 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         for m in range(Asys.shape[1]):
             error_value[f"sys_{m+1}"] = float(Asys[n2, m])
 
-        error_value["luminosity_uncertainty"] = float(Alum[n2])
+        error_value["luminosity_uncertainty"] = float(Alum[n2].squeeze())
         error.append(error_value)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}

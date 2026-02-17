@@ -8,7 +8,6 @@ import logging
 import mimetypes
 import os
 import pathlib
-import pkgutil
 import re
 import shutil
 import sys
@@ -18,9 +17,11 @@ import urllib.parse as urls
 
 import requests
 
+from nnpdf_data import CFACTOR_PATH, THEORY_CARDS_PATH
 from nnpdf_data.commondataparser import parse_new_metadata, parse_set_metadata
 from nnpdf_data.coredata import generate_path_filtered_data
-from nnpdf_data.validphys_compatibility import legacy_to_new_map, legacy_to_new_mapping, path_vpdata
+from nnpdf_data.utils import get_nnpdf_profile
+from nnpdf_data.validphys_compatibility import legacy_to_new_map, legacy_to_new_mapping
 from reportengine import filefinder
 from validphys import lhaindex
 from validphys.core import (
@@ -41,7 +42,6 @@ from validphys.core import (
 from validphys.utils import tempfile_cleaner, yaml_safe
 
 log = logging.getLogger(__name__)
-NNPDF_DIR = "NNPDF"
 
 
 class LoaderError(Exception):
@@ -77,6 +77,10 @@ class TheoryNotFound(LoadFailedError):
 
 
 class EkoNotFound(LoadFailedError):
+    pass
+
+
+class PhotonQEDNotFound(LoadFailedError):
     pass
 
 
@@ -116,121 +120,14 @@ class InconsistentMetaDataError(LoaderError):
     pass
 
 
-def _get_nnpdf_profile(profile_path=None):
-    """Returns the NNPDF profile as a dictionary
-
-    If no ``profile_path`` is provided it will be autodiscovered in the following order:
-
-    1. Environment variable $NNPDF_PROFILE_PATH
-    2. ${XDG_CONFIG_HOME}/NNPDF/nnprofile.yaml (usually ~/.config/nnprofile)
-
-    Any value not filled by 1 or 2 will then be filled by the default values
-    found within the validphys python package `nnporfile_default.yaml`
-
-    If ``nnpdf_share`` is set to the special key ``RELATIVE_TO_PYTHON``
-    the python prefix (``Path(sys.prefix)/"share"/"NNPDF"``) will be used
-
-    """
-
-    home_config = pathlib.Path().home() / ".config"
-    config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / NNPDF_DIR
-
-    # Set all default values
-    profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
-    profile_dict = yaml_safe.load(profile_content)
-    # including the data_path to the validphys package
-    profile_dict.setdefault("data_path", path_vpdata)
-
-    # Look at profile path
-    if profile_path is None:
-        profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
-
-    # If profile_path is still none and there is a .config/NNPDF/nnprofile.yaml, read that
-    if profile_path is None:
-        if (config_nnprofile := config_folder / "nnprofile.yaml").exists():
-            profile_path = config_nnprofile
-        elif (config_nnprofile := config_folder / "nnprofile.yml").exists():
-            profile_path = config_nnprofile
-
-    if profile_path is not None:
-        with open(profile_path, encoding="utf-8") as f:
-            profile_entries = yaml_safe.load(f)
-            if profile_entries is not None:
-                profile_dict.update(profile_entries)
-
-    nnpdf_share = profile_dict.get("nnpdf_share")
-    if nnpdf_share is None:
-        if profile_path is not None:
-            raise ValueError(
-                f"`nnpdf_share` is not set in {profile_path}, please set it, e.g.: nnpdf_share: `.local/share/NNPDF`"
-            )
-        raise ValueError(
-            "`nnpdf_share` not found in validphys, something is very wrong with the installation"
-        )
-
-    if nnpdf_share == "RELATIVE_TO_PYTHON":
-        nnpdf_share = pathlib.Path(sys.prefix) / "share" / NNPDF_DIR
-
-    # At this point nnpdf_share needs to be a path to somewhere
-    nnpdf_share = pathlib.Path(nnpdf_share)
-
-    # Make sure that we expand any ~ or ~<username>
-    nnpdf_share = nnpdf_share.expanduser()
-
-    # Make sure we can either write to this directory or it exists
-    try:
-        nnpdf_share.mkdir(exist_ok=True, parents=True)
-    except PermissionError as e:
-        raise FileNotFoundError(
-            f"{nnpdf_share} does not exist and you haven't got permissions to create it!"
-        ) from e
-
-    # Now read all paths and define them as relative to nnpdf_share (unless given as absolute)
-    for var in ["results_path", "theories_path", "validphys_cache_path", "hyperscan_path"]:
-        # if there are any problems setting or getting these variable erroring out is more than justified
-        absolute_var = nnpdf_share / pathlib.Path(profile_dict[var]).expanduser()
-        profile_dict[var] = absolute_var.absolute().as_posix()
-
-    return profile_dict
-
-
-def _use_fit_commondata_old_format_to_new_format(setname, file_path):
-    """Reads an old commondata written in the old format
-    (e.g., a closure test ran for NNPDF4.0) and creates a new-format version
-    in a temporary folder to be read by the commondata.
-    Note that this does not modify the fit"""
-    from .deprecated_functions import load_commondata_old
-
-    if not file_path.exists():
-        raise DataNotFoundError(f"Data for {setname} at {file_path} not found")
-
-    # This function (as well as the loader) is only kept during this first tag to ensure that cuts fromfit
-    # can be used even with old fits... for now
-    log.error(
-        "Note, the function `_use_fit_commondata_old_format_to_new_format` is deprecated and will be removed in future releases"
-    )
-
-    # Try loading the data from file_path, using the systypes from there
-    # although they are not used
-    systypes = next(file_path.parent.glob("systypes/*.dat"))
-    commondata = load_commondata_old(file_path, systypes, setname)
-
-    # Export the data central
-    new_data_stream = tempfile.NamedTemporaryFile(
-        delete=False, prefix=f"filter_{setname}_data", suffix=".yaml", mode="w"
-    )
-    commondata.export_data(new_data_stream)
-    new_data_stream.close()
-    data_path = pathlib.Path(new_data_stream.name)
-
-    # Export the uncertainties
-    new_unc_stream = tempfile.NamedTemporaryFile(
-        delete=False, prefix=f"filter_{setname}_uncertainties", suffix=".yaml", mode="w"
-    )
-    commondata.export_uncertainties(new_unc_stream)
-    new_unc_stream.close()
-    unc_path = pathlib.Path(new_unc_stream.name)
-    return data_path, unc_path
+def _fail_nicely_DataNotFoundError(setname):
+    """Fail with a DataNotFoundError, but try to check whether the dataset exist in the
+    translation layer, and if it does, offer the translation to the user."""
+    new_name, _ = legacy_to_new_map(setname, None)
+    err = ""
+    if new_name != setname:
+        err = f"\nNote that old names are no longer accepted. Perhaps you meant {new_name}"
+    raise DataNotFoundError(f"Dataset {setname} not found. Is the name correct? {err}")
 
 
 class LoaderBase:
@@ -243,23 +140,26 @@ class LoaderBase:
     def __init__(self, profile=None):
         if not isinstance(profile, dict):
             # If profile is a path, a str or None, read it from the default path
-            profile = _get_nnpdf_profile(profile)
+            profile = get_nnpdf_profile(profile)
 
         # Retrieve important paths from the profile if not given
-        datapath = pathlib.Path(profile["data_path"])
+        datapaths = [pathlib.Path(i) for i in profile["data_path"]]
         theories_path = pathlib.Path(profile["theories_path"])
         resultspath = pathlib.Path(profile["results_path"])
-
-        if not datapath.exists():
-            raise LoaderError(f"The data path {datapath} does not exist.")
+        ekos_path = pathlib.Path(profile["ekos_path"])
+        photons_qed = pathlib.Path(profile["photons_qed_path"])
 
         # Create the theories and results paths if they don't exist already
         theories_path.mkdir(exist_ok=True, parents=True)
+        ekos_path.mkdir(exist_ok=True, parents=True)
         resultspath.mkdir(exist_ok=True, parents=True)
+        photons_qed.mkdir(exist_ok=True, parents=True)
 
         # And save them up
-        self.datapath = datapath
+        self.commondata_folders = tuple(datapaths)
         self._theories_path = theories_path
+        self._ekos_path = ekos_path
+        self._photons_qed_path = photons_qed
         self.resultspath = resultspath
         self._extremely_old_fits = set()
         self.nnprofile = profile
@@ -282,7 +182,6 @@ class LoaderBase:
         return vpcache
 
 
-# TODO: Deprecate get methods?
 class Loader(LoaderBase):
     """Load various resources from the NNPDF data path."""
 
@@ -318,6 +217,14 @@ class Loader(LoaderBase):
             eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.tar")
         }
 
+    @functools.cached_property
+    def available_photons(self):
+        """Return a string token for each of the available theories"""
+        return {
+            photon_path.name.split("photon_")[1]
+            for photon_path in self._photons_qed_path.glob("photon_*")
+        }
+
     @property
     @functools.lru_cache
     def available_datasets(self):
@@ -343,8 +250,9 @@ class Loader(LoaderBase):
         are "fake" (integrability/positivity) or are missing some information.
         """
         datasets = []
-        for metadata_file in self.commondata_folder.glob("*/metadata.yaml"):
-            datasets += parse_set_metadata(metadata_file).allowed_datasets
+        for commondata_folder in self.commondata_folders:
+            for metadata_file in commondata_folder.glob("*/metadata.yaml"):
+                datasets += parse_set_metadata(metadata_file).allowed_datasets
         return datasets
 
     @property
@@ -352,39 +260,11 @@ class Loader(LoaderBase):
     def available_pdfs(self):
         return lhaindex.expand_local_names('*')
 
-    @property
-    def commondata_folder(self):
-        return self.datapath / 'commondata'
-
-    def _use_fit_commondata_old_format_to_old_format(self, basedata, fit):
-        """Load pseudodata from a fit where the data was generated in the old format
-        and does not exist a new-format version.
-        """
-        # TODO: deprecated, will be removed
-        setname = basedata.name
-        log.warning(f"Please update {basedata} to the new format to keep using it")
-        datafilefolder = (fit.path / 'filter') / setname
-        data_path = datafilefolder / f'FILTER_{setname}.dat'
-
-        if not data_path.exists():
-            oldpath = datafilefolder / f'DATA_{setname}.dat'
-            if not oldpath.exists():
-                raise DataNotFoundError(f"{data_path} is needed with `use_fitcommondata`")
-
-            raise DataNotFoundError(
-                f"""This data format: {oldpath} is no longer supported
-In order to upgrade it you need to use the script `vp-rebuild-data` with a version of NNPDF < 4.0.9"""
-            )
-        return data_path
-
     def check_commondata(
         self, setname, sysnum=None, use_fitcommondata=False, fit=None, variant=None
     ):
         """Prepare the commondata files to be loaded.
         A commondata is defined by its name (``setname``) and the variant(s) (``variant``)
-
-        At the moment both old-format and new-format commondata can be utilized and loaded
-        however old-format commondata are deprecated and will be removed in future relases.
 
         The function ``parse_dataset_input`` in ``config.py`` translates all known old commondata
         into their new names (and variants),
@@ -396,61 +276,30 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         if use_fitcommondata:
             if not fit:
                 raise LoadFailedError("Must specify a fit when setting use_fitcommondata")
-            # Using commondata generated with a previous fit requires some branching since it depends on
-            # 1. Whether the data is now in the new commondata
-            # 2. Whether the data was in the old format when it was generated
 
-            # First, load the base commondata which will be used as container and to check point 1
+            # First, load the base commondata which will be used as container
             basedata = self.check_commondata(setname, variant=variant, sysnum=sysnum)
-            # and the possible filename for the new data
+            # and the filename for the new data
             data_path, unc_path = generate_path_filtered_data(fit.path, setname)
 
             if not data_path.exists():
                 # We might be dealing with legacy names and with legacy paths
-                err_str = f"No fit data found for {setname} ({data_path})"
-                if basedata.legacy_names is None:
-                    raise DataNotFoundError(err_str)
-
-                for legacy_name in basedata.legacy_names:
-
-                    # try old commondata format
-                    old_path = fit.path / "filter" / legacy_name / f"FILTER_{legacy_name}.dat"
-                    if old_path.exists():
-                        data_path, unc_path = _use_fit_commondata_old_format_to_new_format(
-                            setname, old_path
-                        )
-                        break
-                    # try new commondata format
-                    old_path = (
-                        fit.path
-                        / "filter"
-                        / legacy_name
-                        / f"filtered_uncertainties_{legacy_name}.yaml"
-                    )
-                    if old_path.exists():
-                        data_path = old_path.with_name(f"filtered_data_{legacy_name}.yaml")
-                        unc_path = old_path.with_name(f"filtered_uncertainties_{legacy_name}.yaml")
-                        break
-                else:
-                    # If no old path was found, then, error out
-                    err_str += f" and no filter found for its legacy names: {basedata.legacy_names}"
-                    return DataNotFoundError(err_str)
+                return DataNotFoundError(f"No fit data found for {setname} ({data_path})")
 
             return basedata.with_modified_data(data_path, uncertainties_file=unc_path)
 
         # Get data folder and observable name and check for existence
         try:
             setfolder, observable_name = setname.rsplit("_", 1)
-            set_path = self.commondata_folder / setfolder
-            if not set_path.exists():
-                # Go down to the exception
-                raise ValueError
         except ValueError:
-            new_name, _ = legacy_to_new_map(setname, None)
-            err = ""
-            if new_name != setname:
-                err = f"\nNote that old names are no longer accepted. Perhaps you meant {new_name}"
-            raise DataNotFoundError(f"Dataset {setname} not found. Is the name correct? {err}")
+            _fail_nicely_DataNotFoundError(setname)
+
+        for commondata_folder in self.commondata_folders:
+            set_path = commondata_folder / setfolder
+            if set_path.exists():
+                break
+        else:
+            _fail_nicely_DataNotFoundError(setname)
 
         metadata_path = set_path / "metadata.yaml"
         metadata = parse_new_metadata(metadata_path, observable_name, variant=variant)
@@ -466,32 +315,31 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
 
     @functools.lru_cache
     def check_eko(self, theoryID):
-        """Check the eko (and the parent theory) both exists and returns the path to it"""
-        theory = self.check_theoryID(theoryID)
-        eko_path = theory.path / "eko.tar"
+        """Check the eko exists and return the path to it"""
+        eko_path = self._ekos_path / f"eko_{int(theoryID)}.tar"
         if not eko_path.exists():
             raise EkoNotFound(f"Could not find eko {eko_path} in theory: {theoryID}")
         return eko_path
 
+    @functools.lru_cache
+    def check_photonQED(self, theoryID, luxset):
+        """Check the Photon QED set exists and return the path to it"""
+        photon_qed_path = self._photons_qed_path / f"photon_theoryID_{int(theoryID)}_fit_{luxset}"
+        if not photon_qed_path.exists():
+            raise PhotonQEDNotFound(
+                f"Could not find Photon QED set {photon_qed_path} in theory: {int(theoryID)}"
+            )
+        return photon_qed_path
+
     @property
     def theorydb_folder(self):
         """Checks theory db file exists and returns path to it"""
-        dbpath = self.datapath / "theory_cards"
-        if not dbpath.is_dir():
-            raise TheoryDataBaseNotFound(
-                f"could not find theory db folder. Directory not found at {dbpath}"
-            )
-        return dbpath
+        if THEORY_CARDS_PATH.exists():
+            return THEORY_CARDS_PATH
+        raise TheoryDataBaseNotFound(
+            f"could not find theory db folder. Directory not found at {THEORY_CARDS_PATH}"
+        )
 
-    def get_commondata(self, setname, sysnum):
-        """Get a Commondata from the set name and number."""
-        # TODO: check where this is used
-        # as this might ignore cfactors or variants
-        raise Exception("Not used")
-        cd = self.check_commondata(setname, sysnum)
-        return cd.load()
-
-    #   @functools.lru_cache()
     def check_fktable(self, theoryID, setname, cfac):
         _, theopath = self.check_theoryID(theoryID)
         fkpath = theopath / 'fastkernel' / ('FK_%s.dat' % setname)
@@ -553,19 +401,26 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         op = data['OP']
         return tuple(tables), op
 
-    def get_fktable(self, theoryID, setname, cfac):
-        fkspec = self.check_fktable(theoryID, setname, cfac)
-        return fkspec.load()
-
     def check_cfactor(self, theoryID, setname, cfactors):
         _, theopath = self.check_theoryID(theoryID)
         cf = []
         for cfactor in cfactors:
-            cfactorpath = theopath / "cfactor" / f"CF_{cfactor}_{setname}.dat"
-            if not cfactorpath.exists():
+            filename = f"CF_{cfactor}_{setname}.dat"
+            theory_cfactor = theopath / "cfactor" / filename
+            internal_cfactor = CFACTOR_PATH / filename
+            if theory_cfactor.exists() and internal_cfactor.exists():
+                log.warning(
+                    f"cfactor for {filename} found both internally and in {theory_cfactor}. The theory cfactor takes precedence."
+                )
+
+            if theory_cfactor.exists():
+                cfactorpath = theory_cfactor
+            elif internal_cfactor.exists():
+                cfactorpath = internal_cfactor
+            else:
                 msg = (
-                    f"Could not find cfactor '{cfactor}' for FKTable {setname}."
-                    f"File {cfactorpath} does not exist in {theoryID}"
+                    f"Could not find cfactor '{cfactor}' for FKTable {setname}.\n"
+                    f"File {filename} does not exist in {theopath}/cfactor or in {CFACTOR_PATH}"
                 )
                 raise CfactorNotFound(msg)
             cf.append(cfactorpath)
@@ -588,9 +443,6 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         """Load an integrability dataset"""
         cd, fk, th = self._check_lagrange_multiplier_set(theoryID, setname)
         return IntegrabilitySetSpec(setname, cd, fk, postlambda, th, rules)
-
-    def get_posset(self, theoryID, setname, postlambda, rules):
-        return self.check_posset(theoryID, setname, postlambda, rules).load()
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
@@ -760,7 +612,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         -------
         >>> from validphys.loader import Loader
         >>> l = Loader()
-        >>> ds = l.check_dataset("NMC", theoryid=53, cuts="internal")
+        >>> ds = l.check_dataset("CDF_Z0_1P96TEV_ZRAP", theoryid=40_000_000, cuts="internal")
         >>> exp = l.check_experiment("My DataGroupSpec Name", [ds])
         """
         if not isinstance(datasets, list):
@@ -772,9 +624,6 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         if lhaindex.isinstalled(name):
             return PDF(name)
         raise PDFNotFound(name)
-
-    def get_pdf(self, name):
-        return self.check_pdf(name).load()
 
     def check_fit_cuts(self, commondata, fit):
         setname = commondata.name
@@ -791,7 +640,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         # There are two translation that might be necessary:
         # 1. New names in the runcard, old cuts in the 'fromfit' fit
         # 2. Old names in the runcard, new cuts in the 'fromfit' fit
-        # In order to enforce the usage of the new names, only (1.) will be implemented
+        # In order to enforce the usage of the new names, only (1.) is implemented
 
         if not cuts_path.parent.exists():
             if commondata.legacy_names is None:
@@ -1005,6 +854,16 @@ class RemoteLoader(LoaderBase):
 
     @property
     @_key_or_loader_error
+    def photon_qed_index(self):
+        return self.nnprofile['photon_qed_index']
+
+    @property
+    @_key_or_loader_error
+    def photon_qed_urls(self):
+        return self.nnprofile['photon_qed_urls']
+
+    @property
+    @_key_or_loader_error
     def nnpdf_pdfs_urls(self):
         return self.nnprofile['nnpdf_pdfs_urls']
 
@@ -1075,6 +934,13 @@ class RemoteLoader(LoaderBase):
 
     @property
     @functools.lru_cache
+    def remote_photons(self):
+        token = 'photon_'
+        rt = self.remote_files(self.photon_qed_urls, self.photon_qed_index, thing="photons")
+        return {k[len(token) :]: v for k, v in rt.items()}
+
+    @property
+    @functools.lru_cache
     def remote_nnpdf_pdfs(self):
         return self.remote_files(self.nnpdf_pdfs_urls, self.nnpdf_pdfs_index, thing="PDFs")
 
@@ -1106,6 +972,10 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_ekos(self):
         return list(self.remote_ekos)
+
+    @property
+    def downloadable_photons(self):
+        return list(self.remote_photons)
 
     @property
     def lhapdf_pdfs(self):
@@ -1273,7 +1143,7 @@ class RemoteLoader(LoaderBase):
             raise PDFNotFound("PDF '%s' is neither an uploaded fit nor an " "LHAPDF set." % name)
 
     def download_theoryID(self, thid):
-        thid = str(thid)
+        thid = str(int(thid))
         remote = self.remote_theories
         if thid not in remote:
             raise TheoryNotFound("Theory %s not available." % thid)
@@ -1286,9 +1156,20 @@ class RemoteLoader(LoaderBase):
         if thid not in remote:
             raise EkoNotFound(f"EKO for TheoryID {thid} is not available in the remote server")
         # Check that we have the theory we need
-        theory = self.check_theoryID(thid)
-        target_path = theory.path / "eko.tar"
-        download_file(remote[thid], target_path, delete_on_failure=True)
+        target_path = self._ekos_path / f"eko_{int(thid)}.tar"
+        download_file(remote[thid], target_path)
+
+    def download_photonQED(self, thid, luxset: str):
+        """Download the Photon set for a given theory ID"""
+        remote = self.remote_photons
+        key = f"theoryID_{thid}_fit_{luxset}"
+        if key not in remote:
+            raise PhotonQEDNotFound(
+                f"Photon QED set for TheoryID {thid} and luxset {luxset} is not available in the remote server."
+            )
+        # Check that we have the theory we need
+        target_path = self._photons_qed_path
+        download_and_extract(remote[key], target_path)
 
     def download_vp_output_file(self, filename, **kwargs):
         try:

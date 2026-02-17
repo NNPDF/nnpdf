@@ -6,32 +6,36 @@ Example
 
 >>> import numpy as np
 >>> from n3fit.vpinterface import N3PDF
->>> from n3fit.model_gen import pdfNN_layer_generator
+>>> from n3fit.model_gen import generate_pdf_model, ReplicaSettings
 >>> from validphys.pdfgrids import xplotting_grid
->>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+>>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 's', 'sbar', 'g']]
 >>> fake_x = np.linspace(1e-3,0.8,3)
->>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
->>> n3pdf = N3PDF(pdf_model)
+>>> rps = [ReplicaSettings(nodes=[8], activations=["linear"], seed=4)]*4
+>>> pdf_model = generate_pdf_model(rps, flav_info=fake_fl, fitbasis='FLAVOUR')
+>>> n3pdf = N3PDF(pdf_model.split_replicas())
 >>> res = xplotting_grid(n3pdf, 1.6, fake_x)
 >>> res.grid_values.error_members().shape
-(1, 8, 3)
-
+(4, 8, 3)
+# (nreplicas, flavours, x-grid)
 
 """
 
 from collections.abc import Iterable
+from dataclasses import dataclass
 from functools import cached_property
 import logging
 
 import numpy as np
-import numpy.linalg as la
+import pandas as pd
+import scipy.linalg as la
 
 from validphys.arclength import arc_lengths, integrability_number
+from validphys.calcutils import calc_chi2, calc_phi
+from validphys.convolution import central_predictions, predictions
 from validphys.core import PDF, MCStats
-from validphys.covmats import covmat_from_systematics, sqrt_covmat
+from validphys.covmats import dataset_inputs_covmat_from_systematics
 from validphys.lhapdfset import LHAPDFSet
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
-from validphys.results import abs_chi2_data, phi_data, results
 
 log = logging.getLogger(__name__)
 # Order of the evolution basis output from n3fit
@@ -53,6 +57,14 @@ EVOL_LIST = [
 ]
 
 
+@dataclass
+class HyperoptMetrics:
+    chi2: float
+    phi2: float
+    logp: float
+    chi2exp: float
+
+
 class N3Stats(MCStats):
     """The PDFs from n3fit are MC PDFs
     however, since there is no grid, the CV has to be computed manually"""
@@ -67,13 +79,14 @@ class N3Stats(MCStats):
 class N3LHAPDFSet(LHAPDFSet):
     """Extension of LHAPDFSet using n3fit models"""
 
-    def __init__(self, name, pdf_models, Q=1.65):
+    def __init__(self, name, pdf_models, Q=1.65, is_t0=False):
         log.debug("Creating LHAPDF-like n3fit PDF")
         self._error_type = "replicas"
         self._name = name
         self._lhapdf_set = pdf_models
         self._flavors = None
         self._fitting_q = Q
+        self._is_t0 = is_t0
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
 
     def xfxQ(self, x, Q, n, fl):
@@ -124,12 +137,12 @@ class N3LHAPDFSet(LHAPDFSet):
         # Register the grid with the photon
         self._register_photon(mod_xgrid)
 
-        if replica is None or replica == 0:
+        if replica is None or replica == 0 or self._is_t0:
             # We need generate output values for all replicas
             result = np.concatenate(
                 [m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0
             )
-            if replica == 0:
+            if replica == 0 or self._is_t0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)
         else:
@@ -226,6 +239,10 @@ class N3PDF(PDF):
     def load(self):
         """If the function needs an LHAPDF object, return a N3LHAPDFSet"""
         return self._lhapdf_set
+
+    def load_t0(self):
+        """Load the central PDF object"""
+        return N3LHAPDFSet(self.name, self._models, Q=self._Q, is_t0=True)
 
     def get_nn_weights(self):
         """Outputs all weights of the NN as numpy.ndarrays"""
@@ -326,7 +343,6 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
     """
     Given the layer with the fit basis computes the arc length
     using the corresponding validphys action
-
     Parameters
     ----------
         pdf_function: function
@@ -337,7 +353,6 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
             basis in which to compute the arc length
         flavours: list
             output flavours
-
     Example
     -------
     >>> from n3fit.vpinterface import N3PDF, compute_arclength
@@ -353,10 +368,9 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
     return ret.stats.central_value()
 
 
-def compute_phi(n3pdf, experimental_data):
-    """Compute phi using validphys functions.
-
-    For more info on how phi is calculated; see Eq.(4.6) of 10.1007/JHEP04(2015)040
+def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
+    """Compute the different hyperopt quantities from which one defines
+    the hyperopt metric.
 
     Parameters
     ----------
@@ -367,43 +381,78 @@ def compute_phi(n3pdf, experimental_data):
 
     Returns
     -------
-        sum_phi: float
-            Sum of phi over all experimental group datasets
+        HyperoptMetrics: :class:`n3fit.vpinterface.HyperoptMetrics`
+            dataclass holding the values of chi2, phi2 and logp
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF, compute_phi
-    >>> from n3fit.model_gen import generate_pdf_model
+    >>> from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
+    >>> from n3fit.model_gen import generate_pdf_model, ReplicaSettings
     >>> from validphys.loader import Loader
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-    >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> rps = [ReplicaSettings(nodes=[8], activations=["linear"], seed=i) for i in [0,1]]
+    >>> pdf_model = generate_pdf_model(rps, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> n3pdf = N3PDF(pdf_model.split_replicas())
-    >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=399, cuts="internal")
+    >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=40_000_000, cuts="internal", variant="legacy")
     >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
-    >>> phi = compute_phi(n3pdf, [data_group_spec])
+    >>> hyperopt_losses = compute_hyperopt_metrics(n3pdf, [data_group_spec])
     """
-    sum_phi = 0.0
-    ndat_tot = 0
+    exp_cv = []
+    th_cvs = []
+    th_rep = []
+    cds_list = []
+
     # Loop over the list of `DataGroupSpec` objects
     for datagroupspec in experimental_data:
         # datagroupspec is an instance of `DataGroupSpec`
-
         # Loop over `DataGroupSpec` datasets
         for datasetspec in datagroupspec.datasets:
             # datasetspec is an instance of `DataSetSpec`
+            # update list of CommonData and corresponding central values
+            cd = datasetspec.load_commondata()
+            cds_list.append(cd)
+            exp_cv.append(cd.central_values)
+            # update list of th pred, for the central value and for each replica
+            th_cvs.append(central_predictions(datasetspec, n3pdf))
+            th_rep.append(predictions(datasetspec, n3pdf))
 
-            # get covariant matrix for each `DataSetSpec`
-            covmat = covmat_from_systematics(datasetspec.load_commondata(), datasetspec)
+    pred_cvs = pd.concat(th_cvs, axis=0, ignore_index=True)
+    pred_rep = pd.concat(th_rep, axis=0, ignore_index=True)
+    expr_cvs = pd.concat(exp_cv, axis=0, ignore_index=True)
+    diffs = pred_cvs.values.flatten() - expr_cvs.values.flatten()
+    diffs_reps = pred_rep.values - expr_cvs.values[:, np.newaxis]
 
-            # get experiment info (`DataResult`) and theory predictions (`ThPredictionsResult`)
-            res = results(datasetspec, n3pdf, covmat, sqrt_covmat(covmat))
+    exp_cov = dataset_inputs_covmat_from_systematics(cds_list, use_weights_in_covmat=False)
+    exp_covmat_col = la.cholesky(exp_cov, lower=True)
 
-            # calculate standard chi2 (all_chi2) and chi2 using PDF central values (central_chi2)
-            chi2 = abs_chi2_data(res)
+    # If there is only one replica, we don't account for PDF covmat
+    if pred_rep.shape[1] == 1:
+        total_covmat = exp_cov
+    else:
+        pdf_cov = np.cov(pred_rep.values)
+        assert exp_cov.shape == pdf_cov.shape
+        total_covmat = exp_cov + pdf_cov
 
-            # calculate phi and store phi**2
-            phi, ndat = phi_data(chi2)
-            sum_phi += ndat * phi**2
-            ndat_tot += ndat
+    # Compute the log_det
+    # Normalize the total covmat to central values of experimental data
+    norm_total_covmat = total_covmat / np.outer(
+        expr_cvs.values.flatten(), expr_cvs.values.flatten()
+    )
+    norm_total_covmat_chol = la.cholesky(norm_total_covmat, lower=True)
+    log_det_total_cov = 2 * np.sum(np.log(np.diag(norm_total_covmat_chol)))
 
-    return np.sqrt(sum_phi / ndat_tot)
+    # Compute the chi2
+    total_covmat_chol = la.cholesky(total_covmat, lower=True)
+    chi2 = calc_chi2(sqrtcov=total_covmat_chol, diffs=diffs)
+    
+    # Compute the experimental chi2
+    exp_covmat_chol = la.cholesky(exp_cov, lower=True)
+    chi2exp = calc_chi2(sqrtcov=exp_covmat_chol, diffs=diffs)
+
+    # Compute phi2
+    phi2 = calc_phi(sqrtcov=exp_covmat_col, diffs=diffs_reps)
+
+    ndat = len(diffs)
+    logp = -0.5 * (len(diffs) * np.log(2 * np.pi) + log_det_total_cov + chi2)
+
+    return HyperoptMetrics(chi2=chi2 / ndat, phi2=phi2, logp=-logp / ndat, chi2exp=chi2exp / ndat)

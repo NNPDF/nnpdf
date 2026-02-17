@@ -1,29 +1,29 @@
 """
-    This module contains the list of operations that can be used within the
-    ``call`` method of the ``n3fit`` layers as well as operations that can
-    act on layers.
+This module contains the list of operations that can be used within the
+``call`` method of the ``n3fit`` layers as well as operations that can
+act on layers.
 
-    This includes an implementation of the NNPDF operations on fktable in the keras
-    language (with the mapping ``c_to_py_fun``) into Keras ``Lambda`` layers.
+This includes an implementation of the NNPDF operations on fktable in the keras
+language (with the mapping ``c_to_py_fun``) into Keras ``Lambda`` layers.
 
-    The rest of the operations in this module are divided into four categories:
-    numpy to tensor:
-        Operations that take a numpy array and return a tensorflow tensor
-    layer to layer:
-        Operations that take a layer and return another layer
-    tensor to tensor:
-        Operations that take a tensor and return a tensor
-    layer generation:
-        Instanciate a layer to be applied by the calling function
+The rest of the operations in this module are divided into four categories:
+numpy to tensor:
+    Operations that take a numpy array and return a tensorflow tensor
+layer to layer:
+    Operations that take a layer and return another layer
+tensor to tensor:
+    Operations that take a tensor and return a tensor
+layer generation:
+    Instanciate a layer to be applied by the calling function
 
-    Most of the operations in this module are just aliases to the backend
-    (Keras in this case) so that, when implementing new backends, it is clear
-    which operations may need to be overwritten.
-    For a few selected operations, a more complicated wrapper to e.g., make
-    them into layers or apply some default, is included.
+Most of the operations in this module are just aliases to the backend
+(Keras in this case) so that, when implementing new backends, it is clear
+which operations may need to be overwritten.
+For a few selected operations, a more complicated wrapper to e.g., make
+them into layers or apply some default, is included.
 
-    Note that tensor operations can also be applied to layers as the output of a layer is a tensor
-    equally operations are automatically converted to layers when used as such.
+Note that tensor operations can also be applied to layers as the output of a layer is a tensor
+equally operations are automatically converted to layers when used as such.
 """
 
 from keras import backend as K
@@ -46,6 +46,7 @@ from keras.ops import (
     expand_dims,
     leaky_relu,
     reshape,
+    nan_to_num,
     repeat,
     split,
     sum,
@@ -70,12 +71,12 @@ elif K.backend() == "jax":
     decorator_compiler = lambda f: f
 elif K.backend() == "tensorflow":
     tensor_to_numpy_or_python = lambda x: x.numpy()
-    lambda ret: {k: i.numpy() for k, i in ret.items()}
     import tensorflow as tf
 
     decorator_compiler = tf.function
 
 dict_to_numpy_or_python = lambda ret: {k: tensor_to_numpy_or_python(i) for k, i in ret.items()}
+variable_to_numpy = lambda x: x.numpy()
 
 
 def as_layer(operation, op_args=None, op_kwargs=None, **kwargs):
@@ -290,3 +291,8 @@ def tensor_splitter(ishape, split_sizes, axis=2, name="splitter"):
         lambda x: Kops.split(x, indices, axis=axis), output_shape=oshapes, name=name
     )
     return sp_layer
+
+
+def nansum(x, *args, **kwargs):
+    """Like np.nansum, returns the sum treating NaN as 0.0 (and inf as a very large number)."""
+    return sum(nan_to_num(x), *args, **kwargs)

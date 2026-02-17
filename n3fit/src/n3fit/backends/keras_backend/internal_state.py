@@ -1,5 +1,5 @@
 """
-    Library of functions that modify the internal state of Keras/Tensorflow
+Library of functions that modify the internal state of Keras/Tensorflow
 """
 
 import os
@@ -21,14 +21,15 @@ import numpy as np
 log = logging.getLogger(__name__)
 
 # Prepare Keras-backend dependent functions
-if K.backend() in ("torch", "jax"):
+if (kback := K.backend()) == "torch":
+
     import torch
 
     def set_eager(flag=True):
         """Pytorch is eager by default"""
         pass
 
-    def set_threading(threads, core):
+    def set_threading(threads, core, double_precision=False):
         """Not implemented"""
         log.info("Setting max number of threads to: %d", threads)
         torch.set_num_threads(threads)
@@ -43,8 +44,13 @@ elif K.backend() == "tensorflow":
         """
         tf.config.run_functions_eagerly(flag)
 
-    def set_threading(threads, cores):
-        """Set the Tensorflow inter and intra parallelism options"""
+    def set_threading(threads, cores, double_precision=False):
+        """Set the Tensorflow inter and intra parallelism options.
+        Make sure that the TensorFloat 32 type is off regardless of whether it is available.
+        """
+        if not double_precision:
+            tf.config.experimental.enable_tensor_float_32_execution(False)
+
         log.info("Setting the number of cores to: %d", cores)
         try:
             tf.config.threading.set_inter_op_parallelism_threads(threads)
@@ -56,12 +62,22 @@ elif K.backend() == "tensorflow":
                 "Could not set tensorflow parallelism settings from n3fit, maybe tensorflow is already initialized by a third program"
             )
 
+elif K.backend() == "jax":
+
+    import jax
+
+    def set_eager(flag=True):
+        pass
+
+    def set_threading(threads, core, double_precision=False):
+        pass
+
 else:
     # Keras should've failed by now, if it doesn't it could be a new backend that works ootb?
     log.warning(f"Backend {K.backend()} not recognized. You are entering uncharted territory")
 
 
-def set_number_of_cores(max_cores=None, max_threads=None):
+def set_number_of_cores(max_cores=None, max_threads=None, double_precision=False):
     """
     Set the maximum number of cores and threads per core to be used by TF.
     It defaults to the number of physical cores
@@ -94,7 +110,7 @@ def set_number_of_cores(max_cores=None, max_threads=None):
     if max_threads is not None:
         threads = min(max_threads, threads)
 
-    set_threading(threads, cores)
+    set_threading(threads, cores, double_precision)
 
 
 def clear_backend_state():
@@ -153,6 +169,8 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
 
     if double_precision:
         K.set_floatx('float64')
+    else:
+        K.set_floatx('float32')
 
     # Set the number of cores depending on the user choice of max_cores
     # if debug mode and no number of cores set by the user, set to 1
@@ -161,7 +179,7 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
         keras.utils.set_random_seed(7331)
         threads = 1
         tf.config.experimental.enable_op_determinism()
-    set_number_of_cores(max_cores=max_cores, max_threads=threads)
+    set_number_of_cores(max_cores=max_cores, max_threads=threads, double_precision=double_precision)
 
     # Once again, if in debug mode or external_seed set, set also the TF seed
     if debug or external_seed:

@@ -9,26 +9,27 @@ description: NNLO DIS only in basis which diagonalises experimental covmat with 
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, frac: 0.75, variant: legacy_dw}
-- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, frac: 0.75, variant: legacy_dw}
-- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
-- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
-- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_300GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], variant: legacy_dw}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED}
+- {dataset: HERA_NC_251GEV_EP-SIGMARED}
+- {dataset: HERA_NC_300GEV_EP-SIGMARED}
+- {dataset: HERA_NC_318GEV_EP-SIGMARED}
+- {dataset: HERA_CC_318GEV_EM-SIGMARED}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED}
+- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED}
+- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED}
 
+diagonal_frac: 0.75
 ############################################################
 datacuts:
   t0pdfset     : NNPDF40_nnlo_as_01180 # PDF set to generate t0 covmat
@@ -37,9 +38,8 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 708        # database id
+  theoryid: 41_000_000        # database id
 
-separate_multiplicative: True
 ############################################################
 trvlseed: 1
 nnseed: 2
@@ -68,10 +68,6 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   regularizer_args: {l1: 0.0, l2: 1.0}
 
 fitting:
-  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
@@ -91,7 +87,7 @@ positivity:
   - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
   - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}

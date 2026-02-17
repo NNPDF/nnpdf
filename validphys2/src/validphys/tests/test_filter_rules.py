@@ -11,7 +11,7 @@ from validphys.filters import (
 )
 from validphys.loader import FallbackLoader as Loader
 from validphys.tests.conftest import PDF
-from validphys.tests.conftest import THEORYID_NEW as THEORYID
+from validphys.tests.conftest import THEORYID as THEORYID
 
 bad_rules = [
     {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2"},

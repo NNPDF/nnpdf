@@ -43,7 +43,7 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    dataset_label: CMS 5 TeV $\sigma_{t\bar{t}}$
+    dataset_label: CMS 5.02 TeV $\sigma_{t\bar{t}}$
     plot_x: sqrts
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:

@@ -38,9 +38,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 708        # database id
-
-separate_multiplicative: True
+  theoryid: 40_000_000        # database id
 
 ############################################################
 hyperscan_config:
@@ -105,6 +103,7 @@ trvlseed: 1
 nnseed: 2
 mcseed: 3
 genrep: false        # true = generate MC replicas, false = use real data
+diagonal_basis: false # true = use the diagonal basis
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [35, 25, 8]

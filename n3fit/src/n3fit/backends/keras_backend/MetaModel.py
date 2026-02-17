@@ -1,14 +1,14 @@
 """
-    MetaModel class
+MetaModel class
 
-    Extension of the backend Model class containing some wrappers in order to absorb other
-    backend-dependent calls.
+Extension of the backend Model class containing some wrappers in order to absorb other
+backend-dependent calls.
 """
 
 from pathlib import Path
 import re
 
-from keras import Variable
+from keras import backend as K
 from keras import optimizers as Kopt
 from keras.models import Model
 import numpy as np
@@ -32,6 +32,16 @@ NN_PREFIX = "NN"
 NN_LAYER_ALL_REPLICAS = "all_NNs"
 PREPROCESSING_LAYER_ALL_REPLICAS = "preprocessing_factor"
 
+#  Running many steps in epoch eliminates some per-epoch overhead and has a big impact
+#  in GPU. In benchmarks, more than 100 steps doesn't seem to have any impact
+#  so this is the rationale for that number.
+#
+#  For reasons that are not clear at the time of writing (13/08/2025) jax only accepts
+#  one step per epoch, showing the same penalty of other libraries.
+STEPS_PER_EPOCH = 100
+if K.backend() == "jax":
+    STEPS_PER_EPOCH = 1
+
 # Some keys need to work for everyone
 for k, v in optimizers.items():
     v[1]["clipnorm"] = 1.0
@@ -40,7 +50,7 @@ for k, v in optimizers.items():
 def _default_loss(y_true, y_pred):  # pylint: disable=unused-argument
     """Default loss to be used when the model is compiled with loss = Null
     (for instance if the prediction of the model is already the loss"""
-    return ops.sum(y_pred)
+    return ops.nansum(y_pred)
 
 
 class MetaModel(Model):
@@ -98,13 +108,16 @@ class MetaModel(Model):
                 self.required_slots.add(k)
         super().__init__(input_tensors, output_tensors, **kwargs)
 
-        self.x_in = x_in
         self.input_tensors = input_tensors
         self.single_replica_generator = None
 
         self.target_tensors = None
         self.compute_losses_function = None
         self._scaler = scaler
+
+        # Keras' __setattr__ would try to track the input dictionary as a TrackedDict
+        # which is incompatible with jax, to avoid this problem, set the attribute directly
+        object.__setattr__(self, "x_in", x_in)
 
     def _parse_input(self, extra_input=None):
         """Returns the input data the model was compiled with.
@@ -153,33 +166,21 @@ class MetaModel(Model):
         if y is None:
             y = self.target_tensors
 
-        # Avoids Tensorflow overhead that happens at every epoch, by putting multiple steps in an epoch
-        steps_per_epoch = self._determine_steps_per_epoch(epochs)
+        # Running more than 1 step for every epoch eliminates some overhead of the backend libraries.
+        # In the special case in which epochs < STEPS_PER_EPOCH, set it to 1
+        if epochs < STEPS_PER_EPOCH:
+            steps_per_epoch = 1
+        else:
+            steps_per_epoch = STEPS_PER_EPOCH
 
         for k, v in x_params.items():
             x_params[k] = ops.repeat(v, steps_per_epoch, axis=0)
         y = [ops.repeat(yi, steps_per_epoch, axis=0) for yi in y]
-
         history = super().fit(
             x=x_params, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
         )
         loss_dict = history.history
         return loss_dict
-
-    def _determine_steps_per_epoch(self, epochs):
-        """Determine how many step to run in every epoch.
-        When running a single replica (CPU) or when the number of epochs is < 100 default to 1.
-        Otherwise run 100 steps per epoch.
-
-        If the number of epochs requested is not divisible by 100 there will be a number
-        of extra training epochs being run equal to max_epochs % 100 in the worst case.
-
-        """
-        num_replicas = self.output_shape[0]
-        if num_replicas == 1 or epochs < 100:
-            return 1
-
-        return 100
 
     def predict(self, x=None, **kwargs):
         """Call super().predict with the right input arguments"""
@@ -218,7 +219,7 @@ class MetaModel(Model):
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
-                total_loss = ops.sum(predictions, axis=0)
+                total_loss = ops.nansum(predictions, axis=0)
                 ret = [total_loss] + predictions
                 return dict(zip(out_names, ret))
 
@@ -408,7 +409,7 @@ class MetaModel(Model):
             raise ValueError("Trying to generate single replica models with no generator set.")
         replicas = []
         for i_replica in range(self.num_replicas):
-            replica = self.single_replica_generator()
+            replica = self.single_replica_generator(i_replica)
             replica.set_replica_weights(self.get_replica_weights(i_replica))
             replicas.append(replica)
 
@@ -496,9 +497,9 @@ def get_layer_replica_weights(layer, i_replica: int):
     """
     if is_stacked_single_replicas(layer):
         weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
-        weights = [Variable(w, name=w.name) for w in weights_ref]
+        weights = [ops.variable_to_numpy(w) for w in weights_ref]
     else:
-        weights = [Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+        weights = [ops.variable_to_numpy(w)[i_replica : i_replica + 1] for w in layer.weights]
 
     return weights
 

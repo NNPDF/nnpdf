@@ -9,7 +9,7 @@ import os
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STATS
 from reportengine.checks import CheckError, make_argcheck
-from validphys.loader import FallbackLoader
+from validphys.loader import FallbackLoader, Loader
 from validphys.pdfbases import check_basis
 
 log = logging.getLogger(__name__)
@@ -396,6 +396,7 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
     - Checks the sum rules can be imposed
     - Correct flavours for the selected basis
     - Correct ranges (min < max) for the small and large-x exponents
+    - When feature scaling is active, the large_x interpolation is not set
     """
     check_sumrules(sum_rules)
     # Check that there are no duplicate flavours and that parameters are sane
@@ -405,12 +406,19 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
         smallx = flavour_dict["smallx"]
         if smallx[0] > smallx[1]:
             raise CheckError(f"Wrong smallx range for flavour {name}: {smallx}")
-        largex = flavour_dict["largex"]
-        if largex[0] > largex[1]:
-            raise CheckError(f"Wrong largex range for flavour {name}: {largex}")
         if name in flavs:
             raise CheckError(f"Repeated flavour name: {name}. Check basis dictionary")
         flavs.append(name)
+
+        # Large-x is allowed to not exist if feature scaling is enabled
+        if parameters.get("feature_scaling_points") is not None:
+            if "largex" in flavour_dict and not flavour_dict["largex"] == [0.0, 0.0]:
+                raise CheckError("No largex exponent allowed when feature_scaling_points is set")
+        else:
+            largex = flavour_dict["largex"]
+            if largex[0] > largex[1]:
+                raise CheckError(f"Wrong largex range for flavour {name}: {largex}")
+
     # Finally check whether the basis considers or not charm
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
     vp_basis = check_basis(fitbasis, flavs)["basis"]
@@ -438,7 +446,7 @@ def check_consistent_parallel(parameters, parallel_models):
 
 
 @make_argcheck
-def check_deprecated_options(fitting):
+def check_deprecated_options(fitting, parameters):
     """Checks whether the runcard is using deprecated options"""
     options_outside = ["trvlseed", "nnseed", "mcseed", "save", "load", "genrep", "parameters"]
     for option in options_outside:
@@ -452,13 +460,28 @@ def check_deprecated_options(fitting):
     for option in nnfit_options:
         if option in fitting:
             log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
-
+    if "interpolation_points" in parameters:
+        raise CheckError(
+            "`interpolation_points` no longer accepted, please change to `feature_scaling_points`"
+        )
+        
 
 @make_argcheck
-def check_multireplica_qed(replicas, fiatlux):
+def check_photonQED_exists(theoryid, fiatlux):
+    """Check that the Photon QED set for this theoryid and luxset exists"""
     if fiatlux is not None:
-        if len(replicas) > 1:
-            raise CheckError("At the moment, running a multireplica QED fits is not allowed.")
+        luxset = fiatlux['luxset']
+        try:
+            _ = Loader().check_photonQED(theoryid.id, luxset)
+            log.info(f"Photon QED set found for {theoryid.id} with luxset {luxset}.")
+        except FileNotFoundError:
+            log.warning(
+                f"No Photon QED set found for {theoryid} with luxset {luxset}. It "
+                "will be computed using FiatLux. This may impact performance. It "
+                "is recommended to precompute the photon set before running the fit. "
+                "Refer to https://docs.nnpdf.science/tutorials/run-qed-fit.html for more details "
+                "on precomputing photon PDF sets."
+            )
 
 
 @make_argcheck

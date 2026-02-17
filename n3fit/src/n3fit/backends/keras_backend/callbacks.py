@@ -1,20 +1,21 @@
 """
-    Callbacks to be used during training
+Callbacks to be used during training
 
-    The callbacks defined in this module can be passed to the ``callbacks`` argument
-    of the ``perform_fit`` method as a list.
+The callbacks defined in this module can be passed to the ``callbacks`` argument
+of the ``perform_fit`` method as a list.
 
-    For the most typical usage: ``on_batch_end``,
-    they must take as input an epoch number and a log of the partial losses.
+For the most typical usage: ``on_batch_end``,
+they must take as input an epoch number and a log of the partial losses.
 
-    Note: the terminology used everywhere refers to a single training step as a single epoch.
-    It turns out that to avoid tensorflow overhead, it is beneficial to write a step as a
-    single batch instead. So callbacks must use ``on_batch_end``.
+Note: the terminology used everywhere refers to a single training step as a single epoch.
+It turns out that to avoid tensorflow overhead, it is beneficial to write a step as a
+single batch instead. So callbacks must use ``on_batch_end``.
 """
 
 import logging
 from time import time
 
+from keras import backend as K
 from keras.callbacks import Callback, TensorBoard
 import numpy as np
 
@@ -130,6 +131,13 @@ class StoppingCallback(CallbackStep):
         print_stats = ((epoch + 1) % self.log_freq) == 0
         # Note that the input logs correspond to the fit before the weights are updated
         logs = self.correct_logs(logs)
+
+        # WARNING: this line seems to be necessary for jax
+        # otherwise the validation model itself cannot run compute_losses
+        # but it needs to be run every epoch, which makes no sense
+        if K.backend() == "jax":
+            _ = self.model.compute_losses()
+
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
         if self.stopping_object.stop_here():
             self.model.stop_training = True

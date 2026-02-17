@@ -2,33 +2,30 @@
 # Configuration file for n3fit
 #
 ##########################################################################################
-description: "NNPDF4.0 methodology fit with theory covariance matrix (9pt prescription) like NNPDF31_nlo_as_0118_scalecov_9pt"
+description: "NNPDF4.0 methodology fit with theory covariance matrix (with both 3 and 9pt prescription at the same time to showcase the composition of theory covmats)"
 
 ##########################################################################################
-# frac: training fraction
-# ewk: apply ewk k-factors
-# sys: systematics treatment (see systypes)
 dataset_inputs:
 - {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
+- {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75 }
 
 ############################################################
 datacuts:
-  t0pdfset: 190310-tg-nlo-global     # PDF set to generate t0 covmat
+  t0pdfset: NNPDF40_nlo_as_01180     # PDF set to generate t0 covmat
   q2min: 13.96                       # Q2 minimum
   w2min: 12.5                        # W2 minimum
   use_cuts: fromintersection
   cuts_intersection_spec:
-  - theoryid: 708
-  - theoryid: 701
+  - theoryid: 40_000_000
+  - theoryid: 701 #NLO 4.0
 
 ############################################################
 theory:
-  theoryid: 708        # database id
+  theoryid: 40_000_000        # database id
 theorycovmatconfig:
   point_prescriptions: ["9 point", "3 point"]
-  pdf: NNPDF31_nlo_as_0118
+  pdf: NNPDF40_nnlo_as_01180
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true
 
@@ -39,6 +36,7 @@ nnseed: 2080989803
 mcseed: 75955222
 save: false
 genrep: true      # true = generate MC replicas, false = use real data
+diagonal_basis: false
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [25, 20, 8]

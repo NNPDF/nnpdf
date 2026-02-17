@@ -36,8 +36,8 @@ def num_fitted_replicas(fit):
     """
     with open(fit.path / "postfit" / "veto_count.json") as stream:
         veto = json.load(stream)
-    # In principle we could use any of the other keys
-    return len(veto["Positivity"])
+    # In principle we could use any keys
+    return len(veto["Total"])
 
 
 # TODO setup make_check on these
@@ -115,7 +115,7 @@ class FitInfo:
 
     @property
     def has_converged(self):
-        """Uses the positivity flag as a proxy for convergence. Where convergence is defined mainly through the two constraints: the validation loss being smaller than the threshold and the positivity criterion being satisfied. 
+        """Uses the positivity flag as a proxy for convergence. Where convergence is defined mainly through the two constraints: the validation loss being smaller than the threshold and the positivity criterion being satisfied.
         When a fit does not reach convergence, the positivity flag is never flipped to true."""
         return self.pos_flag
 
@@ -509,8 +509,7 @@ def datasets_properties_table(data_input):
         dataset_property_dict["Other fields"].append(
             ", ".join([f"{k}: {v}" for k, v in ds_input_dict.items()]) if ds_input_dict else "-"
         )
-    df = pd.DataFrame(dataset_property_dict)
-    df.set_index("Dataset", inplace=True)
+    df = pd.DataFrame(dataset_property_dict).set_index("Dataset")
     df = df[["Training fraction", "Weight", "C-factors", "Other fields"]]
     return df
 
@@ -583,7 +582,5 @@ fits_fit_code_version = collect("fit_code_version", ("fits",))
 @table
 def fits_version_table(fits_fit_code_version):
     """Produces a table of version information for multiple fits."""
-    vtable = pd.concat(fits_fit_code_version, axis=1)
     # Fill NaNs with "unavailable"
-    vtable.fillna("unavailable", inplace=True)
-    return vtable
+    return pd.concat(fits_fit_code_version, axis=1).fillna("unavailable")

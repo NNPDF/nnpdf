@@ -10,9 +10,9 @@ predictions for experimentally measured quantities::
 
 
     inp = {
-        'fit': '181023-001-sc',
+        'fit': '240921-02-rs-nnpdf40-baseline',
         'use_cuts': 'internal',
-        'theoryid': 162,
+        'theoryid': 40_000_000,
         'pdf': 'NNPDF40_nnlo_lowprecision',
         'dataset_inputs': {'from_': 'fit'}
     }
@@ -25,17 +25,15 @@ predictions for experimentally measured quantities::
 
     all_preds = [predictions(ds, pdf) for ds in all_datasets]
 
-
-
-
-Some variants such as :py:func:`central_predictions` and
-:py:func:`linear_predictions` are useful for more specialized tasks.
-
 These functions work with :py:class:`validphys.core.DatasetSpec` objects,
-allowing to account for information on COMPOUND predictions and cuts. A lower
-level interface which operates with :py:class:`validphys.coredata.FKTableData`
+allowing to account for information on predictions which requires no-trivial operations and cuts.
+A lower level interface which operates with :py:class:`validphys.coredata.FKTableData`
 objects is also available.
 """
+
+import logging
+
+log = logging.getLogger(__name__)
 
 import functools
 import operator
@@ -43,8 +41,8 @@ import operator
 import numpy as np
 import pandas as pd
 
-from validphys.pdfbases import evolution
 import validphys
+from validphys.pdfbases import evolution
 
 FK_FLAVOURS = evolution.to_known_elements(
     [
@@ -176,6 +174,7 @@ def _predictions(dataset, pdf, fkfunc):
     return opfunc(*all_predictions)
 
 
+@functools.cache
 def predictions(dataset, pdf):
     """ "Compute theory predictions for a given PDF and dataset. Information
     regading the dataset, on cuts, CFactors and combinations of FKTables is
@@ -227,6 +226,7 @@ def predictions(dataset, pdf):
     return _predictions(dataset, pdf, fk_predictions)
 
 
+@functools.cache
 def central_predictions(
     dataset: validphys.core.DataSetSpec, pdf: validphys.core.PDF
 ) -> pd.DataFrame:
@@ -248,6 +248,7 @@ def linear_predictions(dataset, pdf):
     This approximation is generally a very good approximation in that yields
     differences that are much smaller that the PDF uncertainty.
     """
+    logging.error("Linear predictions are deprecated and will be removed")
     return _predictions(dataset, pdf, linear_fk_predictions)
 
 
@@ -371,15 +372,28 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
     # possible x1-x2 combinations (f1, f2, x1, x2)
     luminosity = np.einsum("ijk, ijl->ijkl", expanded_gv1, expanded_gv2)
 
-    def appl(df):
-        # x1 and x2 are encoded as the first and second index levels.
-        xx1 = df.index.get_level_values(1)
-        xx2 = df.index.get_level_values(2)
-        # take the active combinations from the luminosity tensor
-        partial_lumi = luminosity[..., xx1, xx2]
-        return pd.Series(np.einsum("ijk,kj->i", partial_lumi, df.values))
+    if loaded_fk.legacy:
+        # Old FkTables are singled out since they are not always sorted in x1/x2 so matching the
+        # FkTable with the PDF grids (gv1/gv2) is done by means of dataframes, which is slow.
+        # The gv1/gv2 grids are arrays of shape (replicas, flavours<14>, xarray)
+        # the expanded gv1/gv2 instead are shaped according to the channels (which will match)
+        # therefore the luminosity is an array of shape (replicas, channels, x1, x2)
+        def appl(df):
+            # x1 and x2 are encoded as the first and second index levels.
+            xx1 = df.index.get_level_values(1)
+            xx2 = df.index.get_level_values(2)
+            # take the active combinations from the luminosity tensor
+            partial_lumi = luminosity[..., xx1, xx2]
+            return pd.Series(np.einsum("ijk,kj->i", partial_lumi, df.values))
 
-    return sigma.groupby(level=0).apply(appl)
+        return sigma.groupby(level=0).apply(appl)
+
+    # Pineappl FkTables are sorted and can be treated as numpy arrays
+    lx = len(xgrid)
+    lc = len(fl1)
+    fktab = sigma.values.reshape(-1, lx, lx, lc)
+    ret = np.einsum("rcab, nabc->nr", luminosity, fktab)
+    return pd.DataFrame(ret, index=loaded_fk.data_index)
 
 
 def _gv_dis_predictions(loaded_fk, gvfunc):
@@ -395,12 +409,20 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
     if sigma.empty:
         return pd.DataFrame(columns=range(gv.shape[0]))
 
-    def appl(df):
-        # x is encoded as the first index level.
-        xind = df.index.get_level_values(1)
-        return pd.Series(np.einsum("ijk,kj->i", gv[:, :, xind], df.values))
+    if loaded_fk.legacy:
+        # Old FkTable are not necessarily sorted in x and need to be treated as dataframes
+        # See comment in `_gv_hadron_predictions` for more details
+        def appl(df):
+            # x is encoded as the first index level.
+            xind = df.index.get_level_values(1)
+            return pd.Series(np.einsum("ijk,kj->i", gv[:, :, xind], df.values))
 
-    return sigma.groupby(level=0).apply(appl)
+        return sigma.groupby(level=0).apply(appl)
+
+    lx = len(xgrid)
+    fktab = sigma.values.reshape(-1, lx, len(fm))
+    ret = np.einsum("rfa, naf->nr", gv, fktab)
+    return pd.DataFrame(ret, index=loaded_fk.data_index)
 
 
 def hadron_predictions(loaded_fk, pdf):

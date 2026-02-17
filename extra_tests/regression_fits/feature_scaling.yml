@@ -14,7 +14,7 @@ description: n3fit regression test
 dataset_inputs:
   - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy}
   - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy}
-  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 1.0, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 1.0, variant: legacy}
 
 ############################################################
 datacuts:
@@ -24,7 +24,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 399        # database id
+  theoryid: 40_000_000        # database id
 
 ############################################################
 genrep: True    # on = generate MC replicas, False = use real data
@@ -50,20 +50,20 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   layer_type: 'dense'
   dropout: 0.0
   threshold_chi2: 10.0
-  interpolation_points: 15
+  feature_scaling_points: 15
 
 fitting:
   savepseudodata: False
   fitbasis: EVOL
   basis:
-  - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
-  - {fl: g, trainable: false, smallx: [0.8189, 1.044], largex: [2.791, 5.697]}
-  - {fl: v, trainable: false, smallx: [0.457, 0.7326], largex: [1.56, 3.431]}
-  - {fl: v3, trainable: false, smallx: [0.1462, 0.4061], largex: [1.745, 3.452]}
-  - {fl: v8, trainable: false, smallx: [0.5401, 0.7665], largex: [1.539, 3.393]}
-  - {fl: t3, trainable: false, smallx: [-0.4401, 0.9163], largex: [1.773, 3.333]}
-  - {fl: t8, trainable: false, smallx: [0.5852, 0.8537], largex: [1.533, 3.436]}
-  - {fl: t15, trainable: false, smallx: [1.082, 1.142], largex: [1.461, 3.1]}
+  - {fl: sng, trainable: false, smallx: [1.094, 1.118]}
+  - {fl: g, trainable: false, smallx: [0.8189, 1.044]}
+  - {fl: v, trainable: false, smallx: [0.457, 0.7326]}
+  - {fl: v3, trainable: false, smallx: [0.1462, 0.4061]}
+  - {fl: v8, trainable: false, smallx: [0.5401, 0.7665]}
+  - {fl: t3, trainable: false, smallx: [-0.4401, 0.9163]}
+  - {fl: t8, trainable: false, smallx: [0.5852, 0.8537]}
+  - {fl: t15, trainable: false, smallx: [1.082, 1.142]}
 
 ############################################################
 positivity:

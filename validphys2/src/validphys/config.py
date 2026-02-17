@@ -13,7 +13,8 @@ import pandas as pd
 from nnpdf_data import legacy_to_new_map
 from reportengine import configparser, report
 from reportengine.configparser import ConfigError, _parse_func, element_of, record_from_defaults
-from reportengine.environment import Environment, EnvironmentError_
+from reportengine.environment import Environment as reEnvironment
+from reportengine.environment import EnvironmentError_
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
 from validphys.core import (
@@ -35,7 +36,7 @@ from validphys.filters import (
     default_filter_rules_input,
     default_filter_settings_input,
 )
-from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
+from validphys.fitdata import fitted_replica_indexes, match_datasets_by_name, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
     DataNotFoundError,
@@ -53,7 +54,7 @@ from validphys.utils import yaml_safe
 log = logging.getLogger(__name__)
 
 
-class Environment(Environment):
+class Environment(reEnvironment):
     """Container for information to be filled at run time"""
 
     def __init__(self, *, this_folder=None, net=True, upload=False, dry=False, **kwargs):
@@ -76,8 +77,8 @@ class Environment(Environment):
         except LoaderError as e:
             log.error("Failed to find the paths. These are configured " "in the nnprofile settings")
             raise EnvironmentError_(e) from e
-        self.deta_path = self.loader.datapath
         self.results_path = self.loader.resultspath
+        self.data_paths = self.loader.commondata_folders
 
         self.upload = upload
         super().__init__(**kwargs)
@@ -419,9 +420,7 @@ class CoreConfig(configparser.Config):
             custom_group: str
                 custom group to apply to the dataset
 
-        Note that the `sys` key is deprecated and allowed only for old-format dataset.
-
-        Old-format commondata will be translated to the new version in this function.
+        Old-format names-sys will be translated to the new version in this function.
         """
         accepted_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variant"}
         try:
@@ -476,7 +475,9 @@ class CoreConfig(configparser.Config):
                 variant = map_variant
 
             if sysnum is not None:
-                log.warning("The key 'sys' is deprecated and will soon be removed")
+                log.warning(
+                    f"The key 'sys' is deprecated and only used for variant discovery: {variant}"
+                )
 
         return DataSetInput(
             name=name,
@@ -485,7 +486,6 @@ class CoreConfig(configparser.Config):
             weight=weight,
             custom_group=custom_group,
             variant=variant,
-            sys=sysnum,
         )
 
     def parse_inconsistent_data_settings(self, settings):
@@ -536,11 +536,9 @@ class CoreConfig(configparser.Config):
         """Produce a CommondataSpec from a dataset input"""
 
         name = dataset_input.name
-        sysnum = dataset_input.sys
         try:
             return self.loader.check_commondata(
                 setname=name,
-                sysnum=sysnum,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 variant=dataset_input.variant,
@@ -687,7 +685,6 @@ class CoreConfig(configparser.Config):
         True, attempt to lod and check the PLOTTING files
         (note this may cause a noticeable slowdown in general)."""
         name = dataset_input.name
-        sysnum = dataset_input.sys
         cfac = dataset_input.cfac
         frac = dataset_input.frac
         weight = dataset_input.weight
@@ -695,7 +692,6 @@ class CoreConfig(configparser.Config):
         try:
             ds = self.loader.check_dataset(
                 name=name,
-                sysnum=sysnum,
                 theoryid=theoryid,
                 cfac=cfac,
                 cuts=cuts,
@@ -909,6 +905,18 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_covmat_from_systematics
 
     @configparser.explicit_node
+    def produce_masks(self, diagonal_basis: bool = True):
+        """Modifies which action is used as masks depending on the flag
+        `diagonal_basis`
+        """
+        from validphys import n3fit_data
+
+        if diagonal_basis:
+            return n3fit_data.diagonal_masks
+        else:
+            return n3fit_data.standard_masks
+
+    @configparser.explicit_node
     def produce_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as covariance_matrix depending on
         the flag `use_pdferr`
@@ -973,14 +981,12 @@ class CoreConfig(configparser.Config):
         for spec in dataspecs:
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
-
                 names = {}
                 for dsin in data_input:
                     cd = self.produce_commondata(dataset_input=dsin)
                     proc = get_info(cd).nnpdf31_process
                     ds = dsin.name
                     names[(proc, ds)] = dsin
-
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
         res = []
@@ -989,11 +995,60 @@ class CoreConfig(configparser.Config):
             # TODO: Should this have the same name?
             inner_spec_list = inres["dataspecs"] = []
             for ispec, spec in enumerate(dataspecs):
-                # Passing spec by referene
+                # Passing spec by reference
                 d = ChainMap({"dataset_input": all_names[ispec][k]}, spec)
                 inner_spec_list.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
+        return res
+
+    def produce_mismatched_datasets_by_name(self, dataspecs):
+        """
+        Like produce_matched_datasets_from_dataspecs, but for mismatched datasets from a fit comparison.
+        Returns the mismatched datasets, each tagged with more_info from the dataspecs they came from. Set up to work with plot_fancy.
+
+        Datasets are considered a mismatch if the name is different and if the variant is different.
+        """
+
+        self._check_dataspecs_type(dataspecs)
+
+        # Parse the data for the comparison so that only variant and dataset are actually tested
+        parsed_data = []
+        for spec in dataspecs:
+            tmp = [(i.name, i.variant) for i in spec["dataset_inputs"]]
+            parsed_data.append((spec, tmp))
+
+        # TODO:
+        # This is a convoluted way of checking whether there are mismatches
+        # between the lists of dataset inputs of a list of specs.
+        # This is not going to win any codegolf tournaments
+        already_mismatched = []
+        mismatched_dinputs = []
+        for spec, parsed_dinputs in parsed_data:
+            for spec_to_check, parsed_dinputs_to_check in parsed_data:
+                if spec == spec_to_check:
+                    continue
+                for i, parsed_dinput in enumerate(parsed_dinputs):
+                    # Use a list of already mismatched data to avoid duplicates
+                    if parsed_dinput in already_mismatched:
+                        continue
+                    if parsed_dinput not in parsed_dinputs_to_check:
+                        dinput = spec["dataset_inputs"][i]
+                        mismatched_dinputs.append((dinput, spec))
+                        already_mismatched.append(parsed_dinput)
+
+        res = []
+        # prepare output for plot_fancy
+        for dsin, spec in mismatched_dinputs:
+            res.append(
+                {
+                    "dataset_input": dsin,
+                    "dataset_name": dsin.name,
+                    "theoryid": spec["theoryid"],
+                    "pdfs": [i["pdf"] for i in dataspecs],
+                    "fit": spec["fit"],
+                }
+            )
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
@@ -1006,7 +1061,6 @@ class CoreConfig(configparser.Config):
                 names = {(p.name): (p) for p in pos}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
-
         res = []
         for k in used_set:
             inres = {"posdataset_name": k}
@@ -1297,16 +1351,26 @@ class CoreConfig(configparser.Config):
                 thcovmat_present = False
 
         if use_thcovmat_if_present and thcovmat_present:
-            # Expected path of theory covmat hardcoded
-            covmat_path = (
-                fit.path / "tables" / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
-            )
-            # All possible valid files
+            tables_path = fit.path / "tables"
+            theorycovmatconfig = fit.as_input()["theorycovmatconfig"]
+            user_covmat_path = theorycovmatconfig.get("user_covmat_path", None)
+            point_prescriptions = theorycovmatconfig.get("point_prescriptions", None)
+
+            generic_name = "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
+            if user_covmat_path is not None:
+                # User covmat + point prescriptions
+                if point_prescriptions is not None and point_prescriptions != []:
+                    generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
+                # Only user covmat
+                else:
+                    generic_name = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
+            covmat_path = tables_path / generic_name
             if not covmat_path.exists():
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
                     f"usual location: {covmat_path}."
                 )
+            logging.info(f"Using theory covmat in fit: {covmat_path}")
             fit_theory_covmat = ThCovMatSpec(covmat_path)
         else:
             fit_theory_covmat = None
@@ -1404,8 +1468,20 @@ class CoreConfig(configparser.Config):
         """
         Returns a tuple of AddedFilterRule objects. Rules are immutable after parsing.
         AddedFilterRule objects inherit from FilterRule objects.
+        It checks if the rules are unique, i.e. if there are no
+        multiple filters for the same dataset or process with the
+        same fields (`reason` is not used in the comparison).
         """
-        return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
+        if rules is not None:
+            unique_rules = set(AddedFilterRule(**rule) for rule in rules)
+            if len(unique_rules) != len(rules):
+                raise RuleProcessingError(
+                    "Detected repeated filter rules. Please, make sure that "
+                    " rules are not repeated in the runcard."
+                )
+            return tuple(unique_rules)
+        else:
+            return None
 
     def parse_drop_internal_rules(self, drop_internal_rules: (list, type(None)) = None):
         """Turns drop_internal_rules into a tuple for internal caching."""
@@ -1437,7 +1513,6 @@ class CoreConfig(configparser.Config):
         ``drop_internal_rules``: tuple(dataset names)
             Drop internal dataset-specific rules, it is applied before ``added_filter_rules``
         """
-
         theory_parameters = theoryid.get_description()
 
         if filter_rules is None:
@@ -1469,7 +1544,6 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-
                 try:
                     rule_list.append(
                         Rule(
@@ -1685,13 +1759,14 @@ class CoreConfig(configparser.Config):
         """Load the default grouping of data"""
         # slightly superfluous, only one default at present but perhaps
         # somebody will want to add to this at some point e.g for th. uncertainties
-        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL"}
+        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL", "diagonal_basis": "ALL"}
         return allowed[spec]
 
     def produce_processed_data_grouping(
         self,
         use_thcovmat_in_fitting=False,
         use_thcovmat_in_sampling=False,
+        diagonal_basis=True,
         data_grouping=None,
         data_grouping_recorded_spec_=None,
     ):
@@ -1711,6 +1786,8 @@ class CoreConfig(configparser.Config):
             data_grouping = self.parse_data_grouping("standard_report")
             if use_thcovmat_in_fitting or use_thcovmat_in_sampling:
                 data_grouping = self.parse_data_grouping("thcovmat_fit")
+            if diagonal_basis:
+                data_grouping = self.parse_data_grouping("diagonal_basis")
         if data_grouping_recorded_spec_ is not None:
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)

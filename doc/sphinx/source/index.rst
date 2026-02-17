@@ -33,29 +33,33 @@ The NNPDF collaboration is currently composed of the following
 members:
 
 * Richard D. Ball - University of Edinburgh
-* Andrea Barontini - Università degli Studi di Milano and INFN
-* Alessandro Candido - Università degli Studi di Milano and INFN
+* Alessandro Candido - Quantum Research Centre, Technology Innovation Institute, Abu Dhabi
 * Stefano Carrazza - Università degli Studi di Milano and INFN
+* Amedeo Chiefa - University of Edinburgh
+* Ella Cole - University of Cambridge
 * Mark Costantini - University of Cambridge
-* Juan M. Cruz-Martinez - CERN
+* Juan M. Cruz-Martinez - Universidad de Sevilla
 * Luigi Del Debbio - University of Edinburgh
 * Stefano Forte - Università degli Studi di Milano and INFN
-* Tommaso Giani - Vrije University Amsterdam and Nikhef
-* Felix Hekhorn - Università degli Studi di Milano and INFN
-* José Ignacio Latorre - Quantum Research Centre, Technology
-  Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
-* Niccolò Laurenti - Università degli Studi di Milano and INFN
-* Giacomo Magni - Vrije University Amsterdam and Nikhef
+* Tommaso Giani - Università degli Studi di Torino and INFN
+* Eva Groenendijk - Università degli Studi di Milano and INFN
+* Felix Hekhorn - University of Jyväskylä
+* Jaco ter Hoeve - University of Edinburgh
+* José Ignacio Latorre - Quantum Research Centre, Technology Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
+* Giacomo Magni - IJCLab Orsay and CNRS
 * Emanuele R. Nocera - Università degli Studi di Torino and INFN
+* Tanjona R. Rabemananjara - Vrije University Amsterdam and Nikhef
 * Juan Rojo - Vrije University Amsterdam and Nikhef
-* Christopher Schwan - University of Würzburg
+* Valentina Schutze - University of Cambridge
 * Tanishq Sharma - Università di Torino and INFN
-* Roy Stegeman - University of Edinburgh
+* Roy Stegeman - Quantum Research Centre, Technology Innovation Institute, Abu Dhabi
 * Maria Ubiali - University of Cambridge
+* Ramon Winterhalder - Università degli Studi di Milano and INFN
 
 Former members of the NNPDF collaboration include
 
 * Rabah Abdul Khalek - Post-doc at Jefferson Lab, USA
+* Andrea Barontini - Unity 3D software engineer at Capgemini, IT
 * Valerio Bertone - Post-doc at CEA Saclay, FR
 * Francesco Cerutti - Deployment of the Fly-Eye Telescope for NEO Survey - ESA/ASI
 * Christopher S. Deans
@@ -65,12 +69,14 @@ Former members of the NNPDF collaboration include
 * Shayan Iranipour - Quantitative Researcher at Tudor Investment
   Corporation, UK
 * Zahari Kassabov - Research Engineer, Opificio, London, UK
+* Niccolò Laurenti - Software developer at Next Ingegneria dei Sistemi, IT
 * Rosalyn Pearson - Information Analyst at Public Health Scotland, UK
 * Andrea Piccione - High School Teacher at IPIA G. Piana, IT
 * Luca Rottoli - Post-doc at the University of Zurich, CH
+* Christopher Schwan
 * Emma Slade - Senior AI/ML Engineer at GSK, UK
 * Cameron Voisey - Data Scientist at Privacy Hub by Datavant
-* Michael Wilson
+* Michael Wilson - Applied Scientist at Amazon, UK
 
 The NNPDF publications
 ======================

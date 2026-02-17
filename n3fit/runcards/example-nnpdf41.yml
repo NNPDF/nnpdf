@@ -1,0 +1,185 @@
+#
+# Configuration file for n3fit
+#
+######################################################################################
+description: Runcard for the NNPDF4.1 series of fits; WIP
+
+######################################################################################
+dataset_inputs:
+- {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], variant: legacy_dw}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED}
+- {dataset: HERA_NC_251GEV_EP-SIGMARED}
+- {dataset: HERA_NC_300GEV_EP-SIGMARED}
+- {dataset: HERA_NC_318GEV_EP-SIGMARED}
+- {dataset: HERA_CC_318GEV_EM-SIGMARED}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED}
+- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED}
+- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED}
+- {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO}
+- {dataset: DYE866_Z0_800GEV_PXSEC}
+- {dataset: DYE605_Z0_38P8GEV_DW_PXSEC}
+- {dataset: CDF_Z0_1P96TEV_ZRAP}
+- {dataset: D0_Z0_1P96TEV_ZRAP}
+- {dataset: D0_WPWM_1P96TEV_ASY}
+- {dataset: ATLAS_WPWM_7TEV_36PB_ETA}
+- {dataset: ATLAS_Z0_7TEV_36PB_ETA}
+- {dataset: ATLAS_Z0_7TEV_49FB_HIMASS}
+- {dataset: ATLAS_Z0_7TEV_LOMASS_M}
+- {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA}
+- {dataset: ATLAS_Z0_7TEV_46FB_CC-Y}
+- {dataset: ATLAS_Z0_7TEV_46FB_CF-Y}
+- {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y}
+- {dataset: ATLAS_Z0_13TEV_TOT, cfac: [NRM]}
+- {dataset: ATLAS_WPWM_13TEV_TOT, cfac: [NRM]}
+- {dataset: ATLAS_WJ_8TEV_WP-PT}
+- {dataset: ATLAS_WJ_8TEV_WM-PT}
+- {dataset: ATLAS_Z0J_8TEV_PT-M}
+- {dataset: ATLAS_Z0J_8TEV_PT-Y}
+- {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC}
+- {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC}
+- {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC}
+- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM}
+- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM}
+- {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM}
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, variant: legacy_data}
+- {dataset: ATLAS_2JET_7TEV_R06_M12Y}
+- {dataset: ATLAS_PH_13TEV_XSEC, cfac: [EWK]}
+- {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC}
+- {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC}
+- {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM}
+- {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM}
+- {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM}
+- {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM}
+- {dataset: CMS_WPWM_7TEV_ELECTRON_ASY}
+- {dataset: CMS_WPWM_7TEV_MUON_ASY}
+- {dataset: CMS_Z0_7TEV_DIMUON_2D}
+- {dataset: CMS_WPWM_8TEV_MUON_Y}
+- {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM]}
+- {dataset: CMS_2JET_7TEV_M12-Y}
+- {dataset: CMS_1JET_8TEV_PTY, variant: legacy_data}
+- {dataset: CMS_TTBAR_7TEV_TOT_X-SEC}
+- {dataset: CMS_TTBAR_8TEV_TOT_X-SEC}
+- {dataset: CMS_TTBAR_13TEV_TOT_X-SEC}
+- {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM}
+- {dataset: CMS_TTBAR_5TEV_TOT_X-SEC}
+- {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM}
+- {dataset: CMS_TTBAR_13TEV_2L_DIF_YT}
+- {dataset: CMS_TTBAR_13TEV_LJ_DIF_YT}
+- {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC}
+- {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC}
+- {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC}
+- {dataset: LHCB_Z0_7TEV_DIELECTRON_Y}
+- {dataset: LHCB_Z0_8TEV_DIELECTRON_Y}
+- {dataset: LHCB_WPWM_7TEV_MUON_Y, cfac: [NRM]}
+- {dataset: LHCB_Z0_7TEV_MUON_Y, cfac: [NRM]}
+- {dataset: LHCB_WPWM_8TEV_MUON_Y, cfac: [NRM]}
+- {dataset: LHCB_Z0_8TEV_MUON_Y, cfac: [NRM]}
+- {dataset: LHCB_Z0_13TEV_DIMUON-Y}
+- {dataset: LHCB_Z0_13TEV_DIELECTRON-Y}
+- {dataset: ATLAS_TTBAR_13P6TEV_TOT_X-SEC}
+- {dataset: ATLAS_TTBAR_5TEV_TOT_X-SEC}
+- {dataset: ATLAS_TTBAR_13TEV_2L_TOT_X-SEC}
+- {dataset: CMS_TTBAR_13TEV_35P9FB-1_TOT_X-SEC}
+- {dataset: CMS_TTBAR_13TEV_35P9FB-1_TAU_TOT_X-SEC}
+- {dataset: CMS_TTBAR_13P6TEV_TOT_X-SEC}
+- {dataset: H1_1JET_319GEV_290PB-1_DIF_PTQ2}
+- {dataset: H1_1JET_319GEV_351PB-1_DIF_PTQ2}
+- {dataset: H1_2JET_319GEV_290PB-1_DIF_PTQ2}
+- {dataset: H1_2JET_319GEV_351PB-1_DIF_PTQ2}
+- {dataset: ZEUS_1JET_300GEV_38P6PB-1_DIF_ETQ2}
+- {dataset: ZEUS_1JET_319GEV_82PB-1_DIF_ETQ2}
+- {dataset: ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2}
+- {dataset: ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR}
+- {dataset: ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR}
+- {dataset: CMS_TTBAR_13TEV_2L_138FB-1_DIF_MTTBAR}
+- {dataset: CMS_TTBAR_13TEV_LJ_DIF_MTTBAR}
+
+
+################################################################################
+diagonal_frac: 0.75
+
+datacuts:
+  t0pdfset: 260202-jk-nnpdf41-mhou
+  q2min: 3.49
+  w2min: 12.5
+
+theory:
+  theoryid: 41_000_000
+
+theorycovmatconfig:
+  point_prescriptions: [7 point]
+  pdf: 260202-jk-nnpdf41-mhou
+  use_thcovmat_in_fitting: true
+  use_thcovmat_in_sampling: true
+
+trvlseed: 130582403
+nnseed: 953262798
+mcseed: 1437981271
+genrep: true
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [70, 50, 25, 20, 9]
+  activation_per_layer: [tanh, tanh, tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 27000
+  positivity:
+    initial: 184.8
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+  feature_scaling_points: 5
+
+fitting:
+  fitbasis: CCBAR_ASYMM  # EVOL (7), EVOLQED (8), etc.
+  savepseudodata: true
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.058, 1.155]}
+  - {fl: g, trainable: false, smallx: [0.9017, 1.084]}
+  - {fl: v, trainable: false, smallx: [0.481, 0.6499]}
+  - {fl: v3, trainable: false, smallx: [0.08225, 0.502]}
+  - {fl: v8, trainable: false, smallx: [0.5823, 0.7928]}
+  - {fl: t3, trainable: false, smallx: [-0.3987, 0.9689]}
+  - {fl: t8, trainable: false, smallx: [0.6077, 0.9459]}
+  - {fl: t15, trainable: false, smallx: [1.023, 1.147]}
+  - {fl: v15, trainable: false, smallx: [0.5005, 0.7189]}
+
+################################################################################
+positivity:
+  posdatasets:
+  # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_100GEV_XUQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XUB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XDQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XDB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XSQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XSB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XCQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XCB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_100GEV_XGL, maxlambda: 1e6}
+
+integrability:
+  integdatasets:
+  - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
+
+################################################################################
+debug: false
+maxcores: 16

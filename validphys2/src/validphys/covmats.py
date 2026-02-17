@@ -103,8 +103,8 @@ def covmat_from_systematics(
 
     >>> from validphys.api import API
     >>> inp = dict(
-    ...     dataset_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10},
-    ...     theoryid=162,
+    ...     dataset_input={'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',)},
+    ...     theoryid=40_000_000,
     ...     use_cuts="internal"
     ... )
     >>> cov = API.covmat_from_systematics(**inp)
@@ -125,7 +125,7 @@ def covmat_from_systematics(
 
 def dataset_inputs_covmat_from_systematics(
     dataset_inputs_loaded_cd_with_cuts,
-    data_input,
+    data_input=None,
     use_weights_in_covmat=True,
     norm_threshold=None,
     _list_of_central_values=None,
@@ -171,14 +171,14 @@ def dataset_inputs_covmat_from_systematics(
     This function can be called directly from the API:
 
     >>> dsinps = [
-    ...     {'dataset': 'NMC'},
-    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
-    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
+    ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory'},
+    ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',)},
     ... ]
-    >>> inp = dict(dataset_inputs=dsinps, theoryid=162, use_cuts="internal")
+    >>> inp = dict(dataset_inputs=dsinps, theoryid=40_000_000, use_cuts="internal")
     >>> cov = API.dataset_inputs_covmat_from_systematics(**inp)
     >>> cov.shape
-    (235, 235)
+    (233, 233)
 
     Which properly accounts for all dataset settings and cuts.
 
@@ -186,9 +186,15 @@ def dataset_inputs_covmat_from_systematics(
     special_corrs = []
     block_diags = []
     weights = []
+
     if _list_of_central_values is None:
         # want to just pass None to systematic_errors method
         _list_of_central_values = [None] * len(dataset_inputs_loaded_cd_with_cuts)
+
+    if data_input is None:
+        if use_weights_in_covmat:
+            raise ValueError("if use_weights_in_covmat=True, ``data_input`` cannot be empty")
+        data_input = [None] * len(dataset_inputs_loaded_cd_with_cuts)
 
     for cd, dsinp, central_values in zip(
         dataset_inputs_loaded_cd_with_cuts, data_input, _list_of_central_values
@@ -199,7 +205,8 @@ def dataset_inputs_covmat_from_systematics(
         else:
             sys_errors = cd.systematic_errors(central_values)
         stat_errors = cd.stat_errors.to_numpy()
-        weights.append(np.full_like(stat_errors, dsinp.weight))
+        if use_weights_in_covmat and dsinp is not None:
+            weights.append(np.full_like(stat_errors, dsinp.weight))
         # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = sys_errors.columns.isin(INTRA_DATASET_SYS_NAME)
@@ -207,10 +214,8 @@ def dataset_inputs_covmat_from_systematics(
         special_corrs.append(sys_errors.loc[:, ~is_intra_dataset_error])
 
     # concat systematics across datasets
-    special_sys = pd.concat(special_corrs, axis=0, sort=False)
     # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
-    special_sys.fillna(0, inplace=True)
-
+    special_sys = pd.concat(special_corrs, axis=0, sort=False).fillna(0)
     diag = la.block_diag(*block_diags)
     covmat = diag + special_sys.to_numpy() @ special_sys.to_numpy().T
     if use_weights_in_covmat:
@@ -221,6 +226,72 @@ def dataset_inputs_covmat_from_systematics(
     if norm_threshold is not None:
         covmat = regularize_covmat(covmat, norm_threshold=norm_threshold)
     return covmat
+
+
+def shifts_from_systematics(lcd_wc, theory_predictions):
+    """Take the statistical uncertainty and systematics table from
+    a :py:class:`validphys.coredata.CommonData` object and
+    the corresponding theoretical predictions from :py:funct:`results`
+    to compute the shifts on experimental data due to correlated uncertainties
+    according to Eqs.(7)-(9) of arXiv:hep-ph/0201195. Note that the shift is
+    induced ONLY by the experimental covariance matrix constructed after cuts.
+    The treatment of uncertainties is as in covmat_from_systematics.
+    The shifts must be added to the central value of the unshifted data.
+    Parameters
+    ----------
+    loaded_commondata_with_cuts : validphys.coredata.CommonData
+        CommonData which stores information about systematic errors,
+        their treatment and description.
+    results_without_covmat : py:funct:
+        A results object with a diagonal covmat
+    Returns
+    -------
+    shifts: np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data
+        points) containing the numerical value of the systematic shifts
+        due to correlated uncertainties
+    """
+
+    # Separate statistical and systematic errors
+    stat_errors = lcd_wc.stat_errors.to_numpy()
+    syst_errors = lcd_wc.systematic_errors(None)
+
+    # Determine the uncorrelated part of the error
+    alpha2 = stat_errors**2
+    is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
+    alpha2 += (syst_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
+    alpha = np.sqrt(alpha2)
+
+    if alpha.all() == 0:
+        shifts = np.zeros(len(alpha))
+    else:
+
+        # Determine the correlated part of the error
+        beta = syst_errors.loc[:, ~is_uncorr].to_numpy()
+        beta = beta / alpha[:, np.newaxis]
+
+        # The number of data points and the number of correlated systematics
+        (n_data, n_corr_syst) = np.shape(beta)
+
+        # Get experimental central values and the corresponding
+        # theoretical predictions
+        D = lcd_wc.central_values.to_numpy()
+        D = np.divide(D, alpha)
+        T = theory_predictions
+        T = np.divide(T, alpha)
+
+        # Construct the matrices A and B (Eq. 9)
+        A = np.identity(n_corr_syst) + np.matmul(beta.T, beta)
+        A_inverse = np.linalg.inv(A)
+        B = np.matmul(D - T, beta)
+
+        # Compute the nuisance parameters r (Eq. 8)
+        r = np.matmul(A_inverse, B)
+
+        # Compute the shifts
+        shifts = -np.matmul(beta * alpha[:, np.newaxis], r)
+
+    return shifts, alpha
 
 
 @check_cuts_considered
@@ -555,22 +626,9 @@ def sqrt_covmat(covariance_matrix):
     -------
     >>> import numpy as np
     >>> from validphys.api import API
-    >>> API.sqrt_covmat(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
-    array([[0.0326543 , 0.        , 0.        , ..., 0.        , 0.        ,
-            0.        ],
-        [0.00314523, 0.01467259, 0.        , ..., 0.        , 0.        ,
-            0.        ],
-        [0.0037817 , 0.00544256, 0.02874822, ..., 0.        , 0.        ,
-            0.        ],
-        ...,
-        [0.00043404, 0.00031169, 0.00020489, ..., 0.00441073, 0.        ,
-            0.        ],
-        [0.00048717, 0.00033792, 0.00022971, ..., 0.00126704, 0.00435696,
-            0.        ],
-        [0.00067353, 0.00050372, 0.0003203 , ..., 0.00107255, 0.00065041,
-            0.01002952]])
-    >>> sqrt_cov = API.sqrt_covmat(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
-    >>> cov = API.covariance_matrix(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
+    >>> ds = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
+    >>> sqrt_cov = API.sqrt_covmat(dataset_input=ds, theoryid=40_000_000, use_cuts="internal")
+    >>> cov = API.covariance_matrix(dataset_input=ds, theoryid=40_000_000, use_cuts="internal")
     >>> np.allclose(np.linalg.cholesky(cov), sqrt_cov)
     True
 
@@ -704,7 +762,7 @@ def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
                 'dataset': 'ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM',
                 'variant': 'legacy',
             },
-            'theoryid': 700,
+            'theoryid': 40_000_000,
             'pdf': 'NNPDF40_nlo_as_01180',
             'use_cuts': 'internal',
         }
@@ -752,7 +810,7 @@ def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
     # old to new names mapping
     new_names = {d[0]: legacy_to_new_map(d[0])[0] for d in tmp.index}
-    tmp.rename(columns=new_names, index=new_names, level=0, inplace=True)
+    tmp = tmp.rename(columns=new_names, index=new_names, level=0)
     # reorder
     bb = [str(i) for i in data]
     return tmp.reindex(index=bb, columns=bb, level=0)
@@ -831,9 +889,10 @@ def covmat_stability_characteristic(systematics_matrix_from_commondata):
     --------
 
     >>> from validphys.api import API
-    >>> API.covmat_stability_characteristic(dataset_input={"dataset": "NMC"},
-    ... theoryid=162, use_cuts="internal")
-    2.742658604186114
+    >>> ds = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
+    >>> API.covmat_stability_characteristic(dataset_input=ds,
+    ... theoryid=40_000_000, use_cuts="internal")
+    2.742658604186124
 
     """
     sqrtcov = systematics_matrix_from_commondata

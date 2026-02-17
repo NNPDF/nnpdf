@@ -37,12 +37,16 @@ def test_parameters_init():
     # we are not testing the photon here so we make it faster
     fiatlux_runcard['eps_base'] = 1e-1
 
-    photon = Photon(test_theory, fiatlux_runcard, [1, 2, 3])
+    photon = Photon(
+        test_theory, fiatlux_runcard, [1, 2, 3], save_to_disk=False, force_computation=True
+    )
 
     np.testing.assert_equal(photon.replicas, [1, 2, 3])
     np.testing.assert_equal(photon.luxpdfset._name, fiatlux_runcard["luxset"].name)
-    np.testing.assert_equal(photon.additional_errors.name, "LUXqed17_plus_PDF4LHC15_nnlo_100")
-    np.testing.assert_equal(photon.luxseed, fiatlux_runcard["luxseed"])
+    np.testing.assert_equal(
+        photon.lux_params["additional_errors"].name, "LUXqed17_plus_PDF4LHC15_nnlo_100"
+    )
+    np.testing.assert_equal(photon.lux_params["luxseed"], fiatlux_runcard["luxseed"])
     np.testing.assert_equal(photon.path_to_eko_photon, test_theory.path / "eko_photon.tar")
     np.testing.assert_equal(photon.q_in, 100.0)
 
@@ -58,7 +62,9 @@ def test_photon():
     theory = test_theory.get_description()
 
     for replica in [1, 2, 3]:
-        photon = Photon(test_theory, fiatlux_runcard, [replica])
+        photon = Photon(
+            test_theory, fiatlux_runcard, [replica], save_to_disk=False, force_computation=True
+        )
 
         # set up fiatlux
         path_to_F2 = test_theory.path / "fastkernel/FIATLUX_DIS_F2.pineappl.lz4"

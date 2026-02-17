@@ -125,13 +125,18 @@ class FilterDefaults:
 class FilterRule:
     """
     Dataclass which carries the filter rule information.
+
     """
 
     dataset: str = None
     process_type: str = None
     rule: str = None
-    reason: str = None
-    local_variables: Mapping[str, Union[str, float]] = None
+    reason: str = dataclasses.field(
+        default=None, hash=False, compare=False
+    )  # Not relevant for hashing
+    local_variables: Mapping[str, Union[str, float]] = dataclasses.field(
+        default=None, hash=False
+    )  # Avoid hash issues with caching
     PTO: str = None
     FNS: str = None
     IC: str = None
@@ -163,9 +168,18 @@ def default_filter_rules_input():
     """
     Return a tuple of FilterRule objects.
     These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
+    Similarly to `parse_added_filter_rules`, this function checks if the rules
+    are unique, i.d. if there are no multiple rules for the same dataset of
+    process with the same rule (`reason` and `local_variables` are not hashed).
     """
     list_rules = yaml_safe.load(read_text(validphys.cuts, "filters.yaml"))
-    return tuple(FilterRule(**rule) for rule in list_rules)
+    unique_rules = set(FilterRule(**rule) for rule in list_rules)
+    if len(unique_rules) != len(list_rules):
+        raise RuleProcessingError(
+            "Detected repeated filter rules. Please, make sure that "
+            " rules are not repeated in `filters.yaml`."
+        )
+    return tuple(unique_rules)
 
 
 def check_nonnegative(var: str):
@@ -465,6 +479,14 @@ def check_luxset(luxset):
     log.info(f'{luxset} Lux pdf checked.')
 
 
+def check_luxset_exists(fiatlux):
+    """Check that the Photon QED set for this theoryid and luxset exists"""
+    if fiatlux is not None:
+      luxset = fiatlux['luxset']
+      luxset.load()
+      log.info(f'{luxset} Lux pdf checked.')
+
+
 def check_unpolarized_bc(unpolarized_bc):
     """Check that unpolarized PDF bound can be loaded normally."""
     unpolarized_bc.load()
@@ -639,13 +661,10 @@ class Rule:
             except LoaderError as e:
                 raise RuleProcessingError(f"Could not find dataset {self.dataset}") from e
 
-            if cd.legacy:
+            if cd.metadata.is_ported_dataset:
                 self.variables = _get_kinlabel_process_type(cd.process_type)
             else:
-                if cd.metadata.is_ported_dataset:
-                    self.variables = _get_kinlabel_process_type(cd.process_type)
-                else:
-                    self.variables = cd.metadata.kinematic_coverage
+                self.variables = cd.metadata.kinematic_coverage
         else:
             self.variables = _get_kinlabel_process_type(self.process_type)
             # TODO: for now this will be a string within this class

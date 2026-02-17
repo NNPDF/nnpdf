@@ -30,12 +30,22 @@ Analysing results
    ./datthcomp.rst
    ./overfit_metric.rst
 
+
+NNPDF as a library
+------------------
+.. toctree::
+  :maxdepth: 1
+
+  ./evolution.rst
+
+
 Closure tests
 -------------
 .. toctree::
    :maxdepth: 1
 
    ./closuretest.rst
+   ./inconsistent_closuretests.rst
    ./closureestimators.rst
 
 Special PDF sets

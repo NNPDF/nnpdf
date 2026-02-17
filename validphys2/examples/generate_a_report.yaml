@@ -11,7 +11,7 @@ pdf:
 dataset_inputs:
   from_: "fit"
 
-theoryid: 399
+theoryid: 40_000_000
 
 use_cuts: "fromfit"
 

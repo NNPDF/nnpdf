@@ -50,9 +50,7 @@ class PlottingOptions:
 # and no external code or new feature should depend on them as they might be removed at any point
 # with no previous warning
 
-path_vpdata = pathlib.Path(__file__).parent
-path_commondata = path_vpdata / "commondata"
-_path_legacy_mapping = path_commondata / "dataset_names.yml"
+_path_legacy_mapping = pathlib.Path(__file__).parent / "commondata" / "dataset_names.yml"
 _legacy_to_new_mapping_raw = yaml.YAML().load(_path_legacy_mapping)
 # Convert strings into a dictionary
 legacy_to_new_mapping = {

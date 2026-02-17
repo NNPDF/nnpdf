@@ -12,7 +12,7 @@ import numpy as np
 
 from eko.runner.managed import solve
 from n3fit.io.writer import XGRID
-from nnpdf_data import theory_cards
+from nnpdf_data import THEORY_CARDS_PATH
 from nnpdf_data.theorydbutils import fetch_theory
 from validphys.loader import FallbackLoader, Loader
 
@@ -45,8 +45,7 @@ def construct_eko_parser(subparsers):
         "produce_eko",
         help=(
             """Produce the eko for the specified theory.
-            The q_grid starts at the Q0 given by the theory but the last point is q_fin
-            and its number of points can be specified by q_points.
+            The q_grid starts at 1.0 and ends at 1e5.
             The x_grid starts at x_grid_ini and ends at 1.0 and contains the
             provided number of points. The eko will be dumped in the provided path."""
         ),
@@ -80,7 +79,7 @@ def construct_eko_photon_parser(subparsers):
 def construct_evolven3fit_parser(subparsers):
     parser = subparsers.add_parser(
         "evolve",
-        help="Evolves the fitted PDFs. The q_grid starts at the Q0 given by the theory but the last point is q_fin and its number of points can be specified by q_points. If a path is given for the dump option, the eko will be dumped in that path after the computation. If a path is given for the load option, the eko to be used for the evolution will be loaded from that path. The two options are mutually exclusive.",
+        help="Evolves the fitted PDFs. The q_grid starts at 1.0 and ends at 1e5. If a path is given for the dump option, the eko will be dumped in that path after the computation. If a path is given for the load option, the eko to be used for the evolution will be loaded from that path. The two options are mutually exclusive.",
     )
     parser.add_argument(
         "fit_folder", help="Path to the folder containing the (pre-DGLAP) fit result"
@@ -92,6 +91,12 @@ def construct_evolven3fit_parser(subparsers):
         "-d", "--dump", type=pathlib.Path, default=None, help="Path where the EKO is dumped"
     )
     parser.add_argument(
+        "--hessian_fit",
+        type=bool,
+        default=False,
+        help="Specify if the fit is hessian (default is False)",
+    )
+    parser.add_argument(
         "-f",
         "--force",
         action="store_true",
@@ -100,19 +105,8 @@ def construct_evolven3fit_parser(subparsers):
     return parser
 
 
-def evolven3fit_new():
-    _logger.warning("`evolven3fit_new` is deprecated. Please use `evolven3fit` instead.")
-    main()
-
-
 def main():
     parser = ArgumentParser(description="evolven3fit - a script with tools to evolve PDF fits")
-    parser.add_argument(
-        "-q", "--q-fin", type=float, default=None, help="Final q-value of the evolution"
-    )
-    parser.add_argument(
-        "-p", "--q-points", type=int, default=None, help="Number of q points for the evolution"
-    )
     parser.add_argument("--no-net", action="store_true", help="Emulates validphys' --no-net")
 
     subparsers = parser.add_subparsers(title="actions", dest="actions")
@@ -135,26 +129,21 @@ def main():
 
         fit_folder = pathlib.Path(args.fit_folder)
         if args.load is None:
+            # no path provided to load the eko, get it from the theory
+            utils.check_filter(fit_folder)
             theoryID = utils.get_theoryID_from_runcard(fit_folder)
             _logger.info(f"Loading eko from theory {theoryID}")
             eko_path = loader.check_eko(theoryID)
         else:
+            # If a path is given for the load option, the eko
+            # to be used for the evolution will be loaded from that path.
             eko_path = args.load
 
-        cli.cli_evolven3fit(
-            fit_folder,
-            args.q_fin,
-            args.q_points,
-            op_card_info,
-            theory_card_info,
-            args.force,
-            eko_path,
-            None,
-        )
+        cli.cli_evolven3fit(fit_folder, args.force, eko_path, args.hessian_fit)
     else:
         # If we are in the business of producing an eko, do some checks before starting:
         # 1. load the nnpdf theory early to check for inconsistent options and theory problems
-        nnpdf_theory = fetch_theory(theory_cards, args.theoryID)
+        nnpdf_theory = fetch_theory(THEORY_CARDS_PATH, args.theoryID)
         if nnpdf_theory.get("ModEv") == "TRN" and args.ev_op_iterations is not None:
             raise ValueError("ev_op_iterations is not accepted with ModEv=TRN solution")
 
@@ -189,8 +178,6 @@ def main():
         if args.actions == "produce_eko":
             tcard, opcard = eko_utils.construct_eko_cards(
                 nnpdf_theory,
-                args.q_fin,
-                args.q_points,
                 x_grid,
                 op_card_info,
                 theory_card_info,
@@ -198,7 +185,7 @@ def main():
             )
         elif args.actions == "produce_eko_photon":
             tcard, opcard = eko_utils.construct_eko_photon_cards(
-                nnpdf_theory, args.q_fin, x_grid, args.q_gamma, op_card_info, theory_card_info
+                nnpdf_theory, x_grid, args.q_gamma, op_card_info, theory_card_info
             )
         solve(tcard, opcard, args.dump)
 
