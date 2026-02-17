@@ -7,12 +7,14 @@ import inspect
 import logging
 import numbers
 import pathlib
+
 import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
 from reportengine import configparser, report
 from reportengine.configparser import ConfigError, _parse_func, element_of, record_from_defaults
-from reportengine.environment import Environment, EnvironmentError_
+from reportengine.environment import Environment as reEnvironment
+from reportengine.environment import EnvironmentError_
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
 from validphys.core import (
@@ -34,7 +36,7 @@ from validphys.filters import (
     default_filter_rules_input,
     default_filter_settings_input,
 )
-from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
+from validphys.fitdata import fitted_replica_indexes, match_datasets_by_name, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
     DataNotFoundError,
@@ -52,7 +54,7 @@ from validphys.utils import yaml_safe
 log = logging.getLogger(__name__)
 
 
-class Environment(Environment):
+class Environment(reEnvironment):
     """Container for information to be filled at run time"""
 
     def __init__(self, *, this_folder=None, net=True, upload=False, dry=False, **kwargs):
@@ -75,8 +77,8 @@ class Environment(Environment):
         except LoaderError as e:
             log.error("Failed to find the paths. These are configured " "in the nnprofile settings")
             raise EnvironmentError_(e) from e
-        self.deta_path = self.loader.datapath
         self.results_path = self.loader.resultspath
+        self.data_paths = self.loader.commondata_folders
 
         self.upload = upload
         super().__init__(**kwargs)
@@ -211,7 +213,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
 
         return res
-               
+
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""
         return NSList(range(1, nreplica + 1), nskey="replica")
@@ -903,7 +905,7 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_covmat_from_systematics
 
     @configparser.explicit_node
-    def produce_masks(self, diagonal_basis: bool = False):
+    def produce_masks(self, diagonal_basis: bool = True):
         """Modifies which action is used as masks depending on the flag
         `diagonal_basis`
         """
@@ -979,14 +981,12 @@ class CoreConfig(configparser.Config):
         for spec in dataspecs:
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
-
                 names = {}
                 for dsin in data_input:
                     cd = self.produce_commondata(dataset_input=dsin)
                     proc = get_info(cd).nnpdf31_process
                     ds = dsin.name
                     names[(proc, ds)] = dsin
-
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
         res = []
@@ -995,11 +995,60 @@ class CoreConfig(configparser.Config):
             # TODO: Should this have the same name?
             inner_spec_list = inres["dataspecs"] = []
             for ispec, spec in enumerate(dataspecs):
-                # Passing spec by referene
+                # Passing spec by reference
                 d = ChainMap({"dataset_input": all_names[ispec][k]}, spec)
                 inner_spec_list.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
+        return res
+
+    def produce_mismatched_datasets_by_name(self, dataspecs):
+        """
+        Like produce_matched_datasets_from_dataspecs, but for mismatched datasets from a fit comparison.
+        Returns the mismatched datasets, each tagged with more_info from the dataspecs they came from. Set up to work with plot_fancy.
+
+        Datasets are considered a mismatch if the name is different and if the variant is different.
+        """
+
+        self._check_dataspecs_type(dataspecs)
+
+        # Parse the data for the comparison so that only variant and dataset are actually tested
+        parsed_data = []
+        for spec in dataspecs:
+            tmp = [(i.name, i.variant) for i in spec["dataset_inputs"]]
+            parsed_data.append((spec, tmp))
+
+        # TODO:
+        # This is a convoluted way of checking whether there are mismatches
+        # between the lists of dataset inputs of a list of specs.
+        # This is not going to win any codegolf tournaments
+        already_mismatched = []
+        mismatched_dinputs = []
+        for spec, parsed_dinputs in parsed_data:
+            for spec_to_check, parsed_dinputs_to_check in parsed_data:
+                if spec == spec_to_check:
+                    continue
+                for i, parsed_dinput in enumerate(parsed_dinputs):
+                    # Use a list of already mismatched data to avoid duplicates
+                    if parsed_dinput in already_mismatched:
+                        continue
+                    if parsed_dinput not in parsed_dinputs_to_check:
+                        dinput = spec["dataset_inputs"][i]
+                        mismatched_dinputs.append((dinput, spec))
+                        already_mismatched.append(parsed_dinput)
+
+        res = []
+        # prepare output for plot_fancy
+        for dsin, spec in mismatched_dinputs:
+            res.append(
+                {
+                    "dataset_input": dsin,
+                    "dataset_name": dsin.name,
+                    "theoryid": spec["theoryid"],
+                    "pdfs": [i["pdf"] for i in dataspecs],
+                    "fit": spec["fit"],
+                }
+            )
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
@@ -1012,7 +1061,6 @@ class CoreConfig(configparser.Config):
                 names = {(p.name): (p) for p in pos}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
-
         res = []
         for k in used_set:
             inres = {"posdataset_name": k}
@@ -1312,7 +1360,7 @@ class CoreConfig(configparser.Config):
             if user_covmat_path is not None:
                 # User covmat + point prescriptions
                 if point_prescriptions is not None and point_prescriptions != []:
-                  generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
+                    generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
                 # Only user covmat
                 else:
                     generic_name = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
@@ -1718,7 +1766,7 @@ class CoreConfig(configparser.Config):
         self,
         use_thcovmat_in_fitting=False,
         use_thcovmat_in_sampling=False,
-        diagonal_basis=False,
+        diagonal_basis=True,
         data_grouping=None,
         data_grouping_recorded_spec_=None,
     ):

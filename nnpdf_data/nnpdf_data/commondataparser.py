@@ -49,8 +49,8 @@ from validobj.custom import Parser
 
 from .coredata import KIN_NAMES, CommonData
 from .process_options import ValidProcess
-from .utils import parse_yaml_inp, quick_yaml_load
-from .validphys_compatibility import legacy_to_new_map, new_to_legacy_map, path_commondata
+from .utils import DEFAULT_PATH_VPDATA, parse_yaml_inp, quick_yaml_load
+from .validphys_compatibility import legacy_to_new_map, new_to_legacy_map
 
 try:
     from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
@@ -625,7 +625,7 @@ class ObservableMetaData:
                 for i in range(3 - ncol):
                     dbin[f"extra_{i}"] = d
 
-            kin_dict[bin_index] = pd.DataFrame(dbin).stack()
+            kin_dict[bin_index] = pd.DataFrame(dbin).stack().dropna()
 
         if len(kin_dict) != self.ndata:
             raise ValueError(
@@ -801,10 +801,14 @@ class SetMetaData:
     arXiv: Optional[ValidReference] = None
     iNSPIRE: Optional[ValidReference] = None
     hepdata: Optional[ValidReference] = None
+    metadata_file: Optional[Path] = None
 
     @property
     def folder(self):
-        return path_commondata / self.setname
+        if self.metadata_file is not None:
+            return self.metadata_file.parent
+        else:
+            return DEFAULT_PATH_VPDATA / self.setname
 
     @property
     def cm_energy(self):
@@ -865,7 +869,10 @@ If this is a mistake, please use '{new_name}' instead. E.g.,
 @cache
 def parse_set_metadata(metadata_file):
     """Read the metadata file"""
-    return parse_yaml_inp(metadata_file, SetMetaData)
+    ret = parse_yaml_inp(metadata_file, SetMetaData)
+    # Burn the path to the metadata file before returning
+    object.__setattr__(ret, "metadata_file", metadata_file)
+    return ret
 
 
 @cache

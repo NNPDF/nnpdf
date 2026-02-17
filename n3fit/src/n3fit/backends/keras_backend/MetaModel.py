@@ -50,7 +50,7 @@ for k, v in optimizers.items():
 def _default_loss(y_true, y_pred):  # pylint: disable=unused-argument
     """Default loss to be used when the model is compiled with loss = Null
     (for instance if the prediction of the model is already the loss"""
-    return ops.sum(y_pred)
+    return ops.nansum(y_pred)
 
 
 class MetaModel(Model):
@@ -219,7 +219,7 @@ class MetaModel(Model):
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
-                total_loss = ops.sum(predictions, axis=0)
+                total_loss = ops.nansum(predictions, axis=0)
                 ret = [total_loss] + predictions
                 return dict(zip(out_names, ret))
 

@@ -21,6 +21,7 @@ from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
 from n3fit.hyper_optimization.rewards import HyperLoss
+from n3fit.layers import losses
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
@@ -875,7 +876,7 @@ class ModelTrainer:
             integrability_dict.get("multiplier"),
             integrability_dict.get("initial"),
             epochs,
-            params.get("interpolation_points"),
+            params.get("feature_scaling_points"),
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
@@ -891,6 +892,7 @@ class ModelTrainer:
         trvl_chi2_per_fold = []
         trvl_phi2_per_fold = []
         trvl_logp_per_fold = []
+        trvl_chi2exp_per_fold = []
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
@@ -1044,6 +1046,7 @@ class ModelTrainer:
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
                 trvl_chi2_per_fold.append(hyper_metrics.chi2)
+                trvl_chi2exp_per_fold.append(hyper_metrics.chi2exp)
                 trvl_phi2_per_fold.append(hyper_metrics.phi2)
                 trvl_logp_per_fold.append(hyper_metrics.logp)
                 pdfs_per_fold.append(pdf_model)
@@ -1075,6 +1078,11 @@ class ModelTrainer:
             # Compute the loss over all folds for hyperopt
             final_hyper_loss = self._hyper_loss.reduce_over_folds(l_hyper)
 
+            # Add penalty term to ensure convergence
+            exp_chi2_fitted_data = np.average(trvl_chi2exp_per_fold)
+            expchi2_penalty = losses.LossHyperopt()
+            final_hyper_loss += expchi2_penalty(exp_chi2_fitted_data)
+
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file
             # by adding it to this dictionary
@@ -1086,6 +1094,7 @@ class ModelTrainer:
                 "kfold_meta": {
                     "validation_losses": l_valid,
                     "trvl_losses_chi2": np.array(trvl_chi2_per_fold),
+                    "trvl_losses_chi2exp": np.array(trvl_chi2exp_per_fold),
                     "trvl_losses_phi2": np.array(trvl_phi2_per_fold),
                     "trvl_losses_logp": np.array(trvl_logp_per_fold),
                     "experimental_losses": l_exper,
