@@ -190,21 +190,9 @@ def make_replica(
         return np.concatenate(
             [cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts]
         )
-    # Seed the numpy RNG with the seed and the name of the datasets in this run
 
-    # TODO: to be simplified after the reader is merged, together with an update of the regression tests
-    # this is necessary to reproduce exactly the results due to the replicas being generated with a hash
-    # Only when the sets are legacy (or coming from a legacy runcard) this shall be used
-    names_for_salt = []
-    for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
-        if loaded_cd.legacy_names is None:
-            names_for_salt.append(loaded_cd.setname)
-        else:
-            names_for_salt.append(loaded_cd.legacy_names[0])
-    name_salt = "-".join(names_for_salt)
-
-    name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
-    rng = np.random.default_rng(seed=replica_mcseed + name_seed)
+    # Set random seed to replica_mcseed - Would also like to change this seed for each group via 'groupname' (this can't yet be accessed here)
+    rng = np.random.default_rng(seed=replica_mcseed)
     # construct covmat
     covmat = dataset_inputs_sampling_covmat
     covmat_sqrt = sqrt_covmat(covmat)
@@ -215,21 +203,29 @@ def make_replica(
     special_mult = []
     for cd in groups_dataset_inputs_loaded_cd_with_cuts:
         # copy here to avoid mutating the central values.
-        pseudodata = cd.central_values.to_numpy()
+        is_commondata = hasattr(cd, "central_values") and cd.central_values is not None
+        if is_commondata:
+            pseudodata = cd.central_values.to_numpy()
+        else:
+            pseudodata = np.asarray(cd)
 
         pseudodatas.append(pseudodata)
         # Separation of multiplicative errors. If sep_mult is True also the exp_covmat is produced
         # without multiplicative errors
-        if sep_mult:
-            mult_errors = cd.multiplicative_errors
-            mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
-            mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
-            nonspecial_mult.append((mult_uncorr_errors, mult_corr_errors))
-            special_mult.append(
-                mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
-            )
-        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
-            check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
+        if is_commondata == True:
+            if sep_mult:
+                mult_errors = cd.multiplicative_errors
+                mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
+                mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
+                nonspecial_mult.append((mult_uncorr_errors, mult_corr_errors))
+                special_mult.append(
+                    mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
+                )
+            if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
+                check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
+            else:
+                check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
+        # If the input is not a commondata instance, then we assume there are no multiplicative errors and that all points must be positive
         else:
             check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
     # concatenating special multiplicative errors, pseudodatas and positive mask
