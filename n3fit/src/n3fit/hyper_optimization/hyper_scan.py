@@ -17,8 +17,17 @@ import contextlib
 import copy
 import logging
 
-import hyperopt
-from hyperopt.pyll.base import scope
+try:
+    import hyperopt
+    from hyperopt.pyll.base import scope
+except ModuleNotFoundError:
+    # TODO a sentinel class that tells the user the hyperopt dependency is missing would be nice
+    # if you arrive here, yes, the hyperopt dependency is missing (or your setuptools is too new)
+    from . import HyperoptDependencyMissing as hyperopt
+
+    scope = object()
+
+
 import numpy as np
 
 from n3fit.backends import MetaLayer, MetaModel

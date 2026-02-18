@@ -75,9 +75,11 @@ tensorflow = "*"
 keras = "^3.1"
 eko = "^0.15.1"
 joblib = "*"
-# Hyperopt
-hyperopt = "*"
 seaborn = "*"
+# Hyperopt
+hyperopt = {version = "*", optional = true}
+# hyperopt needs setuptools pinned to < 82 due to pkg resources
+setuptools = {version = "<82", optional = true}
 # LHAPDF installation for debugging purposes
 # a3b2bbc3ced97675ac3a71df45f55ba = "*"
 # Optional dependencies
@@ -111,7 +113,8 @@ qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 torch = ["torch"]
 jax = ["jax"]
-parallelhyperopt = ["pymongo"]
+hyperopt = ["hyperopt", "setuptools"]
+parallelhyperopt = ["pymongo", "hyperopt", "setuptools"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
