@@ -1,0 +1,82 @@
+setname: ATLAS_WPWM_8TEV
+version: 1
+version_comment: Implementation of dataset excluded from NNPDF4.0
+nnpdf_metadata:
+  nnpdf31_process: DY CC
+  experiment: ATLAS
+arXiv:
+  url: 'https://arxiv.org/pdf/1904.05631'
+  journal: Eur.Phys.J.C 79 (2019) 760
+iNSPIRE:
+  url: 'https://inspirehep.net/literature/1729240'
+hepdata:
+  url: 'https://www.hepdata.net/record/ins1729240'
+  version: 1
+implemented_observables:
+- observable_name: CC-ETA
+  observable:
+    description: "Drell-Yan Rapidity Distribution"
+    label: 'ATLAS $W$ 8 TeV 2019'
+    units: '$pb$'
+  process_type: DY_W_ETA
+  tables: [5a, 5b]
+  npoints: []
+  ndata: 22
+  plotting:
+    dataset_label: 'ATLAS $W$ 8 TeV 2019'
+    x_label: '$|\eta_\mu|$'
+    y_label: '$d\sigma/d(\eta_\mu)$ (pb)'
+    line_by:
+    - Boson
+    normalize:
+      figure_by:
+      - Boson     
+    extra_labels:
+      Boson:
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+    plot_x: abs_eta
+  kinematic_coverage:
+  - abs_eta
+  - m_W2
+  - sqrts
+  kinematics:
+    variables:
+      abs_eta:
+        description: 'Absolute pseudo-rapidity of the muon'
+        label: r"|$\eta|$"
+        units: ''
+      m_W2:
+        description: 'Squared invariant mass of the W boson'
+        label: '$m_W^2$'
+        units: 'GeV^2'
+      sqrts:
+        description: 'Square root of the center of mass energy'
+        label: r"\sqrt{s}"
+        units: 'GeV'
+    file: kinematics.yaml
+  
+  data_uncertainties: [uncertainties.yaml]
+
+  data_central: data.yaml
+
