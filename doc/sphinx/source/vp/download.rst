@@ -6,8 +6,8 @@ Downloading resources
 ``validphys`` is designed so that, by default, resources stored in known remote
 locations are downloaded automatically and seamlessly used where necessary.
 Available resources include PDF sets, completed fits, theories, and results of
-past ``validphys`` runs that have been :ref:`uploaded to the server <upload>`. 
-The ``vp-get`` tool, :ref:`described below <vp-get>`, 
+past ``validphys`` runs that have been :ref:`uploaded to the server <upload>`.
+The ``vp-get`` tool, :ref:`described below <vp-get>`,
 can be used to download the same items manually.
 
 Automatic operation
@@ -15,7 +15,7 @@ Automatic operation
 
 By default when some resource such as a PDF is required by ``validphys`` (or
 derived tools such as ``vp-setupfit``), the code will first look for it in some
-local directory specified in the [profile file](nnprofile). If it is not found
+local directory specified in the :ref:`profile file <nnprofile>`. If it is not found
 there, it will try to download it from some remote repository (also specified in
 the profile).
 
@@ -70,6 +70,21 @@ Theories
     Theories (specified by the ``theoryid`` key) are downloaded and
     uncompressed.
 
+Photon PDF sets
+    Photon PDF sets can be downloaded if they have been previously generated
+    using `FiatLux <https://github.com/scarrazza/fiatlux/>`_. A photon PDF set
+    is uniquely identified by the input PDF set used to generate the photon replicas
+    and the theory ID. See :ref:`this tutorial <run-qed-fit>` for more details on
+    how to set up a QED fit.
+
+EKOs
+    Evolution kernels (EKOs) can be downloaded if they have been previously
+    generated using EKO.
+
+Hyperparameter scans
+    Results of the hyperparameter scans generated in the hyperoptimization
+    procedure.
+
 ``validphys`` output files
     Files produced by ``validphys`` can be used as input to subsequent validphys
     analyses (for example χ² tables are used for αs fits). The user needs to
@@ -80,7 +95,7 @@ Theories
 
 .. _vp-get:
 
-The `vp-get` tool
+The ``vp-get`` tool
 -----------------
 
 The ``vp-get`` tool can be used to download resources manually, in the same way
@@ -99,8 +114,11 @@ They correspond to the resources described :ref:`above <what-can-be-downloaded>`
 
   $ vp-get --list
   Available resource types:
+  - eko
   - fit
+  - hyperscan
   - pdf
+  - photonQED
   - theoryID
   - vp_output_file
 
@@ -117,6 +135,15 @@ information on it and bail out:
 
   $ vp-get fit NNPDF31_nlo_as_0118_1000
   FitSpec(name='NNPDF31_nlo_as_0118_1000', path=PosixPath('/home/zah/anaconda3/envs/nnpdf-dev/share/NNPDF/results/NNPDF31_nlo_as_0118_1000'))
+
+.. note::
+
+  In order to download photon PDF sets, the user needs to specify both the input PDF
+  set and the theory ID. For example:
+
+  .. code:: bash
+
+    $ vp-get photonQED 40000000 NNPDF40_nnlo_as_01180
 
 Downloading resources in code (``validphys.loader``)
 ----------------------------------------------------
@@ -164,10 +191,10 @@ Conversely the ``Loader`` class will only search locally.
   ----> 1 l.check_dataset('NMC', theoryid=151)
 
   ~/nngit/nnpdf/validphys2/src/validphys/loader.py in check_dataset(self, name, rules, sysnum, theoryid, cfac, frac, cuts, use_fitcommondata, fit, weight)
-      416 
+      416
       417         if not isinstance(theoryid, TheoryIDSpec):
   --> 418             theoryid = self.check_theoryID(theoryid)
-      419 
+      419
       420         theoryno, _ = theoryid
 
   ~/nngit/nnpdf/validphys2/src/validphys/loader.py in check_theoryID(self, theoryID)
@@ -175,7 +202,7 @@ Conversely the ``Loader`` class will only search locally.
       289             raise TheoryNotFound(("Could not find theory %s. "
   --> 290                   "Folder '%s' not found") % (theoryID, theopath) )
       291         return TheoryIDSpec(theoryID, theopath)
-      292 
+      292
 
   TheoryNotFound: Could not find theory 151. Folder '/home/zah/anaconda3/share/NNPDF/data/theory_151' not found
 
@@ -184,10 +211,9 @@ Output files uploaded to the ``validphys`` can be retrieved specifying their pat
 (starting from the report ID). They will be either downloaded (when using
 ``FallbackLoader``) or retrieved from the cache:
 
-.. code:: python 
+.. code:: python
 
   from validphys.loader import FallbackLoader as Loader
   l = Loader()
   l.check_vp_output_file('qTpvLZLwS924oAsmpMzhFw==/figures/f_ns0_fitunderlyinglaw_plot_closure_pdf_histograms_0.pdf')
   PosixPath('/home/zah/anaconda3/share/NNPDF/vp-cache/qTpvLZLwS924oAsmpMzhFw==/figures/f_ns0_fitunderlyinglaw_plot_closure_pdf_histograms_0.pdf')
-

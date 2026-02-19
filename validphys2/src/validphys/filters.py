@@ -479,6 +479,14 @@ def check_luxset(luxset):
     log.info(f'{luxset} Lux pdf checked.')
 
 
+def check_luxset_exists(fiatlux):
+    """Check that the Photon QED set for this theoryid and luxset exists"""
+    if fiatlux is not None:
+      luxset = fiatlux['luxset']
+      luxset.load()
+      log.info(f'{luxset} Lux pdf checked.')
+
+
 def check_unpolarized_bc(unpolarized_bc):
     """Check that unpolarized PDF bound can be loaded normally."""
     unpolarized_bc.load()

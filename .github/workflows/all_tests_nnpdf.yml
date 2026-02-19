@@ -102,6 +102,7 @@ jobs:
       run: |
         sudo rm -rf /opt/hostedtoolcache/Python/{3.9*}
         sudo rm -rf /opt/hostedtoolcache/CodeQL
+        sudo rm -rf /usr/local/lib/android/sdk
         pip install .[nolha,torch]
         # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
         lhapdf-management update --init
