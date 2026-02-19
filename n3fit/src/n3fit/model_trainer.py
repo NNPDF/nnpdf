@@ -883,6 +883,8 @@ class ModelTrainer:
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
         positivity_dict = params.get("positivity", {})
+        if not self.mode_hyperopt:
+            positivity_dict['initial'] = hyperopt_params["initial"][idx_hyperparamters]
         integrability_dict = params.get("integrability", {})
         self._generate_observables(
             positivity_dict.get("multiplier"),
