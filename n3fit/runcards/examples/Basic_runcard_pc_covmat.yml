@@ -1,0 +1,151 @@
+#
+# Configuration file for n3fit
+#
+######################################################################################
+description: NNPDF4.0 ht with TCM - DIS (NC & CC) only
+
+######################################################################################
+dataset_inputs:
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, frac: 0.75, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, frac: 0.75, variant: legacy}
+- {dataset: CDF_Z0_1P96TEV_ZRAP, frac: 0.75, variant: legacy}
+- {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, variant: legacy_10}
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, variant: legacy_decorrelated}
+- {dataset: ATLAS_2JET_7TEV_R06_M12Y, frac: 0.75, variant: legacy}
+- {dataset: CMS_2JET_7TEV_M12Y, frac: 0.75}
+- {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, variant: legacy}
+- {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75}
+
+################################################################################
+datacuts:
+  t0pdfset: 240701-02-rs-nnpdf40-baseline
+  q2min: 2.5
+  w2min: 3.24
+
+################################################################################
+# NNLO QCD TRN evolution
+theory:
+  theoryid: 40_000_000
+
+theorycovmatconfig:
+  point_prescriptions: ["power corrections"]
+  pc_parameters:
+    H2p: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    H2d: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    HLp: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    HLd: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    H3p: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    H3d: {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
+    Hj: {yshift: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25, 2.75]}
+    H2j_ATLAS: {yshift: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25, 2.75]}
+    H2j_CMS: {yshift: [2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25]}
+  pc_included_procs: ["JETS", "DIJET", "DIS NC", "DIS CC"]
+  pc_excluded_exps: [HERA_NC_318GEV_EAVG_CHARM-SIGMARED,
+                     HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED,]
+  pdf: 210619-n3fit-001
+  use_thcovmat_in_fitting: true
+  use_thcovmat_in_sampling: true
+resample_negative_pseudodata: false
+
+# For fits <= 4.0 multiplicative and additive uncertainties were sampled separately
+# and thus the flag `separate_multiplicative` needs to be set to True
+# sampling:
+#   separate_multiplicative: True
+
+################################################################################
+trvlseed: 591866982
+nnseed: 945709987
+mcseed: 519562661
+genrep: true
+
+################################################################################
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [25, 20, 8]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 3000
+  positivity:
+    initial: 184.8
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+fitting:
+  fitbasis: EVOL
+  savepseudodata: True
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.089, 1.119], largex: [1.475, 3.119]}
+  - {fl: g, trainable: false, smallx: [0.7504, 1.098], largex: [2.814, 5.669]}
+  - {fl: v, trainable: false, smallx: [0.479, 0.7384], largex: [1.549, 3.532]}
+  - {fl: v3, trainable: false, smallx: [0.1073, 0.4397], largex: [1.733, 3.458]}
+  - {fl: v8, trainable: false, smallx: [0.5507, 0.7837], largex: [1.516, 3.356]}
+  - {fl: t3, trainable: false, smallx: [-0.4506, 0.9305], largex: [1.745, 3.424]}
+  - {fl: t8, trainable: false, smallx: [0.5877, 0.8687], largex: [1.522, 3.515]}
+  - {fl: t15, trainable: false, smallx: [1.089, 1.141], largex: [1.492, 3.222]}
+
+################################################################################
+positivity:
+  posdatasets:
+  # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_F2C, maxlambda: 1e6}
+  # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XUB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XDQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XDB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XSQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
+
+added_filter_rules:
+  - dataset: NNPDF_POS_2P24GEV_FLL
+    rule: "x > 5.0e-7"
+  - dataset: NNPDF_POS_2P24GEV_F2C
+    rule: "x < 0.74"
+  - dataset: NNPDF_POS_2P24GEV_XGL
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSB
+    rule: "x > 0.1"
+
+integrability:
+  integdatasets:
+  - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
+
+################################################################################
+debug: false
+maxcores: 8
