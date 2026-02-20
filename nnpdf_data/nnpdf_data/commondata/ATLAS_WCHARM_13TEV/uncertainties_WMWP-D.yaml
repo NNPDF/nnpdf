@@ -1,0 +1,156 @@
+definitions:
+  art. sys. 1:
+    description: art. sys. 1 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 2:
+    description: art. sys. 2 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 3:
+    description: art. sys. 3 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 4:
+    description: art. sys. 4 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 5:
+    description: art. sys. 5 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 6:
+    description: art. sys. 6 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 7:
+    description: art. sys. 7 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 8:
+    description: art. sys. 8 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 9:
+    description: art. sys. 9 unc. from HepData
+    treatment: ADD
+    type: CORR
+  art. sys. 10:
+    description: art. sys. 10 unc. from HepData
+    treatment: ADD
+    type: CORR
+  luminosity:
+    description: luminosity unc. from HepData
+    treatment: MULT
+    type: ATLASLUMIRUNII
+bins:
+- art. sys. 1: -0.6553479317183444
+  art. sys. 2: 0.08723779936536531
+  art. sys. 3: -0.0010280997434844855
+  art. sys. 4: 0.07424399237874833
+  art. sys. 5: -0.09320768410211186
+  art. sys. 6: 0.024906287179968796
+  art. sys. 7: -0.14102001191734007
+  art. sys. 8: 0.08766429151611863
+  art. sys. 9: 0.010809748070381708
+  art. sys. 10: -0.005226867288506727
+  luminosity: 0.10184099999999999
+- art. sys. 1: -0.6184418840814551
+  art. sys. 2: -0.18798626782066288
+  art. sys. 3: 0.08090525976428846
+  art. sys. 4: 0.012852990654214778
+  art. sys. 5: -0.008829714329440857
+  art. sys. 6: -0.023015556376157497
+  art. sys. 7: 0.054004112257144306
+  art. sys. 8: 0.06043173802412304
+  art. sys. 9: -0.012709577922911434
+  art. sys. 10: -0.12617580423612718
+  luminosity: 0.09603099999999999
+- art. sys. 1: -0.6050845773635507
+  art. sys. 2: 0.13846364796955812
+  art. sys. 3: 0.06564689450791197
+  art. sys. 4: -0.0778878716214423
+  art. sys. 5: 0.1350758482798614
+  art. sys. 6: -0.07806707107777223
+  art. sys. 7: 0.015145660327528622
+  art. sys. 8: 0.07471349078430728
+  art. sys. 9: -0.025974294381230844
+  art. sys. 10: 0.03213791590569709
+  luminosity: 0.086403
+- art. sys. 1: -0.39271923476078163
+  art. sys. 2: -0.03675119202324736
+  art. sys. 3: -0.16618584270855558
+  art. sys. 4: 0.03553515216918762
+  art. sys. 5: 0.06598089133055417
+  art. sys. 6: -0.06028984909750072
+  art. sys. 7: -0.07019029133410581
+  art. sys. 8: -0.08079101317641721
+  art. sys. 9: -0.0971633963079513
+  art. sys. 10: -0.04433155821340494
+  luminosity: 0.075447
+- art. sys. 1: -0.34271737202956987
+  art. sys. 2: -0.040638241254225986
+  art. sys. 3: -0.07247526512680474
+  art. sys. 4: -0.16998144676379245
+  art. sys. 5: -0.06801657521765897
+  art. sys. 6: -0.07650690469309841
+  art. sys. 7: -0.03569177480958381
+  art. sys. 8: -0.03326046493743009
+  art. sys. 9: 0.10298426019726402
+  art. sys. 10: -0.007000628360940509
+  luminosity: 0.056854999999999996
+- art. sys. 1: -0.6359054546192882
+  art. sys. 2: 0.05686005727976642
+  art. sys. 3: 0.022803484576535502
+  art. sys. 4: 0.07437035380689068
+  art. sys. 5: -0.11355624230907568
+  art. sys. 6: -0.08448272478101387
+  art. sys. 7: 0.10462614840508712
+  art. sys. 8: -0.06057449914623484
+  art. sys. 9: -0.028626696081682612
+  art. sys. 10: 0.06454541995484782
+  luminosity: 0.09852099999999998
+- art. sys. 1: -0.5977327161121179
+  art. sys. 2: -0.17972808634517357
+  art. sys. 3: 0.07775912313465487
+  art. sys. 4: -0.012447017410779922
+  art. sys. 5: 0.04396015149463061
+  art. sys. 6: 0.06637520041827714
+  art. sys. 7: -0.050336645753895265
+  art. sys. 8: -0.0430129160943896
+  art. sys. 9: -0.0037023948642817745
+  art. sys. 10: 0.12363716526761806
+  luminosity: 0.095865
+- art. sys. 1: -0.5826429807279531
+  art. sys. 2: 0.13229987532081305
+  art. sys. 3: 0.06138036362165751
+  art. sys. 4: -0.004651281193357681
+  art. sys. 5: 0.03586165967030777
+  art. sys. 6: 0.10453312794659793
+  art. sys. 7: 0.01243957723725952
+  art. sys. 8: -0.1136283966100669
+  art. sys. 9: 0.04981058174536401
+  art. sys. 10: -0.08037831430205775
+  luminosity: 0.08374699999999999
+- art. sys. 1: -0.3710452025942976
+  art. sys. 2: -0.024174881424469146
+  art. sys. 3: -0.17006817842007482
+  art. sys. 4: 0.08861034070370687
+  art. sys. 5: 0.06785756081445331
+  art. sys. 6: 0.03211735982596556
+  art. sys. 7: 0.0717658817545283
+  art. sys. 8: 0.05191111577929863
+  art. sys. 9: 0.10768530840665762
+  art. sys. 10: 0.02816994524576121
+  luminosity: 0.07137999999999999
+- art. sys. 1: -0.3047437887390178
+  art. sys. 2: 0.02239159770597145
+  art. sys. 3: -0.10704185577682883
+  art. sys. 4: -0.1154950442446498
+  art. sys. 5: -0.058829225910261705
+  art. sys. 6: 0.11902398727541048
+  art. sys. 7: 0.06343339958077573
+  art. sys. 8: 0.046820681155859814
+  art. sys. 9: -0.09583432183057361
+  art. sys. 10: 0.010676274809368643
+  luminosity: 0.051875

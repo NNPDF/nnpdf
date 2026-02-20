@@ -1,0 +1,122 @@
+setname: ATLAS_WCHARM_13TEV
+
+nnpdf_metadata:
+  nnpdf31_process: DY CC
+  experiment: ATLAS
+
+arXiv:
+  url: https://arxiv.org/abs/2302.00336
+  journal: Phys. Rev. D 108 (2023) 032012
+iNSPIRE:
+  url: https://inspirehep.net/literature/2628732
+hepdata:
+  url: https://www.hepdata.net/record/ins2628732
+  version: 1
+
+version: 1
+version_comment: Initial implementation
+
+implemented_observables:
+- observable_name: WMWP-D
+  observable:
+    description: "Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio, D channel" 
+    label: 'ATLAS $W^\pm + c\to D$ 13 TeV'
+    units: '[pb]'
+  process_type: DY_W_ETA
+  tables: [5,6,16]  
+  ndata: 10
+  plotting:
+    dataset_label: ATLAS $W^\pm + c \to D$ 13 TeV
+    y_label: $d\sigma/d|\eta(\ell)|$ (fb)
+    x_label: $|\eta^\ell|$
+    plot_x: abs_eta
+    line_by:
+    - Boson
+    normalize:
+      figure_by:
+      - Boson
+    extra_labels:
+      Boson:
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+  kinematic_coverage: [abs_eta, m_W2]
+  kinematics:
+    variables:
+      abs_eta:
+        description: Absolute pseudorapidity of the lepton
+        label: $|\eta_l|$
+        units: ''
+      m_W2:
+        description: Squared invariant mass of the W boson
+        label: $m_W^2$
+        units: GeV$^2$
+    file: kinematics_WMWP-D.yaml
+  data_uncertainties:
+  - uncertainties_WMWP-D.yaml
+  data_central: data_WMWP-D.yaml
+
+  theory:
+    FK_tables:
+    - - ATLAS_WCHARM_13TEV_WMWP-D_WM
+      - ATLAS_WCHARM_13TEV_WMWP-D_WP
+    operation: 'null'
+
+- observable_name: WMWP-Dstar
+  observable:
+    description: "Differential fiducial cross-section times the single-lepton-flavor W boson branching ratio, D star channel" 
+    label: 'ATLAS $W^\pm + c\to D^*$ 13 TeV'
+    units: '[pb]'
+  process_type: DY_W_ETA
+  tables: [9,10,18]  
+  ndata: 10
+  plotting:
+    dataset_label: ATLAS $W^\pm + c \to D^*$ 13 TeV
+    y_label: $d\sigma/d|\eta(\ell)|$ (fb)
+    x_label: $|\eta^\ell|$
+    plot_x: abs_eta
+    line_by:
+    - Boson
+    normalize:
+      figure_by:
+      - Boson
+    extra_labels:
+      Boson:
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+  kinematic_coverage: [abs_eta, m_W2]
+  kinematics:
+    variables:
+      abs_eta:
+        description: Absolute pseudorapidity of the lepton
+        label: $|\eta_l|$
+        units: ''
+      m_W2:
+        description: Squared invariant mass of the W boson
+        label: $m_W^2$
+        units: GeV$^2$
+    file: kinematics_WMWP-Dstar.yaml
+  data_uncertainties:
+  - uncertainties_WMWP-Dstar.yaml
+  data_central: data_WMWP-Dstar.yaml
+
+  theory:
+    FK_tables:
+    - - ATLAS_WCHARM_13TEV_WMWP-D_WM
+      - ATLAS_WCHARM_13TEV_WMWP-D_WP
+    operation: 'null'
