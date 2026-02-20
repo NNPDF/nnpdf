@@ -24,7 +24,7 @@ implemented_observables:
     label: r"$1/\sigma_{fid}d\\sigma/dp_{T}^{\\l\\l}$"
     units: "[1/GeV]"
 
-  ndata: 38
+  ndata: 41
 
   tables: [5]
   process_type: DY_NC_PT
@@ -48,11 +48,13 @@ implemented_observables:
   data_central: data.yaml
   data_uncertainties:
   - uncertainties.yaml
+  variants:
+    decorr:
+      data_uncertainties:
+      - uncertainties_decorr.yaml
 
     # Theory
   theory:
-    shifts:
-      ATLAS_Z0J_13TEV_PT_LL: 9
     FK_tables:
     - - ATLAS_Z0J_13TEV_PT_LL
     - - ATLAS_Z0_13TEV_TOT

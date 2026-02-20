@@ -2,7 +2,7 @@ definitions:
   correlated uncertainty:
     description: correlated uncertainty
     treatment: ADD
-    type: CORR
+    type: UNCORR
   uncorrelated uncertainty:
     description: uncorrelated uncertainty
     treatment: ADD
