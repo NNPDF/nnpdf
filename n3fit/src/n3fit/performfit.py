@@ -42,6 +42,8 @@ def performfit(
     maxcores=None,
     double_precision=False,
     parallel_models=True,
+    save_checkpoints=False,
+    checkpoint_freq=100,
 ):
     """
     This action will (upon having read a validcard) process a full PDF fit
@@ -128,6 +130,8 @@ def performfit(
             whether to use double precision
         parallel_models: bool
             whether to run models in parallel
+        save_checkpoints: bool
+            whether to save checkpoints (i.e. model parameters) during the fit.
     """
     from n3fit.backends import set_initial_state
 
@@ -197,7 +201,9 @@ def performfit(
             theoryid=theoryid,
             lux_params=fiatlux,
             replicas=replica_idxs,
-            replicadir = replica_path / f"replica_{replica_idxs[0]}"
+            save_checkpoints=save_checkpoints,
+            replica_path=replica_path,
+            checkpoint_freq=checkpoint_freq,
         )
 
         # This is just to give a descriptive name to the fit function

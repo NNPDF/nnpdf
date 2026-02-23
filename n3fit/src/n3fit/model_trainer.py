@@ -112,7 +112,9 @@ class ModelTrainer:
         theoryid=None,
         lux_params=None,
         replicas=None,
-        replicadir=None
+        save_checkpoints=False,
+        replica_path=None,
+        checkpoint_freq=100,
     ):
         """
         Parameters
@@ -153,6 +155,13 @@ class ModelTrainer:
                 if not give, the photon is not generated
             replicas: list
                 list with the replicas ids to be fitted
+            save_checkpoints: bool
+                whether to save checkpoints (i.e. model parameters) during the fit. This requires
+                `replica_path` to be set as well. Not doing this will raise an error.
+            replica_path: Path
+                root path for all replicas.
+            checkpoint_freq: int
+                frequency (in epochs) at which to save checkpoints. Only relevant if `save_checkpoints` is True.
         """
         # Save all input information
         self.exp_info = list(exp_info)
@@ -169,7 +178,13 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
-        self.replicadir = replicadir
+
+        # Checkpointing options
+        self.save_checkpoints = save_checkpoints
+        self.replica_path = replica_path
+        self.checkpoint_freq = checkpoint_freq
+        if self.save_checkpoints and self.replica_path is None:
+            raise ValueError("To save checkpoints, the 'replica_path' key must be set as well.")
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -712,7 +727,7 @@ class ModelTrainer:
         In the same way, every ``PUSH_INTEGRABILITY_EACH`` epochs the integrability
         will be multiplied by their respective integrability multipliers
         """
-        callback_st = callbacks.StoppingCallback(stopping_object, savedir=self.replicadir)
+        callback_st = callbacks.StoppingCallback(stopping_object)
         callback_pos = callbacks.LagrangeCallback(
             self.training["posdatasets"],
             self.training["posmultipliers"],
@@ -723,11 +738,18 @@ class ModelTrainer:
             self.training["integmultipliers"],
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
+        callback_list = [callback_st, callback_pos, callback_integ]
+
+        if self.save_checkpoints:
+            pdf_model = training_model.get_layer("PDFs")
+            replica_paths = [self.replica_path / f"replica_{r}" for r in self.replicas]
+            checpoint_callback = callbacks.StoreCallback(
+                pdf_model=pdf_model, replica_paths=replica_paths, check_freq=self.checkpoint_freq
+            )
+            callback_list.append(checpoint_callback)
 
         training_model.perform_fit(
-            epochs=epochs,
-            verbose=False,
-            callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
+            epochs=epochs, verbose=False, callbacks=self.callbacks + callback_list
         )
 
     def _hyperopt_override(self, params):

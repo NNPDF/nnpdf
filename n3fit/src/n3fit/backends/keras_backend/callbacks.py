@@ -13,8 +13,8 @@ single batch instead. So callbacks must use ``on_batch_end``.
 """
 
 import logging
+from pathlib import Path
 from time import time
-import pathlib
 
 from keras import backend as K
 from keras.callbacks import Callback, TensorBoard
@@ -23,6 +23,7 @@ import numpy as np
 from .operations import decorator_compiler
 
 log = logging.getLogger(__name__)
+
 
 class CallbackStep(Callback):
     """
@@ -117,13 +118,10 @@ class StoppingCallback(CallbackStep):
             will be set to true
     """
 
-    def __init__(self, stopping_object, log_freq=100, savedir=None):
+    def __init__(self, stopping_object, log_freq=100):
         super().__init__()
         self.log_freq = log_freq
         self.stopping_object = stopping_object
-        if savedir is not None:
-            self.savedir = savedir / "weights"
-            self.savedir.mkdir(parents=True, exist_ok=True)
 
     def on_step_end(self, epoch, logs=None):
         """Function to be called at the end of every epoch
@@ -140,10 +138,6 @@ class StoppingCallback(CallbackStep):
         # but it needs to be run every epoch, which makes no sense
         if K.backend() == "jax":
             _ = self.model.compute_losses()
-        
-        # Save parameters for NTK
-        if self.savedir is not None and ((epoch + 1) % self.log_freq) == 0:
-          self.model.save_weights(self.savedir / f"params_epoch_{epoch}.h5")
 
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
         if self.stopping_object.stop_here():
@@ -201,6 +195,44 @@ class LagrangeCallback(CallbackStep):
         """Function to be called at the end of every epoch"""
         if (epoch + 1) % self.update_freq == 0:
             self._update_weights()
+
+
+class StoreCallback(CallbackStep):
+    """
+    Given a ``savedir``, the callback will store the model parameters in
+    that directory every ``check_freq`` epochs.
+
+    Parameters
+    ----------
+        pdf_model: MetaModel
+            The multi-replica PDF model
+        replica_paths: list[Path]
+            One path for replica. Weights are saved under <path>/weights/.
+        check_freq: int
+            Save every this many epochs (default: 100)
+    """
+
+    def __init__(self, pdf_model, replica_paths, check_freq=100):
+        super().__init__()
+        self.check_freq = check_freq
+        self.pdf_model = pdf_model
+        self.weight_dirs = []
+        for path in replica_paths:
+            weight_dir = path / "weights"
+            weight_dir.mkdir(parents=True, exist_ok=True)
+            self.weight_dirs.append(weight_dir)
+
+    def on_step_end(self, epoch, logs=None):
+        """Function to be called at the end of every epoch
+        Every ``check_freq`` number of epochs, the parameters of the model will
+        be stored in the indicated directory.
+        """
+        if ((epoch + 1) % self.check_freq) == 0:
+            pdf_replicas = self.pdf_model.split_replicas()
+            for replica_model, weight_dir in zip(pdf_replicas, self.weight_dirs):
+                filepath = weight_dir / f"params_epoch_{epoch}.h5"
+                replica_model.save_weights(filepath)
+                log.info(f"Saved parameters at epoch {epoch} in {filepath}")
 
 
 def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
