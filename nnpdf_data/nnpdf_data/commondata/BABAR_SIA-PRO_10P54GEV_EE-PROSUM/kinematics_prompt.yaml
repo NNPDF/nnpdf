@@ -1,0 +1,181 @@
+bins:
+- ph:
+    min: 0.2
+    mid: null
+    max: 0.25
+- ph:
+    min: 0.25
+    mid: null
+    max: 0.3
+- ph:
+    min: 0.3
+    mid: null
+    max: 0.35
+- ph:
+    min: 0.35
+    mid: null
+    max: 0.4
+- ph:
+    min: 0.4
+    mid: null
+    max: 0.45
+- ph:
+    min: 0.45
+    mid: null
+    max: 0.5
+- ph:
+    min: 0.5
+    mid: null
+    max: 0.55
+- ph:
+    min: 0.55
+    mid: null
+    max: 0.6
+- ph:
+    min: 0.6
+    mid: null
+    max: 0.65
+- ph:
+    min: 0.65
+    mid: null
+    max: 0.7
+- ph:
+    min: 0.7
+    mid: null
+    max: 0.75
+- ph:
+    min: 0.75
+    mid: null
+    max: 0.8
+- ph:
+    min: 0.8
+    mid: null
+    max: 0.85
+- ph:
+    min: 0.85
+    mid: null
+    max: 0.9
+- ph:
+    min: 0.9
+    mid: null
+    max: 0.95
+- ph:
+    min: 0.95
+    mid: null
+    max: 1.0
+- ph:
+    min: 1.0
+    mid: null
+    max: 1.1
+- ph:
+    min: 1.1
+    mid: null
+    max: 1.2
+- ph:
+    min: 1.2
+    mid: null
+    max: 1.3
+- ph:
+    min: 1.3
+    mid: null
+    max: 1.4
+- ph:
+    min: 1.4
+    mid: null
+    max: 1.5
+- ph:
+    min: 1.5
+    mid: null
+    max: 1.6
+- ph:
+    min: 1.6
+    mid: null
+    max: 1.7
+- ph:
+    min: 1.7
+    mid: null
+    max: 1.8
+- ph:
+    min: 1.8
+    mid: null
+    max: 1.9
+- ph:
+    min: 1.9
+    mid: null
+    max: 2.0
+- ph:
+    min: 2.0
+    mid: null
+    max: 2.1
+- ph:
+    min: 2.1
+    mid: null
+    max: 2.2
+- ph:
+    min: 2.2
+    mid: null
+    max: 2.3
+- ph:
+    min: 2.3
+    mid: null
+    max: 2.4
+- ph:
+    min: 2.4
+    mid: null
+    max: 2.5
+- ph:
+    min: 2.5
+    mid: null
+    max: 2.6
+- ph:
+    min: 2.6
+    mid: null
+    max: 2.7
+- ph:
+    min: 2.7
+    mid: null
+    max: 2.8
+- ph:
+    min: 2.8
+    mid: null
+    max: 2.9
+- ph:
+    min: 2.9
+    mid: null
+    max: 3.0
+- ph:
+    min: 3.0
+    mid: null
+    max: 3.25
+- ph:
+    min: 3.25
+    mid: null
+    max: 3.5
+- ph:
+    min: 3.5
+    mid: null
+    max: 3.75
+- ph:
+    min: 3.75
+    mid: null
+    max: 4.0
+- ph:
+    min: 4.0
+    mid: null
+    max: 4.25
+- ph:
+    min: 4.25
+    mid: null
+    max: 4.5
+- ph:
+    min: 4.5
+    mid: null
+    max: 4.75
+- ph:
+    min: 4.75
+    mid: null
+    max: 5.0
+- ph:
+    min: 5.0
+    mid: null
+    max: 5.27

@@ -1,0 +1,70 @@
+dependent_variables:
+- header: {name: (D(SIG)/D(X))/SIG(NAME=TOTAL)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '44.0'}
+  - {name: SQRT(S), units: GeV, value: '44.0'}
+  values:
+  - errors:
+    - {symerror: 4.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 202.0
+  - errors:
+    - {symerror: 8.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 188.0
+  - errors:
+    - {symerror: 4.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 166.0
+  - errors:
+    - {symerror: 6.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 143.0
+  - errors:
+    - {symerror: 11.4}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 96.8
+  - errors:
+    - {symerror: 6.2}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 56.5
+  - errors:
+    - {symerror: 5.1}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 33.9
+  - errors:
+    - {symerror: 4.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 25.5
+  - errors:
+    - {symerror: 2.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 12.9
+  - errors:
+    - {symerror: 0.5}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 6.4
+  - errors:
+    - {symerror: 0.2}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 2.1
+  - errors:
+    - {symerror: 0.04}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 0.2
+independent_variables:
+- header: {name: X(DEF=P(P=3)/P(P=1))}
+  values:
+  - {high: 0.0182, low: 0.0136}
+  - {high: 0.0227, low: 0.0182, value: 0.0205}
+  - {high: 0.0273, low: 0.0227}
+  - {high: 0.0318, low: 0.0273, value: 0.0295}
+  - {high: 0.0545, low: 0.0364, value: 0.0445}
+  - {high: 0.0727, low: 0.0545, value: 0.0627}
+  - {high: 0.0909, low: 0.0727, value: 0.0809}
+  - {high: 0.118, low: 0.0909, value: 0.103}
+  - {high: 0.173, low: 0.136, value: 0.152}
+  - {high: 0.273, low: 0.173, value: 0.216}
+  - {high: 0.455, low: 0.273, value: 0.345}
+  - {high: 1.0, low: 0.455, value: 0.682}

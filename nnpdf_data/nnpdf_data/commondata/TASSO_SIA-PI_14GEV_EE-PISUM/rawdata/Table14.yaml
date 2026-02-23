@@ -1,0 +1,90 @@
+dependent_variables:
+- header: {name: (S/BETA)*D(SIG)/DX, units: MUB*GEV**2}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '34.0'}
+  - {name: SQRT(S), units: GeV, value: '34.0'}
+  values:
+  - errors:
+    - {symerror: 3.4}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 67.8
+  - errors:
+    - {symerror: 2.4}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 57.2
+  - errors:
+    - {symerror: 1.8}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 47.5
+  - errors:
+    - {symerror: 1.5}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 39.1
+  - errors:
+    - {symerror: 1.5}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 33.7
+  - errors:
+    - {symerror: 1.5}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 25.5
+  - errors:
+    - {symerror: 1.6}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 19.4
+  - errors:
+    - {symerror: 1.2}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 13.5
+  - errors:
+    - {symerror: 0.86}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 9.3
+  - errors:
+    - {symerror: 0.58}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 6.15
+  - errors:
+    - {symerror: 0.36}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 3.03
+  - errors:
+    - {symerror: 0.25}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 2.33
+  - errors:
+    - {symerror: 0.17}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 1.29
+  - errors:
+    - {symerror: 0.2}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 1.03
+  - errors:
+    - {symerror: 0.06}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 0.29
+  - errors:
+    - {symerror: 0.024}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 5.5%}
+    value: 0.083
+independent_variables:
+- header: {name: X(P=3)}
+  values:
+  - {high: 0.025, low: 0.019}
+  - {high: 0.031, low: 0.025}
+  - {high: 0.036, low: 0.031, value: 0.033}
+  - {high: 0.042, low: 0.036}
+  - {high: 0.048, low: 0.042}
+  - {high: 0.059, low: 0.048, value: 0.054}
+  - {high: 0.071, low: 0.059}
+  - {high: 0.094, low: 0.071, value: 0.082}
+  - {high: 0.118, low: 0.094}
+  - {high: 0.153, low: 0.118, value: 0.135}
+  - {high: 0.2, low: 0.18}
+  - {high: 0.22, low: 0.2}
+  - {high: 0.27, low: 0.22, value: 0.24}
+  - {high: 0.35, low: 0.27}
+  - {high: 0.59, low: 0.35, value: 0.45}
+  - {high: 1.0, low: 0.59, value: 0.69}

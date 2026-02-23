@@ -1,0 +1,103 @@
+dependent_variables:
+- header: {name: (1/N(C=HAD))*D(N)/DLN(1/X)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (P + PBAR) X}
+  - {name: RE(Q=HAD), value: E+ E- --> HADRONS X}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  values:
+  - errors:
+    - {symerror: 3.83}
+    value: 13.82
+  - errors:
+    - {symerror: 3.32}
+    value: 13.93
+  - errors:
+    - {symerror: 3.82}
+    value: 15.11
+  - errors:
+    - {symerror: 3.31}
+    value: 12.14
+  - errors:
+    - {symerror: 2.56}
+    value: 11.73
+  - errors:
+    - {symerror: 2.35}
+    value: 12.96
+  - errors:
+    - {symerror: 1.66}
+    value: 8.02
+  - errors:
+    - {symerror: 0.97}
+    value: 5.32
+  - errors:
+    - {symerror: 0.87}
+    value: 4.24
+  - errors:
+    - {symerror: 0.86}
+    value: 4.18
+  - errors:
+    - {symerror: 0.88}
+    value: 3.29
+  - errors:
+    - {symerror: 0.58}
+    value: 3.62
+  - errors:
+    - {symerror: 0.71}
+    value: 3.4
+  - errors:
+    - {symerror: 0.91}
+    value: 2.74
+  - errors:
+    - {symerror: 1.07}
+    value: 2.0
+  - errors:
+    - {symerror: 0.55}
+    value: 1.56
+  - errors:
+    - {symerror: 0.16}
+    value: 0.79
+  - errors:
+    - {symerror: 0.091}
+    value: 0.406
+  - errors:
+    - {symerror: 0.037}
+    value: 0.169
+  - errors:
+    - {symerror: 0.017}
+    value: 0.046
+  - errors:
+    - {symerror: 0.0092}
+    value: 0.0124
+  - errors:
+    - {symerror: 0.0049}
+    value: 0.0038
+  - errors:
+    - {symerror: 0.00084}
+    value: 0.00021
+independent_variables:
+- header: {name: X(DEF=P(P=3)/P(P=1))}
+  values:
+  - {high: 0.02, low: 0.015}
+  - {high: 0.025, low: 0.02}
+  - {high: 0.03, low: 0.025}
+  - {high: 0.035, low: 0.03}
+  - {high: 0.04, low: 0.035}
+  - {high: 0.05, low: 0.04}
+  - {high: 0.06, low: 0.05}
+  - {high: 0.07, low: 0.06}
+  - {high: 0.08, low: 0.07}
+  - {high: 0.09, low: 0.08}
+  - {high: 0.1, low: 0.09}
+  - {high: 0.12, low: 0.1}
+  - {high: 0.14, low: 0.12}
+  - {high: 0.16, low: 0.14}
+  - {high: 0.18, low: 0.16}
+  - {high: 0.2, low: 0.18}
+  - {high: 0.26, low: 0.2}
+  - {high: 0.3, low: 0.26}
+  - {high: 0.4, low: 0.3}
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+  - {high: 0.8, low: 0.6}
+  - {high: 1.0, low: 0.8}

@@ -1,0 +1,133 @@
+bins:
+- ph:
+    min: 0.271
+    mid: 0.276
+    max: 0.281
+- ph:
+    min: 0.281
+    mid: 0.287
+    max: 0.292
+- ph:
+    min: 0.292
+    mid: 0.298
+    max: 0.304
+- ph:
+    min: 0.304
+    mid: 0.311
+    max: 0.317
+- ph:
+    min: 0.317
+    mid: 0.324
+    max: 0.331
+- ph:
+    min: 0.331
+    mid: 0.339
+    max: 0.346
+- ph:
+    min: 0.346
+    mid: 0.354
+    max: 0.362
+- ph:
+    min: 0.362
+    mid: 0.371
+    max: 0.379
+- ph:
+    min: 0.379
+    mid: 0.388
+    max: 0.397
+- ph:
+    min: 0.397
+    mid: 0.406
+    max: 0.416
+- ph:
+    min: 0.416
+    mid: 0.426
+    max: 0.436
+- ph:
+    min: 0.436
+    mid: 0.447
+    max: 0.457
+- ph:
+    min: 0.457
+    mid: 0.469
+    max: 0.48
+- ph:
+    min: 0.48
+    mid: 0.492
+    max: 0.504
+- ph:
+    min: 0.504
+    mid: 0.516
+    max: 0.528
+- ph:
+    min: 0.528
+    mid: 0.542
+    max: 0.555
+- ph:
+    min: 0.555
+    mid: 0.569
+    max: 0.583
+- ph:
+    min: 0.583
+    mid: 0.597
+    max: 0.612
+- ph:
+    min: 0.612
+    mid: 0.627
+    max: 0.643
+- ph:
+    min: 0.643
+    mid: 0.659
+    max: 0.675
+- ph:
+    min: 0.675
+    mid: 0.692
+    max: 0.709
+- ph:
+    min: 0.709
+    mid: 0.727
+    max: 0.745
+- ph:
+    min: 0.745
+    mid: 0.764
+    max: 0.783
+- ph:
+    min: 4.05
+    mid: 4.48
+    max: 4.95
+- ph:
+    min: 4.95
+    mid: 5.46
+    max: 6.05
+- ph:
+    min: 6.05
+    mid: 6.67
+    max: 7.38
+- ph:
+    min: 7.38
+    mid: 8.15
+    max: 9.02
+- ph:
+    min: 9.02
+    mid: 9.94
+    max: 11.01
+- ph:
+    min: 11.01
+    mid: 12.13
+    max: 13.45
+- ph:
+    min: 13.45
+    mid: 14.81
+    max: 16.43
+- ph:
+    min: 16.43
+    mid: 18.07
+    max: 20.06
+- ph:
+    min: 20.06
+    mid: 23.79
+    max: 29.93
+- ph:
+    min: 29.93
+    mid: 33.94
+    max: 45.6
