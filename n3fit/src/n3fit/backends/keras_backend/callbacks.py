@@ -218,7 +218,7 @@ class StoreCallback(CallbackStep):
         self.pdf_model = pdf_model
         self.weight_dirs = []
         for path in replica_paths:
-            weight_dir = path / "weights"
+            weight_dir = path / "parameters"
             weight_dir.mkdir(parents=True, exist_ok=True)
             self.weight_dirs.append(weight_dir)
 
@@ -230,8 +230,13 @@ class StoreCallback(CallbackStep):
         if ((epoch + 1) % self.check_freq) == 0:
             pdf_replicas = self.pdf_model.split_replicas()
             for replica_model, weight_dir in zip(pdf_replicas, self.weight_dirs):
-                filepath = weight_dir / f"params_epoch_{epoch}.h5"
-                replica_model.save_weights(filepath)
+                filepath = weight_dir / f"params_{epoch}.npz"
+                # save parameters as expected by colibri
+                trainable_weights_flat = np.concatenate(
+                    [w.numpy().flatten() for w in replica_model.trainable_weights]
+                )
+                np.savez(filepath, params=trainable_weights_flat)
+                # replica_model.save_weights(filepath)
                 log.info(f"Saved parameters at epoch {epoch} in {filepath}")
 
 

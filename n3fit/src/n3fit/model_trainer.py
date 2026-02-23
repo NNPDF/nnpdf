@@ -945,6 +945,27 @@ class ModelTrainer:
             )
             replicas_settings.append(tmp)
 
+        # TODO: tempoerary fix to use NTK utilities in colibri
+        # Create model pkl for colibri n3fit module
+        _init_args = {
+            "flav_info": self.flavinfo,
+            "replica_range_settings": {
+                "min_replica": np.sort(self.replicas)[0],
+                "max_replica": np.sort(self.replicas)[-1],
+            },
+            "impose_sumrule": self.impose_sumrule,
+            "fitbasis": self.fitbasis,
+            "nodes": params["nodes_per_layer"],
+            "activations": params["activation_per_layer"],
+            "initializer_name": params["initializer"],
+            "layer_type": params["layer_type"],
+        }
+        state = {"_init_args": _init_args}
+        import pickle
+
+        with open(self.replica_path / "pdf_model.pkl", "wb") as file:
+            pickle.dump(state, file)
+
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
 
