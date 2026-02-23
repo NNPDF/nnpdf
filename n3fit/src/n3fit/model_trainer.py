@@ -12,6 +12,7 @@ between iterations while at the same time keeping the amount of redundant calls 
 from collections import namedtuple
 from itertools import zip_longest
 import logging
+import pickle
 
 import numpy as np
 
@@ -742,7 +743,10 @@ class ModelTrainer:
 
         if self.save_checkpoints:
             pdf_model = training_model.get_layer("PDFs")
-            replica_paths = [self.replica_path / f"replica_{r}" for r in self.replicas]
+            # Save parameters where colibri will look for checkpoints
+            replica_paths = [
+                self.replica_path.parent / f"fit_replicas/replica_{r}" for r in self.replicas
+            ]
             checpoint_callback = callbacks.StoreCallback(
                 pdf_model=pdf_model, replica_paths=replica_paths, check_freq=self.checkpoint_freq
             )
@@ -961,9 +965,8 @@ class ModelTrainer:
             "layer_type": params["layer_type"],
         }
         state = {"_init_args": _init_args}
-        import pickle
 
-        with open(self.replica_path / "pdf_model.pkl", "wb") as file:
+        with open(self.replica_path.parent / "pdf_model.pkl", "wb") as file:
             pickle.dump(state, file)
 
         ### Training loop
