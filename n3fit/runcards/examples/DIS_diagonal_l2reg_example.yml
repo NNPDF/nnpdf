@@ -9,26 +9,27 @@ description: NNLO DIS only in basis which diagonalises experimental covmat with 
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, frac: 0.75, variant: legacy_dw}
-- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, frac: 0.75, variant: legacy_dw}
-- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
-- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
-- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75}
-- {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75}
-- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75}
-- {dataset: HERA_NC_300GEV_EP-SIGMARED, frac: 0.75}
-- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75}
-- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75}
-- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75}
-- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75}
-- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], variant: legacy_dw}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED}
+- {dataset: HERA_NC_251GEV_EP-SIGMARED}
+- {dataset: HERA_NC_300GEV_EP-SIGMARED}
+- {dataset: HERA_NC_318GEV_EP-SIGMARED}
+- {dataset: HERA_CC_318GEV_EM-SIGMARED}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED}
+- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED}
+- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED}
 
+diagonal_frac: 0.75
 ############################################################
 datacuts:
   t0pdfset     : NNPDF40_nnlo_as_01180 # PDF set to generate t0 covmat

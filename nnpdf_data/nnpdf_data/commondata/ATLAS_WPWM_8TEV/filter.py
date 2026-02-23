@@ -329,20 +329,6 @@ def main_filter() -> None:
     print("Generated data.yaml, kinematics.yaml, and uncertainties.yaml")
     print(f"Total bins: {len(central_values_all)} (W+: {n_wplus}, W-: {n_wminus})")
 
-    print("\n" + "="*70)
-    print("Generated data.yaml, kinematics.yaml, and uncertainties.yaml")
-    print(f"Total bins: {len(central_values_all)} (W+: {n_wplus}, W-: {n_wminus})")
-    print("="*70)
-    
-    # Print first 5 values with errors
-    print("\nFirst 5 data points (central value ± stat error):")
-    print("-"*70)
-    for i in range(min(5, len(central_values_all))):
-        cv = central_values_all[i]
-        stat_err = uncertainties_all.loc[f"bin {i}", "stat"]
-        print(f"Bin {i}: {cv:.2f} ± {stat_err:.2f} fb")
-    print("="*70 + "\n")
-
 
 if __name__ == "__main__":
     # Process combined W+ and W- data
