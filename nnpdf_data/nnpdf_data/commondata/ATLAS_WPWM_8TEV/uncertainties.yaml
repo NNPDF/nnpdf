@@ -24,8 +24,8 @@ definitions:
     treatment: MULT
     type: CORR
   sys_corr_6:
-    description: stat,Muon TrigEff Stat.
-    treatment: ADD
+    description: sys,Muon TrigEff Stat.
+    treatment: MULT
     type: CORR
   sys_corr_7:
     description: sys,Muon RecoEff Syst
@@ -44,17 +44,17 @@ definitions:
     treatment: MULT
     type: CORR
   sys_corr_11:
-    description: stat,Muon RecoEff Stat
-    treatment: ADD
+    description: sys,Muon RecoEff Stat
+    treatment: MULT
     type: CORR
   sys_corr_12:
     description: sys,SoftTrkScale
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_13:
     description: sys,SoftTrkResoCorr
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_14:
     description: sys,MET Jet Syst 0
     treatment: MULT
@@ -186,1065 +186,1065 @@ definitions:
   sys_corr_46:
     description: sys,F/B Compatibility
     treatment: MULT
-    type: UNCORR
+    type: CORR
   sys_corr_47:
-    description: stat,MC stat. unc
-    treatment: ADD
+    description: sys,MC stat. unc
+    treatment: MULT
     type: UNCORR
 bins:
-- stat: 0.06
-  sys_corr_1: 0.02
-  sys_corr_2: 0.03
-  sys_corr_3: 0.08
-  sys_corr_4: 0.01
-  sys_corr_5: 0.06
+- stat: 60.0
+  sys_corr_1: 20.0
+  sys_corr_2: 30.0
+  sys_corr_3: 80.0
+  sys_corr_4: 10.0
+  sys_corr_5: 60.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.37
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.1
-  sys_corr_11: 0.08
-  sys_corr_12: 0.26
-  sys_corr_13: 0.35
-  sys_corr_14: 0.1
-  sys_corr_15: 0.02
+  sys_corr_7: 370.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 100.0
+  sys_corr_11: 80.0
+  sys_corr_12: 260.0
+  sys_corr_13: 350.0
+  sys_corr_14: 100.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.02
-  sys_corr_25: 0.01
-  sys_corr_26: 0.01
-  sys_corr_27: 0.01
-  sys_corr_28: 0.01
+  sys_corr_24: 20.0
+  sys_corr_25: 10.0
+  sys_corr_26: 10.0
+  sys_corr_27: 10.0
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.04
-  sys_corr_34: 0.04
+  sys_corr_33: 40.0
+  sys_corr_34: 40.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.01
-  sys_corr_38: 0.02
-  sys_corr_39: 0.01
-  sys_corr_40: 0.13
-  sys_corr_41: 0.67
-  sys_corr_42: 0.4
-  sys_corr_43: 0.14
-  sys_corr_44: 0.14
-  sys_corr_45: 0.1
+  sys_corr_36: 10.0
+  sys_corr_37: 10.0
+  sys_corr_38: 20.0
+  sys_corr_39: 10.0
+  sys_corr_40: 130.0
+  sys_corr_41: 670.0
+  sys_corr_42: 400.0
+  sys_corr_43: 140.0
+  sys_corr_44: 140.0
+  sys_corr_45: 100.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.17
-- stat: 0.05
-  sys_corr_1: 0.02
-  sys_corr_2: 0.01
-  sys_corr_3: 0.06
-  sys_corr_4: 0.01
-  sys_corr_5: 0.02
+  sys_corr_47: 170.0
+- stat: 50.0
+  sys_corr_1: 20.0
+  sys_corr_2: 10.0
+  sys_corr_3: 60.0
+  sys_corr_4: 10.0
+  sys_corr_5: 20.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.16
+  sys_corr_7: 160.0
   sys_corr_8: 0.0
-  sys_corr_9: 0.02
-  sys_corr_10: 0.1
-  sys_corr_11: 0.02
-  sys_corr_12: 0.27
-  sys_corr_13: 0.39
-  sys_corr_14: 0.09
-  sys_corr_15: 0.02
+  sys_corr_9: 20.0
+  sys_corr_10: 100.0
+  sys_corr_11: 20.0
+  sys_corr_12: 270.0
+  sys_corr_13: 390.0
+  sys_corr_14: 90.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
   sys_corr_17: 0.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.02
-  sys_corr_21: 0.02
+  sys_corr_19: 10.0
+  sys_corr_20: 20.0
+  sys_corr_21: 20.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.01
+  sys_corr_24: 10.0
+  sys_corr_25: 10.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.04
-  sys_corr_34: 0.04
+  sys_corr_33: 40.0
+  sys_corr_34: 40.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.03
-  sys_corr_38: 0.01
+  sys_corr_36: 10.0
+  sys_corr_37: 30.0
+  sys_corr_38: 10.0
   sys_corr_39: 0.0
-  sys_corr_40: 0.09
-  sys_corr_41: 0.4
-  sys_corr_42: 0.39
-  sys_corr_43: 0.06
-  sys_corr_44: 0.06
-  sys_corr_45: 0.08
+  sys_corr_40: 90.0
+  sys_corr_41: 400.0
+  sys_corr_42: 390.0
+  sys_corr_43: 60.0
+  sys_corr_44: 60.0
+  sys_corr_45: 80.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.13
-- stat: 0.05
-  sys_corr_1: 0.03
-  sys_corr_2: 0.03
-  sys_corr_3: 0.07
+  sys_corr_47: 130.0
+- stat: 50.0
+  sys_corr_1: 30.0
+  sys_corr_2: 30.0
+  sys_corr_3: 70.0
   sys_corr_4: 0.0
-  sys_corr_5: 0.02
+  sys_corr_5: 20.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.17
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.1
-  sys_corr_11: 0.02
-  sys_corr_12: 0.27
-  sys_corr_13: 0.38
-  sys_corr_14: 0.1
-  sys_corr_15: 0.02
+  sys_corr_7: 170.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 100.0
+  sys_corr_11: 20.0
+  sys_corr_12: 270.0
+  sys_corr_13: 380.0
+  sys_corr_14: 100.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.03
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 30.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.02
-  sys_corr_25: 0.02
+  sys_corr_24: 20.0
+  sys_corr_25: 20.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.1
+  sys_corr_31: 100.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.06
-  sys_corr_34: 0.04
+  sys_corr_33: 60.0
+  sys_corr_34: 40.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.01
-  sys_corr_38: 0.01
+  sys_corr_36: 10.0
+  sys_corr_37: 10.0
+  sys_corr_38: 10.0
   sys_corr_39: 0.0
-  sys_corr_40: 0.1
-  sys_corr_41: 0.31
-  sys_corr_42: 0.37
-  sys_corr_43: 0.05
-  sys_corr_44: 0.05
-  sys_corr_45: 0.08
-  sys_corr_46: 0.39
-  sys_corr_47: 0.13
-- stat: 0.06
-  sys_corr_1: 0.04
-  sys_corr_2: 0.01
-  sys_corr_3: 0.06
-  sys_corr_4: 0.03
-  sys_corr_5: 0.04
+  sys_corr_40: 100.0
+  sys_corr_41: 310.0
+  sys_corr_42: 370.0
+  sys_corr_43: 50.0
+  sys_corr_44: 50.0
+  sys_corr_45: 80.0
+  sys_corr_46: 390.0
+  sys_corr_47: 130.0
+- stat: 60.0
+  sys_corr_1: 40.0
+  sys_corr_2: 10.0
+  sys_corr_3: 60.0
+  sys_corr_4: 30.0
+  sys_corr_5: 40.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.17
-  sys_corr_8: 0.01
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.25
-  sys_corr_13: 0.44
-  sys_corr_14: 0.09
-  sys_corr_15: 0.01
+  sys_corr_7: 170.0
+  sys_corr_8: 10.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 250.0
+  sys_corr_13: 440.0
+  sys_corr_14: 90.0
+  sys_corr_15: 10.0
   sys_corr_16: 0.0
   sys_corr_17: 0.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.02
-  sys_corr_21: 0.02
+  sys_corr_19: 10.0
+  sys_corr_20: 20.0
+  sys_corr_21: 20.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.02
-  sys_corr_25: 0.01
+  sys_corr_24: 20.0
+  sys_corr_25: 10.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.1
+  sys_corr_31: 100.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.08
-  sys_corr_34: 0.03
+  sys_corr_33: 80.0
+  sys_corr_34: 30.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.03
-  sys_corr_38: 0.02
-  sys_corr_39: 0.01
-  sys_corr_40: 0.12
-  sys_corr_41: 0.31
-  sys_corr_42: 0.39
-  sys_corr_43: 0.08
-  sys_corr_44: 0.08
-  sys_corr_45: 0.09
+  sys_corr_36: 10.0
+  sys_corr_37: 30.0
+  sys_corr_38: 20.0
+  sys_corr_39: 10.0
+  sys_corr_40: 120.0
+  sys_corr_41: 310.0
+  sys_corr_42: 390.0
+  sys_corr_43: 80.0
+  sys_corr_44: 80.0
+  sys_corr_45: 90.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.14
-- stat: 0.06
-  sys_corr_1: 0.02
-  sys_corr_2: 0.01
-  sys_corr_3: 0.06
-  sys_corr_4: 0.05
-  sys_corr_5: 0.09
+  sys_corr_47: 140.0
+- stat: 60.0
+  sys_corr_1: 20.0
+  sys_corr_2: 10.0
+  sys_corr_3: 60.0
+  sys_corr_4: 50.0
+  sys_corr_5: 90.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.17
+  sys_corr_7: 170.0
   sys_corr_8: 0.0
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.28
-  sys_corr_13: 0.52
-  sys_corr_14: 0.09
-  sys_corr_15: 0.02
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 280.0
+  sys_corr_13: 520.0
+  sys_corr_14: 90.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.03
-  sys_corr_21: 0.02
+  sys_corr_19: 10.0
+  sys_corr_20: 30.0
+  sys_corr_21: 20.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.02
+  sys_corr_24: 10.0
+  sys_corr_25: 20.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.1
+  sys_corr_31: 100.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.11
-  sys_corr_34: 0.03
+  sys_corr_33: 110.0
+  sys_corr_34: 30.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
+  sys_corr_36: 10.0
   sys_corr_37: 0.0
   sys_corr_38: 0.0
-  sys_corr_39: 0.02
-  sys_corr_40: 0.1
-  sys_corr_41: 0.37
-  sys_corr_42: 0.35
-  sys_corr_43: 0.1
-  sys_corr_44: 0.1
-  sys_corr_45: 0.09
-  sys_corr_46: 0.22
-  sys_corr_47: 0.14
-- stat: 0.04
+  sys_corr_39: 20.0
+  sys_corr_40: 100.0
+  sys_corr_41: 370.0
+  sys_corr_42: 350.0
+  sys_corr_43: 100.0
+  sys_corr_44: 100.0
+  sys_corr_45: 90.0
+  sys_corr_46: 220.0
+  sys_corr_47: 140.0
+- stat: 40.0
   sys_corr_1: 0.0
   sys_corr_2: 0.0
-  sys_corr_3: 0.1
-  sys_corr_4: 0.01
-  sys_corr_5: 0.02
+  sys_corr_3: 100.0
+  sys_corr_4: 10.0
+  sys_corr_5: 20.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.19
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.27
-  sys_corr_13: 0.48
-  sys_corr_14: 0.1
-  sys_corr_15: 0.02
+  sys_corr_7: 190.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 270.0
+  sys_corr_13: 480.0
+  sys_corr_14: 100.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
   sys_corr_17: 0.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.02
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 20.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.01
+  sys_corr_24: 10.0
+  sys_corr_25: 10.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.1
+  sys_corr_31: 100.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.15
-  sys_corr_34: 0.02
+  sys_corr_33: 150.0
+  sys_corr_34: 20.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.02
-  sys_corr_38: 0.01
+  sys_corr_36: 10.0
+  sys_corr_37: 20.0
+  sys_corr_38: 10.0
   sys_corr_39: 0.0
-  sys_corr_40: 0.11
-  sys_corr_41: 0.57
-  sys_corr_42: 0.33
-  sys_corr_43: 0.07
-  sys_corr_44: 0.07
-  sys_corr_45: 0.06
-  sys_corr_46: 0.24
-  sys_corr_47: 0.09
-- stat: 0.06
-  sys_corr_1: 0.02
-  sys_corr_2: 0.01
-  sys_corr_3: 0.07
+  sys_corr_40: 110.0
+  sys_corr_41: 570.0
+  sys_corr_42: 330.0
+  sys_corr_43: 70.0
+  sys_corr_44: 70.0
+  sys_corr_45: 60.0
+  sys_corr_46: 240.0
+  sys_corr_47: 90.0
+- stat: 60.0
+  sys_corr_1: 20.0
+  sys_corr_2: 10.0
+  sys_corr_3: 70.0
   sys_corr_4: 0.0
-  sys_corr_5: 0.05
+  sys_corr_5: 50.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.16
-  sys_corr_8: 0.04
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.26
-  sys_corr_13: 0.48
-  sys_corr_14: 0.09
-  sys_corr_15: 0.02
+  sys_corr_7: 160.0
+  sys_corr_8: 40.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 260.0
+  sys_corr_13: 480.0
+  sys_corr_14: 90.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.02
+  sys_corr_24: 10.0
+  sys_corr_25: 20.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.1
+  sys_corr_31: 100.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.19
-  sys_corr_34: 0.02
+  sys_corr_33: 190.0
+  sys_corr_34: 20.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.01
+  sys_corr_36: 10.0
+  sys_corr_37: 10.0
   sys_corr_38: 0.0
-  sys_corr_39: 0.01
-  sys_corr_40: 0.12
-  sys_corr_41: 0.86
-  sys_corr_42: 0.34
-  sys_corr_43: 0.06
-  sys_corr_44: 0.06
-  sys_corr_45: 0.09
+  sys_corr_39: 10.0
+  sys_corr_40: 120.0
+  sys_corr_41: 860.0
+  sys_corr_42: 340.0
+  sys_corr_43: 60.0
+  sys_corr_44: 60.0
+  sys_corr_45: 90.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.12
-- stat: 0.05
-  sys_corr_1: 0.01
-  sys_corr_2: 0.03
-  sys_corr_3: 0.09
-  sys_corr_4: 0.02
-  sys_corr_5: 0.02
+  sys_corr_47: 120.0
+- stat: 50.0
+  sys_corr_1: 10.0
+  sys_corr_2: 30.0
+  sys_corr_3: 90.0
+  sys_corr_4: 20.0
+  sys_corr_5: 20.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.16
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.25
-  sys_corr_13: 0.56
-  sys_corr_14: 0.08
-  sys_corr_15: 0.01
+  sys_corr_7: 160.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 250.0
+  sys_corr_13: 560.0
+  sys_corr_14: 80.0
+  sys_corr_15: 10.0
   sys_corr_16: 0.0
   sys_corr_17: 0.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.03
-  sys_corr_21: 0.02
+  sys_corr_19: 10.0
+  sys_corr_20: 30.0
+  sys_corr_21: 20.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.01
+  sys_corr_24: 10.0
+  sys_corr_25: 10.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
   sys_corr_28: 0.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.1
+  sys_corr_31: 100.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.22
-  sys_corr_34: 0.02
+  sys_corr_33: 220.0
+  sys_corr_34: 20.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.03
-  sys_corr_38: 0.01
+  sys_corr_36: 10.0
+  sys_corr_37: 30.0
+  sys_corr_38: 10.0
   sys_corr_39: 0.0
-  sys_corr_40: 0.13
-  sys_corr_41: 0.97
-  sys_corr_42: 0.24
-  sys_corr_43: 0.14
-  sys_corr_44: 0.14
-  sys_corr_45: 0.07
-  sys_corr_46: 0.16
-  sys_corr_47: 0.1
-- stat: 0.05
-  sys_corr_1: 0.05
-  sys_corr_2: 0.03
-  sys_corr_3: 0.08
-  sys_corr_4: 0.01
-  sys_corr_5: 0.02
+  sys_corr_40: 130.0
+  sys_corr_41: 970.0
+  sys_corr_42: 240.0
+  sys_corr_43: 140.0
+  sys_corr_44: 140.0
+  sys_corr_45: 70.0
+  sys_corr_46: 160.0
+  sys_corr_47: 100.0
+- stat: 50.0
+  sys_corr_1: 50.0
+  sys_corr_2: 30.0
+  sys_corr_3: 80.0
+  sys_corr_4: 10.0
+  sys_corr_5: 20.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.22
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.24
-  sys_corr_13: 0.55
-  sys_corr_14: 0.1
-  sys_corr_15: 0.02
+  sys_corr_7: 220.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 240.0
+  sys_corr_13: 550.0
+  sys_corr_14: 100.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.05
-  sys_corr_21: 0.02
+  sys_corr_19: 10.0
+  sys_corr_20: 50.0
+  sys_corr_21: 20.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.02
-  sys_corr_25: 0.02
+  sys_corr_24: 20.0
+  sys_corr_25: 20.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
   sys_corr_28: 0.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.1
+  sys_corr_31: 100.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.25
-  sys_corr_34: 0.01
+  sys_corr_33: 250.0
+  sys_corr_34: 10.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.02
-  sys_corr_38: 0.01
-  sys_corr_39: 0.02
-  sys_corr_40: 0.14
-  sys_corr_41: 0.85
-  sys_corr_42: 0.23
-  sys_corr_43: 0.1
-  sys_corr_44: 0.1
-  sys_corr_45: 0.07
-  sys_corr_46: 0.34
-  sys_corr_47: 0.1
-- stat: 0.05
-  sys_corr_1: 0.02
-  sys_corr_2: 0.01
-  sys_corr_3: 0.14
-  sys_corr_4: 0.03
-  sys_corr_5: 0.06
+  sys_corr_36: 10.0
+  sys_corr_37: 20.0
+  sys_corr_38: 10.0
+  sys_corr_39: 20.0
+  sys_corr_40: 140.0
+  sys_corr_41: 850.0
+  sys_corr_42: 230.0
+  sys_corr_43: 100.0
+  sys_corr_44: 100.0
+  sys_corr_45: 70.0
+  sys_corr_46: 340.0
+  sys_corr_47: 100.0
+- stat: 50.0
+  sys_corr_1: 20.0
+  sys_corr_2: 10.0
+  sys_corr_3: 140.0
+  sys_corr_4: 30.0
+  sys_corr_5: 60.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.21
-  sys_corr_8: 0.04
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.18
-  sys_corr_13: 0.5
-  sys_corr_14: 0.08
-  sys_corr_15: 0.02
+  sys_corr_7: 210.0
+  sys_corr_8: 40.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 180.0
+  sys_corr_13: 500.0
+  sys_corr_14: 80.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
   sys_corr_17: 0.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
   sys_corr_24: 0.0
-  sys_corr_25: 0.02
+  sys_corr_25: 20.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
   sys_corr_28: 0.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.28
-  sys_corr_34: 0.01
+  sys_corr_33: 280.0
+  sys_corr_34: 10.0
   sys_corr_35: 0.0
   sys_corr_36: 0.0
-  sys_corr_37: 0.03
-  sys_corr_38: 0.01
-  sys_corr_39: 0.02
-  sys_corr_40: 0.16
-  sys_corr_41: 0.76
-  sys_corr_42: 0.26
-  sys_corr_43: 0.09
-  sys_corr_44: 0.09
-  sys_corr_45: 0.07
-  sys_corr_46: 0.39
-  sys_corr_47: 0.1
-- stat: 0.05
-  sys_corr_1: 0.07
-  sys_corr_2: 0.02
-  sys_corr_3: 0.24
-  sys_corr_4: 0.02
-  sys_corr_5: 0.06
+  sys_corr_37: 30.0
+  sys_corr_38: 10.0
+  sys_corr_39: 20.0
+  sys_corr_40: 160.0
+  sys_corr_41: 760.0
+  sys_corr_42: 260.0
+  sys_corr_43: 90.0
+  sys_corr_44: 90.0
+  sys_corr_45: 70.0
+  sys_corr_46: 390.0
+  sys_corr_47: 100.0
+- stat: 50.0
+  sys_corr_1: 70.0
+  sys_corr_2: 20.0
+  sys_corr_3: 240.0
+  sys_corr_4: 20.0
+  sys_corr_5: 60.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.31
-  sys_corr_8: 0.04
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.13
-  sys_corr_13: 0.45
-  sys_corr_14: 0.09
-  sys_corr_15: 0.02
+  sys_corr_7: 310.0
+  sys_corr_8: 40.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 130.0
+  sys_corr_13: 450.0
+  sys_corr_14: 90.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
   sys_corr_17: 0.0
   sys_corr_18: 0.0
   sys_corr_19: 0.0
-  sys_corr_20: 0.05
-  sys_corr_21: 0.03
+  sys_corr_20: 50.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.03
+  sys_corr_24: 10.0
+  sys_corr_25: 30.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
   sys_corr_28: 0.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.1
+  sys_corr_31: 100.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.3
-  sys_corr_34: 0.01
+  sys_corr_33: 300.0
+  sys_corr_34: 10.0
   sys_corr_35: 0.0
   sys_corr_36: 0.0
-  sys_corr_37: 0.04
-  sys_corr_38: 0.01
-  sys_corr_39: 0.01
-  sys_corr_40: 0.11
-  sys_corr_41: 0.88
-  sys_corr_42: 0.21
-  sys_corr_43: 0.09
-  sys_corr_44: 0.09
-  sys_corr_45: 0.07
+  sys_corr_37: 40.0
+  sys_corr_38: 10.0
+  sys_corr_39: 10.0
+  sys_corr_40: 110.0
+  sys_corr_41: 880.0
+  sys_corr_42: 210.0
+  sys_corr_43: 90.0
+  sys_corr_44: 90.0
+  sys_corr_45: 70.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.1
-- stat: 0.07
-  sys_corr_1: 0.03
-  sys_corr_2: 0.01
-  sys_corr_3: 0.06
+  sys_corr_47: 100.0
+- stat: 70.0
+  sys_corr_1: 30.0
+  sys_corr_2: 10.0
+  sys_corr_3: 60.0
   sys_corr_4: 0.0
-  sys_corr_5: 0.03
+  sys_corr_5: 30.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.37
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.1
-  sys_corr_11: 0.08
-  sys_corr_12: 0.26
-  sys_corr_13: 0.28
-  sys_corr_14: 0.12
-  sys_corr_15: 0.03
+  sys_corr_7: 370.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 100.0
+  sys_corr_11: 80.0
+  sys_corr_12: 260.0
+  sys_corr_13: 280.0
+  sys_corr_14: 120.0
+  sys_corr_15: 30.0
   sys_corr_16: 0.0
   sys_corr_17: 0.0
-  sys_corr_18: 0.01
-  sys_corr_19: 0.01
-  sys_corr_20: 0.03
-  sys_corr_21: 0.03
+  sys_corr_18: 10.0
+  sys_corr_19: 10.0
+  sys_corr_20: 30.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.03
-  sys_corr_25: 0.02
+  sys_corr_24: 30.0
+  sys_corr_25: 20.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.05
-  sys_corr_34: 0.05
+  sys_corr_33: 50.0
+  sys_corr_34: 50.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.02
-  sys_corr_38: 0.01
-  sys_corr_39: 0.01
-  sys_corr_40: 0.12
-  sys_corr_41: 0.47
-  sys_corr_42: 0.42
-  sys_corr_43: 0.12
-  sys_corr_44: 0.12
-  sys_corr_45: 0.11
+  sys_corr_36: 10.0
+  sys_corr_37: 20.0
+  sys_corr_38: 10.0
+  sys_corr_39: 10.0
+  sys_corr_40: 120.0
+  sys_corr_41: 470.0
+  sys_corr_42: 420.0
+  sys_corr_43: 120.0
+  sys_corr_44: 120.0
+  sys_corr_45: 110.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.18
-- stat: 0.06
+  sys_corr_47: 180.0
+- stat: 60.0
   sys_corr_1: 0.0
-  sys_corr_2: 0.01
-  sys_corr_3: 0.05
-  sys_corr_4: 0.01
-  sys_corr_5: 0.04
+  sys_corr_2: 10.0
+  sys_corr_3: 50.0
+  sys_corr_4: 10.0
+  sys_corr_5: 40.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.16
-  sys_corr_8: 0.01
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.25
-  sys_corr_13: 0.33
-  sys_corr_14: 0.11
-  sys_corr_15: 0.02
+  sys_corr_7: 160.0
+  sys_corr_8: 10.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 250.0
+  sys_corr_13: 330.0
+  sys_corr_14: 110.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.02
-  sys_corr_26: 0.01
-  sys_corr_27: 0.01
-  sys_corr_28: 0.01
+  sys_corr_24: 10.0
+  sys_corr_25: 20.0
+  sys_corr_26: 10.0
+  sys_corr_27: 10.0
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.05
-  sys_corr_34: 0.05
+  sys_corr_33: 50.0
+  sys_corr_34: 50.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.01
+  sys_corr_36: 10.0
+  sys_corr_37: 10.0
   sys_corr_38: 0.0
   sys_corr_39: 0.0
-  sys_corr_40: 0.08
-  sys_corr_41: 0.47
-  sys_corr_42: 0.39
-  sys_corr_43: 0.07
-  sys_corr_44: 0.07
-  sys_corr_45: 0.1
+  sys_corr_40: 80.0
+  sys_corr_41: 470.0
+  sys_corr_42: 390.0
+  sys_corr_43: 70.0
+  sys_corr_44: 70.0
+  sys_corr_45: 100.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.14
-- stat: 0.06
-  sys_corr_1: 0.02
-  sys_corr_2: 0.01
-  sys_corr_3: 0.04
-  sys_corr_4: 0.04
+  sys_corr_47: 140.0
+- stat: 60.0
+  sys_corr_1: 20.0
+  sys_corr_2: 10.0
+  sys_corr_3: 40.0
+  sys_corr_4: 40.0
   sys_corr_5: 0.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.19
-  sys_corr_8: 0.01
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.26
-  sys_corr_13: 0.39
-  sys_corr_14: 0.1
-  sys_corr_15: 0.02
-  sys_corr_16: 0.01
-  sys_corr_17: 0.01
+  sys_corr_7: 190.0
+  sys_corr_8: 10.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 260.0
+  sys_corr_13: 390.0
+  sys_corr_14: 100.0
+  sys_corr_15: 20.0
+  sys_corr_16: 10.0
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.03
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 30.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.02
+  sys_corr_24: 10.0
+  sys_corr_25: 20.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.07
-  sys_corr_34: 0.05
+  sys_corr_33: 70.0
+  sys_corr_34: 50.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.01
-  sys_corr_38: 0.01
+  sys_corr_36: 10.0
+  sys_corr_37: 10.0
+  sys_corr_38: 10.0
   sys_corr_39: 0.0
-  sys_corr_40: 0.1
-  sys_corr_41: 0.48
-  sys_corr_42: 0.39
-  sys_corr_43: 0.07
-  sys_corr_44: 0.07
-  sys_corr_45: 0.09
-  sys_corr_46: 0.39
-  sys_corr_47: 0.14
-- stat: 0.07
-  sys_corr_1: 0.02
-  sys_corr_2: 0.01
-  sys_corr_3: 0.05
-  sys_corr_4: 0.03
-  sys_corr_5: 0.01
+  sys_corr_40: 100.0
+  sys_corr_41: 480.0
+  sys_corr_42: 390.0
+  sys_corr_43: 70.0
+  sys_corr_44: 70.0
+  sys_corr_45: 90.0
+  sys_corr_46: 390.0
+  sys_corr_47: 140.0
+- stat: 70.0
+  sys_corr_1: 20.0
+  sys_corr_2: 10.0
+  sys_corr_3: 50.0
+  sys_corr_4: 30.0
+  sys_corr_5: 10.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.19
+  sys_corr_7: 190.0
   sys_corr_8: 0.0
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.29
-  sys_corr_13: 0.47
-  sys_corr_14: 0.13
-  sys_corr_15: 0.03
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 290.0
+  sys_corr_13: 470.0
+  sys_corr_14: 130.0
+  sys_corr_15: 30.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.04
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 40.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.04
-  sys_corr_25: 0.02
-  sys_corr_26: 0.01
-  sys_corr_27: 0.01
-  sys_corr_28: 0.01
+  sys_corr_24: 40.0
+  sys_corr_25: 20.0
+  sys_corr_26: 10.0
+  sys_corr_27: 10.0
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.1
-  sys_corr_34: 0.04
+  sys_corr_33: 100.0
+  sys_corr_34: 40.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.01
-  sys_corr_38: 0.02
-  sys_corr_39: 0.02
-  sys_corr_40: 0.14
-  sys_corr_41: 0.55
-  sys_corr_42: 0.4
-  sys_corr_43: 0.09
-  sys_corr_44: 0.09
-  sys_corr_45: 0.1
+  sys_corr_36: 10.0
+  sys_corr_37: 10.0
+  sys_corr_38: 20.0
+  sys_corr_39: 20.0
+  sys_corr_40: 140.0
+  sys_corr_41: 550.0
+  sys_corr_42: 400.0
+  sys_corr_43: 90.0
+  sys_corr_44: 90.0
+  sys_corr_45: 100.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.16
-- stat: 0.07
-  sys_corr_1: 0.01
-  sys_corr_2: 0.01
-  sys_corr_3: 0.06
-  sys_corr_4: 0.01
-  sys_corr_5: 0.01
+  sys_corr_47: 160.0
+- stat: 70.0
+  sys_corr_1: 10.0
+  sys_corr_2: 10.0
+  sys_corr_3: 60.0
+  sys_corr_4: 10.0
+  sys_corr_5: 10.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.18
+  sys_corr_7: 180.0
   sys_corr_8: 0.0
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.33
-  sys_corr_13: 0.42
-  sys_corr_14: 0.14
-  sys_corr_15: 0.02
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 330.0
+  sys_corr_13: 420.0
+  sys_corr_14: 140.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.03
-  sys_corr_25: 0.02
+  sys_corr_24: 30.0
+  sys_corr_25: 20.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.12
+  sys_corr_31: 120.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.14
-  sys_corr_34: 0.04
+  sys_corr_33: 140.0
+  sys_corr_34: 40.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.01
-  sys_corr_38: 0.03
-  sys_corr_39: 0.03
-  sys_corr_40: 0.11
-  sys_corr_41: 0.67
-  sys_corr_42: 0.34
-  sys_corr_43: 0.09
-  sys_corr_44: 0.09
-  sys_corr_45: 0.1
-  sys_corr_46: 0.22
-  sys_corr_47: 0.16
-- stat: 0.05
-  sys_corr_1: 0.01
+  sys_corr_36: 10.0
+  sys_corr_37: 10.0
+  sys_corr_38: 30.0
+  sys_corr_39: 30.0
+  sys_corr_40: 110.0
+  sys_corr_41: 670.0
+  sys_corr_42: 340.0
+  sys_corr_43: 90.0
+  sys_corr_44: 90.0
+  sys_corr_45: 100.0
+  sys_corr_46: 220.0
+  sys_corr_47: 160.0
+- stat: 50.0
+  sys_corr_1: 10.0
   sys_corr_2: 0.0
-  sys_corr_3: 0.09
-  sys_corr_4: 0.01
-  sys_corr_5: 0.03
+  sys_corr_3: 90.0
+  sys_corr_4: 10.0
+  sys_corr_5: 30.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.19
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.33
-  sys_corr_13: 0.51
-  sys_corr_14: 0.12
-  sys_corr_15: 0.02
+  sys_corr_7: 190.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 330.0
+  sys_corr_13: 510.0
+  sys_corr_14: 120.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.02
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 20.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.01
-  sys_corr_26: 0.01
-  sys_corr_27: 0.01
-  sys_corr_28: 0.01
+  sys_corr_24: 10.0
+  sys_corr_25: 10.0
+  sys_corr_26: 10.0
+  sys_corr_27: 10.0
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.2
-  sys_corr_34: 0.04
+  sys_corr_33: 200.0
+  sys_corr_34: 40.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.03
-  sys_corr_38: 0.02
-  sys_corr_39: 0.02
-  sys_corr_40: 0.11
-  sys_corr_41: 0.73
-  sys_corr_42: 0.31
-  sys_corr_43: 0.12
-  sys_corr_44: 0.12
-  sys_corr_45: 0.08
-  sys_corr_46: 0.24
-  sys_corr_47: 0.1
-- stat: 0.07
-  sys_corr_1: 0.05
-  sys_corr_2: 0.03
-  sys_corr_3: 0.09
+  sys_corr_36: 10.0
+  sys_corr_37: 30.0
+  sys_corr_38: 20.0
+  sys_corr_39: 20.0
+  sys_corr_40: 110.0
+  sys_corr_41: 730.0
+  sys_corr_42: 310.0
+  sys_corr_43: 120.0
+  sys_corr_44: 120.0
+  sys_corr_45: 80.0
+  sys_corr_46: 240.0
+  sys_corr_47: 100.0
+- stat: 70.0
+  sys_corr_1: 50.0
+  sys_corr_2: 30.0
+  sys_corr_3: 90.0
   sys_corr_4: 0.0
-  sys_corr_5: 0.01
+  sys_corr_5: 10.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.17
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.37
-  sys_corr_13: 0.49
-  sys_corr_14: 0.13
-  sys_corr_15: 0.04
-  sys_corr_16: 0.01
-  sys_corr_17: 0.02
-  sys_corr_18: 0.01
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.03
+  sys_corr_7: 170.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 370.0
+  sys_corr_13: 490.0
+  sys_corr_14: 130.0
+  sys_corr_15: 40.0
+  sys_corr_16: 10.0
+  sys_corr_17: 20.0
+  sys_corr_18: 10.0
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.04
-  sys_corr_25: 0.03
+  sys_corr_24: 40.0
+  sys_corr_25: 30.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.12
+  sys_corr_31: 120.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.25
-  sys_corr_34: 0.03
+  sys_corr_33: 250.0
+  sys_corr_34: 30.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.01
-  sys_corr_38: 0.01
-  sys_corr_39: 0.01
-  sys_corr_40: 0.09
-  sys_corr_41: 0.68
-  sys_corr_42: 0.34
-  sys_corr_43: 0.07
-  sys_corr_44: 0.07
-  sys_corr_45: 0.11
+  sys_corr_36: 10.0
+  sys_corr_37: 10.0
+  sys_corr_38: 10.0
+  sys_corr_39: 10.0
+  sys_corr_40: 90.0
+  sys_corr_41: 680.0
+  sys_corr_42: 340.0
+  sys_corr_43: 70.0
+  sys_corr_44: 70.0
+  sys_corr_45: 110.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.14
-- stat: 0.06
-  sys_corr_1: 0.02
-  sys_corr_2: 0.03
-  sys_corr_3: 0.08
-  sys_corr_4: 0.01
-  sys_corr_5: 0.02
+  sys_corr_47: 140.0
+- stat: 60.0
+  sys_corr_1: 20.0
+  sys_corr_2: 30.0
+  sys_corr_3: 80.0
+  sys_corr_4: 10.0
+  sys_corr_5: 20.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.17
-  sys_corr_8: 0.02
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.33
-  sys_corr_13: 0.49
-  sys_corr_14: 0.12
-  sys_corr_15: 0.03
+  sys_corr_7: 170.0
+  sys_corr_8: 20.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 330.0
+  sys_corr_13: 490.0
+  sys_corr_14: 120.0
+  sys_corr_15: 30.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.04
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 40.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.01
-  sys_corr_25: 0.02
-  sys_corr_26: 0.01
-  sys_corr_27: 0.01
-  sys_corr_28: 0.01
+  sys_corr_24: 10.0
+  sys_corr_25: 20.0
+  sys_corr_26: 10.0
+  sys_corr_27: 10.0
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.3
-  sys_corr_34: 0.03
+  sys_corr_33: 300.0
+  sys_corr_34: 30.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.02
-  sys_corr_38: 0.03
-  sys_corr_39: 0.03
-  sys_corr_40: 0.12
-  sys_corr_41: 0.65
-  sys_corr_42: 0.29
-  sys_corr_43: 0.23
-  sys_corr_44: 0.23
-  sys_corr_45: 0.09
-  sys_corr_46: 0.16
-  sys_corr_47: 0.12
-- stat: 0.06
-  sys_corr_1: 0.05
-  sys_corr_2: 0.03
-  sys_corr_3: 0.09
-  sys_corr_4: 0.01
-  sys_corr_5: 0.03
+  sys_corr_36: 10.0
+  sys_corr_37: 20.0
+  sys_corr_38: 30.0
+  sys_corr_39: 30.0
+  sys_corr_40: 120.0
+  sys_corr_41: 650.0
+  sys_corr_42: 290.0
+  sys_corr_43: 230.0
+  sys_corr_44: 230.0
+  sys_corr_45: 90.0
+  sys_corr_46: 160.0
+  sys_corr_47: 120.0
+- stat: 60.0
+  sys_corr_1: 50.0
+  sys_corr_2: 30.0
+  sys_corr_3: 90.0
+  sys_corr_4: 10.0
+  sys_corr_5: 30.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.23
-  sys_corr_8: 0.01
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.36
-  sys_corr_13: 0.56
-  sys_corr_14: 0.12
-  sys_corr_15: 0.03
-  sys_corr_16: 0.01
-  sys_corr_17: 0.01
+  sys_corr_7: 230.0
+  sys_corr_8: 10.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 360.0
+  sys_corr_13: 560.0
+  sys_corr_14: 120.0
+  sys_corr_15: 30.0
+  sys_corr_16: 10.0
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.06
-  sys_corr_21: 0.04
+  sys_corr_19: 10.0
+  sys_corr_20: 60.0
+  sys_corr_21: 40.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.02
-  sys_corr_25: 0.04
-  sys_corr_26: 0.01
-  sys_corr_27: 0.01
-  sys_corr_28: 0.01
+  sys_corr_24: 20.0
+  sys_corr_25: 40.0
+  sys_corr_26: 10.0
+  sys_corr_27: 10.0
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.36
-  sys_corr_34: 0.02
+  sys_corr_33: 360.0
+  sys_corr_34: 20.0
   sys_corr_35: 0.0
-  sys_corr_36: 0.01
-  sys_corr_37: 0.03
-  sys_corr_38: 0.02
-  sys_corr_39: 0.02
-  sys_corr_40: 0.11
-  sys_corr_41: 0.74
-  sys_corr_42: 0.29
-  sys_corr_43: 0.22
-  sys_corr_44: 0.22
-  sys_corr_45: 0.09
-  sys_corr_46: 0.34
-  sys_corr_47: 0.12
-- stat: 0.06
-  sys_corr_1: 0.02
-  sys_corr_2: 0.01
-  sys_corr_3: 0.12
+  sys_corr_36: 10.0
+  sys_corr_37: 30.0
+  sys_corr_38: 20.0
+  sys_corr_39: 20.0
+  sys_corr_40: 110.0
+  sys_corr_41: 740.0
+  sys_corr_42: 290.0
+  sys_corr_43: 220.0
+  sys_corr_44: 220.0
+  sys_corr_45: 90.0
+  sys_corr_46: 340.0
+  sys_corr_47: 120.0
+- stat: 60.0
+  sys_corr_1: 20.0
+  sys_corr_2: 10.0
+  sys_corr_3: 120.0
   sys_corr_4: 0.0
-  sys_corr_5: 0.04
+  sys_corr_5: 40.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.23
-  sys_corr_8: 0.04
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.02
-  sys_corr_12: 0.3
-  sys_corr_13: 0.58
-  sys_corr_14: 0.13
-  sys_corr_15: 0.03
-  sys_corr_16: 0.01
-  sys_corr_17: 0.01
+  sys_corr_7: 230.0
+  sys_corr_8: 40.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 20.0
+  sys_corr_12: 300.0
+  sys_corr_13: 580.0
+  sys_corr_14: 130.0
+  sys_corr_15: 30.0
+  sys_corr_16: 10.0
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.05
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 50.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.02
-  sys_corr_25: 0.03
+  sys_corr_24: 20.0
+  sys_corr_25: 30.0
   sys_corr_26: 0.0
   sys_corr_27: 0.0
-  sys_corr_28: 0.01
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.12
+  sys_corr_31: 120.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.42
-  sys_corr_34: 0.02
+  sys_corr_33: 420.0
+  sys_corr_34: 20.0
   sys_corr_35: 0.0
   sys_corr_36: 0.0
-  sys_corr_37: 0.03
-  sys_corr_38: 0.03
-  sys_corr_39: 0.03
-  sys_corr_40: 0.15
-  sys_corr_41: 0.95
-  sys_corr_42: 0.23
-  sys_corr_43: 0.08
-  sys_corr_44: 0.08
-  sys_corr_45: 0.09
-  sys_corr_46: 0.39
-  sys_corr_47: 0.13
-- stat: 0.07
-  sys_corr_1: 0.05
-  sys_corr_2: 0.03
-  sys_corr_3: 0.19
+  sys_corr_37: 30.0
+  sys_corr_38: 30.0
+  sys_corr_39: 30.0
+  sys_corr_40: 150.0
+  sys_corr_41: 950.0
+  sys_corr_42: 230.0
+  sys_corr_43: 80.0
+  sys_corr_44: 80.0
+  sys_corr_45: 90.0
+  sys_corr_46: 390.0
+  sys_corr_47: 130.0
+- stat: 70.0
+  sys_corr_1: 50.0
+  sys_corr_2: 30.0
+  sys_corr_3: 190.0
   sys_corr_4: 0.0
-  sys_corr_5: 0.02
+  sys_corr_5: 20.0
   sys_corr_6: 0.0
-  sys_corr_7: 0.33
-  sys_corr_8: 0.03
-  sys_corr_9: 0.02
-  sys_corr_10: 0.11
-  sys_corr_11: 0.03
-  sys_corr_12: 0.3
-  sys_corr_13: 0.55
-  sys_corr_14: 0.14
-  sys_corr_15: 0.02
+  sys_corr_7: 330.0
+  sys_corr_8: 30.0
+  sys_corr_9: 20.0
+  sys_corr_10: 110.0
+  sys_corr_11: 30.0
+  sys_corr_12: 300.0
+  sys_corr_13: 550.0
+  sys_corr_14: 140.0
+  sys_corr_15: 20.0
   sys_corr_16: 0.0
-  sys_corr_17: 0.01
+  sys_corr_17: 10.0
   sys_corr_18: 0.0
-  sys_corr_19: 0.01
-  sys_corr_20: 0.05
-  sys_corr_21: 0.03
+  sys_corr_19: 10.0
+  sys_corr_20: 50.0
+  sys_corr_21: 30.0
   sys_corr_22: 0.0
   sys_corr_23: 0.0
-  sys_corr_24: 0.03
-  sys_corr_25: 0.04
-  sys_corr_26: 0.01
-  sys_corr_27: 0.01
-  sys_corr_28: 0.01
+  sys_corr_24: 30.0
+  sys_corr_25: 40.0
+  sys_corr_26: 10.0
+  sys_corr_27: 10.0
+  sys_corr_28: 10.0
   sys_corr_29: 0.0
   sys_corr_30: 0.0
-  sys_corr_31: 0.11
+  sys_corr_31: 110.0
   sys_corr_32: 0.0
-  sys_corr_33: 0.47
-  sys_corr_34: 0.01
+  sys_corr_33: 470.0
+  sys_corr_34: 10.0
   sys_corr_35: 0.0
   sys_corr_36: 0.0
-  sys_corr_37: 0.03
-  sys_corr_38: 0.03
-  sys_corr_39: 0.02
-  sys_corr_40: 0.12
-  sys_corr_41: 1.21
-  sys_corr_42: 0.2
-  sys_corr_43: 0.17
-  sys_corr_44: 0.17
-  sys_corr_45: 0.1
+  sys_corr_37: 30.0
+  sys_corr_38: 30.0
+  sys_corr_39: 20.0
+  sys_corr_40: 120.0
+  sys_corr_41: 1210.0
+  sys_corr_42: 200.0
+  sys_corr_43: 170.0
+  sys_corr_44: 170.0
+  sys_corr_45: 100.0
   sys_corr_46: 0.0
-  sys_corr_47: 0.13
+  sys_corr_47: 130.0
