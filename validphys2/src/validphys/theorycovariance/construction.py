@@ -141,6 +141,32 @@ def covmat_7pt(name1, name2, deltas1, deltas2):
         )
     return s
 
+def covmat_7pt_diag(name1, name2, deltas1, deltas2):
+    """Returns diagonal theory covariance sub-matrix for 7pt prescription,
+    given two dataset names and collections of scale variation shifts"""
+    if name1 == name2:
+        s = (1 / 3) * sum(np.outer(d, d) for d in deltas1)
+    else:
+        s = (1 / 6) * (
+            2 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
+            + (
+                np.outer((deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3]))
+                + np.outer((deltas1[4] + deltas1[5]), (deltas2[4] + deltas2[5]))
+            )
+        )
+    return np.diag(np.diag(s))
+
+def covmat_7pt_sym_envelope(name1, name2, deltas1, deltas2):
+    """Returns the diagonal theory covariance sub-matrix constructed as the
+    symmetric envelope around the central scale of the 7pt variations"""
+    if name1 == name2:
+        deltas1_max = np.max(np.abs(deltas1), axis=0)
+        
+        s = np.outer(deltas1_max, deltas1_max)
+    else:
+        sys.exit("Inconsistent process name")
+
+    return np.diag(np.diag(s))
 
 def covmat_9pt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 9pt prescription,
@@ -255,6 +281,10 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
     elif point_prescription == "7 point":
         # 7pt (Gavin)
         s = covmat_7pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "7 point diagonal":
+        s = covmat_7pt_diag(name1, name2, deltas1, deltas2)
+    elif point_prescription == "7 point sym envelope":
+        s = covmat_7pt_sym_envelope(name1, name2, deltas1, deltas2)
     elif point_prescription == "9 point":
         s = covmat_9pt(name1, name2, deltas1, deltas2)
     elif point_prescription == "ad ihou":

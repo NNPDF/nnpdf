@@ -254,7 +254,7 @@
 
 - dataset: ATLAS_Z0J_13TEV_PT_LL
   reason: Avoid the large pT region where the statistics are not very good.
-  rule: "pT <= 600"
+  rule: "pT <= 1000"
 
 - dataset: CMS_Z0J_8TEV_PT-Y
   reason: Avoid the region where resummation effects become important.
@@ -269,6 +269,10 @@
     removes the last rapidity bin, where we cannot provide a decent
     description due to unknown reasons.
   rule: "abs_y <= 1.6"
+
+- dataset: CMS_Z0J_13TEV_PT-M
+  reason: Avoid the region where resummation effects become important.
+  rule: "pT >= 30 and m_ll >= 76"
 
 - dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.

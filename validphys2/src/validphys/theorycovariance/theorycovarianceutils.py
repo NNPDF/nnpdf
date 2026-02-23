@@ -42,6 +42,12 @@ def check_correct_theory_combination_internal(
     if point_prescription in ["7 point"]:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
+    if point_prescription in ["7 point diagonal"]:
+        correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
+        correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]    
+    if point_prescription in ["7 point sym envelope"]:
+        correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
+        correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
     if correct_xirs != None and correct_xifs != None:
         # some covmats don't rely on scale variations so we don't explicitly check those
         check(

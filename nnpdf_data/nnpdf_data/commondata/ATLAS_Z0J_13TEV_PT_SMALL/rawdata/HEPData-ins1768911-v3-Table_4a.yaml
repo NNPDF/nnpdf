@@ -1,0 +1,272 @@
+dependent_variables:
+- header: {name: '$1/\sigma_{fid} \times d\sigma/dp_{T}^{ll}$', units: 1/GEV}
+  values:
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.146737%}
+    - {label: uncorrelated uncertainty, symerror: 0.182654%}
+    value: 0.024189
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0545108%}
+    - {label: uncorrelated uncertainty, symerror: 0.0780657%}
+    value: 0.0511438
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0506089%}
+    - {label: uncorrelated uncertainty, symerror: 0.0749981%}
+    value: 0.0532324
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0455932%}
+    - {label: uncorrelated uncertainty, symerror: 0.0802127%}
+    value: 0.0473835
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.042823%}
+    - {label: uncorrelated uncertainty, symerror: 0.0902423%}
+    value: 0.0405684
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0600343%}
+    - {label: uncorrelated uncertainty, symerror: 0.107591%}
+    value: 0.0343165
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0707218%}
+    - {label: uncorrelated uncertainty, symerror: 0.124372%}
+    value:  0.0291566
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0609953%}
+    - {label: uncorrelated uncertainty, symerror: 0.136582%}
+    value: 0.0248037
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0461217%}
+    - {label: uncorrelated uncertainty, symerror: 0.145373%}
+    value: 0.021268
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.034637%}
+    - {label: uncorrelated uncertainty, symerror: 0.156366%}
+    value: 0.018325
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.025768%}
+    - {label: uncorrelated uncertainty, symerror: 0.1367%}
+    value: 0.0156045
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0339854%}
+    - {label: uncorrelated uncertainty, symerror: 0.152269%}
+    value: 0.01318
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0411065%}
+    - {label: uncorrelated uncertainty, symerror: 0.168553%}  
+    value: 0.0112073
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0508971%}
+    - {label: uncorrelated uncertainty, symerror: 0.186374%}
+    value: 0.00955676
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0594864%}
+    - {label: uncorrelated uncertainty, symerror: 0.172167%}
+    value: 0.00810287
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0779726%} 
+    - {label: uncorrelated uncertainty, symerror: 0.194268%}
+    value: 0.00678809
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.0936059%}
+    - {label: uncorrelated uncertainty, symerror: 0.213769%}
+    value: 0.00575628
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.115529%}
+    - {label: uncorrelated uncertainty, symerror: 0.231418%}
+    value: 0.00487686
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.12481%}
+    - {label: uncorrelated uncertainty, symerror: 0.254212%}
+    value: 0.00416884
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.144971%}
+    - {label: uncorrelated uncertainty, symerror: 0.282523%}
+    value: 0.00352131
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.167357%}
+    - {label: uncorrelated uncertainty, symerror: 0.314478%}
+    value: 0.00297507
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.182218%}
+    - {label: uncorrelated uncertainty, symerror: 0.345915%}
+    value: 0.00254333
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.199666%}
+    - {label: uncorrelated uncertainty, symerror: 0.378715%}
+    value: 0.00218319
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.15297%}
+    - {label: uncorrelated uncertainty, symerror: 0.309867%}
+    value: 0.00187701
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.165993%}
+    - {label: uncorrelated uncertainty, symerror: 0.351415%}
+    value: 0.0015932
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.155726%}
+    - {label: uncorrelated uncertainty, symerror: 0.320541%}
+    value: 0.00135193
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.173562%}
+    - {label: uncorrelated uncertainty, symerror: 0.373781%}
+    value: 0.0011323
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.20141%}
+    - {label: uncorrelated uncertainty, symerror: 0.429775%}
+    value: 0.00095743
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.222191%}
+    - {label: uncorrelated uncertainty, symerror: 0.489079%}
+    value: 0.000814977
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.140104%}
+    - {label: uncorrelated uncertainty, symerror: 0.286435%}
+    value: 0.000653718
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.176807%}    
+    - {label: uncorrelated uncertainty, symerror: 0.365727%}
+    value: 0.000484859
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.123019%}
+    - {label: uncorrelated uncertainty, symerror: 0.24768%}
+    value: 0.000329051
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.157454%}
+    - {label: uncorrelated uncertainty, symerror: 0.318812%}
+    value: 0.000186048
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.23722%}
+    - {label: uncorrelated uncertainty, symerror: 0.507926%}
+    value: 0.000104998
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.302697%}
+    - {label: uncorrelated uncertainty, symerror: 0.781114%}
+    value: 6.12794e-05
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.219307%}
+    - {label: uncorrelated uncertainty, symerror: 0.65891%}
+    value: 3.0584e-05
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.344574%}
+    - {label: uncorrelated uncertainty, symerror: 1.38523%}
+    value: 1.22113e-05
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.561799%}
+    - {label: uncorrelated uncertainty, symerror: 2.25044%}
+    value: 5.90263e-06
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.897993%}
+    - {label: uncorrelated uncertainty, symerror: 3.75137%}
+    value: 2.77421e-06
+  - errors:
+    - {label: correlated uncertainty, symerror: 0.824661%}
+    - {label: uncorrelated uncertainty, symerror: 4.87351%}
+    value:  1.25134e-06
+  - errors:
+    - {label: correlated uncertainty, symerror: 1.15515%}
+    - {label: uncorrelated uncertainty, symerror: 7.90601%}
+    value: 5.5219e-07
+  - errors:
+    - {label: correlated uncertainty, symerror: 1.54467%}
+    - {label: uncorrelated uncertainty, symerror: 12.8626%}
+    value: 2.01646e-07
+  - errors:
+    - {label: correlated uncertainty, symerror: 1.82228%}
+    - {label: uncorrelated uncertainty, symerror: 15.7307%}
+    value: 5.11526e-08
+  - errors:
+    - {label: correlated uncertainty, symerror: 6.30741%}
+    - {label: uncorrelated uncertainty, symerror: 60.3046%}
+    value: 2.51767e-06
+- header: {name: '$k_{dressed}$'}
+  values:
+  - {value: 0.978339}
+  - {value: 0.984972}
+  - {value: 0.994351}
+  - {value: 1.0028}
+  - {value: 1.00782}
+  - {value: 1.01148}
+  - {value: 1.01278}
+  - {value: 1.01303}
+  - {value: 1.01202}
+  - {value: 1.00898}
+  - {value: 1.00616}
+  - {value: 1.00317}
+  - {value: 0.999679}
+  - {value: 0.999156}
+  - {value: 0.997824}
+  - {value: 0.99582}
+  - {value: 0.993993}
+  - {value: 0.992858}
+  - {value: 0.991661}
+  - {value: 0.99251}
+  - {value: 0.991217}
+  - {value: 0.992147}
+  - {value: 0.993846}
+  - {value: 0.994163}
+  - {value: 0.993764}
+  - {value: 0.99512}
+  - {value: 0.995087}
+  - {value: 0.9953}
+  - {value: 0.994741}
+  - {value: 0.995926}
+  - {value: 0.995122}
+  - {value: 0.995673}
+  - {value: 0.994211}
+  - {value: 0.993365}
+  - {value: 0.992277}
+  - {value: 0.995338}
+  - {value: 0.997277}
+  - {value: 0.99423}
+  - {value: 0.991436}
+  - {value: 0.990586}
+  - {value: 0.993825}
+  - {value: 0.995003}
+  - {value: 0.989972}
+  - {value: 0.963637}
+independent_variables:
+- header: {name: 'Bin $p_{T}^{ll}$', units: GEV}
+  values:
+  - {high: 2, low: 0}
+  - {high: 4, low: 2}
+  - {high: 6, low: 4}
+  - {high: 8, low: 6}
+  - {high: 10, low: 8}
+  - {high: 12, low: 10}
+  - {high: 14, low: 12}
+  - {high: 16, low: 14}
+  - {high: 18, low: 16}
+  - {high: 20, low: 18}
+  - {high: 22.5, low: 20}
+  - {high: 25, low: 22.5}
+  - {high: 27.5, low: 25}
+  - {high: 30, low: 27.5}
+  - {high: 33, low: 30}
+  - {high: 36, low: 33}
+  - {high: 39, low: 36}
+  - {high: 42, low: 39}
+  - {high: 45, low: 42}
+  - {high: 48, low: 45}
+  - {high: 51, low: 48}
+  - {high: 54, low: 51}
+  - {high: 57, low: 54}
+  - {high: 61, low: 57}
+  - {high: 65, low: 61}
+  - {high: 70, low: 65}
+  - {high: 75, low: 70}
+  - {high: 80, low: 75}
+  - {high: 85, low: 80}
+  - {high: 95, low: 85}
+  - {high: 105, low: 95}
+  - {high: 125, low: 105}
+  - {high: 150, low: 125}
+  - {high: 175, low: 150}
+  - {high: 200, low: 175}
+  - {high: 250, low: 200}
+  - {high: 300, low: 250}
+  - {high: 350, low: 300}
+  - {high: 400, low: 350}
+  - {high: 470, low: 400}
+  - {high: 550, low: 470}
+  - {high: 650, low: 550}
+  - {high: 900, low: 650}
+  - {high: 2500, low: 900}

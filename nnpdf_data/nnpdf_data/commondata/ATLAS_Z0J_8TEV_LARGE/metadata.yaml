@@ -1,0 +1,157 @@
+setname: ATLAS_Z0J_8TEV_LARGE
+
+nnpdf_metadata:
+  nnpdf31_process: DY NC PT
+  experiment: ATLAS
+
+arXiv:
+  url: https://arxiv.org/abs/1512.02192
+  journal: Eur. Phys. J. C76 (2016) 291
+iNSPIRE:
+  url: https://inspirehep.net/literature/1408516
+hepdata:
+  url: https://www.hepdata.net/record/ins1408516
+  version: 1
+
+version: 2
+version_comment: Implementation in the new format
+
+implemented_observables:
+- observable_name: PT-Y
+  observable:
+    description: Drell-Yan Transverse Momentum Distribution
+    label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+    units: '[fb]'
+  process_type: DY_NC_PTRAP
+  tables: [29, 30, 31, 32, 33, 34]
+  ndata: 120
+  plotting:
+    dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+    y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
+    figure_by:
+    - y
+    plot_x: pT
+  kinematic_coverage: [y, pT, m_ll2]
+  kinematics:
+    variables:
+      y:
+        description: Absolute boson rapidity
+        label: $|y|_{\ell \ell}$
+        units: ''
+      pT:
+        description: Transverse momentum of the boson
+        label: $p_T^{\ell \ell}$
+        units: GeV
+      m_ll2:
+        description: Square of the invariant mass of the lepton pair
+        label: $m^2_{\ell \ell}$
+        units: 'GeV$^2$'
+    file: kinematics_PT-Y.yaml
+  data_central: data_PT-Y.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN1_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN2_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN3_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN4_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN5_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN6_ptZ
+  data_uncertainties: [uncertainties_PT-Y.yaml]
+  variants:
+    sys_10:
+      data_uncertainties:
+      - uncertainties_sys_10_PT-Y.yaml
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_PT-Y.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_legacy_sys_10_PT-Y.yaml
+    decorr:
+      data_uncertainties:
+      - uncertainties_decorr_PT-Y.yaml
+    decorr_sys_10:
+      data_uncertainties:
+      - uncertainties_decorr_sys_10_PT-Y.yaml
+      
+- observable_name: PT-M
+  observable:
+    description: Drell-Yan Transverse Momentum Distribution
+    label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
+    units: '[fb]'
+  process_type: DY_NC_PT
+  tables: [35, 36, 37, 38, 40]
+  npoints: []
+  ndata: 64
+  plotting:
+    dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
+    y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
+    figure_by:
+    - m_ll2
+    plot_x: pT
+  kinematic_coverage: [m_ll2, pT, y]
+  kinematics:
+    variables:
+      y:
+        description: Absolute boson rapidity
+        label: $|y|_{\ell \ell}$
+        units: ''
+      m_ll2:
+        description: Square of the invariant mass of the lepton pair
+        label: $m^2_{\ell \ell}$
+        units: 'GeV$^2$'
+      pT:
+        description: Transverse momentum of the boson
+        label: $p_T^{\ell \ell}$
+        units: GeV
+    file: kinematics_PT-M.yaml
+  data_central: data_PT-M.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+      - - ATLAS_Z0J_8TEV_PT.pT_mll_12_20
+        - ATLAS_Z0J_8TEV_PT.pT_mll_20_30
+        - ATLAS_Z0J_8TEV_PT.pT_mll_30_46
+        - ATLAS_Z0J_8TEV_PT.pT_mll_46_66
+        - ATLAS_Z0J_8TEV_PT.pT_mll_116_150
+  data_uncertainties: [uncertainties_PT-M.yaml]
+  variants:
+    legacy_theory:
+      theory: &legtheo
+        conversion_factor: 1.0
+        shifts:
+          ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ: 10
+          ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ: 10
+        operation: 'null'
+        FK_tables:
+        - - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN1_ptZ
+          - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN2_ptZ
+          - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN3_ptZ
+          - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ
+          - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ
+    sys_10:
+      data_uncertainties:
+      - uncertainties_sys_10_PT-M.yaml
+    legacy_data:
+      data_uncertainties:
+      - uncertainties_legacy_PT-M.yaml
+    legacy:
+      theory: *legtheo
+      data_uncertainties:
+      - uncertainties_legacy_PT-M.yaml
+    legacy_10:
+      theory: *legtheo
+      data_uncertainties:
+      - uncertainties_legacy_sys_10_PT-M.yaml
+    legacy_data_10:
+      data_uncertainties:
+      - uncertainties_legacy_sys_10_PT-M.yaml
+    decorr:
+      data_uncertainties:
+      - uncertainties_decorr_PT-M.yaml
+    decorr_sys_10:
+      data_uncertainties:
+      - uncertainties_decorr_sys_10_PT-M.yaml   
