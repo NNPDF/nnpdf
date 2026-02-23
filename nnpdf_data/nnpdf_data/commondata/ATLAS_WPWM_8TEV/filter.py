@@ -130,20 +130,20 @@ def get_errors(hepdata: dict) -> tuple:
                     delta_min = source["asymerror"]["minus"]
                     delta_plus = source["asymerror"]["plus"]
                     se_delta, se_sigma = se(delta_plus, delta_min)
-                    stat_errors.append(se_sigma)
+                    stat_errors.append(se_sigma * 1000)
                     shift_cv += se_delta
                 elif "symerror" in source:
-                    stat_errors.append(source["symerror"])
+                    stat_errors.append(source["symerror"] * 1000)
             else:
                 # Systematic uncertainty
                 if "asymerror" in source:
                     delta_min = source["asymerror"]["minus"]
                     delta_plus = source["asymerror"]["plus"]
                     se_delta, se_sigma = se(delta_plus, delta_min)
-                    bin_sys_errors.append(se_sigma)
+                    bin_sys_errors.append(se_sigma * 1000)
                     shift_cv += se_delta
                 elif "symerror" in source:
-                    bin_sys_errors.append(source["symerror"])
+                    bin_sys_errors.append(source["symerror"] * 1000)
         
         sys_errors_list.append(bin_sys_errors)
         cv_i = bin["value"] + shift_cv
@@ -328,6 +328,20 @@ def main_filter() -> None:
     
     print("Generated data.yaml, kinematics.yaml, and uncertainties.yaml")
     print(f"Total bins: {len(central_values_all)} (W+: {n_wplus}, W-: {n_wminus})")
+
+    print("\n" + "="*70)
+    print("Generated data.yaml, kinematics.yaml, and uncertainties.yaml")
+    print(f"Total bins: {len(central_values_all)} (W+: {n_wplus}, W-: {n_wminus})")
+    print("="*70)
+    
+    # Print first 5 values with errors
+    print("\nFirst 5 data points (central value ± stat error):")
+    print("-"*70)
+    for i in range(min(5, len(central_values_all))):
+        cv = central_values_all[i]
+        stat_err = uncertainties_all.loc[f"bin {i}", "stat"]
+        print(f"Bin {i}: {cv:.2f} ± {stat_err:.2f} fb")
+    print("="*70 + "\n")
 
 
 if __name__ == "__main__":
