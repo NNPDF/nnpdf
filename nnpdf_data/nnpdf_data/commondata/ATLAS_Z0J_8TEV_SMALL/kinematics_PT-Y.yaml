@@ -1,0 +1,1441 @@
+bins:
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 0.0
+    mid: 1.0
+    max: 2.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 2.0
+    mid: 3.0
+    max: 4.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 4.0
+    mid: 5.0
+    max: 6.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 6.0
+    mid: 7.0
+    max: 8.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 8.0
+    mid: 9.0
+    max: 10.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 10.0
+    mid: 11.5
+    max: 13.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 13.0
+    mid: 14.5
+    max: 16.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 16.0
+    mid: 18.0
+    max: 20.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 20.0
+    mid: 22.5
+    max: 25.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 25.0
+    mid: 27.5
+    max: 30.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 30.0
+    mid: 33.5
+    max: 37.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 37.0
+    mid: 41.0
+    max: 45.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 45.0
+    mid: 50.0
+    max: 55.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 55.0
+    mid: 60.0
+    max: 65.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 65.0
+    mid: 70.0
+    max: 75.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 75.0
+    mid: 80.0
+    max: 85.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 85.0
+    mid: 95.0
+    max: 105.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 105.0
+    mid: 127.5
+    max: 150.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 150.0
+    mid: 175.0
+    max: 200.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+  pT:
+    min: 200.0
+    mid: 550.0
+    max: 900.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 0.0
+    mid: 1.0
+    max: 2.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 2.0
+    mid: 3.0
+    max: 4.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 4.0
+    mid: 5.0
+    max: 6.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 6.0
+    mid: 7.0
+    max: 8.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 8.0
+    mid: 9.0
+    max: 10.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 10.0
+    mid: 11.5
+    max: 13.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 13.0
+    mid: 14.5
+    max: 16.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 16.0
+    mid: 18.0
+    max: 20.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 20.0
+    mid: 22.5
+    max: 25.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 25.0
+    mid: 27.5
+    max: 30.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 30.0
+    mid: 33.5
+    max: 37.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 37.0
+    mid: 41.0
+    max: 45.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 45.0
+    mid: 50.0
+    max: 55.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 55.0
+    mid: 60.0
+    max: 65.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 65.0
+    mid: 70.0
+    max: 75.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 75.0
+    mid: 80.0
+    max: 85.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 85.0
+    mid: 95.0
+    max: 105.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 105.0
+    mid: 127.5
+    max: 150.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 150.0
+    mid: 175.0
+    max: 200.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.4
+    mid: 6.00000000e-01
+    max: 0.8
+  pT:
+    min: 200.0
+    mid: 550.0
+    max: 900.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 0.0
+    mid: 1.0
+    max: 2.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 2.0
+    mid: 3.0
+    max: 4.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 4.0
+    mid: 5.0
+    max: 6.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 6.0
+    mid: 7.0
+    max: 8.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 8.0
+    mid: 9.0
+    max: 10.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 10.0
+    mid: 11.5
+    max: 13.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 13.0
+    mid: 14.5
+    max: 16.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 16.0
+    mid: 18.0
+    max: 20.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 20.0
+    mid: 22.5
+    max: 25.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 25.0
+    mid: 27.5
+    max: 30.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 30.0
+    mid: 33.5
+    max: 37.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 37.0
+    mid: 41.0
+    max: 45.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 45.0
+    mid: 50.0
+    max: 55.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 55.0
+    mid: 60.0
+    max: 65.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 65.0
+    mid: 70.0
+    max: 75.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 75.0
+    mid: 80.0
+    max: 85.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 85.0
+    mid: 95.0
+    max: 105.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 105.0
+    mid: 127.5
+    max: 150.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 150.0
+    mid: 175.0
+    max: 200.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 0.8
+    mid: 1.0
+    max: 1.2
+  pT:
+    min: 200.0
+    mid: 550.0
+    max: 900.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 0.0
+    mid: 1.0
+    max: 2.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 2.0
+    mid: 3.0
+    max: 4.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 4.0
+    mid: 5.0
+    max: 6.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 6.0
+    mid: 7.0
+    max: 8.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 8.0
+    mid: 9.0
+    max: 10.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 10.0
+    mid: 11.5
+    max: 13.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 13.0
+    mid: 14.5
+    max: 16.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 16.0
+    mid: 18.0
+    max: 20.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 20.0
+    mid: 22.5
+    max: 25.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 25.0
+    mid: 27.5
+    max: 30.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 30.0
+    mid: 33.5
+    max: 37.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 37.0
+    mid: 41.0
+    max: 45.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 45.0
+    mid: 50.0
+    max: 55.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 55.0
+    mid: 60.0
+    max: 65.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 65.0
+    mid: 70.0
+    max: 75.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 75.0
+    mid: 80.0
+    max: 85.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 85.0
+    mid: 95.0
+    max: 105.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 105.0
+    mid: 127.5
+    max: 150.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 150.0
+    mid: 175.0
+    max: 200.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  pT:
+    min: 200.0
+    mid: 550.0
+    max: 900.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 0.0
+    mid: 1.0
+    max: 2.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 2.0
+    mid: 3.0
+    max: 4.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 4.0
+    mid: 5.0
+    max: 6.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 6.0
+    mid: 7.0
+    max: 8.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 8.0
+    mid: 9.0
+    max: 10.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 10.0
+    mid: 11.5
+    max: 13.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 13.0
+    mid: 14.5
+    max: 16.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 16.0
+    mid: 18.0
+    max: 20.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 20.0
+    mid: 22.5
+    max: 25.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 25.0
+    mid: 27.5
+    max: 30.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 30.0
+    mid: 33.5
+    max: 37.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 37.0
+    mid: 41.0
+    max: 45.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 45.0
+    mid: 50.0
+    max: 55.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 55.0
+    mid: 60.0
+    max: 65.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 65.0
+    mid: 70.0
+    max: 75.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 75.0
+    mid: 80.0
+    max: 85.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 85.0
+    mid: 95.0
+    max: 105.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 105.0
+    mid: 127.5
+    max: 150.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 150.0
+    mid: 175.0
+    max: 200.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  pT:
+    min: 200.0
+    mid: 550.0
+    max: 900.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 0.0
+    mid: 1.0
+    max: 2.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 2.0
+    mid: 3.0
+    max: 4.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 4.0
+    mid: 5.0
+    max: 6.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 6.0
+    mid: 7.0
+    max: 8.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 8.0
+    mid: 9.0
+    max: 10.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 10.0
+    mid: 11.5
+    max: 13.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 13.0
+    mid: 14.5
+    max: 16.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 16.0
+    mid: 18.0
+    max: 20.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 20.0
+    mid: 22.5
+    max: 25.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 25.0
+    mid: 27.5
+    max: 30.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 30.0
+    mid: 33.5
+    max: 37.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 37.0
+    mid: 41.0
+    max: 45.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 45.0
+    mid: 50.0
+    max: 55.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 55.0
+    mid: 60.0
+    max: 65.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 65.0
+    mid: 70.0
+    max: 75.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 75.0
+    mid: 80.0
+    max: 85.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 85.0
+    mid: 95.0
+    max: 105.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 105.0
+    mid: 127.5
+    max: 150.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 150.0
+    mid: 175.0
+    max: 200.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  pT:
+    min: 200.0
+    mid: 550.0
+    max: 900.0
+  m_ll2:
+    min: 4356.0
+    mid: 8906.0
+    max: 13456.0

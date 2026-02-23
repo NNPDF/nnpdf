@@ -1,0 +1,77 @@
+setname: CMS_Z0J_8TEV_LARGE
+
+nnpdf_metadata:
+  nnpdf31_process: DY NC PT
+  experiment: CMS
+
+arXiv:
+  url: https://arxiv.org/abs/1504.03511
+  journal: Phys. Lett. B749 (2015) 187
+iNSPIRE:
+  url: https://inspirehep.net/literature/1359450
+hepdata:
+  url: https://www.hepdata.net/record/ins1359450
+  version: 1
+
+version: 2
+version_comment: Implementation in the new format
+
+implemented_observables:
+- observable_name: PT-Y
+  observable:
+    description: Drell-Yan Transverse Momentum Distribution
+    label: CMS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+    units: '[fb]'
+  process_type: DY_NC_PTRAP
+  tables: [2, 4]
+  ndata: 50
+  plotting:
+    dataset_label: CMS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+    y_label: $d\sigma_{Z/\gamma^{*}}/d\eta$ (fb)
+    figure_by:
+    - abs_y
+    plot_x: pT
+  kinematic_coverage: [pT, abs_y, m_Z2]
+  kinematics:
+    variables:
+      abs_y:
+        description: Absolute rapidity of the Z boson
+        label: $|y_Z|$
+        units: ''
+      pT:
+        description: Transverse momentum of the Z boson
+        label: $p_T^Z$
+        units: GeV
+      m_Z2:
+        description: Mass of the Z boson squared
+        label: m_Z2
+        units: GeV$^2$
+    file: kinematics_PT-Y.yaml
+  data_central: data_PT-Y.yaml
+  data_uncertainties: [uncertainties_PT-Y.yaml]
+  variants:
+    sys_10:
+      data_uncertainties:
+      - uncertainties_PT-Y_sys_10.yaml
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_PT-Y.yaml
+    legacy_NNPDF31:
+      data_uncertainties:
+      - uncertainties_legacy_PT-Y_sys_NNPDF31.yaml
+    legacy_10_NNPDF31:
+      data_uncertainties:
+      - uncertainties_legacy_PT-Y_sys_10_NNPDF31.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_legacy_PT-Y_sys_10.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - CMSZDIFF12-CMSZDIFF12-BIN1_ptZ
+      - CMSZDIFF12-CMSZDIFF12-BIN2_ptZ
+      - CMSZDIFF12-CMSZDIFF12-BIN3_ptZ
+      - CMSZDIFF12-CMSZDIFF12-BIN4_ptZ
+      - CMSZDIFF12-CMSZDIFF12-BIN5_ptZ
+  ported_from: CMSZDIFF12
