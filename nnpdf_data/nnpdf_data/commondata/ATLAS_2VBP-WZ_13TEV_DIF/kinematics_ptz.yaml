@@ -1,0 +1,29 @@
+bins:
+- ptZ:
+    min: 0.0
+    mid: null
+    max: 30.0
+- ptZ:
+    min: 30.0
+    mid: null
+    max: 60.0
+- ptZ:
+    min: 60.0
+    mid: null
+    max: 90.0
+- ptZ:
+    min: 90.0
+    mid: null
+    max: 120.0
+- ptZ:
+    min: 120.0
+    mid: null
+    max: 150.0
+- ptZ:
+    min: 150.0
+    mid: null
+    max: 220.0
+- ptZ:
+    min: 220.0
+    mid: null
+    max: 1000.0

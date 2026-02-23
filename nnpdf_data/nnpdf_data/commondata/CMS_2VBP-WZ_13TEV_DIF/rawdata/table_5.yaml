@@ -1,0 +1,29 @@
+independent_variables:
+- header: {name: A table}
+  values:
+    - {value: 'eee'}
+    - {value: 'eem'}
+    - {value: 'emm'}
+    - {value: 'mmm'}
+    - {value: 'Combined'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '$\sigma_{\text{fid}}(pp \to WZ)$ [fb]'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 1.9\lum}
+    value: '63.7\mathrm{}^{+3.8}_{-3.7}\stat\mathrm{}^{+0.6}_{-0.6}\thy\mathrm{}^{+5.3}_{-4.7}\syst'
+  - errors:
+    - {label: stat+syst, symerror: 1.9\lum}
+    value: '61.6\mathrm{}^{+3.0}_{-2.9}\stat\mathrm{}^{+0.6}_{-0.5}\thy\mathrm{}^{+3.7}_{-3.3}\syst'
+  - errors:
+    - {label: stat+syst, symerror: 1.9\lum}
+    value: '63.4\mathrm{}^{+2.6}_{-2.6}\stat\mathrm{}^{+0.6}_{-0.5}\thy\mathrm{}^{+3.5}_{-3.2}\syst'
+  - errors:
+    - {label: stat+syst, symerror: 1.9\lum}
+    value: '67.1\mathrm{}^{+2.1}_{-2.0}\stat\mathrm{}^{+0.6}_{-0.5}\thy\mathrm{}^{+3.3}_{-3.0}\syst'
+  - errors:
+    - {label: stat+syst, symerror: 7.4\lum}
+    value: '257.5\mathrm{}^{+5.3}_{-5.0}\stat\mathrm{}^{+2.3}_{-2.0}\thy\mathrm{}^{+12.8}_{-11.6}\syst'

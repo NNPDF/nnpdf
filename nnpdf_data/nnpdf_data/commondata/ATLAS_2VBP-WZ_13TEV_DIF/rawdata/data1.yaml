@@ -1,0 +1,65 @@
+dependent_variables:
+- header: {name: 'Fiducial cross section $\sigma^{\mathrm{fid.}}_{W^\pm Z}$ [fb]'}
+  qualifiers:
+  - {name: ., value: $e^\pm e^+ e^-$ channel}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: '2.4'}
+    - {label: sys, symerror: '3.9'}
+    - {label: 'sys,mod', symerror: '0.3'}
+    - {label: 'sys,lumi', symerror: '1.5'}
+    value: '65.8'
+- header: {name: 'Fiducial cross section $\sigma^{\mathrm{fid.}}_{W^\pm Z}$ [fb]'}
+  qualifiers:
+  - {name: ., value: $\mu^\pm e^+ e^-$ channel}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: '2.0'}
+    - {label: sys, symerror: '2.1'}
+    - {label: 'sys,mod', symerror: '0.3'}
+    - {label: 'sys,lumi', symerror: '1.3'}
+    value: '61.2'
+- header: {name: 'Fiducial cross section $\sigma^{\mathrm{fid.}}_{W^\pm Z}$ [fb]'}
+  qualifiers:
+  - {name: ., value: $e^\pm \mu^+ \mu^-$ channel}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: '2.0'}
+    - {label: sys, symerror: '3.4'}
+    - {label: 'sys,mod', symerror: '0.3'}
+    - {label: 'sys,lumi', symerror: '1.4'}
+    value: '62.4'
+- header: {name: 'Fiducial cross section $\sigma^{\mathrm{fid.}}_{W^\pm Z}$ [fb]'}
+  qualifiers:
+  - {name: ., value: $\mu^\pm \mu^+ \mu^-$ channel}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: '1.8'}
+    - {label: sys, symerror: '2.7'}
+    - {label: 'sys,mod', symerror: '0.3'}
+    - {label: 'sys,lumi', symerror: '1.64'}
+    value: '65.3'
+- header: {name: 'Fiducial cross section $\sigma^{\mathrm{fid.}}_{W^\pm Z}$ [fb]'}
+  qualifiers:
+  - {name: ., value: combined}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: '1.0'}
+    - {label: sys, symerror: '2.3'}
+    - {label: 'sys,mod', symerror: '0.3'}
+    - {label: 'sys,lumi', symerror: '1.4'}
+    value: '63.7'
+independent_variables:
+- header: {name: '$\sqrt{s}$ [GeV]'}
+  values:
+  - {value: '13000.0'}
