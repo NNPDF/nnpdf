@@ -230,14 +230,14 @@ class StoreCallback(CallbackStep):
         if ((epoch + 1) % self.check_freq) == 0:
             pdf_replicas = self.pdf_model.split_replicas()
             for replica_model, weight_dir in zip(pdf_replicas, self.weight_dirs):
-                filepath = weight_dir / f"params_{epoch}.npz"
+                filepath = weight_dir / f"params_{epoch+1}.npz"
                 # save parameters as expected by colibri
                 trainable_weights_flat = np.concatenate(
                     [w.numpy().flatten() for w in replica_model.trainable_weights]
                 )
                 np.savez(filepath, params=trainable_weights_flat)
                 # replica_model.save_weights(filepath)
-                log.info(f"Saved parameters at epoch {epoch} in {filepath}")
+                log.info(f"Saved parameters at epoch {epoch+1} in {filepath}")
 
 
 def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
