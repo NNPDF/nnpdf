@@ -113,6 +113,7 @@ class ModelTrainer:
         theoryid=None,
         lux_params=None,
         replicas=None,
+        trials=None,
     ):
         """
         Parameters
@@ -153,6 +154,8 @@ class ModelTrainer:
                 if not give, the photon is not generated
             replicas: list
                 list with the replicas ids to be fitted
+            trials: str
+                name of the file containing the trials defining the methodology
         """
         # Save all input information
         self.exp_info = list(exp_info)
@@ -169,6 +172,7 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
+        self.trials=trials
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -853,7 +857,6 @@ class ModelTrainer:
         # Reset the internal state of the backend every time this function is called
         print("")
         clear_backend_state()
-
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
         if self.mode_hyperopt:
@@ -867,7 +870,7 @@ class ModelTrainer:
         else:
             with open(params['hyperopt_res'], 'r') as file:
                 hyperopt_params = json.load(file)
-
+        import pdb; pdb.set_trace()
         # Preprocess some hyperparameters
         if self.mode_hyperopt:
             epochs = int(params["epochs"])

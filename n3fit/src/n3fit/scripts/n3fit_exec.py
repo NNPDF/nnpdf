@@ -9,6 +9,7 @@ import pathlib
 import re
 import shutil
 import sys
+import pandas as pd
 
 from ruamel.yaml import error
 
@@ -18,6 +19,8 @@ from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.core import FitSpec
 from validphys.utils import yaml_safe
+from validphys.api import API
+from validphys.hyperoptplot import generate_dictionary
 
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[], allow_legacy_names=False)
 
@@ -234,7 +237,16 @@ class N3FitConfig(Config):
                 "db_path": db_path,
             }
         return HyperScanner(parameters, hyperscan_config, **extra_args)
-
+    
+    def produce_trials(self, trials_file):
+        hyperscan = API.hyperscan(hyperscan=trials_file)
+        dict_trials = generate_dictionary(hyperscan.tries_files[1].parent,"average")
+        hyperopt_dataframe = pd.DataFrame(dict_trials)
+        n_termalization = 400
+        n_best = 10
+        best = hyperopt_dataframe[n_termalization:].sort_values('loss')[:n_best]
+        return best.to_dict(orient='list')
+        
 
 class N3FitApp(App):
     """The class which parsers and performs the fit"""

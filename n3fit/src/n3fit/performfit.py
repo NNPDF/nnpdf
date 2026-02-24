@@ -36,6 +36,7 @@ def performfit(
     load=None,
     hyperscanner=None,
     hyperopt=None,
+    trials,
     kfold_parameters,
     tensorboard=None,
     debug=False,
@@ -115,6 +116,8 @@ def performfit(
             dictionary containing the details of the hyperscanner
         hyperopt: int
             if given, number of hyperopt iterations to run
+        trials: str 
+            file containing trials defining the methodology
         kfold_parameters: None, dict
             dictionary with kfold settings used in hyperopt.
         tensorboard: None, dict
@@ -197,6 +200,7 @@ def performfit(
             theoryid=theoryid,
             lux_params=fiatlux,
             replicas=replica_idxs,
+            trials=trials,
         )
 
         # This is just to give a descriptive name to the fit function
