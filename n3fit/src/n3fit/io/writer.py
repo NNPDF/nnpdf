@@ -279,10 +279,17 @@ class WriterWrapper:
             replica_path.mkdir(exist_ok=True, parents=True)
 
             self._write_chi2s(replica_path / "chi2exps.log")
+            self._write_would_stop_epoch(replica_path / "would_stop_epoch.txt")
             self._write_metadata_json(i, replica_path / f"{fitname}.json")
             self._export_pdf_grid(i, replica_path / f"{fitname}.exportgrid")
             if weights_name:
                 self._write_weights(i, replica_path / f"{weights_name}")
+
+    def _write_would_stop_epoch(self, out_path):
+        epoch = self.stopping_object.would_stop_epoch
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(str(epoch) if epoch is not None else "None")
+            f.write("\n")
 
     def _write_chi2s(self, out_path):
         # Note: same for all replicas, unless run separately

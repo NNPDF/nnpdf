@@ -116,6 +116,7 @@ class ModelTrainer:
         save_checkpoints=False,
         replica_path=None,
         checkpoint_freq=100,
+        dont_stop=False,
     ):
         """
         Parameters
@@ -163,6 +164,8 @@ class ModelTrainer:
                 root path for all replicas.
             checkpoint_freq: int
                 frequency (in epochs) at which to save checkpoints. Only relevant if `save_checkpoints` is True.
+            dont_stop: bool
+                whether to disable the stopping mechanism, i.e. to run for all epochs regardless of the validation chi2
         """
         # Save all input information
         self.exp_info = list(exp_info)
@@ -179,6 +182,7 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
+        self.dont_stop = dont_stop
 
         # Checkpointing options
         self.save_checkpoints = save_checkpoints
@@ -1035,6 +1039,7 @@ class ModelTrainer:
                 stopping_patience=stopping_epochs,
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
+                dont_stop=self.dont_stop,
             )
 
             # Compile each of the models with the right parameters

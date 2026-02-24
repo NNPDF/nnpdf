@@ -44,6 +44,7 @@ def performfit(
     parallel_models=True,
     save_checkpoints=False,
     checkpoint_freq=100,
+    dont_stop=False,
 ):
     """
     This action will (upon having read a validcard) process a full PDF fit
@@ -204,6 +205,7 @@ def performfit(
             save_checkpoints=save_checkpoints,
             replica_path=replica_path,
             checkpoint_freq=checkpoint_freq,
+            dont_stop=dont_stop,
         )
 
         # This is just to give a descriptive name to the fit function
