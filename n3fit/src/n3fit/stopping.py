@@ -487,8 +487,7 @@ class Stopping:
             self._would_stop_epoch = (
                 -1 if self._history.final_epoch is None else self._history.final_epoch + 1
             )
-        if not self._dont_stop:
-            self._restore_best_weights()
+        self._restore_best_weights()
 
     @property
     def would_stop_epoch(self):
