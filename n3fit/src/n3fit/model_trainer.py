@@ -955,7 +955,7 @@ class ModelTrainer:
             "flav_info": self.flavinfo,
             "replica_range_settings": {
                 "min_replica": np.sort(self.replicas)[0],
-                "max_replica": np.sort(self.replicas)[-1],
+                "max_replica": np.sort(self.replicas)[0],
             },
             "impose_sumrule": self.impose_sumrule,
             "fitbasis": self.fitbasis,
