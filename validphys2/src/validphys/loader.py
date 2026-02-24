@@ -217,14 +217,6 @@ class Loader(LoaderBase):
             eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.tar")
         }
 
-    @property
-    @functools.lru_cache
-    def available_photons_qed(self):
-        """Return a string token for each of the available theories"""
-        return {
-            eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.npz")
-        }
-
     @functools.cached_property
     def available_photons(self):
         """Return a string token for each of the available theories"""
@@ -328,16 +320,6 @@ class Loader(LoaderBase):
         if not eko_path.exists():
             raise EkoNotFound(f"Could not find eko {eko_path} in theory: {theoryID}")
         return eko_path
-
-    @functools.lru_cache
-    def check_photonQED(self, theoryID, luxset):
-        """Check the Photon QED set exists and return the path to it"""
-        photon_qed_path = self._photons_qed_path / f"photon_qed_{theoryID.id}_{luxset}.tar"
-        if not photon_qed_path.exists():
-            raise PhotonQEDNotFound(
-                f"Could not find Photon QED set {photon_qed_path} in theory: {theoryID}"
-            )
-        return photon_qed_path
 
     @functools.lru_cache
     def check_photonQED(self, theoryID, luxset):
@@ -882,16 +864,6 @@ class RemoteLoader(LoaderBase):
 
     @property
     @_key_or_loader_error
-    def photon_qed_index(self):
-        return self.nnprofile['photon_qed_index']
-
-    @property
-    @_key_or_loader_error
-    def photon_qed_urls(self):
-        return self.nnprofile['photon_qed_urls']
-
-    @property
-    @_key_or_loader_error
     def nnpdf_pdfs_urls(self):
         return self.nnprofile['nnpdf_pdfs_urls']
 
@@ -962,13 +934,6 @@ class RemoteLoader(LoaderBase):
 
     @property
     @functools.lru_cache
-    def remote_photons_qed(self):
-        token = 'photon_qed_'
-        rt = self.remote_files(self.photon_qed_urls, self.photon_qed_index, thing="photons_qed")
-        return {k[len(token) :]: v for k, v in rt.items()}
-
-    @property
-    @functools.lru_cache
     def remote_photons(self):
         token = 'photon_'
         rt = self.remote_files(self.photon_qed_urls, self.photon_qed_index, thing="photons")
@@ -1007,10 +972,6 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_ekos(self):
         return list(self.remote_ekos)
-
-    @property
-    def downloadable_photonsQED(self):
-        return list(self.remote_photons_qed)
 
     @property
     def downloadable_photons(self):

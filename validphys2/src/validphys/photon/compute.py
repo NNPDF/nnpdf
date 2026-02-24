@@ -3,7 +3,6 @@
 from functools import lru_cache
 import logging
 import tempfile
-from concurrent.futures import ThreadPoolExecutor
 
 from joblib import Parallel, delayed
 import numpy as np
@@ -17,13 +16,11 @@ from n3fit.io.writer import XGRID
 from validphys.core import FKTableSpec
 from validphys.loader import Loader, PhotonQEDNotFound
 from validphys.n3fit_data import replica_luxseed
-from validphys.loader import Loader, PhotonQEDNotFound
 
 from . import structure_functions as sf
 from .alpha import Alpha
 
 log = logging.getLogger(__name__)
-loader = Loader()
 
 # not the complete fiatlux runcard since some parameters are set in the code
 FIATLUX_DEFAULT = {
@@ -160,7 +157,6 @@ class Photon:
             f2 = f2_func(luxset.members[photonreplica])
             fl = fl_func(luxset.members[photonreplica])
 
-            alpha = Alpha(theory, self.fiatlux_runcard["q2_max"])
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 yaml.dump(fiatlux_runcard, tmp)
                 lux = fiatlux.FiatLux(tmp.name)
