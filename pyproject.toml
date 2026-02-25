@@ -60,7 +60,7 @@ vp-shapley = "validphys.shapley.scripts.vp_shapley:main"
 [tool.poetry.dependencies]
 # Generic dependencies (i.e., validphys)
 python = ">=3.9"
-shapley-values = "*"
+shapley-values = {git = "https://github.com/rbonnetguerrini/shapley-values.git", branch = "main"}
 matplotlib = "^3.9"
 pineappl = "^1.0.0"
 # TODO: make the code compatible with pandas 3

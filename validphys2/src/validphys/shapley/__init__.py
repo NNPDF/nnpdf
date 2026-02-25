@@ -1,10 +1,9 @@
 """Shapley value analysis for NNPDF PDF flavour importance.
 
-Subpackage of validphys that provides tools for computing exact Shapley
-values to quantify the importance of individual PDF flavours in
-constraining experimental observables.
+Subpackage of validphys that provides tools for computing exact Shapley values to quantify the importance of individual PDF flavours in constraining experimental observables.
 
-Uses the external ``shapley_values`` package for the problem-agnostic
+Uses the external ``shapley_values`` package for the problem-agnostic available at https://github.com/rbonnetguerrini
+
 Shapley computation, and wraps NNPDF-specific components:
   - Dense FK tensor convolution for fast repeated chi2 evaluation
   - Gaussian perturbation of PDF grid values
