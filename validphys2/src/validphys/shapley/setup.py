@@ -156,7 +156,7 @@ class FKEntry:
 class NNPDFObservable:
     """Container for one dataset: FK tables, data, covariance, chi2.
 
-    Supports multi-FK datasets with operations: NULL, ASY, RATIO, ADD.
+    Supports multi-FK datasets with operations: NULL, ASY, RATIO, ADD, COM, SMN, SMT.
     """
 
     def __init__(self, name, fk_entries, operation, data_central,
@@ -209,7 +209,11 @@ class NNPDFObservable:
     # -- Combining predictions from multiple FK tables ----------------------
 
     def _combine_predictions(self, pred_list):
-        """Apply the FK operation to combine predictions."""
+        """Apply the FK operation to combine predictions.
+
+        Supports NULL, ASY, RATIO, ADD, COM, SMN, SMT operations
+        matching validphys.convolution.OP.
+        """
         if self.operation == 'NULL':
             return pred_list[0]
         elif self.operation == 'ASY':
@@ -218,6 +222,18 @@ class NNPDFObservable:
             return pred_list[0] / pred_list[1]
         elif self.operation == 'ADD':
             return pred_list[0] + pred_list[1]
+        elif self.operation == 'SMN':
+            # (a + b) / (c + d)
+            return (pred_list[0] + pred_list[1]) / (pred_list[2] + pred_list[3])
+        elif self.operation == 'COM':
+            # (sum of first 10) / (sum of last 10)
+            n = len(pred_list) // 2
+            num = sum(pred_list[:n])
+            den = sum(pred_list[n:])
+            return num / den
+        elif self.operation == 'SMT':
+            # sum of all (up to 10)
+            return sum(pred_list)
         else:
             raise ValueError(f"Unknown operation: {self.operation}")
 
@@ -271,9 +287,28 @@ class NNPDFObservable:
 # Main setup function
 # ---------------------------------------------------------------------------
 
+def _parse_dataset_entry(entry):
+    """Parse a dataset entry from the runcard. Useful for handling the variant of the dataset.
+
+    Accepts either a plain string or a dict with keys:
+        dataset (str), variant (str, optional), cfac (list, optional)
+
+    Returns (name, variant, cfac) tuple.
+    """
+    if isinstance(entry, str):
+        return entry, None, ()
+    elif isinstance(entry, dict):
+        name = entry["dataset"]
+        variant = entry.get("variant", None)
+        cfac = tuple(entry.get("cfac", []))
+        return name, variant, cfac
+    else:
+        raise TypeError(f"Dataset entry must be str or dict, got {type(entry)}")
+
+
 def setup_observables(
     pdf_name: str,
-    datasets: List[str],
+    datasets: list,
     theory_id: int = 708,
     use_cuts: str = "internal",
     variant: Optional[str] = None,
@@ -284,14 +319,16 @@ def setup_observables(
     ----------
     pdf_name : str
         LHAPDF set name, e.g. 'NNPDF40_nnlo_as_01180'.
-    datasets : list of str
-        Dataset names to load.
+    datasets : list
+        Dataset entries. Each can be a plain string (dataset name) or a dict
+        with keys 'dataset', 'variant' (optional), 'cfac' (optional).
     theory_id : int
         NNPDF theory ID (default 708).
     use_cuts : str
         Cut policy: 'internal', 'nocuts', or 'fromfit'.
     variant : str or None
-        Uncertainty variant, e.g. 'legacy'.
+        Global uncertainty variant fallback, e.g. 'legacy'.
+        Per-dataset variants override this.
 
     Returns
     -------
@@ -314,11 +351,16 @@ def setup_observables(
     observables = []
     all_flavor_indices = set()
 
-    for ds_name in datasets:
+    for entry in datasets:
+        ds_name, ds_variant, ds_cfac = _parse_dataset_entry(entry)
+        # Per-dataset variant overrides global variant
+        effective_variant = ds_variant if ds_variant is not None else variant
         ds_kw = {}
-        if variant is not None:
-            ds_kw['variant'] = variant
-        ds = loader.check_dataset(ds_name, theoryid=theoryid, **ds_kw)
+        if effective_variant is not None:
+            ds_kw['variant'] = effective_variant
+        if ds_cfac:
+            ds_kw['cfac'] = ds_cfac
+        ds = loader.check_dataset(ds_name, theoryid=theoryid, cuts=use_cuts, **ds_kw)
 
         # Load all FK tables for this dataset
         fk_entries = []
