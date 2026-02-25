@@ -125,7 +125,7 @@ def make_replica(
     central_values_array,
     group_replica_mcseed,
     dataset_inputs_sampling_covmat,
-    replica_multiplicative_errors,
+    group_multiplicative_errors,
     sep_mult=False,
     genrep=True,
     max_tries=int(1e6),
@@ -198,8 +198,8 @@ def make_replica(
     covmat_sqrt = sqrt_covmat(covmat)
 
     all_pseudodata = central_values_array
-    if replica_multiplicative_errors is not None:
-        full_mask = replica_multiplicative_errors["full_mask"]
+    if group_multiplicative_errors is not None:
+        full_mask = group_multiplicative_errors["full_mask"]
     else:
         full_mask = np.ones_like(central_values_array, dtype=bool)
     # The inner while True loop is for ensuring a positive definite
@@ -207,8 +207,8 @@ def make_replica(
     for _ in range(max_tries):
         mult_shifts = []
         # Prepare the per-dataset multiplicative shifts
-        if replica_multiplicative_errors is not None:
-            for mult_uncorr_errors, mult_corr_errors in replica_multiplicative_errors[
+        if group_multiplicative_errors is not None:
+            for mult_uncorr_errors, mult_corr_errors in group_multiplicative_errors[
                 "nonspecial_mult"
             ]:
                 # convert to from percent to fraction
@@ -226,7 +226,7 @@ def make_replica(
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         mult_part = 1.0
         if sep_mult:
-            special_mult_errors = replica_multiplicative_errors["special_mult"]
+            special_mult_errors = group_multiplicative_errors["special_mult"]
             special_mult = (
                 1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100
             ).prod(axis=1)
@@ -252,7 +252,7 @@ def central_values_array(groups_dataset_inputs_loaded_cd_with_cuts):
     return np.concatenate(central_values, axis=0)
 
 
-def replica_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_mult):
+def group_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_mult):
     """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData
     and returns the multiplicative uncertainties contribution to the pseudodata replica.
     """
