@@ -122,8 +122,10 @@ def read_replica_pseudodata(fit, context_index, replica):
 
 def make_replica(
     groups_dataset_inputs_loaded_cd_with_cuts,
+    central_values_array,
     group_replica_mcseed,
     dataset_inputs_sampling_covmat,
+    replica_multiplicative_errors,
     sep_mult=False,
     genrep=True,
     max_tries=int(1e6),
@@ -187,73 +189,44 @@ def make_replica(
        0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
     """
     if not genrep:
-        return np.concatenate(
-            [cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts]
-        )
+        return central_values_array
 
-    # Set random seed to replica_mcseed - Would also like to change this seed for each group via 'groupname' (this can't yet be accessed here)
+    # Set random seed
     rng = np.random.default_rng(seed=group_replica_mcseed)
     # construct covmat
     covmat = dataset_inputs_sampling_covmat
     covmat_sqrt = sqrt_covmat(covmat)
-    # Loading the data
-    pseudodatas = []
-    check_positive_masks = []
-    nonspecial_mult = []
-    special_mult = []
-    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
-        # copy here to avoid mutating the central values.
-        is_commondata = hasattr(cd, "central_values") and cd.central_values is not None
-        if is_commondata:
-            pseudodata = cd.central_values.to_numpy()
-        else:
-            pseudodata = np.asarray(cd)
 
-        pseudodatas.append(pseudodata)
-        # Separation of multiplicative errors. If sep_mult is True also the exp_covmat is produced
-        # without multiplicative errors
-        if is_commondata == True:
-            if sep_mult:
-                mult_errors = cd.multiplicative_errors
-                mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
-                mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
-                nonspecial_mult.append((mult_uncorr_errors, mult_corr_errors))
-                special_mult.append(
-                    mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
-                )
-            if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
-                check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
-            else:
-                check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
-        # If the input is not a commondata instance, then we assume there are no multiplicative errors and that all points must be positive
-        else:
-            check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
-    # concatenating special multiplicative errors, pseudodatas and positive mask
-    if sep_mult:
-        special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
-    all_pseudodata = np.concatenate(pseudodatas, axis=0)
-    full_mask = np.concatenate(check_positive_masks, axis=0)
+    all_pseudodata = central_values_array
+    if replica_multiplicative_errors is not None:
+        full_mask = replica_multiplicative_errors["full_mask"]
+    else:
+        full_mask = np.ones_like(central_values_array, dtype=bool)
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
     for _ in range(max_tries):
         mult_shifts = []
         # Prepare the per-dataset multiplicative shifts
-        for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
-            # convert to from percent to fraction
-            mult_shift = (
-                1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
-            ).prod(axis=1)
+        if replica_multiplicative_errors is not None:
+            for mult_uncorr_errors, mult_corr_errors in replica_multiplicative_errors[
+                "nonspecial_mult"
+            ]:
+                # convert to from percent to fraction
+                mult_shift = (
+                    1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
+                ).prod(axis=1)
 
-            mult_shift *= (
-                1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
-            ).prod(axis=1)
+                mult_shift *= (
+                    1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
+                ).prod(axis=1)
 
-            mult_shifts.append(mult_shift)
+                mult_shifts.append(mult_shift)
 
         # If sep_mult is true then the multiplicative shifts were not included in the covmat
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         mult_part = 1.0
         if sep_mult:
+            special_mult_errors = replica_multiplicative_errors["special_mult"]
             special_mult = (
                 1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100
             ).prod(axis=1)
@@ -267,6 +240,53 @@ def make_replica(
     dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
     log.error(f"Error generating replicas for the group: {dfail}")
     raise ReplicaGenerationError(f"No valid replica found after {max_tries} attempts")
+
+
+def central_values_array(groups_dataset_inputs_loaded_cd_with_cuts):
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData
+    and returns the central values concatenated in a single array.
+    """
+    central_values = []
+    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        central_values.append(cd.central_values.to_numpy())
+    return np.concatenate(central_values, axis=0)
+
+
+def replica_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_mult):
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData
+    and returns the multiplicative uncertainties contribution to the pseudodata replica.
+    """
+
+    check_positive_masks = []
+    nonspecial_mult = []
+    special_mult = []
+    special_mult_errors = []
+    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        if sep_mult:
+            mult_errors = cd.multiplicative_errors
+            mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
+            mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
+            nonspecial_mult.append((mult_uncorr_errors, mult_corr_errors))
+            special_mult.append(
+                mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
+            )
+        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
+            check_positive_masks.append(np.zeros_like(cd.central_values.to_numpy(), dtype=bool))
+        else:
+            check_positive_masks.append(np.ones_like(cd.central_values.to_numpy(), dtype=bool))
+    # concatenating special multiplicative errors, pseudodatas and positive mask
+    if sep_mult:
+        special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
+
+    full_mask = np.concatenate(check_positive_masks, axis=0)
+
+    multiplicative_errors = {
+        "nonspecial_mult": nonspecial_mult,
+        "special_mult": special_mult_errors,
+        "full_mask": full_mask,
+    }
+
+    return multiplicative_errors
 
 
 def indexed_make_replica(groups_index, make_replica):
