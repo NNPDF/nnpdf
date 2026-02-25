@@ -37,7 +37,7 @@ def load_runcard(path):
     pert = cfg["perturbation"]
     for key in ["mu", "sigma", "amplitude"]:
         if key not in pert:
-            raise KeyError(f"Missing perturbation.{key} in runcard")
+            raise KeyError(f"Missing {key} in perturbation in runcard")
 
     return cfg
 

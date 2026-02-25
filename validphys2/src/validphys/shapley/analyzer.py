@@ -44,7 +44,7 @@ class NNPDFShapleyAnalyzer:
 
     Supports two perturbation bases:
     - evolution : players are evolution-basis flavours (Sigma, g, V, T3, ...).
-    - flavor : players are physical quarks/gluon; rotated before convolution.
+    - flavor : players are physical quarks/gluon rotated before convolution, Warning: if sumrule_enforced=true, the perturbation will be modify in the evolution basis for normalized sumrules.
 
     Parameters
     ----------
@@ -89,7 +89,7 @@ class NNPDFShapleyAnalyzer:
 
         self._gv_cache: dict = {}
 
-        # Sum rule integration grid (lazily initialised)
+        # Sum rule integration grid (lazily initialized)
         self._sr_xgrid = None
         self._sr_weights = None
         self._sr_gv_evol = None
@@ -297,13 +297,9 @@ class NNPDFShapleyAnalyzer:
                         perturb_idx = self._local_flavor_indices_for_entry(
                             entry, flavor_subset
                         )
-                    gv_pert = apply_gaussian_perturbation(
-                        gv, perturb_idx, mu, sigma, amplitude,
-                        entry.xgrid, mode=mode, xspace=xspace
-                    )
+                    gv_pert = apply_gaussian_perturbation(gv, perturb_idx, mu, sigma, amplitude, entry.xgrid, mode=mode, xspace=xspace)
                     if sr_norm is not None:
-                        fi = (range(14) if entry.hadronic
-                              else entry.flavor_indices)
+                        fi = (range(14) if entry.hadronic else entry.flavor_indices)
                         gv_pert = self._apply_norm_to_gv(
                             gv_pert, sr_norm, fi
                         )

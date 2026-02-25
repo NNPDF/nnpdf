@@ -1,7 +1,6 @@
 """Gaussian perturbation of PDF grid values.
 
-Provides tools for perturbing selected flavour channels with a Gaussian
-bump. Two independent parameters control the perturbation:
+Provides tools for perturbing selected flavour channels with a Gaussian bump. Two independent parameters control the perturbation:
   - mode: 'additive' or 'multiplicative'
   - xspace: 'linear' or 'logx'
 """

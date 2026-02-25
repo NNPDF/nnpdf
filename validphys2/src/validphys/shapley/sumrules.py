@@ -1,11 +1,9 @@
 """MSR + VSR sum rule enforcement for perturbed PDFs.
 
-Reproduces the normalization logic of n3fit.layers.msr_normalization
-in pure numpy. Sum rules are always applied in the evolution basis.
+Reproduces the normalization logic of n3fit.layers.msr_normalization in pure numpy for applying to perturbated PDF sets. Sum rules are always applied in the evolution basis.
 
 FK_FLAVOURS ordering:
-  0=photon, 1=Sigma, 2=g, 3=V, 4=V3, 5=V8,
-  6=V15, 7=V24, 8=V35, 9=T3, 10=T8, 11=T15, 12=T24, 13=T35
+  0=photon, 1=Sigma, 2=g, 3=V, 4=V3, 5=V8, 6=V15, 7=V24, 8=V35, 9=T3, 10=T8, 11=T15, 12=T24, 13=T35
 
 Momentum sum rule (MSR):
   int_0^1 dx x [g(x,Q) + Sigma(x,Q)] = 1
@@ -24,8 +22,7 @@ import numpy as np
 def gen_integration_input(nx=2000):
     """Generate x-grid and trapezoidal weights for sum rule integrals.
 
-    Same grid as n3fit.msr.gen_integration_input: nx/2 log-spaced points
-    from 1e-9 to 0.1, then nx/2 linearly-spaced from 0.1 to 1.
+    Same grid as n3fit.msr.gen_integration_input: nx/2 log-spaced points from 1e-9 to 0.1, then nx/2 linearly-spaced from 0.1 to 1.
 
     Parameters
     ----------

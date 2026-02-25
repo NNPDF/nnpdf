@@ -1,18 +1,11 @@
 """Dataset loading, FK convolution, and chi2 for Shapley analysis.
 
-Loads datasets via validphys, builds dense FK tensors for fast convolution,
-and provides chi2 computation. Supports multi-FK datasets with operations
-(NULL, ASY, RATIO, ADD).
+Loads datasets via validphys, builds dense FK tensors for fast convolution, and provides chi2 computation. Supports multi-FK datasets with operations (NULL, ASY, RATIO, ADD, COM, SMN, SMT).
 
 Why not use validphys.convolution directly?
-  1. Dense tensors: validphys keeps FK tables as sparse DataFrames and
-     re-indexes via groupby each call. We pre-densify once for fast
-     numpy einsum/matmul over O(N * 2^N) evaluations.
-  2. Decoupled interface: validphys.convolution.predictions() is coupled
-     to LHAPDF PDF objects. We need to inject perturbed numpy arrays.
-  3. Flavor rotation: validphys has no flavor-to-evolution rotation
-     (it always starts from evolution basis). We add it for flavor-basis
-     Shapley analysis.
+  1. Dense tensors: validphys keeps FK tables as sparse DataFrames and re-indexes via groupby each call. We pre-densify once for fast numpy einsum/matmul over O(N * 2^N) evaluations.
+  2. Decoupled interface: validphys.convolution.predictions() is coupled to LHAPDF PDF objects. We need to inject perturbed numpy arrays.
+  3. Flavor rotation: validphys has no flavor-to-evolution rotation (it always starts from evolution basis). We add it for flavor-basis perturbation.
 
 The underlying math (convolution, chi2, multi-FK operations) is identical
 to validphys.
