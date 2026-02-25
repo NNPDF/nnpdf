@@ -22,24 +22,9 @@ jobs:
       with:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
-    - uses: conda-incubator/setup-miniconda@v3
+    - uses: ./.github/actions/install_conda_pip
       with:
-        python-version: "3.12"
-        use-mamba: true
-        auto-update-conda: true
-        activate-environment: test
-    - name: Setup conda and install LHAPDF and pandoc
-      shell: bash -l {0}
-      run: |
-        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda config --remove channels defaults
-        conda config --append channels conda-forge
-        conda config --set show_channel_urls true
-        conda install lhapdf pandoc
-    - name: Install nnpdf with testing and qed extras
-      shell: bash -l {0}
-      run: |
-        pip install .[qed,tests]
+        python-version: "[qed,tests]"
     - name: Regenerate regressions
       shell: bash -l {0}
       run: |
