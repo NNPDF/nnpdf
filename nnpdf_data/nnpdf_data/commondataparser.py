@@ -78,6 +78,7 @@ log = logging.getLogger(__name__)
 
 KINLABEL_LATEX = {
     "DIJET": ("\\eta", "$\\m_{1,2} (GeV)", "$\\sqrt{s} (GeV)"),
+    "DIJET_3D": ("$y_b$", "$y^*$", "\\m_{1,2} (GeV)"),
     "DIS": ("$x$", "$Q^2 (GeV^2)$", "$y$"),
     "DYP": ("$y$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "EWJ_JPT": ("$p_T (GeV)$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
@@ -131,6 +132,7 @@ PROCESS_DESCRIPTION_LABEL = {
     "EWJ_MLL": "Jet Mass Distribution",
     "EWK_MLL": "Drell-Yan Mass Distribution",
     "DIJET": "Dijets Invariant Mass and Rapidity Distribution",
+    "DIJET_3D": "Dijet triple-differential Invariant Mass and Rapidities Distribution",
     "DYP": "Fixed-Target Drell-Yan",
     "JET_POL": "Inclusive Jet longitudinal double-spin asymmetry",
     "DIJET_POL": "Dijets longitudinal double-spin asymmetry",
