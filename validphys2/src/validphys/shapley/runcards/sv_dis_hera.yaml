@@ -1,0 +1,29 @@
+# Shapley value runcard - HERA DIS only 
+
+pdf_name: NNPDF40_nnlo_as_01180
+theory_id: 708
+use_cuts: internal
+n_replicas: 100
+
+basis:
+  - evolution
+  - flavor
+
+perturbation:
+  mu: 0.02
+  sigma: 0.1
+  amplitude: 0.08
+  mode: multiplicative
+
+enforce_sumrules: true
+
+datasets:
+  - HERA_NC_318GEV_EP-SIGMARED
+  - HERA_NC_318GEV_EM-SIGMARED
+  - HERA_NC_300GEV_EP-SIGMARED
+  - HERA_NC_251GEV_EP-SIGMARED
+  - HERA_NC_225GEV_EP-SIGMARED
+  - HERA_CC_318GEV_EP-SIGMARED
+  - HERA_CC_318GEV_EM-SIGMARED
+  - HERA_NC_318GEV_EAVG_CHARM-SIGMARED
+  - HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED

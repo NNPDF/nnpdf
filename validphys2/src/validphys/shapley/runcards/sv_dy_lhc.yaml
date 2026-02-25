@@ -1,0 +1,35 @@
+# Shapley value runcard Drell-Yan focus (ATLAS + CMS + LHCb)
+# Hadronic-only datasets, both bases for comparison.
+
+pdf_name: NNPDF40_nnlo_as_01180
+theory_id: 708
+use_cuts: internal
+n_replicas: 100
+
+basis:
+  - evolution
+  - flavor
+
+perturbation:
+  mu: 0.02
+  sigma: 0.1
+  amplitude: 0.30
+
+datasets:
+  # ATLAS DY
+  - ATLAS_Z0_7TEV_49FB_HIMASS
+  - ATLAS_Z0_7TEV_46FB_CC-Y
+  - ATLAS_WPWM_7TEV_46FB_CC-ETA
+  - ATLAS_Z0J_8TEV_PT-M
+  - ATLAS_Z0_8TEV_ZMASS_LL
+  # CMS DY
+  - CMS_Z0_7TEV_DIMUON_2D
+  - CMS_WPWM_7TEV_ELECTRON_ASY
+  - CMS_WPWM_8TEV_MUON_Y
+  - CMS_Z0J_8TEV_PT-Y
+  # LHCb DY
+  - LHCB_Z0_7TEV_DIELECTRON_Y
+  - LHCB_WPWM_7TEV_MUON_Y
+  - LHCB_Z0_8TEV_DIELECTRON_Y
+  - LHCB_WPWM_8TEV_MUON_Y
+  - LHCB_Z0_13TEV_DIMUON-Y
