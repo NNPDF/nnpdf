@@ -18,7 +18,12 @@ import json
 import logging
 import pickle
 
-from hyperopt import Trials, space_eval
+try:
+    from hyperopt import Trials, space_eval
+except ModuleNotFoundError:
+    from . import HyperoptDependencyMissing as Trials
+
+    space_eval = object()
 
 from validphys.hyperoptplot import HyperoptTrial
 

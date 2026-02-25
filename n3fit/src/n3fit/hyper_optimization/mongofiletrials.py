@@ -24,8 +24,14 @@ import platform
 import subprocess
 import time
 
-from bson import SON, ObjectId
-from hyperopt.mongoexp import MongoTrials
+try:
+    from bson import SON, ObjectId
+    from hyperopt.mongoexp import MongoTrials
+except ModuleNotFoundError:
+    SON = object()
+    from . import HyperoptDependencyMissing as MongoTrials
+
+    ObjectId = object()
 
 from n3fit.backends import get_physical_gpus
 from n3fit.hyper_optimization.filetrials import space_eval_trial

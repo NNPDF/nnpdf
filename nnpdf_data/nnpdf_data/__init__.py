@@ -7,6 +7,7 @@ from .validphys_compatibility import legacy_to_new_map
 
 # path_commondata = path_vpdata / "commondata"
 THEORY_CARDS_PATH = pathlib.Path(__file__).parent / "theory_cards"
+CFACTOR_PATH = pathlib.Path(__file__).parent / "cfactors"
 
 
 def load_dataset_metadata(dataset_name, variant=None):
