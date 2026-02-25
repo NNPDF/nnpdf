@@ -122,7 +122,7 @@ def read_replica_pseudodata(fit, context_index, replica):
 
 def make_replica(
     groups_dataset_inputs_loaded_cd_with_cuts,
-    replica_mcseed,
+    group_replica_mcseed,
     dataset_inputs_sampling_covmat,
     sep_mult=False,
     genrep=True,
@@ -192,7 +192,7 @@ def make_replica(
         )
 
     # Set random seed to replica_mcseed - Would also like to change this seed for each group via 'groupname' (this can't yet be accessed here)
-    rng = np.random.default_rng(seed=replica_mcseed)
+    rng = np.random.default_rng(seed=group_replica_mcseed)
     # construct covmat
     covmat = dataset_inputs_sampling_covmat
     covmat_sqrt = sqrt_covmat(covmat)
