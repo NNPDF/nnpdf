@@ -1,0 +1,1741 @@
+independent_variables:
+- header:
+    name: $p_T$ col
+    units: GeV
+  values:
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 50-52
+- header:
+    name: $p_T$ row
+    units: GeV
+  values:
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 28-30
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 30-32
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 32-34
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 34-36
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 36-38
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 38-40
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 40-42
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 42-44
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 44-46
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 46-48
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 48-50
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W+ 50-52
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 28-30
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 30-32
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 32-34
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 34-36
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 36-38
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 38-40
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 40-42
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 42-44
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 44-46
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 46-48
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 48-50
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+  - value: W- 50-52
+dependent_variables:
+- header:
+    name: Correlation
+  values:
+  - value: 1.0
+  - value: -0.05082464631863232
+  - value: 0.15489036133889816
+  - value: 0.23164596611887178
+  - value: 0.5162600926318435
+  - value: 0.20584028462161988
+  - value: 0.027417340192253354
+  - value: -0.040178678897501235
+  - value: -0.052919775806272766
+  - value: 0.09484363982558422
+  - value: 0.1908774844570883
+  - value: -0.11449319832899818
+  - value: 0.5232520394200315
+  - value: 0.6419998330652689
+  - value: 0.1312225646139094
+  - value: 0.2664303152435565
+  - value: 0.1327712419940755
+  - value: 0.3290263661695291
+  - value: 0.1672718789041347
+  - value: 0.3710655743805108
+  - value: 0.10522197082029802
+  - value: 0.22748202373572843
+  - value: 0.04083198958517293
+  - value: 0.2863481550905654
+  - value: -0.05082464631863232
+  - value: 1.0000000000000002
+  - value: 0.7194630402852961
+  - value: 0.8035232302890499
+  - value: 0.3747469143284029
+  - value: 0.5600254306682122
+  - value: 0.22398872106384587
+  - value: -0.13445301312025865
+  - value: 0.08113642646927098
+  - value: -0.01888899574484416
+  - value: 0.03528083738844007
+  - value: 0.039857184079488815
+  - value: -0.11427953870834348
+  - value: 0.0013539598438408879
+  - value: 0.5448283272957264
+  - value: 0.034616609282373915
+  - value: 0.545664888028297
+  - value: 0.16921745320553666
+  - value: 0.4463293472017015
+  - value: 0.2643257681994293
+  - value: 0.30198626889253755
+  - value: -0.025629370060800537
+  - value: 0.07048599365583
+  - value: 0.12256339256392333
+  - value: 0.15489036133889816
+  - value: 0.7194630402852961
+  - value: 0.9999999999999999
+  - value: 0.621387355043952
+  - value: 0.6683330845386983
+  - value: 0.4786939125486783
+  - value: 0.20583229991426644
+  - value: -0.038485895875241725
+  - value: 0.1657942420995494
+  - value: -0.34615506487210235
+  - value: 0.2523542915339948
+  - value: -0.1343366045503947
+  - value: -0.0033802976866159472
+  - value: -0.026159495660805915
+  - value: 0.452271187349862
+  - value: 0.3375291843403673
+  - value: 0.6162345693932385
+  - value: -0.015200699938952126
+  - value: 0.7085942560038787
+  - value: 0.2671782970488183
+  - value: -0.15161249934543425
+  - value: 0.3928615827137364
+  - value: 0.37852409029292294
+  - value: -0.09488949646447373
+  - value: 0.23164596611887178
+  - value: 0.8035232302890499
+  - value: 0.621387355043952
+  - value: 0.9999999999999999
+  - value: 0.346516756785366
+  - value: 0.7108239488517769
+  - value: 0.08129154357012465
+  - value: -0.27332346384635964
+  - value: -0.015583438134033891
+  - value: 0.028225621683565624
+  - value: -0.05776687358115882
+  - value: -0.02425707361363264
+  - value: 0.012689086743199619
+  - value: 0.19151488818291376
+  - value: 0.4620753657431719
+  - value: -0.004979843822756337
+  - value: 0.2595777765243673
+  - value: 0.5060829593783275
+  - value: 0.38722468831993817
+  - value: 0.5403329155801033
+  - value: 0.48243504608862164
+  - value: -0.033265296447199943
+  - value: -0.15232277681523596
+  - value: 0.37769515864880254
+  - value: 0.5162600926318435
+  - value: 0.3747469143284029
+  - value: 0.6683330845386983
+  - value: 0.346516756785366
+  - value: 0.9999999999999998
+  - value: 0.15404227896096528
+  - value: 0.10934326544091395
+  - value: 0.029820137524021333
+  - value: -0.009588639656966422
+  - value: -0.2924919961499027
+  - value: 0.3886376009240002
+  - value: -0.30252944547459193
+  - value: 0.3056021038302683
+  - value: 0.2851422004869684
+  - value: 0.13585918008311393
+  - value: 0.5603981115379651
+  - value: 0.6243177327840116
+  - value: -0.04215036770614907
+  - value: 0.6772980359555726
+  - value: 0.29265433477259606
+  - value: -0.28227598557612715
+  - value: 0.5789009171514735
+  - value: 0.4384642409198945
+  - value: -0.07524827056967681
+  - value: 0.20584028462161988
+  - value: 0.5600254306682122
+  - value: 0.4786939125486783
+  - value: 0.7108239488517769
+  - value: 0.15404227896096528
+  - value: 1.0000000000000002
+  - value: 0.34525757005900265
+  - value: 0.22637276913687301
+  - value: 0.3072399804860468
+  - value: 0.411066785589178
+  - value: -0.17800707881704933
+  - value: 0.3660429090195294
+  - value: 0.17696500624071995
+  - value: 0.3812699956378756
+  - value: 0.6351481006662059
+  - value: 0.1391922572510614
+  - value: 0.2876300779340413
+  - value: 0.6873597175084274
+  - value: 0.07435768895208071
+  - value: 0.39864643612948514
+  - value: 0.407905483396761
+  - value: -0.19385693372568175
+  - value: -0.18086887969461735
+  - value: 0.2687298478426999
+  - value: 0.027417340192253354
+  - value: 0.22398872106384587
+  - value: 0.20583229991426644
+  - value: 0.08129154357012465
+  - value: 0.10934326544091395
+  - value: 0.34525757005900265
+  - value: 0.9999999999999999
+  - value: 0.6156413079279147
+  - value: 0.7016112409751493
+  - value: 0.4378352467333819
+  - value: 0.4369380999657504
+  - value: 0.26584405406584904
+  - value: 0.22217470561553473
+  - value: 0.3289102046130458
+  - value: 0.5360424280916165
+  - value: 0.31760486456208387
+  - value: 0.5935123458364427
+  - value: 0.12051437774616786
+  - value: 0.07624238987442576
+  - value: -0.18050065606373394
+  - value: -0.06319841665593881
+  - value: 0.0679805077075756
+  - value: -0.008421558090138132
+  - value: -0.05227694402928573
+  - value: -0.040178678897501235
+  - value: -0.13445301312025865
+  - value: -0.038485895875241725
+  - value: -0.27332346384635964
+  - value: 0.029820137524021333
+  - value: 0.22637276913687301
+  - value: 0.6156413079279147
+  - value: 0.9999999999999999
+  - value: 0.5679135497346277
+  - value: 0.3856892337599999
+  - value: 0.1282392374700059
+  - value: 0.5465103739773501
+  - value: 0.2765614372646973
+  - value: 0.27721993019767927
+  - value: 0.18409467711585195
+  - value: 0.5880305338832466
+  - value: 0.3296492505694668
+  - value: -0.0437388358043037
+  - value: -0.09074360102051564
+  - value: -0.27071187056241686
+  - value: -0.4443540017711514
+  - value: 0.13142871560921413
+  - value: 0.3346365969939983
+  - value: -0.39204037986545454
+  - value: -0.052919775806272766
+  - value: 0.08113642646927098
+  - value: 0.1657942420995494
+  - value: -0.015583438134033891
+  - value: -0.009588639656966422
+  - value: 0.3072399804860468
+  - value: 0.7016112409751493
+  - value: 0.5679135497346277
+  - value: 1.0
+  - value: 0.1991154495472153
+  - value: 0.2866421278738254
+  - value: 0.4478295269079317
+  - value: 0.14669560984729912
+  - value: 0.29744484390794496
+  - value: 0.5009614163221816
+  - value: 0.2981913063184588
+  - value: 0.41567807629661724
+  - value: 0.0662704311352664
+  - value: -0.03208915013018924
+  - value: -0.19424971125913487
+  - value: -0.14528893508130325
+  - value: -0.05786925309338224
+  - value: 0.004710820841281244
+  - value: -0.1366234595751718
+  - value: 0.09484363982558422
+  - value: -0.01888899574484416
+  - value: -0.34615506487210235
+  - value: 0.028225621683565624
+  - value: -0.2924919961499027
+  - value: 0.411066785589178
+  - value: 0.4378352467333819
+  - value: 0.3856892337599999
+  - value: 0.1991154495472153
+  - value: 1.0000000000000002
+  - value: -0.25138093995113636
+  - value: 0.4796364030353935
+  - value: 0.24696301435336035
+  - value: 0.4971179909764237
+  - value: 0.33755310569789887
+  - value: -0.08590443036012535
+  - value: 0.0029506699854776404
+  - value: 0.5612554942411773
+  - value: -0.505606245200674
+  - value: -0.10572094312535958
+  - value: 0.4574752728820233
+  - value: -0.4566114277644493
+  - value: -0.42908775618319045
+  - value: 0.17243563554322036
+  - value: 0.1908774844570883
+  - value: 0.03528083738844007
+  - value: 0.2523542915339948
+  - value: -0.05776687358115882
+  - value: 0.3886376009240002
+  - value: -0.17800707881704933
+  - value: 0.4369380999657504
+  - value: 0.1282392374700059
+  - value: 0.2866421278738254
+  - value: -0.25138093995113636
+  - value: 1.0000000000000002
+  - value: -0.564463440514043
+  - value: 0.07310543178480414
+  - value: 0.07398708149765779
+  - value: 0.13327709744152902
+  - value: 0.14803208621362174
+  - value: 0.37943555940198104
+  - value: -0.1513120338107845
+  - value: 0.2632292341021376
+  - value: -0.13359112011714191
+  - value: -0.2804328597583926
+  - value: 0.4633994837530347
+  - value: 0.008608475519401788
+  - value: 0.11504579001248087
+  - value: -0.11449319832899818
+  - value: 0.039857184079488815
+  - value: -0.1343366045503947
+  - value: -0.02425707361363264
+  - value: -0.30252944547459193
+  - value: 0.3660429090195294
+  - value: 0.26584405406584904
+  - value: 0.5465103739773501
+  - value: 0.4478295269079317
+  - value: 0.4796364030353935
+  - value: -0.564463440514043
+  - value: 1.0
+  - value: 0.047103538386173746
+  - value: 0.21251139200060562
+  - value: 0.22318468290280322
+  - value: 0.21614259828545507
+  - value: 0.0586910155546725
+  - value: 0.11021789367286601
+  - value: -0.27035540009653675
+  - value: -0.04797034732962292
+  - value: -0.019494669462016393
+  - value: -0.32013088547216223
+  - value: 0.14906139987096237
+  - value: -0.23952672128692687
+  - value: 0.5232520394200315
+  - value: -0.11427953870834348
+  - value: -0.0033802976866159472
+  - value: 0.012689086743199619
+  - value: 0.3056021038302683
+  - value: 0.17696500624071995
+  - value: 0.22217470561553473
+  - value: 0.2765614372646973
+  - value: 0.14669560984729912
+  - value: 0.24696301435336035
+  - value: 0.07310543178480414
+  - value: 0.047103538386173746
+  - value: 1.0000000000000002
+  - value: 0.6471327725051405
+  - value: 0.16225572674716265
+  - value: 0.3400802378646799
+  - value: 0.0926133474923746
+  - value: 0.09314131712385874
+  - value: -0.11046902968543346
+  - value: -0.03410892861091998
+  - value: -0.1307190729287151
+  - value: 0.030355714570055765
+  - value: 0.019723018150583693
+  - value: -0.2103186570563799
+  - value: 0.6419998330652689
+  - value: 0.0013539598438408879
+  - value: -0.026159495660805915
+  - value: 0.19151488818291376
+  - value: 0.2851422004869684
+  - value: 0.3812699956378756
+  - value: 0.3289102046130458
+  - value: 0.27721993019767927
+  - value: 0.29744484390794496
+  - value: 0.4971179909764237
+  - value: 0.07398708149765779
+  - value: 0.21251139200060562
+  - value: 0.6471327725051405
+  - value: 1.0
+  - value: 0.41321829242264135
+  - value: 0.2629700019309666
+  - value: 0.25304759082967043
+  - value: 0.5446564138124859
+  - value: -0.15528190328577274
+  - value: 0.12601430703460578
+  - value: 0.24175302982535
+  - value: -0.14294499801436092
+  - value: -0.21253963364986658
+  - value: 0.20935857631980012
+  - value: 0.1312225646139094
+  - value: 0.5448283272957264
+  - value: 0.452271187349862
+  - value: 0.4620753657431719
+  - value: 0.13585918008311393
+  - value: 0.6351481006662059
+  - value: 0.5360424280916165
+  - value: 0.18409467711585195
+  - value: 0.5009614163221816
+  - value: 0.33755310569789887
+  - value: 0.13327709744152902
+  - value: 0.22318468290280322
+  - value: 0.16225572674716265
+  - value: 0.41321829242264135
+  - value: 1.0
+  - value: 0.0529872728562819
+  - value: 0.5259424724163843
+  - value: 0.40607634834965733
+  - value: -0.07204047036425146
+  - value: -0.09381428560632123
+  - value: 0.3280433312321532
+  - value: -0.2948124544122997
+  - value: -0.15894811546040097
+  - value: 0.05977775714228339
+  - value: 0.2664303152435565
+  - value: 0.034616609282373915
+  - value: 0.3375291843403673
+  - value: -0.004979843822756337
+  - value: 0.5603981115379651
+  - value: 0.1391922572510614
+  - value: 0.31760486456208387
+  - value: 0.5880305338832466
+  - value: 0.2981913063184588
+  - value: -0.08590443036012535
+  - value: 0.14803208621362174
+  - value: 0.21614259828545507
+  - value: 0.3400802378646799
+  - value: 0.2629700019309666
+  - value: 0.0529872728562819
+  - value: 1.0000000000000002
+  - value: 0.4519318899204022
+  - value: -0.16513336658874478
+  - value: 0.438519931663104
+  - value: -0.0268400186886336
+  - value: -0.588992293370417
+  - value: 0.5459074033450015
+  - value: 0.6387501156027394
+  - value: -0.4199426556276358
+  - value: 0.1327712419940755
+  - value: 0.545664888028297
+  - value: 0.6162345693932385
+  - value: 0.2595777765243673
+  - value: 0.6243177327840116
+  - value: 0.2876300779340413
+  - value: 0.5935123458364427
+  - value: 0.3296492505694668
+  - value: 0.41567807629661724
+  - value: 0.0029506699854776404
+  - value: 0.37943555940198104
+  - value: 0.0586910155546725
+  - value: 0.0926133474923746
+  - value: 0.25304759082967043
+  - value: 0.5259424724163843
+  - value: 0.4519318899204022
+  - value: 1.0
+  - value: -0.05918562374841033
+  - value: 0.5644432880881095
+  - value: 0.04485749727804418
+  - value: -0.17034397428829154
+  - value: 0.31625679207823343
+  - value: 0.3786458621810759
+  - value: -0.1583617844640847
+  - value: 0.3290263661695291
+  - value: 0.16921745320553666
+  - value: -0.015200699938952126
+  - value: 0.5060829593783275
+  - value: -0.04215036770614907
+  - value: 0.6873597175084274
+  - value: 0.12051437774616786
+  - value: -0.0437388358043037
+  - value: 0.0662704311352664
+  - value: 0.5612554942411773
+  - value: -0.1513120338107845
+  - value: 0.11021789367286601
+  - value: 0.09314131712385874
+  - value: 0.5446564138124859
+  - value: 0.40607634834965733
+  - value: -0.16513336658874478
+  - value: -0.05918562374841033
+  - value: 0.9999999999999999
+  - value: -0.21308189365150612
+  - value: 0.46939948037657353
+  - value: 0.7162300115798225
+  - value: -0.3120142016104905
+  - value: -0.6268081829729415
+  - value: 0.6571610167596377
+  - value: 0.1672718789041347
+  - value: 0.4463293472017015
+  - value: 0.7085942560038787
+  - value: 0.38722468831993817
+  - value: 0.6772980359555726
+  - value: 0.07435768895208071
+  - value: 0.07624238987442576
+  - value: -0.09074360102051564
+  - value: -0.03208915013018924
+  - value: -0.505606245200674
+  - value: 0.2632292341021376
+  - value: -0.27035540009653675
+  - value: -0.11046902968543346
+  - value: -0.15528190328577274
+  - value: -0.07204047036425146
+  - value: 0.438519931663104
+  - value: 0.5644432880881095
+  - value: -0.21308189365150612
+  - value: 1.0
+  - value: 0.49613895934714647
+  - value: -0.3141971879233385
+  - value: 0.7254254426786355
+  - value: 0.5714649572556159
+  - value: -0.055779931606868366
+  - value: 0.3710655743805108
+  - value: 0.2643257681994293
+  - value: 0.2671782970488183
+  - value: 0.5403329155801033
+  - value: 0.29265433477259606
+  - value: 0.39864643612948514
+  - value: -0.18050065606373394
+  - value: -0.27071187056241686
+  - value: -0.19424971125913487
+  - value: -0.10572094312535958
+  - value: -0.13359112011714191
+  - value: -0.04797034732962292
+  - value: -0.03410892861091998
+  - value: 0.12601430703460578
+  - value: -0.09381428560632123
+  - value: -0.0268400186886336
+  - value: 0.04485749727804418
+  - value: 0.46939948037657353
+  - value: 0.49613895934714647
+  - value: 1.0
+  - value: 0.2544851528333838
+  - value: 0.35389900385107104
+  - value: -0.04694323944649096
+  - value: 0.5057981267241805
+  - value: 0.10522197082029802
+  - value: 0.30198626889253755
+  - value: -0.15161249934543425
+  - value: 0.48243504608862164
+  - value: -0.28227598557612715
+  - value: 0.407905483396761
+  - value: -0.06319841665593881
+  - value: -0.4443540017711514
+  - value: -0.14528893508130325
+  - value: 0.4574752728820233
+  - value: -0.2804328597583926
+  - value: -0.019494669462016393
+  - value: -0.1307190729287151
+  - value: 0.24175302982535
+  - value: 0.3280433312321532
+  - value: -0.588992293370417
+  - value: -0.17034397428829154
+  - value: 0.7162300115798225
+  - value: -0.3141971879233385
+  - value: 0.2544851528333838
+  - value: 1.0000000000000002
+  - value: -0.6651642198426143
+  - value: -0.7377508257900273
+  - value: 0.7191680074346902
+  - value: 0.22748202373572843
+  - value: -0.025629370060800537
+  - value: 0.3928615827137364
+  - value: -0.033265296447199943
+  - value: 0.5789009171514735
+  - value: -0.19385693372568175
+  - value: 0.0679805077075756
+  - value: 0.13142871560921413
+  - value: -0.05786925309338224
+  - value: -0.4566114277644493
+  - value: 0.4633994837530347
+  - value: -0.32013088547216223
+  - value: 0.030355714570055765
+  - value: -0.14294499801436092
+  - value: -0.2948124544122997
+  - value: 0.5459074033450015
+  - value: 0.31625679207823343
+  - value: -0.3120142016104905
+  - value: 0.7254254426786355
+  - value: 0.35389900385107104
+  - value: -0.6651642198426143
+  - value: 1.0
+  - value: 0.5413974108703274
+  - value: -0.18384310808181292
+  - value: 0.04083198958517293
+  - value: 0.07048599365583
+  - value: 0.37852409029292294
+  - value: -0.15232277681523596
+  - value: 0.4384642409198945
+  - value: -0.18086887969461735
+  - value: -0.008421558090138132
+  - value: 0.3346365969939983
+  - value: 0.004710820841281244
+  - value: -0.42908775618319045
+  - value: 0.008608475519401788
+  - value: 0.14906139987096237
+  - value: 0.019723018150583693
+  - value: -0.21253963364986658
+  - value: -0.15894811546040097
+  - value: 0.6387501156027394
+  - value: 0.3786458621810759
+  - value: -0.6268081829729415
+  - value: 0.5714649572556159
+  - value: -0.04694323944649096
+  - value: -0.7377508257900273
+  - value: 0.5413974108703274
+  - value: 0.9999999999999999
+  - value: -0.6986373175327275
+  - value: 0.2863481550905654
+  - value: 0.12256339256392333
+  - value: -0.09488949646447373
+  - value: 0.37769515864880254
+  - value: -0.07524827056967681
+  - value: 0.2687298478426999
+  - value: -0.05227694402928573
+  - value: -0.39204037986545454
+  - value: -0.1366234595751718
+  - value: 0.17243563554322036
+  - value: 0.11504579001248087
+  - value: -0.23952672128692687
+  - value: -0.2103186570563799
+  - value: 0.20935857631980012
+  - value: 0.05977775714228339
+  - value: -0.4199426556276358
+  - value: -0.1583617844640847
+  - value: 0.6571610167596377
+  - value: -0.055779931606868366
+  - value: 0.5057981267241805
+  - value: 0.7191680074346902
+  - value: -0.18384310808181292
+  - value: -0.6986373175327275
+  - value: 1.0
