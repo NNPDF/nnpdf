@@ -317,6 +317,8 @@ class NNPDFShapleyAnalyzer:
                              mode='additive', xspace='linear'):
         """Return a callable v(coalition) -> float for ExactShapley.
 
+        The wrapper tracks progress: coalition count, elapsed time, and estimated time remaining (ETA).
+
         Parameters
         ----------
         mu, sigma, amplitude : float
@@ -329,11 +331,51 @@ class NNPDFShapleyAnalyzer:
         value_function : callable
             f(List[int]) -> float
         """
+        import time
+        import sys
+
+        total_coalitions = 2 ** self.n_flavors
+        state = {"count": 0, "t_start": None, "last_player_line": False}
+
         def v(coalition):
-            return self._evaluate_chi2(
+            if state["t_start"] is None:
+                state["t_start"] = time.time()
+
+            result = self._evaluate_chi2(
                 coalition, mu, sigma, amplitude,
                 mode=mode, xspace=xspace,
             )
+
+            state["count"] += 1
+            n = state["count"]
+            elapsed = time.time() - state["t_start"]
+
+            if n == 1:
+                msg = (
+                    f"    [{n}/{total_coalitions}] "
+                    f"elapsed {elapsed:.0f}s ..."
+                )
+            else:
+                rate = elapsed / n
+                remaining = rate * (total_coalitions - n)
+                mins, secs = divmod(int(remaining), 60)
+                msg = (
+                    f"    [{n}/{total_coalitions}] "
+                    f"elapsed {elapsed:.0f}s | "
+                    f"~{rate:.1f}s/eval | "
+                    f"ETA {mins}m{secs:02d}s   "
+                )
+
+            # Use \r to overwrite the progress line in-place
+            sys.stderr.write(f"\r{msg}")
+            sys.stderr.flush()
+
+            if n == total_coalitions:
+                sys.stderr.write("\n")
+                sys.stderr.flush()
+
+            return result
+
         return v
 
     # -- Convenience: run full Shapley analysis -----------------------------

@@ -9,12 +9,14 @@ n_replicas: 100
 
 basis:
   - evolution
-  - flavor
+
+enforce_sumrules: true
 
 perturbation:
-  mu: 0.02
-  sigma: 0.1
-  amplitude: 0.30
+  mu: 0.002
+  sigma: 0.001
+  amplitude: 0.5
+  mode: multiplicative
 
 datasets:
   # DIS: Fixed-target
