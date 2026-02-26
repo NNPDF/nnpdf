@@ -121,18 +121,18 @@ def read_replica_pseudodata(fit, context_index, replica):
 
 
 def make_replica(
-    groups_dataset_inputs_loaded_cd_with_cuts,
     central_values_array,
     group_replica_mcseed,
     dataset_inputs_sampling_covmat,
-    group_multiplicative_errors,
+    group_multiplicative_errors=None,
+    group_positivity_mask=None,
     sep_mult=False,
     genrep=True,
     max_tries=int(1e6),
     resample_negative_pseudodata=False,
 ):
-    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
-    objects and returns a pseudodata replica accounting for
+    """Function that takes in a central value array and a covariance matrix
+    and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
 
     The function loops until positive definite pseudodata is generated for any
@@ -141,16 +141,18 @@ def make_replica(
 
     Parameters
     ---------
-    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`nnpdf_data.coredata.CommonData`]
-        List of CommonData objects which stores information about systematic errors,
-        their treatment and description, for each dataset.
+    central_values_array: np.array
+        Numpy array which is N_dat (where N_dat is the combined number of data points after cuts)
+        containing the central values of the data.
 
-    replica_mcseed: int, None
-        Seed used to initialise the numpy random number generator. If ``None`` then a random seed is
-        allocated using the default numpy behaviour.
+    group_replica_mcseed: int
+        Seed used to initialise the numpy random number generator.
 
     dataset_inputs_sampling_covmat: np.array
         Full covmat to be used. It can be either only experimental or also theoretical.
+
+    group_multiplicative_errors: dict
+        Dictionary containing the multiplicative uncertainties contribution to the pseudodata replica.
 
     sep_mult: bool
         Specifies whether computing the shifts with the full covmat
@@ -197,11 +199,11 @@ def make_replica(
     covmat = dataset_inputs_sampling_covmat
     covmat_sqrt = sqrt_covmat(covmat)
 
-    all_pseudodata = central_values_array
-    if group_multiplicative_errors is not None:
-        full_mask = group_multiplicative_errors["full_mask"]
-    else:
-        full_mask = np.ones_like(central_values_array, dtype=bool)
+    full_mask = (
+        group_positivity_mask
+        if group_positivity_mask is not None
+        else np.ones_like(central_values_array, dtype=bool)
+    )
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
     for _ in range(max_tries):
@@ -232,18 +234,16 @@ def make_replica(
             ).prod(axis=1)
             mult_part = np.concatenate(mult_shifts, axis=0) * special_mult
         # Shifting pseudodata
-        shifted_pseudodata = (all_pseudodata + shifts) * mult_part
+        shifted_pseudodata = (central_values_array + shifts) * mult_part
         # positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0) or not resample_negative_pseudodata:
             return shifted_pseudodata
 
-    dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
-    log.error(f"Error generating replicas for the group: {dfail}")
     raise ReplicaGenerationError(f"No valid replica found after {max_tries} attempts")
 
 
 def central_values_array(groups_dataset_inputs_loaded_cd_with_cuts):
-    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
     and returns the central values concatenated in a single array.
     """
     central_values = []
@@ -253,11 +253,12 @@ def central_values_array(groups_dataset_inputs_loaded_cd_with_cuts):
 
 
 def group_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_mult):
-    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
     and returns the multiplicative uncertainties contribution to the pseudodata replica.
     """
+    if not sep_mult:
+        return None
 
-    check_positive_masks = []
     nonspecial_mult = []
     special_mult = []
     special_mult_errors = []
@@ -270,23 +271,32 @@ def group_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_m
             special_mult.append(
                 mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
             )
-        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
-            check_positive_masks.append(np.zeros_like(cd.central_values.to_numpy(), dtype=bool))
-        else:
-            check_positive_masks.append(np.ones_like(cd.central_values.to_numpy(), dtype=bool))
-    # concatenating special multiplicative errors, pseudodatas and positive mask
+
+    # concatenating special multiplicative errors
     if sep_mult:
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
-
-    full_mask = np.concatenate(check_positive_masks, axis=0)
 
     multiplicative_errors = {
         "nonspecial_mult": nonspecial_mult,
         "special_mult": special_mult_errors,
-        "full_mask": full_mask,
     }
 
     return multiplicative_errors
+
+
+def group_positivity_mask(groups_dataset_inputs_loaded_cd_with_cuts):
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
+    and returns a boolean mask indicating which data points should be positive.
+    """
+
+    check_positive_masks = []
+    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
+            check_positive_masks.append(np.zeros_like(cd.central_values.to_numpy(), dtype=bool))
+        else:
+            check_positive_masks.append(np.ones_like(cd.central_values.to_numpy(), dtype=bool))
+    full_mask = np.concatenate(check_positive_masks, axis=0)
+    return full_mask
 
 
 def indexed_make_replica(groups_index, make_replica):

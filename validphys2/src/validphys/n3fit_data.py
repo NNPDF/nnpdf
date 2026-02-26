@@ -111,7 +111,19 @@ def replica_luxseed(replica, luxseed):
 
 
 def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cuts):
+    """Generates the ``mcseed`` for a group of datasets. This is done by hashing the names
+      of the datasets in the group and adding it to the ``replica_mcseed`
+    Parameters
+    ---------
+    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`nnpdf_data.coredata.CommonData`]
+        List of CommonData objects which stores information about systematic errors,
+        their treatment and description, for each dataset.
+    replica_mcseed: int
+    """
     names_for_salt = []
+    # Try to use the new dataset name, but make older runs reproducible by keeping the old names.
+    # WARNING: don't rely on this behaviour, this might be removed in future releases
+
     for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
         if loaded_cd.legacy_names is None:
             names_for_salt.append(loaded_cd.setname)
