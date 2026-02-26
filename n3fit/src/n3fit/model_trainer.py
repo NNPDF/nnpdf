@@ -864,30 +864,23 @@ class ModelTrainer:
             for key in self._hyperkeys:
                 log.info(" > > Testing %s = %s", key, params[key])
             params = self._hyperopt_override(params)
-            
-        # if not doing hyperot, read the input hyperopt file containing 
-        # different samples
-        else:
-            with open(params['hyperopt_res'], 'r') as file:
-                hyperopt_params = json.load(file)
-        import pdb; pdb.set_trace()
         # Preprocess some hyperparameters
-        if self.mode_hyperopt:
+        if self.mode_hyperopt or (not self.trials):
             epochs = int(params["epochs"])
             stopping_patience = params["stopping_patience"]
             stopping_epochs = int(epochs * stopping_patience)
         else:
-            idx_hyperparamters = self.replicas[0]%10
-            epochs = int(hyperopt_params["epochs"][idx_hyperparamters])
-            stopping_patience = hyperopt_params["stopping_patience"][idx_hyperparamters]
+            idx_hyperparamters = self.replicas[0] % self.trials["number_of_trials"]
+            epochs = int(self.trials["epochs"][idx_hyperparamters])
+            stopping_patience = self.trials["stopping_patience"][idx_hyperparamters]
             stopping_epochs = int(epochs * stopping_patience)
 
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
         positivity_dict = params.get("positivity", {})
-        if not self.mode_hyperopt:
-            positivity_dict['initial'] = hyperopt_params["initial"][idx_hyperparamters]
+        if not self.mode_hyperopt and self.trials:
+            positivity_dict['initial'] = self.trials["initial"][idx_hyperparamters]
         integrability_dict = params.get("integrability", {})
         self._generate_observables(
             positivity_dict.get("multiplier"),
@@ -926,7 +919,7 @@ class ModelTrainer:
 
         # Prepare the settings for all replica
         replicas_settings = []
-        if self.mode_hyperopt:
+        if self.mode_hyperopt or (not self.trials):
             for seed in self._nn_seeds:
                 tmp = model_gen.ReplicaSettings(
                     seed=seed,
@@ -942,18 +935,18 @@ class ModelTrainer:
         else:
             # read hyperparameter values from hyperopt results
             for rep, seed in zip(self.replicas, self._nn_seeds):
-                idx_hyperparamters = rep%10
-                activations = [hyperopt_params["activation_per_layer"][idx_hyperparamters]] * (len(hyperopt_params["nodes_per_layer"][idx_hyperparamters])-1)
+                idx_hyperparamters = rep % self.trials["number_of_trials"]
+                activations = [self.trials["activation_per_layer"][idx_hyperparamters]] * (len(self.trials["nodes_per_layer"][idx_hyperparamters])-1)
                 # last layer activation is always linear
                 activations.append('linear')
 
                 tmp = model_gen.ReplicaSettings(
                     seed=seed,
-                    nodes=hyperopt_params["nodes_per_layer"][idx_hyperparamters],
+                    nodes=self.trials["nodes_per_layer"][idx_hyperparamters],
                     activations=activations,
-                    initializer=hyperopt_params["initializer"][idx_hyperparamters],
-                    architecture=hyperopt_params["layer_type"][idx_hyperparamters],
-                    dropout_rate=hyperopt_params["dropout"][idx_hyperparamters],
+                    initializer=self.trials["initializer"][idx_hyperparamters],
+                    architecture=self.trials["layer_type"][idx_hyperparamters],
+                    dropout_rate=self.trials["dropout"][idx_hyperparamters],
                     regularizer=params.get("regularizer"),
                     regularizer_args=params.get("regularizer_args"),
                 )
@@ -1027,17 +1020,17 @@ class ModelTrainer:
                 threshold_chi2=threshold_chi2,
             )
             
-            if self.mode_hyperopt:
+            if self.mode_hyperopt or (not self.trials):
                 # Compile each of the models with the right parameters
                 for model in models.values():
                     model.compile(**params["optimizer"])
             else:
                 # Proper way of doing this? Not sure how optimizer parameters should be treated
-                idx_hyperparamters = self.replicas[0]%10
+                idx_hyperparamters = self.replicas[0] % self.trials["number_of_trials"]
                 optimizer_params = {}
-                optimizer_params["clipnorm"] = hyperopt_params['clipnorm'][idx_hyperparamters]
-                optimizer_params["learning_rate"] = hyperopt_params['learning_rate'][idx_hyperparamters]
-                optimizer_params["optimizer_name"] = hyperopt_params['optimizer'][idx_hyperparamters]
+                optimizer_params["clipnorm"] = self.trials['clipnorm'][idx_hyperparamters]
+                optimizer_params["learning_rate"] = self.trials['learning_rate'][idx_hyperparamters]
+                optimizer_params["optimizer_name"] = self.trials['optimizer'][idx_hyperparamters]
                 for model in models.values():
                     model.compile(**optimizer_params)
             

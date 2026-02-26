@@ -238,14 +238,24 @@ class N3FitConfig(Config):
             }
         return HyperScanner(parameters, hyperscan_config, **extra_args)
     
-    def produce_trials(self, trials_file):
-        hyperscan = API.hyperscan(hyperscan=trials_file)
-        dict_trials = generate_dictionary(hyperscan.tries_files[1].parent,"average")
-        hyperopt_dataframe = pd.DataFrame(dict_trials)
-        n_termalization = 400
-        n_best = 10
-        best = hyperopt_dataframe[n_termalization:].sort_values('loss')[:n_best]
-        return best.to_dict(orient='list')
+    def parse_trial_specs(self, trial_specs):
+        return trial_specs
+        
+    def produce_trials(self, trial_specs={}):
+        """Read the input hyperscan and produce a dictionary containing 
+        the settings of the best trials"""
+        
+        if not trial_specs:
+            return {}
+        else:
+            hyperscan = API.hyperscan(hyperscan=trial_specs['hyperscan'])
+            dict_trials = generate_dictionary(hyperscan.tries_files[1].parent,"average")
+            hyperopt_dataframe = pd.DataFrame(dict_trials)
+            n_termalization = trial_specs['thermalization']
+            n_best = trial_specs['number_of_trials']
+            best = hyperopt_dataframe[n_termalization:].sort_values('loss')[:n_best].to_dict(orient='list')
+            best['number_of_trials'] = n_best
+            return best
         
 
 class N3FitApp(App):
