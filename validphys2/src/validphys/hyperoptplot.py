@@ -584,9 +584,9 @@ def hyperopt_table(hyperopt_dataframe):
     filters set in the commandline arguments.
     """
     drop_keys = ["hyper_losses_chi2", "hyper_losses_phi2", "hyper_losses_logp"]
-    drop_keys += [f"layer_{idx}" for idx in range(1, 5)]
-    
     dataframe, _ = hyperopt_dataframe
+    n_layers = dataframe['number_of_layers'].max()
+    drop_keys += [f"layer_{idx}" for idx in range(1, n_layers)]
     return dataframe.drop(columns=drop_keys, inplace=False).sort_values(by=["hyper_loss_chi2"], inplace=False)
 
 
