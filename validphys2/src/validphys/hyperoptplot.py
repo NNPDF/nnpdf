@@ -686,14 +686,20 @@ def plot_activation_per_layer(hyperopt_dataframe):
     return fig
 
 @figure
-def plot_cumulative_logp_chi2(hyperopt_dataframe):
+def plot_cumulative_logp_chi2(hyperopt_dataframe, commandline_args):
+    """
+    Generate a plot of the running average of the log-likelihood (chi2) 
+    on the left (right) axis  as a function of the trial index
+    """
     
+    args = SimpleNamespace(**commandline_args)
+    chi2max = args.chi2_threshold
     results, _ = hyperopt_dataframe
     mlogp_ = results['hyper_loss_logp'].to_numpy()
     chi2_ = results['hyper_loss_chi2'].to_numpy()
 
     # don t look at samples with -logp or chi2 too big
-    idx_ok = np.where(chi2_<5.)
+    idx_ok = np.where(chi2_<chi2max)
     fig, ax1 = plt.subplots()
     color = 'tab:blue'
     mlogp = mlogp_[idx_ok]
@@ -715,15 +721,21 @@ def plot_cumulative_logp_chi2(hyperopt_dataframe):
     return fig
 
 @figure
-def plot_cumulative_loss(hyperopt_dataframe):
+def plot_cumulative_loss(hyperopt_dataframe, commandline_args):
+    """
+    Generate a plot of the running average of the log-likelihood  
+    as a function of the trial index
+    """
     
+    args = SimpleNamespace(**commandline_args)
+    chi2exp_max = args.chi2exp_threshold
     results, _ = hyperopt_dataframe
     
     mloss_ = results['loss'].to_numpy()
     chi2_ = results['hyper_loss_chi2'].to_numpy()
     chi2exp = results['trvl_loss_chi2exp'].to_numpy()
 
-    idx_ok = np.where(chi2exp<1.35)
+    idx_ok = np.where(chi2exp<chi2exp_max)
     fig, ax = plt.subplots()
     mloss = mloss_[idx_ok]    
     xlabels = np.arange(len(mloss))

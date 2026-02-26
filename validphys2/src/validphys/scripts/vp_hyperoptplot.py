@@ -45,6 +45,20 @@ class HyperoptPlotApp(App):
             default=1e3,
         )
         parser.add_argument(
+            "-ct",
+            "--chi2_threshold",
+            help="Value of the chi2 threshold for logp plots",
+            type=float,
+            default=5.,
+        )
+        parser.add_argument(
+            "-cet",
+            "--chi2exp_threshold",
+            help="Value of the exp chi2 threshold for loss plots",
+            type=float,
+            default=1.35,
+        )
+        parser.add_argument(
             "-f",
             "--filter",
             help="Add the filter key=value to the dataframe",
@@ -123,6 +137,8 @@ class HyperoptPlotApp(App):
             "autofilter": args["autofilter"],
             "debug": args["debug"],
             "loss_target": args["loss_target"],
+            "chi2exp_threshold": args["chi2exp_threshold"],
+            "chi2_threshold": args["chi2_threshold"],
         }
 
         try:
