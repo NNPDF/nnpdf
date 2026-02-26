@@ -1324,6 +1324,25 @@ class CoreConfig(configparser.Config):
 
         return f
 
+    def produce_mult_factor_user_covmat(
+        self, mult_factor: float = 1.0, user_covmat_path: str = None
+    ):
+        """
+        Multiplicative factors for the user covmat provided by mult_factors_user_covmat in the runcard.
+        If no factors are provided, returns None.
+        For use in theorycovariance.construction.user_covmat.
+        """
+        # Check that if mult_factors is provided, user_covmat_paths is also provided
+        if mult_factor is not None and user_covmat_path is None:
+            raise ConfigError(
+                "If mult_factors is provided, user_covmat_paths must also be provided."
+            )
+
+        if mult_factor is None:
+            return 1.0 if user_covmat_path is not None else None
+        else:
+            return mult_factor
+
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
     ):
@@ -1846,6 +1865,8 @@ class CoreConfig(configparser.Config):
         prescription. The options for the latter are defined in pointprescriptions.yaml.
         This hard codes the theories needed for each prescription to avoid user error."""
         th = t0id.id
+        if point_prescription == 'power corrections':
+            return NSList([t0id], nskey="theoryid")
 
         lsv = yaml_safe.load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
@@ -1955,6 +1976,19 @@ class CoreConfig(configparser.Config):
         if fitthcovmat is None:
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
+
+    @configparser.explicit_node
+    def produce_covs_pt_prescrip(self, point_prescription):
+        if point_prescription == 'power corrections':
+            from validphys.theorycovariance.construction import covs_pt_prescrip_pc
+
+            f = covs_pt_prescrip_pc
+        else:
+            from validphys.theorycovariance.construction import covs_pt_prescrip_mhou
+
+            f = covs_pt_prescrip_mhou
+
+        return f
 
 
 class Config(report.Config, CoreConfig):
