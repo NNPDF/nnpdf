@@ -129,7 +129,6 @@ def make_replica(
     sep_mult=False,
     genrep=True,
     max_tries=int(1e6),
-    resample_negative_pseudodata=False,
 ):
     """Function that takes in a central value array and a covariance matrix
     and returns a pseudodata replica accounting for
@@ -154,6 +153,9 @@ def make_replica(
     group_multiplicative_errors: dict
         Dictionary containing the multiplicative uncertainties contribution to the pseudodata replica.
 
+    group_positivity_mask: np.array
+        Boolean array of shape (N_dat,) indicating which data points should be positive.
+
     sep_mult: bool
         Specifies whether computing the shifts with the full covmat
         or whether multiplicative errors should be separated
@@ -166,9 +168,6 @@ def make_replica(
         If after max_tries (default=1e6) no physical configuration is found,
         it will raise a :py:class:`ReplicaGenerationError`
 
-    resample_negative_pseudodata: bool
-        When True, replicas that produce negative predictions will be resampled for ``max_tries``
-        until all points are positive (default: False)
     Returns
     -------
     pseudodata: np.array
@@ -202,7 +201,7 @@ def make_replica(
     full_mask = (
         group_positivity_mask
         if group_positivity_mask is not None
-        else np.ones_like(central_values_array, dtype=bool)
+        else np.zeros_like(central_values_array, dtype=bool)
     )
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
@@ -236,7 +235,7 @@ def make_replica(
         # Shifting pseudodata
         shifted_pseudodata = (central_values_array + shifts) * mult_part
         # positivity control
-        if np.all(shifted_pseudodata[full_mask] >= 0) or not resample_negative_pseudodata:
+        if np.all(shifted_pseudodata[full_mask] >= 0):
             return shifted_pseudodata
 
     # Find which dataset index corresponds to the negative points, and print it out for debugging purposes
@@ -291,19 +290,23 @@ def group_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_m
     return multiplicative_errors
 
 
-def group_positivity_mask(groups_dataset_inputs_loaded_cd_with_cuts):
+def group_positivity_mask(
+    groups_dataset_inputs_loaded_cd_with_cuts, resample_negative_pseudodata=False
+):
     """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
     and returns a boolean mask indicating which data points should be positive.
     """
-
-    check_positive_masks = []
-    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
-        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
-            check_positive_masks.append(np.zeros_like(cd.central_values.to_numpy(), dtype=bool))
-        else:
-            check_positive_masks.append(np.ones_like(cd.central_values.to_numpy(), dtype=bool))
-    full_mask = np.concatenate(check_positive_masks, axis=0)
-    return full_mask
+    if not resample_negative_pseudodata:
+        return None
+    else:
+        check_positive_masks = []
+        for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+            if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
+                check_positive_masks.append(np.zeros_like(cd.central_values.to_numpy(), dtype=bool))
+            else:
+                check_positive_masks.append(np.ones_like(cd.central_values.to_numpy(), dtype=bool))
+        full_mask = np.concatenate(check_positive_masks, axis=0)
+        return full_mask
 
 
 def indexed_make_replica(groups_index, make_replica):
