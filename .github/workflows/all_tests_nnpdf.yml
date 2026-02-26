@@ -50,6 +50,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install_conda_pip
+        with:
+          nnpdf-extras: "[qed,tests]"
       - name: Run regression tests
         shell: bash -l {0}
         run: |

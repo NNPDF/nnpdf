@@ -304,7 +304,7 @@ def _plot_fancy_impl(
         err = np.full(ndata, np.nan)
         # Shift the theory when with_shift option is True
         if i==1 and with_shift:
-            cv[mask] = result.central_value + shifts
+            cv[mask] = result.central_value - shifts
         else:
             cv[mask] = result.central_value           
         # Retain only the uncorrelated part of the error if shifting the data
