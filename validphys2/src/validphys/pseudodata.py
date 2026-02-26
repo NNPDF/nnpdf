@@ -239,7 +239,14 @@ def make_replica(
         if np.all(shifted_pseudodata[full_mask] >= 0) or not resample_negative_pseudodata:
             return shifted_pseudodata
 
-    raise ReplicaGenerationError(f"No valid replica found after {max_tries} attempts")
+    # Find which dataset index corresponds to the negative points, and print it out for debugging purposes
+    negative_mask = shifted_pseudodata < 0 & full_mask
+    negative_indices = np.where(negative_mask)[0]
+
+    raise ReplicaGenerationError(
+        f"No valid replica found after {max_tries} attempts. "
+        f"Negative global indices: {negative_indices.tolist()}"
+    )
 
 
 def central_values_array(groups_dataset_inputs_loaded_cd_with_cuts):
