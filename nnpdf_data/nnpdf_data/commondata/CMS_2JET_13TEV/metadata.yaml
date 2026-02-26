@@ -1,0 +1,109 @@
+setname: "CMS_2JET_13TEV"
+
+version: 1
+version_comment: "Initial implementation"
+
+arXiv:
+  url: "https://arxiv.org/pdf/2312.16669.pdf"
+  journal: Eur.Phys.J. C85 (2025) 72
+iNSPIRE:
+  url: "https://inspirehep.net/literature/2741343"
+hepdata:
+  url: "https://www.hepdata.net/record/ins2741343"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIJET"
+  experiment: "CMS"
+
+implemented_observables:
+- observable_name: M12-YMAX-R08
+  observable:
+    description: "Double-differential dijet cross-section for anti-kT jets with R=0.8 as a function of the dijet invariant mass and the absolute rapidity of the outermost jet"
+    label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy$ [pb/GeV]"
+    units: ""
+
+  ndata: 92
+  tables: ["2d_mass_ak8"]
+  process_type: DIJET
+
+  kinematic_coverage: [ymax, m_jj, sqrts]
+
+  plotting:
+    dataset_label: "CMS dijets (2D) 13 TeV (R=0.8)"
+    x_scale: log
+    plot_x: m_jj
+    figure_by:
+    - ymax
+
+  kinematics:
+    variables:
+      ymax: {description: "absolute rapidity of the outermost jet", label: '$|y_{\rm max}|$', units: ""}
+      m_jj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "GeV"}
+      sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+    file: kinematics_2d_mass_ak8.yaml
+
+  data_central: data_2d_mass_ak8.yaml
+  data_uncertainties:
+  - uncertainties_2d_mass_ak8.yaml
+
+  theory:
+    FK_tables:
+    - - CMS_2JET_13TEV_2D_BIN1
+      - CMS_2JET_13TEV_2D_BIN2
+      - CMS_2JET_13TEV_2D_BIN3
+      - CMS_2JET_13TEV_2D_BIN4
+      - CMS_2JET_13TEV_2D_BIN5
+
+    operation: 'null'
+
+- observable_name: M12-YSTAR-YB-R08
+  observable:
+    description: "Triple-differential dijet cross-section for anti-kT jets with R=0.8 as a function of the dijet invariant mass, the total boost of the dijet system, and the absolute rapidity separation of the two jets"
+    label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy_bdy^*$ [pb/GeV]"
+    units: ""
+
+  ndata: 164
+  tables: ["3d_mass_ak8"]
+  process_type: DIJET_3D
+
+  kinematic_coverage: [yb, ystar, m_jj]
+
+  plotting:
+    dataset_label: "CMS dijets (3D) 13 TeV (R=0.8)"
+    x_scale: log
+    plot_x: m_jj
+    figure_by:
+    - yb
+    - ystar
+
+  kinematics:
+    variables:
+      yb: {description: "total boost of the dijet system", label: "$y_b$", units: ""}
+      ystar: {description: "absolute rapidity separation of the two jet", label: "$y^*$", units: ""}
+      m_jj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "GeV"}
+
+    file: kinematics_3d_mass_ak8.yaml
+
+  data_central: data_3d_mass_ak8.yaml
+  data_uncertainties:
+  - uncertainties_3d_mass_ak8.yaml
+
+  theory:
+    FK_tables:
+    - - CMS_2JET_13TEV_3D_yb_BIN1_ys_BIN1
+      - CMS_2JET_13TEV_3D_yb_BIN1_ys_BIN2
+      - CMS_2JET_13TEV_3D_yb_BIN1_ys_BIN3
+      - CMS_2JET_13TEV_3D_yb_BIN1_ys_BIN4
+      - CMS_2JET_13TEV_3D_yb_BIN1_ys_BIN5
+      - CMS_2JET_13TEV_3D_yb_BIN2_ys_BIN1
+      - CMS_2JET_13TEV_3D_yb_BIN2_ys_BIN2
+      - CMS_2JET_13TEV_3D_yb_BIN2_ys_BIN3
+      - CMS_2JET_13TEV_3D_yb_BIN2_ys_BIN4
+      - CMS_2JET_13TEV_3D_yb_BIN3_ys_BIN1
+      - CMS_2JET_13TEV_3D_yb_BIN3_ys_BIN2
+      - CMS_2JET_13TEV_3D_yb_BIN3_ys_BIN3
+      - CMS_2JET_13TEV_3D_yb_BIN4_ys_BIN1
+      - CMS_2JET_13TEV_3D_yb_BIN4_ys_BIN2
+      - CMS_2JET_13TEV_3D_yb_BIN5_ys_BIN1
+    operation: 'null'
