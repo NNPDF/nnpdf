@@ -587,9 +587,8 @@ def hyperopt_table(hyperopt_dataframe):
     drop_keys += [f"layer_{idx}" for idx in range(1, 5)]
     
     dataframe, _ = hyperopt_dataframe
-    dataframe.drop(columns=drop_keys, inplace=False)
-    dataframe.sort_values(by=["hyper_loss_chi2"], inplace=False)
-    return dataframe
+    return dataframe.drop(columns=drop_keys, inplace=False)
+                .sort_values(by=["hyper_loss_chi2"], inplace=False)
 
 
 @figure
