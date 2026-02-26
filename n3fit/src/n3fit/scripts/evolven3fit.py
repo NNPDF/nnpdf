@@ -12,7 +12,7 @@ import numpy as np
 
 from eko.runner.managed import solve
 from n3fit.io.writer import XGRID
-from nnpdf_data import THEORY_CARDS_PATH
+from nnpdf_data import theory_cards
 from nnpdf_data.theorydbutils import fetch_theory
 from validphys.loader import FallbackLoader, Loader
 
@@ -150,7 +150,7 @@ def main():
     else:
         # If we are in the business of producing an eko, do some checks before starting:
         # 1. load the nnpdf theory early to check for inconsistent options and theory problems
-        nnpdf_theory = fetch_theory(THEORY_CARDS_PATH, args.theoryID)
+        nnpdf_theory = fetch_theory(theory_cards, args.theoryID)
         if nnpdf_theory.get("ModEv") == "TRN" and args.ev_op_iterations is not None:
             raise ValueError("ev_op_iterations is not accepted with ModEv=TRN solution")
 

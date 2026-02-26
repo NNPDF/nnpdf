@@ -1,0 +1,2 @@
+Dataset	Training fraction	Weight	C-factors	Other fields
+NMC_NC_NOTFIXED_EM-F2	1	1	-	custom_group: unset, variant: ('legacy_dw',)

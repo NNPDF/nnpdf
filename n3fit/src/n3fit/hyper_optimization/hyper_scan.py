@@ -306,6 +306,18 @@ class HyperScanner:
                 output_size=parameters['nodes_per_layer'][-1],
             )
 
+        # Get the bayesian_nn dictionary
+        bayesian_nn_dict = sampling_dict.get("bayesian_nn")
+
+        # Call the method if bayesian_nn is defined
+        if bayesian_nn_dict:
+            self.bayesian_nn(
+                prior_prec=bayesian_nn_dict.get("prior_prec"),
+                std_init=bayesian_nn_dict.get("std_init"),
+                kl_weight_factor=bayesian_nn_dict.get("kl_weight_factor"),
+            )
+
+
     def as_dict(self):
         return self.parameters
 
@@ -547,3 +559,37 @@ class HyperScanner:
     def space_eval(self, trial):
         """Evaluate a trial using the original parameters dictionary"""
         return hyperopt.space_eval(self._original_parameters, trial)
+    
+    def bayesian_nn(self, prior_prec=None, std_init=None, kl_weight_factor=None):
+        """
+        Modifies the following entries of the `parameters` dictionary:
+            - prior_prec
+            - std_init
+            - kl_weight_factor
+        
+        Parameters
+        ----------
+            prior_prec: dict with 'min' and 'max' keys for loguniform sampling
+            std_init: dict with 'min' and 'max' keys for uniform sampling
+            kl_weight_factor: dict with 'min' and 'max' keys for loguniform sampling
+        """
+        if prior_prec is not None:
+            prior_prec_val = hp_loguniform(
+                'prior_prec', 
+                prior_prec['min'], 
+                prior_prec['max']
+            )
+            self._update_param('prior_prec', prior_prec_val)
+        
+        if std_init is not None:
+            std_init_val = hp_uniform('std_init', std_init['min'], std_init['max'])
+            self._update_param('std_init', std_init_val)
+        
+        if kl_weight_factor is not None:
+            kl_val = hp_loguniform(
+                'kl_weight_factor',
+                kl_weight_factor['min'], 
+                kl_weight_factor['max']
+            )
+            self._update_param('kl_weight_factor', kl_val)
+

@@ -1,0 +1,5 @@
+		Current Fit	Current Fit	Reference Fit	Reference Fit
+		ndata	$\chi^2/ndata$	ndata	$\chi^2/ndata$
+group	dataset				
+ALL	NMC_NC_NOTFIXED_EM-F2	121	0.8811419401304795	121	0.8871335320736219
+ALL	ATLAS_Z0J_8TEV_PT-M	44	1.0226211135900944	44	1.1170136899800496

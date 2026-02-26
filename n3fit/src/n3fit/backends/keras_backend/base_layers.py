@@ -1,20 +1,20 @@
 """
-This module defines custom base layers to be used by the n3fit
-Neural Network.
-These layers can use the keras standard set of activation function
-or implement their own.
+    This module defines custom base layers to be used by the n3fit
+    Neural Network.
+    These layers can use the keras standard set of activation function
+    or implement their own.
 
-For a layer to be used by n3fit it should be contained in the `layers` dictionary defined below.
-This dictionary has the following structure:
+    For a layer to be used by n3fit it should be contained in the `layers` dictionary defined below.
+    This dictionary has the following structure:
 
-    'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
+        'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 
-In order to add custom activation functions, they must be added to
-the `custom_activations` dictionary with the following structure:
+    In order to add custom activation functions, they must be added to
+    the `custom_activations` dictionary with the following structure:
 
-    'name of the activation' : function
+        'name of the activation' : function
 
-The names of the layer and the activation function are the ones to be used in the n3fit runcard.
+    The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 import numpy as np
 import keras.backend as K
@@ -31,7 +31,6 @@ from keras.regularizers import l1_l2
 from . import operations as ops
 from .MetaLayer import MetaLayer
 from contextlib import contextmanager
-
 
 # Custom activation functions
 def square_activation(x):
@@ -81,8 +80,17 @@ def LSTM_modified(**kwargs):
     return ReshapedLSTM
 
 class VBDense(Layer):
-    def __init__(self, out_features: int, in_features: int, prior_prec: float = 0.01, 
-                 map: bool = False, std_init: float = -9, lbound=-30, ubound=11, training = True):
+    def __init__(
+            self, 
+            out_features: int, 
+            in_features: int, 
+            prior_prec: float = 0.001, 
+            map: bool = False, 
+            std_init: float = -9, 
+            lbound=-30, 
+            ubound=11, 
+            training = True
+    ):
         super().__init__()
         self.output_dim = out_features
         self.input_dim = in_features
@@ -126,9 +134,10 @@ class VBDense(Layer):
         stdv = 1.0 / tf.math.sqrt(tf.cast(self.input_dim, dtype=tf.float64))
         self.bias.assign(tf.zeros_like(self.bias))
         self.mu_w.assign(tf.random.normal(tf.shape(self.mu_w), mean=0, stddev=stdv, dtype=tf.float64))
-        #self.logsig2_w.assign(tf.random.normal(tf.shape(self.logsig2_w), mean=0.001, stddev=self.std_init, dtype=tf.float64))
-        initial_logsig2 = tf.constant(self.std_init, dtype=tf.float64) 
-        self.logsig2_w.assign(tf.fill(tf.shape(self.logsig2_w), initial_logsig2))
+        self.logsig2_w.assign(tf.random.normal(tf.shape(self.logsig2_w), mean=self.std_init, stddev=0.001, dtype=tf.float64))
+        
+        #initial_logsig2 = tf.constant(self.std_init, dtype=tf.float64) 
+        #self.logsig2_w.assign(tf.fill(tf.shape(self.logsig2_w), initial_logsig2))
 
     def reset_random(self):
         self.random = None
@@ -155,26 +164,28 @@ class VBDense(Layer):
     
         else:
             # During inference, use MAP estimation (posterior mean) for deterministic output
-            mu_out = tf.matmul(input, tf.cast(self.mu_w, input.dtype), transpose_b=True) + tf.cast(self.bias, input.dtype)
-            return mu_out
+            if self.map:
+                mu_out = tf.matmul(input, self.mu_w, transpose_b=True) + self.bias
+                return mu_out
+            
+            logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, 11)
+            if self.random is None:
+                self.random = tf.Variable(tf.random.normal(shape=tf.shape(self.mu_w), dtype=tf.float64))
+            s2_w = tf.math.exp(logsig2_w)
+            # draw fresh samples instead of caching
+            epsilon = tf.random.normal(shape=tf.shape(self.mu_w), dtype=tf.float64)
+            weight = self.mu_w + tf.math.sqrt(s2_w) * epsilon #self.random #
+            
+            return tf.matmul(input, weight, transpose_b=True) + self.bias
 
 
 
 class Dense(KerasDense, MetaLayer):
-<<<<<<< Updated upstream
-
-    def __init__(self, *args, **kwargs):
-        # In Keras == 3.13, np.int() is not accepted by Dense
-        if "units" in kwargs:
-            kwargs["units"] = int(kwargs["units"])
-        super().__init__(*args, **kwargs)
-=======
     def __init__(self, **kwargs):
         # Set default dtype to tf.float64 if not provided
         if 'dtype' not in kwargs:
             kwargs['dtype'] = tf.float64
         super().__init__(**kwargs)
->>>>>>> Stashed changes
 
 
 def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_kwargs):
@@ -254,9 +265,8 @@ layers = {
     "VBDense": (
         VBDense,
         {   
-            "in_features" : 10,
-            "out_features" : 8,
-            "training": "False", 
+            "in_features" : 10, #hardcoded for now
+            "out_features" : 8, 
         },
     ),
     "dropout": (Dropout, {"rate": 0.0}),

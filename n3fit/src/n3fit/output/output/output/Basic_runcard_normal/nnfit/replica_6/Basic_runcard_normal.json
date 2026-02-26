@@ -1,0 +1,95 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.0501779317855835,
+      "largex": 1.8151028156280518,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 1.2293589115142822,
+      "largex": 4.917667865753174,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.6870204210281372,
+      "largex": 2.419705867767334,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.33872339129447937,
+      "largex": 1.5131981372833252,
+      "trainable": true
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.6622711420059204,
+      "largex": 1.6748275756835938,
+      "trainable": true
+    },
+    {
+      "fl": "t3",
+      "smallx": 1.301680564880371,
+      "largex": 2.7185964584350586,
+      "trainable": true
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.6366927027702332,
+      "largex": 3.0299999713897705,
+      "trainable": true
+    },
+    {
+      "fl": "cp",
+      "smallx": 0.7708853483200073,
+      "largex": 4.209542751312256,
+      "trainable": true
+    }
+  ],
+  "stop_epoch": 488,
+  "best_epoch": 186,
+  "erf_tr": 1.9052807092666626,
+  "erf_vl": 1.472570538520813,
+  "chi2": 361.4553202479339,
+  "pos_state": "POS_PASS",
+  "arc_lengths": [
+    1.1704207844962726,
+    1.2569960664973914,
+    1.5019673782774567,
+    1.0110342919670536,
+    0.9978401148147586
+  ],
+  "integrability": [
+    6.6937586779142324e-15,
+    102.72625064849854,
+    0.0008507073289415468,
+    0.0,
+    0.05681796371936798
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 10.55447769165039,
+      "start": 0.0,
+      "replica_set": 0.27538371086120605,
+      "replica_fitted": 10.554332971572876,
+      "replica_set_to_replica_fitted": 10.27894926071167
+    },
+    "cputime": {
+      "Total": 17.756269707,
+      "start": 0.0,
+      "replica_set": 0.2730017880000002,
+      "replica_fitted": 17.756111093,
+      "replica_set_to_replica_fitted": 17.483109305
+    }
+  },
+  "version": {
+    "keras": "3.12.0 backend='tensorflow'",
+    "tensorflow": "2.18.0",
+    "numpy": "2.2.6",
+    "nnpdf": "4.1.2",
+    "validphys": "4.1.2"
+  }
+}

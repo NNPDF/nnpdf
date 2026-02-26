@@ -96,13 +96,13 @@ ProcessGroup:
 actions_:
 - report(main=true)
 meta:
-  title: BNN_integrated_result
+  title: Comparison Report
   author: Dakshansh
   keywords:
-  - bayesian
+  - bayesian_report_4.4
 current:
   fit: &id001
-    id: Basic_runcard
+    id: Basic_runcard_bayesian
     label: Current Fit
   pdf: *id001
   theory:
@@ -112,7 +112,7 @@ current:
   speclabel: Current Fit
 reference:
   fit: &id002
-    id: NNPDF40_nlo_as_01180_qed
+    id: Basic_runcard_normal
     label: Reference Fit
   pdf: *id002
   theory:
@@ -123,3 +123,4 @@ reference:
 use_thcovmat_if_present: false
 data_grouping_recorded_spec_:
   standard_report: experiment
+  diagonal_basis: ALL

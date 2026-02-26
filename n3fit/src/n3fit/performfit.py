@@ -255,7 +255,32 @@ def performfit(
         final_time = stopwatch.stop()
         all_chi2s = the_model_trainer.evaluate(stopping_object)
 
-        pdf_models = result["pdf_model"].split_replicas()
+        # Check if this is a Bayesian Neural Network
+        from n3fit.bnn_wrapper import is_bayesian_model
+        
+        pdf_model = result["pdf_model"]
+        
+        if is_bayesian_model(pdf_model):
+            # For BNN: Generate pseudo-replicas from weight samples
+            # Get number of samples from parameters or use default
+            n_bnn_samples = parameters.get('n_bnn_samples', 3)
+            log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN")
+            
+            # Generate xinput for predictions
+            xinput = the_model_trainer._xgrid_generation()
+            
+            # Use BNNPredictor to generate predictions
+            from n3fit.bnn_wrapper import BNNPredictor
+            bnn_predictor = BNNPredictor(pdf_model, n_samples=n_bnn_samples)
+            predictions = bnn_predictor.generate_predictions_simple(xinput)
+            
+            # For plotting, we need to create pseudo-replicas
+            # Shape: (n_samples, 1, replicas, xgrid, flavours) -> list of pseudo-replicas
+            pdf_models = list(predictions[:, 0, :, :, :])
+        else:
+            # Normal fit: use split_replicas as before
+            pdf_models = pdf_model.split_replicas()
+        
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(

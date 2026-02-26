@@ -21,7 +21,6 @@ from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
 from n3fit.hyper_optimization.rewards import HyperLoss
-from n3fit.layers import losses
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
@@ -767,6 +766,7 @@ class ModelTrainer:
                 invcovmat_tr=self._experiment_data["invcovmat"][i],
                 invcovmat_vl=self._experiment_data["invcovmat_vl"][i],
                 n_replicas=len(self.replicas),
+                # NEW: BNN-specific parameters
                 vb_layers=vb_layers,  
             )
 
@@ -1058,6 +1058,7 @@ class ModelTrainer:
         positivity_dict = params.get("positivity", {})
         integrability_dict = params.get("integrability", {})
 
+        # original NNPDF way
         '''self._generate_observables(
             positivity_dict.get("multiplier"),
             positivity_dict.get("initial"),
@@ -1075,7 +1076,7 @@ class ModelTrainer:
             integrability_dict.get("multiplier"),
             integrability_dict.get("initial"),
             epochs,
-            params.get("feature_scaling_points"),
+            params.get("interpolation_points"),
         )
 
         threshold_pos = positivity_dict.get("threshold", 1e-6)
@@ -1092,7 +1093,6 @@ class ModelTrainer:
         trvl_chi2_per_fold = []
         trvl_phi2_per_fold = []
         trvl_logp_per_fold = []
-        trvl_chi2exp_per_fold = []
 
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
@@ -1115,6 +1115,9 @@ class ModelTrainer:
                 dropout_rate=params["dropout"],
                 regularizer=params.get("regularizer"),
                 regularizer_args=params.get("regularizer_args"),
+                # NEW: BNN-specific parameters
+                prior_prec=params.get('prior_prec', 0.001),
+                std_init=params.get('std_init', -9),
             )
             replicas_settings.append(tmp)
 
@@ -1145,6 +1148,10 @@ class ModelTrainer:
                 layer for layer in pdf_model.layers
                 if layer.__class__.__name__ == 'VBDense' 
             ]
+
+            # NEW: BNN-specific hyperparameter explicit print statement
+            for i, vb in enumerate(vb_layers):
+                log.info(f"VBDense layer {i}: prior_prec={vb.prior_prec}, std_init={vb.std_init}")
 
             # Call the dynamic loss setup function for this replica
             self._generate_replica_losses(vb_layers=vb_layers)
@@ -1255,7 +1262,6 @@ class ModelTrainer:
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
                 trvl_chi2_per_fold.append(hyper_metrics.chi2)
-                trvl_chi2exp_per_fold.append(hyper_metrics.chi2exp)
                 trvl_phi2_per_fold.append(hyper_metrics.phi2)
                 trvl_logp_per_fold.append(hyper_metrics.logp)
                 pdfs_per_fold.append(pdf_model)
@@ -1287,11 +1293,6 @@ class ModelTrainer:
             # Compute the loss over all folds for hyperopt
             final_hyper_loss = self._hyper_loss.reduce_over_folds(l_hyper)
 
-            # Add penalty term to ensure convergence
-            exp_chi2_fitted_data = np.average(trvl_chi2exp_per_fold)
-            expchi2_penalty = losses.LossHyperopt()
-            final_hyper_loss += expchi2_penalty(exp_chi2_fitted_data)
-
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file
             # by adding it to this dictionary
@@ -1303,7 +1304,6 @@ class ModelTrainer:
                 "kfold_meta": {
                     "validation_losses": l_valid,
                     "trvl_losses_chi2": np.array(trvl_chi2_per_fold),
-                    "trvl_losses_chi2exp": np.array(trvl_chi2exp_per_fold),
                     "trvl_losses_phi2": np.array(trvl_phi2_per_fold),
                     "trvl_losses_logp": np.array(trvl_logp_per_fold),
                     "experimental_losses": l_exper,
@@ -1331,3 +1331,80 @@ class ModelTrainer:
             passed = any(bool(i) for i in stopping_object.e_best_chi2)
         dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_model": pdf_model}
         return dict_out
+
+    # DELETE IF NOT USED BY THE END -- currently things handled by bnn_wrapper.py
+    def bayesian_inference(self, pdf_model, n_samples=10):
+        """
+        Perform inference for BNN
+
+        This method uses the same machinery as _model_generation:
+        - apply_as_layer() to connect PDF to observables
+        - _xgrid_generation() for input handling
+        - Uses the trained model stored in self.training["model"]
+        
+        Parameters:
+        -----------
+        pdf_model: MetaModel
+            The trained PDF model with VBDense layers
+        n_samples: int
+            Number of samples for uncertainty estimation
+        
+        Returns:
+        --------
+        mean_pdf: np.ndarray
+            Mean PDF predictions across all samples
+        epistemic_unc: np.ndarray
+            Epistemic uncertainty (std of predictions)
+        """
+        
+        # Generate xinput
+        xinput = self._xgrid_generation()
+        
+        # Extract VBDense layers from pdf_model
+        vb_layers = [
+            layer for layer in pdf_model.layers if layer.__class__.__name__ == 'VBDense'
+        ]
+        print(f"Found {len(vb_layers)} VBDense layers")
+
+        # Set training=False for inference mode
+        for vb_layer in vb_layers: 
+            vb_layer.training = False
+        
+        # Sampling loop
+        predictions = []
+        
+        for i in range(n_samples):
+            # Reset random weights for each VBDense layer
+            for vb_layer in vb_layers:
+                vb_layer.reset_random()
+            
+            # Get PDF predictions using apply_as_layer 
+            full_model_input_dict, full_pdf = pdf_model.apply_as_layer(
+                {"pdf_input": xinput.input}
+            )
+            
+            # The full_pdf has shape: (1, n_replicas, n_xgrid, n_flavours)
+            # Evaluate the PDF on the input
+            pdf_output = full_pdf.eval(feed_dict={xinput.input: xinput.input.tensor_content})
+            predictions.append(pdf_output)
+
+            # Split PDF for observables 
+            split_pdf_unique = xinput.split(full_pdf)
+            split_pdf = [split_pdf_unique[i] for i in xinput.idx]
+        
+            # Inject into observables
+            # to connect PDF to the experimental loss computation
+            output_ex = _pdf_injection(
+                split_pdf, 
+                self.experimental["output"], 
+                [None]  # No mask for experimental
+            )
+        
+        # Stack predictions: (n_samples, 1, n_replicas, n_xgrid, n_flavours)
+        predictions = np.array(predictions)
+        
+        # Shape: (n_samples, batch, replicas, x_points, flavours)
+        mean_pdf = np.mean(predictions, axis=0)
+        epistemic_unc = np.std(predictions, axis=0)
+        
+        return mean_pdf, epistemic_unc

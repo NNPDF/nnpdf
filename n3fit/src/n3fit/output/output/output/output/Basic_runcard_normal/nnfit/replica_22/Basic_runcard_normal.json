@@ -1,0 +1,95 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.0830010175704956,
+      "largex": 2.0983569622039795,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 1.207622766494751,
+      "largex": 2.014446258544922,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.5578875541687012,
+      "largex": 2.650628089904785,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": NaN,
+      "largex": NaN,
+      "trainable": true
+    },
+    {
+      "fl": "v8",
+      "smallx": NaN,
+      "largex": NaN,
+      "trainable": true
+    },
+    {
+      "fl": "t3",
+      "smallx": NaN,
+      "largex": NaN,
+      "trainable": true
+    },
+    {
+      "fl": "t8",
+      "smallx": NaN,
+      "largex": NaN,
+      "trainable": true
+    },
+    {
+      "fl": "cp",
+      "smallx": NaN,
+      "largex": NaN,
+      "trainable": true
+    }
+  ],
+  "stop_epoch": 774,
+  "best_epoch": 999,
+  "erf_tr": NaN,
+  "erf_vl": NaN,
+  "chi2": NaN,
+  "pos_state": "POS_VETO",
+  "arc_lengths": [
+    NaN,
+    NaN,
+    NaN,
+    NaN,
+    NaN
+  ],
+  "integrability": [
+    NaN,
+    NaN,
+    NaN,
+    NaN,
+    NaN
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 17.40804934501648,
+      "start": 0.0,
+      "replica_set": 0.24892807006835938,
+      "replica_fitted": 17.4079372882843,
+      "replica_set_to_replica_fitted": 17.159009218215942
+    },
+    "cputime": {
+      "Total": 28.674370196999995,
+      "start": 0.0,
+      "replica_set": 0.256317941999999,
+      "replica_fitted": 28.674236277,
+      "replica_set_to_replica_fitted": 28.417918335000003
+    }
+  },
+  "version": {
+    "keras": "3.12.0 backend='tensorflow'",
+    "tensorflow": "2.18.0",
+    "numpy": "2.2.6",
+    "nnpdf": "4.1.2",
+    "validphys": "4.1.2"
+  }
+}

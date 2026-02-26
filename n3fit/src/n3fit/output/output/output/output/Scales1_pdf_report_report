@@ -1,0 +1,512 @@
+%NNPDF report comparing Current Fit and Reference Fit
+
+# PDF plots
+
+## PDF comparison
+
+### Absolute
+
+#### Flavour basis
+
+##### Log
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_u.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_u.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_u)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_u.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_u} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_ubar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_ubar.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_ubar)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_ubar.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_ubar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_d.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_d.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_d)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_d.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_d} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_dbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_dbar.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_dbar)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_dbar.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_dbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_s.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_s.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_s)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_s.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_s} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_sbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_sbar.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_sbar)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_sbar.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_sbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_c.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_c.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_c)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_c.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_c} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_cbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_cbar.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_cbar)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_cbar.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_cbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_g.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_g.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_g)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_g.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs0_plot_pdfs_g} 
+</div>
+
+</div>
+
+##### Linear
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_u.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_u.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_u)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_u.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_u} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_ubar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_ubar.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_ubar)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_ubar.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_ubar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_d.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_d.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_d)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_d.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_d} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_dbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_dbar.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_dbar)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_dbar.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_dbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_s.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_s.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_s)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_s.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_s} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_sbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_sbar.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_sbar)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_sbar.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_sbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_c.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_c.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_c)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_c.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_c} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_cbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_cbar.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_cbar)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_cbar.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_cbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_g.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_g.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_g)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_g.png){#Scales1_pdf_report_PDFnormalize0_Basespecs0_PDFscalespecs1_plot_pdfs_g} 
+</div>
+
+</div>
+
+
+#### Evolution basis
+
+##### Log
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T3.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T3.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T3)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T3.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V3.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V3.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V3)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V3.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T8.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T8.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T8)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T8.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V8.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V8.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V8)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V8.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T15.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T15.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T15)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T15.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_T15} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_g.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_g.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_g)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_g.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_g} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V15.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V15.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V15)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V15.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs0_plot_pdfs_V15} 
+</div>
+
+</div>
+
+##### Linear
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T3.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T3.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T3)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T3.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V3.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V3.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V3)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V3.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T8.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T8.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T8)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T8.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V8.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V8.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V8)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V8.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T15.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T15.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T15)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T15.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_T15} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_g.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_g.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_g)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_g.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_g} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V15.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V15.pdf) [#](#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V15)](figures/Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V15.png){#Scales1_pdf_report_PDFnormalize0_Basespecs1_PDFscalespecs1_plot_pdfs_V15} 
+</div>
+
+</div>
+
+
+
+### Ratio
+
+#### Flavour basis
+
+##### Log
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_u.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_u.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_u)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_u.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_u} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_ubar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_ubar.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_ubar)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_ubar.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_ubar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_d.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_d.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_d)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_d.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_d} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_dbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_dbar.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_dbar)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_dbar.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_dbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_s.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_s.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_s)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_s.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_s} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_sbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_sbar.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_sbar)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_sbar.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_sbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_c.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_c.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_c)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_c.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_c} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_cbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_cbar.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_cbar)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_cbar.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_cbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_g.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_g.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_g)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_g.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs0_plot_pdfs_g} 
+</div>
+
+</div>
+
+##### Linear
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_u.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_u.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_u)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_u.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_u} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_ubar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_ubar.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_ubar)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_ubar.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_ubar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_d.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_d.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_d)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_d.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_d} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_dbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_dbar.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_dbar)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_dbar.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_dbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_s.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_s.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_s)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_s.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_s} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_sbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_sbar.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_sbar)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_sbar.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_sbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_c.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_c.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_c)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_c.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_c} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_cbar.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_cbar.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_cbar)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_cbar.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_cbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_g.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_g.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_g)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_g.png){#Scales1_pdf_report_PDFnormalize1_Basespecs0_PDFscalespecs1_plot_pdfs_g} 
+</div>
+
+</div>
+
+
+#### Evolution basis
+
+##### Log
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_Sigma} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T3.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T3.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T3)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T3.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V3.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V3.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V3)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V3.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T8.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T8.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T8)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T8.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V8.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V8.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V8)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V8.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T15.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T15.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T15)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T15.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_T15} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_g.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_g.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_g)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_g.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_g} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V15.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V15.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V15)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V15.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs0_plot_pdfs_V15} 
+</div>
+
+</div>
+
+##### Linear
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_Sigma} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T3.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T3.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T3)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T3.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V3.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V3.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V3)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V3.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T8.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T8.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T8)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T8.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V8.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V8.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V8)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V8.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T15.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T15.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T15)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T15.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_T15} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_g.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_g.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_g)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_g.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_g} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V15.png) [.pdf](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V15.pdf) [#](#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V15)](figures/Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V15.png){#Scales1_pdf_report_PDFnormalize1_Basespecs1_PDFscalespecs1_plot_pdfs_V15} 
+</div>
+
+</div>
+
+
+
+
+## PDF replicas
+
+#### Flavour basis
+
+##### Log
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_u.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_u.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_u)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_u.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_u} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_ubar.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_ubar.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_ubar)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_ubar.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_ubar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_d.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_d.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_d)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_d.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_d} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_dbar.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_dbar.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_dbar)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_dbar.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_dbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_s.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_s.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_s)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_s.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_s} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_sbar.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_sbar.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_sbar)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_sbar.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_sbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_c.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_c.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_c)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_c.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_c} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_cbar.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_cbar.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_cbar)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_cbar.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_cbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_g.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_g.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_g)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_g.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs0_plot_pdfreplicas_g} 
+</div>
+
+</div>
+
+##### Linear
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_u.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_u.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_u)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_u.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_u} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_ubar.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_ubar.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_ubar)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_ubar.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_ubar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_d.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_d.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_d)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_d.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_d} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_dbar.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_dbar.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_dbar)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_dbar.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_dbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_s.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_s.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_s)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_s.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_s} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_sbar.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_sbar.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_sbar)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_sbar.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_sbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_c.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_c.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_c)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_c.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_c} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_cbar.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_cbar.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_cbar)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_cbar.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_cbar} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_g.png) [.pdf](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_g.pdf) [#](#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_g)](figures/Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_g.png){#Scales1_pdf_report_Basespecs0_PDFscalespecs1_plot_pdfreplicas_g} 
+</div>
+
+</div>
+
+
+#### Evolution basis
+
+##### Log
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_Sigma.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_Sigma.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_Sigma)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_Sigma.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_Sigma} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T3.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T3.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T3)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T3.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V3.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V3.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V3)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V3.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T8.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T8.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T8)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T8.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V8.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V8.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V8)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V8.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T15.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T15.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T15)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T15.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_T15} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_g.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_g.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_g)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_g.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_g} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V15.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V15.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V15)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V15.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs0_plot_pdfreplicas_V15} 
+</div>
+
+</div>
+
+##### Linear
+<div class="figiterwrapper">
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_Sigma.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_Sigma.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_Sigma)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_Sigma.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_Sigma} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T3.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T3.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T3)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T3.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V3.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V3.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V3)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V3.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V3} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T8.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T8.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T8)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T8.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V8.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V8.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V8)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V8.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V8} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T15.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T15.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T15)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T15.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_T15} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_g.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_g.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_g)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_g.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_g} 
+</div>
+
+
+<div>![[.png](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V15.png) [.pdf](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V15.pdf) [#](#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V15)](figures/Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V15.png){#Scales1_pdf_report_Basespecs1_PDFscalespecs1_plot_pdfreplicas_V15} 
+</div>
+
+</div>
+

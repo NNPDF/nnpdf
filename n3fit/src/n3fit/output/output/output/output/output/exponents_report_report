@@ -1,0 +1,361 @@
+%NNPDF report comparing Current Fit and Reference Fit
+
+# Effective preprocessing information
+
+## Plots
+### alpha exponent
+<div class="figiterwrapper">
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_alpha_eff_Sigma.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_alpha_eff_Sigma.pdf) [#](#exponents_report_current_basisfromfit_plot_alpha_eff_Sigma)](figures/exponents_report_current_basisfromfit_plot_alpha_eff_Sigma.png){#exponents_report_current_basisfromfit_plot_alpha_eff_Sigma} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_alpha_eff_g.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_alpha_eff_g.pdf) [#](#exponents_report_current_basisfromfit_plot_alpha_eff_g)](figures/exponents_report_current_basisfromfit_plot_alpha_eff_g.png){#exponents_report_current_basisfromfit_plot_alpha_eff_g} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V.pdf) [#](#exponents_report_current_basisfromfit_plot_alpha_eff_V)](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V.png){#exponents_report_current_basisfromfit_plot_alpha_eff_V} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V3.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V3.pdf) [#](#exponents_report_current_basisfromfit_plot_alpha_eff_V3)](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V3.png){#exponents_report_current_basisfromfit_plot_alpha_eff_V3} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V8.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V8.pdf) [#](#exponents_report_current_basisfromfit_plot_alpha_eff_V8)](figures/exponents_report_current_basisfromfit_plot_alpha_eff_V8.png){#exponents_report_current_basisfromfit_plot_alpha_eff_V8} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_alpha_eff_T3.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_alpha_eff_T3.pdf) [#](#exponents_report_current_basisfromfit_plot_alpha_eff_T3)](figures/exponents_report_current_basisfromfit_plot_alpha_eff_T3.png){#exponents_report_current_basisfromfit_plot_alpha_eff_T3} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_alpha_eff_T8.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_alpha_eff_T8.pdf) [#](#exponents_report_current_basisfromfit_plot_alpha_eff_T8)](figures/exponents_report_current_basisfromfit_plot_alpha_eff_T8.png){#exponents_report_current_basisfromfit_plot_alpha_eff_T8} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_alpha_eff_c.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_alpha_eff_c.pdf) [#](#exponents_report_current_basisfromfit_plot_alpha_eff_c)](figures/exponents_report_current_basisfromfit_plot_alpha_eff_c.png){#exponents_report_current_basisfromfit_plot_alpha_eff_c} 
+</div>
+
+</div>
+### beta exponent
+<div class="figiterwrapper">
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_beta_eff_Sigma.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_beta_eff_Sigma.pdf) [#](#exponents_report_current_basisfromfit_plot_beta_eff_Sigma)](figures/exponents_report_current_basisfromfit_plot_beta_eff_Sigma.png){#exponents_report_current_basisfromfit_plot_beta_eff_Sigma} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_beta_eff_g.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_beta_eff_g.pdf) [#](#exponents_report_current_basisfromfit_plot_beta_eff_g)](figures/exponents_report_current_basisfromfit_plot_beta_eff_g.png){#exponents_report_current_basisfromfit_plot_beta_eff_g} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_beta_eff_V.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_beta_eff_V.pdf) [#](#exponents_report_current_basisfromfit_plot_beta_eff_V)](figures/exponents_report_current_basisfromfit_plot_beta_eff_V.png){#exponents_report_current_basisfromfit_plot_beta_eff_V} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_beta_eff_V3.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_beta_eff_V3.pdf) [#](#exponents_report_current_basisfromfit_plot_beta_eff_V3)](figures/exponents_report_current_basisfromfit_plot_beta_eff_V3.png){#exponents_report_current_basisfromfit_plot_beta_eff_V3} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_beta_eff_V8.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_beta_eff_V8.pdf) [#](#exponents_report_current_basisfromfit_plot_beta_eff_V8)](figures/exponents_report_current_basisfromfit_plot_beta_eff_V8.png){#exponents_report_current_basisfromfit_plot_beta_eff_V8} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_beta_eff_T3.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_beta_eff_T3.pdf) [#](#exponents_report_current_basisfromfit_plot_beta_eff_T3)](figures/exponents_report_current_basisfromfit_plot_beta_eff_T3.png){#exponents_report_current_basisfromfit_plot_beta_eff_T3} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_beta_eff_T8.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_beta_eff_T8.pdf) [#](#exponents_report_current_basisfromfit_plot_beta_eff_T8)](figures/exponents_report_current_basisfromfit_plot_beta_eff_T8.png){#exponents_report_current_basisfromfit_plot_beta_eff_T8} 
+</div>
+
+
+<div>![[.png](figures/exponents_report_current_basisfromfit_plot_beta_eff_c.png) [.pdf](figures/exponents_report_current_basisfromfit_plot_beta_eff_c.pdf) [#](#exponents_report_current_basisfromfit_plot_beta_eff_c)](figures/exponents_report_current_basisfromfit_plot_beta_eff_c.png){#exponents_report_current_basisfromfit_plot_beta_eff_c} 
+</div>
+
+</div>
+
+## Tables
+
+### Next effective exponents for Current Fit
+<table class="dataframe">
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th colspan="2" halign="left">prev (Current Fit)</th>
+<th colspan="2" halign="left">next (Current Fit)</th>
+</tr>
+<tr>
+<th></th>
+<th></th>
+<th>Min</th>
+<th>Max</th>
+<th>Min</th>
+<th>Max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="2" valign="top">$\Sigma$</th>
+<th>$\alpha$</th>
+<td>1.050</td>
+<td>1.190</td>
+<td>1.112</td>
+<td>1.155</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.470</td>
+<td>2.700</td>
+<td>1.573</td>
+<td>3.294</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$g$</th>
+<th>$\alpha$</th>
+<td>0.9400</td>
+<td>1.25</td>
+<td>0.9915</td>
+<td>1.232</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>0.1100</td>
+<td>5.870</td>
+<td>0.4092</td>
+<td>4.938</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$V$</th>
+<th>$\alpha$</th>
+<td>0.5400</td>
+<td>0.75</td>
+<td>0.3499</td>
+<td>0.9600</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.150</td>
+<td>2.760</td>
+<td>0.5731</td>
+<td>1.818</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$V3$</th>
+<th>$\alpha$</th>
+<td>0.2100</td>
+<td>0.5700</td>
+<td>0.3324</td>
+<td>0.4810</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.350</td>
+<td>3.080</td>
+<td>0</td>
+<td>2.926</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$V8$</th>
+<th>$\alpha$</th>
+<td>0.5200</td>
+<td>0.7600</td>
+<td>0.4722</td>
+<td>1.059</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>0.7700</td>
+<td>3.560</td>
+<td>0</td>
+<td>3.420</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$T3$</th>
+<th>$\alpha$</th>
+<td>-0.3700</td>
+<td>1.520</td>
+<td>3.303E-2</td>
+<td>0.3317</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.740</td>
+<td>3.390</td>
+<td>2.020</td>
+<td>2.957</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$T8$</th>
+<th>$\alpha$</th>
+<td>0.5600</td>
+<td>1.290</td>
+<td>0.7724</td>
+<td>0.8755</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.450</td>
+<td>3.030</td>
+<td>0.9987</td>
+<td>4.373</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$c^+$</th>
+<th>$\alpha$</th>
+<td>0.1200</td>
+<td>1.190</td>
+<td>0.1535</td>
+<td>1.050</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.830</td>
+<td>6.700</td>
+<td>2.476</td>
+<td>6.864</td>
+</tr>
+</tbody>
+</table>
+
+### Next effective exponents for Reference Fit
+<table class="dataframe">
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th colspan="2" halign="left">prev (Reference Fit)</th>
+<th colspan="2" halign="left">next (Reference Fit)</th>
+</tr>
+<tr>
+<th></th>
+<th></th>
+<th>Min</th>
+<th>Max</th>
+<th>Min</th>
+<th>Max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="2" valign="top">$\Sigma$</th>
+<th>$\alpha$</th>
+<td>1.050</td>
+<td>1.190</td>
+<td>1.121</td>
+<td>1.261</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.470</td>
+<td>2.700</td>
+<td>1.007</td>
+<td>2.863</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$g$</th>
+<th>$\alpha$</th>
+<td>0.9400</td>
+<td>1.25</td>
+<td>6.669E-2</td>
+<td>1.538</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>0.1100</td>
+<td>5.870</td>
+<td>0.1316</td>
+<td>5.733</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$V$</th>
+<th>$\alpha$</th>
+<td>0.5400</td>
+<td>0.75</td>
+<td>-0.7093</td>
+<td>1.151</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.150</td>
+<td>2.760</td>
+<td>0</td>
+<td>2.190</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$V3$</th>
+<th>$\alpha$</th>
+<td>0.2100</td>
+<td>0.5700</td>
+<td>0.2790</td>
+<td>0.5740</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.350</td>
+<td>3.080</td>
+<td>1.062</td>
+<td>3.232</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$V8$</th>
+<th>$\alpha$</th>
+<td>0.5200</td>
+<td>0.7600</td>
+<td>0.3267</td>
+<td>0.9774</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>0.7700</td>
+<td>3.560</td>
+<td>0</td>
+<td>4.338</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$T3$</th>
+<th>$\alpha$</th>
+<td>-0.3700</td>
+<td>1.520</td>
+<td>7.497E-2</td>
+<td>0.3677</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.740</td>
+<td>3.390</td>
+<td>1.448</td>
+<td>3.207</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$T8$</th>
+<th>$\alpha$</th>
+<td>0.5600</td>
+<td>1.290</td>
+<td>0.7169</td>
+<td>0.9183</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.450</td>
+<td>3.030</td>
+<td>1.669</td>
+<td>3.504</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">$c^+$</th>
+<th>$\alpha$</th>
+<td>0.1200</td>
+<td>1.190</td>
+<td>0.4411</td>
+<td>0.9460</td>
+</tr>
+<tr>
+<th>$\beta$</th>
+<td>1.830</td>
+<td>6.700</td>
+<td>3.231</td>
+<td>6.499</td>
+</tr>
+</tbody>
+</table>

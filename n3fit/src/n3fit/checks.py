@@ -398,7 +398,6 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
     - Checks the sum rules can be imposed
     - Correct flavours for the selected basis
     - Correct ranges (min < max) for the small and large-x exponents
-    - When feature scaling is active, the large_x interpolation is not set
     """
     check_sumrules(sum_rules)
     # Check that there are no duplicate flavours and that parameters are sane
@@ -408,25 +407,12 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
         smallx = flavour_dict["smallx"]
         if smallx[0] > smallx[1]:
             raise CheckError(f"Wrong smallx range for flavour {name}: {smallx}")
-<<<<<<< Updated upstream
-=======
         largex = flavour_dict.get("largex")
         if largex is not None and largex[0] > largex[1]:
             raise CheckError(f"Wrong largex range for flavour {name}: {largex}")
->>>>>>> Stashed changes
         if name in flavs:
             raise CheckError(f"Repeated flavour name: {name}. Check basis dictionary")
         flavs.append(name)
-
-        # Large-x is allowed to not exist if feature scaling is enabled
-        if parameters.get("feature_scaling_points") is not None:
-            if "largex" in flavour_dict and not flavour_dict["largex"] == [0.0, 0.0]:
-                raise CheckError("No largex exponent allowed when feature_scaling_points is set")
-        else:
-            largex = flavour_dict["largex"]
-            if largex[0] > largex[1]:
-                raise CheckError(f"Wrong largex range for flavour {name}: {largex}")
-
     # Finally check whether the basis considers or not charm
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
     vp_basis = check_basis(fitbasis, flavs)["basis"]
@@ -455,7 +441,7 @@ def check_consistent_parallel(parameters, parallel_models):
 
 
 @make_argcheck
-def check_deprecated_options(fitting, parameters):
+def check_deprecated_options(fitting):
     """Checks whether the runcard is using deprecated options"""
     options_outside = ["trvlseed", "nnseed", "mcseed", "save", "load", "genrep", "parameters"]
     for option in options_outside:
@@ -469,10 +455,6 @@ def check_deprecated_options(fitting, parameters):
     for option in nnfit_options:
         if option in fitting:
             log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
-    if "interpolation_points" in parameters:
-        raise CheckError(
-            "`interpolation_points` no longer accepted, please change to `feature_scaling_points`"
-        )
 
 
 @make_argcheck

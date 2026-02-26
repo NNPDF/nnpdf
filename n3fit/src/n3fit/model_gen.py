@@ -76,6 +76,7 @@ class ObservableWrapper:
     positivity: bool = False
     data: np.array = None
     rotation: ObsRotation = None  # only used for diagonal covmat
+    kl_weight_factor: float = None
     vb_layers: list[VBDense] = None
 
     def _generate_loss(self, mask=None):
@@ -85,7 +86,13 @@ class ObservableWrapper:
             covmat_matrix = self.covmat
             invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
-                invcovmat_matrix, self.data, mask, covmat=covmat_matrix, vb_layers = self.vb_layers, name=self.name
+                invcovmat_matrix, 
+                self.data, 
+                mask, 
+                covmat=covmat_matrix, 
+                kl_weight_factor=self.kl_weight_factor, 
+                vb_layers=self.vb_layers, 
+                name=self.name
             )
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
@@ -137,6 +144,8 @@ def observable_generator(
     positivity_initial=1.0,
     integrability=False,
     n_replicas=1,
+    # NEW: BNN-specific parameters
+    kl_weight_factor: float = 0.001,
     vb_layers=None,
 ):  # pylint: disable=too-many-locals
     """
@@ -281,6 +290,7 @@ def observable_generator(
             multiplier=positivity_initial,
             positivity=not integrability,
             integrability=integrability,
+            kl_weight_factor=kl_weight_factor,
             vb_layers=vb_layers,
         )
 
@@ -300,6 +310,7 @@ def observable_generator(
         invcovmat=invcovmat_tr,
         data=training_data,
         rotation=obsrot,
+        kl_weight_factor=kl_weight_factor,
         vb_layers=vb_layers,
     )
 
@@ -311,6 +322,7 @@ def observable_generator(
         invcovmat=invcovmat_vl,
         data=validation_data,
         rotation=obsrot,
+        kl_weight_factor=kl_weight_factor,
         vb_layers=vb_layers,
     )
 
@@ -323,12 +335,9 @@ def observable_generator(
         invcovmat=spec_dict["invcovmat_true"],
         covmat=spec_dict["covmat"],
         data=spec_dict["expdata_true"],
-<<<<<<< Updated upstream
-        rotation=obsrot,
-=======
         rotation=None,
+        kl_weight_factor=kl_weight_factor,
         vb_layers=vb_layers,
->>>>>>> Stashed changes
     )
 
     layer_info = {
@@ -374,6 +383,9 @@ class ReplicaSettings:
     dropout_rate: float = 0.0
     regularizer: str = None
     regularizer_args: dict = field(default_factory=dict)
+    # NEW: BNN-specific parameters
+    prior_prec: float = 0.001
+    std_init: float = -9
 
     def __post_init__(self):
         """Apply checks to the input, and expand hyperopt callables"""
@@ -405,7 +417,7 @@ def generate_pdf_model(
     impose_sumrule: str = None,
     scaler: Callable = None,
     photons: Photon = None,
-    training = False,
+    training = True,
 ):
     """
     Generation of the full PDF model which will be used to determine the full PDF.
@@ -495,7 +507,7 @@ def generate_pdf_model(
         "impose_sumrule": impose_sumrule,
         "scaler": scaler,
         "photons": photons,
-        "training": False,
+        "training": True,
     }
 
     pdf_model = _pdfNN_layer_generator(replicas_settings, **shared_config)
@@ -823,6 +835,9 @@ def _generate_nn(
     dropout_rate: float = 0.0,
     regularizer: str = None,
     regularizer_args: dict = field(default_factory=dict),
+    # NEW: BNN-specific parameters
+    prior_prec: float = 0.001,
+    std_init: float = -9,
     training: bool = True
 ) -> MetaModel:
     """
@@ -938,7 +953,9 @@ def _generate_nn(
             
             return base_layer_selector(
                 architecture_type,
-                training = training
+                prior_prec=prior_prec,
+                std_init=std_init,
+                training = training,
                 #kernel_initializer = tf.keras.initializers.HeNormal(seed = int(seed + i_layer)),
                 #units = nodes_out,
                 #activation = activation,

@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Dakshansh">
+  <meta name="keywords" content="bayesian_report_4.4">
+  <title>Comparison Report</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="report.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header class="masthead">
+<div class="container">
+<a class="masthead-logo">Comparison Report</a>
+<nav class="masthead-nav">
+<a>Dakshansh</a>
+</nav>
+</div>
+<!--
+-->
+</header>
+
+<div class="container">
+<div class="columns docs-layout">
+<div class="one-fourth column">
+
+<nav class="menu docs-menu">
+<ul>
+<li><a href="#summary" id="toc-summary">Summary</a></li>
+<li><a href="#t0-losses" id="toc-t0-losses">t0 losses</a></li>
+<li><a href="#theory-covariance-summary"
+id="toc-theory-covariance-summary">Theory covariance summary</a></li>
+<li><a href="#dataset-properties" id="toc-dataset-properties">Dataset
+properties</a></li>
+<li><a href="#distances" id="toc-distances">Distances</a>
+<ul>
+<li><a href="#q-1.65-gev" id="toc-q-1.65-gev">Q = 1.65 GeV</a></li>
+<li><a href="#q-100-gev" id="toc-q-100-gev">Q = 100 GeV</a></li>
+</ul></li>
+<li><a href="#pdf-arc-lengths" id="toc-pdf-arc-lengths">PDF
+arc-lengths</a></li>
+<li><a href="#sum-rules" id="toc-sum-rules">Sum rules</a>
+<ul>
+<li><a href="#current-fit" id="toc-current-fit">Current Fit</a></li>
+<li><a href="#reference-fit" id="toc-reference-fit">Reference
+Fit</a></li>
+</ul></li>
+<li><a href="#pdf-plots" id="toc-pdf-plots">PDF plots</a></li>
+<li><a href="#luminosities" id="toc-luminosities">Luminosities</a></li>
+<li><a href="#effective-exponents"
+id="toc-effective-exponents">Effective exponents</a></li>
+<li><a href="#training-lengths" id="toc-training-lengths">Training
+lengths</a></li>
+<li><a href="#training-validation"
+id="toc-training-validation">Training-validation</a></li>
+<li><a href="#chi2-by-nnpdf31_process"
+id="toc-chi2-by-nnpdf31_process"><span
+class="math inline"><em>χ</em><sup>2</sup></span> by
+nnpdf31_process</a></li>
+<li><a href="#chi2-by-experiment" id="toc-chi2-by-experiment"><span
+class="math inline"><em>χ</em><sup>2</sup></span> by experiment</a></li>
+<li><a href="#chi2-by-dataset" id="toc-chi2-by-dataset"><span
+class="math inline"><em>χ</em><sup>2</sup></span> by dataset</a>
+<ul>
+<li><a href="#plot" id="toc-plot">Plot</a></li>
+<li><a href="#table" id="toc-table">Table</a></li>
+</ul></li>
+<li><a href="#phi-by-nnpdf31_process"
+id="toc-phi-by-nnpdf31_process"><span
+class="math inline"><em>ϕ</em></span> by nnpdf31_process</a></li>
+<li><a href="#phi-by-experiment" id="toc-phi-by-experiment"><span
+class="math inline"><em>ϕ</em></span> by experiment</a></li>
+<li><a href="#dataset-plots" id="toc-dataset-plots">Dataset
+plots</a></li>
+<li><a href="#positivity" id="toc-positivity">Positivity</a></li>
+<li><a href="#dataset-differences-and-cuts"
+id="toc-dataset-differences-and-cuts">Dataset differences and
+cuts</a></li>
+<li><a href="#code-versions" id="toc-code-versions">Code
+versions</a></li>
+</ul>
+</nav>
+</div>
+
+<div class="three-fourths column markdown-body">
+<h2 id="summary">Summary</h2>
+<p>We are comparing:</p>
+<ul>
+<li>Current Fit (<code>Basic_runcard_bayesian</code>): Basic runcard
+with extra options such as debugging and tensorboard</li>
+<li>Reference Fit (<code>Basic_runcard_normal</code>): Basic runcard
+with extra options such as debugging and tensorboard</li>
+</ul>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+Current Fit
+</th>
+<th>
+Reference Fit
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+<span class="math inline"><em>χ</em><sup>2</sup></span>
+</th>
+<td>
+0.91887
+</td>
+<td>
+0.94843
+</td>
+</tr>
+<tr>
+<th>
+<span class="math inline"> &lt; <em>E</em><sub>trn</sub>&gt;</span>
+</th>
+<td>
+0.91±0.14
+</td>
+<td>
+1.90±0.12
+</td>
+</tr>
+<tr>
+<th>
+<span class="math inline"> &lt; <em>E</em><sub>val</sub>&gt;</span>
+</th>
+<td>
+1.02±0.34
+</td>
+<td>
+1.44±0.13
+</td>
+</tr>
+<tr>
+<th>
+<span class="math inline"> &lt; <em>T</em><em>L</em>&gt;</span>
+</th>
+<td>
+450±280
+</td>
+<td>
+300±110
+</td>
+</tr>
+<tr>
+<th>
+<span class="math inline"> &lt; <em>χ</em><sup>2</sup>&gt;</span>
+</th>
+<td>
+0.934±0.029
+</td>
+<td>
+1.067±0.060
+</td>
+</tr>
+<tr>
+<th>
+<span class="math inline"><em>ϕ</em></span>
+</th>
+<td>
+0.122±0.068
+</td>
+<td>
+0.344±0.051
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="t0-losses">t0 losses</h2>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+Current Fit
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+t0pdfset
+</th>
+<td>
+NNPDF40_nnlo_as_01180
+</td>
+</tr>
+<tr>
+<th>
+<span
+class="math inline"><em>χ</em><sub><em>t</em>0</sub><sup>2</sup></span>
+</th>
+<td>
+0.91221
+</td>
+</tr>
+<tr>
+<th>
+<span
+class="math inline"> &lt; <em>χ</em><sub><em>t</em>0</sub><sup>2</sup>&gt;</span>
+</th>
+<td>
+0.929±0.025
+</td>
+</tr>
+</tbody>
+</table>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+Reference Fit
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+t0pdfset
+</th>
+<td>
+NNPDF40_nnlo_as_01180
+</td>
+</tr>
+<tr>
+<th>
+<span
+class="math inline"><em>χ</em><sub><em>t</em>0</sub><sup>2</sup></span>
+</th>
+<td>
+0.95416
+</td>
+</tr>
+<tr>
+<th>
+<span
+class="math inline"> &lt; <em>χ</em><sub><em>t</em>0</sub><sup>2</sup>&gt;</span>
+</th>
+<td>
+1.076±0.057
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="theory-covariance-summary">Theory covariance summary</h2>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+Current Fit
+</th>
+<th>
+Reference Fit
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+sampling
+</th>
+<td>
+False
+</td>
+<td>
+False
+</td>
+</tr>
+<tr>
+<th>
+fitting
+</th>
+<td>
+False
+</td>
+<td>
+False
+</td>
+</tr>
+<tr>
+<th>
+validphys statistical estimators
+</th>
+<td>
+False
+</td>
+<td>
+False
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dataset-properties">Dataset properties</h2>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+Training fraction
+</th>
+<th>
+Weight
+</th>
+<th>
+C-factors
+</th>
+<th>
+Other fields
+</th>
+</tr>
+<tr>
+<th>
+Dataset
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+NMC_NC_NOTFIXED_EM-F2
+</th>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+-
+</td>
+<td>
+custom_group: unset, variant: (‘legacy_dw’,)
+</td>
+</tr>
+<tr>
+<th>
+ATLAS_Z0J_8TEV_PT-M
+</th>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+-
+</td>
+<td>
+custom_group: unset
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="distances">Distances</h2>
+<h3 id="q-1.65-gev">Q = 1.65 GeV</h3>
+<h4 id="flavour-basis-log">Flavour basis, Log</h4>
+<figure
+id="Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances">
+<img
+src="figures/Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances.png">.png</a>
+<a
+href="figures/Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances.pdf">.pdf</a>
+<a
+href="#Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances">#</a></figcaption>
+</figure>
+<figure
+id="Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances">
+<img
+src="figures/Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances.png">.png</a>
+<a
+href="figures/Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances.pdf">.pdf</a>
+<a
+href="#Scales0_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances">#</a></figcaption>
+</figure>
+<h4 id="flavour-basis-linear">Flavour basis, Linear</h4>
+<figure
+id="Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances">
+<img
+src="figures/Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances.png">.png</a>
+<a
+href="figures/Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances.pdf">.pdf</a>
+<a
+href="#Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances">#</a></figcaption>
+</figure>
+<figure
+id="Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances">
+<img
+src="figures/Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances.png">.png</a>
+<a
+href="figures/Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances.pdf">.pdf</a>
+<a
+href="#Scales0_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances">#</a></figcaption>
+</figure>
+<h4 id="evolution-basis-log">Evolution basis, Log</h4>
+<figure
+id="Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances">
+<img
+src="figures/Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances.png">.png</a>
+<a
+href="figures/Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances.pdf">.pdf</a>
+<a
+href="#Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances">#</a></figcaption>
+</figure>
+<figure
+id="Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances">
+<img
+src="figures/Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances.png">.png</a>
+<a
+href="figures/Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances.pdf">.pdf</a>
+<a
+href="#Scales0_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances">#</a></figcaption>
+</figure>
+<h4 id="evolution-basis-linear">Evolution basis, Linear</h4>
+<figure
+id="Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances">
+<img
+src="figures/Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances.png">.png</a>
+<a
+href="figures/Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances.pdf">.pdf</a>
+<a
+href="#Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances">#</a></figcaption>
+</figure>
+<figure
+id="Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances">
+<img
+src="figures/Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances.png">.png</a>
+<a
+href="figures/Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances.pdf">.pdf</a>
+<a
+href="#Scales0_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances">#</a></figcaption>
+</figure>
+<h3 id="q-100-gev">Q = 100 GeV</h3>
+<h4 id="flavour-basis-log-1">Flavour basis, Log</h4>
+<figure
+id="Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances">
+<img
+src="figures/Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances.png">.png</a>
+<a
+href="figures/Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances.pdf">.pdf</a>
+<a
+href="#Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfdistances">#</a></figcaption>
+</figure>
+<figure
+id="Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances">
+<img
+src="figures/Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances.png">.png</a>
+<a
+href="figures/Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances.pdf">.pdf</a>
+<a
+href="#Scales1_Normalize_Basespecs0_PDFscalespecs0_Distspecs0_plot_pdfvardistances">#</a></figcaption>
+</figure>
+<h4 id="flavour-basis-linear-1">Flavour basis, Linear</h4>
+<figure
+id="Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances">
+<img
+src="figures/Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances.png">.png</a>
+<a
+href="figures/Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances.pdf">.pdf</a>
+<a
+href="#Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfdistances">#</a></figcaption>
+</figure>
+<figure
+id="Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances">
+<img
+src="figures/Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances.png">.png</a>
+<a
+href="figures/Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances.pdf">.pdf</a>
+<a
+href="#Scales1_Normalize_Basespecs0_PDFscalespecs1_Distspecs0_plot_pdfvardistances">#</a></figcaption>
+</figure>
+<h4 id="evolution-basis-log-1">Evolution basis, Log</h4>
+<figure
+id="Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances">
+<img
+src="figures/Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances.png">.png</a>
+<a
+href="figures/Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances.pdf">.pdf</a>
+<a
+href="#Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfdistances">#</a></figcaption>
+</figure>
+<figure
+id="Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances">
+<img
+src="figures/Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances.png">.png</a>
+<a
+href="figures/Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances.pdf">.pdf</a>
+<a
+href="#Scales1_Normalize_Basespecs1_PDFscalespecs0_Distspecs0_plot_pdfvardistances">#</a></figcaption>
+</figure>
+<h4 id="evolution-basis-linear-1">Evolution basis, Linear</h4>
+<figure
+id="Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances">
+<img
+src="figures/Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances.png">.png</a>
+<a
+href="figures/Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances.pdf">.pdf</a>
+<a
+href="#Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfdistances">#</a></figcaption>
+</figure>
+<figure
+id="Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances">
+<img
+src="figures/Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances.png">.png</a>
+<a
+href="figures/Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances.pdf">.pdf</a>
+<a
+href="#Scales1_Normalize_Basespecs1_PDFscalespecs1_Distspecs0_plot_pdfvardistances">#</a></figcaption>
+</figure>
+<h2 id="pdf-arc-lengths">PDF arc-lengths</h2>
+<figure id="Basespecs0_plot_arc_lengths">
+<img src="figures/Basespecs0_plot_arc_lengths.png" alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Basespecs0_plot_arc_lengths.png">.png</a> <a
+href="figures/Basespecs0_plot_arc_lengths.pdf">.pdf</a> <a
+href="#Basespecs0_plot_arc_lengths">#</a></figcaption>
+</figure>
+<figure id="Basespecs1_plot_arc_lengths">
+<img src="figures/Basespecs1_plot_arc_lengths.png" alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/Basespecs1_plot_arc_lengths.png">.png</a> <a
+href="figures/Basespecs1_plot_arc_lengths.pdf">.pdf</a> <a
+href="#Basespecs1_plot_arc_lengths">#</a></figcaption>
+</figure>
+<h2 id="sum-rules">Sum rules</h2>
+<h3 id="current-fit">Current Fit</h3>
+<h4 id="known-sum-rules">Known sum rules</h4>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+mean
+</th>
+<th>
+std
+</th>
+<th>
+min
+</th>
+<th>
+max
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+momentum
+</th>
+<td>
+1.001
+</td>
+<td>
+3.132E-4
+</td>
+<td>
+1.000
+</td>
+<td>
+1.001
+</td>
+</tr>
+<tr>
+<th>
+uvalence
+</th>
+<td>
+2.004
+</td>
+<td>
+5.166E-3
+</td>
+<td>
+1.997
+</td>
+<td>
+2.009
+</td>
+</tr>
+<tr>
+<th>
+dvalence
+</th>
+<td>
+0.9993
+</td>
+<td>
+7.937E-3
+</td>
+<td>
+0.9881
+</td>
+<td>
+1.005
+</td>
+</tr>
+<tr>
+<th>
+svalence
+</th>
+<td>
+-1.099E-2
+</td>
+<td>
+1.412E-2
+</td>
+<td>
+-2.447E-2
+</td>
+<td>
+8.512E-3
+</td>
+</tr>
+<tr>
+<th>
+cvalence
+</th>
+<td>
+-7.260E-8
+</td>
+<td>
+6.127E-8
+</td>
+<td>
+-1.483E-7
+</td>
+<td>
+-7.566E-9
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="unknown-sum-rules">Unknown sum rules</h4>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+mean
+</th>
+<th>
+std
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+u momentum fraction
+</th>
+<td>
+0.229
+</td>
+<td>
+0.046
+</td>
+</tr>
+<tr>
+<th>
+ubar momentum fraction
+</th>
+<td>
+0.053
+</td>
+<td>
+0.032
+</td>
+</tr>
+<tr>
+<th>
+d momentum fraction
+</th>
+<td>
+0.01
+</td>
+<td>
+0.11
+</td>
+</tr>
+<tr>
+<th>
+dbar momentum fraction
+</th>
+<td>
+0.127
+</td>
+<td>
+0.096
+</td>
+</tr>
+<tr>
+<th>
+s momentum fraction
+</th>
+<td>
+0.104
+</td>
+<td>
+0.068
+</td>
+</tr>
+<tr>
+<th>
+sbar momentum fraction
+</th>
+<td>
+0.006
+</td>
+<td>
+0.053
+</td>
+</tr>
+<tr>
+<th>
+cp momentum fraction
+</th>
+<td>
+0.0452
+</td>
+<td>
+0.0076
+</td>
+</tr>
+<tr>
+<th>
+cm momentum fraction
+</th>
+<td>
+-2.6E-8
+</td>
+<td>
+3.3E-8
+</td>
+</tr>
+<tr>
+<th>
+g momentum fraction
+</th>
+<td>
+0.424
+</td>
+<td>
+0.038
+</td>
+</tr>
+<tr>
+<th>
+T3
+</th>
+<td>
+0.718
+</td>
+<td>
+0.030
+</td>
+</tr>
+<tr>
+<th>
+T8
+</th>
+<td>
+4.34
+</td>
+<td>
+0.49
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reference-fit">Reference Fit</h3>
+<h4 id="known-sum-rules-1">Known sum rules</h4>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+mean
+</th>
+<th>
+std
+</th>
+<th>
+min
+</th>
+<th>
+max
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+momentum
+</th>
+<td>
+1.000
+</td>
+<td>
+5.709E-6
+</td>
+<td>
+1.000
+</td>
+<td>
+1.000
+</td>
+</tr>
+<tr>
+<th>
+uvalence
+</th>
+<td>
+2.000
+</td>
+<td>
+3.157E-7
+</td>
+<td>
+2.000
+</td>
+<td>
+2.000
+</td>
+</tr>
+<tr>
+<th>
+dvalence
+</th>
+<td>
+1.000
+</td>
+<td>
+3.647E-6
+</td>
+<td>
+1.000
+</td>
+<td>
+1.000
+</td>
+</tr>
+<tr>
+<th>
+svalence
+</th>
+<td>
+1.106E-6
+</td>
+<td>
+3.348E-5
+</td>
+<td>
+-3.946E-5
+</td>
+<td>
+4.254E-5
+</td>
+</tr>
+<tr>
+<th>
+cvalence
+</th>
+<td>
+-7.530E-9
+</td>
+<td>
+2.742E-8
+</td>
+<td>
+-1.891E-8
+</td>
+<td>
+4.025E-8
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="unknown-sum-rules-1">Unknown sum rules</h4>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+mean
+</th>
+<th>
+std
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+u momentum fraction
+</th>
+<td>
+0.304
+</td>
+<td>
+0.055
+</td>
+</tr>
+<tr>
+<th>
+ubar momentum fraction
+</th>
+<td>
+-0.012
+</td>
+<td>
+0.013
+</td>
+</tr>
+<tr>
+<th>
+d momentum fraction
+</th>
+<td>
+0.210
+</td>
+<td>
+0.018
+</td>
+</tr>
+<tr>
+<th>
+dbar momentum fraction
+</th>
+<td>
+-0.057
+</td>
+<td>
+0.025
+</td>
+</tr>
+<tr>
+<th>
+s momentum fraction
+</th>
+<td>
+0.084
+</td>
+<td>
+0.069
+</td>
+</tr>
+<tr>
+<th>
+sbar momentum fraction
+</th>
+<td>
+0.031
+</td>
+<td>
+0.083
+</td>
+</tr>
+<tr>
+<th>
+cp momentum fraction
+</th>
+<td>
+0.0405
+</td>
+<td>
+0.0020
+</td>
+</tr>
+<tr>
+<th>
+cm momentum fraction
+</th>
+<td>
+-1.06E-7
+</td>
+<td>
+3.1E-8
+</td>
+</tr>
+<tr>
+<th>
+g momentum fraction
+</th>
+<td>
+0.400
+</td>
+<td>
+0.081
+</td>
+</tr>
+<tr>
+<th>
+T3
+</th>
+<td>
+0.73
+</td>
+<td>
+0.15
+</td>
+</tr>
+<tr>
+<th>
+T8
+</th>
+<td>
+2.3
+</td>
+<td>
+2.4
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pdf-plots">PDF plots</h2>
+<p><a href="Scales0_pdf_report_report.html">Plots at Q = 1.65
+GeV</a></p>
+<p><a href="Scales1_pdf_report_report.html">Plots at Q = 100 GeV</a></p>
+<h2 id="luminosities">Luminosities</h2>
+<p><a href="Energies0_lumi_report_report.html">Plots at 13 TeV</a></p>
+<h2 id="effective-exponents">Effective exponents</h2>
+<p><a href="exponents_report_report.html">Detailed information</a></p>
+<h2 id="training-lengths">Training lengths</h2>
+<figure id="CurrentFit_plot_training_length">
+<img src="figures/CurrentFit_plot_training_length.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/CurrentFit_plot_training_length.png">.png</a> <a
+href="figures/CurrentFit_plot_training_length.pdf">.pdf</a> <a
+href="#CurrentFit_plot_training_length">#</a></figcaption>
+</figure>
+<figure id="ReferenceFit_plot_training_length">
+<img src="figures/ReferenceFit_plot_training_length.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/ReferenceFit_plot_training_length.png">.png</a> <a
+href="figures/ReferenceFit_plot_training_length.pdf">.pdf</a> <a
+href="#ReferenceFit_plot_training_length">#</a></figcaption>
+</figure>
+<h2 id="training-validation">Training-validation</h2>
+<figure id="CurrentFit_plot_training_validation">
+<img src="figures/CurrentFit_plot_training_validation.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/CurrentFit_plot_training_validation.png">.png</a> <a
+href="figures/CurrentFit_plot_training_validation.pdf">.pdf</a> <a
+href="#CurrentFit_plot_training_validation">#</a></figcaption>
+</figure>
+<figure id="ReferenceFit_plot_training_validation">
+<img src="figures/ReferenceFit_plot_training_validation.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/ReferenceFit_plot_training_validation.png">.png</a> <a
+href="figures/ReferenceFit_plot_training_validation.pdf">.pdf</a> <a
+href="#ReferenceFit_plot_training_validation">#</a></figcaption>
+</figure>
+<h2 id="chi2-by-nnpdf31_process"><span
+class="math inline"><em>χ</em><sup>2</sup></span> by
+nnpdf31_process</h2>
+<figure id="DataGroups0_plot_fits_groups_data_chi2">
+<img src="figures/DataGroups0_plot_fits_groups_data_chi2.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/DataGroups0_plot_fits_groups_data_chi2.png">.png</a> <a
+href="figures/DataGroups0_plot_fits_groups_data_chi2.pdf">.pdf</a> <a
+href="#DataGroups0_plot_fits_groups_data_chi2">#</a></figcaption>
+</figure>
+<h2 id="chi2-by-experiment"><span
+class="math inline"><em>χ</em><sup>2</sup></span> by experiment</h2>
+<figure id="DataGroups1_plot_fits_groups_data_chi2">
+<img src="figures/DataGroups1_plot_fits_groups_data_chi2.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/DataGroups1_plot_fits_groups_data_chi2.png">.png</a> <a
+href="figures/DataGroups1_plot_fits_groups_data_chi2.pdf">.pdf</a> <a
+href="#DataGroups1_plot_fits_groups_data_chi2">#</a></figcaption>
+</figure>
+<h2 id="chi2-by-dataset"><span
+class="math inline"><em>χ</em><sup>2</sup></span> by dataset</h2>
+<h3 id="plot">Plot</h3>
+<figure id="plot_fits_datasets_chi2">
+<img src="figures/plot_fits_datasets_chi2.png" alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/plot_fits_datasets_chi2.png">.png</a> <a
+href="figures/plot_fits_datasets_chi2.pdf">.pdf</a> <a
+href="#plot_fits_datasets_chi2">#</a></figcaption>
+</figure>
+<h3 id="table">Table</h3>
+<table class="dataframe">
+<thead>
+<tr>
+<th>
+</th>
+<th>
+</th>
+<th colspan="2" halign="left">
+Current Fit
+</th>
+<th colspan="2" halign="left">
+Reference Fit
+</th>
+</tr>
+<tr>
+<th>
+</th>
+<th>
+</th>
+<th>
+ndata
+</th>
+<th>
+<span
+class="math inline"><em>χ</em><sup>2</sup>/<em>n</em><em>d</em><em>a</em><em>t</em><em>a</em></span>
+</th>
+<th>
+ndata
+</th>
+<th>
+<span
+class="math inline"><em>χ</em><sup>2</sup>/<em>n</em><em>d</em><em>a</em><em>t</em><em>a</em></span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="3" valign="top">
+ALL
+</th>
+<th>
+Total
+</th>
+<td>
+165
+</td>
+<td>
+0.9189
+</td>
+<td>
+165
+</td>
+<td>
+0.9484
+</td>
+</tr>
+<tr>
+<th>
+NMC_NC_NOTFIXED_EM-F2
+</th>
+<td>
+121
+</td>
+<td>
+0.8811
+</td>
+<td>
+121
+</td>
+<td>
+0.8871
+</td>
+</tr>
+<tr>
+<th>
+ATLAS_Z0J_8TEV_PT-M
+</th>
+<td>
+44
+</td>
+<td>
+1.023
+</td>
+<td>
+44
+</td>
+<td>
+1.117
+</td>
+</tr>
+<tr>
+<th>
+Total
+</th>
+<th>
+Total
+</th>
+<td>
+165
+</td>
+<td>
+0.9189
+</td>
+<td>
+165
+</td>
+<td>
+0.9484
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="phi-by-nnpdf31_process"><span
+class="math inline"><em>ϕ</em></span> by nnpdf31_process</h2>
+<figure id="DataGroups0_plot_fits_groups_data_phi">
+<img src="figures/DataGroups0_plot_fits_groups_data_phi.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/DataGroups0_plot_fits_groups_data_phi.png">.png</a> <a
+href="figures/DataGroups0_plot_fits_groups_data_phi.pdf">.pdf</a> <a
+href="#DataGroups0_plot_fits_groups_data_phi">#</a></figcaption>
+</figure>
+<h2 id="phi-by-experiment"><span class="math inline"><em>ϕ</em></span>
+by experiment</h2>
+<figure id="DataGroups1_plot_fits_groups_data_phi">
+<img src="figures/DataGroups1_plot_fits_groups_data_phi.png"
+alt=".png .pdf #" />
+<figcaption aria-hidden="true"><a
+href="figures/DataGroups1_plot_fits_groups_data_phi.png">.png</a> <a
+href="figures/DataGroups1_plot_fits_groups_data_phi.pdf">.pdf</a> <a
+href="#DataGroups1_plot_fits_groups_data_phi">#</a></figcaption>
+</figure>
+<h2 id="dataset-plots">Dataset plots</h2>
+<p><a
+href="matched_datasets_from_dataspecs0_dataset_report_report.html">Plots
+for NMC_NC_NOTFIXED_EM-F2</a></p>
+<p><a
+href="matched_datasets_from_dataspecs1_dataset_report_report.html">Plots
+for ATLAS_Z0J_8TEV_PT-M</a></p>
+<h2 id="positivity">Positivity</h2>
+<h2 id="dataset-differences-and-cuts">Dataset differences and cuts</h2>
+<p>The following datasets are included in both <code>Current Fit</code>
+and <code>Reference Fit</code>:</p>
+<ul>
+<li>ATLAS <span class="math inline"><em>Z</em></span> <span
+class="math inline"><em>p</em><sub><em>T</em></sub></span> 8 TeV <span
+class="math inline">(<em>p</em><sub><em>T</em></sub><sup><em>l</em><em>l</em></sup>, <em>M</em><sub><em>l</em><em>l</em></sub>)</span>
+(<code>ATLAS_Z0J_8TEV_PT-M</code>)</li>
+<li>NMC <span class="math inline"><em>d</em>/<em>p</em></span>
+(<code>NMC_NC_NOTFIXED_EM-F2</code>)</li>
+</ul>
+<p>The theories used in the fits are identical (theoryid=41000000)</p>
+<h2 id="code-versions">Code versions</h2>
+<table class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+Basic_runcard_bayesian
+</th>
+<th>
+Basic_runcard_normal
+</th>
+</tr>
+<tr>
+<th>
+module
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+keras
+</th>
+<td>
+3.12.0 backend=‘tensorflow’
+</td>
+<td>
+3.12.0 backend=‘tensorflow’
+</td>
+</tr>
+<tr>
+<th>
+tensorflow
+</th>
+<td>
+2.18.0
+</td>
+<td>
+2.18.0
+</td>
+</tr>
+<tr>
+<th>
+numpy
+</th>
+<td>
+2.2.6
+</td>
+<td>
+2.2.6
+</td>
+</tr>
+<tr>
+<th>
+nnpdf
+</th>
+<td>
+4.1.2
+</td>
+<td>
+4.1.2
+</td>
+</tr>
+<tr>
+<th>
+validphys
+</th>
+<td>
+4.1.2
+</td>
+<td>
+4.1.2
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+<footer class="footer">
+Powered by <a href=https://github.com/NNPDF/reportengine/>reportengine</a>
+</footer>
+
+</div>
+
+<script>
+//Note that dollars have to be escaped
+function AnchorJS(A){"use strict";this.options=A||{},this._applyRemainingDefaultOptions=function(A){this.options.icon=this.options.hasOwnProperty("icon")?A.icon:"&#xe9cb",this.options.visible=this.options.hasOwnProperty("visible")?A.visible:"hover",this.options.placement=this.options.hasOwnProperty("placement")?A.placement:"right",this.options.class=this.options.hasOwnProperty("class")?A.class:""},this._applyRemainingDefaultOptions(A),this.add=function(A){var e,t,o,n,i,s,a,l,c,r,h,g,B,Q;if(this._applyRemainingDefaultOptions(this.options),A){if("string"!=typeof A)throw new Error("The selector provided to AnchorJS was invalid.")}else A="h1, h2, h3, h4, h5, h6";if(e=document.querySelectorAll(A),0===e.length)return!1;for(this._addBaselineStyles(),t=document.querySelectorAll("[id]"),o=[].map.call(t,function(A){return A.id}),i=0;i<e.length;i++){if(e[i].hasAttribute("id"))n=e[i].getAttribute("id");else{s=e[i].textContent,a=s.replace(/[^\w\s-]/gi,"").replace(/\s+/g,"-").replace(/-{2,}/g,"-").substring(0,64).replace(/^-+|-+$/gm,"").toLowerCase(),r=a,c=0;do void 0!==l&&(r=a+"-"+c),l=o.indexOf(r),c+=1;while(-1!==l);l=void 0,o.push(r),e[i].setAttribute("id",r),n=r}h=n.replace(/-/g," "),g='<a class="anchorjs-link '+this.options.class+'" href="#'+n+'" aria-label="Anchor link for: '+h+'" data-anchorjs-icon="'+this.options.icon+'"></a>',B=document.createElement("div"),B.innerHTML=g,Q=B.childNodes,"always"===this.options.visible&&(Q[0].style.opacity="1"),"&#xe9cb"===this.options.icon&&(Q[0].style.fontFamily="anchorjs-icons",Q[0].style.fontStyle="normal",Q[0].style.fontVariant="normal",Q[0].style.fontWeight="normal"),"left"===this.options.placement?(Q[0].style.position="absolute",Q[0].style.marginLeft="-1em",Q[0].style.paddingRight="0.5em",e[i].insertBefore(Q[0],e[i].firstChild)):(Q[0].style.paddingLeft="0.375em",e[i].appendChild(Q[0]))}return this},this.remove=function(A){for(var e,t=document.querySelectorAll(A),o=0;o<t.length;o++)e=t[o].querySelector(".anchorjs-link"),e&&t[o].removeChild(e);return this},this._addBaselineStyles=function(){if(null===document.head.querySelector("style.anchorjs")){var A,e=document.createElement("style"),t=" .anchorjs-link {   opacity: 0;   text-decoration: none;   -webkit-font-smoothing: antialiased;   -moz-osx-font-smoothing: grayscale; }",o=" *:hover > .anchorjs-link, .anchorjs-link:focus  {   opacity: 1; }",n=' @font-face {   font-family: "anchorjs-icons";   font-style: normal;   font-weight: normal;   src: url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAALAIAAAwAwT1MvMg8SBTUAAAC8AAAAYGNtYXAWi9QdAAABHAAAAFRnYXNwAAAAEAAAAXAAAAAIZ2x5Zgq29TcAAAF4AAABNGhlYWQEZM3pAAACrAAAADZoaGVhBhUDxgAAAuQAAAAkaG10eASAADEAAAMIAAAAFGxvY2EAKACuAAADHAAAAAxtYXhwAAgAVwAAAygAAAAgbmFtZQ5yJ3cAAANIAAAB2nBvc3QAAwAAAAAFJAAAACAAAwJAAZAABQAAApkCzAAAAI8CmQLMAAAB6wAzAQkAAAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAABAAADpywPA/8AAQAPAAEAAAAABAAAAAAAAAAAAAAAgAAAAAAADAAAAAwAAABwAAQADAAAAHAADAAEAAAAcAAQAOAAAAAoACAACAAIAAQAg6cv//f//AAAAAAAg6cv//f//AAH/4xY5AAMAAQAAAAAAAAAAAAAAAQAB//8ADwABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQAAAAAAAAAAAAIAADc5AQAAAAACADEARAJTAsAAKwBUAAABIiYnJjQ/AT4BMzIWFxYUDwEGIicmND8BNjQnLgEjIgYPAQYUFxYUBw4BIwciJicmND8BNjIXFhQPAQYUFx4BMzI2PwE2NCcmNDc2MhcWFA8BDgEjARQGDAUtLXoWOR8fORYtLTgKGwoKCjgaGg0gEhIgDXoaGgkJBQwHdR85Fi0tOAobCgoKOBoaDSASEiANehoaCQkKGwotLXoWOR8BMwUFLYEuehYXFxYugC44CQkKGwo4GkoaDQ0NDXoaShoKGwoFBe8XFi6ALjgJCQobCjgaShoNDQ0NehpKGgobCgoKLYEuehYXAAEAAAABAACiToc1Xw889QALBAAAAAAA0XnFFgAAAADRecUWAAAAAAJTAsAAAAAIAAIAAAAAAAAAAQAAA8D/wAAABAAAAAAAAlMAAQAAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAACAAAAAoAAMQAAAAAACgAUAB4AmgABAAAABQBVAAIAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEADgAAAAEAAAAAAAIABwCfAAEAAAAAAAMADgBLAAEAAAAAAAQADgC0AAEAAAAAAAUACwAqAAEAAAAAAAYADgB1AAEAAAAAAAoAGgDeAAMAAQQJAAEAHAAOAAMAAQQJAAIADgCmAAMAAQQJAAMAHABZAAMAAQQJAAQAHADCAAMAAQQJAAUAFgA1AAMAAQQJAAYAHACDAAMAAQQJAAoANAD4YW5jaG9yanMtaWNvbnMAYQBuAGMAaABvAHIAagBzAC0AaQBjAG8AbgBzVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwYW5jaG9yanMtaWNvbnMAYQBuAGMAaABvAHIAagBzAC0AaQBjAG8AbgBzYW5jaG9yanMtaWNvbnMAYQBuAGMAaABvAHIAagBzAC0AaQBjAG8AbgBzUmVndWxhcgBSAGUAZwB1AGwAYQByYW5jaG9yanMtaWNvbnMAYQBuAGMAaABvAHIAagBzAC0AaQBjAG8AbgBzRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format("truetype"); }',i=" [data-anchorjs-icon]::after {   content: attr(data-anchorjs-icon); }";e.className="anchorjs",e.appendChild(document.createTextNode("")),A=document.head.querySelector('[rel="stylesheet"], style'),void 0===A?document.head.appendChild(e):document.head.insertBefore(e,A),e.sheet.insertRule(t,e.sheet.cssRules.length),e.sheet.insertRule(o,e.sheet.cssRules.length),e.sheet.insertRule(i,e.sheet.cssRules.length),e.sheet.insertRule(n,e.sheet.cssRules.length)}}}var anchors=new AnchorJS;
+</script>
+<script>
+      var selector = '.markdown-body > h1, .markdown-body > h2, .markdown-body > h3';
+      anchors.options = {
+        placement: 'left',
+        class: 'anchor-link'
+      };
+      anchors.add(selector);
+</script>
+
+</body>
+</html>
