@@ -110,7 +110,7 @@ def replica_luxseed(replica, luxseed):
     return replica_nnseed(replica, luxseed)
 
 
-def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cuts):
+def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cuts, genrep):
     """Generates the ``mcseed`` for a group of datasets. This is done by hashing the names
       of the datasets in the group and adding it to the ``replica_mcseed`
     Parameters
@@ -120,6 +120,8 @@ def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cu
         their treatment and description, for each dataset.
     replica_mcseed: int
     """
+    if not genrep:
+        return None
     names_for_salt = []
     # Try to use the new dataset name, but make older runs reproducible by keeping the old names.
     # WARNING: don't rely on this behaviour, this might be removed in future releases
