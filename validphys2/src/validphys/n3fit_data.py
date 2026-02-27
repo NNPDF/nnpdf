@@ -110,7 +110,7 @@ def replica_luxseed(replica, luxseed):
     return replica_nnseed(replica, luxseed)
 
 
-def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cuts, genrep):
+def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cuts, genrep=True):
     """Generates the ``mcseed`` for a group of datasets. This is done by hashing the names
       of the datasets in the group and adding it to the ``replica_mcseed`
     Parameters
