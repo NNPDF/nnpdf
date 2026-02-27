@@ -42,7 +42,7 @@ def load_runcard(path):
     return cfg
 
 
-def run_analysis(cfg, output_dir):
+def run_analysis(cfg, output_dir, n_jobs_override=None):
     """Execute the full Shapley value pipeline from a parsed runcard."""
     pdf, observables, flavor_info, flavor_basis_info = setup_observables(
         pdf_name=cfg["pdf_name"],
@@ -64,6 +64,9 @@ def run_analysis(cfg, output_dir):
     mode = pert.get("mode", "additive")
     xspace = pert.get("xspace", "linear")
     enforce_sumrules = cfg.get("enforce_sumrules", False)
+    n_jobs = int(cfg.get("n_jobs", 1))
+    if n_jobs_override is not None:
+        n_jobs = int(n_jobs_override)
 
     output_dir.mkdir(parents=True, exist_ok=True)
     all_results = {}
@@ -94,7 +97,7 @@ def run_analysis(cfg, output_dir):
         t0 = time.time()
         results = analyzer.exact_shap(
             mu=mu, sigma=sigma, amplitude=amplitude,
-            mode=mode, xspace=xspace, plot=True,
+            mode=mode, xspace=xspace, plot=True, n_jobs=n_jobs,
         )
         elapsed = time.time() - t0
         print(f"\nElapsed: {elapsed:.1f}s")
@@ -128,6 +131,7 @@ def run_analysis(cfg, output_dir):
             "baseline_chi2": float(results["baseline_chi2"]),
             "coalitions_evaluated": results["coalitions_evaluated"],
             "elapsed_seconds": round(elapsed, 1),
+            "n_jobs": int(results.get("n_jobs", n_jobs)),
         }
 
     # Save combined JSON using shapley_values.save_results
@@ -142,6 +146,7 @@ def run_analysis(cfg, output_dir):
             "mode": mode, "xspace": xspace,
         },
         "enforce_sumrules": enforce_sumrules,
+        "n_jobs": int(n_jobs),
     }
     combined = {"results_by_basis": all_results}
     json_path = str(output_dir / "results.json")
@@ -163,6 +168,10 @@ def main():
         "--output", "-o", type=str, default=None,
         help="Output directory. Default: sv_results/<runcard_stem>_<timestamp>."
     )
+    parser.add_argument(
+        "--n-jobs", type=int, default=None,
+        help="Number of worker threads for coalition evaluation."
+    )
     args = parser.parse_args()
 
     cfg = load_runcard(args.runcard)
@@ -178,7 +187,7 @@ def main():
     print(f"Runcard : {args.runcard}")
     print(f"Output  : {output_dir}\n")
 
-    run_analysis(cfg, output_dir)
+    run_analysis(cfg, output_dir, n_jobs_override=args.n_jobs)
 
 
 if __name__ == "__main__":

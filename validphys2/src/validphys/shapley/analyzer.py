@@ -9,7 +9,12 @@ ExactShapley solver from the ``shapley_values`` package. Handles:
 """
 
 import functools
+import math
+import sys
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from itertools import combinations
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -88,6 +93,8 @@ class NNPDFShapleyAnalyzer:
         self.enforce_sumrules = enforce_sumrules
 
         self._gv_cache: dict = {}
+        self._gv_cache_lock = threading.Lock()
+        self._sumrule_lock = threading.Lock()
 
         # Sum rule integration grid (lazily initialized)
         self._sr_xgrid = None
@@ -121,30 +128,65 @@ class NNPDFShapleyAnalyzer:
 
     def _setup_sumrule_grid(self):
         """Lazily initialise the integration grid for sum rules."""
-        self._sr_xgrid, self._sr_weights = gen_integration_input(2000)
+        sr_xgrid, sr_weights = gen_integration_input(2000)
         Q0 = self.observables[0].Q0
 
-        self._sr_gv_evol = evol_basis.grid_values(
-            self.pdf, qmat=[Q0], vmat=FK_FLAVOURS, xmat=self._sr_xgrid
+        sr_gv_evol = evol_basis.grid_values(
+            self.pdf, qmat=[Q0], vmat=FK_FLAVOURS, xmat=sr_xgrid
         ).squeeze(-1)
         if self.n_replicas is not None:
-            self._sr_gv_evol = self._sr_gv_evol[1: self.n_replicas + 1]
+            sr_gv_evol = sr_gv_evol[1: self.n_replicas + 1]
+
+        sr_gv_flav = None
+        sr_rotation = None
 
         if self.basis == 'flavor':
-            self._sr_gv_flav = _lhapdf_grid_values(
-                self.pdf, list(ALL_FLAVOURS), self._sr_xgrid, [Q0]
+            sr_gv_flav = _lhapdf_grid_values(
+                self.pdf, list(ALL_FLAVOURS), sr_xgrid, [Q0]
             ).squeeze(-1)
             if self.n_replicas is not None:
-                self._sr_gv_flav = self._sr_gv_flav[1: self.n_replicas + 1]
+                sr_gv_flav = sr_gv_flav[1: self.n_replicas + 1]
 
             evol_row_inds = evol_basis._to_indexes(FK_FLAVOURS)
-            self._sr_rotation = evol_basis.from_flavour_mat[evol_row_inds, :]
+            sr_rotation = evol_basis.from_flavour_mat[evol_row_inds, :]
+
+        self._sr_xgrid = sr_xgrid
+        self._sr_weights = sr_weights
+        self._sr_gv_evol = sr_gv_evol
+        self._sr_gv_flav = sr_gv_flav
+        self._sr_rotation = sr_rotation
 
     def _compute_sumrule_norm(self, flavor_subset, mu, sigma, amplitude,
                               mode, xspace):
         """Compute normalization constants for a perturbed coalition."""
-        if self._sr_xgrid is None:
-            self._setup_sumrule_grid()
+        ready = (
+            self._sr_xgrid is not None
+            and self._sr_weights is not None
+            and self._sr_gv_evol is not None
+            and (
+                self.basis != 'flavor'
+                or (
+                    self._sr_gv_flav is not None
+                    and self._sr_rotation is not None
+                )
+            )
+        )
+        if not ready:
+            with self._sumrule_lock:
+                ready = (
+                    self._sr_xgrid is not None
+                    and self._sr_weights is not None
+                    and self._sr_gv_evol is not None
+                    and (
+                        self.basis != 'flavor'
+                        or (
+                            self._sr_gv_flav is not None
+                            and self._sr_rotation is not None
+                        )
+                    )
+                )
+                if not ready:
+                    self._setup_sumrule_grid()
 
         if self.basis == 'evolution':
             gv = self._sr_gv_evol.copy()
@@ -184,30 +226,36 @@ class NNPDFShapleyAnalyzer:
         """Cached evolution-basis grid values (FK-subset flavours)."""
         key = (obs.name, entry_idx, 'evol')
         if key not in self._gv_cache:
-            entry = obs.fk_entries[entry_idx]
-            self._gv_cache[key] = get_pdf_grid_values(
-                self.pdf, entry, n_replicas=self.n_replicas
-            )
+            with self._gv_cache_lock:
+                if key not in self._gv_cache:
+                    entry = obs.fk_entries[entry_idx]
+                    self._gv_cache[key] = get_pdf_grid_values(
+                        self.pdf, entry, n_replicas=self.n_replicas
+                    )
         return self._gv_cache[key]
 
     def _get_flavor_gv_for_entry(self, obs, entry_idx):
         """Cached physical flavor-basis grid values."""
         key = (obs.name, entry_idx, 'flavor')
         if key not in self._gv_cache:
-            entry = obs.fk_entries[entry_idx]
-            self._gv_cache[key] = get_pdf_flavor_grid_values(
-                self.pdf, entry, n_replicas=self.n_replicas
-            )
+            with self._gv_cache_lock:
+                if key not in self._gv_cache:
+                    entry = obs.fk_entries[entry_idx]
+                    self._gv_cache[key] = get_pdf_flavor_grid_values(
+                        self.pdf, entry, n_replicas=self.n_replicas
+                    )
         return self._gv_cache[key]
 
     def _get_gv_all14_for_entry(self, obs, entry_idx):
         """Cached full 14-flavour evolution-basis grid values."""
         key = (obs.name, entry_idx, 'evol_all14')
         if key not in self._gv_cache:
-            entry = obs.fk_entries[entry_idx]
-            self._gv_cache[key] = get_pdf_grid_values_all14(
-                self.pdf, entry, n_replicas=self.n_replicas
-            )
+            with self._gv_cache_lock:
+                if key not in self._gv_cache:
+                    entry = obs.fk_entries[entry_idx]
+                    self._gv_cache[key] = get_pdf_grid_values_all14(
+                        self.pdf, entry, n_replicas=self.n_replicas
+                    )
         return self._gv_cache[key]
 
     def _get_gv_list(self, obs):
@@ -336,6 +384,8 @@ class NNPDFShapleyAnalyzer:
 
         total_coalitions = 2 ** self.n_flavors
         state = {"count": 0, "t_start": None, "last_player_line": False}
+        interactive_stderr = sys.stderr.isatty()
+        log_every = max(1, total_coalitions // 100)
 
         def v(coalition):
             if state["t_start"] is None:
@@ -366,9 +416,16 @@ class NNPDFShapleyAnalyzer:
                     f"ETA {mins}m{secs:02d}s   "
                 )
 
-            # Use \r to overwrite the progress line in-place
-            sys.stderr.write(f"\r{msg}")
-            sys.stderr.flush()
+            if interactive_stderr:
+                sys.stderr.write(f"\r{msg}")
+                sys.stderr.flush()
+            elif (
+                n == 1
+                or n == total_coalitions
+                or n % log_every == 0
+            ):
+                sys.stderr.write(f"{msg}\n")
+                sys.stderr.flush()
 
             if n == total_coalitions:
                 sys.stderr.write("\n")
@@ -380,8 +437,138 @@ class NNPDFShapleyAnalyzer:
 
     # -- Convenience: run full Shapley analysis -----------------------------
 
+    def _iter_all_coalitions(self):
+        """Yield all coalition tuples in deterministic order."""
+        players = tuple(range(self.n_flavors))
+        for size in range(self.n_flavors + 1):
+            for coalition in combinations(players, size):
+                yield coalition
+
+    @staticmethod
+    def _coalition_with_player(coalition, player):
+        """Return sorted coalition tuple with one extra player."""
+        return tuple(sorted(coalition + (player,)))
+
+    def _compute_exact_shap_parallel(self, mu, sigma, amplitude, mode, xspace,
+                                     n_jobs, verbose=True):
+        """Compute exact Shapley values from a parallel coalition cache."""
+        n = self.n_flavors
+        factorial = [math.factorial(k) for k in range(n + 1)]
+        factorial_n = factorial[n]
+        all_coalitions = list(self._iter_all_coalitions())
+        total_coalitions = len(all_coalitions)
+        value_cache = {}
+
+        if verbose:
+            print(
+                f"Computing exact Shapley values for {n} players "
+                f"({total_coalitions} coalitions) with {n_jobs} worker(s)..."
+            )
+
+        t0 = time.time()
+        progress_start = t0
+        interactive_stderr = sys.stderr.isatty()
+        log_every = max(1, total_coalitions // 100)
+
+        def _evaluate_one(coalition):
+            value = self._evaluate_chi2(
+                coalition, mu, sigma, amplitude, mode=mode, xspace=xspace
+            )
+            return coalition, value
+
+        with ThreadPoolExecutor(max_workers=n_jobs) as executor:
+            future_map = {
+                executor.submit(_evaluate_one, coalition): coalition
+                for coalition in all_coalitions
+            }
+            completed = 0
+            for future in as_completed(future_map):
+                coalition, value = future.result()
+                value_cache[coalition] = value
+                completed += 1
+
+                if verbose:
+                    elapsed = time.time() - progress_start
+                    if completed == 1:
+                        msg = (
+                            f"    [{completed}/{total_coalitions}] "
+                            f"elapsed {elapsed:.0f}s ..."
+                        )
+                    else:
+                        rate = elapsed / completed
+                        remaining = rate * (total_coalitions - completed)
+                        mins, secs = divmod(int(remaining), 60)
+                        msg = (
+                            f"    [{completed}/{total_coalitions}] "
+                            f"elapsed {elapsed:.0f}s | "
+                            f"~{rate:.1f}s/eval | ETA {mins}m{secs:02d}s   "
+                        )
+                    if interactive_stderr:
+                        sys.stderr.write(f"\r{msg}")
+                        sys.stderr.flush()
+                    elif (
+                        completed == 1
+                        or completed == total_coalitions
+                        or completed % log_every == 0
+                    ):
+                        sys.stderr.write(f"{msg}\n")
+                        sys.stderr.flush()
+
+        if verbose:
+            sys.stderr.write("\n")
+            sys.stderr.flush()
+
+        baseline = value_cache[tuple()]
+        shapley_vals = np.zeros(n, dtype=float)
+
+        for player in range(n):
+            if verbose:
+                print(f"  Player {player}: {self.flavor_labels[player]}", end="",
+                      flush=True)
+
+            for coalition in all_coalitions:
+                if player in coalition:
+                    continue
+
+                s = len(coalition)
+                weight = (
+                    factorial[s] * factorial[n - s - 1]
+                ) / factorial_n
+                coalition_with_player = self._coalition_with_player(
+                    coalition, player
+                )
+                v_with = value_cache[coalition_with_player]
+                v_without = value_cache[coalition]
+                shapley_vals[player] += weight * (v_with - v_without)
+
+            if verbose:
+                print(f"  ->  SV = {shapley_vals[player]:+.6f}")
+
+        elapsed = time.time() - t0
+
+        if verbose:
+            print(f"Baseline        : {baseline:.6f}")
+            print(f"Max |SV|        : {np.max(np.abs(shapley_vals)):.6f}")
+            print(f"Mean |SV|       : {np.mean(np.abs(shapley_vals)):.6f}")
+            print(f"Sum SV          : {np.sum(shapley_vals):.6f}")
+            print(f"Sum |SV|        : {np.sum(np.abs(shapley_vals)):.6f}")
+            print(f"Elapsed         : {elapsed:.1f}s")
+
+        return {
+            "shapley_values": shapley_vals,
+            "baseline": baseline,
+            "player_labels": self.flavor_labels,
+            "player_short": self.flavor_short,
+            "coalitions_evaluated": len(value_cache),
+            "total_coalitions": total_coalitions,
+            "elapsed_seconds": elapsed,
+            "value_cache": {
+                str(k): v for k, v in value_cache.items()
+            },
+        }
+
     def exact_shap(self, mu, sigma, amplitude, mode='additive',
-                   xspace='linear', plot=True):
+                   xspace='linear', plot=True, n_jobs=1):
         """Compute exact Shapley values for all flavour players.
 
         Uses the ``shapley_values.ExactShapley`` solver with the NNPDF
@@ -394,6 +581,9 @@ class NNPDFShapleyAnalyzer:
         xspace : str
         plot : bool
             Whether to generate plots.
+        n_jobs : int
+            Number of worker threads for coalition evaluation.
+            If n_jobs=1, use the serial ExactShapley solver.
 
         Returns
         -------
@@ -407,24 +597,24 @@ class NNPDFShapleyAnalyzer:
             raise ValueError(
                 f"Unknown xspace '{xspace}'. Choose from {PERTURBATION_XSPACES}."
             )
+        if int(n_jobs) < 1:
+            raise ValueError(f"n_jobs must be >= 1, got {n_jobs}")
 
         basis_name = "flavor" if self.basis == 'flavor' else "evolution"
         print(f"Perturbation basis : {basis_name}")
         print(f"Perturbation mode  : {mode}")
         print(f"Perturbation xspace: {xspace}")
         print(f"Sum rules          : {'ON' if self.enforce_sumrules else 'OFF'}")
+        print(f"Parallel workers   : {int(n_jobs)}")
 
-        # Build value function and run ExactShapley
         v = self.build_value_function(mu, sigma, amplitude, mode, xspace)
-
         solver = ExactShapley(
             n_players=self.n_flavors,
             value_function=v,
             player_labels=self.flavor_labels,
             player_short=self.flavor_short,
         )
-
-        results = solver.compute(verbose=True)
+        results = solver.compute(verbose=True, n_jobs=int(n_jobs))
 
         # Add NNPDF-specific metadata
         results["baseline_chi2"] = results["baseline"]
@@ -434,6 +624,7 @@ class NNPDFShapleyAnalyzer:
         results["basis"] = self.basis
         results["flavor_labels"] = self.flavor_labels
         results["flavor_short"] = self.flavor_short
+        results["n_jobs"] = int(n_jobs)
 
         # Plot
         fig_pdfs = None
