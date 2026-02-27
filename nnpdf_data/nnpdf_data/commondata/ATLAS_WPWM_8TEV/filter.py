@@ -270,6 +270,10 @@ def main_filter() -> None:
     
     uncertainties_all = pd.concat([uncertainties_wplus, uncertainties_wminus])
     
+    # Add luminosity uncertainty: 1.9% of central value
+    lumi_unc = central_values_all * 0.019  # 1.9% as absolute values in fb
+    uncertainties_all['sys,Luminosity'] = lumi_unc
+
     # Determine types for each systematic
     # First column is stat, rest are systematics
     treatment_list = ["ADD"]  # stat is additive
@@ -280,7 +284,9 @@ def main_filter() -> None:
         treatment_list.append("MULT")
         
         # Determine correlation type
-        if col == "sys,Modelling":
+        if col =="sys,Luminosity":
+            type_list.append("ATLASLUMI")
+        elif col == "sys,Modelling":
             type_list.append("CORR")
         elif col.startswith("sys,MJ"):
             type_list.append("CORR")
@@ -305,7 +311,7 @@ def main_filter() -> None:
         elif col == "sys,Z-vertex":
             type_list.append("CORR")
         elif col == "sys,F/B Compatibility":
-            type_list.append("CORR")
+            type_list.append("UNCORR")
         else:
             type_list.append("CORR")
     
