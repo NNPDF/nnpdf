@@ -191,6 +191,10 @@ definitions:
     description: sys,MC stat. unc
     treatment: MULT
     type: UNCORR
+  sys_corr_48:
+    description: sys,Luminosity
+    treatment: MULT
+    type: ATLASLUMI
 bins:
 - stat: 60.0
   sys_corr_1: 20.0
@@ -240,6 +244,7 @@ bins:
   sys_corr_45: 100.0
   sys_corr_46: 0.0
   sys_corr_47: 170.0
+  sys_corr_48: 11970.0
 - stat: 50.0
   sys_corr_1: 20.0
   sys_corr_2: 10.0
@@ -288,6 +293,7 @@ bins:
   sys_corr_45: 80.0
   sys_corr_46: 0.0
   sys_corr_47: 130.0
+  sys_corr_48: 12065.0
 - stat: 50.0
   sys_corr_1: 30.0
   sys_corr_2: 30.0
@@ -336,6 +342,7 @@ bins:
   sys_corr_45: 80.0
   sys_corr_46: 390.0
   sys_corr_47: 130.0
+  sys_corr_48: 12198.0
 - stat: 60.0
   sys_corr_1: 40.0
   sys_corr_2: 10.0
@@ -384,6 +391,7 @@ bins:
   sys_corr_45: 90.0
   sys_corr_46: 0.0
   sys_corr_47: 140.0
+  sys_corr_48: 12122.0
 - stat: 60.0
   sys_corr_1: 20.0
   sys_corr_2: 10.0
@@ -432,6 +440,7 @@ bins:
   sys_corr_45: 90.0
   sys_corr_46: 220.0
   sys_corr_47: 140.0
+  sys_corr_48: 12217.0
 - stat: 40.0
   sys_corr_1: 0.0
   sys_corr_2: 0.0
@@ -480,6 +489,7 @@ bins:
   sys_corr_45: 60.0
   sys_corr_46: 240.0
   sys_corr_47: 90.0
+  sys_corr_48: 12445.0
 - stat: 60.0
   sys_corr_1: 20.0
   sys_corr_2: 10.0
@@ -528,6 +538,7 @@ bins:
   sys_corr_45: 90.0
   sys_corr_46: 0.0
   sys_corr_47: 120.0
+  sys_corr_48: 12559.0
 - stat: 50.0
   sys_corr_1: 10.0
   sys_corr_2: 30.0
@@ -576,6 +587,7 @@ bins:
   sys_corr_45: 70.0
   sys_corr_46: 160.0
   sys_corr_47: 100.0
+  sys_corr_48: 12578.0
 - stat: 50.0
   sys_corr_1: 50.0
   sys_corr_2: 30.0
@@ -624,6 +636,7 @@ bins:
   sys_corr_45: 70.0
   sys_corr_46: 340.0
   sys_corr_47: 100.0
+  sys_corr_48: 12578.0
 - stat: 50.0
   sys_corr_1: 20.0
   sys_corr_2: 10.0
@@ -672,6 +685,7 @@ bins:
   sys_corr_45: 70.0
   sys_corr_46: 390.0
   sys_corr_47: 100.0
+  sys_corr_48: 12502.0
 - stat: 50.0
   sys_corr_1: 70.0
   sys_corr_2: 20.0
@@ -720,6 +734,7 @@ bins:
   sys_corr_45: 70.0
   sys_corr_46: 0.0
   sys_corr_47: 100.0
+  sys_corr_48: 12198.0
 - stat: 70.0
   sys_corr_1: 30.0
   sys_corr_2: 10.0
@@ -768,6 +783,7 @@ bins:
   sys_corr_45: 110.0
   sys_corr_46: 0.0
   sys_corr_47: 180.0
+  sys_corr_48: 9386.0
 - stat: 60.0
   sys_corr_1: 0.0
   sys_corr_2: 10.0
@@ -816,6 +832,7 @@ bins:
   sys_corr_45: 100.0
   sys_corr_46: 0.0
   sys_corr_47: 140.0
+  sys_corr_48: 9310.0
 - stat: 60.0
   sys_corr_1: 20.0
   sys_corr_2: 10.0
@@ -864,6 +881,7 @@ bins:
   sys_corr_45: 90.0
   sys_corr_46: 390.0
   sys_corr_47: 140.0
+  sys_corr_48: 9234.0
 - stat: 70.0
   sys_corr_1: 20.0
   sys_corr_2: 10.0
@@ -912,6 +930,7 @@ bins:
   sys_corr_45: 100.0
   sys_corr_46: 0.0
   sys_corr_47: 160.0
+  sys_corr_48: 9006.0
 - stat: 70.0
   sys_corr_1: 10.0
   sys_corr_2: 10.0
@@ -960,6 +979,7 @@ bins:
   sys_corr_45: 100.0
   sys_corr_46: 220.0
   sys_corr_47: 160.0
+  sys_corr_48: 8835.0
 - stat: 50.0
   sys_corr_1: 10.0
   sys_corr_2: 0.0
@@ -1008,6 +1028,7 @@ bins:
   sys_corr_45: 80.0
   sys_corr_46: 240.0
   sys_corr_47: 100.0
+  sys_corr_48: 8664.0
 - stat: 70.0
   sys_corr_1: 50.0
   sys_corr_2: 30.0
@@ -1056,6 +1077,7 @@ bins:
   sys_corr_45: 110.0
   sys_corr_46: 0.0
   sys_corr_47: 140.0
+  sys_corr_48: 8360.0
 - stat: 60.0
   sys_corr_1: 20.0
   sys_corr_2: 30.0
@@ -1104,6 +1126,7 @@ bins:
   sys_corr_45: 90.0
   sys_corr_46: 160.0
   sys_corr_47: 120.0
+  sys_corr_48: 8113.0
 - stat: 60.0
   sys_corr_1: 50.0
   sys_corr_2: 30.0
@@ -1152,6 +1175,7 @@ bins:
   sys_corr_45: 90.0
   sys_corr_46: 340.0
   sys_corr_47: 120.0
+  sys_corr_48: 7790.0
 - stat: 60.0
   sys_corr_1: 20.0
   sys_corr_2: 10.0
@@ -1200,6 +1224,7 @@ bins:
   sys_corr_45: 90.0
   sys_corr_46: 390.0
   sys_corr_47: 130.0
+  sys_corr_48: 7391.0
 - stat: 70.0
   sys_corr_1: 50.0
   sys_corr_2: 30.0
@@ -1248,3 +1273,4 @@ bins:
   sys_corr_45: 100.0
   sys_corr_46: 0.0
   sys_corr_47: 130.0
+  sys_corr_48: 6992.0
