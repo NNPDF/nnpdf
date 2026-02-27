@@ -8,6 +8,9 @@ import pandas as pd
 from scipy.linalg import block_diag
 import yaml
 
+from nnpdf_data.filter_utils.utils import symmetrize_errors
+
+
 def range_str_to_floats(str_range):
     """
     converts a string range to a list,
@@ -25,6 +28,7 @@ def range_str_to_floats(str_range):
 
 
 # ==================================================================== CMS_2JET_7TEV ====================================================================#
+
 
 def get_data_values_CMS_2JET_7TEV(tables, version):
     """
@@ -1146,3 +1150,95 @@ def fill_df_ATLAS_2JET_7TEV_R06(heptable, scenario='nominal'):
                 df_nan.loc[df_nan.index == i + 1, f"{err['label']}_minus_{j}"] = d_m
 
     return df_nan
+
+
+# ======================================================== ATLAS_1JET_7TEV_R06 ======================================================== #
+TABLE_TO_RAPIDITY_ATLAS_1JET_7TEV_R06 = {
+    7: [0.0, 0.5],
+    8: [0.5, 1.0],
+    9: [1.0, 1.5],
+    10: [1.5, 2],
+    11: [2.0, 2.5],
+    12: [2.5, 3.0],
+}
+
+
+def HEP_table_to_df_ATLAS_1JET_7TEV_R06(table):
+    """
+    Given hep data table, version, and variant, initialize a pandas DataFrame
+    with index given by Ndata, columns by the uncertainties and np.nan entries.
+
+    Note that for this dataset, the same type of systematic JES uncertainty can
+    be either symmetric or asymmetric depending on the bin in pT. Hence, all
+    JES uncertainties are treated as asymmetric here.
+    """
+    columns = {}
+    errors = table[0]['errors']
+    for err in errors:
+        # treat all JES uncertainties as asymmetric
+        if err['label'].startswith('sys,jes'):
+            label = err['label'].replace(',', '_')
+            label = f"{label}_asym"
+        else:
+            label = err['label'].replace(',', '_')
+        columns[label] = np.nan
+
+    df_nan = pd.DataFrame(columns, index=range(1, len(table) + 1))
+    return df_nan
+
+
+def fill_df_ATLAS_1JET_7TEV_R06(table, version, variant='nominal'):
+    """
+    Fill a data frame with index
+    corresponding to measured datapoints
+    and columns to different uncertainties
+    Each df is for a fixed rapidity bin.
+
+    Parameters
+    ----------
+    table : int
+            number of table
+    version : int
+            version number
+    """
+    if variant == 'nominal':
+        hepdata_table = f"rawdata/HEPData-ins1325553-v{version}_table{table}.yaml"
+    elif variant == 'stronger':
+        hepdata_table = f"rawdata/HEPData-ins1325553-v{version}_table{table}_stronger.yaml"
+    elif variant == 'weaker':
+        hepdata_table = f"rawdata/HEPData-ins1325553-v{version}_table{table}_weaker.yaml"
+    else:
+        raise ValueError(f"Unknown variant: {variant}")
+
+    with open(hepdata_table) as file:
+        card = yaml.safe_load(file)
+
+    # list of len ndata. Each entry is dict with
+    # keys errors and value
+    table = card['dependent_variables'][0]['values']
+    df = HEP_table_to_df_ATLAS_1JET_7TEV_R06(table)
+    cvs = []
+
+    for i, dat in enumerate(table):
+        cv = float(dat['value'])
+
+        for j, err in enumerate(dat['errors']):
+            # treat all JES uncertainties as asymmetric
+            if err['label'].startswith('sys,jes'):
+                label = err['label'].replace(',', '_')
+                if 'symerror' in err:
+                    abs_error = float(err['symerror'].split('%')[0]) * cv / 100.0
+                    df.loc[df.index == i + 1, f"{label}_asym"] = abs_error
+                else:
+                    rel_error_plus = float(err['asymerror']['plus'].split('%')[0]) * cv / 100.0
+                    rel_error_minus = float(err['asymerror']['minus'].split('%')[0]) * cv / 100.0
+                    data_delta, sym_error = symmetrize_errors(rel_error_plus, rel_error_minus)
+                    df.loc[df.index == i + 1, f"{label}_asym"] = sym_error
+                    cv += data_delta  # adjust central value accordingly
+            # All the other uncertainties (including luminosity and stat) are symmetric
+            else:
+                label = err['label'].replace(',', '_')
+                df.loc[df.index == i + 1, label] = float(err['symerror'].split('%')[0]) * cv / 100.0
+
+        cvs.append(cv)
+    return df, cvs
