@@ -303,6 +303,11 @@ class WriterWrapper:
             # Note: the 2 arguments below are the same for all replicas, unless run separately
             timing=self.timings,
             stop_epoch=self.stopping_object.stop_epoch,
+            would_stop_epoch=(
+                self.stopping_object.would_stop_epoch
+                if self.stopping_object._dont_stop
+                else self.stopping_object.stop_epoch
+            ),
         )
 
         with open(out_path, "w", encoding="utf-8") as fs:
@@ -347,6 +352,7 @@ def jsonfit(
     true_chi2,
     stop_epoch,
     timing,
+    would_stop_epoch,
 ):
     """Generates a dictionary containing all relevant metadata for the fit
 
@@ -372,6 +378,8 @@ def jsonfit(
             epoch at which the stopping stopped (not the one for the best fit!)
         timing: dict
             dictionary of the timing of the different events that happened
+        would_stop_epoch: int
+            epoch at which the stopping would have stopped if it were not set to "dont_stop"
     """
     all_info = {}
     # Generate preprocessing information
@@ -386,6 +394,7 @@ def jsonfit(
     all_info["arc_lengths"] = arc_lengths
     all_info["integrability"] = integrability_numbers
     all_info["timing"] = timing
+    all_info["would_stop_epoch"] = would_stop_epoch
     # Versioning info
     all_info["version"] = version()
     return all_info
