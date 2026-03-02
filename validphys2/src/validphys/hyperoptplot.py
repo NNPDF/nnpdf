@@ -18,6 +18,7 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 from reportengine.figure import figure
 from reportengine.table import table
@@ -301,24 +302,18 @@ def parse_statistics(trial):
     testing loss
     status of the run
     """
+    hypr_keys = ["hyper_losses_chi2", "hyper_losses_phi2", "hyper_losses_logp", "trvl_losses_chi2exp"]
     dict_out = {}
     results = trial["result"]
     validation_loss = results[KEYWORDS["vl"]]
     testing_loss = results[KEYWORDS["tl"]]
-    # was this a ok run?
-    ok = bool(results["status"] == "ok")
 
-    dict_out[KEYWORDS["good"]] = ok
+    dict_out[KEYWORDS["good"]] = bool(results["status"] == "ok")
     dict_out[KEYWORDS["vl"]] = validation_loss
     dict_out[KEYWORDS["tl"]] = testing_loss
 
-    # Kfolding information
-    # average = results["kfold_meta"]["hyper_avg"]
-    # std = results["kfold_meta"]["hyper_std"]
-    # dict_out["avg"] = average
-    # dict_out["std"] = std
-    dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
-    dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
+    for key in hypr_keys:  # K-folding information
+        dict_out[key] = results["kfold_meta"][key]
     return dict_out
 
 
@@ -344,27 +339,34 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
     """
     Read a trial dictionary and compute the true loss and decide whether the run passes or not
     """
-    test_f = 1.0 - validation_multiplier
-    val_loss = float(trial_dict[KEYWORDS["vl"]])
+    hypr_metric_keys = ["chi2", "phi2", "logp"]
     if loss_target == "average":
-        test_loss = np.array(trial_dict["hlosses"]).mean()
+        for hypr_key in hypr_metric_keys:
+            trial_dict[f"hyper_loss_{hypr_key}"] = np.array(
+                trial_dict[f"hyper_losses_{hypr_key}"]
+            ).mean()
     elif loss_target == "best_worst":
-        test_loss = np.array(trial_dict["hlosses"]).max()
+        for hypr_key in hypr_metric_keys:
+            trial_dict[f"hyper_loss_{hypr_key}"] = np.array(
+                trial_dict[f"hyper_losses_{hypr_key}"]
+            ).max()
     elif loss_target == "std":
-        test_loss = np.array(trial_dict["hlosses"]).std()
-    loss = val_loss * validation_multiplier + test_loss * test_f
+        for hypr_key in hypr_metric_keys:
+            trial_dict[f"hyper_loss_{hypr_key}"] = np.array(
+                trial_dict[f"hyper_losses_{hypr_key}"]
+            ).std()
+    else:
+        raise ValueError(f"Loss target {loss_target} is not valid.")
 
-    if (
-        loss > fail_threshold
-        or val_loss > fail_threshold
-        or test_loss > fail_threshold
-        or np.isnan(loss)
-    ):
-        trial_dict["good"] = False
-        # Set the loss an order of magnitude above the result so it shows obviously on the plots
-        loss *= 10
+    for hypr_key in hypr_metric_keys:
+        if np.isnan(trial_dict[f"hyper_loss_{hypr_key}"]):
+            trial_dict[f"hyper_loss_{hypr_key}"] *= 100
+    
+    trial_dict["trvl_loss_chi2exp"] = np.array(
+                trial_dict["trvl_losses_chi2exp"]
+            ).mean()
 
-    trial_dict["loss"] = loss
+    return
 
 
 def generate_dictionary(
@@ -543,10 +545,6 @@ def hyperopt_dataframe(commandline_args):
     # Make into a dataframe and transpose or the plotting code will complain
     best_trial = best_trial_series.to_frame().T
 
-    log.info("Best setup:")
-    with pd.option_context("display.max_rows", None, "display.max_columns", None):
-        log.info(best_trial)
-
     return dataframe, best_trial
 
 
@@ -585,9 +583,11 @@ def hyperopt_table(hyperopt_dataframe):
     Generates a table containing complete information on all the tested setups that passed the
     filters set in the commandline arguments.
     """
+    drop_keys = ["hyper_losses_chi2", "hyper_losses_phi2", "hyper_losses_logp"]
     dataframe, _ = hyperopt_dataframe
-    dataframe = dataframe.sort_values(by=["loss"])
-    return dataframe
+    n_layers = dataframe['number_of_layers'].max()
+    drop_keys += [f"layer_{idx}" for idx in range(1, n_layers)]
+    return dataframe.drop(columns=drop_keys, inplace=False).sort_values(by=["hyper_loss_chi2"], inplace=False)
 
 
 @figure
@@ -681,6 +681,68 @@ def plot_activation_per_layer(hyperopt_dataframe):
     """
     dataframe, best_trial = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "activation_per_layer")
+    return fig
+
+@figure
+def plot_cumulative_logp_chi2(hyperopt_dataframe, commandline_args):
+    """
+    Generate a plot of the running average of the log-likelihood (chi2) 
+    on the left (right) axis  as a function of the trial index
+    """
+    
+    args = SimpleNamespace(**commandline_args)
+    chi2max = args.chi2_threshold
+    results, _ = hyperopt_dataframe
+    mlogp_ = results['hyper_loss_logp'].to_numpy()
+    chi2_ = results['hyper_loss_chi2'].to_numpy()
+
+    # don t look at samples with -logp or chi2 too big
+    idx_ok = np.where(chi2_<chi2max)
+    fig, ax1 = plt.subplots()
+    color = 'tab:blue'
+    mlogp = mlogp_[idx_ok]
+    xlabels = np.arange(len(mlogp))
+    cum_average = np.cumsum(mlogp)/np.arange(1,len(mlogp)+1)
+    ax1.scatter(xlabels, cum_average, color=color, s=50, label="cum avg")
+    ax1.set_ylabel(r"$- \text{E}\left[\log p(\theta)\right]_{\text{trials}}$", color=color)
+    ax1.set_xlabel('number of trials')
+    ax1.tick_params(axis='y', labelcolor=color)
+
+    ax2 = ax1.twinx()
+    color = 'tab:red'    
+    chi2 = chi2_[idx_ok]
+    xlabels = np.arange(len(chi2))
+    cum_average_chi2 = np.cumsum(chi2)/np.arange(1,len(chi2)+1)
+    ax2.scatter(xlabels, cum_average_chi2, marker='*', color=color, s=50, label=r"$\chi^2(\theta)$", alpha=0.3)
+    ax2.set_ylabel(r"$\text{E}\left[\chi^2(\theta)\right]_{\text{trials}}$",  color=color)
+    ax2.tick_params(axis='y', labelcolor=color)
+    return fig
+
+@figure
+def plot_cumulative_loss(hyperopt_dataframe, commandline_args):
+    """
+    Generate a plot of the running average of the log-likelihood  
+    as a function of the trial index
+    """
+    
+    args = SimpleNamespace(**commandline_args)
+    chi2exp_max = args.chi2exp_threshold
+    results, _ = hyperopt_dataframe
+    
+    mloss_ = results['loss'].to_numpy()
+    chi2_ = results['hyper_loss_chi2'].to_numpy()
+    chi2exp = results['trvl_loss_chi2exp'].to_numpy()
+
+    idx_ok = np.where(chi2exp<chi2exp_max)
+    fig, ax = plt.subplots()
+    mloss = mloss_[idx_ok]    
+    xlabels = np.arange(len(mloss))
+    cum_average = np.cumsum(mloss)/np.arange(1,len(mloss)+1)
+    ax.scatter(xlabels, cum_average, s=50, label="cum avg")
+    ax.set_ylabel(r"loss")
+    ax.set_xlabel('number of trials')
+    ax.tick_params(axis='y')
+
     return fig
 
 
