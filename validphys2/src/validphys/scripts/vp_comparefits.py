@@ -68,7 +68,6 @@ class CompareFitApp(App):
             help="Use LUX basis (which include the photon) for the report",
             action='store_true',
         )
-
         parser.set_defaults()
 
     def try_complete_args(self):
@@ -178,6 +177,7 @@ class CompareFitApp(App):
             args['config_yml'] = comparefittemplates.template_pol_path
         else:
             args['config_yml'] = comparefittemplates.template_path
+
         return args
 
     def complete_mapping(self):
@@ -223,7 +223,15 @@ class CompareFitApp(App):
                     'unpolarized_bc': {'from_': 'positivity_bound'},
                 }
             )
+        are_the_same = self.check_identical_theory_cuts_covmat()
+        if are_the_same:
+            log.info("Adding mismatched datasets page: identical theory, data cuts and covmat detected")
+        else:
+            autosettings["mismatched_information"] = {
+            "template_text": "Mismatched datasets cannot be shown due to cuts theory, data cuts and/or covmat not being identical"
+            }
         return autosettings
+
 
     def get_config(self):
         self.try_complete_args()
@@ -234,6 +242,23 @@ class CompareFitApp(App):
             c = yaml_safe.load(f)
         c.update(self.complete_mapping())
         return self.config_class(c, environment=self.environment)
+    
+    def check_identical_theory_cuts_covmat(self):
+        """ 
+        Checks whether the theory ID, data cuts, and thcovmat are the same between the two fits.    
+        In the affirmative case, a mismatched datasets page will be added to the report.
+        """
+        args = self.args
+        l = self.environment.loader 
+        current_runcard = l.check_fit(args['current_fit']).as_input()
+        reference_runcard = l.check_fit(args['reference_fit']).as_input()
+        
+        current_thcovmat = current_runcard.get("theorycovmatconfig")
+        reference_thcovmat = reference_runcard.get("theorycovmatconfig")
+        same_theoryid = current_runcard.get("theory", {}).get("theoryid") == reference_runcard.get("theory", {}).get("theoryid")
+        same_datacuts = current_runcard.get("datacuts") == reference_runcard.get("datacuts")
+        same_thcovmat = (current_thcovmat == reference_thcovmat)
+        return same_theoryid and same_datacuts and same_thcovmat
 
 
 def main():

@@ -50,6 +50,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install_conda_pip
+        with:
+          nnpdf-extras: "[qed,tests]"
       - name: Run regression tests
         shell: bash -l {0}
         run: |
@@ -102,6 +104,7 @@ jobs:
       run: |
         sudo rm -rf /opt/hostedtoolcache/Python/{3.9*}
         sudo rm -rf /opt/hostedtoolcache/CodeQL
+        sudo rm -rf /usr/local/lib/android/sdk
         pip install .[nolha,torch]
         # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
         lhapdf-management update --init

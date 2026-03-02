@@ -242,7 +242,7 @@ experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
 
 
-def groups_index(groups_data, diagonal_basis=False):
+def groups_index(groups_data, diagonal_basis=True):
     """Return a pandas.MultiIndex with levels for group, dataset and point
     respectively, the group is determined by a key in the dataset metadata, and
     controlled by `metadata_group` key in the runcard.
@@ -270,16 +270,12 @@ def groups_index(groups_data, diagonal_basis=False):
                 )
 
     columns = ["group", "dataset", "id"]
-    df = pd.DataFrame(records, columns=columns)
-    if diagonal_basis:
-        df["dataset"] = [f"eigenmode {i}" for i in range(len(df["dataset"]))]
-        df["id"] = np.arange(len(df), dtype=int)
-    df.set_index(columns, inplace=True)
+    df = pd.DataFrame(records, columns=columns).set_index(columns)
 
     return df.index
 
 
-def experiments_index(experiments_data, diagonal_basis=False):
+def experiments_index(experiments_data, diagonal_basis=True):
     return groups_index(experiments_data, diagonal_basis)
 
 

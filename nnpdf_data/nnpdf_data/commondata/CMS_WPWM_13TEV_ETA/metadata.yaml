@@ -3,7 +3,7 @@ setname: "CMS_WPWM_13TEV_ETA"
 
 version: 1
 
-version_comment: "Initial implementation"
+version_comment: "The covmat is not well behaved and need to regularized to obtain a sensible chi2"
 
 # References
 arXiv:

@@ -111,9 +111,7 @@ def read_replica_pseudodata(fit, context_index, replica):
             new_name, _ = legacy_to_new_map(dsname)
             mapping[dsname] = new_name
 
-    pseudodata.rename(mapping, level=1, inplace=True)
-
-    pseudodata.sort_index(level=range(1, 3), inplace=True)
+    pseudodata = pseudodata.rename(mapping, level=1).sort_index(level=range(1, 3))
     pseudodata.index = sorted_index
 
     tr = pseudodata[pseudodata["type"] == "training"]
