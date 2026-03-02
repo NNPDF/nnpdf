@@ -33,7 +33,6 @@ from .setup import (
     FLAVOR_PDG_NAMES,
 )
 from .perturbation import (
-    gaussian_profile,
     apply_gaussian_perturbation,
     PERTURBATION_MODES,
     PERTURBATION_XSPACES,
@@ -634,14 +633,27 @@ class NNPDFShapleyAnalyzer:
                 amplitude=amplitude, mu=mu, sigma=sigma,
                 mode=mode, xspace=xspace,
             )
-            fig_bar = plot_shapley_bar(
-                results["shapley_values"],
-                self.flavor_short,
-                title=(
+            if mode == 'ablation':
+                bar_title = (
+                    f"PDF Flavour Importance ({basis_name})  "
+                    f"mode={mode}, xspace={xspace}"
+                )
+            elif mode == 'calibrated':
+                bar_title = (
+                    f"PDF Flavour Importance ({basis_name})  "
+                    f"mu={mu}, sigma={sigma}, A={amplitude}\u03c3_rep, "
+                    f"mode={mode}, xspace={xspace}"
+                )
+            else:
+                bar_title = (
                     f"PDF Flavour Importance ({basis_name})  "
                     f"mu={mu}, sigma={sigma}, A={amplitude}, "
                     f"mode={mode}, xspace={xspace}"
-                ),
+                )
+            fig_bar = plot_shapley_bar(
+                results["shapley_values"],
+                self.flavor_short,
+                title=bar_title,
                 ylabel="Shapley Value (delta chi2/N)",
             )
             plt.show()
@@ -657,6 +669,7 @@ class NNPDFShapleyAnalyzer:
                   mode='additive', xspace='linear', x_points=200):
         """Plot reference vs perturbed PDFs for all Shapley-player flavours."""
         x_plot = np.logspace(-5, -0.001, x_points)
+        x_axis_scale = "linear" if float(mu) > 0.1 else "log"
         Q0 = self.observables[0].Q0
 
         if self.basis == 'flavor':
@@ -674,14 +687,16 @@ class NNPDFShapleyAnalyzer:
         if self.n_replicas is not None:
             gv_ref = gv_ref[1: self.n_replicas + 1]
 
-        gauss = gaussian_profile(x_plot, mu, sigma, amplitude, xspace)
-        gv_pert = gv_ref.copy()
-        if mode == 'additive':
-            for i in range(gv_pert.shape[1]):
-                gv_pert[:, i, :] += gauss[np.newaxis, :]
-        else:
-            for i in range(gv_pert.shape[1]):
-                gv_pert[:, i, :] *= (1.0 + gauss[np.newaxis, :])
+        gv_pert = apply_gaussian_perturbation(
+            gv_ref,
+            local_flavor_idx=list(range(gv_ref.shape[1])),
+            mu=mu,
+            sigma=sigma,
+            amplitude=amplitude,
+            xgrid=x_plot,
+            mode=mode,
+            xspace=xspace,
+        )
 
         n = len(self.flavor_short)
         ncols = min(3, n)
@@ -701,7 +716,7 @@ class NNPDFShapleyAnalyzer:
                 alpha=0.25, color="blue"
             )
             ax.plot(x_plot, pert_mean, "r--", lw=1.5, label="Perturbed")
-            ax.set_xscale("log")
+            ax.set_xscale(x_axis_scale)
             ax.set_title(self.flavor_labels[i])
             ax.set_xlabel("x")
             ax.set_ylabel("xf(x)")
@@ -714,7 +729,7 @@ class NNPDFShapleyAnalyzer:
         basis_name = "Flavor" if self.basis == 'flavor' else "Evolution"
         fig.suptitle(
             f"{basis_name}-basis PDFs: A={amplitude}, mu={mu}, "
-            f"sigma={sigma}, mode={mode}, xspace={xspace}",
+            f"sigma={sigma}, mode={mode}, xspace={xspace}, x-axis={x_axis_scale}",
             fontsize=14, fontweight="bold", y=1.01,
         )
         plt.tight_layout()
