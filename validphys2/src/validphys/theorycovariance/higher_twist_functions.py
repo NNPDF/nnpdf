@@ -112,6 +112,8 @@ def get_pc_type(
         if experiment is None:
             raise ValueError("The 'experiment' argument is required for DIJET process type.")
         return _get_dijet_pc_type(experiment, pc_dict)
+    elif process_type == "DIJET_3D":
+        return "H2j_3D"
     else:
         raise RuntimeError(f"{process_type} has not been implemented.")
 
@@ -502,6 +504,15 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
 
         nodes = pc_dict[pc_type]['nodes']
         pc_func = mult_jet_pc(nodes, m_jj, rap, dataset_sp, pdf)
+        deltas.update(_apply_pars_combs(pars_combs, pc_type, pc_func))
+
+    elif process_type == "DIJET_3D":
+        kinematics = dataset_sp.commondata.metadata.load_kinematics()
+        ystar = kinematics['ystar'].to_numpy().reshape(-1)[cuts]
+        m_jj = kinematics['m_jj'].to_numpy().reshape(-1)[cuts]
+
+        nodes = pc_dict[pc_type]['nodes']
+        pc_func = mult_jet_pc(nodes, m_jj, ystar, dataset_sp, pdf)
         deltas.update(_apply_pars_combs(pars_combs, pc_type, pc_func))
 
     else:
