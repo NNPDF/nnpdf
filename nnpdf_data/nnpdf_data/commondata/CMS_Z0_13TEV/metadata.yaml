@@ -1,8 +1,8 @@
 setname: CMS_Z0_13TEV
 version: 1
-version_comment: 'Initial implementation' 
-arXiv: 
-  url: https://arxiv.org/abs/2408.07622 
+version_comment: 'Initial implementation'
+arXiv:
+  url: https://arxiv.org/abs/2408.07622
   journal: Phys.Lett.B 866 (2025) 139526
 iNSPIRE:
   url: https://inspirehep.net/literature/2818125
@@ -13,7 +13,7 @@ hepdata:
 nnpdf_metadata:
   nnpdf31_process: "DY NC"
   experiment: CMS
-  
+
 implemented_observables:
 - observable_name: AFB
   observable:
@@ -24,7 +24,7 @@ implemented_observables:
   tables: [Figure_8,Correlation_coefficients_between_A4_values_of_Figure_8]
   ndata: 53
   plotting:
-    dataset_label: 'CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined' 
+    dataset_label: 'CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined'
     plot_x: m_ll
     y_label: "$A_{FB}$"
   kinematic_coverage:
@@ -45,8 +45,7 @@ implemented_observables:
   - uncertainties_AFB.yaml
   theory:
     FK_tables:
-    - - CMS_Z0_13TEV_FWD
-      - CMS_Z0_13TEV_BWD
-    operation: ASY
+    - - CMS_Z0_13TEV_PROJ_A4
+      - CMS_Z0_13TEV_TOT
+    operation: ratio
     conversion_factor: 1.0
-
