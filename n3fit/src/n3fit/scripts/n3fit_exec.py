@@ -19,8 +19,11 @@ from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.core import FitSpec
 from validphys.utils import yaml_safe
+from validphys.loader import Loader
 from validphys.api import API
 from validphys.hyperoptplot import generate_dictionary
+
+loader = Loader()
 
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[], allow_legacy_names=False)
 
@@ -248,7 +251,7 @@ class N3FitConfig(Config):
         if not trial_specs:
             return {}
         else:
-            hyperscan = API.hyperscan(hyperscan=trial_specs['hyperscan'])
+            hyperscan = loader.check_hyperscan(trial_specs['hyperscan'])
             dict_trials = generate_dictionary(hyperscan.tries_files[1].parent,"average")
             hyperopt_dataframe = pd.DataFrame(dict_trials)
             n_termalization = trial_specs['thermalization']
