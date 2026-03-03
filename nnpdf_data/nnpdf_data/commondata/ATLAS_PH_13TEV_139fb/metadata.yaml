@@ -68,7 +68,7 @@ implemented_observables:
 
 - observable_name: ET-ETA-R04
   observable:
-    description: "ATLAS direct photon production 13 TeV at 139 fb^-1 R=0.4"
+    description: "ATLAS direct photon production 13 TeV at 139 $fb^-1$ R=0.4"
     label: r"dsigma/dE_T^\gamma"
     units: "$fb/GeV$"
   process_type: PHT
