@@ -1,4 +1,4 @@
-setname: ATLAS_1JET_7TEV_R06
+setname: ATLAS_1JET_7TEV_R04
 version: 1
 version_comment: Dataset excluded in NNPDF4.0. First implementation in the new commondata format.
 arXiv:
@@ -9,12 +9,12 @@ hepdata:
   url: https://www.hepdata.net/record/ins1325553
   version: 1
   tables:
-  - 7
-  - 8
-  - 9
-  - 10
-  - 11
-  - 12
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
 nnpdf_metadata:
   nnpdf31_process: JETS
   experiment: ATLAS
@@ -27,15 +27,15 @@ implemented_observables:
     units: '[pb/GeV]'
   ndata: 140
   tables:
-  - 7
-  - 8
-  - 9
-  - 10
-  - 11
-  - 12
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
   process_type: JET
   plotting:
-    dataset_label: ATLAS jets 7 TeV, R=0.6
+    dataset_label: ATLAS jets 7 TeV, R=0.4
     x_scale: log
     plot_x: pT
     figure_by:
@@ -73,10 +73,10 @@ implemented_observables:
       data_central: data_stronger.yaml
   theory:
     FK_tables:
-    - - ATLAS_1JET_7TEV_R06_BIN1
-      - ATLAS_1JET_7TEV_R06_BIN2
-      - ATLAS_1JET_7TEV_R06_BIN3
-      - ATLAS_1JET_7TEV_R06_BIN4
-      - ATLAS_1JET_7TEV_R06_BIN5
-      - ATLAS_1JET_7TEV_R06_BIN6
+    - - ATLAS_1JET_7TEV_R04_BIN1
+      - ATLAS_1JET_7TEV_R04_BIN2
+      - ATLAS_1JET_7TEV_R04_BIN3
+      - ATLAS_1JET_7TEV_R04_BIN4
+      - ATLAS_1JET_7TEV_R04_BIN5
+      - ATLAS_1JET_7TEV_R04_BIN6
     operation: 'null'

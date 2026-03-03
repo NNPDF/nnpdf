@@ -1152,8 +1152,16 @@ def fill_df_ATLAS_2JET_7TEV_R06(heptable, scenario='nominal'):
     return df_nan
 
 
-# ======================================================== ATLAS_1JET_7TEV_R06 ======================================================== #
-TABLE_TO_RAPIDITY_ATLAS_1JET_7TEV_R06 = {
+# ======================================================== ATLAS_1JET_7TEV_R06/04 ======================================================== #
+TABLE_TO_RAPIDITY_ATLAS_1JET_7TEV = {
+    # R = 0.4
+    1: [0.0, 0.5],
+    2: [0.5, 1.0],
+    3: [1.0, 1.5],
+    4: [1.5, 2],
+    5: [2.0, 2.5],
+    6: [2.5, 3.0],
+    # R = 0.6
     7: [0.0, 0.5],
     8: [0.5, 1.0],
     9: [1.0, 1.5],
@@ -1163,7 +1171,7 @@ TABLE_TO_RAPIDITY_ATLAS_1JET_7TEV_R06 = {
 }
 
 
-def HEP_table_to_df_ATLAS_1JET_7TEV_R06(table):
+def HEP_table_to_df_ATLAS_1JET_7TEV(table):
     """
     Given hep data table, version, and variant, initialize a pandas DataFrame
     with index given by Ndata, columns by the uncertainties and np.nan entries.
@@ -1187,7 +1195,7 @@ def HEP_table_to_df_ATLAS_1JET_7TEV_R06(table):
     return df_nan
 
 
-def fill_df_ATLAS_1JET_7TEV_R06(table, version, variant='nominal'):
+def fill_df_ATLAS_1JET_7TEV(table, version, variant='nominal'):
     """
     Fill a data frame with index
     corresponding to measured datapoints
@@ -1216,7 +1224,7 @@ def fill_df_ATLAS_1JET_7TEV_R06(table, version, variant='nominal'):
     # list of len ndata. Each entry is dict with
     # keys errors and value
     table = card['dependent_variables'][0]['values']
-    df = HEP_table_to_df_ATLAS_1JET_7TEV_R06(table)
+    df = HEP_table_to_df_ATLAS_1JET_7TEV(table)
     cvs = []
 
     for i, dat in enumerate(table):
