@@ -76,7 +76,7 @@ implemented_observables:
   ndata: 62
   plotting:
     dataset_label: "ATLAS direct photon production 13 TeV and 139 fb^-1 R=0.4"
-    y_label: '$d\sigma/dE_T ^\gamma$ (fb)'
+    y_label: r'$d\sigma/dE_T ^\gamma$ (fb)'
     figure_by:
     - eta
     plot_x: ET
