@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ######################################################################################
-description: NNLO fit for mc variation project. mc=1.41, matching scale =1.4
+description: NNLO fit to check the uncertainty using the delta chi2 method, mc=1.5
 
 ######################################################################################
 dataset_inputs:
@@ -35,7 +35,15 @@ datacuts:
 ################################################################################
 # NNLO QCD TRN evolution
 theory:
-  theoryid: 40_025_003
+  theoryid: 40_027_003
+
+# theorycovmatconfig:
+#   point_prescriptions: ["mcharm 1.5 1 2"]
+#   # theoryids:
+#   #   from_: scale_variation_theories
+#   pdf: run_main_thr14
+#   use_thcovmat_in_fitting: true
+#   use_thcovmat_in_sampling: true
 
 ################################################################################
 trvlseed: 591866982
