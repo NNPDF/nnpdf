@@ -41,7 +41,7 @@ implemented_observables:
     variables:
       eta:
         description: "Absolute photon pseudorapidity"
-        label: "$|\eta|$"
+        label: r"$|\eta|$"
         units: ""
       ET:
         description: "Transverse energy"
