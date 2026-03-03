@@ -21,14 +21,14 @@ implemented_observables:
 
 - observable_name: ET-ETA-R02
   observable:
-    description: "ATLAS direct photon production 13 TeV at 139 fb^-1 R=0.2"
-    label: r"dsigma/dE_T^\gamma"
+    description: "ATLAS direct photon production 13 TeV at 139 $fb^-1$ R=0.2"
+    label: r"$d\sigma/dE_T^\gamma d\eta"
     units: "$fb/GeV$"
   process_type: PHT
   tables: [7, 8, 9, 10, 11, 12]
   ndata: 62
   plotting:
-    dataset_label: "ATLAS direct photon production 13 TeV and 139 fb^-1 R=0.2"
+    dataset_label: "ATLAS direct photon production 13 TeV and 139 $fb^-1$ R=0.2"
     y_label: '$d\sigma/dE_T ^\gamma$ (fb/GeV)'
     figure_by:
     - eta
@@ -69,7 +69,7 @@ implemented_observables:
 - observable_name: ET-ETA-R04
   observable:
     description: "ATLAS direct photon production 13 TeV at 139 $fb^-1$ R=0.4"
-    label: r"dsigma/dE_T^\gamma"
+    label: r"$d\sigma/dE_T^\gamma d\eta$"
     units: "$fb/GeV$"
   process_type: PHT
   tables: [1, 2, 3, 4, 5, 6]
