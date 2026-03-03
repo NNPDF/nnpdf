@@ -15,6 +15,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tarfile
 import tempfile
 import time
 from urllib.parse import urljoin
@@ -343,12 +344,50 @@ class FitUploader(ArchiveUploader):
 
 
 class HyperscanUploader(FitUploader):
-    """Uploader for hyperopt scans, which are just special cases of fits"""
+    """Uploader for hyperopt scans, which are just special cases of fits.
+    In the case of parallel hyperopt, a huge database is being used but not uploaded
+    (by default) unless the --upload-db flag is being used.
+    """
 
     _resource_type = "hyperscans"
     _loader_name = "downloadable_hyperscans"
     target_dir = _profile_key('hyperscan_target_dir')
     root_url = _profile_key('hyperscan_root_url')
+
+    def __init__(self, *args, upload_database=False, **kwargs):
+        self._upload_database = upload_database
+
+        super().__init__(*args, **kwargs)
+
+    def _filter_db_out(self, tarinfo):
+        """Skips the database from the tarfile to avoid cluttering the server."""
+        if self._upload_database:
+            return tarinfo
+        database_name = "hyperopt-db"
+        file_path = pathlib.Path(tarinfo.name)
+        if database_name in file_path.parts:
+            return None
+        return tarinfo
+
+    def _compress(self, output_path):
+        """Compress the folder skipping the database itself"""
+        output_path = output_path.resolve()
+        tempdir = tempfile.mkdtemp(
+            prefix=f'{self._resource_type}_upload_deleteme_', dir=output_path.parent
+        )
+        log.info(f"Compressing {self._resource_type} to {tempdir}")
+        archive_path_without_extension = pathlib.Path(tempdir) / (output_path.name)
+
+        try:
+            with Spinner():
+                with tarfile.open(
+                    archive_path_without_extension.with_suffix(".tar.gz"), "w:gz"
+                ) as tarf:
+                    tarf.add(name=output_path, filter=self._filter_db_out, arcname=output_path.name)
+        except Exception as e:
+            log.error(f"Couldn't compress archive: {e}")
+            raise UploadError(e) from e
+        return tempdir, archive_path_without_extension
 
 
 class PDFUploader(ArchiveUploader):

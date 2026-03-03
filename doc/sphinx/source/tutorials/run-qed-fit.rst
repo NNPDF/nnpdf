@@ -3,32 +3,255 @@
 ==========================
 How to run a QED fit
 ==========================
+This tutorial describes how to run a QED fit using the LuxQED approach, as
+described in `arXiv:1607.04266 <https://arxiv.org/abs/1607.04266>`_ and
+`arXiv:1708.01256 <https://arxiv.org/abs/1708.01256>`_.
 
-It is possible to perform a QED fit adding the key ``fiatlux`` to the runcard. In this way
-a photon PDF will be generated using the FiatLux public library that implements the LuxQED
-(see :cite:p:`Manohar:2016nzj` and :cite:p:`Manohar:2017eqh`) approach.
-The parameters to be added are the following:
+Setting up the runcard
+----------------------
+
+It is possible to perform a QED fit by adding a ``fiatlux`` block to the
+runcard. The following code snippet shows all the available options to set up
+a QED fit:
 
 .. code-block:: yaml
 
     fiatlux:
-      luxset: NNPDF40_nnlo_as_01180
+      luxset: NNPDF40_nnlo_as_01180_qcd
       additional_errors: true
       luxseed: 1234567890
+      compute_in_setupfit: false
+      eps_base: 1e-5
 
-``luxset`` is the PDF set used to generate the photon PDF with `FiatLux <https://github.com/scarrazza/fiatlux/>`.
-The code will generate as many photon replicas as the number of replicas contained in the ``luxset``. Therefore, if the user
-tries to generate a replica with ID higher than the maximum ID of the ``luxset``, the code will
-raise an error. Moreover, being the LuxQED approach an iterated prcedure, and given that some replicas
-do not pass the ``postfit`` selection criteria, the user should make sure that the number of replicas in
-the ``luxset`` is high enough such that in the final iteration there will be a number of replicas
-higher than the final replicas desired.
-``additional_errors`` is a parameter that switches on and off the additional errors of the LuxQED  approach,
-while ``luxseed`` is the seed used to generate such errors.
-This errors should be switched on only in the very last iteration of the procedure.
+The parameters contained in the ``fiatlux`` block are:
 
-Whenever the photon PDF is generated, it will remain constant during the fit and will be considered in the momentum sum rule.
+* ``luxset``
+      The name of the PDF set used to generate the photon PDF with `FiatLux
+      <https://github.com/scarrazza/fiatlux/>`_. The code will use as many
+      photon replicas as the number of replicas contained in the ``luxset``. If
+      the user tries to generate a replica with ID higher than the maximum ID of
+      the ``luxset``, the code will start reusing photon replica from the first
+      replica. Being the LuxQED approach an iterated procedure, and that some
+      replicas do not pass the ``postfit`` selection criteria, the user should
+      make sure that the number of replicas in the ``luxset`` is high enough
+      such that in the final iteration there will be a number of replicas higher
+      than the final replicas desired.
+
+* ``additional_errors``
+      Boolean flag to switch on and off the additional errors of the LuxQED approach.
+
+      .. note::
+
+        The ``additional_errors`` flag should be switched on only in the very last
+        iteration of the procedure.
+
+* ``luxseed``
+      The seed used to generate the additional errors of the LuxQED as in ``additional_errors``.
+
+* ``compute_in_setupfit``
+      Boolean flag to trigger the computation of the photon PDF set during
+      ``vp-setupfit``. By default, it is set to `false`. This is not required if
+      the photon PDF set is already available locally or on the NNPDF server.
+      See the :ref:`section below <running-with-photon-sets>` for more details.
+
+* ``eps_base``
+      (optional) The base precision of the FiatLux computation, which controls
+      the precision on final integration of double integral. By default, it is
+      set to ``1e-5``. This parameter is used only if the photon PDF set is
+      generated on the fly, either during ``vp-setupfit`` or ``n3fit``. See
+      :ref:`Generating new Photon sets <generating-photon-sets>` for more
+      details.
+
+The code uses information contained in both the ``fiatlux`` block and the
+``theoryid`` specified in the runcard to identify the photon PDF set, which will
+be assigned the name ``photon_theoryID_<theoryid>_fit_<luxset>``. This name will
+be used to either look for existing photon PDF sets or to store newly generated
+ones, as explained below.
+
+.. _running-with-photon-sets:
+
+Running with Photon PDF sets
+-----------------------------
+
+The generation of a photon PDF set can add significant overhead to the fitting
+procedure. Moreover, the same photon PDF set might be used in different fits. To
+minimize the overhead due to the generation of photon PDF sets and avoid
+redundant computations, the code looks for precomputed photon resources either
+locally or on the NNPDF server. If a desired photon PDF set does not exist in
+either of the two locations, it will be computed on the fly and stored locally.
+If the user is satisfied with the new local photon PDF set, they can upload it to
+the NNPDF server following the instructions in :ref:`this section <generating-photon-sets>`.
+The following sections describe how to use existing photon PDF sets or generate
+new ones.
+
+Using available Photon PDF sets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Before running a QED fit, it is strongly advised to prepare the fit using
+``vp-setupfit``, as explained in :ref:`this tutorial <run-n3fit-fit>`. This will
+ensure that all the required resources are available, including the photon PDF.
+The desired photon PDF is specified by the ``luxset`` parameter in the
+``fiatlux`` block and the ``theoryid``, as explained above. The code will first
+look for the photon PDF set in the local directory specified in the
+:ref:`profile file <nnprofile>`. If the set is not found locally, it will try to
+download it from the NNPDF server. If the photon PDF set is not found on the
+server either, and the user has not requested to compute it during
+``vp-setupfit`` through the flag ``compute_in_setupfit``, the photon replica
+will be computed as needed for the replica fitted during the execution of
+``n3fit`` (see :ref:`here <photon_n3fit>` for more details).
+
+The following is an example of running ``vp-setupfit`` using the
+``fiatlux`` block shown above and setting ``compute_in_setupfit: false``:
+
+.. code-block:: bash
+
+    $ vp-setupfit qed_example_runcard.yml
+    [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed in theory: 40000100. Attempting to download it.
+    [INFO]: Downloading https://data.nnpdf.science/photons/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed.tar.
+    [==================================================] (100%)
+    [INFO]: Extracting archive to /opt/homebrew/Caskroom/miniconda/base/envs/nnpdf/share/NNPDF/photons_qed
+    [INFO]: Photon QED set found for 40000100 with luxset NNPDF40_nnlo_as_01180_qed.
+    [WARNING]: Using q2min from runcard
+    [WARNING]: Using w2min from runcard
+    Using Keras backend
+    [INFO]: All requirements processed and checked successfully. Executing actions.
+    ...
+
+In this case, the desired photon PDF set was already stored and precomputed on
+the server. This is downloaded and extracted in the local
+``photons_qed_path`` specified in the :ref:`profile file <nnprofile>`.
+
+The ``vp-list`` utility tool can be used to list all the available photon PDF
+sets locally and on the NNPDF server. To list the available photon PDF sets,
+just run `vp-list photons` to see which photon PDF sets are available locally
+and which ones can be downloaded from the server. The user can manually download
+a photon PDF set using the ``vp-get`` tool as explained :ref:`here <download>`.
+For example:
+
+.. code-block:: bash
+
+  $ vp-get photonQED 40000100 NNPDF40_nnlo_as_01180_qed
+  [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed in theory: 40000100. Attempting to download it.
+  [INFO]: Downloading https://data.nnpdf.science/photons/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed.tar.
+  [==================================================] (100%)
+  [INFO]: Extracting archive to /user/envs/nnpdf/share/NNPDF/photons_qed
+  PosixPath('/user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qed')
+
+As in the case of ``vp-setupfit``, this will download and extract the photon PDF
+set in the local ``photons_qed_path`` specified in the :ref:`profile file <nnprofile>`.
+Once the photon PDF set is available locally, the user can proceed to run the
+fit with ``n3fit`` as usual.
 
 .. warning::
 
-   At the moment it is not possible to run QED fits in parallel, as the FiatLux library cannot run in parallel.
+   If ``vp-setupfit`` is not run before ``n3fit``, and the photon PDF set is not
+   available locally, the code will **not** attempt to download it from the server,
+   but will directly proceed to compute it on the fly. See the :ref:`next section <generating-photon-sets>` for
+   more details.
+
+.. _generating-photon-sets:
+
+Generating new Photon PDF sets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If the desired photon PDF set is not available locally nor on the NNPDF server, the
+code will generate the required photon PDF set replicas on the fly using `FiatLux <https://github.com/scarrazza/fiatlux/>`_.
+This can be done either during the ``vp-setupfit`` step, which precomputes all photon
+replicas before starting the fit, or during the fitting step with ``n3fit``, which
+generates the photon replica as needed for each replica being fitted.
+
+.. note::
+
+  Generating photon PDF sets on the fly can add significant overhead to the
+  fitting procedure. It is therefore strongly advised to precompute the photon
+  PDF set using ``vp-setupfit`` before running the fit with ``n3fit``.
+
+In either case, the generated photon PDF set will be stored locally in the
+``photons_qed_path`` specified in the :ref:`profile file <nnprofile>`, so that
+it can be reused in future fits. The folder containing the photon replicas will
+be named as ``photon_theoryID_<theoryid>_fit_<luxset>`` where ``<theoryid>`` and
+``<luxset>`` are the values specified in the runcard. The folder contains a ``npz``
+file for each photon replica, named as ``replica_<replica_id>.npz``. Each replica
+file contains the photon PDF grid computed with FiatLux at :math:`Q_{\rm init} = 100` GeV,
+prior to the evolution through EKO.
+
+.. important::
+
+  Automatic upload to the NNPDF server through ``vp-upload`` is **not**
+  supported at the moment. The user should manually create a ``tar`` archive
+  file containing the photon replicas
+
+  .. code-block:: bash
+
+      $ cd my_photon_folder
+      $ tar -czf my_photon.tgz *.npz
+
+  Once the archive file is created, the user can upload it to the server. Refer
+  to the :ref:`profile file <nnprofile>` to find the remote URL where photon PDF
+  sets are stored.
+
+
+Using ``vp-setupfit`` (preferred)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  In order to trigger the computation of the photon PDF set during ``vp-setupfit``,
+  the user needs to add the flag ``compute_in_setupfit: true`` in the ``fiatlux`` block
+  discussed above. The following is an example of running ``vp-setupfit`` with
+  this flag enabled:
+
+  .. code-block:: bash
+
+      $ vp-setupfit qed_example_runcard.yml
+      [INFO]: Could not find a resource (photonQED): Could not find Photon QED set /user/envs/nnpdf/share/NNPDF/photons_qed/photon_theoryID_40000100_fit_NNPDF40_nnlo_as_01180_qcd in theory: 40000100. Attempting to download it.
+      [ERROR]: Resource not in the remote repository: Photon QED set for TheoryID 40000100 and luxset NNPDF40_nnlo_as_01180_qcd is not available in the remote server.
+      [WARNING]: Photon QED set for theory 40000100 with luxset NNPDF40_nnlo_as_01180_qcd not found. It will be computed in vp-setupfit.
+      [INFO]: Forcing photon computation with FiatLux during setupfit.
+      [WARNING]: Using q2min from runcard
+      [WARNING]: Using w2min from runcard
+      Using Keras backend
+      [INFO]: All requirements processed and checked successfully. Executing actions.
+      ...
+
+  In addition, the user can also specify the optional parameter ``eps_base`` to
+  the ``fiatlux`` block to set the base precision of the FiatLux computation,
+  which controls the precision on final integration of double integral. By
+  default, it is set to ``1e-5``. If the ``compute_in_setupfit`` flag is set to
+  ``true`` despite the photon PDF being available locally, the code will
+  recompute and overwrite the existing photon PDF set
+
+  .. tip::
+
+    During ``vp-setupfit``, the code tries to distribute the computation of the
+    photon replicas among the available CPU cores as specified in the
+    ``maxcores`` key of the runcard. This can significantly speed up the
+    computation of the photon PDF set. Make sure to set ``maxcores`` to a value
+    compatible with the available hardware. For example, using ``maxcores: 64``
+    will try to compute up to 64 photon replicas in parallel using 64 GB of RAM.
+
+  Once the preparation step is completed, and the photon PDF set is generated and stored
+  locally, the user can proceed to run the fit with ``n3fit`` as usual.
+
+.. _photon_n3fit:
+Using ``n3fit`` (discouraged)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  If the user prefers to compute the photon PDF set during the fitting step with
+  ``n3fit``, no additional flag is needed in the runcard and ``vp-setupfit`` is
+  not required beforehand (unless other resources are needed such as the
+  :ref:`theory covariance matrix <vptheorycov-index>`). The code will check for
+  the presence of the photon PDF set locally before starting the fit for each
+  replica. If it is not found, it will proceed to compute the photon replica as
+  needed for each replica being fitted. The following is an example of running
+  ``n3fit`` where the photon PDF set is computed during the fitting step:
+
+  .. code-block:: bash
+
+      $ n3fit qed_example_runcard.yml 1
+      [INFO]: Creating replica output folder in /user/runcards/qed_example_runcard/nnfit/replica_1
+      [WARNING]: Using q2min from runcard
+      [WARNING]: Using w2min from runcard Using Keras backend
+      [WARNING]: No Photon QED set found for Theory 40000100 with luxset NNPDF40_nnlo_as_01180_qed. It will be computed using FiatLux. This may impact performance. It is recommended to precompute the photon set before running the fit. Refer to https://docs.nnpdf.science/tutorials/run-qed-fit.html for more details on precomputing photon PDF sets.
+      [INFO]: All requirements processed and checked successfully. Executing actions.
+
+  .. warning::
+
+    Computing the photon PDF set during `n3fit` with multiple replicas or using GPUs
+    has not been tested and may lead to unexpected behaviour. It is strongly advised to
+    precompute the photon PDF set using ``vp-setupfit`` before running the fit with ``n3fit``.

@@ -79,7 +79,7 @@ def load_adapted_fits_chi2_table(filename):
     ndatas = dns.iloc[:, 0]
 
     f = lambda x: x[x.columns[0]] * x[x.columns[1]]
-    df = df.groupby(axis=1, level=0).apply(f)
+    df = df.T.groupby(level=0).apply(lambda x: f(x.T)).T
     df.columns = pd.MultiIndex.from_product([list(df.columns), ['chi2']])
 
     return ndatas, df
@@ -119,31 +119,33 @@ def combine_pseudoreplica_tables(
     total_chis = total.groupby(level=3).sum(min_count=1)
 
     def fixup_min_points(df):
+        # Since pandas 3, needs to transpose the df
+        # see deprecation note: https://pandas.pydata.org/pandas-docs/version/2.3/reference/api/pandas.DataFrame.groupby.html
+        df = df.T
         m = (~df.isnull()).sum(axis=1, min_count=1) >= min_points_required
         df[df[m].isnull()] = np.inf
-        return df
+        return df.T
 
     # The idea is: Set to inf the nans of the valid curves, so that we select
     # the minimum (which is not infinite).  Leave the bad nans as nans, so we
     # write nan always for those.
-    total_chis = total_chis.groupby(axis=1, level=1, group_keys=False).apply(fixup_min_points)
+    total_chis = total_chis.T.groupby(level=1, group_keys=False).apply(fixup_min_points).T
 
     # Note, asarray is needed because it ignores NANs otherwise.
     argmin = lambda x: pd.Series(np.argmin(np.asarray(x), axis=1), index=x.index)
 
-    best_replicas = total_chis.groupby(axis=1, level=1).apply(argmin)
-    gb = together.groupby(axis=1, level=1)
+    best_replicas = total_chis.T.groupby(level=1).apply(lambda x: argmin(x.T)).T
 
     def inner_select(df, indexes):
         return df.iloc[:, indexes[df.name]]
 
     def select_best_replicas(df):
         indexes = best_replicas[df.name]
-        return df.groupby(level=3).apply(inner_select, indexes=indexes)
+        return df.T.groupby(level=3).apply(inner_select, indexes=indexes).T
 
-    res = gb.apply(select_best_replicas)
+    res = together.T.groupby(level=1).apply(select_best_replicas).T
     res.index = res.index.droplevel(0)
-    res.sort_index(inplace=True)
+    res = res.sort_index()
 
     # TODO: Why in earth did I decide to keep this?!
     res.columns = pd.MultiIndex.from_product((res.columns, ['chi2']))
@@ -154,8 +156,7 @@ def combine_pseudoreplica_tables(
 def get_extrasum_slice(df, components):
     """Extract a slice of a table that has the components in the format that
     extra_sums expects."""
-    df = pd.DataFrame(df)
-    df.sort_index(inplace=True)
+    df = pd.DataFrame(df).sort_index()
     total_token = ' Total'
     keys = [
         (c[: -len(total_token)], 'Total') if c.endswith(total_token) else (slice(None), c)

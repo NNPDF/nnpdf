@@ -17,7 +17,7 @@ import urllib.parse as urls
 
 import requests
 
-from nnpdf_data import THEORY_CARDS_PATH
+from nnpdf_data import CFACTOR_PATH, THEORY_CARDS_PATH
 from nnpdf_data.commondataparser import parse_new_metadata, parse_set_metadata
 from nnpdf_data.coredata import generate_path_filtered_data
 from nnpdf_data.utils import get_nnpdf_profile
@@ -77,6 +77,10 @@ class TheoryNotFound(LoadFailedError):
 
 
 class EkoNotFound(LoadFailedError):
+    pass
+
+
+class PhotonQEDNotFound(LoadFailedError):
     pass
 
 
@@ -143,16 +147,19 @@ class LoaderBase:
         theories_path = pathlib.Path(profile["theories_path"])
         resultspath = pathlib.Path(profile["results_path"])
         ekos_path = pathlib.Path(profile["ekos_path"])
+        photons_qed = pathlib.Path(profile["photons_qed_path"])
 
         # Create the theories and results paths if they don't exist already
         theories_path.mkdir(exist_ok=True, parents=True)
         ekos_path.mkdir(exist_ok=True, parents=True)
         resultspath.mkdir(exist_ok=True, parents=True)
+        photons_qed.mkdir(exist_ok=True, parents=True)
 
         # And save them up
         self.commondata_folders = tuple(datapaths)
         self._theories_path = theories_path
         self._ekos_path = ekos_path
+        self._photons_qed_path = photons_qed
         self.resultspath = resultspath
         self._extremely_old_fits = set()
         self.nnprofile = profile
@@ -208,6 +215,14 @@ class Loader(LoaderBase):
         """Return a string token for each of the available theories"""
         return {
             eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.tar")
+        }
+
+    @functools.cached_property
+    def available_photons(self):
+        """Return a string token for each of the available theories"""
+        return {
+            photon_path.name.split("photon_")[1]
+            for photon_path in self._photons_qed_path.glob("photon_*")
         }
 
     @property
@@ -306,6 +321,16 @@ class Loader(LoaderBase):
             raise EkoNotFound(f"Could not find eko {eko_path} in theory: {theoryID}")
         return eko_path
 
+    @functools.lru_cache
+    def check_photonQED(self, theoryID, luxset):
+        """Check the Photon QED set exists and return the path to it"""
+        photon_qed_path = self._photons_qed_path / f"photon_theoryID_{int(theoryID)}_fit_{luxset}"
+        if not photon_qed_path.exists():
+            raise PhotonQEDNotFound(
+                f"Could not find Photon QED set {photon_qed_path} in theory: {int(theoryID)}"
+            )
+        return photon_qed_path
+
     @property
     def theorydb_folder(self):
         """Checks theory db file exists and returns path to it"""
@@ -380,11 +405,22 @@ class Loader(LoaderBase):
         _, theopath = self.check_theoryID(theoryID)
         cf = []
         for cfactor in cfactors:
-            cfactorpath = theopath / "cfactor" / f"CF_{cfactor}_{setname}.dat"
-            if not cfactorpath.exists():
+            filename = f"CF_{cfactor}_{setname}.dat"
+            theory_cfactor = theopath / "cfactor" / filename
+            internal_cfactor = CFACTOR_PATH / filename
+            if theory_cfactor.exists() and internal_cfactor.exists():
+                log.warning(
+                    f"cfactor for {filename} found both internally and in {theory_cfactor}. The theory cfactor takes precedence."
+                )
+
+            if theory_cfactor.exists():
+                cfactorpath = theory_cfactor
+            elif internal_cfactor.exists():
+                cfactorpath = internal_cfactor
+            else:
                 msg = (
-                    f"Could not find cfactor '{cfactor}' for FKTable {setname}."
-                    f"File {cfactorpath} does not exist in {theoryID}"
+                    f"Could not find cfactor '{cfactor}' for FKTable {setname}.\n"
+                    f"File {filename} does not exist in {theopath}/cfactor or in {CFACTOR_PATH}"
                 )
                 raise CfactorNotFound(msg)
             cf.append(cfactorpath)
@@ -818,6 +854,16 @@ class RemoteLoader(LoaderBase):
 
     @property
     @_key_or_loader_error
+    def photon_qed_index(self):
+        return self.nnprofile['photon_qed_index']
+
+    @property
+    @_key_or_loader_error
+    def photon_qed_urls(self):
+        return self.nnprofile['photon_qed_urls']
+
+    @property
+    @_key_or_loader_error
     def nnpdf_pdfs_urls(self):
         return self.nnprofile['nnpdf_pdfs_urls']
 
@@ -888,6 +934,13 @@ class RemoteLoader(LoaderBase):
 
     @property
     @functools.lru_cache
+    def remote_photons(self):
+        token = 'photon_'
+        rt = self.remote_files(self.photon_qed_urls, self.photon_qed_index, thing="photons")
+        return {k[len(token) :]: v for k, v in rt.items()}
+
+    @property
+    @functools.lru_cache
     def remote_nnpdf_pdfs(self):
         return self.remote_files(self.nnpdf_pdfs_urls, self.nnpdf_pdfs_index, thing="PDFs")
 
@@ -919,6 +972,10 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_ekos(self):
         return list(self.remote_ekos)
+
+    @property
+    def downloadable_photons(self):
+        return list(self.remote_photons)
 
     @property
     def lhapdf_pdfs(self):
@@ -1101,6 +1158,18 @@ class RemoteLoader(LoaderBase):
         # Check that we have the theory we need
         target_path = self._ekos_path / f"eko_{int(thid)}.tar"
         download_file(remote[thid], target_path)
+
+    def download_photonQED(self, thid, luxset: str):
+        """Download the Photon set for a given theory ID"""
+        remote = self.remote_photons
+        key = f"theoryID_{thid}_fit_{luxset}"
+        if key not in remote:
+            raise PhotonQEDNotFound(
+                f"Photon QED set for TheoryID {thid} and luxset {luxset} is not available in the remote server."
+            )
+        # Check that we have the theory we need
+        target_path = self._photons_qed_path
+        download_and_extract(remote[key], target_path)
 
     def download_vp_output_file(self, filename, **kwargs):
         try:

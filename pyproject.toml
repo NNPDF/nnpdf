@@ -61,9 +61,10 @@ vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
 python = ">=3.9"
 matplotlib = "^3.9"
 pineappl = "^1.0.0"
+# TODO: make the code compatible with pandas 3
 pandas = "*"
 numpy = "*"
-"ruamel.yaml" = "*"
+"ruamel.yaml" = {version = ">=0.19.1", extras=["oldlibyaml"]}
 validobj = "*"
 prompt_toolkit = "*"
 reportengine = ">=0.32"
@@ -74,9 +75,11 @@ tensorflow = "*"
 keras = "^3.1"
 eko = "^0.15.1"
 joblib = "*"
-# Hyperopt
-hyperopt = "*"
 seaborn = "*"
+# Hyperopt
+hyperopt = {version = "*", optional = true}
+# hyperopt needs setuptools pinned to < 82 due to pkg resources
+setuptools = {version = "<82", optional = true}
 # LHAPDF installation for debugging purposes
 # a3b2bbc3ced97675ac3a71df45f55ba = "*"
 # Optional dependencies
@@ -88,7 +91,7 @@ hypothesis = {version = "*", optional = true}
 # docs
 sphinxcontrib-bibtex = {version = "*", optional = true}
 sphinx_rtd_theme = {version = "*", optional = true}
-sphinx = {version = "^5.0", optional = true}
+sphinx = {version = "^6.2", optional = true}
 tabulate = {version = "*", optional = true}
 # qed
 fiatlux = {version = "*", optional = true}
@@ -110,7 +113,8 @@ qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 torch = ["torch"]
 jax = ["jax"]
-parallelhyperopt = ["pymongo"]
+hyperopt = ["hyperopt", "setuptools"]
+parallelhyperopt = ["pymongo", "hyperopt", "setuptools"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
