@@ -362,7 +362,7 @@ DIJET = _Process(
 )
 
 DIJET_3D = _Process(
-    "DIJET",
+    "DIJET_3D",
     "DiJets production",
     accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff, _Vars.ymax, _Vars.yb),
     xq2map_function=_dijets_xq2map,
