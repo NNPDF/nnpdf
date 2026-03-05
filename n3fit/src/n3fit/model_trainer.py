@@ -1021,19 +1021,17 @@ class ModelTrainer:
             )
             
             if self.mode_hyperopt or (not self.trials):
-                # Compile each of the models with the right parameters
-                for model in models.values():
-                    model.compile(**params["optimizer"])
+                optimizer_params = params["optimizer"]
             else:
-                # Proper way of doing this? Not sure how optimizer parameters should be treated
                 idx_hyperparamters = self.replicas[0] % self.trials["number_of_trials"]
                 optimizer_params = {}
                 optimizer_params["clipnorm"] = self.trials['clipnorm'][idx_hyperparamters]
                 optimizer_params["learning_rate"] = self.trials['learning_rate'][idx_hyperparamters]
                 optimizer_params["optimizer_name"] = self.trials['optimizer'][idx_hyperparamters]
-                for model in models.values():
-                    model.compile(**optimizer_params)
-            
+                
+            # Compile each of the training/validation models with the same  optimization parameters  
+            for model in models.values():
+                model.compile(**optimizer_params)
             self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
