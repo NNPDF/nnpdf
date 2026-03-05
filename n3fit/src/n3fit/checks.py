@@ -15,6 +15,18 @@ from validphys.pdfbases import check_basis
 log = logging.getLogger(__name__)
 
 NN_PARAMETERS = ["nodes_per_layer", "optimizer", "activation_per_layer"]
+HYPEROPTIMIZED_PARAMETERS = [
+    "nodes_per_layer" , 
+    "optimizer", 
+    "learning_rate", 
+    "clipnorm",
+    "activation_per_layer",
+    "initializer",
+    "epochs",
+    "stopping_patience",
+    "layer_type",
+    "dropout"
+    ]
 
 
 def _is_floatable(num):
@@ -28,6 +40,16 @@ def _is_floatable(num):
     except (ValueError, TypeError):
         return False
 
+def check_hyperopt_parameters(parameters, trial_specs):
+    if trial_specs:
+        tmp = []
+        for param in HYPEROPTIMIZED_PARAMETERS:
+            if param in parameters.keys():
+                tmp.append(param)
+        if tmp:
+            raise CheckError(f"Parameters {tmp} already contained in the hyperoptimization scan. Please remove them from the parameters namespace.")
+    else:
+        log.warning("No trials specifications provided. Using fixed hyperparameters")
 
 # Checks on the NN parameters
 def check_existing_parameters(parameters):
@@ -78,32 +100,33 @@ def check_stopping(parameters):
         raise CheckError(f"Needs to run at least 1 epoch, got: {epochs}")
 
 
-def check_basis_with_layers(basis, validphys_basis, parameters):
+def check_basis_with_layers(basis, validphys_basis, parameters, trial_specs):
     """Check that the last layer matches the number of flavours defined in the runcard.
     And that the activation functions are compatible with the basis.
     """
-    number_of_flavours = len(basis)
-    last_layer = parameters["nodes_per_layer"][-1]
-    if number_of_flavours != last_layer:
-        raise CheckError(
-            f"The number of nodes in the last layer ({last_layer}) does not"
-            f" match the number of flavours: ({number_of_flavours})"
-        )
+    if not trial_specs:
+        number_of_flavours = len(basis)
+        last_layer = parameters["nodes_per_layer"][-1]
+        if number_of_flavours != last_layer:
+            raise CheckError(
+                f"The number of nodes in the last layer ({last_layer}) does not"
+                f" match the number of flavours: ({number_of_flavours})"
+            )
 
-    flavours = [i["fl"] for i in basis]
-    if parameters["activation_per_layer"][-1] == "square_singlet":
-        if not (("sng" in flavours) and ("g" in flavours)):
-            raise CheckError(
-                "square_singlet can only be used when `gluon` (g) and `singlet` (sng) are being fitted"
-            )
-        if (val := validphys_basis.indexes.get("sng")) > 1:
-            raise CheckError(
-                f"When using square_singlet, \\Sigma must be either element 0 or 1, found {val}"
-            )
-        if (val := validphys_basis.indexes.get("g")) > 1:
-            raise CheckError(
-                f"When using square_singlet, gluon must be either element 0 or 1, found {val}"
-            )
+        flavours = [i["fl"] for i in basis]
+        if parameters["activation_per_layer"][-1] == "square_singlet":
+            if not (("sng" in flavours) and ("g" in flavours)):
+                raise CheckError(
+                    "square_singlet can only be used when `gluon` (g) and `singlet` (sng) are being fitted"
+                )
+            if (val := validphys_basis.indexes.get("sng")) > 1:
+                raise CheckError(
+                    f"When using square_singlet, \\Sigma must be either element 0 or 1, found {val}"
+                )
+            if (val := validphys_basis.indexes.get("g")) > 1:
+                raise CheckError(
+                    f"When using square_singlet, gluon must be either element 0 or 1, found {val}"
+                )
 
 
 def check_optimizer(optimizer_dict):
@@ -209,20 +232,23 @@ def check_model_file(save, load):
 
 
 @make_argcheck
-def wrapper_check_NN(tensorboard, save, load, parameters):
+def wrapper_check_NN(tensorboard, save, load, parameters, trial_specs):
     """Wrapper function for all NN-related checks"""
     check_tensorboard(tensorboard)
     check_model_file(save, load)
-    check_existing_parameters(parameters)
-    check_consistent_layers(parameters)
-    check_stopping(parameters)
-    check_layer_type_implemented(parameters)
-    check_dropout(parameters)
     check_lagrange_multipliers(parameters, "integrability")
     check_lagrange_multipliers(parameters, "positivity")
-    # Checks that need to import the backend (and thus take longer) should be done last
-    check_optimizer(parameters["optimizer"])
-    check_initializer(parameters["initializer"])
+    if trial_specs:
+        check_hyperopt_parameters(parameters, trial_specs)
+    else:
+        check_existing_parameters(parameters)
+        check_consistent_layers(parameters)
+        check_stopping(parameters)
+        check_layer_type_implemented(parameters)
+        check_dropout(parameters)
+        # Checks that need to import the backend (and thus take longer) should be done last
+        check_optimizer(parameters["optimizer"])
+        check_initializer(parameters["initializer"])
 
 
 def check_hyperopt_architecture(architecture):
@@ -391,7 +417,7 @@ def check_sumrules(sum_rules):
 
 # Checks on the physics
 @make_argcheck
-def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
+def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters, trial_specs):
     """Checks the fitbasis setup for inconsistencies
     - Checks the sum rules can be imposed
     - Correct flavours for the selected basis
@@ -429,20 +455,21 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
     if not theoryid.get_description()["IC"] and has_c:
         raise CheckError(f"{theoryid} (perturbative charm) is incompatible with basis {fitbasis}")
 
-    check_basis_with_layers(basis, vp_basis, parameters)
+    check_basis_with_layers(basis, vp_basis, parameters, trial_specs)
 
 
 @make_argcheck
-def check_consistent_parallel(parameters, parallel_models):
+def check_consistent_parallel(parameters, parallel_models, trial_specs):
     """Checks whether the multiple-replica fit options are consistent among them
     i.e., that the trvl seed is fixed and the layer type is correct
     """
-    if not parallel_models:
-        return
-    if parameters.get("layer_type") not in ("dense"):
-        raise CheckError(
-            "Parallelization has only been tested with layer_type=='dense', set `parallel_models: false`"
-        )
+    if not trial_specs:
+        if not parallel_models:
+            return
+        if parameters.get("layer_type") not in ("dense"):
+            raise CheckError(
+                "Parallelization has only been tested with layer_type=='dense', set `parallel_models: false`"
+            )
 
 
 @make_argcheck

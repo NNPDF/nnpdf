@@ -294,22 +294,26 @@ class WriterWrapper:
 
     def _hyperparam_settings(self, replica_number):
         """Collect replica hyperparameter settings"""
-        trials_number = self.trials["number_of_trials"]
-        idx_trial = replica_number % trials_number
-        hyperparam_info = {}
-        hyperparam_info["optimizer"]=self.trials["optimizer"][idx_trial]
-        hyperparam_info["learning_rate"]=self.trials["learning_rate"][idx_trial]
-        hyperparam_info["clipnorm"]=self.trials["clipnorm"][idx_trial]
-        hyperparam_info["epochs"]=self.trials["epochs"][idx_trial]
-        hyperparam_info["stopping_patience"]=self.trials["stopping_patience"][idx_trial]
-        hyperparam_info["initial"]=self.trials["initial"][idx_trial]
-        hyperparam_info["nodes_per_layer"]=self.trials["nodes_per_layer"][idx_trial]
-        hyperparam_info["number_of_layers"]=self.trials["number_of_layers"][idx_trial]
-        hyperparam_info["activation"]=self.trials["activation_per_layer"][idx_trial]
-        hyperparam_info["layer_type"]=self.trials["layer_type"][idx_trial]
-        hyperparam_info["initializer"]=self.trials["initializer"][idx_trial]
-        hyperparam_info["dropout"]=self.trials["dropout"][idx_trial]
-        return hyperparam_info
+        if self.trials:
+            trials_number = self.trials["number_of_trials"]
+            idx_trial = replica_number % trials_number
+            hyperparam_info = {}
+            hyperparam_info["optimizer"]=self.trials["optimizer"][idx_trial]
+            hyperparam_info["learning_rate"]=self.trials["learning_rate"][idx_trial]
+            hyperparam_info["clipnorm"]=self.trials["clipnorm"][idx_trial]
+            hyperparam_info["epochs"]=self.trials["epochs"][idx_trial]
+            hyperparam_info["stopping_patience"]=self.trials["stopping_patience"][idx_trial]
+            hyperparam_info["initial"]=self.trials["initial"][idx_trial]
+            hyperparam_info["nodes_per_layer"]=self.trials["nodes_per_layer"][idx_trial]
+            hyperparam_info["number_of_layers"]=self.trials["number_of_layers"][idx_trial]
+            hyperparam_info["activation"]=self.trials["activation_per_layer"][idx_trial]
+            hyperparam_info["layer_type"]=self.trials["layer_type"][idx_trial]
+            hyperparam_info["initializer"]=self.trials["initializer"][idx_trial]
+            hyperparam_info["dropout"]=self.trials["dropout"][idx_trial]
+            return hyperparam_info
+        else:
+            hyperparam_info = "from runcard"
+            return hyperparam_info
 
     def _write_metadata_json(self, i, replica_number, out_path):
         json_dict = jsonfit(

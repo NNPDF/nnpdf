@@ -265,7 +265,7 @@ def performfit(
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time
+            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time, trials
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 
