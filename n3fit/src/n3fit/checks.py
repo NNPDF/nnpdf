@@ -41,15 +41,12 @@ def _is_floatable(num):
         return False
 
 def check_hyperopt_parameters(parameters, trial_specs):
-    if trial_specs:
-        tmp = []
-        for param in HYPEROPTIMIZED_PARAMETERS:
-            if param in parameters.keys():
-                tmp.append(param)
-        if tmp:
-            raise CheckError(f"Parameters {tmp} already contained in the hyperoptimization scan. Please remove them from the parameters namespace.")
-    else:
-        log.warning("No trials specifications provided. Using fixed hyperparameters")
+    tmp = []
+    for param in HYPEROPTIMIZED_PARAMETERS:
+        if param in parameters.keys():
+            tmp.append(param)
+    if tmp:
+        raise CheckError(f"Parameters {tmp} already contained in the hyperoptimization scan. Please remove them from the parameters namespace.")        
 
 # Checks on the NN parameters
 def check_existing_parameters(parameters):
@@ -241,6 +238,7 @@ def wrapper_check_NN(tensorboard, save, load, parameters, trial_specs):
     if trial_specs:
         check_hyperopt_parameters(parameters, trial_specs)
     else:
+        log.warning("No trials specifications provided. Using fixed hyperparameters")
         check_existing_parameters(parameters)
         check_consistent_layers(parameters)
         check_stopping(parameters)
