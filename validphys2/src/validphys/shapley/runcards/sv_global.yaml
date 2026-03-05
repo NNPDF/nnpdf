@@ -6,17 +6,20 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
+output_root: sv_results/nnpdf40
+log_root: slurm/logs/nnpdf40
+run_name: sv_global
 
 basis:
-  - evolution
+  - flavor
 
-enforce_sumrules: true
-
-perturbation:
-  mu: 0.002
-  sigma: 0.001
-  amplitude: 0.5
-  mode: multiplicative
+experiments:
+  - name: baseline
+    perturbation:
+      mu: 0.05
+      sigma: 0.1
+      amplitude: -10
+      mode: additive
 
 datasets:
   # DIS: Fixed-target

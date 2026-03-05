@@ -2,7 +2,7 @@
 #SBATCH --job-name=vp_shapley
 #SBATCH --account=inf26_pml4hep_0
 #SBATCH --partition=dcgp_usr_prod
-#SBATCH --time=02:00:00
+#SBATCH --time=08:00:00
 #SBATCH --output=/leonardo/home/userexternal/rbonnetg/projects/nnpdf/validphys2/src/validphys/shapley/slurm/slurm-%j.out
 #SBATCH --error=/leonardo/home/userexternal/rbonnetg/projects/nnpdf/validphys2/src/validphys/shapley/slurm/slurm-%j.err
 

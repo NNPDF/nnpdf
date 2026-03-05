@@ -5,15 +5,20 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
+output_root: sv_results/nnpdf40
+log_root: slurm/logs/nnpdf40
+run_name: sv_dy_lhc
 
 basis:
   - evolution
   - flavor
 
-perturbation:
-  mu: 0.02
-  sigma: 0.1
-  amplitude: 0.30
+experiments:
+  - name: baseline
+    perturbation:
+      mu: 0.02
+      sigma: 0.1
+      amplitude: 0.30
 
 datasets:
   # ATLAS DY

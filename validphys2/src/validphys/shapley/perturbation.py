@@ -62,7 +62,8 @@ def gaussian_profile(xgrid, mu, sigma, amplitude, xspace='linear'):
 
 
 def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
-                                xgrid, mode='additive', xspace='linear'):
+                                xgrid, mode='additive', xspace='linear',
+                                random_sign=False, rng=None):
     """Perturb selected flavour channels with a Gaussian bump.
 
     Parameters
@@ -85,6 +86,15 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
             mu, sigma, amplitude are ignored.
     xspace : str
         'linear' or 'logx' (ignored for mode='ablation')
+    random_sign : bool
+        When True the Gaussian amplitude is independently flipped to +1 or -1
+        for each replica (drawn uniformly from {-1, +1}).  This decorrelates
+        the direction of the perturbation across the Monte Carlo ensemble,
+        reducing sensitivity to the sign convention of the bump.
+        Ignored for mode='ablation'.
+    rng : numpy.random.Generator or None
+        Optional random-number generator for reproducibility.  When None a
+        fresh, non-seeded generator is created per call.
 
     Returns
     -------
@@ -109,6 +119,7 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
             f"Choose from {PERTURBATION_XSPACES}."
         )
     gv_pert = gv.copy()
+    nrep = gv.shape[0]
 
     if mode == 'ablation':
         # Zero out the selected flavour channels entirely over all x.
@@ -116,22 +127,30 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
         for fi in local_flavor_idx:
             gv_pert[:, fi, :] = 0.0
         return gv_pert  # positivity trivially satisfied; skip clipping
-    elif mode == 'calibrated':
+
+    # Per-replica sign vector: shape (nrep, 1) for broadcasting over nx.
+    if random_sign:
+        _rng = rng if rng is not None else np.random.default_rng()
+        signs = _rng.choice(np.array([-1.0, 1.0]), size=nrep)[:, np.newaxis]
+    else:
+        signs = np.ones((nrep, 1), dtype=float)
+
+    if mode == 'calibrated':
         # Per-flavor amplitude: alpha * replica std at x closest to mu.
         xgrid_arr = np.asarray(xgrid)
         idx_mu = int(np.argmin(np.abs(xgrid_arr - mu)))
         for fi in local_flavor_idx:
             sigma_rep = float(gv[:, fi, idx_mu].std())
             gauss = gaussian_profile(xgrid, mu, sigma, amplitude * sigma_rep, xspace)
-            gv_pert[:, fi, :] += gauss[np.newaxis, :]
+            gv_pert[:, fi, :] += signs * gauss[np.newaxis, :]
     elif mode == 'additive':
         gauss = gaussian_profile(xgrid, mu, sigma, amplitude, xspace)
         for fi in local_flavor_idx:
-            gv_pert[:, fi, :] += gauss[np.newaxis, :]
+            gv_pert[:, fi, :] += signs * gauss[np.newaxis, :]
     else:  # multiplicative
         gauss = gaussian_profile(xgrid, mu, sigma, amplitude, xspace)
         for fi in local_flavor_idx:
-            gv_pert[:, fi, :] *= (1.0 + gauss[np.newaxis, :])
+            gv_pert[:, fi, :] *= (1.0 + signs * gauss[np.newaxis, :])
 
     # Enforce positivity only on perturbed channels and only when the perturbation would drive a previously non-negative point below zero.
     for fi in local_flavor_idx:

@@ -280,8 +280,9 @@ class NNPDFShapleyAnalyzer:
     # -- Chi2 evaluation with perturbation ----------------------------------
 
     def _evaluate_chi2(self, flavor_subset, mu, sigma, amplitude,
-                       mode='additive', xspace='linear'):
-        """Mean chi2/Ndata across all observables for a given perturbation.
+                       mode='additive', xspace='linear',
+                       per_replica=False, random_sign=False):
+        """Chi2/Ndata across all observables for a given perturbation.
 
         Parameters
         ----------
@@ -290,10 +291,18 @@ class NNPDFShapleyAnalyzer:
         mu, sigma, amplitude : float
         mode : str
         xspace : str
+        per_replica : bool
+            When False (default) return the mean over replicas as a float.
+            When True return the per-replica array of shape (nrep,) so that
+            Shapley values can be computed independently for every replica.
+        random_sign : bool
+            When True the perturbation amplitude is independently randomised
+            to ±1 for each replica.  Forwarded to apply_gaussian_perturbation.
 
         Returns
         -------
-        chi2 : float
+        chi2 : float or np.ndarray
+            Float when per_replica=False; shape (nrep,) when per_replica=True.
         """
         sr_norm = None
         if self.enforce_sumrules:
@@ -301,7 +310,12 @@ class NNPDFShapleyAnalyzer:
                 flavor_subset, mu, sigma, amplitude, mode, xspace
             )
 
-        total_chi2 = 0.0
+        # Use a single rng per call so all FK entries of one coalition share
+        # the same random signs (same coalition = same perturbation direction).
+        rng = np.random.default_rng() if random_sign else None
+
+        total_chi2 = 0.0          # used when per_replica=False
+        total_chi2_rep = None     # used when per_replica=True  shape (nrep,)
         total_ndata = 0
 
         for obs in self.observables:
@@ -314,7 +328,8 @@ class NNPDFShapleyAnalyzer:
                     ]
                     gv_pert = apply_gaussian_perturbation(
                         gv_flav, perturb_idx, mu, sigma, amplitude,
-                        entry.xgrid, mode=mode, xspace=xspace
+                        entry.xgrid, mode=mode, xspace=xspace,
+                        random_sign=random_sign, rng=rng,
                     )
                     gv_pert_list.append(gv_pert)
 
@@ -344,7 +359,11 @@ class NNPDFShapleyAnalyzer:
                         perturb_idx = self._local_flavor_indices_for_entry(
                             entry, flavor_subset
                         )
-                    gv_pert = apply_gaussian_perturbation(gv, perturb_idx, mu, sigma, amplitude, entry.xgrid, mode=mode, xspace=xspace)
+                    gv_pert = apply_gaussian_perturbation(
+                        gv, perturb_idx, mu, sigma, amplitude,
+                        entry.xgrid, mode=mode, xspace=xspace,
+                        random_sign=random_sign, rng=rng,
+                    )
                     if sr_norm is not None:
                         fi = (range(14) if entry.hadronic else entry.flavor_indices)
                         gv_pert = self._apply_norm_to_gv(
@@ -353,15 +372,25 @@ class NNPDFShapleyAnalyzer:
                     gv_pert_list.append(gv_pert)
                 chi2_arr = obs.chi2(gv_pert_list)
 
-            total_chi2 += np.mean(chi2_arr)
+            if per_replica:
+                if total_chi2_rep is None:
+                    total_chi2_rep = chi2_arr.copy()
+                else:
+                    total_chi2_rep += chi2_arr
+            else:
+                total_chi2 += np.mean(chi2_arr)
             total_ndata += obs.ndata
 
+        if per_replica:
+            return total_chi2_rep / total_ndata
         return total_chi2 / total_ndata
 
     # -- Build value function for ExactShapley ------------------------------
 
     def build_value_function(self, mu, sigma, amplitude,
-                             mode='additive', xspace='linear'):
+                             mode='additive', xspace='linear',
+                             _coalition_log=None,
+                             random_sign=False):
         """Return a callable v(coalition) -> float for ExactShapley.
 
         The wrapper tracks progress: coalition count, elapsed time, and estimated time remaining (ETA).
@@ -372,6 +401,13 @@ class NNPDFShapleyAnalyzer:
             Gaussian perturbation parameters.
         mode : str
         xspace : str
+        _coalition_log : list or None
+            If provided, every (coalition_tuple, chi2) pair is appended to
+            this list during evaluation.  Use this to build the full
+            per-coalition chi2 record for diagnostics.
+        random_sign : bool
+            Forwarded to _evaluate_chi2.  Each call draws fresh signs so
+            the serial ExactShapley path also benefits.
 
         Returns
         -------
@@ -393,7 +429,12 @@ class NNPDFShapleyAnalyzer:
             result = self._evaluate_chi2(
                 coalition, mu, sigma, amplitude,
                 mode=mode, xspace=xspace,
+                random_sign=random_sign,
             )
+
+            # Record coalition -> chi2 for diagnostics if requested.
+            if _coalition_log is not None:
+                _coalition_log.append((tuple(sorted(coalition)), result))
 
             state["count"] += 1
             n = state["count"]
@@ -434,6 +475,124 @@ class NNPDFShapleyAnalyzer:
 
         return v
 
+    # -- Coalition diagnostics ----------------------------------------------
+
+    def _compute_diagnostics(self, coalition_log, outlier_n_sigma=3.0):
+        """Compute per-coalition chi2 statistics and marginal contribution stats.
+
+        Parameters
+        ----------
+        coalition_log : list of (coalition_tuple, chi2)
+            Raw log produced by build_value_function when _coalition_log is set.
+        outlier_n_sigma : float
+            Flag a coalition as an outlier when its chi2 exceeds
+            mean + outlier_n_sigma * std.  Default is 3.0.
+
+        Returns
+        -------
+        diag : dict
+            chi2_stats, outliers, per_player_marginals, marginal_contributions.
+        """
+        if not coalition_log:
+            return {}
+
+        # Build O(1) lookup dict (coalitions are already sorted tuples).
+        chi2_dict = {c: v for c, v in coalition_log}
+        coalitions = list(chi2_dict.keys())
+        chi2_arr = np.array([chi2_dict[c] for c in coalitions])
+
+        mean_chi2 = float(np.mean(chi2_arr))
+        std_chi2 = float(np.std(chi2_arr))
+        threshold = mean_chi2 + outlier_n_sigma * std_chi2
+
+        outlier_coalitions = [
+            {
+                "coalition": list(c),
+                "coalition_labels": [self.flavor_short[i] for i in c],
+                "size": len(c),
+                "chi2": float(chi2_dict[c]),
+                "z_score": float((chi2_dict[c] - mean_chi2) / std_chi2)
+                           if std_chi2 > 0 else 0.0,
+            }
+            for c in coalitions
+            if chi2_dict[c] > threshold
+        ]
+        outlier_coalitions.sort(key=lambda x: -x["chi2"])
+
+        # Per-player marginal contribution analysis:
+        # delta_v(i, S) = v(S ∪ {i}) - v(S)  for all S not containing i.
+        per_player_marginals = {}
+        all_marginals = []   # flat list used for the contributions CSV
+
+        for player_idx in range(self.n_flavors):
+            label = self.flavor_short[player_idx]
+            deltas = []
+            for coalition in coalitions:
+                if player_idx not in coalition:
+                    coal_with = tuple(sorted(coalition + (player_idx,)))
+                    if coal_with in chi2_dict:
+                        v_without = chi2_dict[coalition]
+                        v_with = chi2_dict[coal_with]
+                        delta = v_with - v_without
+                        deltas.append(delta)
+                        all_marginals.append({
+                            "player_idx": player_idx,
+                            "player": label,
+                            "coalition_without": list(coalition),
+                            "v_without": float(v_without),
+                            "v_with": float(v_with),
+                            "delta_v": float(delta),
+                        })
+
+            if deltas:
+                deltas_arr = np.array(deltas)
+                mean_d = float(np.mean(deltas_arr))
+                std_d = float(np.std(deltas_arr))
+                thr_d = mean_d + outlier_n_sigma * std_d
+                thr_d_low = mean_d - outlier_n_sigma * std_d
+                per_player_marginals[label] = {
+                    "n_marginals": len(deltas),
+                    "mean": mean_d,
+                    "std": std_d,
+                    "min": float(np.min(deltas_arr)),
+                    "max": float(np.max(deltas_arr)),
+                    "p05": float(np.percentile(deltas_arr, 5)),
+                    "p95": float(np.percentile(deltas_arr, 95)),
+                    "n_outliers_high": int(np.sum(deltas_arr > thr_d)),
+                    "n_outliers_low": int(np.sum(deltas_arr < thr_d_low)),
+                }
+
+        # Flag outlier marginals in the flat list.
+        for entry in all_marginals:
+            lbl = entry["player"]
+            stats = per_player_marginals.get(lbl, {})
+            mean_d = stats.get("mean", 0.0)
+            std_d = stats.get("std", 0.0)
+            thr_hi = mean_d + outlier_n_sigma * std_d
+            thr_lo = mean_d - outlier_n_sigma * std_d
+            dv = entry["delta_v"]
+            entry["is_outlier"] = int(dv > thr_hi or dv < thr_lo)
+
+        diag = {
+            "outlier_n_sigma": float(outlier_n_sigma),
+            "chi2_stats": {
+                "n_coalitions": len(chi2_arr),
+                "mean": mean_chi2,
+                "std": std_chi2,
+                "min": float(np.min(chi2_arr)),
+                "max": float(np.max(chi2_arr)),
+                "median": float(np.median(chi2_arr)),
+                "p95": float(np.percentile(chi2_arr, 95)),
+                "p99": float(np.percentile(chi2_arr, 99)),
+            },
+            "outlier_chi2_threshold": float(threshold),
+            "n_outlier_coalitions": len(outlier_coalitions),
+            "outlier_coalitions": outlier_coalitions,
+            "per_player_marginals": per_player_marginals,
+            "_marginal_contributions": all_marginals,  # used internally for CSV
+        }
+        return diag
+
     # -- Convenience: run full Shapley analysis -----------------------------
 
     def _iter_all_coalitions(self):
@@ -449,8 +608,15 @@ class NNPDFShapleyAnalyzer:
         return tuple(sorted(coalition + (player,)))
 
     def _compute_exact_shap_parallel(self, mu, sigma, amplitude, mode, xspace,
-                                     n_jobs, verbose=True):
-        """Compute exact Shapley values from a parallel coalition cache."""
+                                     n_jobs, verbose=True,
+                                     per_replica=False, random_sign=False):
+        """Compute exact Shapley values from a parallel coalition cache.
+
+        When per_replica=True every coalition is evaluated independently for
+        each replica, yielding a (nrep, n_flavors) Shapley matrix from which
+        the ensemble mean phi_j = mean_k phi_j^(k) and standard deviation
+        are derived.
+        """
         n = self.n_flavors
         factorial = [math.factorial(k) for k in range(n + 1)]
         factorial_n = factorial[n]
@@ -471,7 +637,8 @@ class NNPDFShapleyAnalyzer:
 
         def _evaluate_one(coalition):
             value = self._evaluate_chi2(
-                coalition, mu, sigma, amplitude, mode=mode, xspace=xspace
+                coalition, mu, sigma, amplitude, mode=mode, xspace=xspace,
+                per_replica=per_replica, random_sign=random_sign,
             )
             return coalition, value
 
@@ -517,7 +684,76 @@ class NNPDFShapleyAnalyzer:
             sys.stderr.write("\n")
             sys.stderr.flush()
 
-        baseline = value_cache[tuple()]
+        baseline_raw = value_cache[tuple()]
+
+        # per-replica path 
+        if per_replica:
+            # value_cache values are ndarray(nrep,)
+            nrep = len(next(iter(value_cache.values())))
+            baseline = float(np.mean(baseline_raw))
+
+            # shapley_per_replica[k, j] = phi_j^(k)
+            shapley_per_replica = np.zeros((nrep, n), dtype=float)
+
+            for player in range(n):
+                if verbose:
+                    print(f"  Player {player}: {self.flavor_labels[player]}",
+                          end="", flush=True)
+
+                for coalition in all_coalitions:
+                    if player in coalition:
+                        continue
+                    s = len(coalition)
+                    weight = (
+                        factorial[s] * factorial[n - s - 1]
+                    ) / factorial_n
+                    coalition_with_player = self._coalition_with_player(
+                        coalition, player
+                    )
+                    v_with = value_cache[coalition_with_player]   # (nrep,)
+                    v_without = value_cache[coalition]             # (nrep,)
+                    shapley_per_replica[:, player] += weight * (v_with - v_without)
+
+                if verbose:
+                    sv_mean = float(np.mean(shapley_per_replica[:, player]))
+                    sv_std = float(np.std(shapley_per_replica[:, player], ddof=1))
+                    print(f"  ->  SV = {sv_mean:+.6f} ± {sv_std:.6f}")
+
+            shapley_vals = shapley_per_replica.mean(axis=0)
+            shapley_std  = shapley_per_replica.std(axis=0, ddof=1) if nrep > 1 \
+                           else np.zeros(n, dtype=float)
+            shapley_err  = shapley_std / np.sqrt(nrep)
+
+            elapsed = time.time() - t0
+
+            if verbose:
+                print(f"Baseline (mean) : {baseline:.6f}")
+                print(f"Max |SV|        : {np.max(np.abs(shapley_vals)):.6f}")
+                print(f"Mean |SV|       : {np.mean(np.abs(shapley_vals)):.6f}")
+                print(f"Max SV std      : {np.max(shapley_std):.6f}")
+                print(f"Elapsed         : {elapsed:.1f}s")
+
+            # Serialize per-replica matrix as list-of-lists for JSON
+            sv_per_rep_serializable = [
+                {str(k): v for k, v in value_cache.items()}
+            ]
+            return {
+                "shapley_values": shapley_vals,
+                "shapley_values_per_replica": shapley_per_replica,
+                "shapley_std": shapley_std,
+                "shapley_err": shapley_err,
+                "baseline": baseline,
+                "baseline_per_replica": baseline_raw,
+                "player_labels": self.flavor_labels,
+                "player_short": self.flavor_short,
+                "coalitions_evaluated": len(value_cache),
+                "total_coalitions": total_coalitions,
+                "elapsed_seconds": elapsed,
+                "n_replicas": nrep,
+            }
+
+        # scalar (mean-chi2) path 
+        baseline = float(baseline_raw)
         shapley_vals = np.zeros(n, dtype=float)
 
         for player in range(n):
@@ -555,6 +791,9 @@ class NNPDFShapleyAnalyzer:
 
         return {
             "shapley_values": shapley_vals,
+            "shapley_values_per_replica": None,
+            "shapley_std": None,
+            "shapley_err": None,
             "baseline": baseline,
             "player_labels": self.flavor_labels,
             "player_short": self.flavor_short,
@@ -567,7 +806,9 @@ class NNPDFShapleyAnalyzer:
         }
 
     def exact_shap(self, mu, sigma, amplitude, mode='additive',
-                   xspace='linear', plot=True, n_jobs=1):
+                   xspace='linear', plot=True, n_jobs=1,
+                   diagnostic=False, outlier_n_sigma=3.0,
+                   per_replica=False, random_sign=False):
         """Compute exact Shapley values for all flavour players.
 
         Uses the ``shapley_values.ExactShapley`` solver with the NNPDF
@@ -582,7 +823,28 @@ class NNPDFShapleyAnalyzer:
             Whether to generate plots.
         n_jobs : int
             Number of worker threads for coalition evaluation.
-            If n_jobs=1, use the serial ExactShapley solver.
+            If n_jobs=1, use the serial ExactShapley solver (scalar path)
+            or the single-worker parallel path (per_replica=True).
+        diagnostic : bool
+            When True, record chi2 for every coalition evaluated and compute
+            per-coalition and per-player-marginal statistics.  The results
+            dict will contain ``coalition_log`` (raw list of
+            ``(coalition_tuple, chi2)`` pairs) and ``diagnostic`` (statistics
+            dict).  Useful for spotting extreme coalitions that corrupt the
+            Shapley values.
+        outlier_n_sigma : float
+            Z-score threshold used to flag outlier coalitions/marginals.
+            Default is 3.0 (mean ± 3σ).
+        per_replica : bool
+            When True compute phi_j^(k) for every replica k and return the
+            full (nrep, n_flavors) matrix together with the ensemble mean,
+            standard deviation, and standard error.  Forces use of the
+            parallel evaluation path (n_jobs>=1).  This implements
+            Eq. (shapley_replicas) from the paper.
+        random_sign : bool
+            When True the perturbation amplitude is independently drawn from
+            {-1, +1} for each replica at every coalition evaluation, reducing
+            sensitivity of the Shapley values to the sign of the bump.
 
         Returns
         -------
@@ -605,15 +867,93 @@ class NNPDFShapleyAnalyzer:
         print(f"Perturbation xspace: {xspace}")
         print(f"Sum rules          : {'ON' if self.enforce_sumrules else 'OFF'}")
         print(f"Parallel workers   : {int(n_jobs)}")
+        print(f"Per-replica SVs    : {'ON' if per_replica else 'OFF'}")
+        print(f"Random sign        : {'ON' if random_sign else 'OFF'}")
 
-        v = self.build_value_function(mu, sigma, amplitude, mode, xspace)
-        solver = ExactShapley(
-            n_players=self.n_flavors,
-            value_function=v,
-            player_labels=self.flavor_labels,
-            player_short=self.flavor_short,
-        )
-        results = solver.compute(verbose=True, n_jobs=int(n_jobs))
+        # per_replica=True requires vector-valued value function; the external
+        # ExactShapley solver only handles scalars, so always use the parallel
+        # path (which supports both scalar and vector modes).
+        if per_replica or int(n_jobs) > 1:
+            results = self._compute_exact_shap_parallel(
+                mu, sigma, amplitude, mode, xspace,
+                n_jobs=int(n_jobs),
+                per_replica=per_replica,
+                random_sign=random_sign,
+            )
+            # Build coalition_log for diagnostics from _compute_exact_shap_parallel
+            # (the parallel path does not produce a coalition_log internally;
+            # re-run with diagnostics via the scalar path below if requested).
+            coalition_log = None
+            if diagnostic:
+                # Re-evaluate all coalitions through the serial value function
+                # (scalar, mean-chi2) to collect the log for the diagnostic.
+                coalition_log = []
+                v_diag = self.build_value_function(
+                    mu, sigma, amplitude, mode, xspace,
+                    _coalition_log=coalition_log,
+                    random_sign=random_sign,
+                )
+                for coalition in self._iter_all_coalitions():
+                    v_diag(list(coalition))
+        else:
+            coalition_log = [] if diagnostic else None
+            v = self.build_value_function(
+                mu, sigma, amplitude, mode, xspace,
+                _coalition_log=coalition_log,
+                random_sign=random_sign,
+            )
+            solver = ExactShapley(
+                n_players=self.n_flavors,
+                value_function=v,
+                player_labels=self.flavor_labels,
+                player_short=self.flavor_short,
+            )
+            results = solver.compute(verbose=True, n_jobs=1)
+            # Ensure keys added by the parallel path are always present.
+            results.setdefault("shapley_values_per_replica", None)
+            results.setdefault("shapley_std", None)
+            results.setdefault("shapley_err", None)
+
+        # Attach coalition log and diagnostics if requested.
+        if diagnostic and coalition_log is not None:
+            results["coalition_log"] = coalition_log
+            results["diagnostic"] = self._compute_diagnostics(
+                coalition_log, outlier_n_sigma=outlier_n_sigma
+            )
+            diag = results["diagnostic"]
+            print("\n--- Coalition diagnostics ---")
+            cs = diag.get("chi2_stats", {})
+            print(
+                f"  Coalitions : {cs.get('n_coalitions', '?')}  "
+                f"chi2 mean={cs.get('mean', 0):.4f}  "
+                f"std={cs.get('std', 0):.4f}  "
+                f"min={cs.get('min', 0):.4f}  "
+                f"max={cs.get('max', 0):.4f}"
+            )
+            print(
+                f"  Outlier threshold ({outlier_n_sigma}σ): "
+                f"{diag.get('outlier_chi2_threshold', 0):.4f}  "
+                f"({diag.get('n_outlier_coalitions', 0)} outlier coalitions)"
+            )
+            if diag.get("outlier_coalitions"):
+                print("  Top outliers (chi2 > threshold):")
+                for oc in diag["outlier_coalitions"][:5]:
+                    print(
+                        f"    coalition={oc['coalition_labels']}  "
+                        f"chi2={oc['chi2']:.4f}  z={oc['z_score']:.2f}"
+                    )
+            print("  Per-player marginal |max|:")
+            for lbl, pm in diag.get("per_player_marginals", {}).items():
+                print(
+                    f"    {lbl:>8s}: mean={pm['mean']:+.4f}  "
+                    f"std={pm['std']:.4f}  ["
+                    f"{pm['min']:+.4f}, {pm['max']:+.4f}]  "
+                    f"outliers: {pm['n_outliers_high']+pm['n_outliers_low']}"
+                )
+            print()
+        else:
+            results["coalition_log"] = None
+            results["diagnostic"] = None
 
         # Add NNPDF-specific metadata
         results["baseline_chi2"] = results["baseline"]
@@ -624,6 +964,15 @@ class NNPDFShapleyAnalyzer:
         results["flavor_labels"] = self.flavor_labels
         results["flavor_short"] = self.flavor_short
         results["n_jobs"] = int(n_jobs)
+        results["per_replica"] = bool(per_replica)
+        results["random_sign"] = bool(random_sign)
+        # Convenience: scalar uncertainty arrays (None when per_replica=False)
+        # shapley_std[j]  = std_k phi_j^(k)  (replica-to-replica spread)
+        # shapley_err[j]  = shapley_std[j] / sqrt(nrep)  (standard error of mean)
+        if results.get("shapley_std") is None:
+            results["shapley_std"] = None
+        if results.get("shapley_err") is None:
+            results["shapley_err"] = None
 
         # Plot
         fig_pdfs = None
@@ -656,6 +1005,28 @@ class NNPDFShapleyAnalyzer:
                 title=bar_title,
                 ylabel="Shapley Value (delta chi2/N)",
             )
+            # Overlay error bars when per-replica uncertainties are available.
+            _sv_std = results.get("shapley_std")
+            if _sv_std is not None:
+                from matplotlib.lines import Line2D
+                _ax = fig_bar.axes[0]
+                _ax.errorbar(
+                    self.flavor_short,
+                    results["shapley_values"],
+                    yerr=_sv_std,
+                    fmt="none",
+                    ecolor="black",
+                    elinewidth=1.2,
+                    capsize=4,
+                    capthick=1.2,
+                    zorder=5,
+                )
+                _handles, _ = _ax.get_legend_handles_labels()
+                _handles.append(
+                    Line2D([], [], color="black", linewidth=1.2, label="1\u03c3 std")
+                )
+                _ax.legend(handles=_handles, loc="upper right")
+                fig_bar.tight_layout()
             plt.show()
 
         results["fig_pdfs"] = fig_pdfs
@@ -668,8 +1039,14 @@ class NNPDFShapleyAnalyzer:
     def plot_pdfs(self, amplitude=0.08, mu=0.02, sigma=0.1,
                   mode='additive', xspace='linear', x_points=200):
         """Plot reference vs perturbed PDFs for all Shapley-player flavours."""
-        x_plot = np.logspace(-5, -0.001, x_points)
-        x_axis_scale = "linear" if float(mu) > 0.1 else "log"
+        x_min = 1e-5
+        x_max = 10 ** (-0.001)
+        if mode == "ablation":
+            x_plot = np.linspace(x_min, x_max, x_points)
+            x_axis_scale = "linear"
+        else:
+            x_plot = np.logspace(-5, -0.001, x_points)
+            x_axis_scale = "linear" if float(mu) > 0.1 else "log"
         Q0 = self.observables[0].Q0
 
         if self.basis == 'flavor':
