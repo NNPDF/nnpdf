@@ -220,7 +220,7 @@ XGRID = np.array(
 
 
 class WriterWrapper:
-    def __init__(self, replica_numbers, pdf_objects, stopping_object, all_chi2s, theory, timings):
+    def __init__(self, replica_numbers, pdf_objects, stopping_object, all_chi2s, theory, timings, trials):
         """
         Initializes the writer for all replicas.
 
@@ -241,6 +241,8 @@ class WriterWrapper:
                 theory information of the fit
             `timings`
                 dictionary of the timing of the different events that happened
+            `trials`
+                dictionary with best trials settings
         """
         self.replica_numbers = replica_numbers
         self.pdf_objects = pdf_objects
@@ -248,6 +250,7 @@ class WriterWrapper:
         self.theory = theory
         self.timings = timings
         self.tr_chi2, self.vl_chi2, self.true_chi2 = all_chi2s
+        self.trials = trials
 
     def write_data(self, save_path, fitname, weights_name):
         """
@@ -273,13 +276,12 @@ class WriterWrapper:
             self.integrability_numbers.append(
                 vpinterface.integrability_numbers(pdf_object).tolist()
             )
-
         for i, rn in enumerate(self.replica_numbers):
             replica_path = save_path / f"replica_{rn}"
             replica_path.mkdir(exist_ok=True, parents=True)
 
             self._write_chi2s(replica_path / "chi2exps.log")
-            self._write_metadata_json(i, replica_path / f"{fitname}.json")
+            self._write_metadata_json(i, rn, replica_path / f"{fitname}.json")
             self._export_pdf_grid(i, replica_path / f"{fitname}.exportgrid")
             if weights_name:
                 self._write_weights(i, replica_path / f"{weights_name}")
@@ -290,7 +292,26 @@ class WriterWrapper:
         with open(out_path, "w", encoding="utf-8") as fs:
             json.dump(chi2_log, fs, indent=2, cls=SuperEncoder)
 
-    def _write_metadata_json(self, i, out_path):
+    def _hyperparam_settings(self, replica_number):
+        """Collect replica hyperparameter settings"""
+        trials_number = self.trials["number_of_trials"]
+        idx_trial = replica_number % trials_number
+        hyperparam_info = {}
+        hyperparam_info["optimizer"]=self.trials["optimizer"][idx_trial]
+        hyperparam_info["learning_rate"]=self.trials["learning_rate"][idx_trial]
+        hyperparam_info["clipnorm"]=self.trials["clipnorm"][idx_trial]
+        hyperparam_info["epochs"]=self.trials["epochs"][idx_trial]
+        hyperparam_info["stopping_patience"]=self.trials["stopping_patience"][idx_trial]
+        hyperparam_info["initial"]=self.trials["initial"][idx_trial]
+        hyperparam_info["nodes_per_layer"]=self.trials["nodes_per_layer"][idx_trial]
+        hyperparam_info["number_of_layers"]=self.trials["number_of_layers"][idx_trial]
+        hyperparam_info["activation"]=self.trials["activation_per_layer"][idx_trial]
+        hyperparam_info["layer_type"]=self.trials["layer_type"][idx_trial]
+        hyperparam_info["initializer"]=self.trials["initializer"][idx_trial]
+        hyperparam_info["dropout"]=self.trials["dropout"][idx_trial]
+        return hyperparam_info
+
+    def _write_metadata_json(self, i, replica_number, out_path):
         json_dict = jsonfit(
             best_epoch=self.stopping_object.e_best_chi2[i],
             positivity_status=self.stopping_object.positivity_statuses[i],
@@ -300,6 +321,7 @@ class WriterWrapper:
             tr_chi2=self.tr_chi2[i],
             vl_chi2=self.vl_chi2[i],
             true_chi2=self.true_chi2[i],
+            hyperparam_info=self._hyperparam_settings(replica_number),
             # Note: the 2 arguments below are the same for all replicas, unless run separately
             timing=self.timings,
             stop_epoch=self.stopping_object.stop_epoch,
@@ -347,6 +369,7 @@ def jsonfit(
     true_chi2,
     stop_epoch,
     timing,
+    hyperparam_info,
 ):
     """Generates a dictionary containing all relevant metadata for the fit
 
@@ -372,6 +395,8 @@ def jsonfit(
             epoch at which the stopping stopped (not the one for the best fit!)
         timing: dict
             dictionary of the timing of the different events that happened
+        hyperparam_info: dict 
+            dictionary of hyperparameter settings
     """
     all_info = {}
     # Generate preprocessing information
@@ -386,6 +411,7 @@ def jsonfit(
     all_info["arc_lengths"] = arc_lengths
     all_info["integrability"] = integrability_numbers
     all_info["timing"] = timing
+    all_info["hyperparameters"] = hyperparam_info
     # Versioning info
     all_info["version"] = version()
     return all_info
