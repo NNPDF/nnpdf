@@ -43,11 +43,7 @@ from validphys.utils import yaml_safe
 loader = FallbackLoader()
 
 SETUPFIT_FIXED_CONFIG = dict(
-    actions_=[
-        'datacuts check_t0pdfset',
-        'theory check_positivity',
-        'theory evolven3fit_checks_action',
-    ]
+    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action']
 )
 
 SETUPFIT_PROVIDERS = [
