@@ -53,7 +53,7 @@ def test_check_basis_with_layer():
     # Or when the wrong kind of basis is being used
     params = {"nodes_per_layer": [4, 5], "activation_per_layer": ["sigmoid", "square_singlet"]}
     with pytest.raises(CheckError):
-        checks.check_basis_with_layers(basis, vp_basis, params, trial_specs, trial_specs)
+        checks.check_basis_with_layers(basis, vp_basis, params, trial_specs)
 
 
 def test_check_optimizer():
