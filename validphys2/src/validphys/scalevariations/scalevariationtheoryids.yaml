@@ -827,3 +827,10 @@ scale_variations_for:
       (1): 40_028_003
       (1.5): 40_027_003
       (2): 40_029_003
+
+  - theoryid: 40_030_000 # like 40027003 but with perturbative charm. 1.5 is 000, 1.0 is 001, 2.0 is 002
+    variations:
+      (1): 40_030_001
+      (1.5): 40_030_000
+      (2): 40_030_002
+      
