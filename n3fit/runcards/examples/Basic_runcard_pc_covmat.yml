@@ -6,24 +6,22 @@ description: NNPDF4.1 with TCM higher twists and jet power corrections
 
 ######################################################################################
 dataset_inputs:
-- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
-- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, frac: 0.75, variant: legacy_dw}
-- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
-- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, frac: 0.75, variant: legacy}
-- {dataset: CDF_Z0_1P96TEV_ZRAP, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, variant: legacy_10}
-- {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, variant: legacy_decorrelated}
-- {dataset: ATLAS_2JET_7TEV_R06_M12Y, frac: 0.75, variant: legacy}
-- {dataset: CMS_2JET_7TEV_M12Y, frac: 0.75}
-- {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], variant: legacy_dw}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED}
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, variant: decorrelated}
+- {dataset: ATLAS_2JET_7TEV_R06_M12Y, frac: 0.75}
+- {dataset: CMS_1JET_8TEV_PTY, frac: 0.75}
+- {dataset: CMS_2JET_7TEV_M12-Y, frac: 0.75}
 - {dataset: CMS_2JET_13TEV_M12-YSTAR-YB-R08, frac: 0.75}
-- {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75}
 
 ################################################################################
 diagonal_frac: 0.75
