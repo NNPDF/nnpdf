@@ -113,7 +113,7 @@ def get_pc_type(
             raise ValueError("The 'experiment' argument is required for DIJET process type.")
         return _get_dijet_pc_type(experiment, pc_dict)
     elif process_type == "DIJET_3D":
-        return "H2j_3D"
+        return "H2j_ystar"
     else:
         raise RuntimeError(f"{process_type} has not been implemented.")
 
@@ -138,14 +138,12 @@ def _get_dis_pc_type(exp_name: str) -> PCTypeResult:
 def _get_dijet_pc_type(experiment: str, pc_dict: Optional[dict] = None) -> str:
     """Resolve DIJET experiment to PC type key with optional fallback."""
     if experiment == 'ATLAS':
-        specific_key = "H2j_ATLAS"
+        specific_key = "H2j_ystar"
     elif experiment == 'CMS':
-        specific_key = "H2j_CMS"
+        specific_key = "H2j_ymax"
     else:
         raise ValueError(f"{experiment} is not implemented for DIJET.")
 
-    if pc_dict is not None and not pc_dict.get(specific_key):
-        return "H2j"
     return specific_key
 
 
