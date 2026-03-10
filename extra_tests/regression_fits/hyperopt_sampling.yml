@@ -5,18 +5,17 @@
 #
 
 ############################################################
-description: n3fit regression test for hyperotp sampling
+description: n3fit regression test for hyperotp sampling in NNPDF4.1
 
 ############################################################
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-  - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy}
-  - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy}
-  - {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.5, variant: legacy_10}
-  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 1.0, variant: legacy}
-
+  - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+  - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+  - {dataset: CMS_Z0J_8TEV_PT-Y}
+  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC}
 ############################################################
 datacuts:
   t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
@@ -25,7 +24,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 40_000_000        # database id
+  theoryid: 41_000_000        # database id
 
 ############################################################
 genrep: False    # on = generate MC replicas, False = use real data
@@ -45,19 +44,21 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     multiplier: 1.05
     initial: 1.5
   threshold_chi2: 10.0
+  feature_scaling_points: 5
 
 fitting:
+  fitbasis: CCBAR_ASYMM  # EVOL (7), EVOLQED (8), etc.
   savepseudodata: False
-  fitbasis: EVOL
   basis:
-  - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
-  - {fl: g, trainable: false, smallx: [0.8189, 1.044], largex: [2.791, 5.697]}
-  - {fl: v, trainable: false, smallx: [0.457, 0.7326], largex: [1.56, 3.431]}
-  - {fl: v3, trainable: false, smallx: [0.1462, 0.4061], largex: [1.745, 3.452]}
-  - {fl: v8, trainable: false, smallx: [0.5401, 0.7665], largex: [1.539, 3.393]}
-  - {fl: t3, trainable: false, smallx: [-0.4401, 0.9163], largex: [1.773, 3.333]}
-  - {fl: t8, trainable: false, smallx: [0.5852, 0.8537], largex: [1.533, 3.436]}
-  - {fl: t15, trainable: false, smallx: [1.082, 1.142], largex: [1.461, 3.1]}
+  - {fl: sng, trainable: false, smallx: [1.058, 1.155]}
+  - {fl: g, trainable: false, smallx: [0.9017, 1.084]}
+  - {fl: v, trainable: false, smallx: [0.481, 0.6499]}
+  - {fl: v3, trainable: false, smallx: [0.08225, 0.502]}
+  - {fl: v8, trainable: false, smallx: [0.5823, 0.7928]}
+  - {fl: t3, trainable: false, smallx: [-0.3987, 0.9689]}
+  - {fl: t8, trainable: false, smallx: [0.6077, 0.9459]}
+  - {fl: t15, trainable: false, smallx: [1.023, 1.147]}
+  - {fl: v15, trainable: false, smallx: [0.5005, 0.7189]}
 
 ############################################################
 positivity:
