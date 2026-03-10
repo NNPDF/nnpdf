@@ -258,7 +258,7 @@ def central_values_array(groups_dataset_inputs_loaded_cd_with_cuts):
     return np.concatenate(central_values, axis=0)
 
 
-def group_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_mult):
+def group_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_mult=False):
     """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
     and returns the multiplicative uncertainties contribution to the pseudodata replica.
     """
