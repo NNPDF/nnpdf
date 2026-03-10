@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-setup-fit - prepare and apply data cuts before fit
-setup-fit constructs the fit [results] folder where data used by nnfit
-will be stored.
+    setup-fit - prepare and apply data cuts before fit
+    setup-fit constructs the fit [results] folder where data used by nnfit
+    will be stored.
 """
 
 # Implementation notes
@@ -37,13 +37,17 @@ from ruamel.yaml import error
 from reportengine import colors
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
-from validphys.loader import FallbackLoader, PhotonQEDNotFound, TheoryNotFound
+from validphys.loader import Loader, TheoryNotFound
 from validphys.utils import yaml_safe
 
-loader = FallbackLoader()
+l = Loader()
 
 SETUPFIT_FIXED_CONFIG = dict(
-    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action']
+    actions_=[
+        'datacuts check_t0pdfset',
+        'theory check_positivity',
+        'theory evolven3fit_checks_action',
+    ]
 )
 
 SETUPFIT_PROVIDERS = [
@@ -53,7 +57,6 @@ SETUPFIT_PROVIDERS = [
     'validphys.filters',
     'validphys.results',
     'validphys.theorycovariance.construction',
-    'validphys.photon.compute',
 ]
 
 SETUPFIT_DEFAULTS = dict(use_cuts='internal')
@@ -152,7 +155,7 @@ class SetupFitConfig(Config):
                 SETUPFIT_FIXED_CONFIG['theory']['theoryid'] = closuredict['faketheoryid']
                 # download theoryid since it will be used in the fit
                 try:
-                    loader.check_theoryID(file_content['theory']['theoryid'])
+                    l.check_theoryID(file_content['theory']['theoryid'])
                 except TheoryNotFound as e:
                     log.warning(e)
             filter_action = 'datacuts::closuretest::theory::fitting filter'
@@ -181,33 +184,9 @@ class SetupFitConfig(Config):
         # Check fiatlux configuration
         fiatlux = file_content.get('fiatlux')
         if fiatlux is not None:
-            luxset = fiatlux['luxset']
-            theoryid = file_content['theory']['theoryid']
-            compute_in_setupfit = fiatlux.get('compute_in_setupfit', False)
-            try:
-                _ = loader.check_photonQED(theoryid, luxset)
-                log.info(f"Photon QED set found for {theoryid} with luxset {luxset}.")
-            except PhotonQEDNotFound:
-                if compute_in_setupfit:
-                    log.warning(
-                        f"Photon QED set for theory {theoryid} with luxset {luxset} not found. "
-                        "It will be computed in vp-setupfit."
-                    )
-                else:
-                    log.warning(
-                        f"No photon set found for theory {theoryid} with luxset {luxset}. Consider "
-                        "using `compute_in_setupfit` in the runcard to compute all replicas of the photon "
-                        "in vp-setupfit. Otherwise n3fit "
-                        "will take care of the photon computation. May impact performance."
-                    )
-
-            if compute_in_setupfit:
-                log.info("Forcing photon computation with FiatLux during setupfit.")
-                # Since the photon will be computed, check that the luxset and additional_errors exist
-                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset_exists')
-                if fiatlux.get("additional_errors"):
-                    SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
-                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux::theory compute_photon_to_disk')
+            SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset')
+            if fiatlux.get("additional_errors"):
+                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
 
         # Check positivity bound
         if file_content.get('positivity_bound') is not None:

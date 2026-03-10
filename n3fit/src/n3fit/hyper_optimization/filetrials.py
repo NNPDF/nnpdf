@@ -1,29 +1,12 @@
 """
-Custom hyperopt trial object for persistent file storage
-in the form of json and pickle files within the nnfit folder
-
-The trials can be easily accessed with ``json``:
-
-Example
--------
->>> import json ; import glob
->>> for jsonfile in glob.glob("*/nnfit/replica_1/tries.json"):
->>> name = jsonfile.split("/")[0]
->>> aa = json.load(open(jsonfile, 'r'))
->>> print(f"{len(aa)} trials for {name}")
-
+    Custom hyperopt trial object for persistent file storage
+    in the form of json and pickle files within the nnfit folder
 """
-
 import json
 import logging
 import pickle
 
-try:
-    from hyperopt import Trials, space_eval
-except ModuleNotFoundError:
-    from . import HyperoptDependencyMissing as Trials
-
-    space_eval = object()
+from hyperopt import Trials, space_eval
 
 from validphys.hyperoptplot import HyperoptTrial
 

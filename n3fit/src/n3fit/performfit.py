@@ -7,13 +7,15 @@ import logging
 
 import n3fit.checks
 from n3fit.vpinterface import N3PDF
+import n3fit.bnn_wrapper
+from keras import ops
 
 log = logging.getLogger(__name__)
 
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
-@n3fit.checks.check_photonQED_exists
+@n3fit.checks.check_multireplica_qed
 @n3fit.checks.check_polarized_configs
 def performfit(
     *,
@@ -111,7 +113,7 @@ def performfit(
             ``load``.
         load: None, str
             model file from which to load weights from.
-        hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
+        hyperscanner: dict
             dictionary containing the details of the hyperscanner
         hyperopt: int
             if given, number of hyperopt iterations to run
@@ -175,6 +177,9 @@ def performfit(
             replicas[0] + n_models - 1,
         )
 
+    layer_type = parameters.get('layer_type')
+    is_bnn = any(layer == 'VBDense' for layer in (layer_type or []))
+    
     for replica_idxs, exp_info, nnseeds in replicas_info:
         log.info("Starting replica fit " + str(replica_idxs))
 
@@ -215,9 +220,7 @@ def performfit(
         if hyperopt:
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
-            # TODO: save everything to a hyperopt folder instead
-            # Save everything to replica_1 regardless of which replicas are we running
-            replica_path_set = replica_path / "replica_1"
+            replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             hyper_scan_wrapper(
                 replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
             )
@@ -255,15 +258,75 @@ def performfit(
         log.info("Stopped at epoch=%d", stopping_object.stop_epoch)
 
         final_time = stopwatch.stop()
-        all_chi2s = the_model_trainer.evaluate(stopping_object)
+        all_chi2s = the_model_trainer.evaluate(stopping_object)        
+        pdf_model = result["pdf_model"]
+        
+        if is_bnn:
+            # For BNN: Generate pseudo-replicas using BNNPredictor
+            from n3fit.bnn_wrapper import BNNPredictor
 
-        pdf_models = result["pdf_model"].split_replicas()
+            n_bnn_samples = parameters.get('n_bnn_samples', 3)
+            log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN")
+            
+            bnn_predictor = BNNPredictor(pdf_model, n_samples=n_bnn_samples)
+            pdf_models = bnn_predictor.generate_bnn_replica() # prints [<MetaModel name=PDFs, built=True>, <MetaModel name=PDFs, built=True>] for 2 bnn replica
+
+            class BNNStoppingProxy:
+                """
+                Proxy for the Stopping object to handle BNN
+
+                In a standard fit, one training run produces one replica (1-to-1).
+                In a BNN fit, one training run produces N "pseudo-replicas" (1-to-N).
+                
+                The WriterWrapper expects metadata (e.g., e_best_chi2, positivity_statuses) to 
+                be a list of length N. Since the Stopping object only contains data for the 
+                single training run (length 1), indexing it for BNN samples > 1 causes an IndexError.
+
+                This proxy "stretches" the single-run metadata by replicating it N times, 
+                allowing the existing WriterWrapper to process BNN samples as if they were 
+                independent replicas without modifying the immutable Stopping object.
+
+                Parameters
+                ----------
+                original_stopping : n3fit.stopping.Stopping
+                    The original stopping object containing metadata from the BNN training.
+                n_samples : int
+                    The number of Bayesian pseudo-replicas generated from the model.
+                """
+                def __init__(self, original_stopping, n_samples):
+                    self._obj = original_stopping
+                    # Replicate the specific lists indexed by [i] in writer.py
+                    self.e_best_chi2 = original_stopping.e_best_chi2 * n_samples
+                    self.positivity_statuses = original_stopping.positivity_statuses * n_samples
+                    
+                def __getattr__(self, name):
+                    # Forward everything else (stop_epoch, chi2exps_json) to the original object
+                    return getattr(self._obj, name)
+                
+            replica_idxs = tuple(range(replica_idxs[0], replica_idxs[0] + n_bnn_samples))
+
+            # Expand the inner lists, keeping the outer length at 3
+            # all_chi2s is [tr_list, vl_list, true_list]
+            all_chi2s = [list(chi2_list) * n_bnn_samples for chi2_list in all_chi2s]
+
+            stopping_object = BNNStoppingProxy(stopping_object, n_bnn_samples)
+            
+        else:
+            pdf_models = pdf_model.split_replicas() # prints [<MetaModel name=PDFs, built=True>] then trians, then prints and trains again for 2nd replica
+        
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time
-        )
+                replica_idxs, 
+                pdf_instances, 
+                stopping_object, 
+                all_chi2s, 
+                theoryid, 
+                final_time
+            )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 
         if tensorboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)
+
+    
