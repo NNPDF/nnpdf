@@ -32,7 +32,6 @@ trvlseed: 3
 nnseed: 2
 mcseed: 1
 
-load: "weights.weights.h5"
 
 trial_specs: 
   hyperscan: 260204-jcm-hyperopt
