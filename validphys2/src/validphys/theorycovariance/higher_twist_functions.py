@@ -55,7 +55,6 @@ DIS_CC_PREFIXES = ('CHORUS_CC', 'NUTEV_CC', 'HERA_CC')
 # Dijet rapidity variable name per experiment
 DIJET_RAPIDITY_VAR = {'ATLAS': 'ystar', 'CMS': 'ydiff'}
 
-
 # ---------------------------------------------------------------------------
 # Dataset -> PC type routing
 # ---------------------------------------------------------------------------
@@ -138,9 +137,9 @@ def _get_dis_pc_type(exp_name: str) -> PCTypeResult:
 def _get_dijet_pc_type(experiment: str, pc_dict: Optional[dict] = None) -> str:
     """Resolve DIJET experiment to PC type key with optional fallback."""
     if experiment == 'ATLAS':
-        specific_key = "H2j_ystar"
+        specific_key = "H2j_ystar" if pc_dict.get("H2j_ystar") is not None else "H2j_ATLAS"
     elif experiment == 'CMS':
-        specific_key = "H2j_ymax"
+        specific_key = "H2j_ymax" if pc_dict.get("H2j_ymax") is not None else "H2j_CMS"
     else:
         raise ValueError(f"{experiment} is not implemented for DIJET.")
 
