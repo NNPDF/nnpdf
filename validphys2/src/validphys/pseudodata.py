@@ -298,15 +298,14 @@ def group_positivity_mask(
     """
     if not resample_negative_pseudodata:
         return None
-    else:
-        check_positive_masks = []
-        for cd in groups_dataset_inputs_loaded_cd_with_cuts:
-            if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
-                check_positive_masks.append(np.zeros_like(cd.central_values.to_numpy(), dtype=bool))
-            else:
-                check_positive_masks.append(np.ones_like(cd.central_values.to_numpy(), dtype=bool))
-        full_mask = np.concatenate(check_positive_masks, axis=0)
-        return full_mask
+    check_positive_masks = []
+    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
+            check_positive_masks.append(np.zeros_like(cd.central_values.to_numpy(), dtype=bool))
+        else:
+            check_positive_masks.append(np.ones_like(cd.central_values.to_numpy(), dtype=bool))
+    full_mask = np.concatenate(check_positive_masks, axis=0)
+    return full_mask
 
 
 def indexed_make_replica(groups_index, make_replica):
