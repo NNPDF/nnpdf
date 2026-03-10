@@ -13,7 +13,17 @@ yaml.add_representer(float, prettify_float)
 AVAILABLE_VARIANTS = ['nominal', 'weaker', 'stronger']
 
 
-def filter_ATLAS_1JET_7TEV_data_kinematics():
+def observable_selector(metadata: dict, observable: str):
+    """
+    Select the metadata for the given observable.
+    """
+    for obs in metadata["implemented_observables"]:
+        if obs["observable_name"] == observable:
+            return obs
+    raise ValueError(f"Observable {observable} not found in metadata.")
+
+
+def filter_ATLAS_1JET_7TEV_data_kinematics(observable: str = 'PTY-R06'):
     """
     Write kinematic values in the kinematics.yaml file.
     """
@@ -21,7 +31,9 @@ def filter_ATLAS_1JET_7TEV_data_kinematics():
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
-    tables = metadata["hepdata"]["tables"]
+    obs_metadata = observable_selector(metadata, observable)
+    tables = obs_metadata["tables"]
+    kinematics_filename = obs_metadata["kinematics"]["file"]
 
     kin = []
     for table in tables:
@@ -56,11 +68,11 @@ def filter_ATLAS_1JET_7TEV_data_kinematics():
 
     kinematics_yaml = {"bins": kin}
 
-    with open("kinematics.yaml", "w") as file:
+    with open(kinematics_filename, "w") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
-def filter_ALTAS_1JET_7TEV_data_uncertainties(variant='nominal'):
+def filter_ALTAS_1JET_7TEV_data_uncertainties(observable: str = 'PTY-R06', variant='nominal'):
     """
     Write uncertainties in the uncertainties.yaml file.
     """
@@ -74,7 +86,8 @@ def filter_ALTAS_1JET_7TEV_data_uncertainties(variant='nominal'):
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
-    tables = metadata["hepdata"]["tables"]
+    obs_metadata = observable_selector(metadata, observable)
+    tables = obs_metadata["tables"]
 
     # get df of uncertainties
     dfs = []
@@ -133,23 +146,25 @@ def filter_ALTAS_1JET_7TEV_data_uncertainties(variant='nominal'):
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
     if variant == 'nominal':
-        filename = 'uncertainties.yaml'
+        data_filename = obs_metadata['data_central']
+        uncertainties_filename = obs_metadata['data_uncertainties'][0]
     else:
-        filename = f"uncertainties_{variant}.yaml"
-    with open(filename, "w") as file:
+        data_filename = obs_metadata['variants'][variant]['data_central']
+        uncertainties_filename = obs_metadata['variants'][variant]['data_uncertainties'][0]
+
+    with open(uncertainties_filename, "w") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
     data_central_yaml = {"data_central": cvs.tolist()}
-    if variant == 'nominal':
-        data_filename = 'data.yaml'
-    else:
-        data_filename = f"data_{variant}.yaml"
     with open(data_filename, "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
 
 
 if __name__ == "__main__":
-    filter_ATLAS_1JET_7TEV_data_kinematics()
-    filter_ALTAS_1JET_7TEV_data_uncertainties('nominal')
-    filter_ALTAS_1JET_7TEV_data_uncertainties('weaker')
-    filter_ALTAS_1JET_7TEV_data_uncertainties('stronger')
+    filter_ATLAS_1JET_7TEV_data_kinematics(observable='PTY-R06')
+    filter_ALTAS_1JET_7TEV_data_uncertainties(observable='PTY-R06', variant='nominal')
+    filter_ALTAS_1JET_7TEV_data_uncertainties(observable='PTY-R06', variant='weaker')
+    filter_ALTAS_1JET_7TEV_data_uncertainties(observable='PTY-R06', variant='stronger')
+    filter_ALTAS_1JET_7TEV_data_uncertainties(observable='PTY-R04', variant='nominal')
+    filter_ALTAS_1JET_7TEV_data_uncertainties(observable='PTY-R04', variant='weaker')
+    filter_ALTAS_1JET_7TEV_data_uncertainties(observable='PTY-R04', variant='stronger')
