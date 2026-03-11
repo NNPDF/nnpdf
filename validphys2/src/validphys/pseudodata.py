@@ -432,8 +432,11 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     )
 
     # ================== generation of Level1 data ======================#
+    central_vals= central_values_array(level0_commondata_wc)
+    group_mult_errs = group_multiplicative_errors(level0_commondata_wc, sep_mult=sep_mult)
+    group_pos_mask = group_positivity_mask(level0_commondata_wc)
     level1_data = make_replica(
-        level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
+        central_vals, filterseed, covmat, group_multiplicative_errors=group_mult_errs, group_positivity_mask=group_pos_mask, sep_mult=sep_mult, genrep=True,
     )
 
     indexed_level1_data = indexed_make_replica(data_index, level1_data)
