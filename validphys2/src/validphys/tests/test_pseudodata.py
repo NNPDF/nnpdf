@@ -8,6 +8,7 @@ This is used to benchmark the correctness of the pseudodata
 recreation.
 """
 
+import numpy as np
 from numpy.testing import assert_allclose
 import pandas as pd
 import pytest
@@ -115,3 +116,16 @@ def test_level0_commondata_wc():
     assert_allclose(
         dataset_t0_predictions(t0dataset=datasetspec, t0set=t0set), l0_vals, rtol=1e-07, atol=0
     )
+
+
+def test_level1_commondata(data_internal_cuts_closure_config):
+    """
+    check whether level 1 commondata can be generated and that it is seed-dependent.
+    """
+    mod_data1 = API.make_level1_data(**data_internal_cuts_closure_config, filterseed=2)
+    mod_data2 = API.make_level1_data(**data_internal_cuts_closure_config, filterseed=42)
+
+    arr1 = pd.concat(i.central_values for i in mod_data1)
+    arr2 = pd.concat(i.central_values for i in mod_data2)
+
+    assert not np.allclose(arr1, arr2)
