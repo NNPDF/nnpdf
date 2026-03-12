@@ -48,9 +48,6 @@ def filter_ATLAS_1JET_7TEV_data_kinematics(observable: str = 'PTY-R06'):
         rap['min'], rap['max'] = rapidity_interval[0], rapidity_interval[1]
         rap['mid'] = 0.5 * (rap['min'] + rap['max'])
 
-        # center of mass energy
-        sqrts = float(input['dependent_variables'][0]['qualifiers'][4]['value'])
-
         # transverse momentum
         jet_kt_bins = input['independent_variables'][0]['values']
         KT = {}
@@ -61,7 +58,6 @@ def filter_ATLAS_1JET_7TEV_data_kinematics(observable: str = 'PTY-R06'):
             kin_value = {
                 'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
                 'pT': {'min': KT['min'], 'mid': KT['mid'], 'max': KT['max']},
-                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }
 
             kin.append(kin_value)
