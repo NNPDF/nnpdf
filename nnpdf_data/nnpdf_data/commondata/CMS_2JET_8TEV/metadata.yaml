@@ -12,12 +12,12 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DIJET_3D"
+  nnpdf31_process: "DIJET"
   experiment: "CMS"
 
 implemented_observables:
 - observable_name: 3D
-  process_type: DIJET
+  process_type: DIJET_3D
   tables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   ndata: 122 # 31 + 26 + 14 + 23 + 17 + 11
   observable:
@@ -26,7 +26,7 @@ implemented_observables:
     units: "[pb/GeV]"
   kinematics:
     file: kinematics.yaml
-    variables: # need to fix inline math here because load_yaml breaks down
+    variables:
       yb: {description: "the boost of the two leading jets", label: "$y_{b}$", units: ""}
       ystar: {description: "half rapidity separation of the two leading jets", label: "$y^*$", units: ""}
       pTavg: {description: "average transverse momentum of the two leading jets", label: '$p_{\text{T,avg}}$', units: "GeV"}
