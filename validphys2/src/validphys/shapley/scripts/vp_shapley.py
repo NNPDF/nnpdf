@@ -31,20 +31,20 @@ from shapley_values import save_results
 
 
 _MUTED_SERIES_COLORS = [
-    "#4C78A8",
-    "#F58518",
-    "#54A24B",
     "#E45756",
-    "#72B7B2",
+    "#F58518",
     "#EECA3B",
+    "#71BD00",
+    "#72B7B2",
+    "#4C78A8",
     "#B279A2",
-    "#FF9DA6",
     "#9D755D",
+    "#FF9DA6",
     "#BAB0AC",
 ]
 _SERIES_MARKERS = ["o", "s", "D", "^", "v", "P", "X", "<", ">", "h"]
-_SOFT_POSITIVE_COLOR = "#7FAF9C"
-_SOFT_NEGATIVE_COLOR = "#D8A0A0"
+_SOFT_POSITIVE_COLOR = "#518500"
+_SOFT_NEGATIVE_COLOR = "#FFBF00"
 
 
 def _plot_sv_bar(sv, labels, title=None, sv_err=None,
@@ -428,7 +428,7 @@ def _plot_sv_bar_comparison(
     output_dir,
     experiment_meta,
 ):
-    """Save publication-style multi-panel bar comparisons across experiments."""
+    """Multi-panel bar comparisons across experiments."""
     n = len(exp_names_ordered)
     if n == 0:
         return

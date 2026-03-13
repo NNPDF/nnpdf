@@ -1,29 +1,50 @@
-# Shapley value runcard - full NNPDF4.0-like global fit
-# 82 datasets, both bases. Matches n3fit/runcards/examples/nnpdf40-like.yml
+# Shapley value runcard - NNPDF4.0-like global fit, ablation perturbation
+# Datasets restricted to NULL and ADD operations only.
+#
+# Ablation sets flavour channels to zero over all x.  This is undefined for
+# datasets whose FK operation involves division (ASY, RATIO, COM, SMN):
+# zeroing a flavour sends the denominator to zero -> NaN chi2.
+#
+# Removed from the full 82-dataset list (22 datasets):
+#   RATIO : NMC_NC_NOTFIXED_EM-F2, DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO,
+#           D0_Z0_1P96TEV_ZRAP,
+#           ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM,
+#           ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM,
+#           CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM,
+#           ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC,
+#           ATLAS_SINGLETOP_7TEV_T-Y-NORM, ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM,
+#           ATLAS_SINGLETOP_8TEV_T-RAP-NORM, ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM,
+#           CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, CMS_SINGLETOP_13TEV_TCHANNEL-XSEC
+#   ASY   : D0_WPWM_1P96TEV_ASY, CMS_WPWM_7TEV_ELECTRON_ASY, CMS_WPWM_7TEV_MUON_ASY
+#   COM   : DYE906_Z0_120GEV_DW_PDXSECRATIO
 
 
 pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
-output_root: sv_results/nnpdf40
-log_root: slurm/logs/nnpdf40
-run_name: sv_global
+output_root: sv_results/nnpdf40/ablation
+log_root: slurm/logs/nnpdf40/ablation
+run_name: ablation_ev
 
-basis:
-  - flavor
-
+stabilization:
+  enabled: true
+  action: exclude_dataset
+  dataset_delta_chi2_threshold: 1e6
+  max_outlier_coalitions: 5
+  rerun_stable: true
 experiments:
-  - name: baseline
+
+  - name: ablation
+    basis: [evolution]
     perturbation:
-      mu: 0.05
-      sigma: 0.1
-      amplitude: -10
-      mode: additive
+      mu: 0.0        # ignored for mode=ablation
+      sigma: 1.0     # ignored for mode=ablation
+      amplitude: 1.0 # ignored for mode=ablation
+      mode: ablation
 
 datasets:
-  # DIS: Fixed-target
-  - {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+  # DIS: Fixed-target (NMC_NC_NOTFIXED_EM-F2 removed: RATIO)
   - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
   - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
   - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
@@ -43,15 +64,11 @@ datasets:
   - {dataset: HERA_CC_318GEV_EP-SIGMARED, variant: legacy}
   - {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, variant: legacy}
   - {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, variant: legacy}
-  # DY: Fixed-target
-  - {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, variant: legacy}
+  # DY: Fixed-target (RATIO and COM datasets removed)
   - {dataset: DYE866_Z0_800GEV_PXSEC, variant: legacy}
   - {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy}
-  - {dataset: DYE906_Z0_120GEV_DW_PDXSECRATIO, cfac: [ACC], variant: legacy}
-  # DY: Tevatron
+  # DY: Tevatron (D0_Z0_1P96TEV_ZRAP RATIO, D0_WPWM_1P96TEV_ASY ASY removed)
   - {dataset: CDF_Z0_1P96TEV_ZRAP, variant: legacy}
-  - {dataset: D0_Z0_1P96TEV_ZRAP, variant: legacy}
-  - {dataset: D0_WPWM_1P96TEV_ASY, variant: legacy}
   # DY: ATLAS
   - {dataset: ATLAS_WPWM_7TEV_36PB_ETA, variant: legacy}
   - {dataset: ATLAS_Z0_7TEV_36PB_ETA, variant: legacy}
@@ -68,9 +85,7 @@ datasets:
   - {dataset: ATLAS_WJ_8TEV_WM-PT, variant: legacy}
   - {dataset: ATLAS_Z0J_8TEV_PT-M, variant: legacy_10}
   - {dataset: ATLAS_Z0J_8TEV_PT-Y, variant: legacy_10}
-  # DY: CMS
-  - CMS_WPWM_7TEV_ELECTRON_ASY
-  - {dataset: CMS_WPWM_7TEV_MUON_ASY, variant: legacy}
+  # DY: CMS (ASY datasets removed)
   - CMS_Z0_7TEV_DIMUON_2D
   - {dataset: CMS_WPWM_8TEV_MUON_Y, variant: legacy}
   - {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy_10}
@@ -91,12 +106,7 @@ datasets:
   - {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, variant: legacy}
   - {dataset: CMS_TTBAR_13TEV_TOT_X-SEC, variant: legacy}
   - {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, variant: legacy}
-  # Top: ttbar differential
-  - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, variant: legacy}
-  - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, variant: legacy}
-  - {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, variant: legacy}
-  - {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, variant: legacy}
-  - {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, variant: legacy}
+  # Top: ttbar differential (RATIO/NORM datasets removed, NULL ones kept)
   - {dataset: CMS_TTBAR_13TEV_2L_DIF_YT, variant: legacy}
   - {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YT, variant: legacy}
   # Jets
@@ -106,13 +116,6 @@ datasets:
   - {dataset: CMS_1JET_8TEV_PTY, variant: legacy}
   # Prompt photon
   - {dataset: ATLAS_PH_13TEV_XSEC, cfac: [EWK], variant: legacy}
-  # Single top
-  - {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, variant: legacy}
-  - {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC, variant: legacy}
-  - {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, variant: legacy}
-  - {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, variant: legacy}
-  - {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, variant: legacy}
-  - {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM, variant: legacy}
+  # Single top (only CMS_7TEV kept: ADD; all others are RATIO)
   - {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC, variant: legacy}
-  - {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, variant: legacy}
-  - {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, variant: legacy}
+

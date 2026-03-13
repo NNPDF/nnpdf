@@ -3,8 +3,8 @@
 #SBATCH --account=inf26_pml4hep_0
 #SBATCH --partition=dcgp_usr_prod
 #SBATCH --time=08:00:00
-#SBATCH --output=/leonardo/home/userexternal/rbonnetg/projects/nnpdf/validphys2/src/validphys/shapley/slurm/slurm-%j.out
-#SBATCH --error=/leonardo/home/userexternal/rbonnetg/projects/nnpdf/validphys2/src/validphys/shapley/slurm/slurm-%j.err
+#SBATCH --output=/leonardo/home/userexternal/rbonnetg/projects/nnpdf/validphys2/src/validphys/shapley/slurm/logs/slurm-%j.out
+#SBATCH --error=/leonardo/home/userexternal/rbonnetg/projects/nnpdf/validphys2/src/validphys/shapley/slurm/logs/slurm-%j.err
 
 set -euo pipefail
 

@@ -1,0 +1,91 @@
+#
+# Experiment layout
+# -----------------
+#   x-scan : 5 log-spaced mu values covering [1e-4, 0.5], alpha=-1.0
+#            -> produces phi_j(x) Shapley density on the full global fit
+#
+# sigma is fixed in log10(x) units (xspace: logx) so the bump width is
+# constant in decades across the full x range.
+
+pdf_name: NNPDF40_nnlo_as_01180
+theory_id: 708
+use_cuts: internal
+n_replicas: 100
+output_root: sv_results/gluon
+log_root: slurm/logs/gluon
+run_name: xscan_dis
+per_replica: true      
+random_sign: true      
+enforce_sumrules: false
+stabilization:
+  enabled: true
+  action: exclude_dataset
+  dataset_delta_chi2_threshold: 1e6
+  max_outlier_coalitions: 5
+  rerun_stable: true
+experiments:
+
+  # --- x-scan 
+
+  - name:  1e-4
+    basis: [flavor]
+    perturbation:
+      mu: 0.0001
+      sigma: 0.2      
+      amplitude:  1.0   
+      mode: calibrated
+      xspace: logx
+
+  - name:  1e-3
+    basis: [flavor]
+    perturbation:
+      mu: 0.001
+      sigma: 0.3       
+      amplitude:  1.0
+      mode: calibrated
+      xspace: logx
+
+  - name:  1e-2
+    basis: [flavor]
+    perturbation:
+      mu: 0.01
+      sigma: 0.3      
+      amplitude:  1.0
+      mode: calibrated
+      xspace: logx
+
+  - name:  1e-1
+    basis: [flavor]
+    perturbation:
+      mu: 0.1
+      sigma: 0.3       
+      amplitude:  1.0
+      mode: calibrated
+      xspace: logx
+
+  - name:  5e-1
+    basis: [flavor]
+    perturbation:
+      mu: 0.5
+      sigma: 0.2       
+      amplitude:  1.0
+      mode: calibrated
+      xspace: logx
+  - name:  8e-1
+    basis: [flavor]
+    perturbation:
+      mu: 0.8
+      sigma: 0.2       
+      amplitude:  1.0
+      mode: calibrated
+      xspace: logx
+
+datasets:
+  # DIS: HERA combined
+  - {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_251GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_300GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, variant: legacy}
