@@ -17,6 +17,7 @@ import re
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.transforms as mtransforms
 import numpy as np
 import yaml
 
@@ -29,10 +30,29 @@ import matplotlib.patches as mpatches
 from shapley_values import save_results
 
 
+_MUTED_SERIES_COLORS = [
+    "#4C78A8",
+    "#F58518",
+    "#54A24B",
+    "#E45756",
+    "#72B7B2",
+    "#EECA3B",
+    "#B279A2",
+    "#FF9DA6",
+    "#9D755D",
+    "#BAB0AC",
+]
+_SERIES_MARKERS = ["o", "s", "D", "^", "v", "P", "X", "<", ">", "h"]
+_SOFT_POSITIVE_COLOR = "#7FAF9C"
+_SOFT_NEGATIVE_COLOR = "#D8A0A0"
+
+
 def _plot_sv_bar(sv, labels, title=None, sv_err=None,
                  ax=None, figsize=(12, 6),
                  ylabel="Shapley Value (delta chi2/N)",
-                 positive_color="green", negative_color="red", alpha=0.7):
+                 positive_color=_SOFT_POSITIVE_COLOR,
+                 negative_color=_SOFT_NEGATIVE_COLOR,
+                 alpha=0.85, show_legend=True):
     """Bar chart of Shapley values with optional symmetric error bars.
 
     Parameters
@@ -61,20 +81,24 @@ def _plot_sv_bar(sv, labels, title=None, sv_err=None,
 
     if sv_err is not None:
         sv_err = np.asarray(sv_err, dtype=float)
-        ax.errorbar(
-            labels, sv,
-            yerr=sv_err,
-            fmt="none",
-            ecolor="black",
-            elinewidth=1.2,
-            capsize=4,
-            capthick=1.2,
-            zorder=5,
-        )
+        if np.any(np.isfinite(sv_err)):
+            sv_err = np.where(np.isfinite(sv_err), sv_err, 0.0)
+            ax.errorbar(
+                labels, sv,
+                yerr=sv_err,
+                fmt="none",
+                ecolor="#333333",
+                elinewidth=1.1,
+                capsize=3.2,
+                capthick=1.1,
+                zorder=5,
+            )
 
-    ax.axhline(0, color="black", lw=0.5)
+    ax.axhline(0, color="#444444", lw=0.8, alpha=0.9)
     ax.set_ylabel(ylabel)
-    ax.grid(axis="y", ls="--", alpha=0.5)
+    ax.grid(axis="y", ls="--", alpha=0.35, linewidth=0.7)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right")
     if title:
         ax.set_title(title)
@@ -83,11 +107,12 @@ def _plot_sv_bar(sv, labels, title=None, sv_err=None,
         mpatches.Patch(color=positive_color, alpha=alpha, label="SV > 0"),
         mpatches.Patch(color=negative_color, alpha=alpha, label="SV < 0"),
     ]
-    if sv_err is not None:
+    if sv_err is not None and np.any(np.isfinite(sv_err)):
         handles.append(
-            mlines.Line2D([], [], color="black", linewidth=1.2, label="1\u03c3 std")
+            mlines.Line2D([], [], color="#333333", linewidth=1.1, label="1\u03c3 std")
         )
-    ax.legend(handles=handles, loc="upper right")
+    if show_legend:
+        ax.legend(handles=handles, loc="upper right", frameon=False)
     fig.tight_layout()
     return fig
 
@@ -197,27 +222,264 @@ def _build_setup_context(cfg):
     }
 
 
-def _format_experiment_title(exp_name, exp_meta):
-    """Build concise comparison subplot title including perturbation params."""
+def _format_axis_tick(val):
+    """Compact numeric tick labels suitable for x-scan values."""
+    val = float(val)
+    if val == 0.0:
+        return "0"
+    abs_v = abs(val)
+    if 1e-2 <= abs_v < 1e2:
+        return f"{val:g}"
+    text = f"{val:.0e}"
+    return text.replace("e-0", "e-").replace("e+0", "e+")
+
+
+def _resolve_scan_axis(exp_names, experiment_meta, evenly_spaced_bins=True):
+    """Return axis positions and display labels for experiment comparisons."""
+    mu_vals = []
+    xspaces = []
+    for exp_name in exp_names:
+        pert = (experiment_meta.get(exp_name) or {}).get("perturbation", {})
+        try:
+            mu_vals.append(float(pert.get("mu")))
+        except (TypeError, ValueError):
+            mu_vals = None
+            break
+        xspaces.append(str(pert.get("xspace", "linear")).strip().lower())
+
+    n_exp = len(exp_names)
+    if not mu_vals or len(mu_vals) != n_exp:
+        x = np.arange(n_exp, dtype=float)
+        return {
+            "order": np.arange(n_exp),
+            "x": x,
+            "tick_labels": exp_names,
+            "xscale": "linear",
+            "xlabel": "Experiment",
+            "is_index_axis": True,
+        }
+
+    order = np.argsort(mu_vals)
+    x_sorted = np.asarray(mu_vals, dtype=float)[order]
+    if evenly_spaced_bins:
+        # Use evenly spaced bins for readability while keeping sorted mu labels.
+        x_bins = np.arange(n_exp, dtype=float)
+        return {
+            "order": order,
+            "x": x_bins,
+            "tick_labels": [_format_axis_tick(v) for v in x_sorted],
+            "xscale": "linear",
+            "xlabel": "Perturbation center x (mu, evenly spaced bins)",
+            "is_index_axis": True,
+        }
+
+    all_positive = bool(np.all(x_sorted > 0))
+    use_log = all_positive and all(xs == "logx" for xs in xspaces)
+    return {
+        "order": order,
+        "x": x_sorted,
+        "tick_labels": [_format_axis_tick(v) for v in x_sorted],
+        "xscale": "log" if use_log else "linear",
+        "xlabel": "Perturbation center x (mu)",
+        "is_index_axis": False,
+    }
+
+
+def _plot_sv_scan_comparison(
+    sv_matrix,
+    err_matrix,
+    labels,
+    basis,
+    output_dir,
+    axis_info,
+    output_stem,
+    title_suffix=None,
+    dodge_step_pt=4.5,
+    use_dodge=True,
+):
+    """Plot SV vs scan-x with per-flavor markers and uncertainty bars."""
+    x = np.asarray(axis_info["x"], dtype=float)
+    use_index_axis = bool(axis_info["is_index_axis"])
+
+    with matplotlib.rc_context(
+        {
+            "font.size": 12,
+            "axes.labelsize": 13,
+            "axes.titlesize": 14,
+            "legend.fontsize": 10,
+            "xtick.labelsize": 11,
+            "ytick.labelsize": 11,
+        }
+    ):
+        fig, ax = plt.subplots(figsize=(10.5, 6.2))
+        n_series = len(labels)
+        if (not use_dodge) or n_series <= 1:
+            dodge_offsets_pt = np.zeros(n_series, dtype=float)
+        else:
+            # Constant display-space dodge keeps interpretation of x intact
+            # for both linear and logarithmic axes.
+            half_span_pt = 0.5 * dodge_step_pt * (n_series - 1)
+            dodge_offsets_pt = np.linspace(
+                -half_span_pt, half_span_pt, n_series, dtype=float
+            )
+
+        for i, flav in enumerate(labels):
+            y = sv_matrix[:, i]
+            yerr = err_matrix[:, i] if err_matrix is not None else None
+            valid = np.isfinite(y)
+            if not np.any(valid):
+                continue
+
+            xv = x[valid]
+            yv = y[valid]
+            color = _MUTED_SERIES_COLORS[i % len(_MUTED_SERIES_COLORS)]
+            marker = _SERIES_MARKERS[i % len(_SERIES_MARKERS)]
+
+            if yerr is not None:
+                yerrv = np.asarray(yerr[valid], dtype=float)
+                yerrv = np.where(np.isfinite(yerrv), yerrv, 0.0)
+            else:
+                yerrv = None
+
+            err_container = ax.errorbar(
+                xv,
+                yv,
+                yerr=yerrv,
+                linestyle="none",
+                linewidth=0.0,
+                marker=marker,
+                markersize=5.0,
+                markerfacecolor="white",
+                markeredgewidth=1.0,
+                capsize=2.8,
+                elinewidth=1.0,
+                color=color,
+                alpha=0.95,
+                label=flav,
+                zorder=3,
+            )
+            dx_pt = float(dodge_offsets_pt[i])
+            if dx_pt != 0.0:
+                shift = mtransforms.ScaledTranslation(
+                    dx_pt / 72.0, 0.0, fig.dpi_scale_trans
+                )
+                shifted_data = ax.transData + shift
+                data_line, cap_lines, bar_linecols = err_container.lines
+                if data_line is not None:
+                    data_line.set_transform(shifted_data)
+                for artist in cap_lines:
+                    artist.set_transform(shifted_data)
+                for artist in bar_linecols:
+                    artist.set_transform(shifted_data)
+
+        if axis_info["xscale"] == "log":
+            ax.set_xscale("log")
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(axis_info["tick_labels"], rotation=0 if not use_index_axis else 35)
+        ax.set_xlabel(axis_info["xlabel"])
+        ax.set_ylabel("Shapley Value (delta chi2/N)")
+        title = f"Shapley comparison ({basis} basis)"
+        if title_suffix:
+            title = f"{title} - {title_suffix}"
+        ax.set_title(title)
+        ax.axhline(0.0, color="#555555", linewidth=0.9, alpha=0.9)
+        ax.grid(True, which="major", linestyle="--", linewidth=0.7, alpha=0.35)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+        ax.legend(
+            loc="upper left",
+            bbox_to_anchor=(1.01, 1.0),
+            frameon=False,
+            ncol=1,
+            borderaxespad=0.0,
+        )
+        fig.tight_layout(rect=[0, 0, 0.82, 1])
+
+        png_path = output_dir / f"{output_stem}_{basis}.png"
+        pdf_path = output_dir / f"{output_stem}_{basis}.pdf"
+        fig.savefig(png_path, dpi=220, bbox_inches="tight")
+        fig.savefig(pdf_path, bbox_inches="tight")
+        plt.close(fig)
+        print(f"Saved comparison plot: {png_path}")
+        print(f"Saved comparison plot: {pdf_path}")
+
+
+def _format_experiment_panel_title(exp_name, exp_meta):
+    """Compact per-panel title for bar comparison figures."""
     pert = (exp_meta or {}).get("perturbation", {})
-    amp = pert.get("amplitude", "na")
-    mu = pert.get("mu", "na")
-    sigma = pert.get("sigma", "na")
-    mode = pert.get("mode", "additive")
-    xspace = pert.get("xspace")
-    if mode == "ablation":
-        title = f"{exp_name} | {mode}"
-    elif mode == "calibrated":
-        title = f"{exp_name} | A={amp}\u03c3_rep, mu={mu}, sigma={sigma}, {mode}"
-    else:
-        title = f"{exp_name} | A={amp}, mu={mu}, sigma={sigma}, {mode}"
-    if xspace is not None:
-        title += f", {xspace}"
-    return title
+    mu = pert.get("mu")
+    sigma = pert.get("sigma")
+    if mu is None:
+        return str(exp_name)
+    mu_txt = _format_axis_tick(mu)
+    if sigma is None:
+        return f"{exp_name} | mu={mu_txt}"
+    return f"{exp_name} | mu={mu_txt}, sigma={sigma}"
+
+
+def _plot_sv_bar_comparison(
+    sv_matrix,
+    err_matrix,
+    labels,
+    basis,
+    exp_names_ordered,
+    output_dir,
+    experiment_meta,
+):
+    """Save publication-style multi-panel bar comparisons across experiments."""
+    n = len(exp_names_ordered)
+    if n == 0:
+        return
+
+    ncols = min(n, 3)
+    nrows = int(np.ceil(n / ncols))
+
+    with matplotlib.rc_context(
+        {
+            "font.size": 11,
+            "axes.labelsize": 11,
+            "axes.titlesize": 12,
+            "xtick.labelsize": 10,
+            "ytick.labelsize": 10,
+        }
+    ):
+        fig, axes = plt.subplots(nrows, ncols, figsize=(6.2 * ncols, 4.4 * nrows))
+        axes_flat = np.atleast_1d(axes).ravel()
+
+        for i, (ax, exp_name) in enumerate(zip(axes_flat, exp_names_ordered)):
+            title = _format_experiment_panel_title(
+                exp_name, experiment_meta.get(exp_name, {})
+            )
+            _plot_sv_bar(
+                sv_matrix[i, :],
+                labels,
+                title=title,
+                sv_err=err_matrix[i, :],
+                ax=ax,
+                show_legend=False,
+            )
+            if (i % ncols) != 0:
+                ax.set_ylabel("")
+
+        for ax in axes_flat[n:]:
+            ax.set_visible(False)
+
+        fig.suptitle(f"Shapley bar comparison ({basis} basis)", y=0.995)
+        fig.tight_layout(rect=[0, 0, 1, 0.98])
+
+        png_path = output_dir / f"shapley_comparison_bars_{basis}.png"
+        pdf_path = output_dir / f"shapley_comparison_bars_{basis}.pdf"
+        fig.savefig(png_path, dpi=220, bbox_inches="tight")
+        fig.savefig(pdf_path, bbox_inches="tight")
+        plt.close(fig)
+        print(f"Saved comparison plot: {png_path}")
+        print(f"Saved comparison plot: {pdf_path}")
 
 
 def _save_comparison_plots(all_experiment_results, output_dir, experiment_meta):
-    """Save per-basis comparison plots across experiments (with error bars when available)."""
+    """Save per-basis SV-vs-x and bar-comparison plots across experiments."""
     if len(all_experiment_results) < 2:
         return
 
@@ -229,6 +491,14 @@ def _save_comparison_plots(all_experiment_results, output_dir, experiment_meta):
         }
     )
     exp_names = list(all_experiment_results.keys())
+    axis_info_bins = _resolve_scan_axis(
+        exp_names, experiment_meta, evenly_spaced_bins=True
+    )
+    axis_info_truex = _resolve_scan_axis(
+        exp_names, experiment_meta, evenly_spaced_bins=False
+    )
+    order_bins = axis_info_bins["order"]
+    exp_names_ordered = [exp_names[i] for i in order_bins]
 
     for basis in basis_names:
         labels = None
@@ -240,39 +510,58 @@ def _save_comparison_plots(all_experiment_results, output_dir, experiment_meta):
             continue
 
         sv_rows = []
-        std_rows = []
+        err_rows = []
         for exp_name in exp_names:
             basis_results = all_experiment_results[exp_name].get(basis, {})
             sv_map = basis_results.get("shapley_values", {})
-            std_map = basis_results.get("shapley_std") or {}
+            err_map = (
+                basis_results.get("shapley_std")
+                or basis_results.get("shapley_err")
+                or {}
+            )
             sv_rows.append(np.array([float(sv_map.get(lbl, 0.0)) for lbl in labels]))
-            std_rows.append(
-                np.array([float(std_map.get(lbl, 0.0)) for lbl in labels])
-                if std_map else None
+            err_rows.append(
+                np.array([float(err_map.get(lbl, np.nan)) for lbl in labels])
+                if err_map else np.full(len(labels), np.nan)
             )
 
-        titles = [
-            _format_experiment_title(exp_name, experiment_meta.get(exp_name, {}))
-            for exp_name in exp_names
-        ]
-
-        n = len(exp_names)
-        ncols = min(n, 3)
-        nrows = int(np.ceil(n / ncols))
-        fig, axes = plt.subplots(nrows, ncols, figsize=(7 * ncols, 5 * nrows))
-        axes_flat = np.atleast_1d(axes).ravel()
-
-        for ax, sv_row, std_row, ttl in zip(axes_flat, sv_rows, std_rows, titles):
-            _plot_sv_bar(sv_row, labels, title=ttl, sv_err=std_row, ax=ax)
-
-        for ax in axes_flat[n:]:
-            ax.set_visible(False)
-
-        fig.tight_layout()
-        out_path = output_dir / f"shapley_comparison_{basis}.png"
-        fig.savefig(out_path, dpi=150, bbox_inches="tight")
-        plt.close(fig)
-        print(f"Saved comparison plot: {out_path}")
+        sv_matrix_bins = np.asarray(sv_rows, dtype=float)[order_bins, :]
+        err_matrix_bins = np.asarray(err_rows, dtype=float)[order_bins, :]
+        _plot_sv_scan_comparison(
+            sv_matrix=sv_matrix_bins,
+            err_matrix=err_matrix_bins,
+            labels=labels,
+            basis=basis,
+            output_dir=output_dir,
+            axis_info=axis_info_bins,
+            output_stem="shapley_comparison",
+            title_suffix="binned x, dodged points",
+            dodge_step_pt=4.5,
+            use_dodge=True,
+        )
+        order_truex = axis_info_truex["order"]
+        sv_matrix_truex = np.asarray(sv_rows, dtype=float)[order_truex, :]
+        err_matrix_truex = np.asarray(err_rows, dtype=float)[order_truex, :]
+        _plot_sv_scan_comparison(
+            sv_matrix=sv_matrix_truex,
+            err_matrix=err_matrix_truex,
+            labels=labels,
+            basis=basis,
+            output_dir=output_dir,
+            axis_info=axis_info_truex,
+            output_stem="shapley_comparison_truex",
+            title_suffix="true x, overlapping",
+            use_dodge=False,
+        )
+        _plot_sv_bar_comparison(
+            sv_matrix=sv_matrix_bins,
+            err_matrix=err_matrix_bins,
+            labels=labels,
+            basis=basis,
+            exp_names_ordered=exp_names_ordered,
+            output_dir=output_dir,
+            experiment_meta=experiment_meta,
+        )
 
 
 def _save_diagnostic_files(diag, output_dir, basis):
