@@ -11,8 +11,8 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
-output_root: sv_results/gluon
-log_root: slurm/logs/gluon
+output_root: sv_results/DY
+log_root: slurm/logs/DY
 run_name: xscan_DY_pt
 per_replica: true      
 random_sign: true      
