@@ -22,6 +22,7 @@ different combinations of parameters (i.e. different prescriptions) if needed.
 """
 
 from collections import defaultdict
+import logging
 import operator
 from typing import Optional, Tuple, Union
 
@@ -30,6 +31,8 @@ import numpy.typing as npt
 
 from validphys.convolution import central_fk_predictions
 from validphys.core import PDF, DataSetSpec
+
+log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Dataset name constants
@@ -112,7 +115,12 @@ def get_pc_type(
             raise ValueError("The 'experiment' argument is required for DIJET process type.")
         return _get_dijet_pc_type(experiment, pc_dict)
     elif process_type == "DIJET_3D":
-        return "H2j_ystar"
+        if not (pc_dict.get("H2j_ystar") and pc_dict.get("H2j_yb")):
+            raise ValueError(
+                "For DIJET_3D, both 'H2j_ystar' and 'H2j_yb' keys must be present in pc_dict."
+            )
+        return ("H2j_ystar", "H2j_yb")
+
     else:
         raise RuntimeError(f"{process_type} has not been implemented.")
 
@@ -136,12 +144,15 @@ def _get_dis_pc_type(exp_name: str) -> PCTypeResult:
 
 def _get_dijet_pc_type(experiment: str, pc_dict: Optional[dict] = None) -> str:
     """Resolve DIJET experiment to PC type key with optional fallback."""
-    if experiment == 'ATLAS':
-        specific_key = "H2j_ystar" if pc_dict.get("H2j_ystar") is not None else "H2j_ATLAS"
-    elif experiment == 'CMS':
-        specific_key = "H2j_ymax" if pc_dict.get("H2j_ymax") is not None else "H2j_CMS"
+    if pc_dict.get("H2j_ystar") and pc_dict.get("H2j_yb"):
+        return ("H2j_ystar", "H2j_yb")
     else:
-        raise ValueError(f"{experiment} is not implemented for DIJET.")
+        if experiment == 'ATLAS':
+            specific_key = "H2j_ystar"
+        elif experiment == 'CMS':
+            specific_key = "H2j_ymax"
+        else:
+            raise ValueError(f"{experiment} is not implemented for DIJET.")
 
     return specific_key
 
@@ -259,7 +270,89 @@ def jets_pc_func(
     return PC
 
 
-def mult_dis_pc(nodes, x, q2, dataset_sp, pdf):
+def dijet3D_pc_func(
+    ystar_shifts: npt.ArrayLike,
+    yb_shifts: npt.ArrayLike,
+    ystar_nodes: npt.ArrayLike,
+    yb_nodes: npt.ArrayLike,
+    m_jj: npt.ArrayLike,
+    ystar: npt.ArrayLike,
+    yb: npt.ArrayLike,
+) -> npt.ArrayLike:
+    """
+    Similar to `jets_pc_func`, but for dijet 3D data the correction is a
+    function on the two-dimensional grid in (ystar, yb).
+
+    Parameters
+    ----------
+    ystar_shifts: ArrayLike
+      One-dimensional array containing the shifts for each bin in ystar.
+    yb_shifts: ArrayLike
+      One-dimensional array containing the shifts for each bin in yb.
+    ystar_nodes: ArrayLike
+      One-dimensional array containing the edges of the bins in ystar.
+    yb_nodes: ArrayLike
+      One-dimensional array containing the edges of the bins in yb.
+    ystar: ArrayLike
+      List of ystar points at which the power correction is evaluated.
+    yb: ArrayLike
+      List of yb points at which the power correction is evaluated.
+    """
+    f_ystar = linear_bin_function(ystar, ystar_shifts, ystar_nodes)
+    f_yb = linear_bin_function(yb, yb_shifts, yb_nodes)
+    PC = np.multiply(f_ystar, f_yb) / m_jj
+    return PC
+
+
+def dijet_ystar_pc_func(
+    ystar_shifts: npt.ArrayLike,
+    yb_shifts: npt.ArrayLike,
+    ystar_nodes: npt.ArrayLike,
+    yb_nodes: npt.ArrayLike,
+    m_jj: npt.ArrayLike,
+    ystar: npt.ArrayLike,
+) -> npt.ArrayLike:
+    """
+    Integrate the two-dimensional power correction function
+    over the nodes in yb to obtain a one-dimensional function of ystar.
+    It uses trapezoidal integration.
+
+    Parameters
+    ----------
+    ystar_shifts: ArrayLike
+      One-dimensional array containing the shifts for each bin in ystar.
+    yb_shifts: ArrayLike
+      One-dimensional array containing the shifts for each bin in yb.
+    ystar_nodes: ArrayLike
+      One-dimensional array containing the edges of the bins in ystar.
+    yb_nodes: ArrayLike
+      One-dimensional array containing the edges of the bins in yb.
+    ystar: ArrayLike
+      List of ystar points at which the power correction is evaluated.
+    """
+    f_ystar = linear_bin_function(ystar, ystar_shifts, ystar_nodes)
+    Dyb = yb_nodes[-1] - yb_nodes[0]
+    deltas_yb = [y2 - y1 for y1, y2 in zip(yb_nodes[:-1], yb_nodes[1:])]
+    Hb_integrated = (
+        np.sum(
+            np.concatenate(
+                [
+                    [yb_shifts[0] * deltas_yb[0] / 2],  # Left most node
+                    [yb_shifts[-1] * deltas_yb[-1] / 2],  # Right most node
+                    [
+                        yb_shifts[i] * (deltas_yb[i] + deltas_yb[i - 1]) / 2
+                        for i in range(1, len(yb_nodes) - 1, 1)
+                    ],
+                ]
+            )
+        )
+        / Dyb
+    )
+    PC = Hb_integrated * f_ystar / m_jj
+    return PC
+
+
+def mult_dis_pc(nodes, x, q2, dataset_sp, pdf) -> callable:
     """
     Returns the function that computes the shift to observables due to
     power corrections. Power corrections are treated as multiplicative
@@ -281,6 +374,157 @@ def mult_dis_pc(nodes, x, q2, dataset_sp, pdf):
 
     def func(y_values):
         result = dis_pc_func(y_values, nodes, x, q2)
+        return np.multiply(result, th_preds.to_numpy()[:, 0])
+
+    return func
+
+
+def dijet_ymax_pc_func(
+    ystar_shifts: npt.ArrayLike,
+    yb_shifts: npt.ArrayLike,
+    ystar_nodes: npt.ArrayLike,
+    yb_nodes: npt.ArrayLike,
+    m_jj: npt.ArrayLike,
+    ymax: npt.ArrayLike,
+) -> npt.ArrayLike:
+    """
+    Compute the two-dimensional power correction for the double-differential
+    dijet distribution in y_max. The following convention is used: x = y*,
+    y = y_b, and z = y_max.
+
+    The 2D power correction H(x, y) is integrated along the diagonal y = z - x
+    using per-cell Simpson's rule (exact for the quadratic integrand):
+
+        H(z) = (1/Delta_x_total) * sum_{cells (a,b)} (b-a)/6 * [F(a) + 4*F(mid) + F(b)]
+
+    where F(x) = F_alpha^x(t_x(x)) * F_beta^y(t_y(x)) is the product of the
+    two local linear interpolants within the cell, and [a, b] is the overlap
+    between the cell column and the diagonal line y = z - x.
+
+    Parameters
+    ----------
+    ystar_shifts : ArrayLike
+        Node values h_alpha^(y*) of the 2D power correction grid.
+    yb_shifts : ArrayLike
+        Node values h_beta^(y_b) of the 2D power correction grid.
+    ystar_nodes : ArrayLike
+        Grid nodes in y* (= x in the notes).
+    yb_nodes : ArrayLike
+        Grid nodes in y_b (= y in the notes).
+    m_jj : ArrayLike
+        Dijet invariant mass for each data point (used as the overall 1/m_jj factor).
+    ymax : ArrayLike
+        y_max values (= z in the notes) at which H(z) is evaluated.
+
+    Returns
+    -------
+    np.ndarray
+        Power correction H(z) / m_jj evaluated at each data point.
+    """
+    ystar_nodes = np.asarray(ystar_nodes)
+    yb_nodes = np.asarray(yb_nodes)
+    ystar_shifts = np.asarray(ystar_shifts)
+    yb_shifts = np.asarray(yb_shifts)
+    ymax = np.asarray(ymax)
+
+    Delta_x_total = ystar_nodes[-1] - ystar_nodes[0]
+    H_z = np.zeros(len(ymax))
+
+    for z_idx, z in enumerate(ymax):
+        integral = 0.0
+        for alpha in range(len(ystar_nodes) - 1):
+            x0, x1 = ystar_nodes[alpha], ystar_nodes[alpha + 1]
+            dx = x1 - x0
+            hx0, hx1 = ystar_shifts[alpha], ystar_shifts[alpha + 1]
+
+            for beta in range(len(yb_nodes) - 1):
+                y0, y1 = yb_nodes[beta], yb_nodes[beta + 1]
+                dy = y1 - y0
+                hy0, hy1 = yb_shifts[beta], yb_shifts[beta + 1]
+
+                # Check if the line y = z - x intersects the cell defined by (x0, x1) and (y0, y1)
+                a = max(x0, z - y1)
+                b = min(x1, z - y0)
+                if a >= b:
+                    continue
+
+                # Local coordinates at the two endpoints and midpoint
+                tx_a = (a - x0) / dx
+                tx_b = (b - x0) / dx
+                ty_a = (z - a - y0) / dy
+                ty_b = (z - b - y0) / dy
+                tx_m = 0.5 * (tx_a + tx_b)
+                ty_m = 0.5 * (ty_a + ty_b)
+
+                def _F(tx, ty):
+                    return (hx0 * (1.0 - tx) + hx1 * tx) * (hy0 * (1.0 - ty) + hy1 * ty)
+
+                # Simpson's rule (exact for the quadratic product of two linears)
+                integral += (b - a) / 6.0 * (_F(tx_a, ty_a) + 4.0 * _F(tx_m, ty_m) + _F(tx_b, ty_b))
+
+        H_z[z_idx] = integral / Delta_x_total
+
+    return H_z / m_jj
+
+
+def mult_dijet_pc(
+    ystar_nodes,
+    yb_nodes,
+    m_jj,
+    dataset_sp,
+    pdf,
+    ystar: npt.ArrayLike = np.array([]),
+    yb: npt.ArrayLike = np.array([]),
+    ymax: npt.ArrayLike = np.array([]),
+    distrb: str = '3D',
+) -> callable:
+    cuts = dataset_sp.cuts
+    (fkspec,) = dataset_sp.fkspecs
+    fk = fkspec.load_with_cuts(cuts)
+    th_preds = central_fk_predictions(fk, pdf)
+
+    def func(ystar_shifts, y_b_shifts):
+        if distrb == '3D':
+            log.info(f" Using dijet3D_pc_func.")
+            if len(ystar) == 0 or len(yb) == 0:
+                raise ValueError("For 3D distributions, ystar and yb must be provided.")
+            result = dijet3D_pc_func(
+                ystar_shifts=ystar_shifts,
+                yb_shifts=y_b_shifts,
+                ystar_nodes=ystar_nodes,
+                yb_nodes=yb_nodes,
+                ystar=ystar,
+                yb=yb,
+                m_jj=m_jj,
+            )
+        elif distrb == "ystar":
+            log.info(f" Using dijet_ystar_pc_func.")
+            if len(ystar) == 0:
+                raise ValueError("For ystar distributions, ystar must be provided.")
+            result = dijet_ystar_pc_func(
+                ystar_shifts=ystar_shifts,
+                yb_shifts=y_b_shifts,
+                ystar_nodes=ystar_nodes,
+                yb_nodes=yb_nodes,
+                m_jj=m_jj,
+                ystar=ystar,
+            )
+        elif distrb == "ydiff":
+            log.info(f" Using dijet_ymax_pc_func.")
+            if len(ymax) == 0:
+                raise ValueError("For ymax distributions, ymax must be provided.")
+            result = dijet_ymax_pc_func(
+                ystar_shifts=ystar_shifts,
+                yb_shifts=y_b_shifts,
+                ystar_nodes=ystar_nodes,
+                yb_nodes=yb_nodes,
+                m_jj=m_jj,
+                ymax=ymax,
+            )
+        else:
+            raise ValueError(
+                f"Unknown distrb value: {distrb!r}. Expected '3D', 'ystar', or 'ymax'."
+            )
         return np.multiply(result, th_preds.to_numpy()[:, 0])
 
     return func
@@ -408,7 +652,7 @@ def construct_pars_combs(parameters_dict: dict) -> list[dict]:
     return combinations
 
 
-def _apply_pars_combs(pars_combs, pc_key, pc_func):
+def _apply_pars_combs(pars_combs, pc_keys, pc_func):
     """Apply parameter combinations to a PC function, returning deltas dict.
 
     This eliminates the repeated pattern::
@@ -420,8 +664,8 @@ def _apply_pars_combs(pars_combs, pc_key, pc_func):
     ----------
     pars_combs : list of dict
         Output of ``construct_pars_combs``.
-    pc_key : str
-        The key into ``pars_pc['comb']`` to extract the parameter values.
+    pc_keys : list of str
+        The keys into ``pars_pc['comb']`` to extract the parameter values.
     pc_func : callable
         A function that takes a single array of y-values and returns shifts.
 
@@ -431,8 +675,13 @@ def _apply_pars_combs(pars_combs, pc_key, pc_func):
         ``{label: array_of_shifts}``
     """
     deltas = {}
+
+    if isinstance(pc_keys, str):
+        pc_keys = [pc_keys]
+
     for pars_pc in pars_combs:
-        deltas[pars_pc['label']] = pc_func(pars_pc['comb'][pc_key])
+        arg = [pars_pc['comb'][pc_key] for pc_key in pc_keys]
+        deltas[pars_pc['label']] = pc_func(*arg)
     return deltas
 
 
@@ -499,18 +748,50 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, pc_dict: dict):
         rap = kinematics[rap_var].to_numpy().reshape(-1)[cuts]
         m_jj = kinematics['m_jj'].to_numpy().reshape(-1)[cuts]
 
-        nodes = pc_dict[pc_type]['nodes']
-        pc_func = mult_jet_pc(nodes, m_jj, rap, dataset_sp, pdf)
-        deltas.update(_apply_pars_combs(pars_combs, pc_type, pc_func))
+        if isinstance(pc_type, tuple):
+            # 2D case
+            ystar_nodes = pc_dict[pc_type[0]]['nodes']
+            yb_nodes = pc_dict[pc_type[1]]['nodes']
+            pc_func = mult_dijet_pc(
+                ystar_nodes=ystar_nodes,
+                yb_nodes=yb_nodes,
+                m_jj=m_jj,
+                dataset_sp=dataset_sp,
+                pdf=pdf,
+                ystar=rap if rap_var == 'ystar' else np.array([]),
+                yb=np.array([]),
+                ymax=rap if rap_var == 'ydiff' else np.array([]),
+                distrb=rap_var,
+            )
+            # Both ystar and yb parameters contribute for all 2D distributions
+            deltas.update(_apply_pars_combs(pars_combs, ["H2j_ystar", "H2j_yb"], pc_func))
+
+        else:
+            nodes = pc_dict[pc_type]['nodes']
+            pc_func = mult_jet_pc(nodes, m_jj, rap, dataset_sp, pdf)
+            deltas.update(_apply_pars_combs(pars_combs, pc_type, pc_func))
 
     elif process_type == "DIJET_3D":
         kinematics = dataset_sp.commondata.metadata.load_kinematics()
         ystar = kinematics['ystar'].to_numpy().reshape(-1)[cuts]
+        yb = kinematics['yb'].to_numpy().reshape(-1)[cuts]
         m_jj = kinematics['m_jj'].to_numpy().reshape(-1)[cuts]
 
-        nodes = pc_dict[pc_type]['nodes']
-        pc_func = mult_jet_pc(nodes, m_jj, ystar, dataset_sp, pdf)
-        deltas.update(_apply_pars_combs(pars_combs, pc_type, pc_func))
+        ystar_nodes = pc_dict[pc_type[0]]['nodes']
+        yb_nodes = pc_dict[pc_type[1]]['nodes']
+
+        pc_func = mult_dijet_pc(
+            ystar_nodes=ystar_nodes,
+            yb_nodes=yb_nodes,
+            m_jj=m_jj,
+            dataset_sp=dataset_sp,
+            pdf=pdf,
+            ystar=ystar,
+            yb=yb,
+            ymax=np.array([]),
+            distrb="3D",
+        )
+        deltas.update(_apply_pars_combs(pars_combs, ["H2j_ystar", "H2j_yb"], pc_func))
 
     else:
         raise RuntimeError(f"{process_type} has not been implemented.")

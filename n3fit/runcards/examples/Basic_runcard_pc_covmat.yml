@@ -22,6 +22,7 @@ dataset_inputs:
 - {dataset: CMS_1JET_8TEV_PTY, frac: 0.75}
 - {dataset: CMS_2JET_7TEV_M12-Y, frac: 0.75}
 - {dataset: CMS_2JET_13TEV_M12-YSTAR-YB-R08, frac: 0.75}
+- {dataset: ATLAS_2JET_7TEV_R06_M12Y, frac: 0.75}
 
 ################################################################################
 diagonal_frac: 0.75
@@ -42,8 +43,8 @@ theorycovmatconfig:
     dis_cc:     {yshift: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.0], nodes: [0.0, 0.001, 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 1]}
     Hj:         {yshift: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25, 2.75]}
     H2j_ystar:  {yshift: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25, 2.75]}
-    H2j_ymax:   {yshift: [2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25]}
-  pc_included_procs: ["JETS", "DIJET", "DIS NC", "DIS CC"]
+    H2j_yb:   {yshift: [2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25]}
+  pc_included_procs: ["DIJET"]
   pc_excluded_exps: [HERA_NC_318GEV_EAVG_CHARM-SIGMARED,
                      HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED,]
   pdf: 260202-jk-nnpdf41-mhou
