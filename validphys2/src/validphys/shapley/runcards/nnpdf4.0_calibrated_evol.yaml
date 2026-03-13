@@ -13,10 +13,11 @@ use_cuts: internal
 n_replicas: 100
 output_root: sv_results/nnpdf40_calibrated
 log_root: slurm/logs/nnpdf40_calibrated
-run_name: calibrated_xscan_ev_replica
+run_name: calibrated_xscan_ev_
 
 enforce_sumrules: false
 per_replica: true      
+random_sign: true      
 stabilization:
   enabled: true
   action: exclude_dataset
@@ -79,7 +80,6 @@ experiments:
       amplitude:  1.0
       mode: calibrated
       xspace: logx
-
 datasets:
   # DIS: Fixed-target
   - {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}

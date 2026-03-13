@@ -23,9 +23,9 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
-output_root: sv_results/nnpdf40/ablation
-log_root: slurm/logs/nnpdf40/ablation
-run_name: ablation_ev
+output_root: sv_results/ablation
+log_root: slurm/logs/ablation
+run_name: flavor
 
 stabilization:
   enabled: true
@@ -36,7 +36,7 @@ stabilization:
 experiments:
 
   - name: ablation
-    basis: [evolution]
+    basis: [flavor]
     perturbation:
       mu: 0.0        # ignored for mode=ablation
       sigma: 1.0     # ignored for mode=ablation

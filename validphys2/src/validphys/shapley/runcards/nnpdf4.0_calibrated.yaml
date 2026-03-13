@@ -10,12 +10,12 @@
 pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
-n_replicas: 1
+n_replicas: 100
 output_root: sv_results/nnpdf40_calibrated
 log_root: slurm/logs/nnpdf40_calibrated
 run_name: calibrated_xscan
 per_replica: true      
-random_sign: true      
+random_sign: true       #turn to false for replica only UQ
 enforce_sumrules: false
 stabilization:
   enabled: true
