@@ -22,7 +22,6 @@ different combinations of parameters (i.e. different prescriptions) if needed.
 """
 
 from collections import defaultdict
-import logging
 import operator
 from typing import Optional, Tuple, Union
 
@@ -31,8 +30,6 @@ import numpy.typing as npt
 
 from validphys.convolution import central_fk_predictions
 from validphys.core import PDF, DataSetSpec
-
-log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Dataset name constants
@@ -485,7 +482,6 @@ def mult_dijet_pc(
 
     def func(ystar_shifts, y_b_shifts):
         if distrb == '3D':
-            log.info(f" Using dijet3D_pc_func.")
             if len(ystar) == 0 or len(yb) == 0:
                 raise ValueError("For 3D distributions, ystar and yb must be provided.")
             result = dijet3D_pc_func(
@@ -498,7 +494,6 @@ def mult_dijet_pc(
                 m_jj=m_jj,
             )
         elif distrb == "ystar":
-            log.info(f" Using dijet_ystar_pc_func.")
             if len(ystar) == 0:
                 raise ValueError("For ystar distributions, ystar must be provided.")
             result = dijet_ystar_pc_func(
@@ -510,7 +505,6 @@ def mult_dijet_pc(
                 ystar=ystar,
             )
         elif distrb == "ydiff":
-            log.info(f" Using dijet_ymax_pc_func.")
             if len(ymax) == 0:
                 raise ValueError("For ymax distributions, ymax must be provided.")
             result = dijet_ymax_pc_func(

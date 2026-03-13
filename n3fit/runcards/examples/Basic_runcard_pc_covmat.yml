@@ -45,8 +45,7 @@ theorycovmatconfig:
     H2j_ystar:  {yshift: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25, 2.75]}
     H2j_yb:   {yshift: [2.0, 2.0, 2.0, 2.0, 2.0], nodes: [0.25, 0.75, 1.25, 1.75, 2.25]}
   pc_included_procs: ["DIJET"]
-  pc_excluded_exps: [HERA_NC_318GEV_EAVG_CHARM-SIGMARED,
-                     HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED,]
+  pc_excluded_exps: []
   pdf: 260202-jk-nnpdf41-mhou
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true
