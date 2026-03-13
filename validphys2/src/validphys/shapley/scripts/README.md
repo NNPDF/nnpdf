@@ -12,13 +12,13 @@ Requires the external `shapley-values` package:
 
 Local run (single machine):
 
-    vp-shapley runcards/sv_dis_hera.yaml --output results/my_analysis
+    vp-shapley runcards/DIS/HERA.yaml --output results/my_analysis
 
 Cluster run with parallelization:
 
     sbatch --cpus-per-task=64 --export=ALL,N_JOBS=64 \
       /path/to/slurm/run_vp_shapley.slurm \
-      /path/to/runcards/gluon/DIS.yaml
+      /path/to/runcards/DIS/HERA.yaml
 
 ## Usage
 

@@ -13,7 +13,7 @@ use_cuts: internal
 n_replicas: 100
 output_root: sv_results/DIS
 log_root: slurm/logs/DIS
-run_name: xscan_hera
+run_name: xscan_nu_fixed
 per_replica: true      
 random_sign: true      
 enforce_sumrules: false
@@ -81,11 +81,8 @@ experiments:
       xspace: logx
 
 datasets:
-  # DIS: HERA combined
-  - {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy}
-  - {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
-  - {dataset: HERA_NC_251GEV_EP-SIGMARED, variant: legacy}
-  - {dataset: HERA_NC_300GEV_EP-SIGMARED, variant: legacy}
-  - {dataset: HERA_NC_318GEV_EP-SIGMARED, variant: legacy}
-  - {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, variant: legacy}
-  - {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, variant: legacy}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, variant: legacy_dw}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], variant: legacy_dw}
+
