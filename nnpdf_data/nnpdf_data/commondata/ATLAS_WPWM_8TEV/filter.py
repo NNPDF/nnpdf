@@ -61,7 +61,6 @@ def get_kinematics(hepdata: dict) -> list:
                 'max': None,
             },
             'm_W2': {'min': None, 'mid': 6463.838404, 'max': None},
-            'sqrts': {'min': None, 'mid': 8000.0, 'max': None},
         }
         kin.append(kin_value)
     
