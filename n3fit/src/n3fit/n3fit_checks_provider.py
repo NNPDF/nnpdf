@@ -29,6 +29,7 @@ def n3fit_checks_action(
     tensorboard=None,
     parallel_models=True,
     double_precision=False,
+    trial_specs=None,
 ):
     return
 

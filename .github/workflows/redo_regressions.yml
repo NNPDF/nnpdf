@@ -23,8 +23,6 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
     - uses: ./.github/actions/install_conda_pip
-      with:
-        python-version: "[qed,tests]"
     - name: Regenerate regressions
       shell: bash -l {0}
       run: |

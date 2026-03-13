@@ -1,0 +1,98 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.1070080995559692,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 1.0574088096618652,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.5285826325416565,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.46124693751335144,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.7556604743003845,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t3",
+      "smallx": 0.7078039646148682,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.6369834542274475,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t15",
+      "smallx": 1.1202620267868042,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v15",
+      "smallx": 0.5717487931251526,
+      "largex": 0.0,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 15700,
+  "best_epoch": 11809,
+  "erf_tr": 1.5522006750106812,
+  "erf_vl": 0.8228918313980103,
+  "chi2": 1.3685028535082824,
+  "pos_state": "POS_PASS",
+  "arc_lengths": [
+    2.523857734518874,
+    1.101830505438013,
+    5.354887791586663,
+    1.002221739520188,
+    1.0815427015576187
+  ],
+  "integrability": [
+    0.02235139708500272,
+    0.036644561681897336,
+    0.0004369386006155551,
+    0.02273471909575253,
+    0.04385659284889787
+  ],
+  "hyperparameters": {
+    "optimizer": "Adam",
+    "learning_rate": 0.007521481879943997,
+    "clipnorm": 2.7161295780819e-05,
+    "epochs": 15756,
+    "stopping_patience": 0.4200000000000001,
+    "initial": 15.789743720813016,
+    "nodes_per_layer": [
+      30,
+      40,
+      15,
+      52,
+      9
+    ],
+    "number_of_layers": 4,
+    "activation": "sigmoid",
+    "layer_type": "dense",
+    "initializer": "glorot_normal",
+    "dropout": 0.0
+  }
+}

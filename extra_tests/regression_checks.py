@@ -30,6 +30,7 @@ runcard_and_replicas = {
     "polarized_evol": 34,
     "t0theoryid": 100,
     "no_t0_sampling": 430,
+    "hyperopt_sampling": 4,
 }
 
 
