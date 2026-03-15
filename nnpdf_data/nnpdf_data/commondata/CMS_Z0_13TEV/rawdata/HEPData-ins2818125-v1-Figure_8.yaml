@@ -1,0 +1,592 @@
+dependent_variables:
+- header:
+    name: yll_min
+  values:
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.0
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.4
+  - value: 2.4
+  - value: 2.4
+  - value: 2.7
+  - value: 2.7
+  - value: 2.7
+  - value: 3.0
+  - value: 3.0
+  - value: 3.0
+- header:
+    name: yll_max
+  values:
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.4
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 0.8
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.2
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 1.6
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.0
+  - value: 2.4
+  - value: 2.4
+  - value: 2.4
+  - value: 2.4
+  - value: 2.4
+  - value: 2.4
+  - value: 2.4
+  - value: 2.7
+  - value: 2.7
+  - value: 2.7
+  - value: 3.0
+  - value: 3.0
+  - value: 3.0
+  - value: 3.4
+  - value: 3.4
+  - value: 3.4
+- header:
+    name: mll_min
+  values:
+  - value: 54.0
+  - value: 66.0
+  - value: 76.0
+  - value: 82.0
+  - value: 86.0
+  - value: 89.5
+  - value: 92.7
+  - value: 96.0
+  - value: 100.0
+  - value: 106.0
+  - value: 116.0
+  - value: 54.0
+  - value: 66.0
+  - value: 76.0
+  - value: 82.0
+  - value: 86.0
+  - value: 89.5
+  - value: 92.7
+  - value: 96.0
+  - value: 100.0
+  - value: 106.0
+  - value: 116.0
+  - value: 54.0
+  - value: 66.0
+  - value: 76.0
+  - value: 82.0
+  - value: 86.0
+  - value: 89.5
+  - value: 92.7
+  - value: 96.0
+  - value: 100.0
+  - value: 106.0
+  - value: 116.0
+  - value: 54.0
+  - value: 66.0
+  - value: 76.0
+  - value: 86.0
+  - value: 96.0
+  - value: 106.0
+  - value: 116.0
+  - value: 54.0
+  - value: 66.0
+  - value: 76.0
+  - value: 86.0
+  - value: 96.0
+  - value: 106.0
+  - value: 116.0
+  - value: 54.0
+  - value: 66.0
+  - value: 76.0
+  - value: 86.0
+  - value: 96.0
+  - value: 106.0
+  - value: 116.0
+  - value: 66.0
+  - value: 86.0
+  - value: 96.0
+  - value: 66.0
+  - value: 86.0
+  - value: 96.0
+  - value: 66.0
+  - value: 86.0
+  - value: 96.0
+- header:
+    name: mll_max
+  values:
+  - value: 66.0
+  - value: 76.0
+  - value: 82.0
+  - value: 86.0
+  - value: 89.5
+  - value: 92.7
+  - value: 96.0
+  - value: 100.0
+  - value: 106.0
+  - value: 116.0
+  - value: 150.0
+  - value: 66.0
+  - value: 76.0
+  - value: 82.0
+  - value: 86.0
+  - value: 89.5
+  - value: 92.7
+  - value: 96.0
+  - value: 100.0
+  - value: 106.0
+  - value: 116.0
+  - value: 150.0
+  - value: 66.0
+  - value: 76.0
+  - value: 82.0
+  - value: 86.0
+  - value: 89.5
+  - value: 92.7
+  - value: 96.0
+  - value: 100.0
+  - value: 106.0
+  - value: 116.0
+  - value: 150.0
+  - value: 66.0
+  - value: 76.0
+  - value: 86.0
+  - value: 96.0
+  - value: 106.0
+  - value: 116.0
+  - value: 150.0
+  - value: 66.0
+  - value: 76.0
+  - value: 86.0
+  - value: 96.0
+  - value: 106.0
+  - value: 116.0
+  - value: 150.0
+  - value: 66.0
+  - value: 76.0
+  - value: 86.0
+  - value: 96.0
+  - value: 106.0
+  - value: 116.0
+  - value: 150.0
+  - value: 86.0
+  - value: 96.0
+  - value: 116.0
+  - value: 86.0
+  - value: 96.0
+  - value: 116.0
+  - value: 86.0
+  - value: 96.0
+  - value: 116.0
+- header:
+    name: A4
+  qualifiers:
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  values:
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0074292
+    value: -0.0086482
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0076943
+    value: -0.033992
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0077735
+    value: -0.021625
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0064491
+    value: -0.012986
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0033672
+    value: -0.0011154
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0011401
+    value: 0.0017664
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0030613
+    value: 0.01436
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0050779
+    value: 0.024078
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0061061
+    value: 0.020788
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0069449
+    value: 0.046908
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0069654
+    value: 0.04152
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0076437
+    value: -0.064782
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0080405
+    value: -0.098499
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0082671
+    value: -0.064554
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0070084
+    value: -0.035726
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.003795
+    value: -0.0093437
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0012489
+    value: 0.015155
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0035269
+    value: 0.030693
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.005627
+    value: 0.067548
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0064976
+    value: 0.07893
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.007208
+    value: 0.12633
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0071094
+    value: 0.17564
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0080001
+    value: -0.13178
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0084246
+    value: -0.18003
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0088889
+    value: -0.11602
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0079228
+    value: -0.064338
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0044468
+    value: -0.018044
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0014555
+    value: 0.026687
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0042499
+    value: 0.05825
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0066498
+    value: 0.10674
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.00721
+    value: 0.14654
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0077017
+    value: 0.21216
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0073762
+    value: 0.30394
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0084489
+    value: -0.21858
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0089907
+    value: -0.26521
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0051727
+    value: -0.13269
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0008084
+    value: 0.039435
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.004321
+    value: 0.18622
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0087522
+    value: 0.32014
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0082966
+    value: 0.43738
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.011895
+    value: -0.27888
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.013881
+    value: -0.37527
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0083051
+    value: -0.20469
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0011941
+    value: 0.057624
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0070275
+    value: 0.27664
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.013788
+    value: 0.45724
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.012968
+    value: 0.63255
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.031726
+    value: -0.3762
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.035912
+    value: -0.52712
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.019223
+    value: -0.2774
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0023523
+    value: 0.081106
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.015569
+    value: 0.35895
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.032229
+    value: 0.62059
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.036894
+    value: 0.80039
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.042724
+    value: -0.45736
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0040949
+    value: 0.10689
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.024627
+    value: 0.49997
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.050821
+    value: -0.59639
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0046402
+    value: 0.1251
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.026859
+    value: 0.65723
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.099043
+    value: -0.67574
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.0080727
+    value: 0.15638
+  - errors:
+    - label: A4 uncertainty
+      symerror: 0.041249
+    value: 0.75026
+independent_variables:
+- header:
+    name: '|Y|-M'
+    units: Bin
+  values:
+  - value: 1.0
+  - value: 2.0
+  - value: 3.0
+  - value: 4.0
+  - value: 5.0
+  - value: 6.0
+  - value: 7.0
+  - value: 8.0
+  - value: 9.0
+  - value: 10.0
+  - value: 11.0
+  - value: 12.0
+  - value: 13.0
+  - value: 14.0
+  - value: 15.0
+  - value: 16.0
+  - value: 17.0
+  - value: 18.0
+  - value: 19.0
+  - value: 20.0
+  - value: 21.0
+  - value: 22.0
+  - value: 23.0
+  - value: 24.0
+  - value: 25.0
+  - value: 26.0
+  - value: 27.0
+  - value: 28.0
+  - value: 29.0
+  - value: 30.0
+  - value: 31.0
+  - value: 32.0
+  - value: 33.0
+  - value: 34.0
+  - value: 35.0
+  - value: 36.0
+  - value: 37.0
+  - value: 38.0
+  - value: 39.0
+  - value: 40.0
+  - value: 41.0
+  - value: 42.0
+  - value: 43.0
+  - value: 44.0
+  - value: 45.0
+  - value: 46.0
+  - value: 47.0
+  - value: 48.0
+  - value: 49.0
+  - value: 50.0
+  - value: 51.0
+  - value: 52.0
+  - value: 53.0
+  - value: 54.0
+  - value: 55.0
+  - value: 56.0
+  - value: 57.0
+  - value: 58.0
+  - value: 59.0
+  - value: 60.0
+  - value: 61.0
+  - value: 62.0
+  - value: 63.0
