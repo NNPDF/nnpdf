@@ -7,6 +7,7 @@ uncertainties
 """
 
 import yaml
+from nnpdf_data.filter_utils.utils import cormat_to_covmat,covmat_to_artunc
 
 def get_tables():
     """
@@ -31,6 +32,9 @@ def get_all():
     data_central = []
     kinematics = []
     uncertainties = []
+    art_uncert = []
+    art_uncertainties = []
+    correlations = []
     hepdata_tables = get_tables()
 
     table=hepdata_tables[0]
@@ -58,36 +62,58 @@ def get_all():
                     'max': kin_values_mll_max[i]["value"]}}
         kinematics.append(kin)
         
-    # Uncertainties
+    # Artificial uncertainties (from correlation matrix)
+    # Errors
     for data_value in data_values:
         errors = data_value["errors"]
         uncertainty = {}
         for error in errors:
-            uncertainty[error["label"]] = error["symerror"]
-            uncertainty.update(uncertainty)
-        uncertainties.append(uncertainty)
+            uncertainties.append(error["symerror"])
 
-    return(data_central, kinematics, uncertainties)
+    # Correlation coefficients
+    table_corr = hepdata_tables[1]
+    with open(table_corr, 'r') as f:
+        input = yaml.safe_load(f)
+    corr_coeffs = input["dependent_variables"][0]["values"]
+    for corr_coeff in corr_coeffs:
+        correlations.append(corr_coeff["value"])
+
+    covmat = cormat_to_covmat(uncertainties,correlations)
+    art_uncertainties = covmat_to_artunc(len(uncertainties),covmat,1)
+    
+    # Remap uncertainties
+    for uncertainties in art_uncertainties:
+        j = 1
+        artificial_unc={}
+        for uncertainty in uncertainties:
+            key = "artificial uncertainty " + str(j)
+            art_unc = {key: uncertainty}
+            j = j + 1
+            
+            artificial_unc.update(art_unc)
+
+        art_uncert.append(artificial_unc)
+            
+    return(data_central, kinematics, art_uncert)
  
 def filter_CMS_Z0_13TEV_PT():
     """
     Dumps data, kinematics, and uncertainties on .yaml files
     """
-    #central_values, kinematics, uncertainties = get_all()
     central_values, kinematics, uncertainties = get_all()
     # Central values
     data_central_yaml = {"data_central": central_values}
     # Kinematics
     kinematics_yaml = {"bins": kinematics}
     # Uncertainties
-    treatment = {"A4 uncertainty": "ADD"}
-    correlation = {"A4 uncertainty": "UNCORR"}
+    treatment = {"artificial uncertainty": "ADD"}
+    correlation = {"artificial uncertainty": "CORR"}
     definitions = {}
     for key,value in uncertainties[0].items():
         definition = {key :
                       {"description": key,
-                       "treatment": treatment[key],
-                       "type": correlation[key]}}
+                       "treatment": "ADD",
+                       "type": "CORR"}}
         definitions.update(definition)
     uncertainties_yaml = {"definitions": definitions,"bins": uncertainties}
 

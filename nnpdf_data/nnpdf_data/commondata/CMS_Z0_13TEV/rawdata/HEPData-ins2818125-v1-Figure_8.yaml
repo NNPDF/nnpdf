@@ -272,256 +272,256 @@ dependent_variables:
   values:
   - errors:
     - label: A4 uncertainty
-      symerror: 0.007429
-    value: -0.0088087
+      symerror: 0.0074292
+    value: -0.0086482
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0076935
-    value: -0.033938
+      symerror: 0.0076943
+    value: -0.033992
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0077738
-    value: -0.021486
+      symerror: 0.0077735
+    value: -0.021625
   - errors:
     - label: A4 uncertainty
-      symerror: 0.006449
-    value: -0.01283
+      symerror: 0.0064491
+    value: -0.012986
   - errors:
     - label: A4 uncertainty
       symerror: 0.0033672
-    value: -0.0010866
+    value: -0.0011154
   - errors:
     - label: A4 uncertainty
       symerror: 0.0011401
-    value: 0.0017601
+    value: 0.0017664
   - errors:
     - label: A4 uncertainty
       symerror: 0.0030613
-    value: 0.014298
+    value: 0.01436
   - errors:
     - label: A4 uncertainty
       symerror: 0.0050779
-    value: 0.023975
+    value: 0.024078
   - errors:
     - label: A4 uncertainty
       symerror: 0.0061061
-    value: 0.02063
+    value: 0.020788
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0069447
-    value: 0.04671
+      symerror: 0.0069449
+    value: 0.046908
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0069648
-    value: 0.04132
+      symerror: 0.0069654
+    value: 0.04152
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0076436
-    value: -0.065286
+      symerror: 0.0076437
+    value: -0.064782
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0080397
-    value: -0.098281
+      symerror: 0.0080405
+    value: -0.098499
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0082675
-    value: -0.064055
+      symerror: 0.0082671
+    value: -0.064554
   - errors:
     - label: A4 uncertainty
       symerror: 0.0070084
-    value: -0.035366
+    value: -0.035726
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0037952
-    value: -0.0091856
+      symerror: 0.003795
+    value: -0.0093437
   - errors:
     - label: A4 uncertainty
       symerror: 0.0012489
-    value: 0.015125
+    value: 0.015155
   - errors:
     - label: A4 uncertainty
-      symerror: 0.003527
-    value: 0.03051
+      symerror: 0.0035269
+    value: 0.030693
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0056272
-    value: 0.067186
+      symerror: 0.005627
+    value: 0.067548
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0064977
-    value: 0.078415
+      symerror: 0.0064976
+    value: 0.07893
   - errors:
     - label: A4 uncertainty
       symerror: 0.007208
-    value: 0.12568
+    value: 0.12633
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0071091
-    value: 0.17502
+      symerror: 0.0071094
+    value: 0.17564
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0079998
-    value: -0.13264
+      symerror: 0.0080001
+    value: -0.13178
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0084241
-    value: -0.17966
+      symerror: 0.0084246
+    value: -0.18003
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0088898
-    value: -0.1151
+      symerror: 0.0088889
+    value: -0.11602
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0079229
-    value: -0.063701
+      symerror: 0.0079228
+    value: -0.064338
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0044469
-    value: -0.017779
+      symerror: 0.0044468
+    value: -0.018044
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0014556
-    value: 0.026632
+      symerror: 0.0014555
+    value: 0.026687
   - errors:
     - label: A4 uncertainty
-      symerror: 0.00425
-    value: 0.057933
+      symerror: 0.0042499
+    value: 0.05825
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0066502
-    value: 0.10609
+      symerror: 0.0066498
+    value: 0.10674
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0072105
-    value: 0.14562
+      symerror: 0.00721
+    value: 0.14654
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0077022
-    value: 0.21103
+      symerror: 0.0077017
+    value: 0.21216
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0073767
-    value: 0.30288
+      symerror: 0.0073762
+    value: 0.30394
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0084481
-    value: -0.21994
+      symerror: 0.0084489
+    value: -0.21858
   - errors:
     - label: A4 uncertainty
-      symerror: 0.00899
-    value: -0.26467
+      symerror: 0.0089907
+    value: -0.26521
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0051729
-    value: -0.13147
+      symerror: 0.0051727
+    value: -0.13269
   - errors:
     - label: A4 uncertainty
       symerror: 0.0008084
-    value: 0.039362
+    value: 0.039435
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0043213
-    value: 0.18504
+      symerror: 0.004321
+    value: 0.18622
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0087537
-    value: 0.31841
+      symerror: 0.0087522
+    value: 0.32014
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0082989
-    value: 0.43577
+      symerror: 0.0082966
+    value: 0.43738
   - errors:
     - label: A4 uncertainty
-      symerror: 0.011894
-    value: -0.28089
+      symerror: 0.011895
+    value: -0.27888
   - errors:
     - label: A4 uncertainty
-      symerror: 0.013878
-    value: -0.37435
+      symerror: 0.013881
+    value: -0.37527
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0083043
-    value: -0.20281
+      symerror: 0.0083051
+    value: -0.20469
   - errors:
     - label: A4 uncertainty
-      symerror: 0.001194
-    value: 0.057507
+      symerror: 0.0011941
+    value: 0.057624
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0070285
-    value: 0.27497
+      symerror: 0.0070275
+    value: 0.27664
   - errors:
     - label: A4 uncertainty
-      symerror: 0.013793
-    value: 0.45481
+      symerror: 0.013788
+    value: 0.45724
   - errors:
     - label: A4 uncertainty
-      symerror: 0.012974
-    value: 0.63044
+      symerror: 0.012968
+    value: 0.63255
   - errors:
     - label: A4 uncertainty
-      symerror: 0.031733
-    value: -0.37894
+      symerror: 0.031726
+    value: -0.3762
   - errors:
     - label: A4 uncertainty
-      symerror: 0.035905
-    value: -0.52607
+      symerror: 0.035912
+    value: -0.52712
   - errors:
     - label: A4 uncertainty
-      symerror: 0.019218
-    value: -0.27475
+      symerror: 0.019223
+    value: -0.2774
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0023519
-    value: 0.080962
+      symerror: 0.0023523
+    value: 0.081106
   - errors:
     - label: A4 uncertainty
       symerror: 0.015569
-    value: 0.35646
+    value: 0.35895
   - errors:
     - label: A4 uncertainty
-      symerror: 0.03223
-    value: 0.61701
+      symerror: 0.032229
+    value: 0.62059
   - errors:
     - label: A4 uncertainty
-      symerror: 0.036881
-    value: 0.79779
+      symerror: 0.036894
+    value: 0.80039
   - errors:
     - label: A4 uncertainty
-      symerror: 0.042725
-    value: -0.45325
+      symerror: 0.042724
+    value: -0.45736
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0040947
-    value: 0.1066
+      symerror: 0.0040949
+    value: 0.10689
   - errors:
     - label: A4 uncertainty
-      symerror: 0.024637
-    value: 0.49703
+      symerror: 0.024627
+    value: 0.49997
   - errors:
     - label: A4 uncertainty
-      symerror: 0.050829
-    value: -0.59247
+      symerror: 0.050821
+    value: -0.59639
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0046399
-    value: 0.12488
+      symerror: 0.0046402
+    value: 0.1251
   - errors:
     - label: A4 uncertainty
-      symerror: 0.026876
-    value: 0.65322
+      symerror: 0.026859
+    value: 0.65723
   - errors:
     - label: A4 uncertainty
-      symerror: 0.09911
-    value: -0.67106
+      symerror: 0.099043
+    value: -0.67574
   - errors:
     - label: A4 uncertainty
-      symerror: 0.0080721
-    value: 0.15607
+      symerror: 0.0080727
+    value: 0.15638
   - errors:
     - label: A4 uncertainty
-      symerror: 0.041292
-    value: 0.74539
+      symerror: 0.041249
+    value: 0.75026
 independent_variables:
 - header:
     name: '|Y|-M'
