@@ -1116,8 +1116,9 @@ class ModelTrainer:
                 regularizer=params.get("regularizer"),
                 regularizer_args=params.get("regularizer_args"),
                 # NEW: BNN-specific parameters
-                prior_prec=params.get('prior_prec', 0.001),
-                std_init=params.get('std_init', -9),
+                prior_prec=params.get('prior_prec'),
+                std_init=params.get('std_init'),
+                dropout_rate_bayesian=params.get('bayes_dropout')
             )
             replicas_settings.append(tmp)
 

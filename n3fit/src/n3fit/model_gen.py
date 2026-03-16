@@ -18,6 +18,7 @@ It contains functions to generate:
 """
 import tensorflow as tf
 import numpy as np
+import logging
 
 from dataclasses import asdict, dataclass, field
 from typing import Callable, Union
@@ -384,8 +385,9 @@ class ReplicaSettings:
     regularizer: str = None
     regularizer_args: dict = field(default_factory=dict)
     # NEW: BNN-specific parameters
-    prior_prec: float = 0.001
-    std_init: float = -9
+    prior_prec: float = None
+    std_init: float = None
+    dropout_rate_bayesian: float = None
 
     def __post_init__(self):
         """Apply checks to the input, and expand hyperopt callables"""
@@ -836,8 +838,9 @@ def _generate_nn(
     regularizer: str = None,
     regularizer_args: dict = field(default_factory=dict),
     # NEW: BNN-specific parameters
-    prior_prec: float = 0.001,
-    std_init: float = -9,
+    prior_prec: float = None,
+    std_init: float = None,
+    dropout_rate_bayesian: float = None,
     training: bool = True
 ) -> MetaModel:
     """
@@ -868,54 +871,6 @@ def _generate_nn(
     # this layer generator takes the index of the layer (useful for seeding)
     # the output nodes of the layer
     # and the activation function
-
-    '''if architecture_type == "dense_per_flavour":
-            # Reset the last node in the list to be 1, we will then
-            # repeat it n-times
-            nodes = hidden_layers + [1]
-
-            def layer_generator(i_layer, nodes_out, activation):
-                """Generate the ``i_layer``-th dense_per_flavour layer for all replicas."""
-                l_seed = int(seed + i_layer * n_flavours)
-                initializers = [
-                    MetaLayer.select_initializer(initializer, seed=l_seed + b)
-                    for b in range(n_flavours)
-                ]
-                layer = base_layer_selector(
-                    architecture_type,
-                    kernel_initializer=initializers,
-                    units=int(nodes_out),
-                    activation=activation,
-                    basis_size=n_flavours,
-                )
-                return layer
-
-    elif architecture_type == "dense":
-            
-            def layer_generator(i_layer, nodes_out, activation):
-                kini = MetaLayer.select_initializer(initializer, seed=int(seed + i_layer))
-                return base_layer_selector(
-                    architecture_type,
-                    kernel_initializer=kini,
-                    units=nodes_out,
-                    activation=activation,
-                    regularizer=reg,
-                )
-    
-    elif architecture_type == "VBDense":
-
-            def layer_generator(i_layer, nodes_out, activation):
-                return base_layer_selector(
-                    architecture_type,
-                    #kernel_initializer = tf.keras.initializers.HeNormal(seed = int(seed + i_layer)),
-                    #units = nodes_out,
-                    #activation = activation,
-                    #regularizer = reg,
-                )            
-
-    else:
-            raise ValueError(f"{architecture_type} not recognized during model generation")'''
-
 
     def layer_generator(architecture_type, i_layer, nodes_out, nodes_in, activation):
 
@@ -977,6 +932,13 @@ def _generate_nn(
         if dropout_rate > 0 and layer_idx == (len(hidden_layers) - 2):
             dropout_l = base_layer_selector("dropout", rate=dropout_rate)
             previous_layer = dropout_l(previous_layer)
+
+        # Add dropout to bayesian layer specifically
+        if dropout_rate_bayesian > 0 and architecture_type == 'VBDense':
+            log = logging.getLogger(__name__)
+            log.info(f"Dropout implemented for {layer_idx}-th layer")
+            dropout_l = base_layer_selector("dropout", rate=dropout_rate_bayesian)
+
 
     # In a dense-per-flavour, concatenate the last layer
     if architecture_type == ["dense_per_flavour"]:

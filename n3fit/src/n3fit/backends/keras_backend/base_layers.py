@@ -84,9 +84,9 @@ class VBDense(Layer):
             self, 
             out_features: int, 
             in_features: int, 
-            prior_prec: float = 0.001, 
+            prior_prec: float, 
+            std_init: float, 
             map: bool = False, 
-            std_init: float = -9, 
             lbound=-30, 
             ubound=11, 
             training = True
@@ -270,6 +270,8 @@ layers = {
         {   
             "in_features" : None, 
             "out_features" : None, 
+            "prior_prec": None,
+            "std_init": None,
         },
     ),
     "dropout": (Dropout, {"rate": 0.0}),
