@@ -12,6 +12,7 @@ from keras import backend as K
 from keras import optimizers as Kopt
 from keras.models import Model
 import numpy as np
+import tensorflow as tf
 
 from . import operations as ops
 
@@ -187,6 +188,45 @@ class MetaModel(Model):
         x = self._parse_input(x)
         result = super().predict(x=x, **kwargs)
         return result
+
+    def mc_dropout_predict(self, x=None, n_samples=100):
+        """
+        Run ``n_samples`` stochastic forward passes with dropout kept active
+        (``training=True``), implementing MC Dropout inference.
+
+        Each forward pass draws a fresh random binary mask on every Dropout
+        layer, so the spread across samples reflects the epistemic uncertainty
+        captured by the dropout regulariser.
+
+        Parameters
+        ----------
+        x : dict or None
+            Extra inputs to supply to the model (same convention as
+            ``predict``).  If None, the model uses its pre-compiled constants.
+        n_samples : int
+            Number of stochastic forward passes.
+
+        Returns
+        -------
+        samples : np.ndarray
+            Array of shape ``(n_samples, *output_shape)`` where ``output_shape``
+            is the shape of a single model call, e.g.
+            ``(1, n_replicas, n_x, 14)``.
+        mean : np.ndarray
+            Mean over samples, same shape as a single model call.
+        std : np.ndarray
+            Standard deviation over samples, same shape as a single model call.
+        """
+        x_in = self._parse_input(x)
+        # Keras 3 forbids mixing tf.Tensor and numpy arrays in the same call()
+        # argument dict, so ensure every value is a proper tensor.
+        x_in = {k: tf.constant(v) if not isinstance(v, tf.Tensor) else v for k, v in x_in.items()}
+        samples = []
+        for _ in range(n_samples):
+            out = self(x_in, training=True)  # keeps Dropout stochastic
+            samples.append(out.numpy())
+        samples = np.stack(samples, axis=0)
+        return samples, samples.mean(axis=0), samples.std(axis=0)
 
     def compute_losses(self):
         """
