@@ -636,11 +636,11 @@ bins:
   sys,Diboson xsec: 2.86446600e-02
   sys,eff MU SF TTVA STAT: 1.90964400e-01
   sys,b extrapolation: 1.00256310e-01
-  ArtUnc_stat_1: -1.50506227e-03
-  ArtUnc_stat_2: 1.85132154e-03
-  ArtUnc_stat_3: 6.47920327e-04
-  ArtUnc_stat_4: -1.29057017e-03
-  ArtUnc_stat_5: 6.62637071e-04
+  ArtUnc_stat_1: 1.50506227e-03
+  ArtUnc_stat_2: -1.85132154e-03
+  ArtUnc_stat_3: -6.47920327e-04
+  ArtUnc_stat_4: 1.29057017e-03
+  ArtUnc_stat_5: -6.62637071e-04
   ArtUnc_stat_6: 4.62729658e-04
   ArtUnc_stat_7: -3.35993977e-04
   ArtUnc_stat_8: -1.08051388e-03
@@ -658,13 +658,13 @@ bins:
   ArtUnc_stat_20: -3.85497055e-04
   ArtUnc_stat_21: -5.01813065e-05
   ArtUnc_stat_22: -1.56298187e-04
-  ArtUnc_stat_23: -9.38783684e-05
-  ArtUnc_stat_24: -7.66562774e-06
-  ArtUnc_stat_25: -3.13958522e-05
-  ArtUnc_stat_26: -3.73814287e-07
-  ArtUnc_stat_27: -1.90878056e-05
-  ArtUnc_stat_28: -1.71525061e-08
-  ArtUnc_stat_29: 5.92164325e-06
+  ArtUnc_stat_23: 9.38783684e-05
+  ArtUnc_stat_24: 7.66562781e-06
+  ArtUnc_stat_25: 3.13958522e-05
+  ArtUnc_stat_26: 3.73814280e-07
+  ArtUnc_stat_27: 1.90878056e-05
+  ArtUnc_stat_28: 5.92164346e-06
+  ArtUnc_stat_29: 1.71524531e-08
 - sys,light-jet tag eff (eig 15): 0.0
   sys,light-jet tag eff (eig 14): 0.0
   sys,hardscat-model: 2.34132607e+01
@@ -769,11 +769,11 @@ bins:
   sys,Diboson xsec: 2.69634480e-02
   sys,eff MU SF TTVA STAT: 1.79756320e-01
   sys,b extrapolation: 8.53842520e-02
-  ArtUnc_stat_1: -1.68283947e-03
-  ArtUnc_stat_2: 2.08195288e-03
-  ArtUnc_stat_3: 1.41314639e-03
-  ArtUnc_stat_4: -1.58140394e-03
-  ArtUnc_stat_5: 2.49643541e-04
+  ArtUnc_stat_1: 1.68283947e-03
+  ArtUnc_stat_2: -2.08195288e-03
+  ArtUnc_stat_3: -1.41314639e-03
+  ArtUnc_stat_4: 1.58140394e-03
+  ArtUnc_stat_5: -2.49643541e-04
   ArtUnc_stat_6: 4.10677513e-04
   ArtUnc_stat_7: 1.35980949e-04
   ArtUnc_stat_8: -1.27780350e-03
@@ -791,13 +791,13 @@ bins:
   ArtUnc_stat_20: -4.38495302e-04
   ArtUnc_stat_21: -6.42242639e-05
   ArtUnc_stat_22: -1.53323602e-04
-  ArtUnc_stat_23: -1.09241471e-04
-  ArtUnc_stat_24: -7.64145941e-06
-  ArtUnc_stat_25: -3.74583763e-05
-  ArtUnc_stat_26: 5.33774978e-07
-  ArtUnc_stat_27: -2.23351904e-05
-  ArtUnc_stat_28: -2.00978982e-08
-  ArtUnc_stat_29: 6.85892412e-06
+  ArtUnc_stat_23: 1.09241471e-04
+  ArtUnc_stat_24: 7.64145950e-06
+  ArtUnc_stat_25: 3.74583763e-05
+  ArtUnc_stat_26: -5.33774986e-07
+  ArtUnc_stat_27: 2.23351904e-05
+  ArtUnc_stat_28: 6.85892437e-06
+  ArtUnc_stat_29: 2.00978367e-08
 - sys,light-jet tag eff (eig 15): 0.0
   sys,light-jet tag eff (eig 14): 0.0
   sys,hardscat-model: 1.43242865e+01
@@ -902,11 +902,11 @@ bins:
   sys,Diboson xsec: 2.73812140e-02
   sys,eff MU SF TTVA STAT: 1.56464080e-01
   sys,b extrapolation: 7.43204380e-02
-  ArtUnc_stat_1: -7.81699095e-04
-  ArtUnc_stat_2: 1.19459957e-03
-  ArtUnc_stat_3: 9.13795392e-04
-  ArtUnc_stat_4: -7.09665997e-04
-  ArtUnc_stat_5: -1.01858995e-04
+  ArtUnc_stat_1: 7.81699095e-04
+  ArtUnc_stat_2: -1.19459957e-03
+  ArtUnc_stat_3: -9.13795392e-04
+  ArtUnc_stat_4: 7.09665997e-04
+  ArtUnc_stat_5: 1.01858995e-04
   ArtUnc_stat_6: -1.11070474e-04
   ArtUnc_stat_7: 1.17624578e-04
   ArtUnc_stat_8: -6.23872337e-04
@@ -924,13 +924,13 @@ bins:
   ArtUnc_stat_20: -3.26208793e-04
   ArtUnc_stat_21: -5.05125905e-05
   ArtUnc_stat_22: -2.63964455e-04
-  ArtUnc_stat_23: -1.23422826e-04
-  ArtUnc_stat_24: -6.20250688e-06
-  ArtUnc_stat_25: -5.20989708e-05
-  ArtUnc_stat_26: -1.78314609e-06
-  ArtUnc_stat_27: -2.97283169e-05
-  ArtUnc_stat_28: -2.70078995e-08
-  ArtUnc_stat_29: 9.27434188e-06
+  ArtUnc_stat_23: 1.23422826e-04
+  ArtUnc_stat_24: 6.20250698e-06
+  ArtUnc_stat_25: 5.20989708e-05
+  ArtUnc_stat_26: 1.78314608e-06
+  ArtUnc_stat_27: 2.97283169e-05
+  ArtUnc_stat_28: 9.27434222e-06
+  ArtUnc_stat_29: 2.70078163e-08
 - sys,light-jet tag eff (eig 15): 2.98075500e-03
   sys,light-jet tag eff (eig 14): 0.0
   sys,hardscat-model: 9.89610660e+00
@@ -1035,11 +1035,11 @@ bins:
   sys,Diboson xsec: 2.08652850e-02
   sys,eff MU SF TTVA STAT: 1.19230200e-01
   sys,b extrapolation: 5.06728350e-02
-  ArtUnc_stat_1: -4.70549555e-04
-  ArtUnc_stat_2: 6.02601602e-04
-  ArtUnc_stat_3: 4.20659470e-04
-  ArtUnc_stat_4: -3.89539080e-04
-  ArtUnc_stat_5: -1.91866682e-04
+  ArtUnc_stat_1: 4.70549555e-04
+  ArtUnc_stat_2: -6.02601602e-04
+  ArtUnc_stat_3: -4.20659470e-04
+  ArtUnc_stat_4: 3.89539080e-04
+  ArtUnc_stat_5: 1.91866682e-04
   ArtUnc_stat_6: -6.56741689e-05
   ArtUnc_stat_7: 7.61368465e-05
   ArtUnc_stat_8: -1.74458166e-04
@@ -1057,13 +1057,13 @@ bins:
   ArtUnc_stat_20: -9.24333647e-04
   ArtUnc_stat_21: -2.27097830e-04
   ArtUnc_stat_22: -1.10197396e-04
-  ArtUnc_stat_23: -1.71864129e-04
-  ArtUnc_stat_24: -1.60576313e-05
-  ArtUnc_stat_25: -5.21437623e-05
-  ArtUnc_stat_26: 9.72856405e-06
-  ArtUnc_stat_27: -3.33486137e-05
-  ArtUnc_stat_28: -3.06087332e-08
-  ArtUnc_stat_29: 1.05129426e-05
+  ArtUnc_stat_23: 1.71864129e-04
+  ArtUnc_stat_24: 1.60576315e-05
+  ArtUnc_stat_25: 5.21437623e-05
+  ArtUnc_stat_26: -9.72856406e-06
+  ArtUnc_stat_27: 3.33486137e-05
+  ArtUnc_stat_28: 1.05129430e-05
+  ArtUnc_stat_29: 3.06086389e-08
 - sys,light-jet tag eff (eig 15): 0.0
   sys,light-jet tag eff (eig 14): 0.0
   sys,hardscat-model: 6.71186315e+00
@@ -1168,11 +1168,11 @@ bins:
   sys,Diboson xsec: 9.03549000e-03
   sys,eff MU SF TTVA STAT: 6.02366000e-02
   sys,b extrapolation: 3.31301300e-02
-  ArtUnc_stat_1: -1.47333595e-04
-  ArtUnc_stat_2: 2.01905221e-04
-  ArtUnc_stat_3: 1.94620097e-04
-  ArtUnc_stat_4: -2.17861920e-04
-  ArtUnc_stat_5: -1.70449496e-04
+  ArtUnc_stat_1: 1.47333595e-04
+  ArtUnc_stat_2: -2.01905221e-04
+  ArtUnc_stat_3: -1.94620097e-04
+  ArtUnc_stat_4: 2.17861920e-04
+  ArtUnc_stat_5: 1.70449496e-04
   ArtUnc_stat_6: 6.30573169e-06
   ArtUnc_stat_7: -2.14111704e-05
   ArtUnc_stat_8: -1.90402551e-04
@@ -1190,10 +1190,10 @@ bins:
   ArtUnc_stat_20: 1.11431989e-03
   ArtUnc_stat_21: 4.66445451e-04
   ArtUnc_stat_22: -6.88908173e-04
-  ArtUnc_stat_23: -6.75914236e-05
-  ArtUnc_stat_24: -7.17386951e-06
-  ArtUnc_stat_25: -7.41539841e-05
-  ArtUnc_stat_26: 1.63143935e-06
-  ArtUnc_stat_27: -3.91943180e-05
-  ArtUnc_stat_28: -3.55836778e-08
-  ArtUnc_stat_29: 1.22722133e-05
+  ArtUnc_stat_23: 6.75914236e-05
+  ArtUnc_stat_24: 7.17386954e-06
+  ArtUnc_stat_25: 7.41539841e-05
+  ArtUnc_stat_26: -1.63143937e-06
+  ArtUnc_stat_27: 3.91943180e-05
+  ArtUnc_stat_28: 1.22722137e-05
+  ArtUnc_stat_29: 3.55835677e-08
