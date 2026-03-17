@@ -10,7 +10,7 @@ jobs:
   deploy_docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
         with:
           nnpdf-extras: "[qed,docs]"
