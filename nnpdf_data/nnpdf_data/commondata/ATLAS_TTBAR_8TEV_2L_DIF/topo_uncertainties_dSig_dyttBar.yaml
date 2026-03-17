@@ -4,8 +4,8 @@ definitions:
     treatment: ADD
     type: CORR
 bins:
-- topo_unc: 0.3334795420104662
-- topo_unc: 0.2910934199621336
-- topo_unc: 0.2246401748759221
-- topo_unc: 0.21793340982464662
-- topo_unc: 0.027853453326831156
+- topo_unc: 0.8336988550261655
+- topo_unc: 0.727733549905334
+- topo_unc: 0.5616004371898053
+- topo_unc: 0.27241676228080824
+- topo_unc: 0.03481681665853895
