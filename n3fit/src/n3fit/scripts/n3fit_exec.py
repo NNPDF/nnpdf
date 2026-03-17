@@ -9,19 +9,19 @@ import pathlib
 import re
 import shutil
 import sys
-import pandas as pd
 
+import pandas as pd
 from ruamel.yaml import error
 
 from reportengine import colors
 from reportengine.namespaces import NSList
+from validphys.api import API
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.core import FitSpec
-from validphys.utils import yaml_safe
-from validphys.loader import FallbackLoader, HyperscanNotFound
-from validphys.api import API
 from validphys.hyperoptplot import generate_dictionary
+from validphys.loader import FallbackLoader, HyperscanNotFound
+from validphys.utils import yaml_safe
 
 loader = FallbackLoader()
 
@@ -240,14 +240,14 @@ class N3FitConfig(Config):
                 "db_path": db_path,
             }
         return HyperScanner(parameters, hyperscan_config, **extra_args)
-    
+
     def parse_trial_specs(self, trial_specs):
         return trial_specs
-        
+
     def produce_trials(self, trial_specs={}):
-        """Read the input hyperscan and produce a dictionary containing 
+        """Read the input hyperscan and produce a dictionary containing
         the settings of the best trials"""
-        
+
         if not trial_specs:
             return {}
         else:
@@ -255,14 +255,18 @@ class N3FitConfig(Config):
                 hyperscan = loader.check_hyperscan(trial_specs['hyperscan'])
             except HyperscanNotFound as e:
                 log.warning(e)
-            dict_trials = generate_dictionary(hyperscan.tries_files[1].parent,"average")
+            dict_trials = generate_dictionary(hyperscan.tries_files[1].parent, "average")
             hyperopt_dataframe = pd.DataFrame(dict_trials)
             n_termalization = trial_specs['thermalization']
             n_best = trial_specs['number_of_trials']
-            best = hyperopt_dataframe[n_termalization:].sort_values('loss')[:n_best].to_dict(orient='list')
+            best = (
+                hyperopt_dataframe[n_termalization:]
+                .sort_values('loss')[:n_best]
+                .to_dict(orient='list')
+            )
             best['number_of_trials'] = n_best
             return best
-        
+
 
 class N3FitApp(App):
     """The class which parsers and performs the fit"""
@@ -270,8 +274,8 @@ class N3FitApp(App):
     environment_class = N3FitEnvironment
     config_class = N3FitConfig
 
-    def __init__(self):
-        super().__init__(name="n3fit", providers=N3FIT_PROVIDERS)
+    def __init__(self, name="n3fit", providers=N3FIT_PROVIDERS):
+        super().__init__(name=name, providers=providers)
 
     @property
     def argparser(self):

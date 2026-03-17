@@ -217,7 +217,7 @@ class SetupFitConfig(Config):
         trials_config = file_content.get('trial_specs', {})
         if trials_config:
             loader.check_hyperscan(trials_config['hyperscan'])
-    
+
         # Sets default values if they are not present in the runcard
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
