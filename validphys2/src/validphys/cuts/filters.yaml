@@ -124,6 +124,12 @@
    linearly dependent on the others
   rule: "m_ttBar<2250 or y_ttBar<1.7"
 
+- dataset: CMS_TTBAR_13TEV_LJ_DIF_MTTBAR-YTTBAR
+  reason: |
+   We remove the last bin of the absolute distribution because the grid 
+    does not align because of a bug
+  rule: "m_ttBar<2250 or y_ttBar<1.35"
+
 - dataset: CMS_TTBAR_13TEV_LJ_DIF_PTT-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is
