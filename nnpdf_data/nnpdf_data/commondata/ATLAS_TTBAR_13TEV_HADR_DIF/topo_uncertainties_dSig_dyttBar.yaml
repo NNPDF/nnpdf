@@ -1,0 +1,18 @@
+definitions:
+  topo_unc:
+    description: 50% uncertainty on the toponium cross section
+    treatment: ADD
+    type: CORR
+bins:
+- topo_unc: 0.26367906008491826
+- topo_unc: 0.2557267574539479
+- topo_unc: 0.24991172253093882
+- topo_unc: 0.2670136717309251
+- topo_unc: 0.25956042682821534
+- topo_unc: 0.2588835056310413
+- topo_unc: 0.2671342151613253
+- topo_unc: 0.235974825836817
+- topo_unc: 0.22041507384055625
+- topo_unc: 0.22848048722012643
+- topo_unc: 0.21964946556624224
+- topo_unc: 0.48857078811494514

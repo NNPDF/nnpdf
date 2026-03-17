@@ -40,9 +40,14 @@ implemented_observables:
   variants:
     mc_uncertainties:
       data_uncertainties:
-        - uncertainties_dSig_dmttBar.yaml
-        - mc_top_uncertainties_dSig_dmttBar.yaml
+      - uncertainties_dSig_dmttBar.yaml
+      - mc_top_uncertainties_dSig_dmttBar.yaml
 
+    topo_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dmttBar.yaml
+      - mc_top_uncertainties_dSig_dmttBar.yaml
+      - topo_uncertainties_dSig_dmttBar.yaml
 - observable: {description: "differential cross section w.r.t. transverse momentum of t", label: '$\frac{d\sigma}{dpT_{t}}$', units: '$\frac{pb}{GeV}$'}
   observable_name: PTT
   process_type: HQP_PTQ
@@ -69,9 +74,14 @@ implemented_observables:
   variants:
     mc_uncertainties:
       data_uncertainties:
-        - uncertainties_dSig_dpTt.yaml
-        - mc_top_uncertainties_dSig_dpTt.yaml
+      - uncertainties_dSig_dpTt.yaml
+      - mc_top_uncertainties_dSig_dpTt.yaml
 
+    topo_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dpTt.yaml
+      - mc_top_uncertainties_dSig_dpTt.yaml
+      - topo_uncertainties_dSig_dpTt.yaml
 - observable: {description: "differential cross section w.r.t. rapidity of t", label: '$\frac{d\sigma}{dy_{t}}$', units: '$pb$'}
   observable_name: YT
   process_type: HQP_YQ
@@ -98,9 +108,14 @@ implemented_observables:
   variants:
     mc_uncertainties:
       data_uncertainties:
-        - uncertainties_dSig_dyt.yaml
-        - mc_top_uncertainties_dSig_dyt.yaml
+      - uncertainties_dSig_dyt.yaml
+      - mc_top_uncertainties_dSig_dyt.yaml
 
+    topo_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dyt.yaml
+      - mc_top_uncertainties_dSig_dyt.yaml
+      - topo_uncertainties_dSig_dyt.yaml
 - observable: {description: "double differential cross section w.r.t. invariant mass and absolute rapidity of ttBar", label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: '$\frac{pb}{GeV}$'}
   observable_name: MTTBAR-YTTBAR
   process_type: HQP_YQQ
@@ -130,5 +145,10 @@ implemented_observables:
   variants:
     mc_uncertainties:
       data_uncertainties:
-        - uncertainties_d2Sig_dmttBar_dyttBar.yaml
-        - mc_top_uncertainties_d2Sig_dmttBar_dyttBar.yaml
+      - uncertainties_d2Sig_dmttBar_dyttBar.yaml
+      - mc_top_uncertainties_d2Sig_dmttBar_dyttBar.yaml
+    topo_uncertainties:
+      data_uncertainties:
+      - uncertainties_d2Sig_dmttBar_dyttBar.yaml
+      - mc_top_uncertainties_d2Sig_dmttBar_dyttBar.yaml
+      - topo_uncertainties_d2Sig_dmttBar_dyttBar.yaml

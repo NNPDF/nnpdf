@@ -58,6 +58,11 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_dSig_dmttBar.yaml
       - mc_top_uncertainties_dSig_dmttBar.yaml
+    topo_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dmttBar.yaml
+      - mc_top_uncertainties_dSig_dmttBar.yaml
+      - topo_uncertainties_dSig_dmttBar.yaml
 - observable:
     description: normalized differential cross section w.r.t. ttBar invariant mass
     label: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$
@@ -151,6 +156,11 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_dSig_dyttBar.yaml
       - mc_top_uncertainties_dSig_dyttBar.yaml
+    topo_uncertainties:
+      data_uncertainties:
+      - uncertainties_dSig_dyttBar.yaml
+      - mc_top_uncertainties_dSig_dyttBar.yaml
+      - topo_uncertainties_dSig_dyttBar.yaml
 - observable:
     description: normalized differential cross section w.r.t. absolute rapidity of ttBar
     label: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$
