@@ -195,8 +195,8 @@ class MetaModel(Model):
         (``training=True``), implementing MC Dropout inference.
 
         Each forward pass draws a fresh random binary mask on every Dropout
-        layer, so the spread across samples reflects the epistemic uncertainty
-        captured by the dropout regulariser.
+        layer, so the spread across samples reflects the uncertainty
+        captured by the dropout.
 
         Parameters
         ----------

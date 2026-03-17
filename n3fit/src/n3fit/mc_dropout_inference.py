@@ -1,10 +1,10 @@
 """
-MC Dropout inference for NNPDF dropout fits - (fit on central value)
+MC Dropout inference for NNPDF dropout fits
 ======================================================================
 
 Loads the trained weights of one replica, runs N stochastic forward passes
 with dropout kept active (training=True), and computes the mean PDF over
-those passes.  The result is written as a numpy archive (.npz) containing:
+those passes.  The result contains:
 
   - ``x``           : x-grid, shape (n_x,)
   - ``mean``        : mean PDF,  shape (n_x, 14)
@@ -12,7 +12,7 @@ those passes.  The result is written as a numpy archive (.npz) containing:
   - ``samples``     : all N samples, shape (N, n_x, 14)
   - ``flavours``    : LHAPDF PID list, shape (14,)
 
-Usage (from the project root, inside environment_nnpdf):
+Usage :
     python -m n3fit.mc_dropout_inference \\
         --fit-dir     nnpdf40-like-dropout-cluster \\
         --replica     1 \\
@@ -25,8 +25,7 @@ The fit directory must contain:
     nnfit/replica_<N>/weights.weights.h5   - saved Keras weights
     filter.yml or n3fit runcard            - architecture parameters
 
-The architecture is hardcoded from the runcard below and must match the
-saved weights.  If you change the runcard parameters, update the defaults.
+Warning: The architecture parameters are read from the n3fit runcard, not from the saved model.  
 """
 
 import argparse
@@ -63,10 +62,7 @@ def _get_xgrid():
     from n3fit.io.writer import XGRID  # noqa - re-raise if truly missing
     return XGRID
 
-
-# ---------------------------------------------------------------------------
-# ARCHITECTURE DEFAULTS : must match what was used during training
-# ---------------------------------------------------------------------------
+# Loading the architecture parameters from the fit runcard 
 DEFAULT_RUNCARD = (
     Path(__file__).resolve().parent.parent.parent  # n3fit/src/../..  : n3fit
     / "runcards" / "examples" / "nnpdf40-like-dropout-cluster.yml"
@@ -83,13 +79,13 @@ def _load_architecture(runcard_path):
     fitbasis = rc["fitting"]["fitbasis"]
 
     return dict(
-        nodes          = params["nodes_per_layer"],        # [25, 20, 8]
-        activations    = params["activation_per_layer"],   # ['tanh','tanh','linear']
-        initializer    = params["initializer"],            # 'glorot_normal'
-        architecture   = params["layer_type"],             # 'dense'
-        dropout_rate   = params.get("dropout", 0.0),      # 0.1
+        nodes          = params["nodes_per_layer"],        
+        activations    = params["activation_per_layer"],  
+        initializer    = params["initializer"],            
+        architecture   = params["layer_type"],             
+        dropout_rate   = params.get("dropout", 0.0),      
         flav_info      = basis,
-        fitbasis       = fitbasis,                         # 'EVOL'
+        fitbasis       = fitbasis,                         
     )
 
 

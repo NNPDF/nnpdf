@@ -11,13 +11,13 @@ Two assembly modes are supported:
   --mode mean  (default)
     For every trained replica N write ONE exportgrid using the mean over all
     MC Dropout samples.  Gives 1 PDF member per trained replica.
-    Uncertainty comes from inter-replica diversity (same as standard NNPDF).
+    Uncertainty comes from replica diversity (same as standard NNPDF).
 
   --mode samples
     For every trained replica N write ONE exportgrid per MC Dropout sample.
     Gives n_samples PDF members per trained replica (sequential numbering).
     Uncertainty comes from the MC Dropout spread within a single trained
-    replica.  This is the mode you want to study MC Dropout uncertainty.
+    replica.  
     Example: 1 trained replica x 100 samples -> 100 PDF members.
 
 Usage
