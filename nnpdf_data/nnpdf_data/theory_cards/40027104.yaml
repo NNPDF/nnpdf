@@ -1,12 +1,12 @@
 ID: 40_027_104
-Comments: Same as 40027100 but XIF=1, XIR=0.5
+Comments: Same as 40027100 but XIF=1, XIR=2
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
 IC: 1
 Q0: 1.65
 ModEv: TRN
-XIR: 0.5
+XIR: 2
 XIF: 1
 NfFF: 5
 QED: 0

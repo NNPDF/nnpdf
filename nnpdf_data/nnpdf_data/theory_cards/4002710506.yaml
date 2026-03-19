@@ -8,7 +8,7 @@ CKM:
 - 0.00862
 - 0.0403
 - 0.999152
-Comments: Same as 40027100 but XIF=1, XIR=2
+Comments: Same as 40027100 but XIF=2, XIR=1
 DAMP: 0
 DAMPPOWERb: null
 DAMPPOWERc: null
@@ -26,7 +26,7 @@ MZ: 91.1876
 MaxNfAs: null
 MaxNfPdf: 5
 ModEv: TRN
-ModSV: null
+ModSV: expanded
 NfFF: 5
 PTO: 2
 PTODIS: null
@@ -43,8 +43,8 @@ SxOrd: null
 SxRes: null
 TMC: 1
 XIA: 1.0
-XIF: 1.0
-XIR: 2.0
+XIF: 2.0
+XIR: 1.0
 alphaqed: 0.0077553
 alphas: 0.118
 global_nx: null
