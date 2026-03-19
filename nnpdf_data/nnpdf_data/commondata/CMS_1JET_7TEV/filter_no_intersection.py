@@ -4,6 +4,10 @@ from nnpdf_data.filter_utils.utils import prettify_float
 
 yaml.add_representer(float, prettify_float)
 
+'''
+this filter implements the CMS_1JET_7TEV measurement as in the 1406.0324.
+'''
+
 def read_metadata():
     '''
     this function reads metadata
