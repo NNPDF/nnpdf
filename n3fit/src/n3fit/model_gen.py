@@ -934,7 +934,7 @@ def _generate_nn(
             previous_layer = dropout_l(previous_layer)
 
         # Add dropout to bayesian layer specifically
-        if dropout_rate_bayesian > 0 and architecture_type == 'VBDense':
+        if dropout_rate_bayesian is not None and dropout_rate_bayesian > 0 and architecture_type == 'VBDense':
             log = logging.getLogger(__name__)
             log.info(f"Dropout implemented for {layer_idx}-th layer")
             dropout_l = base_layer_selector("dropout", rate=dropout_rate_bayesian)

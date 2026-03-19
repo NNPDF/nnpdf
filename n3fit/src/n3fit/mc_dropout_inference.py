@@ -63,10 +63,11 @@ def _get_xgrid():
     return XGRID
 
 # Loading the architecture parameters from the fit runcard 
-DEFAULT_RUNCARD = (
+DEFAULT_RUNCARD = Path("/home/daksh/nnpdf/nnpdf/n3fit/runcards/examples/Basic_runcard_qed.yml")
+"""(
     Path(__file__).resolve().parent.parent.parent  # n3fit/src/../..  : n3fit
-    / "runcards" / "examples" / "nnpdf40-like-dropout-cluster.yml"
-)
+    / "runcards" / "examples" / "Basic_runcard_qed_normal.yml"
+)"""
 
 
 def _load_architecture(runcard_path):
@@ -83,7 +84,9 @@ def _load_architecture(runcard_path):
         activations    = params["activation_per_layer"],  
         initializer    = params["initializer"],            
         architecture   = params["layer_type"],             
-        dropout_rate   = params.get("dropout", 0.0),      
+        dropout_rate   = params.get("dropout", 0.0), 
+        prior_prec     = params.get("prior_prec", 0.1),
+        std_init       = params.get("std_init", -9.0),     
         flav_info      = basis,
         fitbasis       = fitbasis,                         
     )
@@ -118,6 +121,8 @@ def build_pdf_model(arch, seed=0):
         architecture = arch["architecture"],
         initializer  = arch["initializer"],
         dropout_rate = arch["dropout_rate"],
+        prior_prec   = arch["prior_prec"],
+        std_init     = arch["std_init"]
     )
 
     pdf_model = generate_pdf_model(

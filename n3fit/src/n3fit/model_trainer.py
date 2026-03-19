@@ -1118,7 +1118,7 @@ class ModelTrainer:
                 # NEW: BNN-specific parameters
                 prior_prec=params.get('prior_prec'),
                 std_init=params.get('std_init'),
-                dropout_rate_bayesian=params.get('bayes_dropout')
+                dropout_rate_bayesian=params.get('bayes_dropout', 0.0)
             )
             replicas_settings.append(tmp)
 

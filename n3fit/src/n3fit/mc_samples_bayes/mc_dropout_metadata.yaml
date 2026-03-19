@@ -1,0 +1,9 @@
+mode: samples
+source_fit: /home/daksh/anaconda3/envs/environment_nnpdf/lib/python3.12/site-packages/n3fit/Basic_runcard_qed
+n_trained_replicas: 1
+n_samples_per_replica: 1
+n_total_members: 1
+n_replicas_assembled: 1
+q0_gev: 1.65
+n_active_flavours: 4
+assembled_at: 2026-03-19T22:23:17

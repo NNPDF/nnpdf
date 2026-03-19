@@ -178,7 +178,7 @@ def performfit(
         )
 
     layer_type = parameters.get('layer_type')
-    is_bnn = any(layer == 'VBDense' for layer in (layer_type or []))
+    is_bnn = any(layer == 'VBDense' for layer in layer_type)
     
     for replica_idxs, exp_info, nnseeds in replicas_info:
         log.info("Starting replica fit " + str(replica_idxs))
@@ -265,7 +265,7 @@ def performfit(
             # For BNN: Generate pseudo-replicas using BNNPredictor
             from n3fit.bnn_wrapper import BNNPredictor
 
-            n_bnn_samples = parameters.get('n_bnn_samples', 3)
+            n_bnn_samples = parameters.get('n_bnn_samples', 1)
             log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN")
             
             bnn_predictor = BNNPredictor(pdf_model, n_samples=n_bnn_samples)

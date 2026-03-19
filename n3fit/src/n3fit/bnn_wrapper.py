@@ -106,28 +106,3 @@ class BNNPredictor:
             replica_models.append(replica)
 
         return replica_models
-
-    def generate_predictions(self, xinput):
-         """
-         Generate predictions via sampling
-
-         Parameters
-         ----------
-         xinput : InputInfo.input.tensor_content
-            an array containing the input values 
-
-         Returns
-         -------
-         predictions : np.ndarray
-         """
-         predictions = []
-
-         for i in range(self.n_samples):
-            # Reset random weights for each VBDense layer
-            self.reset_random()
-            self.eval()
-
-            pdf_output = self.pdf_model.predict({"pdf_input": xinput})
-            predictions.append(pdf_output)
-
-         return predictions
