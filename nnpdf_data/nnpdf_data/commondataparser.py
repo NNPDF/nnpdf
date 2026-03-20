@@ -897,6 +897,15 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
     return metadata
 
 
+def _check_if_statistical(col):
+    """Receives the header of a column of the uncertainties dataframe which includes:
+    (name of the uncertainty, treatment, type)
+    Returns true if and only if the column name stats with "stat",
+    its treatment is additive and it is not correlated (type == UNCORR)
+    """
+    return col[0].lower().startswith("stat") and col[1] == "ADD" and col[2] == "UNCORR"
+
+
 def load_commondata(metadata):
     """
 
@@ -936,9 +945,7 @@ def load_commondata(metadata):
     kin_df = metadata.load_kinematics()
 
     # Once we have loaded all uncertainty files, let's check how many sys we have
-    nsys = len(
-        [i for i in uncertainties_df.columns.get_level_values(0) if not i.startswith("stat")]
-    )
+    nsys = len([i for i in uncertainties_df.columns if not _check_if_statistical(i)])
 
     # Backwards-compatibility
     # Finally, create the commondata by merging the dataframes in the old commondata_table
@@ -955,7 +962,7 @@ def load_commondata(metadata):
     new_columns = []
     systypes = {"treatment": [], "name": []}
     for col in uncertainties_df.columns:
-        if col[0].startswith("stat"):
+        if _check_if_statistical(col):
             new_columns.append("stat")
         else:
             # if it is syst add the ADD/MULT information
