@@ -654,6 +654,48 @@ def _write_shapley_csv(path, labels, values):
             f.write(f"{lbl},{float(val):.8f}\n")
 
 
+def _write_shapley_per_replica_csv(path, labels, values_per_replica):
+    """Write per-replica Shapley values as a replica-by-flavour matrix."""
+    matrix = np.asarray(values_per_replica, dtype=float)
+    with open(path, "w") as f:
+        f.write("replica," + ",".join(labels) + "\n")
+        for replica_idx, row in enumerate(matrix, start=1):
+            values_txt = ",".join(f"{float(val):.8f}" for val in row)
+            f.write(f"{replica_idx},{values_txt}\n")
+
+
+def _write_shapley_per_sample_csv(path, labels, values_per_sample):
+    """Write per-sign-sample Shapley values as a sample-by-flavour matrix."""
+    matrix = np.asarray(values_per_sample, dtype=float)
+    with open(path, "w") as f:
+        f.write("sample," + ",".join(labels) + "\n")
+        for sample_idx, row in enumerate(matrix, start=1):
+            values_txt = ",".join(f"{float(val):.8f}" for val in row)
+            f.write(f"{sample_idx},{values_txt}\n")
+
+
+def _serialize_shapley_per_replica(labels, values_per_replica):
+    """Convert per-replica SV matrix into JSON-native flavour -> list form."""
+    if values_per_replica is None:
+        return None
+    matrix = np.asarray(values_per_replica, dtype=float)
+    return {
+        lbl: [float(val) for val in matrix[:, i]]
+        for i, lbl in enumerate(labels)
+    }
+
+
+def _serialize_shapley_per_sample(labels, values_per_sample):
+    """Convert per-sign-sample SV matrix into JSON-native flavour -> list form."""
+    if values_per_sample is None:
+        return None
+    matrix = np.asarray(values_per_sample, dtype=float)
+    return {
+        lbl: [float(val) for val in matrix[:, i]]
+        for i, lbl in enumerate(labels)
+    }
+
+
 def _resolve_stabilization_cfg(cfg):
     """Resolve stabilization options with safe defaults."""
     stab = cfg.get("stabilization", {}) or {}
@@ -799,11 +841,14 @@ def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=No
 def _build_stabilization_report(analyzer, raw_results, pert, stab_cfg):
     """Build coalition->dataset outlier report and exclusion list."""
     diag = raw_results.get("diagnostic") or {}
+    sign_matrices = raw_results.get("_sign_matrices")
     outliers = list(diag.get("outlier_coalitions", []))
     n_selected = min(len(outliers), int(stab_cfg["max_outlier_coalitions"]))
     selected = outliers[:n_selected]
 
-    baseline_rows = _dataset_mean_chi2_for_coalition(analyzer, [], pert)
+    baseline_rows = _dataset_mean_chi2_for_coalition(
+        analyzer, [], pert, sign_matrices=sign_matrices
+    )
     baseline_map = {r["dataset"]: r for r in baseline_rows}
 
     threshold = float(stab_cfg["dataset_delta_chi2_threshold"])
@@ -813,7 +858,9 @@ def _build_stabilization_report(analyzer, raw_results, pert, stab_cfg):
     for oc in selected:
         coalition_idx = list(oc.get("coalition", []))
         coalition_labels = list(oc.get("coalition_labels", []))
-        coalition_rows = _dataset_mean_chi2_for_coalition(analyzer, coalition_idx, pert)
+        coalition_rows = _dataset_mean_chi2_for_coalition(
+            analyzer, coalition_idx, pert, sign_matrices=sign_matrices
+        )
 
         flagged = []
         for crow in coalition_rows:
@@ -904,6 +951,7 @@ def _build_stabilization_report(analyzer, raw_results, pert, stab_cfg):
 
 def _save_stabilization_files(report, output_dir, basis):
     """Write stabilization report JSON + compact flagged-dataset CSV."""
+    output_dir.mkdir(parents=True, exist_ok=True)
     json_path = output_dir / f"stabilization_report_{basis}.json"
     with open(json_path, "w") as f:
         json.dump(report, f, indent=2)
@@ -958,10 +1006,34 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
     per_replica = bool(
         pert.get("per_replica", cfg.get("per_replica", False))
     )
-    # Random sign: flip amplitude sign independently per replica per coalition.
+    # Random sign: draw a fixed sign for each replica/flavour for the run.
     random_sign = bool(
         pert.get("random_sign", cfg.get("random_sign", False))
     )
+    n_sign_samples = int(
+        pert.get("n_sign_samples", cfg.get("n_sign_samples", 1))
+    )
+    random_seed = pert.get("random_seed", cfg.get("random_seed"))
+    expected_member_mode = "replicas" if per_replica else "central"
+    explicit_member_mode = pert.get("member_mode", cfg.get("member_mode"))
+    if explicit_member_mode is not None:
+        member_mode = str(explicit_member_mode).strip().lower()
+        if member_mode != expected_member_mode:
+            raise ValueError(
+                "member_mode is redundant with per_replica and must match it: "
+                f"expected '{expected_member_mode}', got '{member_mode}'."
+            )
+    else:
+        member_mode = expected_member_mode
+    if not random_sign:
+        n_sign_samples = 1
+    elif per_replica:
+        if n_sign_samples != 1:
+            print(
+                "Note: per_replica=True uses one fixed sign mask per replica; "
+                f"ignoring n_sign_samples={n_sign_samples} and using 1."
+            )
+        n_sign_samples = 1
     enforce_sumrules = cfg.get("enforce_sumrules", False)
     n_jobs = int(cfg.get("n_jobs", 1))
     if n_jobs_override is not None:
@@ -1106,9 +1178,21 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
         _write_shapley_csv(csv_path, labels, sv)
         print(f"Saved: {csv_path}")
 
-        # Per-replica uncertainty CSV.
+        # Sampling-axis outputs.
+        sv_per_replica = results_final.get("shapley_values_per_replica")
+        sv_per_sample = results_final.get("shapley_values_per_sign_sample")
         sv_std = results_final.get("shapley_std")
         sv_err = results_final.get("shapley_err")
+        sv_sign_std = results_final.get("shapley_sign_std")
+        sv_sign_err = results_final.get("shapley_sign_err")
+        if per_replica and sv_per_replica is not None:
+            per_rep_path = output_dir / f"shapley_values_per_replica_{basis}.csv"
+            _write_shapley_per_replica_csv(per_rep_path, labels, sv_per_replica)
+            print(f"Saved: {per_rep_path}")
+        if sv_per_sample is not None:
+            per_sample_path = output_dir / f"shapley_values_per_sign_sample_{basis}.csv"
+            _write_shapley_per_sample_csv(per_sample_path, labels, sv_per_sample)
+            print(f"Saved: {per_sample_path}")
         if per_replica and sv_std is not None:
             unc_path = output_dir / f"shapley_uncertainties_{basis}.csv"
             with open(unc_path, "w") as f:
@@ -1123,6 +1207,20 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                         f"{lbl},{float(mean_v):.8f},{float(std_v):.8f},{float(err_v):.8f}\n"
                     )
             print(f"Saved: {unc_path}")
+        if sv_sign_std is not None:
+            sign_unc_path = output_dir / f"shapley_sign_uncertainties_{basis}.csv"
+            with open(sign_unc_path, "w") as f:
+                f.write("flavour,mean,std,err\n")
+                for lbl, mean_v, std_v, err_v in zip(
+                    labels,
+                    sv,
+                    sv_sign_std,
+                    sv_sign_err,
+                ):
+                    f.write(
+                        f"{lbl},{float(mean_v):.8f},{float(std_v):.8f},{float(err_v):.8f}\n"
+                    )
+            print(f"Saved: {sign_unc_path}")
 
         if stable_rerun_performed:
             csv_stable = output_dir / f"shapley_values_{basis}_stable.csv"
@@ -1137,6 +1235,12 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
 
         all_results[basis] = {
             "shapley_values": {l: float(v) for l, v in zip(labels, sv)},
+            "shapley_values_per_replica": _serialize_shapley_per_replica(
+                labels, sv_per_replica
+            ),
+            "shapley_values_per_sign_sample": _serialize_shapley_per_sample(
+                labels, sv_per_sample
+            ),
             "shapley_std": (
                 {l: float(v) for l, v in zip(labels, sv_std)}
                 if sv_std is not None else None
@@ -1216,6 +1320,40 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
     return all_results
 
 
+def _save_consolidated_results(all_experiment_results, summary, output_dir):
+    """Save consolidated results from all experiments into a single JSON.
+    
+    Combines results from all experiments into a single JSON file with a smart
+    structure that preserves per-experiment metadata and results by basis.
+    
+    Parameters
+    ----------
+    all_experiment_results : dict
+        Dictionary mapping experiment name to per-basis results
+    summary : dict
+        Experiment summary with perturbation and output_dir info
+    output_dir : Path
+        Top-level output directory
+    """
+    consolidated = {
+        "timestamp": datetime.now().isoformat(),
+        "experiments": {}
+    }
+    
+    for exp_name, exp_results in all_experiment_results.items():
+        exp_summary = summary.get(exp_name, {})
+        consolidated["experiments"][exp_name] = {
+            "output_dir": exp_summary.get("output_dir"),
+            "perturbation": exp_summary.get("perturbation"),
+            "results_by_basis": exp_results
+        }
+    
+    json_path = output_dir / "consolidated_results.json"
+    with open(json_path, "w") as f:
+        json.dump(consolidated, f, indent=2)
+    print(f"Saved consolidated results: {json_path}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="NNPDF Shapley value analysis from a YAML runcard."
@@ -1253,6 +1391,44 @@ def main():
             "contributions in the diagnostic output (default: 3.0)."
         ),
     )
+
+    exp_sel = parser.add_argument_group("experiment selection")
+    exp_sel.add_argument(
+        "--list-experiments",
+        action="store_true",
+        help="List normalized experiments with indices and exit.",
+    )
+    exp_sel.add_argument(
+        "--experiment",
+        type=str,
+        default=None,
+        help=(
+            "Run only the experiment with this name (as in the runcard). "
+            "By default, single-experiment runs skip cross-experiment plots."
+        ),
+    )
+    exp_sel.add_argument(
+        "--experiment-index",
+        type=int,
+        default=None,
+        help=(
+            "Run only the experiment at this 0-based index in the normalized list. "
+            "Useful for SLURM array tasks (SLURM_ARRAY_TASK_ID)."
+        ),
+    )
+    exp_sel.add_argument(
+        "--aggregate-only",
+        action="store_true",
+        help=(
+            "Do not run Shapley; instead rebuild cross-experiment plots and "
+            "consolidated summaries from per-experiment results already on disk."
+        ),
+    )
+    exp_sel.add_argument(
+        "--no-compare",
+        action="store_true",
+        help="Skip cross-experiment comparison plots and consolidated summaries.",
+    )
     args = parser.parse_args()
 
     cfg = load_runcard(args.runcard)
@@ -1264,13 +1440,107 @@ def main():
     print(f"Output  : {output_dir}\n")
 
     experiments = _normalize_experiments(cfg)
+
+    if args.list_experiments:
+        print("Normalized experiments:")
+        for i, (exp_name, exp_cfg) in enumerate(experiments):
+            exp_token = _safe_token(exp_name) or "exp"
+            pert = exp_cfg.get("perturbation", {})
+            mu = pert.get("mu")
+            sigma = pert.get("sigma")
+            print(
+                f"  [{i}] name={exp_name} token={exp_token} "
+                f"mu={mu} sigma={sigma}"
+            )
+        return
+
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Resolve experiment selection (if any).
+    selected = experiments
+    selected_name = None
+    if args.experiment_index is not None and args.experiment is not None:
+        raise ValueError("Use only one of --experiment or --experiment-index")
+    if args.experiment_index is not None:
+        idx = int(args.experiment_index)
+        if idx < 0 or idx >= len(experiments):
+            raise IndexError(
+                f"--experiment-index out of range: {idx} (n={len(experiments)})"
+            )
+        selected = [experiments[idx]]
+        selected_name = experiments[idx][0]
+    if args.experiment is not None:
+        target = str(args.experiment)
+        matches = [(n, c) for (n, c) in experiments if n == target]
+        if not matches:
+            # Convenience: allow matching by safe token as well.
+            matches = [(n, c) for (n, c) in experiments if _safe_token(n) == _safe_token(target)]
+        if not matches:
+            known = ", ".join(n for (n, _) in experiments)
+            raise KeyError(f"Unknown experiment '{target}'. Known: {known}")
+        selected = [matches[0]]
+        selected_name = matches[0][0]
+
+    # By default, single-experiment runs skip cross-experiment comparison outputs.
+    compare_enabled = not args.no_compare
+    if len(selected) == 1 and not args.aggregate_only:
+        compare_enabled = False
+
+    def _load_results_json(path: Path):
+        with open(path) as f:
+            payload = json.load(f)
+        results = payload.get("results") or {}
+        rb = results.get("results_by_basis")
+        if rb is None:
+            raise KeyError(f"Missing results.results_by_basis in {path}")
+        return rb, payload.get("metadata") or {}
+
+    if args.aggregate_only:
+        # Aggregation needs a deterministic output directory.
+        if args.output is None and not cfg.get("output_dir"):
+            raise ValueError(
+                "--aggregate-only requires --output (or a runcard 'output_dir') "
+                "so the timestamped run directory can be located."
+            )
+
+        summary = {}
+        all_experiment_results = {}
+        missing = []
+        for exp_name, exp_cfg in experiments:
+            exp_token = _safe_token(exp_name) or "exp"
+            exp_output_dir = output_dir / exp_token
+            res_path = exp_output_dir / "results.json"
+            if not res_path.exists():
+                missing.append(str(res_path))
+                continue
+            exp_results_by_basis, _ = _load_results_json(res_path)
+            all_experiment_results[exp_name] = exp_results_by_basis
+            summary[exp_name] = {
+                "output_dir": str(exp_output_dir),
+                "perturbation": exp_cfg["perturbation"],
+            }
+
+        if missing:
+            print("WARNING: some experiments are missing results.json:")
+            for p in missing:
+                print(f"  - {p}")
+
+        if compare_enabled:
+            _save_comparison_plots(all_experiment_results, output_dir, summary)
+
+            summary_path = output_dir / "experiments_summary.json"
+            with open(summary_path, "w") as f:
+                json.dump(summary, f, indent=2)
+            print(f"\nSaved multi-experiment summary: {summary_path}")
+
+            _save_consolidated_results(all_experiment_results, summary, output_dir)
+        return
 
     setup_context = _build_setup_context(cfg)
 
     summary = {}
     all_experiment_results = {}
-    for exp_name, exp_cfg in experiments:
+    for exp_name, exp_cfg in selected:
         exp_token = _safe_token(exp_name) or "exp"
         exp_output_dir = output_dir / exp_token
         print(f"\nRunning experiment '{exp_name}'")
@@ -1289,12 +1559,15 @@ def main():
             "perturbation": exp_cfg["perturbation"],
         }
 
-    _save_comparison_plots(all_experiment_results, output_dir, summary)
+    if compare_enabled and len(all_experiment_results) > 0:
+        _save_comparison_plots(all_experiment_results, output_dir, summary)
 
-    summary_path = output_dir / "experiments_summary.json"
-    with open(summary_path, "w") as f:
-        json.dump(summary, f, indent=2)
-    print(f"\nSaved multi-experiment summary: {summary_path}")
+        summary_path = output_dir / "experiments_summary.json"
+        with open(summary_path, "w") as f:
+            json.dump(summary, f, indent=2)
+        print(f"\nSaved multi-experiment summary: {summary_path}")
+
+        _save_consolidated_results(all_experiment_results, summary, output_dir)
 
 
 if __name__ == "__main__":
