@@ -464,7 +464,20 @@ def setup_observables(
 # Grid-value evaluation
 # ---------------------------------------------------------------------------
 
-def get_pdf_grid_values(pdf, target, n_replicas=None):
+def _select_pdf_members(gv, n_replicas=None, member_mode="replicas"):
+    """Select either replica members or the central member from a PDF grid."""
+    if member_mode == "central":
+        return gv[:1]
+    if member_mode != "replicas":
+        raise ValueError(
+            f"Unknown member_mode '{member_mode}'. Choose from ('replicas', 'central')."
+        )
+    if n_replicas is not None:
+        return gv[1: n_replicas + 1]
+    return gv
+
+
+def get_pdf_grid_values(pdf, target, n_replicas=None, member_mode="replicas"):
     """Evaluate PDF in evolution basis (FK-subset flavours only).
 
     Returns shape (nrep, nfl_used, nx).
@@ -474,12 +487,10 @@ def get_pdf_grid_values(pdf, target, n_replicas=None):
     gv = gv_func(
         qmat=[target.Q0], vmat=flavour_names, xmat=target.xgrid
     ).squeeze(-1)
-    if n_replicas is not None:
-        gv = gv[1: n_replicas + 1]
-    return gv
+    return _select_pdf_members(gv, n_replicas=n_replicas, member_mode=member_mode)
 
 
-def get_pdf_flavor_grid_values(pdf, target, n_replicas=None):
+def get_pdf_flavor_grid_values(pdf, target, n_replicas=None, member_mode="replicas"):
     """Evaluate PDF in physical flavor basis (all 14 PDG codes).
 
     Returns shape (nrep, 14, nx).
@@ -488,12 +499,10 @@ def get_pdf_flavor_grid_values(pdf, target, n_replicas=None):
     gv = _lhapdf_grid_values(
         pdf, pdg_codes, target.xgrid, [target.Q0]
     ).squeeze(-1)
-    if n_replicas is not None:
-        gv = gv[1: n_replicas + 1]
-    return gv
+    return _select_pdf_members(gv, n_replicas=n_replicas, member_mode=member_mode)
 
 
-def get_pdf_grid_values_all14(pdf, target, n_replicas=None):
+def get_pdf_grid_values_all14(pdf, target, n_replicas=None, member_mode="replicas"):
     """Evaluate PDF in all 14 evolution-basis flavours.
 
     Returns shape (nrep, 14, nx).
@@ -501,6 +510,4 @@ def get_pdf_grid_values_all14(pdf, target, n_replicas=None):
     gv = evol_basis.grid_values(
         pdf, qmat=[target.Q0], vmat=FK_FLAVOURS, xmat=target.xgrid
     ).squeeze(-1)
-    if n_replicas is not None:
-        gv = gv[1: n_replicas + 1]
-    return gv
+    return _select_pdf_members(gv, n_replicas=n_replicas, member_mode=member_mode)

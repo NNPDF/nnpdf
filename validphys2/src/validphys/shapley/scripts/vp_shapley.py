@@ -195,6 +195,8 @@ def _normalize_experiments(cfg):
             "n_jobs",
             "enforce_sumrules",
             "n_replicas",
+            "n_sign_samples",
+            "random_seed",
             "run_name",
             "stabilization",
         ]:
@@ -582,7 +584,7 @@ def _save_diagnostic_files(diag, output_dir, basis):
     """
     import copy
 
-    # ── coalition_chi2 CSV ─────────────────────────────────────────────────
+    # -- coalition_chi2 CSV -------------------------------------------------
     outlier_threshold = diag.get("outlier_chi2_threshold", float("inf"))
     outlier_set = {
         tuple(oc["coalition"]) for oc in diag.get("outlier_coalitions", [])
@@ -620,7 +622,7 @@ def _save_diagnostic_files(diag, output_dir, basis):
             f.write(f"{labels_str},{len(coal)},{chi2:.8f},{is_out}\n")
     print(f"Saved: {coalition_csv_path}")
 
-    # ── marginal_contributions CSV ─────────────────────────────────────────
+    # -- marginal_contributions CSV -----------------------------------------
     contrib_csv_path = output_dir / f"marginal_contributions_{basis}.csv"
     with open(contrib_csv_path, "w") as f:
         f.write("player,coalition_without,v_without,v_with,delta_v,is_outlier\n")
@@ -635,7 +637,7 @@ def _save_diagnostic_files(diag, output_dir, basis):
             )
     print(f"Saved: {contrib_csv_path}")
 
-    # ── diagnostic_stats JSON ─────────────────────────────────────────────
+    # -- diagnostic_stats JSON ----------------------------------------------
     # Strip the internal key before serialising.
     diag_public = {k: v for k, v in diag.items() if k != "_marginal_contributions"}
     stats_path = output_dir / f"diagnostic_stats_{basis}.json"
@@ -682,81 +684,104 @@ def _resolve_stabilization_cfg(cfg):
     }
 
 
-def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert):
+def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=None):
     """Compute per-dataset mean chi2 for a single coalition."""
     mu = pert["mu"]
     sigma = pert["sigma"]
     amplitude = pert["amplitude"]
     mode = pert.get("mode", "additive")
     xspace = pert.get("xspace", "linear")
-
-    sr_norm = None
-    if analyzer.enforce_sumrules:
-        sr_norm = analyzer._compute_sumrule_norm(
-            coalition, mu, sigma, amplitude, mode, xspace
-        )
+    sign_matrices = [None] if sign_matrices is None else list(sign_matrices)
 
     rows = []
     for obs in analyzer.observables:
-        if analyzer.basis == "flavor":
-            gv_pert_list = []
-            perturb_idx = [analyzer.flavor_indices[p] for p in coalition]
-            for idx, entry in enumerate(obs.fk_entries):
-                gv_flav = analyzer._get_flavor_gv_for_entry(obs, idx)
-                gv_pert = apply_gaussian_perturbation(
-                    gv_flav,
-                    perturb_idx,
-                    mu,
-                    sigma,
-                    amplitude,
-                    entry.xgrid,
-                    mode=mode,
-                    xspace=xspace,
+        mean_samples = []
+        for sign_matrix in sign_matrices:
+            sr_norm = None
+            if analyzer.enforce_sumrules:
+                sr_norm = analyzer._compute_sumrule_norm(
+                    coalition, mu, sigma, amplitude, mode, xspace,
+                    random_sign_matrix=sign_matrix,
                 )
-                gv_pert_list.append(gv_pert)
 
-            if sr_norm is not None:
-                gv_evol_list = obs.rotate_to_evolution(gv_pert_list)
-                gv_evol_list = [
-                    analyzer._apply_norm_to_gv(
-                        gv,
-                        sr_norm,
-                        range(14) if entry.hadronic else entry.flavor_indices,
-                    )
-                    for gv, entry in zip(gv_evol_list, obs.fk_entries)
-                ]
-                chi2_arr = obs.chi2(gv_evol_list)
-            else:
-                chi2_arr = obs.chi2_from_flavor(gv_pert_list)
-        else:
-            gv_pert_list = []
-            for idx, entry in enumerate(obs.fk_entries):
-                if entry.hadronic:
-                    gv = analyzer._get_gv_all14_for_entry(obs, idx)
-                    perturb_idx = [analyzer.flavor_indices[p] for p in coalition]
-                else:
-                    gv = analyzer._get_gv_for_entry(obs, idx)
-                    perturb_idx = analyzer._local_flavor_indices_for_entry(
-                        entry, coalition
-                    )
-
-                gv_pert = apply_gaussian_perturbation(
-                    gv,
-                    perturb_idx,
-                    mu,
-                    sigma,
-                    amplitude,
-                    entry.xgrid,
-                    mode=mode,
-                    xspace=xspace,
+            if analyzer.basis == "flavor":
+                gv_pert_list = []
+                perturb_idx = [analyzer.flavor_indices[p] for p in coalition]
+                perturb_signs = (
+                    sign_matrix[:, coalition] if sign_matrix is not None else None
                 )
+                for idx, entry in enumerate(obs.fk_entries):
+                    gv_flav = analyzer._get_flavor_gv_for_entry(obs, idx)
+                    gv_flav_calib = analyzer._get_calibration_flavor_gv_for_entry(obs, idx)
+                    gv_pert = apply_gaussian_perturbation(
+                        gv_flav,
+                        perturb_idx,
+                        mu,
+                        sigma,
+                        amplitude,
+                        entry.xgrid,
+                        mode=mode,
+                        xspace=xspace,
+                        flavor_signs=perturb_signs,
+                        calibration_gv=gv_flav_calib,
+                    )
+                    gv_pert_list.append(gv_pert)
+
                 if sr_norm is not None:
-                    fi = range(14) if entry.hadronic else entry.flavor_indices
-                    gv_pert = analyzer._apply_norm_to_gv(gv_pert, sr_norm, fi)
-                gv_pert_list.append(gv_pert)
-            chi2_arr = obs.chi2(gv_pert_list)
+                    gv_evol_list = obs.rotate_to_evolution(gv_pert_list)
+                    gv_evol_list = [
+                        analyzer._apply_norm_to_gv(
+                            gv,
+                            sr_norm,
+                            range(14) if entry.hadronic else entry.flavor_indices,
+                        )
+                        for gv, entry in zip(gv_evol_list, obs.fk_entries)
+                    ]
+                    chi2_arr = obs.chi2(gv_evol_list)
+                else:
+                    chi2_arr = obs.chi2_from_flavor(gv_pert_list)
+            else:
+                gv_pert_list = []
+                for idx, entry in enumerate(obs.fk_entries):
+                    if entry.hadronic:
+                        gv = analyzer._get_gv_all14_for_entry(obs, idx)
+                        gv_calib = analyzer._get_calibration_gv_all14_for_entry(obs, idx)
+                        perturb_players = list(coalition)
+                        perturb_idx = [analyzer.flavor_indices[p] for p in coalition]
+                    else:
+                        gv = analyzer._get_gv_for_entry(obs, idx)
+                        gv_calib = analyzer._get_calibration_gv_for_entry(obs, idx)
+                        perturb_idx, perturb_players = (
+                            analyzer._local_flavor_indices_and_players_for_entry(
+                                entry, coalition
+                            )
+                        )
+                    perturb_signs = (
+                        sign_matrix[:, perturb_players]
+                        if sign_matrix is not None else None
+                    )
 
-        mean_chi2 = float(np.mean(chi2_arr))
+                    gv_pert = apply_gaussian_perturbation(
+                        gv,
+                        perturb_idx,
+                        mu,
+                        sigma,
+                        amplitude,
+                        entry.xgrid,
+                        mode=mode,
+                        xspace=xspace,
+                        flavor_signs=perturb_signs,
+                        calibration_gv=gv_calib,
+                    )
+                    if sr_norm is not None:
+                        fi = range(14) if entry.hadronic else entry.flavor_indices
+                        gv_pert = analyzer._apply_norm_to_gv(gv_pert, sr_norm, fi)
+                    gv_pert_list.append(gv_pert)
+                chi2_arr = obs.chi2(gv_pert_list)
+
+            mean_samples.append(float(np.mean(chi2_arr)))
+
+        mean_chi2 = float(np.mean(mean_samples))
         rows.append(
             {
                 "dataset": obs.name,
@@ -980,6 +1005,7 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             n_replicas=n_replicas,
             basis=basis,
             enforce_sumrules=enforce_sumrules,
+            member_mode=member_mode,
         )
 
         t0 = time.time()
@@ -998,6 +1024,8 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             mode=mode, xspace=xspace, plot=True, n_jobs=n_jobs,
             diagnostic=raw_diagnostic, outlier_n_sigma=diag_sigma,
             per_replica=per_replica, random_sign=random_sign,
+            n_sign_samples=n_sign_samples,
+            random_seed=random_seed,
         )
         stabilization_report = None
         stabilization_json = None
@@ -1038,12 +1066,15 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                         n_replicas=n_replicas,
                         basis=basis,
                         enforce_sumrules=enforce_sumrules,
+                        member_mode=member_mode,
                     )
                     results_final = stable_analyzer.exact_shap(
                         mu=mu, sigma=sigma, amplitude=amplitude,
                         mode=mode, xspace=xspace, plot=True, n_jobs=n_jobs,
                         diagnostic=diagnostic, outlier_n_sigma=diag_sigma,
                         per_replica=per_replica, random_sign=random_sign,
+                        n_sign_samples=n_sign_samples,
+                        random_seed=random_seed,
                     )
                     stable_rerun_performed = True
                     observables_used = kept
@@ -1114,8 +1145,22 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                 {l: float(v) for l, v in zip(labels, sv_err)}
                 if sv_err is not None else None
             ),
+            "shapley_sign_std": (
+                {l: float(v) for l, v in zip(labels, sv_sign_std)}
+                if sv_sign_std is not None else None
+            ),
+            "shapley_sign_err": (
+                {l: float(v) for l, v in zip(labels, sv_sign_err)}
+                if sv_sign_err is not None else None
+            ),
             "per_replica": per_replica,
             "random_sign": random_sign,
+            "member_mode": member_mode,
+            "n_sign_samples": int(results_final.get("n_sign_samples", n_sign_samples)),
+            "antithetic_sign": bool(
+                results_final.get("random_sign") and results_final.get("n_sign_samples", 1) > 1
+            ),
+            "random_seed": random_seed,
             "baseline_chi2": float(results_final["baseline_chi2"]),
             "coalitions_evaluated": results_final["coalitions_evaluated"],
             "elapsed_seconds": round(elapsed, 1),
@@ -1146,6 +1191,10 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             "mode": mode, "xspace": xspace,
             "per_replica": per_replica,
             "random_sign": random_sign,
+            "member_mode": member_mode,
+            "n_sign_samples": int(n_sign_samples),
+            "antithetic_sign": bool(random_sign and int(n_sign_samples) > 1),
+            "random_seed": random_seed,
         },
         "enforce_sumrules": enforce_sumrules,
         "n_jobs": int(n_jobs),

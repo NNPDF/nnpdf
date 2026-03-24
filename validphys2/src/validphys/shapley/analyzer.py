@@ -18,11 +18,9 @@ from itertools import combinations
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 
 from validphys.convolution import FK_FLAVOURS
 from validphys.pdfbases import evolution as evol_basis, ALL_FLAVOURS
-from validphys.gridvalues import grid_values as _lhapdf_grid_values
 
 from shapley_values import ExactShapley, plot_shapley_bar
 
@@ -83,15 +81,22 @@ class NNPDFShapleyAnalyzer:
     }
 
     def __init__(self, pdf, observables, flavor_info, n_replicas=None,
-                 basis='evolution', enforce_sumrules=False):
+                 basis='evolution', enforce_sumrules=False,
+                 member_mode='replicas'):
         self.pdf = pdf
         self.observables = observables
         self.flavor_info = flavor_info
         self.n_replicas = n_replicas
         self.basis = basis
         self.enforce_sumrules = enforce_sumrules
+        self.member_mode = str(member_mode).strip().lower()
+        if self.member_mode not in {"replicas", "central"}:
+            raise ValueError(
+                f"Unknown member_mode '{member_mode}'. Use 'replicas' or 'central'."
+            )
 
         self._gv_cache: dict = {}
+        self._gv_calib_cache: dict = {}
         self._gv_cache_lock = threading.Lock()
         self._sumrule_lock = threading.Lock()
 
@@ -100,6 +105,8 @@ class NNPDFShapleyAnalyzer:
         self._sr_weights = None
         self._sr_gv_evol = None
         self._sr_gv_flav = None
+        self._sr_calib_gv_evol = None
+        self._sr_calib_gv_flav = None
         self._sr_rotation = None
 
         if basis == 'evolution':
@@ -130,21 +137,42 @@ class NNPDFShapleyAnalyzer:
         sr_xgrid, sr_weights = gen_integration_input(2000)
         Q0 = self.observables[0].Q0
 
-        sr_gv_evol = evol_basis.grid_values(
-            self.pdf, qmat=[Q0], vmat=FK_FLAVOURS, xmat=sr_xgrid
-        ).squeeze(-1)
-        if self.n_replicas is not None:
-            sr_gv_evol = sr_gv_evol[1: self.n_replicas + 1]
+        sr_gv_evol = get_pdf_grid_values_all14(
+            self.pdf,
+            type("SumruleTarget", (), {"Q0": Q0, "xgrid": sr_xgrid})(),
+            n_replicas=self.n_replicas,
+            member_mode=self.member_mode,
+        )
+        if self.member_mode == "central":
+            sr_gv_calib_evol = get_pdf_grid_values_all14(
+                self.pdf,
+                type("SumruleTarget", (), {"Q0": Q0, "xgrid": sr_xgrid})(),
+                n_replicas=self.n_replicas,
+                member_mode="replicas",
+            )
+        else:
+            sr_gv_calib_evol = sr_gv_evol
 
         sr_gv_flav = None
+        sr_gv_calib_flav = None
         sr_rotation = None
 
         if self.basis == 'flavor':
-            sr_gv_flav = _lhapdf_grid_values(
-                self.pdf, list(ALL_FLAVOURS), sr_xgrid, [Q0]
-            ).squeeze(-1)
-            if self.n_replicas is not None:
-                sr_gv_flav = sr_gv_flav[1: self.n_replicas + 1]
+            sr_gv_flav = get_pdf_flavor_grid_values(
+                self.pdf,
+                type("SumruleTarget", (), {"Q0": Q0, "xgrid": sr_xgrid})(),
+                n_replicas=self.n_replicas,
+                member_mode=self.member_mode,
+            )
+            if self.member_mode == "central":
+                sr_gv_calib_flav = get_pdf_flavor_grid_values(
+                    self.pdf,
+                    type("SumruleTarget", (), {"Q0": Q0, "xgrid": sr_xgrid})(),
+                    n_replicas=self.n_replicas,
+                    member_mode="replicas",
+                )
+            else:
+                sr_gv_calib_flav = sr_gv_flav
 
             evol_row_inds = evol_basis._to_indexes(FK_FLAVOURS)
             sr_rotation = evol_basis.from_flavour_mat[evol_row_inds, :]
@@ -153,10 +181,12 @@ class NNPDFShapleyAnalyzer:
         self._sr_weights = sr_weights
         self._sr_gv_evol = sr_gv_evol
         self._sr_gv_flav = sr_gv_flav
+        self._sr_calib_gv_evol = sr_gv_calib_evol
+        self._sr_calib_gv_flav = sr_gv_calib_flav
         self._sr_rotation = sr_rotation
 
     def _compute_sumrule_norm(self, flavor_subset, mu, sigma, amplitude,
-                              mode, xspace):
+                              mode, xspace, random_sign_matrix=None):
         """Compute normalization constants for a perturbed coalition."""
         ready = (
             self._sr_xgrid is not None
@@ -190,16 +220,28 @@ class NNPDFShapleyAnalyzer:
         if self.basis == 'evolution':
             gv = self._sr_gv_evol.copy()
             perturb_idx = [self.flavor_indices[p] for p in flavor_subset]
+            perturb_signs = (
+                random_sign_matrix[:, flavor_subset]
+                if random_sign_matrix is not None else None
+            )
             gv_pert = apply_gaussian_perturbation(
                 gv, perturb_idx, mu, sigma, amplitude,
-                self._sr_xgrid, mode=mode, xspace=xspace
+                self._sr_xgrid, mode=mode, xspace=xspace,
+                flavor_signs=perturb_signs,
+                calibration_gv=self._sr_calib_gv_evol,
             )
         else:
             gv_flav = self._sr_gv_flav.copy()
             perturb_idx = [self.flavor_indices[p] for p in flavor_subset]
+            perturb_signs = (
+                random_sign_matrix[:, flavor_subset]
+                if random_sign_matrix is not None else None
+            )
             gv_flav_pert = apply_gaussian_perturbation(
                 gv_flav, perturb_idx, mu, sigma, amplitude,
-                self._sr_xgrid, mode=mode, xspace=xspace
+                self._sr_xgrid, mode=mode, xspace=xspace,
+                flavor_signs=perturb_signs,
+                calibration_gv=self._sr_calib_gv_flav,
             )
             gv_pert = np.einsum(
                 'ef,rfx->rex', self._sr_rotation, gv_flav_pert
@@ -220,6 +262,7 @@ class NNPDFShapleyAnalyzer:
     def clear_cache(self):
         """Drop cached grid values."""
         self._gv_cache.clear()
+        self._gv_calib_cache.clear()
 
     def _get_gv_for_entry(self, obs, entry_idx):
         """Cached evolution-basis grid values (FK-subset flavours)."""
@@ -229,9 +272,23 @@ class NNPDFShapleyAnalyzer:
                 if key not in self._gv_cache:
                     entry = obs.fk_entries[entry_idx]
                     self._gv_cache[key] = get_pdf_grid_values(
-                        self.pdf, entry, n_replicas=self.n_replicas
+                        self.pdf, entry, n_replicas=self.n_replicas,
+                        member_mode=self.member_mode,
                     )
         return self._gv_cache[key]
+
+    def _get_calibration_gv_for_entry(self, obs, entry_idx):
+        """Cached evolution-basis replica ensemble used for calibration."""
+        key = (obs.name, entry_idx, 'evol_calib')
+        if key not in self._gv_calib_cache:
+            with self._gv_cache_lock:
+                if key not in self._gv_calib_cache:
+                    entry = obs.fk_entries[entry_idx]
+                    self._gv_calib_cache[key] = get_pdf_grid_values(
+                        self.pdf, entry, n_replicas=self.n_replicas,
+                        member_mode='replicas',
+                    )
+        return self._gv_calib_cache[key]
 
     def _get_flavor_gv_for_entry(self, obs, entry_idx):
         """Cached physical flavor-basis grid values."""
@@ -241,9 +298,23 @@ class NNPDFShapleyAnalyzer:
                 if key not in self._gv_cache:
                     entry = obs.fk_entries[entry_idx]
                     self._gv_cache[key] = get_pdf_flavor_grid_values(
-                        self.pdf, entry, n_replicas=self.n_replicas
+                        self.pdf, entry, n_replicas=self.n_replicas,
+                        member_mode=self.member_mode,
                     )
         return self._gv_cache[key]
+
+    def _get_calibration_flavor_gv_for_entry(self, obs, entry_idx):
+        """Cached flavor-basis replica ensemble used for calibration."""
+        key = (obs.name, entry_idx, 'flavor_calib')
+        if key not in self._gv_calib_cache:
+            with self._gv_cache_lock:
+                if key not in self._gv_calib_cache:
+                    entry = obs.fk_entries[entry_idx]
+                    self._gv_calib_cache[key] = get_pdf_flavor_grid_values(
+                        self.pdf, entry, n_replicas=self.n_replicas,
+                        member_mode='replicas',
+                    )
+        return self._gv_calib_cache[key]
 
     def _get_gv_all14_for_entry(self, obs, entry_idx):
         """Cached full 14-flavour evolution-basis grid values."""
@@ -253,9 +324,23 @@ class NNPDFShapleyAnalyzer:
                 if key not in self._gv_cache:
                     entry = obs.fk_entries[entry_idx]
                     self._gv_cache[key] = get_pdf_grid_values_all14(
-                        self.pdf, entry, n_replicas=self.n_replicas
+                        self.pdf, entry, n_replicas=self.n_replicas,
+                        member_mode=self.member_mode,
                     )
         return self._gv_cache[key]
+
+    def _get_calibration_gv_all14_for_entry(self, obs, entry_idx):
+        """Cached full 14-flavour replica ensemble used for calibration."""
+        key = (obs.name, entry_idx, 'evol_all14_calib')
+        if key not in self._gv_calib_cache:
+            with self._gv_cache_lock:
+                if key not in self._gv_calib_cache:
+                    entry = obs.fk_entries[entry_idx]
+                    self._gv_calib_cache[key] = get_pdf_grid_values_all14(
+                        self.pdf, entry, n_replicas=self.n_replicas,
+                        member_mode='replicas',
+                    )
+        return self._gv_calib_cache[key]
 
     def _get_gv_list(self, obs):
         """Get list of baseline grid values for all FK entries."""
@@ -277,11 +362,89 @@ class NNPDFShapleyAnalyzer:
                 local.append(fi_list.index(global_fi))
         return local
 
+    def _local_flavor_indices_and_players_for_entry(self, entry, global_flavor_subset):
+        """Map global player indices to local FK columns, preserving order."""
+        local = []
+        players = []
+        fi_list = entry.flavor_indices.tolist()
+        for player in global_flavor_subset:
+            global_fi = self.flavor_indices[player]
+            if global_fi in fi_list:
+                local.append(fi_list.index(global_fi))
+                players.append(player)
+        return local, players
+
+    def _infer_n_members(self):
+        """Infer the number of PDF members currently loaded by the analyzer."""
+        obs0 = self.observables[0]
+        if self.basis == 'flavor':
+            return int(self._get_flavor_gv_for_entry(obs0, 0).shape[0])
+
+        entry0 = obs0.fk_entries[0]
+        if entry0.hadronic:
+            return int(self._get_gv_all14_for_entry(obs0, 0).shape[0])
+        return int(self._get_gv_for_entry(obs0, 0).shape[0])
+
+    @staticmethod
+    def _build_sign_matrices(
+        n_members,
+        n_flavors,
+        n_sign_samples,
+        random_seed=None,
+        unique_rows=False,
+    ):
+        """Build one or more fixed sign tables for sign-mask sampling.
+
+        Parameters
+        ----------
+        unique_rows : bool
+            When True and n_sign_samples=1, draw per-member sign masks
+            without replacement so every member gets a distinct mask.
+        """
+        if int(n_sign_samples) < 1:
+            raise ValueError(f"n_sign_samples must be >= 1, got {n_sign_samples}")
+
+        rng = np.random.default_rng(random_seed)
+        n_sign_samples = int(n_sign_samples)
+        if n_sign_samples == 1:
+            if unique_rows:
+                n_unique_max = 2 ** int(n_flavors)
+                if int(n_members) > n_unique_max:
+                    raise ValueError(
+                        "Requested unique per-member sign masks but n_members "
+                        f"({n_members}) exceeds available unique masks "
+                        f"(2**n_flavors = {n_unique_max})."
+                    )
+
+                chosen = rng.choice(n_unique_max, size=int(n_members), replace=False)
+                bit_pos = np.arange(int(n_flavors), dtype=np.int64)
+                bits = ((chosen[:, None] >> bit_pos[None, :]) & 1).astype(float)
+                signs = np.where(bits > 0.5, 1.0, -1.0)
+                return [signs]
+
+            return [
+                rng.choice(np.array([-1.0, 1.0]), size=(n_members, n_flavors))
+            ]
+
+        if n_sign_samples % 2 != 0:
+            raise ValueError(
+                "n_sign_samples must be even when random_sign is enabled "
+                "and more than one sign sample is requested."
+            )
+
+        n_pairs = n_sign_samples // 2
+        base = [
+            rng.choice(np.array([-1.0, 1.0]), size=(n_members, n_flavors))
+            for _ in range(n_pairs)
+        ]
+        return base + [-m for m in base]
+
     # -- Chi2 evaluation with perturbation ----------------------------------
 
     def _evaluate_chi2(self, flavor_subset, mu, sigma, amplitude,
                        mode='additive', xspace='linear',
-                       per_replica=False, random_sign=False):
+                       per_replica=False, random_sign=False,
+                       random_sign_matrix=None):
         """Chi2/Ndata across all observables for a given perturbation.
 
         Parameters
@@ -296,8 +459,9 @@ class NNPDFShapleyAnalyzer:
             When True return the per-replica array of shape (nrep,) so that
             Shapley values can be computed independently for every replica.
         random_sign : bool
-            When True the perturbation amplitude is independently randomised
-            to ±1 for each replica.  Forwarded to apply_gaussian_perturbation.
+            When True use signed perturbations. When ``random_sign_matrix`` is
+            provided, those fixed replica/flavour signs are reused for all
+            coalition evaluations in the run.
 
         Returns
         -------
@@ -307,12 +471,14 @@ class NNPDFShapleyAnalyzer:
         sr_norm = None
         if self.enforce_sumrules:
             sr_norm = self._compute_sumrule_norm(
-                flavor_subset, mu, sigma, amplitude, mode, xspace
+                flavor_subset, mu, sigma, amplitude, mode, xspace,
+                random_sign_matrix=random_sign_matrix,
             )
 
-        # Use a single rng per call so all FK entries of one coalition share
-        # the same random signs (same coalition = same perturbation direction).
-        rng = np.random.default_rng() if random_sign else None
+        rng = (
+            np.random.default_rng()
+            if random_sign and random_sign_matrix is None else None
+        )
 
         total_chi2 = 0.0          # used when per_replica=False
         total_chi2_rep = None     # used when per_replica=True  shape (nrep,)
@@ -321,8 +487,14 @@ class NNPDFShapleyAnalyzer:
         for obs in self.observables:
             if self.basis == 'flavor':
                 gv_pert_list = []
+                perturb_players = list(flavor_subset)
+                perturb_signs = (
+                    random_sign_matrix[:, perturb_players]
+                    if random_sign_matrix is not None else None
+                )
                 for idx, entry in enumerate(obs.fk_entries):
                     gv_flav = self._get_flavor_gv_for_entry(obs, idx)
+                    gv_flav_calib = self._get_calibration_flavor_gv_for_entry(obs, idx)
                     perturb_idx = [
                         self.flavor_indices[p] for p in flavor_subset
                     ]
@@ -330,6 +502,8 @@ class NNPDFShapleyAnalyzer:
                         gv_flav, perturb_idx, mu, sigma, amplitude,
                         entry.xgrid, mode=mode, xspace=xspace,
                         random_sign=random_sign, rng=rng,
+                        flavor_signs=perturb_signs,
+                        calibration_gv=gv_flav_calib,
                     )
                     gv_pert_list.append(gv_pert)
 
@@ -351,18 +525,29 @@ class NNPDFShapleyAnalyzer:
                 for idx, entry in enumerate(obs.fk_entries):
                     if entry.hadronic:
                         gv = self._get_gv_all14_for_entry(obs, idx)
+                        gv_calib = self._get_calibration_gv_all14_for_entry(obs, idx)
+                        perturb_players = list(flavor_subset)
                         perturb_idx = [
                             self.flavor_indices[p] for p in flavor_subset
                         ]
                     else:
                         gv = self._get_gv_for_entry(obs, idx)
-                        perturb_idx = self._local_flavor_indices_for_entry(
-                            entry, flavor_subset
+                        gv_calib = self._get_calibration_gv_for_entry(obs, idx)
+                        perturb_idx, perturb_players = (
+                            self._local_flavor_indices_and_players_for_entry(
+                                entry, flavor_subset
+                            )
                         )
+                    perturb_signs = (
+                        random_sign_matrix[:, perturb_players]
+                        if random_sign_matrix is not None else None
+                    )
                     gv_pert = apply_gaussian_perturbation(
                         gv, perturb_idx, mu, sigma, amplitude,
                         entry.xgrid, mode=mode, xspace=xspace,
                         random_sign=random_sign, rng=rng,
+                        flavor_signs=perturb_signs,
+                        calibration_gv=gv_calib,
                     )
                     if sr_norm is not None:
                         fi = (range(14) if entry.hadronic else entry.flavor_indices)
@@ -390,7 +575,8 @@ class NNPDFShapleyAnalyzer:
     def build_value_function(self, mu, sigma, amplitude,
                              mode='additive', xspace='linear',
                              _coalition_log=None,
-                             random_sign=False):
+                             random_sign=False,
+                             random_sign_matrix=None):
         """Return a callable v(coalition) -> float for ExactShapley.
 
         The wrapper tracks progress: coalition count, elapsed time, and estimated time remaining (ETA).
@@ -406,8 +592,10 @@ class NNPDFShapleyAnalyzer:
             this list during evaluation.  Use this to build the full
             per-coalition chi2 record for diagnostics.
         random_sign : bool
-            Forwarded to _evaluate_chi2.  Each call draws fresh signs so
-            the serial ExactShapley path also benefits.
+            Forwarded to _evaluate_chi2.
+        random_sign_matrix : np.ndarray or None
+            Fixed sign table with shape ``(n_members, n_flavors)`` reused for
+            every coalition evaluation in the run.
 
         Returns
         -------
@@ -430,6 +618,7 @@ class NNPDFShapleyAnalyzer:
                 coalition, mu, sigma, amplitude,
                 mode=mode, xspace=xspace,
                 random_sign=random_sign,
+                random_sign_matrix=random_sign_matrix,
             )
 
             # Record coalition -> chi2 for diagnostics if requested.
@@ -520,7 +709,7 @@ class NNPDFShapleyAnalyzer:
         outlier_coalitions.sort(key=lambda x: -x["chi2"])
 
         # Per-player marginal contribution analysis:
-        # delta_v(i, S) = v(S ∪ {i}) - v(S)  for all S not containing i.
+        # delta_v(i, S) = v(S U {i}) - v(S) for all S not containing i.
         per_player_marginals = {}
         all_marginals = []   # flat list used for the contributions CSV
 
@@ -609,7 +798,8 @@ class NNPDFShapleyAnalyzer:
 
     def _compute_exact_shap_parallel(self, mu, sigma, amplitude, mode, xspace,
                                      n_jobs, verbose=True,
-                                     per_replica=False, random_sign=False):
+                                     per_replica=False, random_sign=False,
+                                     sign_matrices=None):
         """Compute exact Shapley values from a parallel coalition cache.
 
         When per_replica=True every coalition is evaluated independently for
@@ -623,6 +813,8 @@ class NNPDFShapleyAnalyzer:
         all_coalitions = list(self._iter_all_coalitions())
         total_coalitions = len(all_coalitions)
         value_cache = {}
+        sign_matrices = [None] if sign_matrices is None else list(sign_matrices)
+        n_sign_samples = len(sign_matrices)
 
         if verbose:
             print(
@@ -636,10 +828,21 @@ class NNPDFShapleyAnalyzer:
         log_every = max(1, total_coalitions // 100)
 
         def _evaluate_one(coalition):
-            value = self._evaluate_chi2(
-                coalition, mu, sigma, amplitude, mode=mode, xspace=xspace,
-                per_replica=per_replica, random_sign=random_sign,
-            )
+            if n_sign_samples == 1:
+                value = self._evaluate_chi2(
+                    coalition, mu, sigma, amplitude, mode=mode, xspace=xspace,
+                    per_replica=per_replica, random_sign=random_sign,
+                    random_sign_matrix=sign_matrices[0],
+                )
+            else:
+                value = np.stack([
+                    self._evaluate_chi2(
+                        coalition, mu, sigma, amplitude, mode=mode, xspace=xspace,
+                        per_replica=per_replica, random_sign=random_sign,
+                        random_sign_matrix=sign_matrix,
+                    )
+                    for sign_matrix in sign_matrices
+                ], axis=0)
             return coalition, value
 
         with ThreadPoolExecutor(max_workers=n_jobs) as executor:
@@ -685,44 +888,103 @@ class NNPDFShapleyAnalyzer:
             sys.stderr.flush()
 
         baseline_raw = value_cache[tuple()]
+        mean_value_cache = {
+            coalition: float(np.mean(value))
+            for coalition, value in value_cache.items()
+        }
 
         # per-replica path 
         if per_replica:
-            # value_cache values are ndarray(nrep,)
-            nrep = len(next(iter(value_cache.values())))
-            baseline = float(np.mean(baseline_raw))
+            first_value = next(iter(value_cache.values()))
+            if n_sign_samples == 1:
+                nrep = len(first_value)
+                baseline = float(np.mean(baseline_raw))
 
-            # shapley_per_replica[k, j] = phi_j^(k)
-            shapley_per_replica = np.zeros((nrep, n), dtype=float)
+                # shapley_per_replica[k, j] = phi_j^(k)
+                shapley_per_replica = np.zeros((nrep, n), dtype=float)
 
-            for player in range(n):
-                if verbose:
-                    print(f"  Player {player}: {self.flavor_labels[player]}",
-                          end="", flush=True)
+                for player in range(n):
+                    if verbose:
+                        print(f"  Player {player}: {self.flavor_labels[player]}",
+                              end="", flush=True)
 
-                for coalition in all_coalitions:
-                    if player in coalition:
-                        continue
-                    s = len(coalition)
-                    weight = (
-                        factorial[s] * factorial[n - s - 1]
-                    ) / factorial_n
-                    coalition_with_player = self._coalition_with_player(
-                        coalition, player
-                    )
-                    v_with = value_cache[coalition_with_player]   # (nrep,)
-                    v_without = value_cache[coalition]             # (nrep,)
-                    shapley_per_replica[:, player] += weight * (v_with - v_without)
+                    for coalition in all_coalitions:
+                        if player in coalition:
+                            continue
+                        s = len(coalition)
+                        weight = (
+                            factorial[s] * factorial[n - s - 1]
+                        ) / factorial_n
+                        coalition_with_player = self._coalition_with_player(
+                            coalition, player
+                        )
+                        v_with = value_cache[coalition_with_player]
+                        v_without = value_cache[coalition]
+                        shapley_per_replica[:, player] += weight * (v_with - v_without)
 
-                if verbose:
-                    sv_mean = float(np.mean(shapley_per_replica[:, player]))
-                    sv_std = float(np.std(shapley_per_replica[:, player], ddof=1))
-                    print(f"  ->  SV = {sv_mean:+.6f} ± {sv_std:.6f}")
+                    if verbose:
+                        sv_mean = float(np.mean(shapley_per_replica[:, player]))
+                        sv_std = float(np.std(shapley_per_replica[:, player], ddof=1))
+                        print(f"  ->  SV = {sv_mean:+.6f} +/- {sv_std:.6f}")
 
-            shapley_vals = shapley_per_replica.mean(axis=0)
-            shapley_std  = shapley_per_replica.std(axis=0, ddof=1) if nrep > 1 \
-                           else np.zeros(n, dtype=float)
-            shapley_err  = shapley_std / np.sqrt(nrep)
+                shapley_vals = shapley_per_replica.mean(axis=0)
+                shapley_std = (
+                    shapley_per_replica.std(axis=0, ddof=1) if nrep > 1
+                    else np.zeros(n, dtype=float)
+                )
+                shapley_err = shapley_std / np.sqrt(nrep)
+                shapley_per_sign_sample = None
+                shapley_sign_std = None
+                shapley_sign_err = None
+            else:
+                nrep = int(first_value.shape[1])
+                baseline = float(np.mean(baseline_raw))
+                shapley_sample_replica = np.zeros((n_sign_samples, nrep, n), dtype=float)
+
+                for player in range(n):
+                    if verbose:
+                        print(f"  Player {player}: {self.flavor_labels[player]}",
+                              end="", flush=True)
+
+                    for coalition in all_coalitions:
+                        if player in coalition:
+                            continue
+                        s = len(coalition)
+                        weight = (
+                            factorial[s] * factorial[n - s - 1]
+                        ) / factorial_n
+                        coalition_with_player = self._coalition_with_player(
+                            coalition, player
+                        )
+                        v_with = value_cache[coalition_with_player]
+                        v_without = value_cache[coalition]
+                        shapley_sample_replica[:, :, player] += (
+                            weight * (v_with - v_without)
+                        )
+
+                    if verbose:
+                        sv_mean = float(np.mean(shapley_sample_replica[:, :, player]))
+                        sv_std = float(
+                            np.std(
+                                shapley_sample_replica.mean(axis=1)[:, player],
+                                ddof=1,
+                            )
+                        ) if n_sign_samples > 1 else 0.0
+                        print(f"  ->  SV = {sv_mean:+.6f} +/- {sv_std:.6f}")
+
+                shapley_per_replica = shapley_sample_replica.mean(axis=0)
+                shapley_per_sign_sample = shapley_sample_replica.mean(axis=1)
+                shapley_vals = shapley_per_replica.mean(axis=0)
+                shapley_std = (
+                    shapley_per_replica.std(axis=0, ddof=1) if nrep > 1
+                    else np.zeros(n, dtype=float)
+                )
+                shapley_err = shapley_std / np.sqrt(nrep)
+                shapley_sign_std = (
+                    shapley_per_sign_sample.std(axis=0, ddof=1)
+                    if n_sign_samples > 1 else np.zeros(n, dtype=float)
+                )
+                shapley_sign_err = shapley_sign_std / np.sqrt(n_sign_samples)
 
             elapsed = time.time() - t0
 
@@ -733,15 +995,14 @@ class NNPDFShapleyAnalyzer:
                 print(f"Max SV std      : {np.max(shapley_std):.6f}")
                 print(f"Elapsed         : {elapsed:.1f}s")
 
-            # Serialize per-replica matrix as list-of-lists for JSON
-            sv_per_rep_serializable = [
-                {str(k): v for k, v in value_cache.items()}
-            ]
             return {
                 "shapley_values": shapley_vals,
                 "shapley_values_per_replica": shapley_per_replica,
+                "shapley_values_per_sign_sample": shapley_per_sign_sample,
                 "shapley_std": shapley_std,
                 "shapley_err": shapley_err,
+                "shapley_sign_std": shapley_sign_std,
+                "shapley_sign_err": shapley_sign_err,
                 "baseline": baseline,
                 "baseline_per_replica": baseline_raw,
                 "player_labels": self.flavor_labels,
@@ -750,34 +1011,80 @@ class NNPDFShapleyAnalyzer:
                 "total_coalitions": total_coalitions,
                 "elapsed_seconds": elapsed,
                 "n_replicas": nrep,
+                "n_sign_samples": n_sign_samples,
+                "_mean_value_cache": mean_value_cache,
             }
 
         # scalar (mean-chi2) path 
-        baseline = float(baseline_raw)
-        shapley_vals = np.zeros(n, dtype=float)
+        if n_sign_samples == 1:
+            baseline = float(baseline_raw)
+            shapley_vals = np.zeros(n, dtype=float)
 
-        for player in range(n):
-            if verbose:
-                print(f"  Player {player}: {self.flavor_labels[player]}", end="",
-                      flush=True)
+            for player in range(n):
+                if verbose:
+                    print(f"  Player {player}: {self.flavor_labels[player]}", end="",
+                          flush=True)
 
-            for coalition in all_coalitions:
-                if player in coalition:
-                    continue
+                for coalition in all_coalitions:
+                    if player in coalition:
+                        continue
 
-                s = len(coalition)
-                weight = (
-                    factorial[s] * factorial[n - s - 1]
-                ) / factorial_n
-                coalition_with_player = self._coalition_with_player(
-                    coalition, player
-                )
-                v_with = value_cache[coalition_with_player]
-                v_without = value_cache[coalition]
-                shapley_vals[player] += weight * (v_with - v_without)
+                    s = len(coalition)
+                    weight = (
+                        factorial[s] * factorial[n - s - 1]
+                    ) / factorial_n
+                    coalition_with_player = self._coalition_with_player(
+                        coalition, player
+                    )
+                    v_with = value_cache[coalition_with_player]
+                    v_without = value_cache[coalition]
+                    shapley_vals[player] += weight * (v_with - v_without)
 
-            if verbose:
-                print(f"  ->  SV = {shapley_vals[player]:+.6f}")
+                if verbose:
+                    print(f"  ->  SV = {shapley_vals[player]:+.6f}")
+
+            shapley_per_sign_sample = None
+            shapley_std = None
+            shapley_err = None
+            shapley_sign_std = None
+            shapley_sign_err = None
+        else:
+            baseline = float(np.mean(baseline_raw))
+            shapley_per_sign_sample = np.zeros((n_sign_samples, n), dtype=float)
+
+            for player in range(n):
+                if verbose:
+                    print(f"  Player {player}: {self.flavor_labels[player]}", end="",
+                          flush=True)
+
+                for coalition in all_coalitions:
+                    if player in coalition:
+                        continue
+
+                    s = len(coalition)
+                    weight = (
+                        factorial[s] * factorial[n - s - 1]
+                    ) / factorial_n
+                    coalition_with_player = self._coalition_with_player(
+                        coalition, player
+                    )
+                    v_with = value_cache[coalition_with_player]
+                    v_without = value_cache[coalition]
+                    shapley_per_sign_sample[:, player] += weight * (v_with - v_without)
+
+                if verbose:
+                    print(
+                        f"  ->  SV = {float(np.mean(shapley_per_sign_sample[:, player])):+.6f}"
+                    )
+
+            shapley_vals = shapley_per_sign_sample.mean(axis=0)
+            shapley_sign_std = (
+                shapley_per_sign_sample.std(axis=0, ddof=1)
+                if n_sign_samples > 1 else np.zeros(n, dtype=float)
+            )
+            shapley_sign_err = shapley_sign_std / np.sqrt(n_sign_samples)
+            shapley_std = shapley_sign_std
+            shapley_err = shapley_sign_err
 
         elapsed = time.time() - t0
 
@@ -792,23 +1099,29 @@ class NNPDFShapleyAnalyzer:
         return {
             "shapley_values": shapley_vals,
             "shapley_values_per_replica": None,
-            "shapley_std": None,
-            "shapley_err": None,
+            "shapley_values_per_sign_sample": shapley_per_sign_sample,
+            "shapley_std": shapley_std,
+            "shapley_err": shapley_err,
+            "shapley_sign_std": shapley_sign_std,
+            "shapley_sign_err": shapley_sign_err,
             "baseline": baseline,
             "player_labels": self.flavor_labels,
             "player_short": self.flavor_short,
             "coalitions_evaluated": len(value_cache),
             "total_coalitions": total_coalitions,
             "elapsed_seconds": elapsed,
+            "n_sign_samples": n_sign_samples,
             "value_cache": {
                 str(k): v for k, v in value_cache.items()
             },
+            "_mean_value_cache": mean_value_cache,
         }
 
     def exact_shap(self, mu, sigma, amplitude, mode='additive',
                    xspace='linear', plot=True, n_jobs=1,
                    diagnostic=False, outlier_n_sigma=3.0,
-                   per_replica=False, random_sign=False):
+                   per_replica=False, random_sign=False,
+                   n_sign_samples=1, random_seed=None):
         """Compute exact Shapley values for all flavour players.
 
         Uses the ``shapley_values.ExactShapley`` solver with the NNPDF
@@ -834,7 +1147,7 @@ class NNPDFShapleyAnalyzer:
             Shapley values.
         outlier_n_sigma : float
             Z-score threshold used to flag outlier coalitions/marginals.
-            Default is 3.0 (mean ± 3σ).
+            Default is 3.0 (mean +/- 3 sigma).
         per_replica : bool
             When True compute phi_j^(k) for every replica k and return the
             full (nrep, n_flavors) matrix together with the ensemble mean,
@@ -842,9 +1155,13 @@ class NNPDFShapleyAnalyzer:
             parallel evaluation path (n_jobs>=1).  This implements
             Eq. (shapley_replicas) from the paper.
         random_sign : bool
-            When True the perturbation amplitude is independently drawn from
-            {-1, +1} for each replica at every coalition evaluation, reducing
-            sensitivity of the Shapley values to the sign of the bump.
+            When True draw a fixed sign table indexed by replica and flavour,
+            and reuse it for every coalition evaluation in the run.
+        n_sign_samples : int
+            Number of independent sign-table games to average when
+            ``random_sign=True``. Defaults to 1.
+        random_seed : int or None
+            Optional seed for reproducible sign-mask sampling.
 
         Returns
         -------
@@ -860,47 +1177,70 @@ class NNPDFShapleyAnalyzer:
             )
         if int(n_jobs) < 1:
             raise ValueError(f"n_jobs must be >= 1, got {n_jobs}")
+        if int(n_sign_samples) < 1:
+            raise ValueError(f"n_sign_samples must be >= 1, got {n_sign_samples}")
+
+        effective_n_sign_samples = int(n_sign_samples)
+        if not random_sign:
+            effective_n_sign_samples = 1
+        elif per_replica:
+            if effective_n_sign_samples != 1:
+                print(
+                    "Note: per_replica=True uses one fixed sign mask per replica; "
+                    f"ignoring n_sign_samples={effective_n_sign_samples} and using 1."
+                )
+            effective_n_sign_samples = 1
 
         basis_name = "flavor" if self.basis == 'flavor' else "evolution"
         print(f"Perturbation basis : {basis_name}")
         print(f"Perturbation mode  : {mode}")
         print(f"Perturbation xspace: {xspace}")
         print(f"Sum rules          : {'ON' if self.enforce_sumrules else 'OFF'}")
+        print(f"PDF member mode    : {self.member_mode}")
         print(f"Parallel workers   : {int(n_jobs)}")
         print(f"Per-replica SVs    : {'ON' if per_replica else 'OFF'}")
         print(f"Random sign        : {'ON' if random_sign else 'OFF'}")
+        print(f"Sign samples       : {effective_n_sign_samples}")
+
+        sign_matrices = [None]
+        if random_sign:
+            sign_matrices = self._build_sign_matrices(
+                self._infer_n_members(),
+                self.n_flavors,
+                n_sign_samples=effective_n_sign_samples,
+                random_seed=random_seed,
+                unique_rows=bool(per_replica),
+            )
 
         # per_replica=True requires vector-valued value function; the external
         # ExactShapley solver only handles scalars, so always use the parallel
         # path (which supports both scalar and vector modes).
-        if per_replica or int(n_jobs) > 1:
+        if per_replica or int(n_jobs) > 1 or len(sign_matrices) > 1:
             results = self._compute_exact_shap_parallel(
                 mu, sigma, amplitude, mode, xspace,
                 n_jobs=int(n_jobs),
                 per_replica=per_replica,
                 random_sign=random_sign,
+                sign_matrices=sign_matrices,
             )
             # Build coalition_log for diagnostics from _compute_exact_shap_parallel
             # (the parallel path does not produce a coalition_log internally;
             # re-run with diagnostics via the scalar path below if requested).
             coalition_log = None
             if diagnostic:
-                # Re-evaluate all coalitions through the serial value function
-                # (scalar, mean-chi2) to collect the log for the diagnostic.
-                coalition_log = []
-                v_diag = self.build_value_function(
-                    mu, sigma, amplitude, mode, xspace,
-                    _coalition_log=coalition_log,
-                    random_sign=random_sign,
-                )
-                for coalition in self._iter_all_coalitions():
-                    v_diag(list(coalition))
+                mean_value_cache = results.get("_mean_value_cache", {})
+                coalition_log = [
+                    (coalition, mean_value_cache[coalition])
+                    for coalition in self._iter_all_coalitions()
+                    if coalition in mean_value_cache
+                ]
         else:
             coalition_log = [] if diagnostic else None
             v = self.build_value_function(
                 mu, sigma, amplitude, mode, xspace,
                 _coalition_log=coalition_log,
                 random_sign=random_sign,
+                random_sign_matrix=sign_matrices[0],
             )
             solver = ExactShapley(
                 n_players=self.n_flavors,
@@ -931,7 +1271,7 @@ class NNPDFShapleyAnalyzer:
                 f"max={cs.get('max', 0):.4f}"
             )
             print(
-                f"  Outlier threshold ({outlier_n_sigma}σ): "
+                f"  Outlier threshold ({outlier_n_sigma} sigma): "
                 f"{diag.get('outlier_chi2_threshold', 0):.4f}  "
                 f"({diag.get('n_outlier_coalitions', 0)} outlier coalitions)"
             )
@@ -966,6 +1306,11 @@ class NNPDFShapleyAnalyzer:
         results["n_jobs"] = int(n_jobs)
         results["per_replica"] = bool(per_replica)
         results["random_sign"] = bool(random_sign)
+        results["member_mode"] = self.member_mode
+        results["n_sign_samples"] = int(effective_n_sign_samples)
+        results["antithetic_sign"] = bool(random_sign and effective_n_sign_samples > 1)
+        results["random_seed"] = random_seed
+        results["_sign_matrices"] = sign_matrices if random_sign else None
         # Convenience: scalar uncertainty arrays (None when per_replica=False)
         # shapley_std[j]  = std_k phi_j^(k)  (replica-to-replica spread)
         # shapley_err[j]  = shapley_std[j] / sqrt(nrep)  (standard error of mean)
@@ -973,6 +1318,13 @@ class NNPDFShapleyAnalyzer:
             results["shapley_std"] = None
         if results.get("shapley_err") is None:
             results["shapley_err"] = None
+        if results.get("shapley_values_per_sign_sample") is None:
+            results["shapley_values_per_sign_sample"] = None
+        if results.get("shapley_sign_std") is None:
+            results["shapley_sign_std"] = None
+        if results.get("shapley_sign_err") is None:
+            results["shapley_sign_err"] = None
+        results.pop("_mean_value_cache", None)
 
         # Plot
         fig_pdfs = None
@@ -1049,20 +1401,38 @@ class NNPDFShapleyAnalyzer:
             x_axis_scale = "linear" if float(mu) > 0.1 else "log"
         Q0 = self.observables[0].Q0
 
-        if self.basis == 'flavor':
-            pdg_codes = [int(ALL_FLAVOURS[i]) for i in self.flavor_indices]
-            gv_ref = _lhapdf_grid_values(
-                self.pdf, pdg_codes, x_plot, [Q0]
-            ).squeeze(-1)
-        else:
-            gv_func = functools.partial(evol_basis.grid_values, self.pdf)
-            all_names = FK_FLAVOURS[self.flavor_indices]
-            gv_ref = gv_func(
-                qmat=[Q0], vmat=all_names, xmat=x_plot
-            ).squeeze(-1)
+        class PlotTarget:
+            pass
 
-        if self.n_replicas is not None:
-            gv_ref = gv_ref[1: self.n_replicas + 1]
+        plot_target = PlotTarget()
+        plot_target.Q0 = Q0
+        plot_target.xgrid = x_plot
+        plot_target.flavor_indices = np.asarray(self.flavor_indices)
+
+        if self.basis == 'flavor':
+            gv_ref_all = get_pdf_flavor_grid_values(
+                self.pdf, plot_target, n_replicas=self.n_replicas,
+                member_mode=self.member_mode,
+            )
+            gv_calib_all = get_pdf_flavor_grid_values(
+                self.pdf, plot_target, n_replicas=self.n_replicas,
+                member_mode='replicas',
+            )
+            # get_pdf_flavor_grid_values returns all 14 PDG flavours in
+            # ALL_FLAVOURS order. Shapley players are a subset given by
+            # self.flavor_indices (indices into that 14-flavour axis).
+            sel = np.asarray(self.flavor_indices, dtype=int)
+            gv_ref = gv_ref_all[:, sel, :]
+            gv_calib = gv_calib_all[:, sel, :]
+        else:
+            gv_ref = get_pdf_grid_values(
+                self.pdf, plot_target, n_replicas=self.n_replicas,
+                member_mode=self.member_mode,
+            )
+            gv_calib = get_pdf_grid_values(
+                self.pdf, plot_target, n_replicas=self.n_replicas,
+                member_mode='replicas',
+            )
 
         gv_pert = apply_gaussian_perturbation(
             gv_ref,
@@ -1073,6 +1443,7 @@ class NNPDFShapleyAnalyzer:
             xgrid=x_plot,
             mode=mode,
             xspace=xspace,
+            calibration_gv=gv_calib,
         )
 
         n = len(self.flavor_short)
