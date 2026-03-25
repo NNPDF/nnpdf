@@ -54,7 +54,7 @@ diagonal_basis: false
 
 ################################################################################
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-  nodes_per_layer: [25, 20, 9]
+  nodes_per_layer: [25, 20, 7]
   activation_per_layer: [tanh, tanh, linear]
   initializer: glorot_normal
   optimizer:
@@ -74,18 +74,17 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 3.5
 
 fitting:
-  fitbasis: FLAVOURPC
+  fitbasis: NN31PC
   savepseudodata: True
   basis:
-  - {fl: u, trainable: false, smallx: [1.089, 1.119], largex: [1.475, 3.119]}
-  - {fl: ubar, trainable: false, smallx: [0.7504, 1.098], largex: [2.814, 5.669]}
-  - {fl: d, trainable: false, smallx: [0.479, 0.7384], largex: [1.549, 3.532]}
-  - {fl: dbar, trainable: false, smallx: [0.1073, 0.4397], largex: [1.733, 3.458]}
-  - {fl: s, trainable: false, smallx: [0.5507, 0.7837], largex: [1.516, 3.356]}
-  - {fl: sbar, trainable: false, smallx: [-0.4506, 0.9305], largex: [1.745, 3.424]}
-  - {fl: cbar, trainable: false, smallx: [0.5877, 0.8687], largex: [1.522, 3.515]}
-  - {fl: g, trainable: false, smallx: [1.089, 1.141], largex: [1.492, 3.222]}
-  - {fl: photon, trainable: false, smallx: [1.089, 1.141], largex: [1.492, 3.222]}
+  - {fl: sng, trainable: false, smallx: [1.089, 1.119], largex: [1.475, 3.119]}
+  - {fl: g, trainable: false, smallx: [0.7504, 1.098], largex: [2.814, 5.669]}
+  - {fl: v, trainable: false, smallx: [0.479, 0.7384], largex: [1.549, 3.532]}
+  - {fl: v3, trainable: false, smallx: [0.1073, 0.4397], largex: [1.733, 3.458]}
+  - {fl: v8, trainable: false, smallx: [0.5507, 0.7837], largex: [1.516, 3.356]}
+  - {fl: t3, trainable: false, smallx: [-0.4506, 0.9305], largex: [1.745, 3.424]}
+  - {fl: t8, trainable: false, smallx: [0.5877, 0.8687], largex: [1.522, 3.515]}
+
 
 ################################################################################
 positivity:
