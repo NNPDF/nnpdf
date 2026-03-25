@@ -165,7 +165,9 @@ class CoreConfig(configparser.Config):
 
         return pdf
 
-    def produce_load_weights_dict(self, fit, load_weights_from_fit):
+    def produce_load_weights_dict(self, fit, load_weights_from_fit=None):
+        if load_weights_from_fit is None:
+            return None
         try:
             fit_folder = self.loader.check_fit(load_weights_from_fit).path
             weights_dict = {}
