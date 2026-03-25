@@ -165,6 +165,13 @@ class CoreConfig(configparser.Config):
 
         return pdf
 
+    def parse_load_weights_from_fit(self, name: str):
+        """A fit in the results folder, containing at least a valid filter result."""
+        try:
+            return self.loader.check_fit(name)
+        except LoadFailedError as e:
+            raise ConfigError(str(e), name, self.loader.available_fits)
+
     @element_of("unpolarized_bcs")
     @_id_with_label
     def parse_unpolarized_bc(self, name):

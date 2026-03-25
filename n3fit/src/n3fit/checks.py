@@ -11,6 +11,10 @@ from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STA
 from reportengine.checks import CheckError, make_argcheck
 from validphys.loader import FallbackLoader, Loader
 from validphys.pdfbases import check_basis
+from validphys.loader import Loader
+from validphys.core import FitSpec
+
+l = Loader()
 
 log = logging.getLogger(__name__)
 
@@ -228,11 +232,35 @@ def check_model_file(save, load):
             raise CheckError(f"Model file {load} seems to be empty")
 
 
+def check_load_fits_from_weight_file(load_weights_from_fit, load):
+    """Checks whether the load_weights_from_fit option is correctly defined"""
+    if load_weights_from_fit is not None:
+        if load is not None:
+            raise CheckError(
+                "Cannot use both `load` and `load_weights_from_fit` options at the same time, please select only one of them"
+            )
+        if not isinstance(load_weights_from_fit, FitSpec):
+            raise CheckError(
+                f"Fit to load weights from: {load_weights_from_fit} not understood, FitSpec expected"
+            )
+        fit_folder = load_weights_from_fit.path
+        if not fit_folder.is_dir():
+            raise CheckError(
+                f"Fit to load weights from: {load_weights_from_fit} can not be opened, does it exist?"
+            )
+        weights_files = list(fit_folder.glob("nnfit/replica_*/weights.weights.h5"))
+        if not weights_files:
+            raise CheckError(
+                f"Fit to load weights from: {load_weights_from_fit} does not contain any weights file in the expected location (replica_*/weights.weights.h5)"
+            )
+
+
 @make_argcheck
-def wrapper_check_NN(tensorboard, save, load, parameters, trial_specs):
+def wrapper_check_NN(tensorboard, save, load, load_weights_from_fit, parameters, trial_specs):
     """Wrapper function for all NN-related checks"""
     check_tensorboard(tensorboard)
     check_model_file(save, load)
+    check_load_fits_from_weight_file(load_weights_from_fit, load)
     check_lagrange_multipliers(parameters, "integrability")
     check_lagrange_multipliers(parameters, "positivity")
     if trial_specs:

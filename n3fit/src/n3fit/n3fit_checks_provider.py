@@ -23,6 +23,7 @@ def n3fit_checks_action(
     parameters,
     save=None,
     load=None,
+    load_weights_from_fit=None,
     hyperscan_config=None,
     hyperopt=None,
     kfold=None,

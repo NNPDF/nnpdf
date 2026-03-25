@@ -29,8 +29,10 @@ from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
 from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 
-log = logging.getLogger(__name__)
+from validphys.loader import Loader
 
+log = logging.getLogger(__name__)
+l = Loader()
 # Threshold defaults
 # Any partition with a chi2 over the threshold will discard its hyperparameters
 HYPER_THRESHOLD = 50.0
@@ -113,6 +115,7 @@ class ModelTrainer:
         lux_params=None,
         replicas=None,
         trials=None,
+        load_weights_fit=None,
     ):
         """
         Parameters
@@ -179,6 +182,7 @@ class ModelTrainer:
         else:
             self.max_cores = max_cores
         self.model_file = model_file
+        self.load_weights_fit = load_weights_fit
         self.print_summary = True
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
@@ -992,6 +996,17 @@ class ModelTrainer:
             if self.model_file:
                 log.info("Applying model file %s", self.model_file)
                 pdf_model.load_identical_replicas(self.model_file)
+
+            if self.load_weights_fit:
+                log.info("Using weights from fit: " + str(self.load_weights_fit))
+                weights_path = (
+                    self.load_weights_fit.path
+                    / 'nnfit'
+                    / ('replica_%s' % self.replicas)
+                    / 'weights.weights.h5'
+                )
+                log.info("Loading weights from path: " + str(weights_path))
+                pdf_model.load_weights(weights_path)
 
             if k > 0:
                 # Reset the positivity and integrability multipliers
