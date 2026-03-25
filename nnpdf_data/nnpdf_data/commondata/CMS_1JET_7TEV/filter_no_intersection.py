@@ -100,7 +100,7 @@ def main_filter() -> None:
     with open('data_R07.yaml', 'w') as file:
         yaml.safe_dump({'data_central': data_central_float}, file, sort_keys=False)
 
-    unc_definitions = {'definitions': {'sys': {'description': 'combined systematic ucertainties (symmetrised), including JES correction, pT resolution, luminosity', 'treatment': 'MULT', 'type': 'CORR'}, 'stat': {'description': 'combined statistical uncertainties', 'treatment': 'MULT', 'type': 'CORR'}}}
+    unc_definitions = {'definitions': {'sys': {'description': 'combined systematic ucertainties (symmetrised), including JES correction, pT resolution, luminosity', 'treatment': 'MULT', 'type': 'CORR'}, 'stat': {'description': 'combined statistical uncertainties', 'treatment': 'ADD', 'type': 'UNCORR'}}}
 
     with open('uncertainties_R07.yaml', 'w') as file:
         yaml.safe_dump(unc_definitions | {'bins': uncertainties}, file, sort_keys=False)

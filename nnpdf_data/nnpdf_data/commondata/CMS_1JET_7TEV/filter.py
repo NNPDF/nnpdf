@@ -104,7 +104,7 @@ def read_old_bins(table_no: int):
         old_bins.append(pT_dict)
     return old_bins
 
-def build_intersection(table_no: int):
+def build_intersection(table_no: int, show_bins_to_delete=False):
     '''
     take the number of the table (as in raw data) and find the intersections
     to build the new implementation
@@ -115,11 +115,21 @@ def build_intersection(table_no: int):
     bins_int = list()
     centrals_int = list()
     unc_int = list()
+    intersection_bins = list()
     for bin, central, uncertainty in zip(bins_in_table, corrected_centrals_in_table, uncertainties_in_table):
         if bin['pT'] in old_bins:
             bins_int.append(bin)
             centrals_int.append(central)
             unc_int.append(uncertainty)
+            if show_bins_to_delete:
+                intersection_bins.append(bin['pT'])
+
+    if show_bins_to_delete:
+        print(f'from grid number {table_corr[str(table_no)]}, one needs to remove:')
+        for old_bin in old_bins:
+            if old_bin not in intersection_bins:
+                print(old_bin)
+
     return bins_int, centrals_int, unc_int
     
 
@@ -146,7 +156,7 @@ def main_filter() -> None:
     with open('data_R07.yaml', 'w') as file:
         yaml.safe_dump({'data_central': data_central_float}, file, sort_keys=False)
 
-    unc_definitions = {'definitions': {'sys': {'description': 'combined systematic ucertainties (symmetrised), including JES correction, pT resolution, luminosity', 'treatment': 'MULT', 'type': 'CORR'}, 'stat': {'description': 'combined statistical uncertainties', 'treatment': 'MULT', 'type': 'CORR'}}}
+    unc_definitions = {'definitions': {'sys': {'description': 'combined systematic ucertainties (symmetrised), including JES correction, pT resolution, luminosity', 'treatment': 'MULT', 'type': 'CORR'}, 'stat': {'description': 'combined statistical uncertainties', 'treatment': 'ADD', 'type': 'UNCORR'}}}
 
     with open('uncertainties_R07.yaml', 'w') as file:
         yaml.safe_dump(unc_definitions | {'bins': uncertainties}, file, sort_keys=False)

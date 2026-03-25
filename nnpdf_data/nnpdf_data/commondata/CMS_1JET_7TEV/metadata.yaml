@@ -35,9 +35,15 @@ implemented_observables:
     - uncertainties_R07.yaml
   theory:
     FK_tables:
-      - - CMS_1JET_7TEV_R07
+      - - CMS_1JET_7TEV_R07_BIN1
+        - CMS_1JET_7TEV_R07_BIN2
+        - CMS_1JET_7TEV_R07_BIN3
+        - CMS_1JET_7TEV_R07_BIN4
+        - CMS_1JET_7TEV_R07_BIN5
   plotting:
     dataset_label: "CMS 1JET 7TeV with R=0.7"
     plot_x: pT
     y_label: r"$d^2\sigma / dp_Tdy$"
+    figure_by:
+      - y
     
