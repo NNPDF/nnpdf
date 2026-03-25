@@ -115,7 +115,7 @@ class ModelTrainer:
         lux_params=None,
         replicas=None,
         trials=None,
-        load_weights_fit=None,
+        load_weights_dict=None,
     ):
         """
         Parameters
@@ -182,7 +182,7 @@ class ModelTrainer:
         else:
             self.max_cores = max_cores
         self.model_file = model_file
-        self.load_weights_fit = load_weights_fit
+        self.load_weights_dict = load_weights_dict
         self.print_summary = True
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
@@ -997,14 +997,8 @@ class ModelTrainer:
                 log.info("Applying model file %s", self.model_file)
                 pdf_model.load_identical_replicas(self.model_file)
 
-            if self.load_weights_fit:
-                log.info("Using weights from fit: " + str(self.load_weights_fit))
-                weights_path = (
-                    self.load_weights_fit.path
-                    / 'nnfit'
-                    / ('replica_%s' % self.replicas)
-                    / 'weights.weights.h5'
-                )
+            if self.load_weights_dict:
+                weights_path= self.load_weights_dict[self.replicas[0]]
                 log.info("Loading weights from path: " + str(weights_path))
                 pdf_model.load_weights(weights_path)
 

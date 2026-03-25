@@ -165,12 +165,17 @@ class CoreConfig(configparser.Config):
 
         return pdf
 
-    def parse_load_weights_from_fit(self, name: str):
-        """A fit in the results folder, containing at least a valid filter result."""
+    def produce_load_weights_dict(self, fit, load_weights_from_fit):
         try:
-            return self.loader.check_fit(name)
+            fit_folder = self.loader.check_fit(load_weights_from_fit).path
+            weights_dict = {}
+            for p in fit_folder.glob("nnfit/replica_*/weights.weights.h5"):
+                replica_folder = p.parent.name
+                replica_index = int(replica_folder.split("_")[1])
+                weights_dict[replica_index] = p
+            return weights_dict
         except LoadFailedError as e:
-            raise ConfigError(str(e), name, self.loader.available_fits)
+            raise ConfigError(str(e), fit.name, self.loader.available_fits)
 
     @element_of("unpolarized_bcs")
     @_id_with_label

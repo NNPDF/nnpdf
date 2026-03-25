@@ -28,6 +28,7 @@ def performfit(
     basis,
     fitbasis,
     positivity_bound,
+    load_weights_dict,
     sum_rules=True,
     parameters,
     replica_path,
@@ -43,7 +44,6 @@ def performfit(
     maxcores=None,
     double_precision=False,
     parallel_models=True,
-    load_weights_from_fit=None,
 ):
     """
     This action will (upon having read a validcard) process a full PDF fit
@@ -202,7 +202,7 @@ def performfit(
             lux_params=fiatlux,
             replicas=replica_idxs,
             trials=trials,
-            load_weights_fit=load_weights_from_fit,
+            load_weights_dict=load_weights_dict
         )
 
         # This is just to give a descriptive name to the fit function
