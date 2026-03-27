@@ -165,7 +165,7 @@ class CoreConfig(configparser.Config):
 
         return pdf
 
-    def produce_load_weights_dict(self, fit, load_weights_from_fit=None):
+    def produce_load_weights_dict(self, load_weights_from_fit=None):
         if load_weights_from_fit is None:
             return None
         try:
@@ -177,7 +177,7 @@ class CoreConfig(configparser.Config):
                 weights_dict[replica_index] = p
             return weights_dict
         except LoadFailedError as e:
-            raise ConfigError(str(e), fit.name, self.loader.available_fits)
+            raise ConfigError(str(e), load_weights_from_fit, self.loader.available_fits)
 
     @element_of("unpolarized_bcs")
     @_id_with_label

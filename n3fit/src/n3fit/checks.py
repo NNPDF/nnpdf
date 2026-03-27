@@ -11,10 +11,6 @@ from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STA
 from reportengine.checks import CheckError, make_argcheck
 from validphys.loader import FallbackLoader, Loader
 from validphys.pdfbases import check_basis
-from validphys.loader import Loader
-from validphys.core import FitSpec
-
-l = Loader()
 
 log = logging.getLogger(__name__)
 
