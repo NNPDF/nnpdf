@@ -796,6 +796,393 @@ class NNPDFShapleyAnalyzer:
         """Return sorted coalition tuple with one extra player."""
         return tuple(sorted(coalition + (player,)))
 
+    @staticmethod
+    def _coalition_to_bitmask(coalition):
+        """Encode a coalition tuple as an integer bitmask."""
+        mask = 0
+        for player in coalition:
+            mask |= (1 << int(player))
+        return int(mask)
+
+    @staticmethod
+    def _compute_shapley_from_cache(value_cache, all_coalitions, n_flavors):
+        """Compute exact Shapley values from a coalition->value cache."""
+        factorial = [math.factorial(k) for k in range(n_flavors + 1)]
+        factorial_n = factorial[n_flavors]
+
+        first_value = next(iter(value_cache.values()))
+        is_vector = np.ndim(first_value) > 0
+        if is_vector:
+            n_members = int(np.asarray(first_value).shape[0])
+            shapley_vals = np.zeros((n_members, n_flavors), dtype=float)
+        else:
+            shapley_vals = np.zeros(n_flavors, dtype=float)
+
+        for player in range(n_flavors):
+            for coalition in all_coalitions:
+                if player in coalition:
+                    continue
+                size = len(coalition)
+                weight = (
+                    factorial[size] * factorial[n_flavors - size - 1]
+                ) / factorial_n
+                coalition_with = tuple(sorted(coalition + (player,)))
+                delta = value_cache[coalition_with] - value_cache[coalition]
+                if is_vector:
+                    shapley_vals[:, player] += weight * delta
+                else:
+                    shapley_vals[player] += weight * delta
+
+        return shapley_vals
+
+    def _print_even_odd_validation_checks(self, checks, per_replica):
+        """Print numerical consistency checks for the deterministic dual-game construction."""
+        def _fmt(entry):
+            return (
+                f"max|diff|={entry['max_abs_diff']:.3e}, "
+                f"tol={entry['tol']:.1e}, pass={entry['pass']}"
+            )
+
+        print("\n--- Deterministic calibrated up/down checks ---")
+        print(f"  completeness even : {_fmt(checks['completeness_even'])}")
+        print(f"  completeness odd  : {_fmt(checks['completeness_odd'])}")
+        print(f"  v_even(empty)=0   : {_fmt(checks['empty_even_zero'])}")
+        print(f"  v_odd(empty)=0    : {_fmt(checks['empty_odd_zero'])}")
+        print(
+            "  odd from up/down : "
+            f"chi2_plus-minus residual={checks['chi2_symmetry_residual']:.3e}, "
+            f"max|phi_odd|={checks['odd_zero_if_symmetric']['phi_odd_max_abs']:.3e}, "
+            f"pass={checks['odd_zero_if_symmetric']['pass']}"
+        )
+        print(f"  phi_even relation : {_fmt(checks['even_vs_pm'])}")
+        print(f"  phi_odd relation  : {_fmt(checks['odd_vs_pm'])}")
+        if per_replica:
+            print("  (checks evaluated over replica vectors using max-abs residuals)")
+        print()
+
+    def _compute_exact_shap_even_odd_parallel(
+        self,
+        mu,
+        sigma,
+        amplitude,
+        mode,
+        xspace,
+        n_jobs,
+        verbose=True,
+        per_replica=False,
+    ):
+        """Compute deterministic calibrated up/down exact Shapley values.
+
+        For every coalition S, evaluate once:
+          chi2_plus(S)  = chi2(p0 + Delta_S_plus)
+          chi2_minus(S) = chi2(p0 + Delta_S_minus)
+
+        where Delta_S_plus and Delta_S_minus are built from the calibrated
+        +1sigma and -1sigma flavour templates, respectively, and are not
+        assumed to be opposite perturbations.
+
+        Then define the two games:
+          v_even(S) = 0.5 * (chi2_plus + chi2_minus) - chi2_baseline
+          v_odd(S)  = 0.5 * (chi2_plus - chi2_minus)
+        """
+        n = self.n_flavors
+        all_coalitions = list(self._iter_all_coalitions())
+        total_coalitions = len(all_coalitions)
+        non_empty = [c for c in all_coalitions if len(c) > 0]
+        coalition_bitmasks = {
+            coalition: self._coalition_to_bitmask(coalition)
+            for coalition in all_coalitions
+        }
+
+        if verbose:
+            print(
+                f"Computing deterministic calibrated even/odd Shapley for {n} players "
+                f"({total_coalitions} coalitions) with {n_jobs} worker(s)..."
+            )
+
+        n_members = self._infer_n_members()
+        plus_sign_matrix = np.ones((n_members, n), dtype=float)
+        minus_sign_matrix = -np.ones((n_members, n), dtype=float)
+
+        t0 = time.time()
+        progress_start = t0
+        interactive_stderr = sys.stderr.isatty()
+        log_every = max(1, total_coalitions // 100)
+
+        # Empty coalition is shared: plus and minus are both the baseline.
+        chi2_baseline = self._evaluate_chi2(
+            [], mu, sigma, amplitude,
+            mode=mode, xspace=xspace,
+            per_replica=per_replica,
+            random_sign=False,
+            random_sign_matrix=plus_sign_matrix,
+        )
+
+        chi2_plus_cache = {tuple(): chi2_baseline}
+        chi2_minus_cache = {tuple(): chi2_baseline}
+
+        def _evaluate_one(coalition):
+            chi2_plus = self._evaluate_chi2(
+                coalition, mu, sigma, amplitude,
+                mode=mode, xspace=xspace,
+                per_replica=per_replica,
+                random_sign=False,
+                random_sign_matrix=plus_sign_matrix,
+            )
+            chi2_minus = self._evaluate_chi2(
+                coalition, mu, sigma, amplitude,
+                mode=mode, xspace=xspace,
+                per_replica=per_replica,
+                random_sign=False,
+                random_sign_matrix=minus_sign_matrix,
+            )
+            return coalition, chi2_plus, chi2_minus
+
+        with ThreadPoolExecutor(max_workers=n_jobs) as executor:
+            future_map = {
+                executor.submit(_evaluate_one, coalition): coalition
+                for coalition in non_empty
+            }
+            completed = 1  # empty coalition already done
+            for future in as_completed(future_map):
+                coalition, chi2_plus, chi2_minus = future.result()
+                chi2_plus_cache[coalition] = chi2_plus
+                chi2_minus_cache[coalition] = chi2_minus
+                completed += 1
+
+                if verbose:
+                    elapsed = time.time() - progress_start
+                    if completed == 1:
+                        msg = (
+                            f"    [{completed}/{total_coalitions}] "
+                            f"elapsed {elapsed:.0f}s ..."
+                        )
+                    else:
+                        rate = elapsed / completed
+                        remaining = rate * (total_coalitions - completed)
+                        mins, secs = divmod(int(remaining), 60)
+                        msg = (
+                            f"    [{completed}/{total_coalitions}] "
+                            f"elapsed {elapsed:.0f}s | "
+                            f"~{rate:.1f}s/coalition | ETA {mins}m{secs:02d}s   "
+                        )
+                    if interactive_stderr:
+                        sys.stderr.write(f"\r{msg}")
+                        sys.stderr.flush()
+                    elif (
+                        completed == 1
+                        or completed == total_coalitions
+                        or completed % log_every == 0
+                    ):
+                        sys.stderr.write(f"{msg}\n")
+                        sys.stderr.flush()
+
+        if verbose:
+            sys.stderr.write("\n")
+            sys.stderr.flush()
+
+        v_plus_cache = {}
+        v_minus_cache = {}
+        v_even_cache = {}
+        v_odd_cache = {}
+        for coalition in all_coalitions:
+            chi2_plus = chi2_plus_cache[coalition]
+            chi2_minus = chi2_minus_cache[coalition]
+            v_plus_cache[coalition] = chi2_plus - chi2_baseline
+            v_minus_cache[coalition] = chi2_minus - chi2_baseline
+            v_even_cache[coalition] = 0.5 * (chi2_plus + chi2_minus) - chi2_baseline
+            v_odd_cache[coalition] = 0.5 * (chi2_plus - chi2_minus)
+
+        phi_even = self._compute_shapley_from_cache(v_even_cache, all_coalitions, n)
+        phi_odd = self._compute_shapley_from_cache(v_odd_cache, all_coalitions, n)
+        phi_plus = self._compute_shapley_from_cache(v_plus_cache, all_coalitions, n)
+        phi_minus = self._compute_shapley_from_cache(v_minus_cache, all_coalitions, n)
+
+        coalition_full = tuple(range(n))
+        tol = 1e-10
+
+        def _max_abs(x):
+            return float(np.max(np.abs(np.asarray(x, dtype=float))))
+
+        lhs_even = np.sum(phi_even, axis=0) if np.ndim(phi_even) == 1 else np.sum(phi_even, axis=1)
+        rhs_even = v_even_cache[coalition_full] - v_even_cache[tuple()]
+        lhs_odd = np.sum(phi_odd, axis=0) if np.ndim(phi_odd) == 1 else np.sum(phi_odd, axis=1)
+        rhs_odd = v_odd_cache[coalition_full] - v_odd_cache[tuple()]
+
+        chi2_symmetry_residual = max(
+            _max_abs(chi2_plus_cache[c] - chi2_minus_cache[c])
+            for c in all_coalitions
+        )
+        odd_zero_tol = 1e-10
+        odd_max_abs = _max_abs(phi_odd)
+        odd_zero_pass = (chi2_symmetry_residual > odd_zero_tol) or (odd_max_abs <= odd_zero_tol)
+
+        even_pm_diff = phi_even - 0.5 * (phi_plus + phi_minus)
+        odd_pm_diff = phi_odd - 0.5 * (phi_plus - phi_minus)
+
+        checks = {
+            "completeness_even": {
+                "max_abs_diff": _max_abs(lhs_even - rhs_even),
+                "tol": tol,
+                "pass": bool(_max_abs(lhs_even - rhs_even) <= tol),
+            },
+            "completeness_odd": {
+                "max_abs_diff": _max_abs(lhs_odd - rhs_odd),
+                "tol": tol,
+                "pass": bool(_max_abs(lhs_odd - rhs_odd) <= tol),
+            },
+            "empty_even_zero": {
+                "max_abs_diff": _max_abs(v_even_cache[tuple()]),
+                "tol": tol,
+                "pass": bool(_max_abs(v_even_cache[tuple()]) <= tol),
+            },
+            "empty_odd_zero": {
+                "max_abs_diff": _max_abs(v_odd_cache[tuple()]),
+                "tol": tol,
+                "pass": bool(_max_abs(v_odd_cache[tuple()]) <= tol),
+            },
+            "chi2_symmetry_residual": chi2_symmetry_residual,
+            "odd_zero_if_symmetric": {
+                "phi_odd_max_abs": odd_max_abs,
+                "tol": odd_zero_tol,
+                "pass": bool(odd_zero_pass),
+            },
+            "even_vs_pm": {
+                "max_abs_diff": _max_abs(even_pm_diff),
+                "tol": tol,
+                "pass": bool(_max_abs(even_pm_diff) <= tol),
+            },
+            "odd_vs_pm": {
+                "max_abs_diff": _max_abs(odd_pm_diff),
+                "tol": tol,
+                "pass": bool(_max_abs(odd_pm_diff) <= tol),
+            },
+        }
+
+        elapsed = time.time() - t0
+
+        if per_replica:
+            nrep = int(np.asarray(phi_even).shape[0])
+            mean_even = np.mean(phi_even, axis=0)
+            std_even_rep = (
+                np.std(phi_even, axis=0, ddof=1) if nrep > 1
+                else np.zeros(n, dtype=float)
+            )
+            err_even_rep = std_even_rep / np.sqrt(max(nrep, 1))
+
+            # Sign dependence should not cancel between replicas:
+            # S_abs_j = < |phi_odd_j| >_replicas
+            phi_odd_abs = np.abs(phi_odd)
+            mean_odd = np.mean(phi_odd_abs, axis=0)
+
+            if verbose:
+                print(f"Baseline (mean) : {float(np.mean(chi2_baseline)):.6f}")
+                print(f"Max |phi_even|  : {float(np.max(np.abs(mean_even))):.6f}")
+                print(f"Max S_abs       : {float(np.max(mean_odd)):.6f}")
+                print(f"Max even std    : {float(np.max(std_even_rep)):.6f}")
+                print(f"Elapsed         : {elapsed:.1f}s")
+                self._print_even_odd_validation_checks(checks, per_replica=True)
+
+            return {
+                "shapley_values": mean_even,
+                "shapley_values_odd": mean_odd,
+                "shapley_values_odd_signed": np.mean(phi_odd, axis=0),
+                "shapley_values_per_replica": phi_even,
+                "shapley_values_odd_per_replica": phi_odd_abs,
+                "shapley_values_odd_signed_per_replica": phi_odd,
+                "shapley_std": std_even_rep,
+                "shapley_err": err_even_rep,
+                "shapley_odd_std": None,
+                "shapley_odd_err": None,
+                "mean_even": mean_even,
+                "std_even_rep": std_even_rep,
+                "mean_odd": mean_odd,
+                "std_odd_rep": None,
+                "baseline": float(np.mean(chi2_baseline)),
+                "baseline_per_replica": chi2_baseline,
+                "player_labels": self.flavor_labels,
+                "player_short": self.flavor_short,
+                "coalitions_evaluated": total_coalitions,
+                "total_coalitions": total_coalitions,
+                "theory_evaluations": 1 + 2 * (total_coalitions - 1),
+                "elapsed_seconds": elapsed,
+                "n_replicas": nrep,
+                "checks": checks,
+                "value_cache_even": v_even_cache,
+                "value_cache_odd": v_odd_cache,
+                "value_cache_plus": v_plus_cache,
+                "value_cache_minus": v_minus_cache,
+                "chi2_plus_cache": chi2_plus_cache,
+                "chi2_minus_cache": chi2_minus_cache,
+                "_mean_value_cache": {
+                    coalition: float(np.mean(v_even_cache[coalition]))
+                    for coalition in all_coalitions
+                },
+                "_mean_value_cache_even": {
+                    coalition: float(np.mean(v_even_cache[coalition]))
+                    for coalition in all_coalitions
+                },
+                "_mean_value_cache_odd": {
+                    coalition: float(np.mean(v_odd_cache[coalition]))
+                    for coalition in all_coalitions
+                },
+                "coalition_bitmasks": coalition_bitmasks,
+                "_sign_matrices": [plus_sign_matrix, minus_sign_matrix],
+            }
+
+        if verbose:
+            print(f"Baseline        : {float(chi2_baseline):.6f}")
+            print(f"Max |phi_even|  : {float(np.max(np.abs(phi_even))):.6f}")
+            print(f"Max |phi_odd|   : {float(np.max(np.abs(phi_odd))):.6f}")
+            print(f"Sum phi_even    : {float(np.sum(phi_even)):.6f}")
+            print(f"Sum phi_odd     : {float(np.sum(phi_odd)):.6f}")
+            print(f"Elapsed         : {elapsed:.1f}s")
+            self._print_even_odd_validation_checks(checks, per_replica=False)
+
+        return {
+            "shapley_values": phi_even,
+            "shapley_values_odd": np.abs(phi_odd),
+            "shapley_values_odd_signed": phi_odd,
+            "shapley_values_per_replica": None,
+            "shapley_values_odd_per_replica": None,
+            "shapley_std": None,
+            "shapley_err": None,
+            "shapley_odd_std": None,
+            "shapley_odd_err": None,
+            "mean_even": phi_even,
+            "std_even_rep": None,
+            "mean_odd": np.abs(phi_odd),
+            "std_odd_rep": None,
+            "baseline": float(chi2_baseline),
+            "player_labels": self.flavor_labels,
+            "player_short": self.flavor_short,
+            "coalitions_evaluated": total_coalitions,
+            "total_coalitions": total_coalitions,
+            "theory_evaluations": 1 + 2 * (total_coalitions - 1),
+            "elapsed_seconds": elapsed,
+            "checks": checks,
+            "value_cache_even": v_even_cache,
+            "value_cache_odd": v_odd_cache,
+            "value_cache_plus": v_plus_cache,
+            "value_cache_minus": v_minus_cache,
+            "chi2_plus_cache": chi2_plus_cache,
+            "chi2_minus_cache": chi2_minus_cache,
+            "_mean_value_cache": {
+                coalition: float(v_even_cache[coalition])
+                for coalition in all_coalitions
+            },
+            "_mean_value_cache_even": {
+                coalition: float(v_even_cache[coalition])
+                for coalition in all_coalitions
+            },
+            "_mean_value_cache_odd": {
+                coalition: float(v_odd_cache[coalition])
+                for coalition in all_coalitions
+            },
+            "coalition_bitmasks": coalition_bitmasks,
+            "_sign_matrices": [plus_sign_matrix, minus_sign_matrix],
+        }
+
     def _compute_exact_shap_parallel(self, mu, sigma, amplitude, mode, xspace,
                                      n_jobs, verbose=True,
                                      per_replica=False, random_sign=False,
@@ -1121,7 +1508,8 @@ class NNPDFShapleyAnalyzer:
                    xspace='linear', plot=True, n_jobs=1,
                    diagnostic=False, outlier_n_sigma=3.0,
                    per_replica=False, random_sign=False,
-                   n_sign_samples=1, random_seed=None):
+                   n_sign_samples=1, random_seed=None,
+                   deterministic_sign_symmetrized=True):
         """Compute exact Shapley values for all flavour players.
 
         Uses the ``shapley_values.ExactShapley`` solver with the NNPDF
@@ -1162,6 +1550,10 @@ class NNPDFShapleyAnalyzer:
             ``random_sign=True``. Defaults to 1.
         random_seed : int or None
             Optional seed for reproducible sign-mask sampling.
+        deterministic_sign_symmetrized : bool
+            When True (default), use deterministic calibrated up/down dual
+            games. When False, use the legacy sign-sampling path controlled
+            by ``random_sign`` and ``n_sign_samples``.
 
         Returns
         -------
@@ -1180,16 +1572,7 @@ class NNPDFShapleyAnalyzer:
         if int(n_sign_samples) < 1:
             raise ValueError(f"n_sign_samples must be >= 1, got {n_sign_samples}")
 
-        effective_n_sign_samples = int(n_sign_samples)
-        if not random_sign:
-            effective_n_sign_samples = 1
-        elif per_replica:
-            if effective_n_sign_samples != 1:
-                print(
-                    "Note: per_replica=True uses one fixed sign mask per replica; "
-                    f"ignoring n_sign_samples={effective_n_sign_samples} and using 1."
-                )
-            effective_n_sign_samples = 1
+        deterministic_sign_symmetrized = bool(deterministic_sign_symmetrized)
 
         basis_name = "flavor" if self.basis == 'flavor' else "evolution"
         print(f"Perturbation basis : {basis_name}")
@@ -1199,60 +1582,75 @@ class NNPDFShapleyAnalyzer:
         print(f"PDF member mode    : {self.member_mode}")
         print(f"Parallel workers   : {int(n_jobs)}")
         print(f"Per-replica SVs    : {'ON' if per_replica else 'OFF'}")
-        print(f"Random sign        : {'ON' if random_sign else 'OFF'}")
-        print(f"Sign samples       : {effective_n_sign_samples}")
+        if deterministic_sign_symmetrized:
+            print("Sign game          : deterministic calibrated up/down")
+            if random_sign:
+                print(
+                    "Note: deterministic calibrated up/down games are enabled; "
+                    "ignoring random_sign=True."
+                )
+            if int(n_sign_samples) != 1:
+                print(
+                    "Note: deterministic calibrated up/down games do not use "
+                    f"n_sign_samples={int(n_sign_samples)}; forcing to 1."
+                )
 
-        sign_matrices = [None]
-        if random_sign:
-            sign_matrices = self._build_sign_matrices(
-                self._infer_n_members(),
-                self.n_flavors,
-                n_sign_samples=effective_n_sign_samples,
-                random_seed=random_seed,
-                unique_rows=bool(per_replica),
-            )
-
-        # per_replica=True requires vector-valued value function; the external
-        # ExactShapley solver only handles scalars, so always use the parallel
-        # path (which supports both scalar and vector modes).
-        if per_replica or int(n_jobs) > 1 or len(sign_matrices) > 1:
-            results = self._compute_exact_shap_parallel(
+            effective_random_sign = False
+            effective_n_sign_samples = 1
+            results = self._compute_exact_shap_even_odd_parallel(
                 mu, sigma, amplitude, mode, xspace,
                 n_jobs=int(n_jobs),
                 per_replica=per_replica,
-                random_sign=random_sign,
+                verbose=True,
+            )
+            mean_value_cache_for_diag = results.get("_mean_value_cache_even", {})
+        else:
+            print("Sign game          : configurable random/fixed signs")
+            effective_random_sign = bool(random_sign)
+            if effective_random_sign:
+                effective_n_sign_samples = int(n_sign_samples)
+                sign_matrices = self._build_sign_matrices(
+                    n_members=self._infer_n_members(),
+                    n_flavors=self.n_flavors,
+                    n_sign_samples=effective_n_sign_samples,
+                    random_seed=random_seed,
+                    unique_rows=(
+                        self.member_mode == "replicas"
+                        and bool(per_replica)
+                        and int(n_sign_samples) == 1
+                    ),
+                )
+            else:
+                if int(n_sign_samples) != 1:
+                    print(
+                        "Note: random_sign=False so n_sign_samples is ignored; "
+                        "forcing to 1."
+                    )
+                effective_n_sign_samples = 1
+                sign_matrices = [None]
+
+            results = self._compute_exact_shap_parallel(
+                mu, sigma, amplitude, mode, xspace,
+                n_jobs=int(n_jobs),
+                verbose=True,
+                per_replica=per_replica,
+                random_sign=effective_random_sign,
                 sign_matrices=sign_matrices,
             )
-            # Build coalition_log for diagnostics from _compute_exact_shap_parallel
-            # (the parallel path does not produce a coalition_log internally;
-            # re-run with diagnostics via the scalar path below if requested).
-            coalition_log = None
-            if diagnostic:
-                mean_value_cache = results.get("_mean_value_cache", {})
-                coalition_log = [
-                    (coalition, mean_value_cache[coalition])
-                    for coalition in self._iter_all_coalitions()
-                    if coalition in mean_value_cache
-                ]
-        else:
-            coalition_log = [] if diagnostic else None
-            v = self.build_value_function(
-                mu, sigma, amplitude, mode, xspace,
-                _coalition_log=coalition_log,
-                random_sign=random_sign,
-                random_sign_matrix=sign_matrices[0],
-            )
-            solver = ExactShapley(
-                n_players=self.n_flavors,
-                value_function=v,
-                player_labels=self.flavor_labels,
-                player_short=self.flavor_short,
-            )
-            results = solver.compute(verbose=True, n_jobs=1)
-            # Ensure keys added by the parallel path are always present.
-            results.setdefault("shapley_values_per_replica", None)
-            results.setdefault("shapley_std", None)
-            results.setdefault("shapley_err", None)
+            results["_sign_matrices"] = sign_matrices
+            results.setdefault("shapley_values_odd", None)
+            results.setdefault("shapley_values_odd_per_replica", None)
+            results.setdefault("shapley_values_odd_signed", None)
+            results.setdefault("shapley_values_odd_signed_per_replica", None)
+            mean_value_cache_for_diag = results.get("_mean_value_cache", {})
+
+        coalition_log = None
+        if diagnostic:
+            coalition_log = [
+                (coalition, mean_value_cache_for_diag[coalition])
+                for coalition in self._iter_all_coalitions()
+                if coalition in mean_value_cache_for_diag
+            ]
 
         # Attach coalition log and diagnostics if requested.
         if diagnostic and coalition_log is not None:
@@ -1305,12 +1703,19 @@ class NNPDFShapleyAnalyzer:
         results["flavor_short"] = self.flavor_short
         results["n_jobs"] = int(n_jobs)
         results["per_replica"] = bool(per_replica)
-        results["random_sign"] = bool(random_sign)
+        results["random_sign"] = bool(effective_random_sign)
         results["member_mode"] = self.member_mode
         results["n_sign_samples"] = int(effective_n_sign_samples)
-        results["antithetic_sign"] = bool(random_sign and effective_n_sign_samples > 1)
+        results["antithetic_sign"] = bool(
+            effective_random_sign and int(effective_n_sign_samples) > 1
+        )
         results["random_seed"] = random_seed
-        results["_sign_matrices"] = sign_matrices if random_sign else None
+        results["deterministic_sign_symmetrized"] = bool(
+            deterministic_sign_symmetrized
+        )
+        results["deterministic_calibrated_updown"] = bool(
+            deterministic_sign_symmetrized
+        )
         # Convenience: scalar uncertainty arrays (None when per_replica=False)
         # shapley_std[j]  = std_k phi_j^(k)  (replica-to-replica spread)
         # shapley_err[j]  = shapley_std[j] / sqrt(nrep)  (standard error of mean)
@@ -1329,6 +1734,7 @@ class NNPDFShapleyAnalyzer:
         # Plot
         fig_pdfs = None
         fig_bar = None
+        fig_bar_odd = None
         if plot:
             fig_pdfs = self.plot_pdfs(
                 amplitude=amplitude, mu=mu, sigma=sigma,
@@ -1351,21 +1757,26 @@ class NNPDFShapleyAnalyzer:
                     f"mu={mu}, sigma={sigma}, A={amplitude}, "
                     f"mode={mode}, xspace={xspace}"
                 )
-            fig_bar = plot_shapley_bar(
-                results["shapley_values"],
-                self.flavor_short,
-                title=bar_title,
-                ylabel="Shapley Value (delta chi2/N)",
-            )
-            # Overlay error bars when per-replica uncertainties are available.
+            # Single main bar plot from phi_even only.
+            # Odd quantities are kept in outputs but not plotted.
+            sv_even = np.asarray(results["shapley_values"], dtype=float)
+            fig_bar, ax = plt.subplots(figsize=(12, 6))
+            pos_color = "#518500"
+            neg_color = "#FFBF00"
+            bar_colors = [pos_color if v >= 0.0 else neg_color for v in sv_even]
+            ax.bar(self.flavor_short, sv_even, color=bar_colors, alpha=0.85)
+            ax.axhline(0.0, color="#444444", lw=0.9, alpha=0.9)
+            ax.set_ylabel("Shapley Value (delta chi2/N)")
+            ax.set_title(bar_title)
+            ax.grid(axis="y", ls="--", alpha=0.35)
+            plt.setp(ax.get_xticklabels(), rotation=45, ha="right")
+
             _sv_std = results.get("shapley_std")
             if _sv_std is not None:
-                from matplotlib.lines import Line2D
-                _ax = fig_bar.axes[0]
-                _ax.errorbar(
+                ax.errorbar(
                     self.flavor_short,
-                    results["shapley_values"],
-                    yerr=_sv_std,
+                    sv_even,
+                    yerr=np.asarray(_sv_std, dtype=float),
                     fmt="none",
                     ecolor="black",
                     elinewidth=1.2,
@@ -1373,16 +1784,23 @@ class NNPDFShapleyAnalyzer:
                     capthick=1.2,
                     zorder=5,
                 )
-                _handles, _ = _ax.get_legend_handles_labels()
-                _handles.append(
-                    Line2D([], [], color="black", linewidth=1.2, label="1\u03c3 std")
-                )
-                _ax.legend(handles=_handles, loc="upper right")
-                fig_bar.tight_layout()
+            ax.legend(
+                handles=[
+                    plt.Rectangle((0, 0), 1, 1, color=pos_color, alpha=0.85, label="SV > 0"),
+                    plt.Rectangle((0, 0), 1, 1, color=neg_color, alpha=0.85, label="SV < 0"),
+                ],
+                loc="upper right",
+                frameon=False,
+            )
+            fig_bar.tight_layout()
+
+            fig_bar_odd = None
             plt.show()
 
         results["fig_pdfs"] = fig_pdfs
         results["fig_bar"] = fig_bar
+        results["fig_bar_even"] = fig_bar
+        results["fig_bar_odd"] = fig_bar_odd
 
         return results
 

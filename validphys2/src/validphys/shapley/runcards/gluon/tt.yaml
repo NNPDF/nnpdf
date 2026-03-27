@@ -14,9 +14,10 @@ n_replicas: 100
 output_root: sv_results/gluon
 log_root: slurm/logs/gluon
 run_name: xscan_tt
-per_replica: true      
-random_sign: true      
 enforce_sumrules: false
+per_replica: true
+deterministic_sign_symmetrized: true
+random_sign: false
 stabilization:
   enabled: true
   action: exclude_dataset

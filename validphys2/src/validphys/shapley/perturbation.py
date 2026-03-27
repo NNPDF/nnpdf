@@ -7,15 +7,16 @@ Provides tools for perturbing selected flavour channels with a Gaussian bump. Tw
 Calibrated mode
 ---------------
 In 'calibrated' mode the Gaussian amplitude is not a global constant but is
-scaled per-flavor by the replica standard deviation evaluated at x ~ mu:
+scaled per-flavor from calibrated +1sigma/-1sigma envelopes evaluated at
+x ~ mu. The up/down shifts are built independently and can be asymmetric:
 
-    amplitude_j = alpha * std_rep[ f_j(x_mu) ]
+    amplitude_j_plus  = alpha * (q84_j(x_mu) - c_j(x_mu))
+    amplitude_j_minus = alpha * (c_j(x_mu) - q16_j(x_mu))
 
-so the perturbation probes a shift of *alpha* times what the fit itself is
-uncertain about at that x value.  The Gaussian shape is preserved; only its
-peak height varies by flavor.  This removes the bias of both additive (gluon
-is much larger than sea quarks) and multiplicative (gluon is much more
-tightly constrained in relative terms) approaches.
+where c_j is the central calibrated reference (replica mean), and q84/q16 are
+the 84th/16th percentiles over replicas. The Gaussian shape is preserved; only
+its peak height varies by flavor and by sign. This avoids assuming a symmetric
+down-shift equal to the negative of the up-shift.
 
 Ablation mode
 -------------
@@ -80,9 +81,12 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
     mode : str
         'additive':      f_j -> f_j + A * G(x)
         'multiplicative': f_j -> f_j * (1 + A * G(x))
-        'calibrated':    f_j -> f_j + (A * sigma_rep_j) * G(x)
-            where sigma_rep_j = std of replicas at x closest to mu.
-            A acts as a dimensionless scaling factor (alpha).
+        'calibrated':    f_j -> f_j + delta_j^(sign) * G(x)
+            where delta_j^(+)  = A * (q84_j - c_j),
+                  delta_j^(-)  = A * (c_j - q16_j),
+            at x closest to mu, with c_j the calibrated replica mean.
+            This builds distinct calibrated up/down templates and does not
+            assume delta_j^- = -delta_j^+.
         'ablation':      f_j -> 0 for all x.
             mu, sigma, amplitude are ignored.
     xspace : str
@@ -155,15 +159,28 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
         sign_matrix = np.ones((nrep, len(local_flavor_idx)), dtype=float)
 
     if mode == 'calibrated':
-        # Per-flavor amplitude: alpha * replica std at x closest to mu.
+        # Per-flavor amplitudes from calibrated +1sigma / -1sigma envelopes
+        # at x closest to mu, allowing asymmetric up/down shifts.
         xgrid_arr = np.asarray(xgrid)
         idx_mu = int(np.argmin(np.abs(xgrid_arr - mu)))
         gv_sigma = gv if calibration_gv is None else np.asarray(calibration_gv, dtype=float)
         for col, fi in enumerate(local_flavor_idx):
-            sigma_rep = float(gv_sigma[:, fi, idx_mu].std())
-            gauss = gaussian_profile(xgrid, mu, sigma, amplitude * sigma_rep, xspace)
             signs = sign_matrix[:, col][:, np.newaxis]
-            gv_pert[:, fi, :] += signs * gauss[np.newaxis, :]
+            calib_vals = np.asarray(gv_sigma[:, fi, idx_mu], dtype=float)
+            c_ref = float(np.mean(calib_vals))
+            q16 = float(np.percentile(calib_vals, 16.0))
+            q84 = float(np.percentile(calib_vals, 84.0))
+
+            amp_plus = float(amplitude) * max(q84 - c_ref, 0.0)
+            amp_minus = float(amplitude) * max(c_ref - q16, 0.0)
+
+            gauss_plus = gaussian_profile(xgrid, mu, sigma, amp_plus, xspace)
+            gauss_minus = gaussian_profile(xgrid, mu, sigma, amp_minus, xspace)
+
+            # Build replica-wise signed perturbations using fixed up/down
+            # templates for this flavor.
+            delta = np.where(signs >= 0.0, gauss_plus[np.newaxis, :], -gauss_minus[np.newaxis, :])
+            gv_pert[:, fi, :] += delta
     elif mode == 'additive':
         gauss = gaussian_profile(xgrid, mu, sigma, amplitude, xspace)
         for col, fi in enumerate(local_flavor_idx):

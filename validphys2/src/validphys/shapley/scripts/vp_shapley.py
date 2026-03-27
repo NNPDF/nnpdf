@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.transforms as mtransforms
+from matplotlib.colors import LogNorm, SymLogNorm
 import numpy as np
 import yaml
 
@@ -34,14 +35,14 @@ _MUTED_SERIES_COLORS = [
     "#E45756",
     "#F58518",
     "#EECA3B",
-    "#71BD00",
+    "#71BD00B5",
     "#72B7B2",
     "#4C78A8",
     "#B279A2",
-    "#9D755D",
-    "#FF9DA6",
-    "#BAB0AC",
+    "#6F4C9B",
+    "#BAB0AC"
 ]
+
 _SERIES_MARKERS = ["o", "s", "D", "^", "v", "P", "X", "<", ">", "h"]
 _SOFT_POSITIVE_COLOR = "#518500"
 _SOFT_NEGATIVE_COLOR = "#FFBF00"
@@ -360,6 +361,7 @@ def _plot_sv_scan_comparison(
                 label=flav,
                 zorder=3,
             )
+
             dx_pt = float(dodge_offsets_pt[i])
             if dx_pt != 0.0:
                 shift = mtransforms.ScaledTranslation(
@@ -397,6 +399,7 @@ def _plot_sv_scan_comparison(
             ncol=1,
             borderaxespad=0.0,
         )
+
         fig.tight_layout(rect=[0, 0, 0.82, 1])
 
         png_path = output_dir / f"{output_stem}_{basis}.png"
@@ -429,6 +432,8 @@ def _plot_sv_bar_comparison(
     exp_names_ordered,
     output_dir,
     experiment_meta,
+    output_stem="shapley_comparison_bars",
+    title_tag="even",
 ):
     """Multi-panel bar comparisons across experiments."""
     n = len(exp_names_ordered)
@@ -468,11 +473,14 @@ def _plot_sv_bar_comparison(
         for ax in axes_flat[n:]:
             ax.set_visible(False)
 
-        fig.suptitle(f"Shapley bar comparison ({basis} basis)", y=0.995)
+        fig.suptitle(
+            f"Shapley bar comparison ({basis} basis, {title_tag})", y=0.995
+        )
+
         fig.tight_layout(rect=[0, 0, 1, 0.98])
 
-        png_path = output_dir / f"shapley_comparison_bars_{basis}.png"
-        pdf_path = output_dir / f"shapley_comparison_bars_{basis}.pdf"
+        png_path = output_dir / f"{output_stem}_{basis}.png"
+        pdf_path = output_dir / f"{output_stem}_{basis}.pdf"
         fig.savefig(png_path, dpi=220, bbox_inches="tight")
         fig.savefig(pdf_path, bbox_inches="tight")
         plt.close(fig)
@@ -503,67 +511,289 @@ def _save_comparison_plots(all_experiment_results, output_dir, experiment_meta):
     exp_names_ordered = [exp_names[i] for i in order_bins]
 
     for basis in basis_names:
-        labels = None
-        for exp_name in exp_names:
-            if basis in all_experiment_results[exp_name]:
-                labels = list(all_experiment_results[exp_name][basis]["shapley_values"].keys())
-                break
-        if labels is None:
-            continue
-
-        sv_rows = []
-        err_rows = []
-        for exp_name in exp_names:
-            basis_results = all_experiment_results[exp_name].get(basis, {})
-            sv_map = basis_results.get("shapley_values", {})
-            err_map = (
-                basis_results.get("shapley_std")
-                or basis_results.get("shapley_err")
-                or {}
-            )
-            sv_rows.append(np.array([float(sv_map.get(lbl, 0.0)) for lbl in labels]))
-            err_rows.append(
-                np.array([float(err_map.get(lbl, np.nan)) for lbl in labels])
-                if err_map else np.full(len(labels), np.nan)
-            )
-
-        sv_matrix_bins = np.asarray(sv_rows, dtype=float)[order_bins, :]
-        err_matrix_bins = np.asarray(err_rows, dtype=float)[order_bins, :]
-        _plot_sv_scan_comparison(
-            sv_matrix=sv_matrix_bins,
-            err_matrix=err_matrix_bins,
-            labels=labels,
-            basis=basis,
-            output_dir=output_dir,
-            axis_info=axis_info_bins,
-            output_stem="shapley_comparison",
-            title_suffix="binned x, dodged points",
-            dodge_step_pt=4.5,
-            use_dodge=True,
+        basis_entries = [
+            all_experiment_results[exp_name].get(basis, {})
+            for exp_name in exp_names
+            if basis in all_experiment_results[exp_name]
+        ]
+        deterministic_basis = bool(basis_entries) and all(
+            bool(entry.get("deterministic_sign_symmetrized", False))
+            for entry in basis_entries
         )
-        order_truex = axis_info_truex["order"]
-        sv_matrix_truex = np.asarray(sv_rows, dtype=float)[order_truex, :]
-        err_matrix_truex = np.asarray(err_rows, dtype=float)[order_truex, :]
-        _plot_sv_scan_comparison(
-            sv_matrix=sv_matrix_truex,
-            err_matrix=err_matrix_truex,
-            labels=labels,
-            basis=basis,
-            output_dir=output_dir,
-            axis_info=axis_info_truex,
-            output_stem="shapley_comparison_truex",
-            title_suffix="true x, overlapping",
-            use_dodge=False,
+        replica_basis = bool(basis_entries) and all(
+            bool(entry.get("per_replica", False))
+            for entry in basis_entries
         )
-        _plot_sv_bar_comparison(
-            sv_matrix=sv_matrix_bins,
-            err_matrix=err_matrix_bins,
-            labels=labels,
-            basis=basis,
-            exp_names_ordered=exp_names_ordered,
+        if deterministic_basis and replica_basis:
+            mode_tag = "det_rep"
+        elif deterministic_basis:
+            mode_tag = "det"
+        elif replica_basis:
+            mode_tag = "rep"
+        else:
+            mode_tag = "pert"
+
+        def _plot_game(value_key, std_key, err_key, stem_tag, title_tag):
+            labels = None
+            for exp_name in exp_names:
+                if basis in all_experiment_results[exp_name]:
+                    labels = list(
+                        (all_experiment_results[exp_name][basis].get(value_key) or {}).keys()
+                    )
+                    if labels:
+                        break
+            if labels is None:
+                return
+
+            sv_rows = []
+            err_rows = []
+            for exp_name in exp_names:
+                basis_results = all_experiment_results[exp_name].get(basis, {})
+                sv_map = basis_results.get(value_key, {}) or {}
+                err_map = (
+                    basis_results.get(std_key)
+                    or basis_results.get(err_key)
+                    or {}
+                )
+                sv_rows.append(
+                    np.array([float(sv_map.get(lbl, 0.0)) for lbl in labels])
+                )
+                err_rows.append(
+                    np.array([float(err_map.get(lbl, np.nan)) for lbl in labels])
+                    if err_map else np.full(len(labels), np.nan)
+                )
+
+            sv_matrix_bins = np.asarray(sv_rows, dtype=float)[order_bins, :]
+            err_matrix_bins = np.asarray(err_rows, dtype=float)[order_bins, :]
+            _plot_sv_scan_comparison(
+                sv_matrix=sv_matrix_bins,
+                err_matrix=err_matrix_bins,
+                labels=labels,
+                basis=basis,
+                output_dir=output_dir,
+                axis_info=axis_info_bins,
+                output_stem=f"shapley_comparison_{stem_tag}",
+                title_suffix=f"{title_tag}, binned x, dodged points",
+                dodge_step_pt=4.5,
+                use_dodge=True,
+            )
+
+            order_truex = axis_info_truex["order"]
+            sv_matrix_truex = np.asarray(sv_rows, dtype=float)[order_truex, :]
+            err_matrix_truex = np.asarray(err_rows, dtype=float)[order_truex, :]
+            _plot_sv_scan_comparison(
+                sv_matrix=sv_matrix_truex,
+                err_matrix=err_matrix_truex,
+                labels=labels,
+                basis=basis,
+                output_dir=output_dir,
+                axis_info=axis_info_truex,
+                output_stem=f"shapley_comparison_truex_{stem_tag}",
+                title_suffix=f"{title_tag}, true x, overlapping",
+                use_dodge=False,
+            )
+
+            _plot_sv_bar_comparison(
+                sv_matrix=sv_matrix_bins,
+                err_matrix=err_matrix_bins,
+                labels=labels,
+                basis=basis,
+                exp_names_ordered=exp_names_ordered,
+                output_dir=output_dir,
+                experiment_meta=experiment_meta,
+                output_stem=f"shapley_comparison_bars_{stem_tag}",
+                title_tag=title_tag,
+            )
+
+        _plot_game(
+            value_key="shapley_values",
+            std_key="shapley_std",
+            err_key="shapley_err",
+            stem_tag=mode_tag,
+            title_tag=mode_tag,
+        )
+
+        _save_dense_flavor_heatmap(
+            all_experiment_results=all_experiment_results,
             output_dir=output_dir,
             experiment_meta=experiment_meta,
+            basis=basis,
+            mode_tag=mode_tag,
         )
+
+
+def _compute_log_bin_edges(xvals):
+    """Compute log-spaced bin edges around sorted positive x centers."""
+    x = np.asarray(xvals, dtype=float)
+    if x.ndim != 1 or x.size == 0:
+        raise ValueError("xvals must be a non-empty 1D array")
+    if not np.all(x > 0.0):
+        raise ValueError("xvals must be strictly positive for log edges")
+
+    if x.size == 1:
+        return np.asarray([x[0] / np.sqrt(10.0), x[0] * np.sqrt(10.0)], dtype=float)
+
+    logx = np.log10(x)
+    mids = 0.5 * (logx[:-1] + logx[1:])
+    edges = np.empty(x.size + 1, dtype=float)
+    edges[1:-1] = mids
+    edges[0] = logx[0] - (mids[0] - logx[0])
+    edges[-1] = logx[-1] + (logx[-1] - mids[-1])
+    return np.power(10.0, edges)
+
+
+def _save_dense_flavor_heatmap(
+    all_experiment_results,
+    output_dir,
+    experiment_meta,
+    basis,
+    mode_tag="pert",
+):
+    """Save dense flavor x-scan heatmap (+ global |phi| band)."""
+    # Keep this output focused on dense scans so existing coarse workflows stay unchanged.
+    if len(all_experiment_results) < 10:
+        return
+
+    exp_names = list(all_experiment_results.keys())
+    usable = []
+    for exp_name in exp_names:
+        basis_results = all_experiment_results.get(exp_name, {}).get(basis)
+        if not basis_results:
+            continue
+        pert = (experiment_meta.get(exp_name) or {}).get("perturbation", {})
+        try:
+            mu = float(pert.get("mu"))
+        except (TypeError, ValueError):
+            continue
+
+        phi_even_map = basis_results.get("phi_even") or basis_results.get("shapley_values") or {}
+        if not phi_even_map:
+            continue
+        usable.append((exp_name, mu, phi_even_map))
+
+    if len(usable) < 2:
+        return
+
+    usable.sort(key=lambda item: item[1])
+    mu_sorted = np.asarray([item[1] for item in usable], dtype=float)
+    labels = list(usable[0][2].keys())
+    n_labels = len(labels)
+
+    phi_matrix = np.full((n_labels, len(usable)), np.nan, dtype=float)
+    for col, (_, _, phi_map) in enumerate(usable):
+        for row, label in enumerate(labels):
+            val = phi_map.get(label)
+            if val is not None:
+                phi_matrix[row, col] = float(val)
+
+    global_importance = np.nanmean(np.abs(phi_matrix), axis=0)
+    if not np.any(np.isfinite(phi_matrix)):
+        return
+
+    x_edges = _compute_log_bin_edges(mu_sorted)
+    y_edges_top = np.arange(n_labels + 1, dtype=float)
+    y_edges_bottom = np.array([0.0, 1.0], dtype=float)
+
+    with matplotlib.rc_context(
+        {
+            "font.size": 11,
+            "axes.labelsize": 12,
+            "axes.titlesize": 13,
+            "xtick.labelsize": 10,
+            "ytick.labelsize": 10,
+        }
+    ):
+        fig, (ax_top, ax_bottom) = plt.subplots(
+            2,
+            1,
+            figsize=(12.5, 6.6),
+            sharex=True,
+            gridspec_kw={"height_ratios": [9.0, 1.35], "hspace": 0.08},
+        )
+
+        finite_abs = np.abs(phi_matrix[np.isfinite(phi_matrix)])
+        absmax = float(np.max(finite_abs)) if finite_abs.size else 0.0
+        if absmax <= 0.0:
+            absmax = 1e-12
+        nonzero_abs = finite_abs[finite_abs > 0.0]
+        if nonzero_abs.size:
+            # Symlog keeps sign while expanding contrast around small magnitudes.
+            linthresh = float(np.percentile(nonzero_abs, 25.0))
+            linthresh = max(min(linthresh, absmax), 1e-12)
+        else:
+            linthresh = 1e-12
+
+        top_mesh = ax_top.pcolormesh(
+            x_edges,
+            y_edges_top,
+            phi_matrix,
+            cmap="RdBu_r",
+            norm=SymLogNorm(
+                linthresh=linthresh,
+                linscale=1.0,
+                vmin=-absmax,
+                vmax=absmax,
+                base=10.0,
+            ),
+            shading="auto",
+        )
+
+        global_2d = global_importance[np.newaxis, :]
+        gmax = float(np.nanmax(global_2d)) if np.any(np.isfinite(global_2d)) else 0.0
+        if gmax <= 0.0:
+            gmax = 1e-12
+        pos_global = global_2d[np.isfinite(global_2d) & (global_2d > 0.0)]
+        gmin = float(np.min(pos_global)) if pos_global.size else 1e-12
+        gmin = min(gmin, gmax)
+        bot_mesh = ax_bottom.pcolormesh(
+            x_edges,
+            y_edges_bottom,
+            global_2d,
+            cmap="YlGnBu",
+            norm=LogNorm(vmin=max(gmin, 1e-12), vmax=max(gmax, gmin, 1e-12)),
+            shading="auto",
+        )
+
+        ax_top.set_xscale("log")
+        ax_bottom.set_xscale("log")
+        ax_top.set_xlim(float(x_edges[0]), float(x_edges[-1]))
+
+        ax_top.set_yticks(np.arange(n_labels, dtype=float) + 0.5)
+        ax_top.set_yticklabels(labels)
+        ax_top.invert_yaxis()
+        ax_top.set_ylabel("flavor")
+        top_tag = f"signed {mode_tag}"
+        ax_top.set_title(f"Dense x-scan heatmap ({top_tag})")
+
+        ax_bottom.set_yticks([0.5])
+        ax_bottom.set_yticklabels(["global"])
+        ax_bottom.invert_yaxis()
+        ax_bottom.set_ylabel("band")
+
+        # Use true mu geometry (log-scaled x edges). To keep labels readable,
+        # only show a subset of exact mu tick labels.
+        n_ticks = min(10, len(mu_sorted))
+        tick_idx = np.unique(np.linspace(0, len(mu_sorted) - 1, num=n_ticks, dtype=int))
+        tick_vals = mu_sorted[tick_idx]
+        ax_bottom.set_xticks(tick_vals)
+        ax_bottom.set_xticklabels([_format_axis_tick(v) for v in tick_vals], rotation=30, ha="right")
+        ax_bottom.set_xlabel("perturbation center x (mu)")
+
+        cbar_top = fig.colorbar(top_mesh, ax=ax_top, pad=0.015)
+        cbar_top.set_label(f"signed {mode_tag} (symlog)")
+        cbar_bottom = fig.colorbar(bot_mesh, ax=ax_bottom, pad=0.015)
+        cbar_bottom.set_label("mean_j |phi_j(x)| (log)")
+
+        fig.subplots_adjust(left=0.08, right=0.92, bottom=0.14, top=0.94, hspace=0.08)
+
+        stem = f"shapley_dense_heatmap_{mode_tag}"
+        png_path = output_dir / f"{stem}_{basis}.png"
+        pdf_path = output_dir / f"{stem}_{basis}.pdf"
+        fig.savefig(png_path, dpi=220, bbox_inches="tight")
+        fig.savefig(pdf_path, bbox_inches="tight")
+        plt.close(fig)
+        print(f"Saved comparison plot: {png_path}")
+        print(f"Saved comparison plot: {pdf_path}")
 
 
 def _save_diagnostic_files(diag, output_dir, basis):
@@ -1006,34 +1236,38 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
     per_replica = bool(
         pert.get("per_replica", cfg.get("per_replica", False))
     )
-    # Random sign: draw a fixed sign for each replica/flavour for the run.
+    deterministic_sign_symmetrized = bool(
+        pert.get(
+            "deterministic_sign_symmetrized",
+            cfg.get("deterministic_sign_symmetrized", True),
+        )
+    )
     random_sign = bool(
         pert.get("random_sign", cfg.get("random_sign", False))
     )
     n_sign_samples = int(
         pert.get("n_sign_samples", cfg.get("n_sign_samples", 1))
     )
+    if deterministic_sign_symmetrized and random_sign:
+        print(
+            "Note: ignoring random_sign=True; using deterministic calibrated up/down games."
+        )
+    if deterministic_sign_symmetrized and n_sign_samples != 1:
+        print(
+            "Note: ignoring n_sign_samples="
+            f"{n_sign_samples}; deterministic dual game uses one fixed definition."
+        )
     random_seed = pert.get("random_seed", cfg.get("random_seed"))
-    expected_member_mode = "replicas" if per_replica else "central"
     explicit_member_mode = pert.get("member_mode", cfg.get("member_mode"))
     if explicit_member_mode is not None:
         member_mode = str(explicit_member_mode).strip().lower()
-        if member_mode != expected_member_mode:
+        if member_mode not in {"replicas", "central"}:
             raise ValueError(
-                "member_mode is redundant with per_replica and must match it: "
-                f"expected '{expected_member_mode}', got '{member_mode}'."
+                "member_mode must be 'replicas' or 'central'; "
+                f"got '{member_mode}'."
             )
     else:
-        member_mode = expected_member_mode
-    if not random_sign:
-        n_sign_samples = 1
-    elif per_replica:
-        if n_sign_samples != 1:
-            print(
-                "Note: per_replica=True uses one fixed sign mask per replica; "
-                f"ignoring n_sign_samples={n_sign_samples} and using 1."
-            )
-        n_sign_samples = 1
+        member_mode = "replicas" if per_replica else "central"
     enforce_sumrules = cfg.get("enforce_sumrules", False)
     n_jobs = int(cfg.get("n_jobs", 1))
     if n_jobs_override is not None:
@@ -1098,6 +1332,7 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             per_replica=per_replica, random_sign=random_sign,
             n_sign_samples=n_sign_samples,
             random_seed=random_seed,
+            deterministic_sign_symmetrized=deterministic_sign_symmetrized,
         )
         stabilization_report = None
         stabilization_json = None
@@ -1147,6 +1382,7 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                         per_replica=per_replica, random_sign=random_sign,
                         n_sign_samples=n_sign_samples,
                         random_seed=random_seed,
+                        deterministic_sign_symmetrized=deterministic_sign_symmetrized,
                     )
                     stable_rerun_performed = True
                     observables_used = kept
@@ -1174,21 +1410,44 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
 
         labels = results_final["flavor_short"]
         sv = results_final["shapley_values"]
+        sv_odd = results_final.get("shapley_values_odd")
         csv_path = output_dir / f"shapley_values_{basis}.csv"
         _write_shapley_csv(csv_path, labels, sv)
         print(f"Saved: {csv_path}")
+        if sv_odd is not None:
+            csv_odd_path = output_dir / f"shapley_values_odd_{basis}.csv"
+            _write_shapley_csv(csv_odd_path, labels, sv_odd)
+            print(f"Saved: {csv_odd_path}")
 
         # Sampling-axis outputs.
         sv_per_replica = results_final.get("shapley_values_per_replica")
+        sv_odd_per_replica = results_final.get("shapley_values_odd_per_replica")
+        sv_odd_signed_per_replica = results_final.get("shapley_values_odd_signed_per_replica")
         sv_per_sample = results_final.get("shapley_values_per_sign_sample")
         sv_std = results_final.get("shapley_std")
         sv_err = results_final.get("shapley_err")
+        sv_odd_std = results_final.get("shapley_odd_std")
+        sv_odd_err = results_final.get("shapley_odd_err")
         sv_sign_std = results_final.get("shapley_sign_std")
         sv_sign_err = results_final.get("shapley_sign_err")
         if per_replica and sv_per_replica is not None:
             per_rep_path = output_dir / f"shapley_values_per_replica_{basis}.csv"
             _write_shapley_per_replica_csv(per_rep_path, labels, sv_per_replica)
             print(f"Saved: {per_rep_path}")
+        if per_replica and sv_odd_per_replica is not None:
+            per_rep_odd_path = output_dir / f"shapley_values_odd_per_replica_{basis}.csv"
+            _write_shapley_per_replica_csv(
+                per_rep_odd_path, labels, sv_odd_per_replica
+            )
+            print(f"Saved: {per_rep_odd_path}")
+        if per_replica and sv_odd_signed_per_replica is not None:
+            per_rep_odd_signed_path = (
+                output_dir / f"shapley_values_odd_signed_per_replica_{basis}.csv"
+            )
+            _write_shapley_per_replica_csv(
+                per_rep_odd_signed_path, labels, sv_odd_signed_per_replica
+            )
+            print(f"Saved: {per_rep_odd_signed_path}")
         if sv_per_sample is not None:
             per_sample_path = output_dir / f"shapley_values_per_sign_sample_{basis}.csv"
             _write_shapley_per_sample_csv(per_sample_path, labels, sv_per_sample)
@@ -1207,6 +1466,7 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                         f"{lbl},{float(mean_v):.8f},{float(std_v):.8f},{float(err_v):.8f}\n"
                     )
             print(f"Saved: {unc_path}")
+        # Odd metric is the sign-sensitivity S_abs = <|phi_odd|>; no odd variance file.
         if sv_sign_std is not None:
             sign_unc_path = output_dir / f"shapley_sign_uncertainties_{basis}.csv"
             with open(sign_unc_path, "w") as f:
@@ -1235,8 +1495,30 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
 
         all_results[basis] = {
             "shapley_values": {l: float(v) for l, v in zip(labels, sv)},
+            "phi_even": {l: float(v) for l, v in zip(labels, sv)},
+            "phi_odd": (
+                {l: float(v) for l, v in zip(labels, sv_odd)}
+                if sv_odd is not None else None
+            ),
+            "phi_odd_signed": (
+                {l: float(v) for l, v in zip(labels, results_final.get("shapley_values_odd_signed", []))}
+                if results_final.get("shapley_values_odd_signed") is not None else None
+            ),
+            "sign_sensitivity_abs": (
+                {l: float(v) for l, v in zip(labels, sv_odd)}
+                if sv_odd is not None else None
+            ),
             "shapley_values_per_replica": _serialize_shapley_per_replica(
                 labels, sv_per_replica
+            ),
+            "phi_even_per_replica": _serialize_shapley_per_replica(
+                labels, sv_per_replica
+            ),
+            "phi_odd_per_replica": _serialize_shapley_per_replica(
+                labels, sv_odd_per_replica
+            ),
+            "phi_odd_signed_per_replica": _serialize_shapley_per_replica(
+                labels, sv_odd_signed_per_replica
             ),
             "shapley_values_per_sign_sample": _serialize_shapley_per_sample(
                 labels, sv_per_sample
@@ -1245,9 +1527,29 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                 {l: float(v) for l, v in zip(labels, sv_std)}
                 if sv_std is not None else None
             ),
+            "std_even_rep": (
+                {l: float(v) for l, v in zip(labels, sv_std)}
+                if sv_std is not None else None
+            ),
             "shapley_err": (
                 {l: float(v) for l, v in zip(labels, sv_err)}
                 if sv_err is not None else None
+            ),
+            "shapley_values_odd": (
+                {l: float(v) for l, v in zip(labels, sv_odd)}
+                if sv_odd is not None else None
+            ),
+            "shapley_odd_std": (
+                {l: float(v) for l, v in zip(labels, sv_odd_std)}
+                if sv_odd_std is not None else None
+            ),
+            "std_odd_rep": (
+                {l: float(v) for l, v in zip(labels, sv_odd_std)}
+                if sv_odd_std is not None else None
+            ),
+            "shapley_odd_err": (
+                {l: float(v) for l, v in zip(labels, sv_odd_err)}
+                if sv_odd_err is not None else None
             ),
             "shapley_sign_std": (
                 {l: float(v) for l, v in zip(labels, sv_sign_std)}
@@ -1264,9 +1566,19 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             "antithetic_sign": bool(
                 results_final.get("random_sign") and results_final.get("n_sign_samples", 1) > 1
             ),
+            "deterministic_sign_symmetrized": bool(
+                results_final.get(
+                    "deterministic_sign_symmetrized",
+                    deterministic_sign_symmetrized,
+                )
+            ),
             "random_seed": random_seed,
             "baseline_chi2": float(results_final["baseline_chi2"]),
+            "validation_checks": results_final.get("checks"),
             "coalitions_evaluated": results_final["coalitions_evaluated"],
+            "theory_evaluations": int(
+                results_final.get("theory_evaluations", results_final["coalitions_evaluated"])
+            ),
             "elapsed_seconds": round(elapsed, 1),
             "n_jobs": int(results_final.get("n_jobs", n_jobs)),
             "n_datasets_used": len(observables_used),
@@ -1298,6 +1610,7 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             "member_mode": member_mode,
             "n_sign_samples": int(n_sign_samples),
             "antithetic_sign": bool(random_sign and int(n_sign_samples) > 1),
+            "deterministic_sign_symmetrized": bool(deterministic_sign_symmetrized),
             "random_seed": random_seed,
         },
         "enforce_sumrules": enforce_sumrules,

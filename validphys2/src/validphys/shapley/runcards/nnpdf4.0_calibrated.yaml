@@ -14,13 +14,16 @@ n_replicas: 100
 output_root: sv_results/nnpdf40_calibrated
 log_root: slurm/logs/nnpdf40_calibrated
 run_name: calibrated_xscan
-per_replica: true      
-random_sign: true       #turn to false for replica only UQ
+per_replica: true
+
+deterministic_sign_symmetrized: true
+random_sign: false
+
 enforce_sumrules: false
 stabilization:
   enabled: true
   action: exclude_dataset
-  dataset_delta_chi2_threshold: 1e6
+  dataset_delta_chi2_threshold: 1e5
   max_outlier_coalitions: 5
   rerun_stable: true
 experiments:

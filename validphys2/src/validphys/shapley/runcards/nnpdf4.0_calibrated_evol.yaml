@@ -13,11 +13,12 @@ use_cuts: internal
 n_replicas: 100
 output_root: sv_results/nnpdf40_calibrated
 log_root: slurm/logs/nnpdf40_calibrated
-run_name: calibrated_xscan_ev_
+run_name: calibrated_xscan_ev
 
 enforce_sumrules: false
-per_replica: true      
-random_sign: true      
+per_replica: true
+deterministic_sign_symmetrized: true
+random_sign: false
 stabilization:
   enabled: true
   action: exclude_dataset
