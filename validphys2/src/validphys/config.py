@@ -169,9 +169,16 @@ class CoreConfig(configparser.Config):
         if load_weights_from_fit is None:
             return None
         try:
-            fit_folder = self.loader.check_fit(load_weights_from_fit).path
+            fit_object = self.loader.check_fit(load_weights_from_fit)
+            fit_folder = fit_object.path / "nnfit"
+            weights_name = fit_object.as_input().get("save")
+            if weights_name is None:
+                raise LoadFailedError(f"{load_weights_from_fit} was no saving weights")
+            # Correct for extension already included
+            if weights_name.endswith(".h5"):
+                weights_name = weights_name[:-3]
             weights_dict = {}
-            for p in fit_folder.glob("nnfit/replica_*/weights.weights.h5"):
+            for p in fit_folder.glob("replica_*/{weights_name}.weights.h5"):
                 replica_folder = p.parent.name
                 replica_index = int(replica_folder.split("_")[1])
                 weights_dict[replica_index] = p
