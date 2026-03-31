@@ -22,13 +22,12 @@ implemented_observables:
     units: ""
   process_type: DY_MLL
   tables: [Figure_8,Correlation_coefficients_between_A4_values_of_Figure_8]
-  ndata: 53
+  ndata: 63
   plotting:
     dataset_label: 'CMS 13 TeV $A_{FB}$ $e$ and $\mu$ channels combined'
     plot_x: m_ll
     y_label: "$A_{FB}$"
-  kinematic_coverage:
-  - m_ll
+  kinematic_coverage: [m_ll, y]
   kinematics:
     variables:
       y:
