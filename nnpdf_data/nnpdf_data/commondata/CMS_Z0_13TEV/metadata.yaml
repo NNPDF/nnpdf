@@ -45,6 +45,6 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_Z0_13TEV_PROJ_A4
-      - CMS_Z0_13TEV_TOT
+    - - CMS_Z0_13TEV_TOT
     operation: ratio
     conversion_factor: 1.0
