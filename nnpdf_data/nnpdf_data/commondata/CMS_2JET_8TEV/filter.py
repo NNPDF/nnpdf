@@ -139,7 +139,7 @@ def aggregate_uncertainties(abs_errors, art_unc):
 
 
 def dump_uncertainties(all_unc):
-    singular_art_unc_desc = {'description': 'artificial uncertainty originating correlated statistical uncertainties',
+    singular_art_unc_desc = {'description': 'artificial uncertainty originating from correlated statistical uncertainties',
                              'treatment': 'ADD',
                              'type': 'CORR'}
     all_art_unc_desc = {f'art_unc_{i+1}': singular_art_unc_desc.copy() for i in range(122)}
