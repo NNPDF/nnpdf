@@ -195,16 +195,21 @@ def _pht_xq2map(kin_info):
 
 def _dijets_xq2map(kin_info):
     # Here we can have either ystar or ymax or ydiff, but in either case we need to do the same
-    ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_1, _Vars.abs_eta_1)
-    ylab_2 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_2, _Vars.abs_eta_2)
-    # Similarly, there may be m_jj or pTavg but we proceed in the same way
-    mlab_jj = kin_info.get_one_of(_Vars.m_jj, _Vars.pTavg)
-    # Then compute x, Q2
-    ratio = mlab_jj / kin_info[_Vars.sqrts]
-    x1 = ratio * np.exp(ylab_1)
-    x2 = ratio * np.exp(-ylab_2)
+    if _Vars.m_jj in kin_info._kins:
+        ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_1, _Vars.abs_eta_1)
+        ylab_2 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_2, _Vars.abs_eta_2)
+        ratio = kin_info[_Vars.m_jj] / kin_info[_Vars.sqrts]
+        x1 = ratio * np.exp(ylab_1)
+        x2 = ratio * np.exp(-ylab_2)
+        q2 = kin_info[_Vars.m_jj] * kin_info[_Vars.m_jj]
+    elif _Vars.pTavg in kin_info._kins:
+        m_jjlab = 2 * kin_info[_Vars.pTavg] * np.cosh(kin_info[_Vars.ystar])
+        ratio = m_jjlab / kin_info[_Vars.sqrts]
+        yblab = kin_info[_Vars.yb]
+        x1 = ratio * np.exp(yblab)
+        x2 = ratio * np.exp(-yblab)
+        q2 = m_jjlab * m_jjlab
     x = np.concatenate((x1, x2))
-    q2 = mlab_jj * mlab_jj
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
    
 
