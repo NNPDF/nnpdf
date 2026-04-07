@@ -48,6 +48,8 @@ def get_tables(observable=None):
 
     if observable == "DIF-LEP":
         tables = ["lep_physical_plus_mtw", "lep_physical_minus_mtw"]
+    elif observable == "DIF-LEP-PM":
+        tables = ["lep_physical_plusminus_mtw"]
     elif observable == "DIF-MUON":
         tables = ["muo_plus_mtw", "muo_minus_mtw"]
     elif observable == "DDIF-LEP":
@@ -66,6 +68,7 @@ def get_tables(observable=None):
         print("Observable not implemented.")
         print("Choose one of the following observables:")
         print("- DIF-LEP")
+        print("- DIF-LEP-PM")
         print("- DIF-MUON")
         print("- DDIF-LEP")
         print("- DDIF-MUON")
@@ -100,9 +103,11 @@ def get_data(observable=None):
     ]
 
     for table in hepdata_tables:
-        if 'plus' in table:
+        if 'plus' in table and 'minus' in table:
+            charge = '$W^{\\pm}$'
+        elif 'plus' in table:
             charge = '$W^{+}$'
-        if 'minus' in table:
+        elif 'minus' in table:
             charge = '$W^{-}$'
 
         with open(table, "r") as f:
@@ -285,6 +290,7 @@ def filter_ATLAS_WPWM_13TEV_DIF(observable=None):
 
 if __name__ == "__main__":
     filter_ATLAS_WPWM_13TEV_DIF("DIF-LEP")
+    filter_ATLAS_WPWM_13TEV_DIF("DIF-LEP-PM")
     filter_ATLAS_WPWM_13TEV_DIF("DIF-MUON")
     filter_ATLAS_WPWM_13TEV_DIF("DDIF-LEP")
     filter_ATLAS_WPWM_13TEV_DIF("DDIF-MUON")
