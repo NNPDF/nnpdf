@@ -60,6 +60,53 @@ implemented_observables:
       - uncertainties_DIF-LEP.yaml
     data_central: data_DIF-LEP.yaml
 
+  - observable_name: DIF-LEP-PM
+    observable:
+      description: Combined Born-level single-differential cross-section in the $l^+$ and $l^-$ channels combined
+      label: ATLAS $W$ 13 TeV Differential
+      units: "pb/GeV"
+    process_type: EWK_RAP
+    tables: [40]
+    npoints: [12]
+    ndata: 12
+    plotting:
+      dataset_label: ATLAS $W$ 13 TeV Differential
+      y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
+      line_by:
+        - charge
+      normalize:
+        figure_by:
+          - charge
+      plot_x: mt
+    kinematic_coverage:
+      - mt
+      - M2
+      - charge
+    kinematics:
+      variables:
+        mt:
+          description: Transverse mass of the W boson
+          label: "$m_T^W$"
+          units: "GeV"
+        M2:
+          description: W boson squared mass
+          label: "$m_W^2$"
+          units: "GeV$^2$"
+        charge:
+          description: W boson charge
+          label: "charge"
+          units: ""
+      file: kinematics_DIF-LEP-PM.yaml
+    theory:
+      conversion_factor: 0.001
+      operation: "ADD"
+      FK_tables:
+        - - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WP
+        - - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WM
+    data_uncertainties:
+      - uncertainties_DIF-LEP-PM.yaml
+    data_central: data_DIF-LEP-PM.yaml
+
   - observable_name: DIF-MUON
     observable:
       description: Born-level single-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence
