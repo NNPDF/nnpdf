@@ -11,9 +11,9 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
-output_root: sv_results/DY
-log_root: slurm/logs/DY
-run_name: xscan_DY_pt
+output_root: sv_results/DIS
+log_root: slurm/logs/DIS
+run_name: xscan_all
 enforce_sumrules: true
 per_replica: true
 deterministic_sign_symmetrized: true
@@ -82,11 +82,14 @@ experiments:
       xspace: logx
 
 datasets:
-
-  # DY: ATLAS
-  - {dataset: ATLAS_WJ_8TEV_WP-PT, variant: legacy}
-  - {dataset: ATLAS_WJ_8TEV_WM-PT, variant: legacy}
-  - {dataset: ATLAS_Z0J_8TEV_PT-M, variant: legacy_10}
-  - {dataset: ATLAS_Z0J_8TEV_PT-Y, variant: legacy_10}
-  # DY: CMS
-  - {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy_10}
+  # DIS: Fixed-target
+  - {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+  - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+  - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+  - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+  - {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+  - {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, variant: legacy_dw}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], variant: legacy_dw}

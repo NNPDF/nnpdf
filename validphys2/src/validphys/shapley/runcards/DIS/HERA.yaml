@@ -14,7 +14,7 @@ n_replicas: 100
 output_root: sv_results/DIS
 log_root: slurm/logs/DIS
 run_name: xscan_hera
-enforce_sumrules: false
+enforce_sumrules: true
 per_replica: true
 deterministic_sign_symmetrized: true
 random_sign: false
