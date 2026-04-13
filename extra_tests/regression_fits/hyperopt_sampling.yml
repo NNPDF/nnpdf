@@ -14,8 +14,8 @@ description: n3fit regression test for hyperotp sampling in NNPDF4.1
 dataset_inputs:
   - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
   - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
-  - {dataset: CMS_Z0J_8TEV_PT-Y}
-  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC}
+  - {dataset: CMS_Z0J_8TEV_PT-Y }
+  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, variant: legacy_theory }
 ############################################################
 datacuts:
   t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
@@ -24,7 +24,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 41_000_000        # database id
+  theoryid: 40_000_000        # database id
 
 ############################################################
 genrep: False    # on = generate MC replicas, False = use real data
