@@ -10,6 +10,7 @@ from copy import copy
 import functools
 import hashlib
 import logging
+import pathlib
 
 import numpy as np
 import pandas as pd
@@ -20,6 +21,8 @@ from validphys.core import IntegrabilitySetSpec, TupleComp
 from validphys.n3fit_data_utils import validphys_group_extractor
 
 log = logging.getLogger(__name__)
+
+DIAGONAL_BASIS_ROTATION_FILENAME = "diagonal_basis_rotation.csv"
 
 
 class Hashrray(TupleComp):
@@ -546,6 +549,35 @@ def fitting_data_dict(
 
 
 exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
+groups_dataset_inputs_fitting_covmat = collect(
+    "dataset_inputs_fitting_covmat", ("group_dataset_inputs_by_metadata",)
+)
+
+
+def save_diagonal_basis_rotation(output_path, _inv_covmat_prepared, diagonal_basis=True):
+    """Store a single fit-level table with eigenvalues and eigenvectors.
+
+    The rows are globally indexed as ``eigenmode N`` to line up with diagonal-basis pseudodata.
+    """
+    if not diagonal_basis:
+        return None
+
+    table_path = pathlib.Path(output_path) / "tables"
+    table_path.mkdir(parents=True, exist_ok=True)
+
+    _, _, diagonal_rotation, eig_vals = _inv_covmat_prepared
+    if diagonal_rotation is None or eig_vals is None:
+        log.warning("No diagonal-basis rotation available; skipping table export.")
+        return None
+
+    df_rotation = pd.DataFrame(diagonal_rotation)
+    df_rotation.insert(0, "eig_val", eig_vals)
+    df_rotation.index = pd.Index([f"eigenmode {i}" for i in range(len(eig_vals))])
+
+    output_file = table_path / DIAGONAL_BASIS_ROTATION_FILENAME
+    df_rotation.to_csv(output_file, sep="\t", index=True)
+    log.info("Saved diagonal-basis rotation table to %s", output_file)
+    return output_file
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
@@ -575,7 +607,9 @@ experiment_indexed_make_replica = collect(
 )
 
 
-def replica_pseudodata(experiment_indexed_make_replica, replica):
+def replica_pseudodata(
+    experiment_indexed_make_replica, exps_fitting_data_dict, replica, diagonal_basis=True
+):
     """Creates a pandas DataFrame containing the generated pseudodata.
     The index is :py:func:`validphys.results.experiments_index` and the columns
     is the replica numbers.
@@ -586,9 +620,29 @@ def replica_pseudodata(experiment_indexed_make_replica, replica):
     `fitting::savepseudodata` is `true` (as per the default setting)
     The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
     """
-    df = pd.concat(experiment_indexed_make_replica)
-    df.columns = [f"replica {replica}"]
-    return df
+    replica_column = f"replica {replica}"
+
+    if not diagonal_basis:
+        df = pd.concat(experiment_indexed_make_replica)
+        df.columns = [replica_column]
+        return df
+
+    diagonal_frames = []
+    mode_counter = 0
+    for indexed_replica, fit_data in zip(experiment_indexed_make_replica, exps_fitting_data_dict):
+        values = indexed_replica.iloc[:, 0].to_numpy()
+        diag_rot = fit_data.get("data_transformation")
+        rotated_values = values if diag_rot is None else diag_rot @ values
+        next_counter = mode_counter + len(rotated_values)
+        eigenmode_index = pd.Index(
+            [f"eigenmode {i}" for i in range(mode_counter, next_counter)], name="eigenmode"
+        )
+        diagonal_frames.append(
+            pd.DataFrame(rotated_values, index=eigenmode_index, columns=[replica_column])
+        )
+        mode_counter = next_counter
+
+    return pd.concat(diagonal_frames)
 
 
 @_per_replica

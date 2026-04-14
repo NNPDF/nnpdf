@@ -51,6 +51,7 @@ SETUPFIT_PROVIDERS = [
     'validphys.commondata',
     'validphys.covmats',
     'validphys.filters',
+    'validphys.n3fit_data',
     'validphys.results',
     'validphys.theorycovariance.construction',
     'validphys.photon.compute',
@@ -169,10 +170,11 @@ class SetupFitConfig(Config):
             check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
             filter_action = 'datacuts::theory::fitting filter'
+            rotation_action = 'datacuts::theory::fitting save_diagonal_basis_rotation'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
 
         # The settings for these actions depend on the presence of closuretest
-        SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
+        SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action, rotation_action]
 
         # Check theory covariance matrix configuration
         thconfig = file_content.get('theorycovmatconfig', {})

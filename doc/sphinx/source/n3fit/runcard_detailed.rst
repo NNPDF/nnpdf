@@ -429,6 +429,12 @@ according to their experiment. Additionally, the union of these two is saved in
 ``<fit_directory>/replica_<number>/datacuts_theory_fitting_pseudodata_table.csv``
 if one is not interested in the exact nature of the splitting.
 
+When ``diagonal_basis: true`` is used (by default), the saved pseudodata indices are labeled as
+``eigenmode <i>`` corresponding to the diagonal basis used in the fit. ``vp-setupfit`` writes one
+file with the diagonal-basis elements under:
+``<fit_directory>/tables/diagonal_basis_rotation.csv``.
+This file stores both the eigenvalues and eigenvectors used for the rotation.
+
 
 Imposing sum rules
 ^^^^^^^^^^^^^^^^^^
