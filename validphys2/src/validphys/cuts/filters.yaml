@@ -1,3 +1,12 @@
+- dataset: CMS_Z0_13TEV_AFB
+  reason: |
+   We remove the Z-mass invariant mass bin where Ew corrections are
+   expected to be large
+  local_variables:
+    min_mll: 86 # GeV
+    max_mll: 96 # GeV
+  rule: "m_ll < min_mll or m_ll > max_mll"
+
 - dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM
   reason: |
    We remove one bin from the normalised distribution because it is

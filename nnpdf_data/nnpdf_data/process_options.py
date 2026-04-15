@@ -470,7 +470,7 @@ DY_2L = _Process(
 DY_MLL = _Process(
     "DY_MLL",
     "DY Z -> ll mass of lepton pair",
-    accepted_variables=(_Vars.m_ll, _Vars.sqrts),
+    accepted_variables=(_Vars.m_ll, _Vars.sqrts, _Vars.y),
     xq2map_function=_dymll_xq2map,
 )
 
