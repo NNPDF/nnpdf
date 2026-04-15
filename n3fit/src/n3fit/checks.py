@@ -16,17 +16,17 @@ log = logging.getLogger(__name__)
 
 NN_PARAMETERS = ["nodes_per_layer", "optimizer", "activation_per_layer"]
 HYPEROPTIMIZED_PARAMETERS = [
-    "nodes_per_layer" , 
-    "optimizer", 
-    "learning_rate", 
+    "nodes_per_layer",
+    "optimizer",
+    "learning_rate",
     "clipnorm",
     "activation_per_layer",
     "initializer",
     "epochs",
     "stopping_patience",
     "layer_type",
-    "dropout"
-    ]
+    "dropout",
+]
 
 
 def _is_floatable(num):
@@ -40,13 +40,17 @@ def _is_floatable(num):
     except (ValueError, TypeError):
         return False
 
+
 def check_hyperopt_parameters(parameters, trial_specs):
     tmp = []
     for param in HYPEROPTIMIZED_PARAMETERS:
         if param in parameters.keys():
             tmp.append(param)
     if tmp:
-        raise CheckError(f"Parameters {tmp} already contained in the hyperoptimization scan. Please remove them from the parameters namespace.")        
+        raise CheckError(
+            f"Parameters {tmp} already contained in the hyperoptimization scan. Please remove them from the parameters namespace."
+        )
+
 
 # Checks on the NN parameters
 def check_existing_parameters(parameters):
@@ -227,19 +231,39 @@ def check_model_file(save, load):
         if os.stat(load).st_size == 0:
             raise CheckError(f"Model file {load} seems to be empty")
 
-def check_load_fits_from_weight_file(load_weights_from_fit, load):
-    """Checks whether the load_weights_from_fit option is correctly defined"""
+
+def check_load_fits_from_weight_file(load_weights_from_fit, load, load_weights_dict, replicas):
+    """Checks whether the load_weights_from_fit option is correctly defined.
+    And whether the requested replica can be loaded
+    """
     if load_weights_from_fit is not None:
         if load is not None:
             raise CheckError(
-                "Cannot use both `load` and `load_weights_from_fit` options at the same time, please select only one of them")
+                "Cannot use both `load` and `load_weights_from_fit` options at the same time, please select only one of them"
+            )
+    if replicas is not None and load_weights_from_fit is not None:
+        missing_replicas = set(replicas) - set(load_weights_dict.keys())
+        if missing_replicas:
+            raise CheckError(
+                f"Not all replicas requested have weights to be loaded, missing: {missing_replicas}"
+            )
+
 
 @make_argcheck
-def wrapper_check_NN(tensorboard, save, load, load_weights_from_fit, parameters, trial_specs):
+def wrapper_check_NN(
+    tensorboard,
+    save,
+    load,
+    load_weights_from_fit,
+    load_weights_dict,
+    parameters,
+    trial_specs,
+    replicas,
+):
     """Wrapper function for all NN-related checks"""
     check_tensorboard(tensorboard)
     check_model_file(save, load)
-    check_load_fits_from_weight_file(load_weights_from_fit, load)
+    check_load_fits_from_weight_file(load_weights_from_fit, load, load_weights_dict, replicas)
     check_lagrange_multipliers(parameters, "integrability")
     check_lagrange_multipliers(parameters, "positivity")
     if trial_specs:
@@ -496,7 +520,7 @@ def check_deprecated_options(fitting, parameters):
         raise CheckError(
             "`interpolation_points` no longer accepted, please change to `feature_scaling_points`"
         )
-        
+
 
 @make_argcheck
 def check_photonQED_exists(theoryid, fiatlux):

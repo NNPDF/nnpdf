@@ -24,6 +24,7 @@ def n3fit_checks_action(
     save=None,
     load=None,
     load_weights_from_fit=None,
+    load_weights_dict,
     hyperscan_config=None,
     hyperopt=None,
     kfold=None,
@@ -31,6 +32,7 @@ def n3fit_checks_action(
     parallel_models=True,
     double_precision=False,
     trial_specs=None,
+    replicas=None,
 ):
     return
 

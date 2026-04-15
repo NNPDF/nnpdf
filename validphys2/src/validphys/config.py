@@ -178,13 +178,15 @@ class CoreConfig(configparser.Config):
             if weights_name.endswith(".h5"):
                 weights_name = weights_name[:-3]
             weights_dict = {}
-            for p in fit_folder.glob("replica_*/{weights_name}.weights.h5"):
+            for p in fit_folder.glob(f"replica_*/{weights_name}.weights.h5"):
                 replica_folder = p.parent.name
                 replica_index = int(replica_folder.split("_")[1])
                 weights_dict[replica_index] = p
+            if not weights_dict:
+                raise LoadFailedError(f"No weights found for: {load_weights_from_fit}")
             return weights_dict
         except LoadFailedError as e:
-            raise ConfigError(str(e), load_weights_from_fit, self.loader.available_fits)
+            raise ConfigError(str(e), load_weights_from_fit, self.loader.available_fits) from e
 
     @element_of("unpolarized_bcs")
     @_id_with_label
