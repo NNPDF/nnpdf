@@ -1,4 +1,4 @@
-- dataset: CMS_Z0_13TEV-AFB
+- dataset: CMS_Z0_13TEV_AFB
   reason: |
    We remove the Z-mass invariant mass bin where Ew corrections are
    expected to be large
