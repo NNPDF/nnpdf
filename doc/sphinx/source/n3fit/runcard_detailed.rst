@@ -396,9 +396,12 @@ Save and load weights of the model
 
     save: "weights.h5"
     load: "weights.h5"
+    load_weights_from_fit: NNPDF40_nnlo_as_01180_qcd
 
 - ``save``: saves the weights of the PDF model in the selected file in the replica folder.
-- ``load``: loads the weights of the PDF model from the selected file.
+- ``load``: loads the weights of the PDF model from the selected file. Each replica will load the same weights from this file.
+- ``load_weights_from_fit``: loads the weights of the PDF model from a previous fit located in the `resultspath` directory.
+ This requires that the fit contains the saved weights. Each replica loads the weights from the corresponding replica of the specified fit.
 
 Since the weights depend only on the architecture of the Neural Network,
 it is possible to save the weights of a Neural Network trained with one set of hyperparameters and experiments
