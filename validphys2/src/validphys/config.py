@@ -173,7 +173,7 @@ class CoreConfig(configparser.Config):
             fit_folder = fit_object.path / "nnfit"
             weights_name = fit_object.as_input().get("save")
             if weights_name is None:
-                raise LoadFailedError(f"{load_weights_from_fit} was no saving weights")
+                raise LoadFailedError(f"{load_weights_from_fit} does not have saved weights")
             # Correct for extension already included
             if weights_name.endswith(".h5"):
                 weights_name = weights_name[:-3]
