@@ -1,4 +1,4 @@
-.. _lhapdf:
+.. _lhapdf-code:
 
 PDF set storage and interpolation
 =================================
