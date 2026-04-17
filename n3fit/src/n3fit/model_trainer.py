@@ -84,15 +84,15 @@ class ModelTrainer:
 
     Wrapper around the fitting code and the generation of the Neural Network
 
-    When the "hyperparametrizable"* function is called with a dictionary of parameters,
+    A "hyperparametrizable" function accepts a dictionary of hyper-parameters
+    which defines the Neural Network.
+
+    When it is called with a dictionary of parameters,
     it generates a NN and subsequentially performs a fit.
 
     The motivation behind this class is minimising the amount
     of redundant calls of each hyperopt run, in particular this allows to completely reset
-    the NN at the beginning of each iteration reusing some of the previous work.
-
-    *called in this way because it accept a dictionary of hyper-parameters
-    which defines the Neural Network
+    the NN at the beginning of each iteration reusing some of the previous work.  
     """
 
     def __init__(
@@ -851,6 +851,7 @@ class ModelTrainer:
         Parameters used only here:
             - ``epochs``: maximum number of iterations for the fit to run
             - ``stopping_patience``: patience of the stopper after finding a new minimum
+            
         All other parameters are passed to the corresponding functions
         """
 
