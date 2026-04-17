@@ -107,5 +107,5 @@ Our GitHub Action service implements:
     commit. Some logs are generated, which can aid in determining the cause of errors.
  4. If the workflow succeeds, a comment to the initial pull request will appear with link references to the generated report and fit.
 
-The progress reports of the various jobs at `GitHub Actions <https://github.com/NNPDF/actions>`_, upon logging in
+The progress reports of the various jobs at `GitHub Actions <https://help.github.com/en/actions>`_, upon logging in
 with an authorized GitHub account.
