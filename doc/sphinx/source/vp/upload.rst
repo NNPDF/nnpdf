@@ -1,7 +1,7 @@
 .. _upload:
 
 Uploading results to the ``validphys`` repository
-===============================================
+=================================================
 
 The primary method to share results within the collaboration is by uploading the
 corresponding files to the :ref:`NNPDF server <server>`. Most commonly, results are
@@ -30,6 +30,7 @@ Several settings relevant to uploading files are configured in :ref:`profile
 files <nnprofile>`.
 
 .. _vpmetadata:
+
 Metadata
 --------
 
@@ -116,6 +117,7 @@ This is mostly useful for sub-reports not at the top level, in
 more complicated documents.
 
 .. _uploading-directly-from-validphys:
+
 Uploading directly from ``validphys``
 -------------------------------------
 
@@ -129,6 +131,7 @@ to share. Otherwise use :ref:`vp-upload <the-vp-upload-script>` after checking t
 it will fail early if it cannot be established.
 
 .. _vpupload:
+
 The ``vp-upload`` script
 ------------------------
 
@@ -158,6 +161,7 @@ Note that fits are indexed separately, and can be retrieved with the ``vp-get``
 :ref:`command <download>`.
 
 .. _the-wiki-upload-script:
+
 The ``wiki-upload`` script
 --------------------------
 
