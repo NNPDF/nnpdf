@@ -50,6 +50,7 @@ resource locally will result in an error and exiting the program. The ``--net``
 flag makes the default behaviour explicit and has no effect otherwise.
 
 .. _what-can-be-downloaded:
+
 What can be downloaded
 ----------------------
 
@@ -96,7 +97,7 @@ Hyperparameter scans
 .. _vp-get:
 
 The ``vp-get`` tool
------------------
+-------------------
 
 The ``vp-get`` tool can be used to download resources manually, in the same way
 ``validphys`` would do.

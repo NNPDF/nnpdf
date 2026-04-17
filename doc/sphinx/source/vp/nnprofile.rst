@@ -1,7 +1,7 @@
 .. _nnprofile:
 
 The ``nnprofile.yaml`` file
-=========================
+===========================
 
 The NNPDF code stores some configuration options (mostly various URLs and paths) in a ``.yaml`` file
 which is installed alongside the code.
@@ -11,7 +11,7 @@ This configuration is used by ``validphys`` to locate,
 :ref:`upload <upload>` and :ref:`download <download>` resources.
 
 Altering profile settings
---------------------------
+-------------------------
 
 It is possible to set up a custom profile file in: ::
 

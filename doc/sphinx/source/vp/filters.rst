@@ -307,7 +307,7 @@ append a list of filter rules to the rules obtained by the mechanisms described 
 The value of ``added_filter_rules`` should be a list of rules with the same format as ``filter_rules``.
 
 
-.. _drop_filter_rules::
+.. _drop_filter_rules:
 
 Dropping filter rules for selected datasets
 -------------------------------------------
