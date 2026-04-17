@@ -6,7 +6,7 @@ Continuous integration and deployment
 The NNPDF code base makes use of externally hosted services, to aid development
 and testing. These are typically called *Continuous integration (CI)* or
 *Continuous deployment* services. Their main task is to execute automated tests
-on the code and produce :ref:`binary builds <conda>` which allow it to be
+on the code and produce :ref:`binary builds <conda-packages>` which allow it to be
 automatically deployed. The tests automatically run upon ``git push`` to any branch
 in the GitHub server (see :ref:`git <gitsection>`).
 
