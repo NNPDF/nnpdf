@@ -17,7 +17,7 @@ The uploading system is designed to be integrated with ``validphys``. Reports,
 hopefully filled with the :ref:`appropriate metadata <vpmetadata>` in the runcard, can
 be :ref:`uploaded directly <uploading-directly-from-validphys>`, or after they have
 been completed using the ``vp-upload`` :ref:`script <vpupload>`. Arbitrary
-files can be uploaded using the ``wiki-upload `` :ref:`script <the-wiki-upload-script>`,
+files can be uploaded using the ``wiki-upload`` :ref:`script <the-wiki-upload-script>`,
 which will interactively ask the user to fill in the metadata. In either case an
 URL will be returned with the location of the resource accessible with a web
 browser.

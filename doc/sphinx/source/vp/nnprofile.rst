@@ -66,9 +66,8 @@ the code. These should be specified in YAML format.
     A list of URLs where to search completed fits from.
 
 ``fit_index``
-	A filename that, when appended to each fit urls, points to an index with a
-    list of fits available from that location. You shouldn't change this as it
-    is configurable for historical reasons.
+    A filename that, when appended to each fit urls, points to an index with a list of fits available
+    from that location. You shouldn't change this as it is configurable for historical reasons.
 
 ``theory_urls``
     A list of URLs pointing to theory repositories.
