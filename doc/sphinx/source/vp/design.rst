@@ -1,4 +1,6 @@
- .. _design:
+:orphan:
+
+.. _design:
 
 The design of ``validphys 2``
 =============================
