@@ -29,6 +29,7 @@ to the ``nnpdf@lxplus`` account at CERN.
 
 
 .. _server-access:
+
 Access
 ------
 
@@ -169,6 +170,8 @@ The following cron jobs are registered for the ``root`` user:
 - perform a certbot renew every Monday.
 - reboot every Sunday at 6am (in order to use new kernels).
 - perform system update every day.
+
+.. _web-server:
 
 Web server Configuration
 ------------------------
