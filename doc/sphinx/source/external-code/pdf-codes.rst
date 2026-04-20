@@ -23,7 +23,7 @@ alongside NNPDF, and so it therefore contains the features and settings required
 That is, it includes quark masses in the MSbar scheme, the various FONLL heavy quark schemes, scale
 variations up to NLO, etc. Note that at the time of writing, a more streamlined code is being
 written to replace APFEL, which is currently dubbed EKO ('Evolution Kernel Operator'). To find more
-general information about PDF evolution and the DGLAP equations, you can go to the :ref:`Theory section <thoery>`.
+general information about PDF evolution and the DGLAP equations, you can go to the :ref:`Theory section <theory>`.
 
 PDF compression
 ---------------

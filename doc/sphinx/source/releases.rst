@@ -1,4 +1,5 @@
 .. _releases:
+
 Releases and compatibility policy
 =================================
 
@@ -12,6 +13,7 @@ main results, such as NNPDF 4.0 :cite:p:`nnpdf40` will be produced with a frozen
 <docker>` so that they can be reproduced entirely.
 
 .. _tags:
+
 Tags
 ----
 
@@ -54,6 +56,7 @@ significant releases since the code was made public are:
     Used to produce the NNPDF 4.0 :cite:p:`nnpdf40` fits.
 
 .. _compatibility_policy:
+
 Compatibility Policy
 --------------------
 
