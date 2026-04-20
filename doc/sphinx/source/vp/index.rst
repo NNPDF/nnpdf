@@ -79,7 +79,7 @@ More detailed functionality
 .. toctree::
    :maxdepth: 1
 
-   ./design.md
+   ./design.rst
    ./namespaces.rst
    ./resolving_dependencies.rst
    ./collect.rst
