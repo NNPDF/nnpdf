@@ -6,7 +6,7 @@ How to plot PDFs, distances and luminosities
 Plotting any number of PDFs can be done using ``validphys``.  There are several
 kinds of plots which can be made using the actions in the module ``pdfplots.py``.
 The runcards in this section can be found
-`here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples>`_.
+`in this section of the NNPDF repository <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples>`_.
 
 Runcard basics
 --------------
