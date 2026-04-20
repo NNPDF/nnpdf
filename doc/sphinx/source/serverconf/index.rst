@@ -55,10 +55,10 @@ Access for continuous deployment tools
 
 The :ref:`conda packages <conda-packages>` as well as the documentation are
 automatically uploaded to the server by the Continous Integration service
-(Travis), through an user called ``dummy`` which has further reduction in
+(Travis), through a user called ``dummy`` which has further reduction in
 privileges (it uses the ``rssh`` `shell <https://linux.die.net/man/1/rssh>`_ and it
-is only allowed to run the ``scp`` command. An accepted private key is stored
-securely in the :ref:`Travis configuration <travis-variables>`.  The packages
+is only allowed to run the ``scp`` command). An accepted private key is stored
+securely in the Travis configuration.  The packages
 are uploaded to ``/home/nnpdf/packages``.
 
 HTTP access
