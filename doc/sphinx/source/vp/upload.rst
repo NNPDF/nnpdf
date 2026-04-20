@@ -10,7 +10,7 @@ uploaded to the ``validphys`` repository, so that they are accessible from
 `https://vp.nnpdf.science <https://vp.nnpdf.science>`_
 
 The files in this repository are backed up to two locations, indexed and cross
-referenced with the :ref:`mailing list <mail>`. The HTTP access to the files is
+referenced with the mailing list. The HTTP access to the files is
 password protected.
 
 The uploading system is designed to be integrated with ``validphys``. Reports,
@@ -125,7 +125,7 @@ When the ``--upload`` flag is set in the invocation of the ``validphys`` command
 the contents of the output folder will be uploaded to the NNPDF data server,
 after validphys is done. Use this if you have :ref:`filled the meta mapping in the
 runcard <vpmetadata>` and already know that the output is going to be good enough
-to share. Otherwise use :ref:`vp-upload <the-vp-upload-script>` after checking the result.
+to share. Otherwise use :ref:`vp-upload <vpupload>` after checking the result.
 
 ``validphys`` will check the SSH connection before doing any work, and
 it will fail early if it cannot be established.
