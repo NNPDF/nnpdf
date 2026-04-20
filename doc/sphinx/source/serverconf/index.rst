@@ -40,9 +40,7 @@ The access to the server is provided by
 ``ssh``/:ref:`vp-upload <upload>` with the following restrictions:
 
 - ``ssh`` access to ``root`` is forbidden.
-- There is a shared ``nnpdf`` user with low privileges. In order to login
-the user must send his public ssh key (usually in ``~/.ssh/id_rsa.pub``) to SC.
-The ``nnpdf`` is not allowed to login with password.
+- There is a shared ``nnpdf`` user with low privileges. In order to login the user must send his public ssh key (usually in ``~/.ssh/id_rsa.pub``) to SC. This ``nnpdf`` user is not allowed to login with password.
 
 The ``nnpdf`` user shares a common ``/home/nnpdf`` folder where all NNPDF
 material is stored. Public access to data is available for all files
