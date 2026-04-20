@@ -90,7 +90,7 @@ Hyperparameter scans
     Files produced by ``validphys`` can be used as input to subsequent validphys
     analyses (for example χ² tables are used for αs fits). The user needs to
     have HTTP access to the repository, which is provided when installing using
-    the :ref:`bootstrap script <conda>`. Output files are not specified by any
+    the :ref:`bootstrap script <conda-packages>`. Output files are not specified by any
     top level config key, but instead actions can specify their own logic, for
     example for using an existing file instead of computing it.
 

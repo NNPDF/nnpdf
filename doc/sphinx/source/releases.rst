@@ -5,10 +5,10 @@ Releases and compatibility policy
 Development occur in the tip of the `master branch <https://github.com/NNPDF/nnpdf/tree/master>`_
 while we aim for this branch to be stable, tested and correct, this is not guaranteed.
 Premade packages are available for the latest tag
-:ref:`generated automatically<CI>` and can be :ref:`readily installed<conda>`.
+:ref:`generated automatically<CI>` and can be :ref:`readily installed <conda-packages>`.
 See the compatibility policy below. The
 main results, such as NNPDF 4.0 :cite:p:`nnpdf40` will be produced with a frozen
-:ref:`tag <tags>`, a :ref:`conda environment <conda>` and a :ref:`docker image
+:ref:`tag <tags>`, a :ref:`conda environment <conda-packages>` and a :ref:`docker image
 <docker>` so that they can be reproduced entirely.
 
 .. _tags:

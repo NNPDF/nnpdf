@@ -52,7 +52,7 @@ in the ``/home/nnpdf/WEB`` folder. The ``validphys`` reports are stored in
 Access for continuous deployment tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :ref:`conda packages<conda>` as well as the documentation are
+The :ref:`conda packages <conda-packages>` as well as the documentation are
 automatically uploaded to the server by the Continous Integration service
 (Travis), through an user called ``dummy`` which has further reduction in
 privileges (it uses the ``rssh`` `shell <https://linux.die.net/man/1/rssh>`_ and it
@@ -63,11 +63,11 @@ are uploaded to ``/home/nnpdf/packages``.
 HTTP access
 ~~~~~~~~~~~
 
-Tools such as :ref:`conda <conda>` and :ref:`vp-get<download>` require access to
+Tools such as :ref:`conda <conda-packages>` and :ref:`vp-get<download>` require access to
 private URLs, which are password-protected, using HTTP basic_auth. The
 access is granted by a ``/.netrc`` file containing the user and password
 for the relevant servers. The ``/.netrc`` file is typically generated
-at :ref:`installation<conda>` time. It should look similar to::
+at :ref:`installation <conda-packages>` time. It should look similar to::
 
   machine vp.nnpdf.science
       login nnpdf
