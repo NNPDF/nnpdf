@@ -687,7 +687,7 @@ N space solutions to the evolution equations (Ref. )
 
     \binom{\Sigma}{g}(N,a_s) = \bigg[\mathbb{I}+\sum_{k=1}^{\infty}a_s^kU_k(N)\bigg] \mathbf{L}(a_s,a_0,N)\bigg[\mathbb{I}+\sum_{k=1}^{\infty}a_0^kU_k(N)\bigg]^{-1}\binom{\Sigma}{g}(N,a_0)\equiv \mathbf{\Gamma}_S(N,a_s,a_0)\binom{\Sigma}{g}(N,a_0)
 
--  The *fully truncated*\  [1]_ expression of the matrix evolution
+-  The *fully truncated* expression of the matrix evolution
    kernel up to NNLO reads
 
 .. math::
