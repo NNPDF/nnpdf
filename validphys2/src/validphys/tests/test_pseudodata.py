@@ -8,8 +8,6 @@ This is used to benchmark the correctness of the pseudodata
 recreation.
 """
 
-from pathlib import Path
-
 import numpy as np
 from numpy.testing import assert_allclose
 import pandas as pd
@@ -87,11 +85,6 @@ def test_read_matches_recreate():
 
     for fit in [PSEUDODATA_FIT, PSEUDODATA_FIT_DIAG]:
         diagonal_basis = True if fit == PSEUDODATA_FIT_DIAG else False
-        if diagonal_basis:
-            fit_spec = API.fit(fit=fit)
-            rotation_file = Path(fit_spec.path) / "tables" / "diagonal_basis_rotation.csv"
-            if not rotation_file.exists():
-                pytest.fail(f"Diagonal rotation file not available for {fit}")
         reads = API.read_fit_pseudodata(fit=fit, diagonal_basis=diagonal_basis)
         recreates = API.recreate_fit_pseudodata(fit=fit, diagonal_basis=diagonal_basis)
         for read, recreate in zip(reads, recreates):

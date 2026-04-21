@@ -549,9 +549,6 @@ def fitting_data_dict(
 
 
 exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
-groups_dataset_inputs_fitting_covmat = collect(
-    "dataset_inputs_fitting_covmat", ("group_dataset_inputs_by_metadata",)
-)
 
 
 @table
@@ -604,8 +601,19 @@ experiment_indexed_make_replica = collect(
 )
 
 
+def diagonal_indexed_make_replica(indexed_make_replica, fitting_data_dict):
+    """Rotate one group pseudodata block to the diagonal basis."""
+    values = indexed_make_replica.iloc[:, 0].to_numpy()
+    diag_rot = fitting_data_dict.get("data_transformation")
+    rotated_values = values if diag_rot is None else diag_rot @ values
+    return pd.DataFrame(rotated_values, columns=["data"])
+
+
 def replica_pseudodata(
-    experiment_indexed_make_replica, exps_fitting_data_dict, replica, diagonal_basis=True
+    experiment_indexed_make_replica,
+    experiment_diagonal_indexed_make_replica,
+    replica,
+    diagonal_basis=True,
 ):
     """Creates a pandas DataFrame containing the generated pseudodata.
     The index is :py:func:`validphys.results.experiments_index` and the columns
@@ -624,22 +632,15 @@ def replica_pseudodata(
         df.columns = [replica_column]
         return df
 
-    diagonal_frames = []
-    mode_counter = 0
-    for indexed_replica, fit_data in zip(experiment_indexed_make_replica, exps_fitting_data_dict):
-        values = indexed_replica.iloc[:, 0].to_numpy()
-        diag_rot = fit_data.get("data_transformation")
-        rotated_values = values if diag_rot is None else diag_rot @ values
-        next_counter = mode_counter + len(rotated_values)
-        eigenmode_index = pd.Index(
-            [f"eigenmode {i}" for i in range(mode_counter, next_counter)], name="eigenmode"
-        )
-        diagonal_frames.append(
-            pd.DataFrame(rotated_values, index=eigenmode_index, columns=[replica_column])
-        )
-        mode_counter = next_counter
+    df = pd.concat(experiment_diagonal_indexed_make_replica, ignore_index=True)
+    df.columns = [replica_column]
+    df.index = pd.Index([f"eigenmode {i}" for i in range(len(df))])
+    return df
 
-    return pd.concat(diagonal_frames)
+
+experiment_diagonal_indexed_make_replica = collect(
+    "diagonal_indexed_make_replica", ("group_dataset_inputs_by_metadata",)
+)
 
 
 @_per_replica
