@@ -10,7 +10,6 @@ from copy import copy
 import functools
 import hashlib
 import logging
-import pathlib
 
 import numpy as np
 import pandas as pd
@@ -21,8 +20,6 @@ from validphys.core import IntegrabilitySetSpec, TupleComp
 from validphys.n3fit_data_utils import validphys_group_extractor
 
 log = logging.getLogger(__name__)
-
-DIAGONAL_BASIS_ROTATION_FILENAME = "diagonal_basis_rotation.csv"
 
 
 class Hashrray(TupleComp):
@@ -558,9 +555,6 @@ def diagonal_basis_rotation_table(output_path, _inv_covmat_prepared, diagonal_ba
     """
     if not diagonal_basis:
         return None
-
-    table_path = pathlib.Path(output_path) / "tables"
-    table_path.mkdir(parents=True, exist_ok=True)
 
     _, _, diagonal_rotation, eig_vals = _inv_covmat_prepared
     if diagonal_rotation is None or eig_vals is None:

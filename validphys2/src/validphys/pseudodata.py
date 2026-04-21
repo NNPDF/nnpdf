@@ -20,8 +20,6 @@ from validphys.covmats import (
 
 log = logging.getLogger(__name__)
 
-DIAGONAL_BASIS_ROTATION_FILENAME = "diagonal_basis_rotation.csv"
-
 DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
 
 context_index = collect("groups_index", ("fitcontext",))
@@ -33,7 +31,7 @@ class ReplicaGenerationError(Exception):
     pass
 
 
-def read_replica_pseudodata(fit, context_index, replica, diagonal_basis=True):
+def read_replica_pseudodata(fit, context_index, replica):
     """Function to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
 
@@ -72,6 +70,11 @@ def read_replica_pseudodata(fit, context_index, replica, diagonal_basis=True):
                             5    3.117819
                             6    0.771079
     """
+    # List of length 1 due to the collect
+    context_index = context_index[0]
+    # The [0] is because of how pandas handles sorting a MultiIndex
+    sorted_index = context_index.sortlevel(level=range(1, 3))[0]
+
     log.debug(f"Reading pseudodata & training/validation splits from {fit.name}.")
     replica_path = fit.path / "nnfit" / f"replica_{replica}"
 
@@ -85,16 +88,8 @@ def read_replica_pseudodata(fit, context_index, replica, diagonal_basis=True):
         vl_pseudodatafile = "datacuts_theory_fitting_validation_pseudodata.csv"
 
     try:
-        if diagonal_basis:
-            tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0], sep="\t", header=0)
-            val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0], sep="\t", header=0)
-        else:
-            tr = pd.read_csv(
-                replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0
-            )
-            val = pd.read_csv(
-                replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0
-            )
+        tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+        val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
     except FileNotFoundError as e:
         raise FileNotFoundError(
             "Could not find saved training and validation data files. "
@@ -105,23 +100,19 @@ def read_replica_pseudodata(fit, context_index, replica, diagonal_basis=True):
 
     pseudodata = pd.concat((tr, val))
 
-    if not diagonal_basis:
-        # List of length 1 due to the collect
-        context_index = context_index[0]
-        # The [0] is because of how pandas handles sorting a MultiIndex
-        sorted_index = context_index.sortlevel(level=range(1, 3))[0]
+    # In order for this function to work also with old fit, it is necessary to remap the names
+    # being read (since the names in the context have already been remapped)
+    # The following checks whether a given name is in both the context and the fit, and if not
+    # tries to get it from the old_to_new mapping.
+    mapping = {}
+    context_datasets = context_index.get_level_values("dataset").unique()
+    for dsname in pseudodata.index.get_level_values("dataset").unique():
+        if dsname not in context_datasets:
+            new_name, _ = legacy_to_new_map(dsname)
+            mapping[dsname] = new_name
 
-        # In order for this function to work also with old fit, it is necessary to remap the names
-        # being read (since the names in the context have already been remapped)
-        mapping = {}
-        context_datasets = context_index.get_level_values("dataset").unique()
-        for dsname in pseudodata.index.get_level_values("dataset").unique():
-            if dsname not in context_datasets:
-                new_name, _ = legacy_to_new_map(dsname)
-                mapping[dsname] = new_name
-
-        pseudodata = pseudodata.rename(mapping, level=1).sort_index(level=range(1, 3))
-        pseudodata.index = sorted_index
+    pseudodata = pseudodata.rename(mapping, level=1).sort_index(level=range(1, 3))
+    pseudodata.index = sorted_index
 
     tr = pseudodata[pseudodata["type"] == "training"]
     val = pseudodata[pseudodata["type"] == "validation"]
@@ -323,28 +314,6 @@ def indexed_make_replica(groups_index, make_replica):
     return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
 
 
-def _load_diagonal_rotation(fit):
-    """Load the fixed diagonal-basis rotation table written during vp-setupfit."""
-    rotation_path = fit.path / "tables" / DIAGONAL_BASIS_ROTATION_FILENAME
-    rotation_table = pd.read_csv(rotation_path, sep="\t", index_col=0)
-    rotation_table = rotation_table.sort_index(
-        key=lambda idx: idx.str.replace("eigenmode ", "").astype(int)
-    )
-    eigenvector_cols = [c for c in rotation_table.columns if c.startswith("evec_")]
-    return rotation_table[eigenvector_cols].to_numpy()
-
-
-def load_diagonal_rotation_and_eigenvalues(fit):
-    """Return the global rotation matrix and eigenvalues for diagonal-basis fits."""
-    rotation_path = fit.path / "tables" / DIAGONAL_BASIS_ROTATION_FILENAME
-    rotation_table = pd.read_csv(rotation_path, sep="\t", index_col=0)
-    rotation_table = rotation_table.sort_index(
-        key=lambda idx: idx.str.replace("eigenmode ", "").astype(int)
-    )
-    eigenvector_cols = [c for c in rotation_table.columns if c.startswith("evec_")]
-    return rotation_table[eigenvector_cols].to_numpy(), rotation_table["eigenvalue"].to_numpy()
-
-
 def level0_commondata_wc(data, fakepdf):
     """
     Given a validphys.core.DataGroupSpec object, load commondata and
@@ -505,9 +474,7 @@ fitted_make_replicas = collect('make_replica', ('pdfreplicas',))
 indexed_make_replicas = collect('indexed_make_replica', ('replicas',))
 
 
-def recreate_fit_pseudodata(
-    _recreate_fit_pseudodata, fitreplicas, fit_masks, fit, diagonal_basis=False
-):
+def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_masks):
     """Function used to reconstruct the pseudodata seen by each of the
     Monte Carlo fit replicas.
 
@@ -532,28 +499,16 @@ def recreate_fit_pseudodata(
     :py:func:`validphys.pseudodata.recreate_pdf_pseudodata`
     """
     res = []
-    diagonal_rotation = _load_diagonal_rotation(fit) if diagonal_basis else None
-
     for pseudodata, mask, rep in zip(_recreate_fit_pseudodata, fit_masks, fitreplicas):
         df = pd.concat(pseudodata)
         df.columns = [f"replica {rep}"]
-
-        if diagonal_rotation is not None:
-            rotated_values = diagonal_rotation @ df.iloc[:, 0].to_numpy()
-            eigenmode_index = pd.Index(
-                [f"eigenmode {i}" for i in range(len(rotated_values))], name="eigenmode"
-            )
-            df = pd.DataFrame(rotated_values, index=eigenmode_index, columns=[f"replica {rep}"])
-
         tr_idx = df.loc[mask[0].values].index
         val_idx = df.loc[mask[1].values].index
         res.append(DataTrValSpec(df, tr_idx, val_idx))
     return res
 
 
-def recreate_pdf_pseudodata(
-    _recreate_pdf_pseudodata, pdfreplicas, pdf_masks, fit, diagonal_basis=False
-):
+def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks):
     """Like :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     but accounts for the postfit reshuffling of replicas.
 
@@ -573,21 +528,11 @@ def recreate_pdf_pseudodata(
     --------
     :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     """
-    return recreate_fit_pseudodata(
-        _recreate_pdf_pseudodata, pdfreplicas, pdf_masks, fit, diagonal_basis=diagonal_basis
-    )
+    return recreate_fit_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks)
 
 
 pdf_masks_no_table = collect('replica_mask', ('pdfreplicas', 'fitenvironment'))
 
 
-def recreate_pdf_pseudodata_no_table(
-    _recreate_pdf_pseudodata, pdfreplicas, pdf_masks_no_table, fit, diagonal_basis=False
-):
-    return recreate_pdf_pseudodata(
-        _recreate_pdf_pseudodata,
-        pdfreplicas,
-        pdf_masks_no_table,
-        fit,
-        diagonal_basis=diagonal_basis,
-    )
+def recreate_pdf_pseudodata_no_table(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks_no_table):
+    return recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks_no_table)

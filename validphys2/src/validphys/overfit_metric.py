@@ -17,7 +17,6 @@ from reportengine.figure import figure
 from reportengine.table import table
 from validphys import plotutils
 from validphys.checks import check_at_least_two_replicas
-from validphys.pseudodata import load_diagonal_rotation_and_eigenvalues
 
 log = logging.getLogger(__name__)
 
@@ -40,12 +39,6 @@ def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
     return np.array(vl_data_fitrep)[:, :, 0]
 
 
-def _eigenmode_ids(eigenmode_index):
-    return np.array(
-        [int(str(label).replace("eigenmode ", "")) for label in eigenmode_index], dtype=int
-    )
-
-
 @check_at_least_two_replicas
 def calculate_chi2s_per_replica(
     pdf,  # for the check
@@ -54,7 +47,6 @@ def calculate_chi2s_per_replica(
     preds,
     dataset_inputs,
     groups_covmat_no_table,
-    fit,
 ):
     """Calculates, for each PDF replica, the chi2 of the validation with the
     pseudodata generated for all other replicas in the fit
@@ -94,46 +86,28 @@ def calculate_chi2s_per_replica(
 
     PDF_predictions = pd.concat(pp)
 
-    diagonal_mode = isinstance(
-        recreate_pdf_pseudodata_no_table[0].val_idx, pd.Index
-    ) and not isinstance(recreate_pdf_pseudodata_no_table[0].val_idx, pd.MultiIndex)
-    rotation = None
-    eigenvalues = None
-    if diagonal_mode:
-        rotation, eigenvalues = load_diagonal_rotation_and_eigenvalues(fit)
-
     chi2s_per_replica = []
     for enum, pdf_data_index in enumerate(recreate_pdf_pseudodata_no_table):
-        if diagonal_mode and rotation is not None:
-            # Build full prediction vector in data space for this PDF replica and rotate it.
-            full_prediction = PDF_predictions.values[:, enum]
-            rotated_prediction = rotation @ full_prediction
-            mode_ids = _eigenmode_ids(pdf_data_index.val_idx)
-            PDF_predictions_val = rotated_prediction[mode_ids]
-        else:
-            prediction_filter = pdf_data_index.val_idx.droplevel(level=0)
-            prediction_filter.rename(["dataset", "data"], inplace=True)
-            PDF_predictions_val = PDF_predictions.loc[prediction_filter]
-            PDF_predictions_val = PDF_predictions_val.values[:, enum]
+        prediction_filter = pdf_data_index.val_idx.droplevel(level=0)
+        prediction_filter.rename(["dataset", "data"], inplace=True)
+        PDF_predictions_val = PDF_predictions.loc[prediction_filter]
+        PDF_predictions_val = PDF_predictions_val.values[:, enum]
 
         new_val_pseudodata_list = _create_new_val_pseudodata(
             pdf_data_index, recreate_pdf_pseudodata_no_table
         )
 
-        if diagonal_mode and eigenvalues is not None:
-            mode_ids = _eigenmode_ids(pdf_data_index.val_idx)
-            invcovmat_vl = np.diag(1.0 / eigenvalues[mode_ids])
-        else:
-            invcovmat_vl = np.linalg.inv(
-                groups_covmat_no_table[pdf_data_index.val_idx].T[pdf_data_index.val_idx]
-            )
+        invcovmat_vl = np.linalg.inv(
+            groups_covmat_no_table[pdf_data_index.val_idx].T[pdf_data_index.val_idx]
+        )
 
         tmp = PDF_predictions_val - new_val_pseudodata_list
 
         chi2 = np.einsum("ij,jk,ik->i", tmp, invcovmat_vl, tmp) / tmp.shape[1]
         chi2s_per_replica.append(chi2)
+        ret = np.array(chi2s_per_replica)
 
-    return np.array(chi2s_per_replica)
+    return ret
 
 
 def array_expected_overfitting(
