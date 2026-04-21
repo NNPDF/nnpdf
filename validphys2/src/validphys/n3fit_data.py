@@ -554,10 +554,10 @@ groups_dataset_inputs_fitting_covmat = collect(
 )
 
 
-def save_diagonal_basis_rotation(output_path, _inv_covmat_prepared, diagonal_basis=True):
-    """Store a single fit-level table with eigenvalues and eigenvectors.
-
-    The rows are globally indexed as ``eigenmode N`` to line up with diagonal-basis pseudodata.
+@table
+def diagonal_basis_rotation_table(output_path, _inv_covmat_prepared, diagonal_basis=True):
+    """
+    Save the diagonal basis rotation.
     """
     if not diagonal_basis:
         return None
@@ -573,11 +573,8 @@ def save_diagonal_basis_rotation(output_path, _inv_covmat_prepared, diagonal_bas
     df_rotation = pd.DataFrame(diagonal_rotation)
     df_rotation.insert(0, "eig_val", eig_vals)
     df_rotation.index = pd.Index([f"eigenmode {i}" for i in range(len(eig_vals))])
-
-    output_file = table_path / DIAGONAL_BASIS_ROTATION_FILENAME
-    df_rotation.to_csv(output_file, sep="\t", index=True)
-    log.info("Saved diagonal-basis rotation table to %s", output_file)
-    return output_file
+    log.info("Saving diagonal-basis rotation table")
+    return df_rotation
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):

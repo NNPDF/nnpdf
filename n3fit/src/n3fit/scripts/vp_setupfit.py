@@ -170,7 +170,7 @@ class SetupFitConfig(Config):
             check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
             filter_action = 'datacuts::theory::fitting filter'
-            rotation_action = 'datacuts::theory::fitting save_diagonal_basis_rotation'
+            rotation_action = 'datacuts::theory::fitting diagonal_basis_rotation_table'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
 
         # The settings for these actions depend on the presence of closuretest
