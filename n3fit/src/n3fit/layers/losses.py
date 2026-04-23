@@ -10,6 +10,7 @@
 
 import numpy as np
 import tensorflow as tf
+import logging
 
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
@@ -39,13 +40,13 @@ class LossInvcovmat(MetaLayer):
     True
     """
 
-    def __init__(self, invcovmat, y_true, mask=None, covmat=None, kl_weight_factor = 1, vb_layers = None, **kwargs):
+    def __init__(self, invcovmat, y_true, mask=None, covmat=None, vb_layers=None, kl_beta=None, **kwargs):
         self._invcovmat = op.numpy_to_tensor(invcovmat)
         self._covmat = covmat
         self._y_true = op.numpy_to_tensor(y_true)
         self._ndata = y_true.shape[-1]
-        self.kl_weight_factor = kl_weight_factor
         self.vb_layers = vb_layers
+        self.kl_beta = kl_beta  
         if mask is None or all(mask):
             self._mask = None
         else:
@@ -96,8 +97,8 @@ class LossInvcovmat(MetaLayer):
             einstr = "bri, ij, brj -> r" if experimental_loss else "bri, rij, brj -> r"
             loss = op.einsum(einstr, obs_diff, self.kernel, obs_diff)
 
-        if self.vb_layers:
-        # compute kl loss
+        if self.vb_layers and self.kl_beta is not None:
+            # compute kl loss
             kl = tf.constant(0.0, dtype=tf.float32)
             # Iterate over the actual layer instances
             for layer_instance in self.vb_layers:
@@ -105,10 +106,13 @@ class LossInvcovmat(MetaLayer):
                 if hasattr(layer_instance, 'kl_loss'): 
                     kl += tf.cast(layer_instance.kl_loss(), tf.float32)
             kl = tf.divide(kl, tf.cast(self._ndata, tf.float32))
-
-            self.kl_weight_factor = 1 #hardcoded value
-            loss = loss + (self.kl_weight_factor * kl)
-
+            beta_val = tf.cast(self.kl_beta.read_value(), tf.float32)
+            # Use tf.print instead of python print - works in both eager and graph mode
+            #tf.print("data_loss=", loss, "kl=", kl, "beta=", beta_val, "kl*beta=", kl * beta_val)
+            
+            loss = loss + kl * beta_val
+            
+            #tf.print("total_loss=", loss)
         return loss
 
 
