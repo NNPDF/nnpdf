@@ -8,7 +8,7 @@ meant for both public and internal consumption. It hosts the following URLs:
 
   - https://data.nnpdf.science: Hosts **public**
     NNPDF data such as PDF fits, releases etc.
-  - https://vp.nnpdf.science: Hosts the :ref:`validphys <vp-index>` 
+  - https://vp.nnpdf.science: Hosts the :ref:`validphys <vp-index>`
     report and displays an index of all of the reports.
   - https://wiki.nnpdf.science: Hosts the github wiki version.
   - https://packages.nnpdf.science/: Hosts the ``conda`` binary packages.
@@ -40,29 +40,18 @@ The access to the server is provided by
 ``ssh``/:ref:`vp-upload <upload>` with the following restrictions:
 
 - ``ssh`` access to ``root`` is forbidden.
-- There is a shared ``nnpdf`` user with low privileges. In order to login the user must send his public ssh key (usually in ``~/.ssh/id_rsa.pub``) to SC. This ``nnpdf`` user is not allowed to login with password.
+- There is a shared ``nnpdf`` user with low privileges. In order to login the user must send his public ssh key (usually in ``~/.ssh/id_rsa.pub``) to JCM. This ``nnpdf`` user is not allowed to login with password.
 
 The ``nnpdf`` user shares a common ``/home/nnpdf`` folder where all NNPDF
-material is stored. Public access to data is available for all files
-in the ``/home/nnpdf/WEB`` folder. The ``validphys`` reports are stored in
-``/home/nnpdf/validphys-reports`` and the wiki in
-``/home/nnpdf/WEB/wiki``.
+material is stored. Public access to data is available
+in the ``/home/nnpdf/WEB`` folder and the ``validphys`` reports are stored in
+``/home/nnpdf/validphys-reports``.
 
-Access for continuous deployment tools
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The :ref:`conda packages <conda-packages>` as well as the documentation are
-automatically uploaded to the server by the Continous Integration service
-(Travis), through a user called ``dummy`` which has further reduction in
-privileges (it uses the ``rssh`` `shell <https://linux.die.net/man/1/rssh>`_ and it
-is only allowed to run the ``scp`` command). An accepted private key is stored
-securely in the Travis configuration.  The packages
-are uploaded to ``/home/nnpdf/packages``.
 
 HTTP access
 ~~~~~~~~~~~
 
-Tools such as :ref:`conda <conda-packages>` and :ref:`vp-get<download>` require access to
+Tools such as the private :ref:`conda <conda-packages>` and :ref:`vp-get<download>` require access to
 private URLs, which are password-protected, using HTTP basic_auth. The
 access is granted by a ``/.netrc`` file containing the user and password
 for the relevant servers. The ``/.netrc`` file is typically generated
@@ -156,9 +145,9 @@ Cron jobs
 The following cron jobs are registered for the ``nnpdf`` user:
 
 - every day at 4 AM run the ``index-email.py`` script.
-- at every reboot run ``index-reports.py``, ``index-fits.py``, ``index-hyperscan.py``, ``index-packahes-public.sh`` 
-  and ``index-packages-private.sh``, which monitor continuously the respective folders and create indexes that 
-  can be used by various applications. The first two are homegrown scripts (see :ref:`Web Scripts <web-scripts>`) 
+- at every reboot run ``index-reports.py``, ``index-fits.py``, ``index-hyperscan.py``, ``index-packahes-public.sh``
+  and ``index-packages-private.sh``, which monitor continuously the respective folders and create indexes that
+  can be used by various applications. The first two are homegrown scripts (see :ref:`Web Scripts <web-scripts>`)
   and the later two use `conda-index <https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-index.html>`_.
 
 

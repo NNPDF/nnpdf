@@ -67,7 +67,7 @@ the code. These should be specified in YAML format.
 
 ``fit_index``
     A filename that, when appended to each fit urls, points to an index with a list of fits available
-    from that location. You shouldn't change this as it is configurable for historical reasons.
+    from that location. It reflects the current location of the server.
 
 ``theory_urls``
     A list of URLs pointing to theory repositories.

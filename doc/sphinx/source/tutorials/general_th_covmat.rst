@@ -58,8 +58,8 @@ generation). The default is ``True`` for both.
       Changing either of these to ``False`` will affect the fit outcome and should
       be avoided unless you know what you are doing.
 
-1. Make sure that datasets are grouped under one big experiment called "BIGEXP",
-   just like in :ref:`vptheorycov-index`.
+When the theory covmat is active, all datasets are grouped toghether.
+For an example runcard see `here <https://github.com/NNPDF/nnpdf/blob/master/n3fit/runcards/examples/Fit_with_theory_covmat.yml>`_.
 
 
 Including both scale variation uncertainties and user uncertainties

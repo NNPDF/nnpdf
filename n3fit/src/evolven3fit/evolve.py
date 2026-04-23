@@ -97,14 +97,14 @@ def evolve_exportgrid(eko_path: pathlib.Path, exportgrids: list[ExportGrid]):
     evolved exportgrid as a dictionary of the form:
 
     .. code-block:: python
-    
+
         {
             (Q_1^2, nf1): (replica, flavours, x),
             (Q_2^2, nf1): (replica, flavours, x),
             ...
             (Q_3^2, nf2): (replica, flavours, x),
         }
-    
+
 
     with the output grouped by nf and sorted in ascending order by Q2.
 

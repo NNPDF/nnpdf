@@ -11,8 +11,8 @@ between iterations while at the same time keeping the amount of redundant calls 
 
 from collections import namedtuple
 from itertools import zip_longest
-import logging
 import json
+import logging
 
 import numpy as np
 
@@ -84,15 +84,14 @@ class ModelTrainer:
 
     Wrapper around the fitting code and the generation of the Neural Network
 
-    A "hyperparametrizable" function accepts a dictionary of hyper-parameters
+    The ``hyperparametrizable`` method accepts a dictionary of hyper-parameters
     which defines the Neural Network.
-
     When it is called with a dictionary of parameters,
     it generates a NN and subsequentially performs a fit.
 
     The motivation behind this class is minimising the amount
     of redundant calls of each hyperopt run, in particular this allows to completely reset
-    the NN at the beginning of each iteration reusing some of the previous work.  
+    the NN at the beginning of each iteration reusing some of the previous work.
     """
 
     def __init__(
@@ -172,7 +171,7 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
-        self.trials=trials
+        self.trials = trials
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -851,7 +850,7 @@ class ModelTrainer:
         Parameters used only here:
             - ``epochs``: maximum number of iterations for the fit to run
             - ``stopping_patience``: patience of the stopper after finding a new minimum
-            
+
         All other parameters are passed to the corresponding functions
         """
 
@@ -875,7 +874,6 @@ class ModelTrainer:
             epochs = int(self.trials["epochs"][idx_hyperparamters])
             stopping_patience = self.trials["stopping_patience"][idx_hyperparamters]
             stopping_epochs = int(epochs * stopping_patience)
-
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
@@ -937,7 +935,9 @@ class ModelTrainer:
             # read hyperparameter values from hyperopt results
             for rep, seed in zip(self.replicas, self._nn_seeds):
                 idx_hyperparamters = rep % self.trials["number_of_trials"]
-                activations = [self.trials["activation_per_layer"][idx_hyperparamters]] * (len(self.trials["nodes_per_layer"][idx_hyperparamters])-1)
+                activations = [self.trials["activation_per_layer"][idx_hyperparamters]] * (
+                    len(self.trials["nodes_per_layer"][idx_hyperparamters]) - 1
+                )
                 # last layer activation is always linear
                 activations.append('linear')
 
@@ -1020,7 +1020,7 @@ class ModelTrainer:
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
             )
-            
+
             if self.mode_hyperopt or (not self.trials):
                 optimizer_params = params["optimizer"]
             else:
@@ -1029,8 +1029,8 @@ class ModelTrainer:
                 optimizer_params["clipnorm"] = self.trials['clipnorm'][idx_hyperparamters]
                 optimizer_params["learning_rate"] = self.trials['learning_rate'][idx_hyperparamters]
                 optimizer_params["optimizer_name"] = self.trials['optimizer'][idx_hyperparamters]
-                
-            # Compile each of the training/validation models with the same  optimization parameters  
+
+            # Compile each of the training/validation models with the same  optimization parameters
             for model in models.values():
                 model.compile(**optimizer_params)
             self._train_and_fit(models["training"], stopping_object, epochs=epochs)
