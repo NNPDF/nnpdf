@@ -85,6 +85,7 @@ class MetaModel(Model):
     def __init__(self, input_tensors, output_tensors, scaler=None, input_values=None, **kwargs):
         self.has_dataset = False
         self.required_slots = set()
+        self.kl_beta = tf.Variable(0.1, trainable=False, name="kl_beta", dtype=tf.float32)
 
         if input_values is None:
             input_values = {}

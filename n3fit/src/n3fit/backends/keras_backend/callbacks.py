@@ -18,6 +18,8 @@ from time import time
 from keras import backend as K
 from keras.callbacks import Callback, TensorBoard
 import numpy as np
+import tensorflow as tf
+import pandas as pd
 
 from .operations import decorator_compiler
 
@@ -45,6 +47,9 @@ class CallbackStep(Callback):
         self.epochs_finished += 1
 
     def on_batch_end(self, batch, logs=None):
+        #tf.print("CallbackStep.on_batch_end called, batch=", batch)
+        #if logs is not None:
+        #    tf.print("logs keys:", list(logs.keys()))
         step_number = self.steps_in_epoch + self.epochs_finished * self.steps_per_epoch
         self.on_step_end(step_number, logs)
         self.steps_in_epoch += 1
@@ -54,12 +59,13 @@ class CallbackStep(Callback):
         The logs that get computed by default are an average over batches.
         This converts it into the logs for the current step.
         """
+        #tf.print("correct_logs called, logs keys:", list(logs.keys()) if logs else 'None')
         corrected_logs = {}
         for k in logs.keys():
             previous_total = self._previous_logs.get(k, 0.0) * self.steps_in_epoch
             current_total = logs[k] * (self.steps_in_epoch + 1)
             corrected_logs[k] = current_total - previous_total
-        self._previous_logs = logs
+        self._previous_logs = logs.copy()
         return corrected_logs
 
 
@@ -194,6 +200,101 @@ class LagrangeCallback(CallbackStep):
         """Function to be called at the end of every epoch"""
         if (epoch + 1) % self.update_freq == 0:
             self._update_weights()
+
+class KLAnnealingCallback(CallbackStep):
+    """
+    Updates the tensorflow variable "kl_beta" to increase 
+    from 0 to 1 over a specified number of warmup steps.
+
+    Parameters
+    ----------
+    kl_beta: tf.Variable
+        The variable used in the loss function to scale the KL term.
+    warmup_steps: int
+        The number of steps (epochs/batches) until kl_beta reaches 1.0.
+    """
+
+    def __init__(self, kl_beta, warmup_steps=2000):
+        super().__init__()
+        self.kl_beta = kl_beta
+        self.warmup_steps = max(1, warmup_steps)
+        self.total_steps = tf.Variable(0, trainable=False, dtype=tf.float32)
+        self.klarray = []
+
+
+    def linear_annealing(self, step, logs=None):
+        """
+        Updates the beta variable at the end of each epoch
+        Tracks total steps directly to bypass correct_logs issues.
+        """
+        # Linearly increase beta until it hits 1.0
+        self.new_beta = min(1.0, self.total_steps / self.warmup_steps)
+        self.kl_beta.assign(tf.cast(self.new_beta, self.kl_beta.dtype))
+        if self.total_steps % 100 == 0:  # debug log every 500 steps
+            tf.print("[INFO]: Linear KLAnnealing: step=", self.total_steps, " beta=", self.new_beta)
+
+    def sigmoid_annealing(self, step, logs=None):
+        k = 0.0005
+        t0 = self.warmup_steps / 2
+        
+        self.new_beta = 1 / (1 + tf.exp(-k*(self.total_steps-t0)))
+        self.kl_beta.assign(tf.cast(self.new_beta, self.kl_beta.dtype))
+        if self.total_steps % 100 == 0:  # debug log every 500 steps
+            tf.print("[INFO]: Sigmoid KLAnnealing: step=", self.total_steps, " beta=", self.new_beta)
+
+    def cyclical_annealing(self, step, logs=None):
+        
+        cycle_len = self.warmup_steps // 4
+        # Linear ramp within the cycle
+        rel_step = self.total_steps % cycle_len
+        self.new_beta = min(1.0, rel_step / (cycle_len * 0.5)) # Ramp for 50% of the cycle
+        self.kl_beta.assign(tf.cast(self.new_beta, self.kl_beta.dtype))
+        if self.total_steps % 100 == 0:  # debug log every 500 steps
+            tf.print("[INFO]: Cyclical KLAnnealing: step=", self.total_steps, " beta=", self.new_beta)
+    
+    def old_cosine_annealing(self, step, logs=None):
+        beta_min = tf.cast(0.1, tf.float32)
+        beta_max = tf.cast(1.0, tf.float32)
+        ratio = tf.cast(0.5, tf.float32)
+        cycle_len = tf.cast(self.warmup_steps // 4, tf.float32)
+        
+        t_mod = tf.cast(self.total_steps % cycle_len, tf.float32)
+        ramp_end = ratio * cycle_len
+        
+        phi = t_mod / ramp_end
+        ramped = beta_min + 0.5 * (beta_max - beta_min) * (1 - tf.math.cos(np.pi * phi))
+        
+        self.new_beta = tf.cond(t_mod < ramp_end, lambda: ramped, lambda: beta_max)   
+
+    def cosine_annealing(self, step, logs=None):
+        beta_min = tf.cast(0.1, tf.float32)
+        beta_max = tf.cast(1.0, tf.float32)
+        ratio = tf.cast(0.5, tf.float32)
+        cycle_len = tf.cast(self.warmup_steps // 4, tf.float32)
+        
+        t_mod = tf.cast(self.total_steps % cycle_len, tf.float32)
+        ramp_end = ratio * cycle_len
+        
+        phi = t_mod / ramp_end
+        ramped = beta_min + 0.5 * (beta_max - beta_min) * (1 - tf.math.cos(np.pi * phi))
+        
+        cyclical_beta = tf.cond(t_mod < ramp_end, lambda: ramped, lambda: beta_max)
+
+        self.new_beta = tf.cond(step > self.warmup_steps, lambda: beta_max, lambda: cyclical_beta)
+        
+    def on_step_end(self, step, logs=None):
+        self.total_steps.assign_add(1)
+        #tf.print("KL.on_step_end: total_steps=", self.total_steps, " model=", self.model is not None)
+        self.cosine_annealing(step)
+        old_beta = self.kl_beta.read_value()
+        self.kl_beta.assign(tf.cast(self.new_beta, self.kl_beta.dtype))
+        new_beta = self.kl_beta.read_value()
+        self.klarray.append(new_beta)
+        
+    def on_train_end(self, logs=None):
+        pd.DataFrame(self.klarray, columns=["kl_beta"]).to_csv(
+            "/mnt/c/Users/daksh/nnpdf_reports/kl.csv", index=False
+        )
 
 
 def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):

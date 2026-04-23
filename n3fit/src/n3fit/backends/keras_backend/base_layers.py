@@ -152,7 +152,7 @@ class VBDense(Layer):
                                 - logsig2_w - tf.constant(1.0, dtype=tf.float64) - tf.math.log(self.prior_prec)))
         return kl
         
-    def call(self, input: tf.Tensor) -> tf.Tensor:
+    """def call(self, input: tf.Tensor) -> tf.Tensor:
         # Ensure input is tf.float64
         input = tf.cast(input, tf.float64)
     
@@ -180,9 +180,28 @@ class VBDense(Layer):
             weight = self.mu_w + tf.math.sqrt(s2_w) * epsilon #self.random
             
             return tf.matmul(input, weight, transpose_b=True) + self.bias
+    """
 
-
-
+    def old_call(self, input: tf.Tensor) -> tf.Tensor:
+        input = tf.cast(input, tf.float64)
+        logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
+        std_w = tf.math.exp(0.5*logsig2_w)
+        epsilon = tf.random.normal(shape=tf.shape(self.mu_w), dtype=tf.float64)
+        weight = self.mu_w + std_w * epsilon
+        return tf.matmul(input, weight, transpose_b=True) + self.bias
+    
+    def call(self, input):
+        input = tf.cast(input, tf.float64)
+        n_samples = 5  # average over multiple weight samples per step
+        outputs = []
+        for _ in range(n_samples):
+            logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
+            std_w = tf.math.exp(0.5 * logsig2_w)
+            epsilon = tf.random.normal(shape=tf.shape(self.mu_w), dtype=tf.float64)
+            weight = self.mu_w + std_w * epsilon
+            outputs.append(tf.matmul(input, weight, transpose_b=True) + self.bias)
+        return tf.reduce_mean(tf.stack(outputs), axis=0)
+    
 class Dense(KerasDense, MetaLayer):
     def __init__(self, **kwargs):
         # Set default dtype to tf.float64 if not provided
