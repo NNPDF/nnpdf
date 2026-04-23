@@ -92,7 +92,7 @@ def generate_msr_model_and_grid(
     # 4. Integrate the pdf
     pdf_integrated = xIntegrator(weights_array)(pdf_integrand)
 
-    # 5. THe input for the photon integral, will be set to 0 if no photons
+    # 5. The input for the photon integral, will be set to 0 if no photons
     photon_integral = Input(shape=(replicas, 1), batch_size=1, name='photon_integral')
 
     # 6. Compute the normalization factor

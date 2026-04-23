@@ -268,7 +268,7 @@ def performfit(
             n_bnn_samples = parameters.get('n_bnn_samples', 1)
             log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN")
             
-            bnn_predictor = BNNPredictor(pdf_model, n_samples=n_bnn_samples)
+            bnn_predictor = BNNPredictor(pdf_model, n_samples=n_bnn_samples, training_model=result["training_model"])
             pdf_models = bnn_predictor.generate_bnn_replica() # prints [<MetaModel name=PDFs, built=True>, <MetaModel name=PDFs, built=True>] for 2 bnn replica
 
             class BNNStoppingProxy:

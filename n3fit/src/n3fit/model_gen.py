@@ -77,8 +77,8 @@ class ObservableWrapper:
     positivity: bool = False
     data: np.array = None
     rotation: ObsRotation = None  # only used for diagonal covmat
-    kl_weight_factor: float = None
     vb_layers: list[VBDense] = None
+    kl_beta: float = 1.0
 
     def _generate_loss(self, mask=None):
         """Generates the corresponding loss function depending on the values the wrapper
@@ -91,8 +91,8 @@ class ObservableWrapper:
                 self.data, 
                 mask, 
                 covmat=covmat_matrix, 
-                kl_weight_factor=self.kl_weight_factor, 
                 vb_layers=self.vb_layers, 
+                kl_beta=self.kl_beta,
                 name=self.name
             )
         elif self.positivity:
@@ -146,8 +146,8 @@ def observable_generator(
     integrability=False,
     n_replicas=1,
     # NEW: BNN-specific parameters
-    kl_weight_factor: float = None,
     vb_layers=None,
+    kl_beta=1.0
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -291,8 +291,8 @@ def observable_generator(
             multiplier=positivity_initial,
             positivity=not integrability,
             integrability=integrability,
-            kl_weight_factor=kl_weight_factor,
             vb_layers=vb_layers,
+            kl_beta=kl_beta,
         )
 
         layer_info = {
@@ -311,8 +311,8 @@ def observable_generator(
         invcovmat=invcovmat_tr,
         data=training_data,
         rotation=obsrot,
-        kl_weight_factor=kl_weight_factor,
         vb_layers=vb_layers,
+        kl_beta=kl_beta,
     )
 
     out_vl = ObservableWrapper(
@@ -323,8 +323,8 @@ def observable_generator(
         invcovmat=invcovmat_vl,
         data=validation_data,
         rotation=obsrot,
-        kl_weight_factor=kl_weight_factor,
         vb_layers=vb_layers,
+        kl_beta=kl_beta,
     )
 
     # experimental data has already been rotated if diagonal basis is requested
@@ -337,8 +337,8 @@ def observable_generator(
         covmat=spec_dict["covmat"],
         data=spec_dict["expdata_true"],
         rotation=None,
-        kl_weight_factor=kl_weight_factor,
         vb_layers=vb_layers,
+        kl_beta=kl_beta,
     )
 
     layer_info = {
@@ -930,6 +930,8 @@ def _generate_nn(
 
         # Add dropout if any to the second to last layer
         if dropout_rate > 0 and layer_idx == (len(hidden_layers) - 2):
+            log = logging.getLogger(__name__)
+            log.info(f"Dropout implemented for {layer_idx+1}-th layer")
             dropout_l = base_layer_selector("dropout", rate=dropout_rate)
             previous_layer = dropout_l(previous_layer)
 

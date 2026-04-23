@@ -16,7 +16,8 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
+from n3fit.backends.keras_backend import callbacks
+from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, clear_backend_state
 from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
@@ -514,6 +515,7 @@ class ModelTrainer:
         epochs,
         interpolation_points,
         vb_layers,
+        kl_beta,
     ):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
@@ -581,6 +583,7 @@ class ModelTrainer:
                 invcovmat_vl=experiment_data["invcovmat_vl"][i],
                 n_replicas=len(self.replicas),
                 vb_layers=vb_layers,
+                kl_beta=kl_beta,
             )
 
             # Save the input(s) corresponding to this experiment
@@ -615,6 +618,7 @@ class ModelTrainer:
                 validation_data=training_data,
                 n_replicas=len(self.replicas),
                 vb_layers=vb_layers,
+                kl_beta=kl_beta,
             )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
@@ -645,6 +649,7 @@ class ModelTrainer:
                 integrability=True,
                 n_replicas=len(self.replicas),
                 vb_layers=vb_layers,
+                kl_beta=kl_beta,
             )
             # The input list is still common
             self.input_list.append(integ_layer["inputs"])
@@ -740,7 +745,7 @@ class ModelTrainer:
         # The self.input_list is still empty, and the output dictionaries are empty.
         # The next step will fill them.
 
-    def _generate_replica_losses(self, vb_layers):
+    def _generate_replica_losses(self, vb_layers, kl_beta):
         """
         Generates the model-specific observable layers and loss functions
         using the extracted vb_layers from the current replica's model.
@@ -768,7 +773,8 @@ class ModelTrainer:
                 invcovmat_vl=self._experiment_data["invcovmat_vl"][i],
                 n_replicas=len(self.replicas),
                 # NEW: BNN-specific parameters
-                vb_layers=vb_layers,  
+                vb_layers=vb_layers, 
+                kl_beta=kl_beta, 
             )
 
             self.input_list.append(exp_layer["inputs"])
@@ -801,6 +807,7 @@ class ModelTrainer:
                 validation_data=training_data,
                 n_replicas=len(self.replicas),
                 vb_layers=vb_layers, 
+                kl_beta=kl_beta,
             )
         
             self.input_list.append(pos_layer["inputs"])
@@ -829,6 +836,7 @@ class ModelTrainer:
                 integrability=True,
                 n_replicas=len(self.replicas),
                 vb_layers=vb_layers, 
+                kl_beta=kl_beta,
             )
         
             self.input_list.append(integ_layer["inputs"])
@@ -888,7 +896,7 @@ class ModelTrainer:
 
         return reporting_list
 
-    def _train_and_fit(self, train_model, stopping_object, epochs=100) -> bool:
+    def _train_and_fit(self, train_model, stopping_object, epochs=100, kl_beta=None) -> bool:
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -909,11 +917,16 @@ class ModelTrainer:
             self.training["integmultipliers"],
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
+        if kl_beta is None:
+            kl_beta = train_model.kl_beta  # fallback
+        callback_kl = callbacks.KLAnnealingCallback(kl_beta, warmup_steps=epochs//2)
+        log.info(f"KLAnnealing init: warmup_steps={epochs//4}, kl_beta initial={float(train_model.kl_beta.numpy())}")
+
 
         train_model.perform_fit(
             epochs=epochs,
             verbose=False,
-            callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
+            callbacks=self.callbacks + [callback_st, callback_pos, callback_integ, callback_kl],
         )
 
     def _hyperopt_override(self, params):
@@ -1144,22 +1157,16 @@ class ModelTrainer:
                 photons=photons,
                 training=self.training_model,
             )
-
-            """
-            vb_layers = [
-                layer for layer in pdf_model.layers
-                if layer.__class__.__name__ == 'VBDense' 
-            ]
-            """
-            vb_layers = get_vb_layers(pdf_model)
             
+            vb_layers = get_vb_layers(pdf_model)
+            kl_beta = pdf_model.kl_beta            
 
             # NEW: BNN-specific hyperparameter explicit print statement (REMOVE THIS LATER)
             for i, vb in enumerate(vb_layers):
                 log.info(f"VBDense layer {i}: prior_prec={vb.prior_prec}, std_init={vb.std_init}")
 
             # Call the dynamic loss setup function for this replica
-            self._generate_replica_losses(vb_layers=vb_layers)
+            self._generate_replica_losses(vb_layers=vb_layers, kl_beta=kl_beta)
 
             # Generate the grid in x, note this is the same for all partitions
             xinput = self._xgrid_generation()
@@ -1214,7 +1221,7 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            self._train_and_fit(models["training"], stopping_object, epochs=epochs)
+            self._train_and_fit(models["training"], stopping_object, epochs=epochs, kl_beta=pdf_model.kl_beta)
 
             if self.mode_hyperopt:
                 validation_loss = stopping_object.vl_chi2
@@ -1334,7 +1341,7 @@ class ModelTrainer:
         # and the pdf model (which are used to generate the PDF grids and compute arclengths)
         if not self.mode_hyperopt:
             passed = any(bool(i) for i in stopping_object.e_best_chi2)
-        dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_model": pdf_model}
+        dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_model": pdf_model, "training_model": models["training"]}
         return dict_out
 
     
