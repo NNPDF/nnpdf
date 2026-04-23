@@ -564,13 +564,11 @@ class HyperScanner:
         Modifies the following entries of the `parameters` dictionary:
             - prior_prec
             - std_init
-            - kl_weight_factor
         
         Parameters
         ----------
             prior_prec: dict with 'min' and 'max' keys for loguniform sampling
             std_init: dict with 'min' and 'max' keys for uniform sampling
-            kl_weight_factor: dict with 'min' and 'max' keys for loguniform sampling
         """
         if prior_prec is not None:
             prior_prec_val = hp_loguniform(
