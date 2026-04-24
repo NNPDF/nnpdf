@@ -57,7 +57,7 @@ SETUPFIT_PROVIDERS = [
     'validphys.photon.compute',
 ]
 
-SETUPFIT_DEFAULTS = dict(use_cuts='internal')
+SETUPFIT_DEFAULTS = dict(use_cuts='internal', use_t0=True)
 
 
 log = logging.getLogger(__name__)
