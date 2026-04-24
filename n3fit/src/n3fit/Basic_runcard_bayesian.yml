@@ -106,6 +106,7 @@ nnseed: 945709987
 mcseed: 519562661
 genrep: false
 diagonal_basis: false
+parallel_models: false
 
 ################################################################################
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
