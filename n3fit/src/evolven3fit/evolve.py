@@ -58,7 +58,7 @@ class ExportGrid:
         A list of the flavours contained in each element of the pdfgrid, by label. Not necessary if pids is given.
 
     replica: int
-        Index of the corresponding monte carlo replica or member
+        Index of the corresponding monte carlo replica or member.
     """
 
     q20: float
@@ -91,9 +91,12 @@ class ExportGrid:
 
 
 def evolve_exportgrid(eko_path: pathlib.Path, exportgrids: list[ExportGrid]):
-    """Takes the path to an EKO and a list of exportgrids,
+    """
+    Takes the path to an EKO and a list of exportgrids,
     returns a tuple with an info file and the
     evolved exportgrid as a dictionary of the form:
+
+    .. code-block:: python
 
         {
             (Q_1^2, nf1): (replica, flavours, x),
@@ -102,24 +105,24 @@ def evolve_exportgrid(eko_path: pathlib.Path, exportgrids: list[ExportGrid]):
             (Q_3^2, nf2): (replica, flavours, x),
         }
 
-        with the output grouped by nf and sorted in ascending order by Q2
+
+    with the output grouped by nf and sorted in ascending order by Q2.
 
     Parameters
     ----------
-        eko_path: pathlib.Path
-            Path to the evolution eko
-        exportgrids: list[ExportGrid]
-            List of ExportGrid objects to be evolved
+    eko_path: pathlib.Path
+        Path to the evolution eko
+    exportgrids: list[ExportGrid]
+        List of ExportGrid objects to be evolved
 
     Returns
     -------
-        info_file: eko_box.info_file
-            dict-like object with the info file information
-
-        evolved_replicas: dict
-            a dictionary containing all evolved PDF.
-            The format of the output is
-                { (q2, flavour number): np.ndarray(replica, flavours, x) }
+    info_file: eko_box.info_file
+        Dict-like object with the info file information.
+    evolved_replicas: dict
+        a dictionary containing all evolved PDFs.
+        The format of the output is
+        { (q2, flavour number): np.ndarray(replica, flavours, x) }
     """
     # Check that all exportgrid objects have been evaluated for 1) The same value of Q, the same value of x
     ref = exportgrids[0]

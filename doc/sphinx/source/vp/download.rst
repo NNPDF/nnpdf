@@ -50,6 +50,7 @@ resource locally will result in an error and exiting the program. The ``--net``
 flag makes the default behaviour explicit and has no effect otherwise.
 
 .. _what-can-be-downloaded:
+
 What can be downloaded
 ----------------------
 
@@ -89,14 +90,14 @@ Hyperparameter scans
     Files produced by ``validphys`` can be used as input to subsequent validphys
     analyses (for example χ² tables are used for αs fits). The user needs to
     have HTTP access to the repository, which is provided when installing using
-    the :ref:`bootstrap script <conda>`. Output files are not specified by any
+    the :ref:`bootstrap script <conda-packages>`. Output files are not specified by any
     top level config key, but instead actions can specify their own logic, for
     example for using an existing file instead of computing it.
 
 .. _vp-get:
 
 The ``vp-get`` tool
------------------
+-------------------
 
 The ``vp-get`` tool can be used to download resources manually, in the same way
 ``validphys`` would do.

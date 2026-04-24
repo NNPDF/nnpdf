@@ -1,4 +1,4 @@
- .. _design:
+.. _design:
 
 The design of ``validphys 2``
 =============================

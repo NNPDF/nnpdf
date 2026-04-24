@@ -1,6 +1,5 @@
 .. _tut_closure:
 
-
 How to run a closure test
 =========================
 
@@ -46,6 +45,7 @@ The main obvious disadvantage is that a pre-existing PDF may not be a suitable
 proxy for the underlying law.
 
 .. _prep_ct_runcard:
+
 Preparing the closure test runcard
 ----------------------------------
 

@@ -127,8 +127,8 @@ provide a faster convergence to the solution.
 	Parameters like the number of layers, nodes, activation functions are hyper-parameters that require tuning.
 
 
-To see the structure of the model, one can use Keras's ``plot_model`` function as illustrated in the script below.
-See the `Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
+To see the structure of the model, one can use Keras' ``plot_model`` function as illustrated in the script below.
+See the `this section of the Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
 
 .. code-block:: python
 
@@ -206,10 +206,7 @@ Following the gradient descent approach the training is performed in iteration s
   descent update scheme (which controls the convergence step size and speed).
 
 The gradient descent schemes are usually controlled by the **learning rate**, and the total
-**number of iterations**. Examples of fits using the ``n3fit`` methodology are available here:
-
-- DIS-only fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/KTzrle5FQGuuBdcigkDKnQ==/>`_
-- Global fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/qtXzt-BbQZGkV6P4pf9-UA==/>`_
+**number of iterations**.
 
 .. important::
 	The gradient descent scheme (RMSprop, Adagrad, etc.), the learning rate, the number of iteractions are hyper-parameters that require tuning.

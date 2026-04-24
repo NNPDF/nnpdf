@@ -1,4 +1,5 @@
 .. _pdfbases:
+
 Plotting non-trivial combinations of PDFs
 =========================================
 
@@ -16,6 +17,7 @@ We need to begin by assigning each parton a numerical index. This
 convention is laid out by the PDG as follows:
 
 .. _pdgflavs:
+
 ==========  ===============
 Index       Parton
 ==========  ===============

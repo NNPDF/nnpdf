@@ -1,5 +1,5 @@
 Chi square figures of merit
-================================================================================
+===========================
 
 Within the NNPDF methodology various figures of merit are used, each of which
 can be used in different situations. To avoid confusion, it is important to
@@ -13,7 +13,7 @@ when each of them is used.
 
 
 The basis of the loss functions: 𝜒²
---------------------------------------------------------------------------------
+-----------------------------------
 The :math:`\chi^2` figures of merit used in the NNPDF methodology are all
 based on the chi square statistic:
 
@@ -73,7 +73,7 @@ set, which needs to be specified.
 
 
 Missing higher order uncertainties
---------------------------------------------------------------------------------
+----------------------------------
 Another source of uncertainties that we may want to include in the covariance
 matrix are theoretical uncertainties, particularly missing higher order
 uncertainties estimated through scale variations. These uncertainties can be
@@ -84,7 +84,7 @@ covariance matrix'. A paper discussing the formalism can be found here:
 
 
 Future test: including PDF errors
---------------------------------------------------------------------------------
+----------------------------------
 To test the generalization power of the NNPDF fitting framework in the region
 where PDFs are not constrained by data, the 'future test' has been developed.
 The figure of merit considered in a future test is again the :math:`\chi^2`,
@@ -101,7 +101,7 @@ For a more detailed discussion of the future test formalism see e.g.
 .. _covmat-reg:
 
 Regularized covariance matrices
---------------------------------------------------------------------------------
+-------------------------------
 Information about the accuracy of the experimental uncertainty is generally not
 available, nevertheless inaccuracies in an experimental covariance matrix can
 lead to problems during optimization. Simply making a conservative estimate of
@@ -130,7 +130,7 @@ within NNPDF can be found in sections 4.2 and 8.7 of the NNPDF4.0 paper
 
 
 The weighted fit method
---------------------------------------------------------------------------------
+-----------------------
 To determine whether a specific dataset shows inconsistencies with the
 global dataset, one can produce a PDF determination in which that measurement
 is given an increased weight (usually equal to the combined weight of the other
@@ -159,7 +159,7 @@ HERACOMB_SIGMARED_C dataset to 100 by adding the following to the runcard:
 
 
 Experimental, validation, and training 𝜒²
---------------------------------------------------------------------------------
+-----------------------------------------
 When performing a PDF fit we generally distinguish three different definitions
 of the :math:`\chi^2` loss function, namely the experimental loss
 :math:`\chi^2_{\rm exp}`, the training loss :math:`\chi^2_{rm tr}` and the
@@ -180,6 +180,7 @@ of the neural network can be found in the :ref:`methodology overview
 
 
 .. _lagrange-multipliers:
+
 Positivity and integrability: Lagrange multipliers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Generally in an NNPDF fit we will want to ensure positivity and integrability of
@@ -198,7 +199,7 @@ while the analogous information for integrability can be found
 
 
 Hyperoptimized figure of merit
---------------------------------------------------------------------------------
+------------------------------
 To test the generalization power of a given methodology (a specific set of
 hyperparameter values), we employ hyperoptimization, specifically we use
 K-folds cross-validation. The idea of K-folds cross-validation is to create
