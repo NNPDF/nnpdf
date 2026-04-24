@@ -371,6 +371,7 @@ def fitting_data_dict(
     _inv_covmat_prepared,
     kfold_masks,
     fittable_datasets_masked,
+    output_path,
     threshold=0.0,
 ):
     """
@@ -421,6 +422,15 @@ def fitting_data_dict(
     fittable_datasets = fittable_datasets_masked
 
     # all covmat manipulation is shared across the replicas for memory purposes
+
+    # TODO: load vp-setupfit table
+    diagonal_basis_saved = "datacuts_theory_fitting_diagonal_basis_rotation_table.csv"
+    path_diagonal_basis = output_path / "tables" / diagonal_basis_saved
+    eigensystem = pd.read_csv(
+        path_diagonal_basis, index_col=[0], header=[0], sep="\t|,", engine="python"
+    )
+    diag_rot2 = eigensystem.iloc[:, 1:].values
+    eig_vals2 = eigensystem["eig_val"].values
     covmat, inv_true, diag_rot, eig_vals = _inv_covmat_prepared
 
     # get the masks - different for each replica so fine to call here
@@ -604,10 +614,7 @@ def diagonal_indexed_make_replica(indexed_make_replica, fitting_data_dict):
 
 
 def replica_pseudodata(
-    experiment_indexed_make_replica,
-    experiment_diagonal_indexed_make_replica,
-    replica,
-    diagonal_basis=True,
+    experiment_indexed_make_replica, diagonal_indexed_make_replica, replica, diagonal_basis=True
 ):
     """Creates a pandas DataFrame containing the generated pseudodata.
     The index is :py:func:`validphys.results.experiments_index` and the columns
@@ -626,15 +633,10 @@ def replica_pseudodata(
         df.columns = [replica_column]
         return df
 
-    df = pd.concat(experiment_diagonal_indexed_make_replica, ignore_index=True)
+    df = pd.concat(diagonal_indexed_make_replica, ignore_index=True)
     df.columns = [replica_column]
     df.index = pd.Index([f"eigenmode {i}" for i in range(len(df))])
     return df
-
-
-experiment_diagonal_indexed_make_replica = collect(
-    "diagonal_indexed_make_replica", ("group_dataset_inputs_by_metadata",)
-)
 
 
 @_per_replica

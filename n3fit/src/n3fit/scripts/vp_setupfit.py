@@ -51,10 +51,10 @@ SETUPFIT_PROVIDERS = [
     'validphys.commondata',
     'validphys.covmats',
     'validphys.filters',
-    'validphys.n3fit_data',
     'validphys.results',
     'validphys.theorycovariance.construction',
     'validphys.photon.compute',
+    'validphys.n3fit_data',
 ]
 
 SETUPFIT_DEFAULTS = dict(use_cuts='internal', use_t0=True)
