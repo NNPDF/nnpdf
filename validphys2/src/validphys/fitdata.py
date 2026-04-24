@@ -7,14 +7,16 @@ from dataclasses import dataclass
 from io import StringIO
 import json
 import logging
+import numbers
 import pathlib
+from typing import NamedTuple
 
 import numpy as np
 import pandas as pd
 
 from reportengine import collect
 from reportengine.checks import CheckError, make_argcheck
-from reportengine.floatformatting import ValueErrorTuple
+from reportengine.floatformatting import format_value_error
 from reportengine.table import table
 from validphys import checks
 from validphys.core import PDF
@@ -28,6 +30,21 @@ FIT_SUMRULES = ["momentum", "uvalence", "dvalence", "svalence"]
 
 # t = blessings.Terminal()
 log = logging.getLogger(__name__)
+
+# Redefinition of what is in reportengine.
+# TODO: fix directly there to avoid confusion
+class ValueErrorTuple(NamedTuple):
+    """A class to represent a value and its error. The only functionality it
+    adds is the ``__str__`` method, to represent the quantity."""
+    value: numbers.Real
+    error: numbers.Real
+
+    def __str__(self):
+        if self.error == 0 or not np.isfinite(np.log10(self.error)):
+            value = int(self.value) if self.value == int(self.value) else round(self.value, 4)
+            return f'{value}±0'
+        valstr, errstr = format_value_error(self.value, self.error)
+        return f'{valstr}±{errstr}'
 
 
 def num_fitted_replicas(fit):
