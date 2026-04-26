@@ -27,10 +27,11 @@ from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
 from validphys.core import DataGroupSpec
+from validphys.loader import Loader
 from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
-
+l = Loader()
 # Threshold defaults
 # Any partition with a chi2 over the threshold will discard its hyperparameters
 HYPER_THRESHOLD = 50.0
@@ -113,6 +114,7 @@ class ModelTrainer:
         lux_params=None,
         replicas=None,
         trials=None,
+        load_weights_dict=None,
     ):
         """
         Parameters
@@ -179,6 +181,7 @@ class ModelTrainer:
         else:
             self.max_cores = max_cores
         self.model_file = model_file
+        self.load_weights_dict = load_weights_dict
         self.print_summary = True
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
@@ -987,11 +990,19 @@ class ModelTrainer:
             # together with pdf model generated above
             models = self._model_generation(xinput, pdf_model, partition, k)
 
-            # Only after model generation, apply possible weight file
-            # Starting every replica with the same weights
+            # After model generation, apply possible weights files.
+            # The possibilities are a single model file (`load:`)
+            # so that every replica starts with the same weights
+            # or a weight per replica from `load_weights_from_fit`
             if self.model_file:
                 log.info("Applying model file %s", self.model_file)
                 pdf_model.load_identical_replicas(self.model_file)
+
+            if self.load_weights_dict:
+                for replica in self.replicas:
+                    weights_path = self.load_weights_dict[replica]
+                    log.info("Loading weights from path: " + str(weights_path))
+                    pdf_model.set_replica_weights_from_file(weights_path)
 
             if k > 0:
                 # Reset the positivity and integrability multipliers

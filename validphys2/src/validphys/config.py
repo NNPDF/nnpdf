@@ -165,6 +165,29 @@ class CoreConfig(configparser.Config):
 
         return pdf
 
+    def produce_load_weights_dict(self, load_weights_from_fit=None):
+        if load_weights_from_fit is None:
+            return None
+        try:
+            fit_object = self.loader.check_fit(load_weights_from_fit)
+            fit_folder = fit_object.path / "nnfit"
+            weights_name = fit_object.as_input().get("save")
+            if weights_name is None:
+                raise LoadFailedError(f"{load_weights_from_fit} does not have saved weights")
+            # Correct for extension already included
+            if weights_name.endswith(".h5"):
+                weights_name = weights_name[:-3]
+            weights_dict = {}
+            for p in fit_folder.glob(f"replica_*/{weights_name}.weights.h5"):
+                replica_folder = p.parent.name
+                replica_index = int(replica_folder.split("_")[1])
+                weights_dict[replica_index] = p
+            if not weights_dict:
+                raise LoadFailedError(f"No weights found for: {load_weights_from_fit}")
+            return weights_dict
+        except LoadFailedError as e:
+            raise ConfigError(str(e), load_weights_from_fit, self.loader.available_fits) from e
+
     @element_of("unpolarized_bcs")
     @_id_with_label
     def parse_unpolarized_bc(self, name):

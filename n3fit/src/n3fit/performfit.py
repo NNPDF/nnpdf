@@ -28,6 +28,7 @@ def performfit(
     basis,
     fitbasis,
     positivity_bound,
+    load_weights_dict,
     sum_rules=True,
     parameters,
     replica_path,
@@ -201,6 +202,7 @@ def performfit(
             lux_params=fiatlux,
             replicas=replica_idxs,
             trials=trials,
+            load_weights_dict=load_weights_dict
         )
 
         # This is just to give a descriptive name to the fit function
