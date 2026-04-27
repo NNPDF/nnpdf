@@ -14,6 +14,7 @@ from itertools import zip_longest
 import logging
 
 import numpy as np
+import tensorflow as tf
 
 from n3fit import model_gen
 from n3fit.backends.keras_backend import callbacks
@@ -28,6 +29,7 @@ from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
 from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 from n3fit.bnn_wrapper import get_vb_layers
+from n3fit.layers.losses import LossKL
 
 log = logging.getLogger(__name__)
 
@@ -55,7 +57,14 @@ def _pdf_injection(pdf_layers, observables, masks):
     Returns a list of obs(pdf).
     Note that the list of masks don't need to be the same size as the list of layers/observables
     """
-    return [f(x, mask=m) for f, x, m in zip_longest(observables, pdf_layers, masks)]
+    results = []
+    for f, x, m in zip_longest(observables, pdf_layers, masks):
+        if isinstance(f, LossKL):
+            # KL layer doesn't need pdf input — call with dummy zero tensor
+            results.append(f(pdf_layers[0]))
+        else:
+            results.append(f(x, mask=m))
+    return results
 
 
 def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, steps):
@@ -114,6 +123,7 @@ class ModelTrainer:
         lux_params=None,
         replicas=None,
         training=True,
+        replica_path=None,
     ):
         """
         Parameters
@@ -171,6 +181,7 @@ class ModelTrainer:
         self.replicas = replicas
         self.experiments_data = experiments_data
         self.training_model = training
+        self.replica_path = replica_path
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -514,8 +525,6 @@ class ModelTrainer:
         all_integ_initial,
         epochs,
         interpolation_points,
-        vb_layers,
-        kl_beta,
     ):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
@@ -582,8 +591,6 @@ class ModelTrainer:
                 invcovmat_tr=experiment_data["invcovmat"][i],
                 invcovmat_vl=experiment_data["invcovmat_vl"][i],
                 n_replicas=len(self.replicas),
-                vb_layers=vb_layers,
-                kl_beta=kl_beta,
             )
 
             # Save the input(s) corresponding to this experiment
@@ -617,8 +624,6 @@ class ModelTrainer:
                 training_data=training_data,
                 validation_data=training_data,
                 n_replicas=len(self.replicas),
-                vb_layers=vb_layers,
-                kl_beta=kl_beta,
             )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
@@ -648,8 +653,6 @@ class ModelTrainer:
                 positivity_initial=integ_initial,
                 integrability=True,
                 n_replicas=len(self.replicas),
-                vb_layers=vb_layers,
-                kl_beta=kl_beta,
             )
             # The input list is still common
             self.input_list.append(integ_layer["inputs"])
@@ -757,7 +760,7 @@ class ModelTrainer:
         self.experimental["output"].clear()
         self.input_list.clear()
     
-        # Experimental Data Loss Setup (uses vb_layers)
+        # Experimental Data Loss Setup
         for i, exp_dict in enumerate(self.exp_info[0]):
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
@@ -772,9 +775,6 @@ class ModelTrainer:
                 invcovmat_tr=self._experiment_data["invcovmat"][i],
                 invcovmat_vl=self._experiment_data["invcovmat_vl"][i],
                 n_replicas=len(self.replicas),
-                # NEW: BNN-specific parameters
-                vb_layers=vb_layers, 
-                kl_beta=kl_beta, 
             )
 
             self.input_list.append(exp_layer["inputs"])
@@ -782,7 +782,7 @@ class ModelTrainer:
             self.validation["output"].append(exp_layer["output_vl"])
             self.experimental["output"].append(exp_layer["output"])
 
-        # Positivity Penalty Setup (uses vb_layers) 
+        # Positivity Penalty Setup 
         self.training["posmultipliers"].clear()
         self.training["posinitials"].clear()
     
@@ -806,8 +806,6 @@ class ModelTrainer:
                 training_data=training_data,
                 validation_data=training_data,
                 n_replicas=len(self.replicas),
-                vb_layers=vb_layers, 
-                kl_beta=kl_beta,
             )
         
             self.input_list.append(pos_layer["inputs"])
@@ -835,14 +833,17 @@ class ModelTrainer:
                 positivity_initial=integ_initial,
                 integrability=True,
                 n_replicas=len(self.replicas),
-                vb_layers=vb_layers, 
-                kl_beta=kl_beta,
             )
         
             self.input_list.append(integ_layer["inputs"])
             self.training["output"].append(integ_layer["output_tr"])
             self.training["integmultipliers"].append(integ_multiplier)
             self.training["integinitials"].append(integ_initial)
+
+        # Add KL loss once for BNN fits
+        if vb_layers:
+            kl_layer = LossKL(vb_layers, kl_beta, name="kl_loss")
+            self.training["output"].append(kl_layer)
         
         # Final Static Setup (Requires full input_list) 
         if hasattr(self, '_interpolation_points'):
@@ -919,8 +920,8 @@ class ModelTrainer:
         )
         if kl_beta is None:
             kl_beta = train_model.kl_beta  # fallback
-        callback_kl = callbacks.KLAnnealingCallback(kl_beta, warmup_steps=epochs//2)
-        log.info(f"KLAnnealing init: warmup_steps={epochs//4}, kl_beta initial={float(train_model.kl_beta.numpy())}")
+        callback_kl = callbacks.KLAnnealingCallback(kl_beta, warmup_steps=epochs//2, replica_path=self.replica_path)
+        log.info(f"KLAnnealing init: warmup_steps={epochs//2}, kl_beta initial={float(train_model.kl_beta.numpy())}")
 
 
         train_model.perform_fit(
@@ -1072,16 +1073,6 @@ class ModelTrainer:
         positivity_dict = params.get("positivity", {})
         integrability_dict = params.get("integrability", {})
 
-        # original NNPDF way
-        '''self._generate_observables(
-            positivity_dict.get("multiplier"),
-            positivity_dict.get("initial"),
-            integrability_dict.get("multiplier"),
-            integrability_dict.get("initial"),
-            epochs,
-            params.get("interpolation_points"),
-        )'''
-
         # Call the new static data preparation function once
         self._generate_static_data(
             positivity_dict.get("multiplier"),
@@ -1156,6 +1147,7 @@ class ModelTrainer:
                 scaler=self._scaler,
                 photons=photons,
                 training=self.training_model,
+                bayesian_preproc=params.get("bayesian_preproc", False),
             )
             
             vb_layers = get_vb_layers(pdf_model)

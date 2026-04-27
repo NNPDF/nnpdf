@@ -43,6 +43,7 @@ from n3fit.layers import (
     Mask,
     ObsRotation,
     Preprocessing,
+    BayesianPreprocessing,
     losses,
 )
 from n3fit.layers.observable import is_unique
@@ -77,8 +78,6 @@ class ObservableWrapper:
     positivity: bool = False
     data: np.array = None
     rotation: ObsRotation = None  # only used for diagonal covmat
-    vb_layers: list[VBDense] = None
-    kl_beta: float = 1.0
 
     def _generate_loss(self, mask=None):
         """Generates the corresponding loss function depending on the values the wrapper
@@ -91,8 +90,6 @@ class ObservableWrapper:
                 self.data, 
                 mask, 
                 covmat=covmat_matrix, 
-                vb_layers=self.vb_layers, 
-                kl_beta=self.kl_beta,
                 name=self.name
             )
         elif self.positivity:
@@ -145,9 +142,6 @@ def observable_generator(
     positivity_initial=1.0,
     integrability=False,
     n_replicas=1,
-    # NEW: BNN-specific parameters
-    vb_layers=None,
-    kl_beta=1.0
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -291,8 +285,6 @@ def observable_generator(
             multiplier=positivity_initial,
             positivity=not integrability,
             integrability=integrability,
-            vb_layers=vb_layers,
-            kl_beta=kl_beta,
         )
 
         layer_info = {
@@ -311,8 +303,6 @@ def observable_generator(
         invcovmat=invcovmat_tr,
         data=training_data,
         rotation=obsrot,
-        vb_layers=vb_layers,
-        kl_beta=kl_beta,
     )
 
     out_vl = ObservableWrapper(
@@ -323,8 +313,6 @@ def observable_generator(
         invcovmat=invcovmat_vl,
         data=validation_data,
         rotation=obsrot,
-        vb_layers=vb_layers,
-        kl_beta=kl_beta,
     )
 
     # experimental data has already been rotated if diagonal basis is requested
@@ -337,8 +325,6 @@ def observable_generator(
         covmat=spec_dict["covmat"],
         data=spec_dict["expdata_true"],
         rotation=None,
-        vb_layers=vb_layers,
-        kl_beta=kl_beta,
     )
 
     layer_info = {
@@ -420,6 +406,7 @@ def generate_pdf_model(
     scaler: Callable = None,
     photons: Photon = None,
     training = True,
+    bayesian_preproc: bool = False,
 ):
     """
     Generation of the full PDF model which will be used to determine the full PDF.
@@ -510,6 +497,7 @@ def generate_pdf_model(
         "scaler": scaler,
         "photons": photons,
         "training": True,
+        "bayesian_preproc": bayesian_preproc,
     }
 
     pdf_model = _pdfNN_layer_generator(replicas_settings, **shared_config)
@@ -550,6 +538,7 @@ def _pdfNN_layer_generator(
     photons: Photon = None,
     replica_axis: bool = True,
     training: bool = True,
+    bayesian_preproc: bool = False,
 ):
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -718,7 +707,8 @@ def _pdfNN_layer_generator(
     #       - NN(x) - N(1.0)
     apply_preprocessing_factor = Lambda(op.op_multiply, name="prefactor_times_NN")
 
-    compute_preprocessing_factor = Preprocessing(
+    PreprocessingClass = BayesianPreprocessing if bayesian_preproc else Preprocessing
+    compute_preprocessing_factor = PreprocessingClass(
         flav_info=flav_info,
         name=PREPROCESSING_LAYER_ALL_REPLICAS,
         replica_seeds=all_seed,

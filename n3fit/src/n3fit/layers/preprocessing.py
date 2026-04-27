@@ -1,5 +1,7 @@
 from typing import List, Optional
 
+import tensorflow as tf
+
 from n3fit.backends import MetaLayer, MultiInitializer, constraints
 from n3fit.backends import operations as op
 
@@ -131,4 +133,70 @@ class Preprocessing(MetaLayer):
 
         x = op.batchit(x, batch_dimension=0)
 
+        return x ** (1 - alphas) * (1 - x) ** betas
+    
+class BayesianPreprocessing(Preprocessing):
+    """
+    Bayesian version of Preprocessing.
+
+    During training, alpha and beta are resampled uniformly on every forward
+    pass, integrating preprocessing uncertainty into the ELBO automatically.
+    Averaging happens implicitly since each dataset forward pass within one
+    loss evaluation gets an independent sample.
+
+    During inference, exponents are fixed on the first forward pass and held
+    constant until reset_random() is called — mirroring the self.random
+    mechanism in VBDense. This ensures all x-grid evaluations for a given
+    replica see the same preprocessing.
+    """
+
+    def __init__(self, replica_seeds, flav_info=None, large_x=True, **kwargs):
+        super().__init__(replica_seeds=replica_seeds, flav_info=flav_info, large_x=large_x, **kwargs)
+        self._is_training = True
+        self._fixed_sample = None
+
+    def train(self):
+        self._is_training = True
+
+    def eval(self):
+        self._is_training = False
+
+    def reset_random(self):
+        self._fixed_sample = None
+
+    def _sample_exponents(self, dtype):
+        alphas = op.stack(
+            [
+                tf.random.uniform(
+                    shape=(self.num_replicas, 1),
+                    minval=flav["smallx"][0],
+                    maxval=flav["smallx"][1],
+                    dtype=dtype,
+                )
+                for flav in self.flav_info
+            ],
+            axis=-1,
+        )
+        betas = op.stack(
+            [
+                tf.random.uniform(
+                    shape=(self.num_replicas, 1),
+                    minval=flav["largex"][0] if self.large_x else 0.0,
+                    maxval=flav["largex"][1] if self.large_x else 0.0,
+                    dtype=dtype,
+                )
+                for flav in self.flav_info
+            ],
+            axis=-1,
+        )
+        return alphas, betas
+
+    def call(self, x):
+        x = op.batchit(x, batch_dimension=0)
+        if self._is_training:
+            alphas, betas = self._sample_exponents(x.dtype)
+        else:
+            if self._fixed_sample is None:
+                self._fixed_sample = self._sample_exponents(x.dtype)
+            alphas, betas = self._fixed_sample
         return x ** (1 - alphas) * (1 - x) ** betas

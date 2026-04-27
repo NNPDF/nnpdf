@@ -133,6 +133,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   n_bnn_samples: 100
 
 fitting:
+  bayesian_preproc: True
   fitbasis: EVOL
   savepseudodata: True
   basis:

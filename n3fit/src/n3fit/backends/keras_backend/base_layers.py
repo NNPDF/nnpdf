@@ -1,21 +1,22 @@
 """
-    This module defines custom base layers to be used by the n3fit
-    Neural Network.
-    These layers can use the keras standard set of activation function
-    or implement their own.
+This module defines custom base layers to be used by the n3fit
+Neural Network.
+These layers can use the keras standard set of activation function
+or implement their own.
 
-    For a layer to be used by n3fit it should be contained in the `layers` dictionary defined below.
-    This dictionary has the following structure:
+For a layer to be used by n3fit it should be contained in the `layers` dictionary defined below.
+This dictionary has the following structure:
 
-        'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
+    'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 
-    In order to add custom activation functions, they must be added to
-    the `custom_activations` dictionary with the following structure:
+In order to add custom activation functions, they must be added to
+the `custom_activations` dictionary with the following structure:
 
-        'name of the activation' : function
+    'name of the activation' : function
 
-    The names of the layer and the activation function are the ones to be used in the n3fit runcard.
+The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
+
 import numpy as np
 import keras.backend as K
 import tensorflow as tf
@@ -31,6 +32,7 @@ from keras.regularizers import l1_l2
 from . import operations as ops
 from .MetaLayer import MetaLayer
 from contextlib import contextmanager
+
 
 # Custom activation functions
 def square_activation(x):
@@ -79,62 +81,72 @@ def LSTM_modified(**kwargs):
 
     return ReshapedLSTM
 
+
 class VBDense(Layer):
     def __init__(
-            self, 
-            out_features: int, 
-            in_features: int, 
-            prior_prec: float, 
-            std_init: float, 
-            map: bool = False, 
-            lbound=-30, 
-            ubound=11, 
-            training = True
+        self,
+        out_features: int,
+        in_features: int,
+        prior_prec: float = 1.0,
+        std_init: float = -9.0,
+        map: bool = False,
     ):
         super().__init__()
         self.output_dim = out_features
         self.input_dim = in_features
         self.map = map
-        self.prior_prec = tf.cast(prior_prec, tf.float64)
+        self.prior_prec = tf.cast(prior_prec, K.floatx())
+        self.std_init = tf.cast(std_init, K.floatx())
         self.random = None
+        self.lbound = -30 if K.floatx() == 'float64' else -20
+        self.ubound = 11
         self.eps = 1e-12 if K.floatx() == 'float64' else 1e-8
-        self.std_init = tf.cast(std_init, tf.float64)
-        self.lbound = lbound
-        self.ubound = ubound
-        self.training = training
+        self.training = True
 
     def build(self, input_shape):
         self.bias = self.add_weight(
-            name='bias', 
-            shape=(self.output_dim,), 
-            initializer='glorot_normal', 
-            trainable=True, 
-            dtype=tf.float64
-            )
-        
-        self.mu_w = self.add_weight(
-            name='mu_w', 
-            shape=(self.output_dim, self.input_dim), 
-            initializer='glorot_normal', 
-            trainable=True, 
-            dtype=tf.float64
-            )
-        
-        self.logsig2_w = self.add_weight(
-            name='logsig2_w', 
-            shape=(self.output_dim, self.input_dim), 
-            initializer='glorot_normal', 
+            name='bias',
+            shape=(self.output_dim,),
+            initializer='glorot_normal',
             trainable=True,
-            dtype=tf.float64,
-            ) 
-        
+            dtype=K.floatx(),
+        )
+
+        self.mu_w = self.add_weight(
+            name='mu_w',
+            shape=(self.output_dim, self.input_dim),
+            initializer='glorot_normal',
+            trainable=True,
+            dtype=K.floatx(),
+        )
+
+        self.logsig2_w = self.add_weight(
+            name='logsig2_w',
+            shape=(self.output_dim, self.input_dim),
+            initializer='glorot_normal',
+            trainable=True,
+            dtype=K.floatx(),
+        )
+
         self.reset_parameters()
 
     def reset_parameters(self):
-        stdv = 1.0 / tf.math.sqrt(tf.cast(self.input_dim, dtype=tf.float64))
+        stdv = 1.0 / tf.math.sqrt(tf.cast(self.input_dim, dtype=K.floatx()))
         self.bias.assign(tf.zeros_like(self.bias))
-        self.mu_w.assign(tf.random.normal(tf.shape(self.mu_w), mean=0, stddev=stdv, dtype=tf.float64))
-        self.logsig2_w.assign(tf.random.normal(tf.shape(self.logsig2_w), mean=self.std_init, stddev=0.001, dtype=tf.float64))
+        self.mu_w.assign(
+            tf.random.normal(tf.shape(self.mu_w), mean=0, stddev=stdv, dtype=K.floatx())
+        )
+        self.logsig2_w.assign(
+            tf.random.normal(
+                tf.shape(self.logsig2_w), mean=self.std_init, stddev=0.001, dtype=K.floatx()
+            )
+        )
+
+    def enable_map(self):
+        self.map = True
+
+    def disable_map(self):
+        self.map = False
 
     def reset_random(self):
         self.random = None
@@ -147,61 +159,44 @@ class VBDense(Layer):
         self.training = False
 
     def kl_loss(self) -> tf.Tensor:
+        r"""Compute KL divergence between posterior and prior.
+        KL = \int q(w) log(q(w)/p(w)) dw
+        where q(w) is the posterior and p(w) is the prior.
+        """
         logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
-        kl = 0.5 * tf.reduce_sum((self.prior_prec*(tf.math.pow(self.mu_w,2)+tf.math.exp(logsig2_w))
-                                - logsig2_w - tf.constant(1.0, dtype=tf.float64) - tf.math.log(self.prior_prec)))
+        kl = 0.5 * tf.reduce_sum(
+            (
+                self.prior_prec * (tf.math.pow(self.mu_w, 2) + tf.math.exp(logsig2_w))
+                - logsig2_w
+                - tf.constant(1.0, dtype=K.floatx())
+                - tf.math.log(self.prior_prec)
+            )
+        )
         return kl
-        
-    """def call(self, input: tf.Tensor) -> tf.Tensor:
-        # Ensure input is tf.float64
-        input = tf.cast(input, tf.float64)
-    
-        if self.training:
-            mu_out = tf.matmul(input, tf.cast(self.mu_w, input.dtype), transpose_b=True) + tf.cast(self.bias, input.dtype)
-            logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
-            s2_w = tf.math.exp(logsig2_w)
-            input2 = tf.math.pow(input, 2)
-            var_out = tf.matmul(input2, s2_w, transpose_b=True) + tf.cast(self.eps, input.dtype)
-        
-            return mu_out + tf.math.sqrt(var_out) * tf.random.normal(shape=tf.shape(mu_out), dtype=input.dtype)
-    
-        else:
-            # During inference, use MAP estimation (posterior mean) for deterministic output
-            if self.map:
-                mu_out = tf.matmul(input, self.mu_w, transpose_b=True) + self.bias
-                return mu_out
-            
-            logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, 11)
-            if self.random is None:
-                self.random = tf.Variable(tf.random.normal(shape=tf.shape(self.mu_w), dtype=tf.float64))
-            s2_w = tf.math.exp(logsig2_w)
-            # draw fresh samples instead of caching
-            epsilon = tf.random.normal(shape=tf.shape(self.mu_w), dtype=tf.float64)
-            weight = self.mu_w + tf.math.sqrt(s2_w) * epsilon #self.random
-            
-            return tf.matmul(input, weight, transpose_b=True) + self.bias
-    """
 
-    def old_call(self, input: tf.Tensor) -> tf.Tensor:
-        input = tf.cast(input, tf.float64)
-        logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
-        std_w = tf.math.exp(0.5*logsig2_w)
-        epsilon = tf.random.normal(shape=tf.shape(self.mu_w), dtype=tf.float64)
-        weight = self.mu_w + std_w * epsilon
-        return tf.matmul(input, weight, transpose_b=True) + self.bias
-    
-    def call(self, input):
-        input = tf.cast(input, tf.float64)
-        n_samples = 5  # average over multiple weight samples per step
-        outputs = []
-        for _ in range(n_samples):
+    def call(self, input: tf.Tensor) -> tf.Tensor:
+        if self.training:
+            # local reparameterization trick is more efficient and leads to
+            # an estimate of the gradient with smaller variance.
+            # https://arxiv.org/pdf/1506.02557.pdf
+            mu_out = tf.matmul(input, self.mu_w, transpose_b=True) + self.bias
             logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
-            std_w = tf.math.exp(0.5 * logsig2_w)
-            epsilon = tf.random.normal(shape=tf.shape(self.mu_w), dtype=tf.float64)
-            weight = self.mu_w + std_w * epsilon
-            outputs.append(tf.matmul(input, weight, transpose_b=True) + self.bias)
-        return tf.reduce_mean(tf.stack(outputs), axis=0)
-    
+            s2_w = tf.math.exp(logsig2_w)
+            var_out = tf.matmul(tf.math.pow(input, 2), s2_w, transpose_b=True) + self.eps
+            return mu_out + tf.math.sqrt(var_out) * tf.random.normal(
+                shape=tf.shape(mu_out), dtype=input.dtype
+            )
+
+        if self.map:
+            return tf.matmul(input, self.mu_w, transpose_b=True) + self.bias
+
+        logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
+        if self.random is None:
+            self.random = tf.Variable(tf.random.normal(shape=tf.shape(self.mu_w), dtype=input.dtype), trainable=False)
+        weight = self.mu_w + tf.math.sqrt(tf.math.exp(logsig2_w)) * self.random
+        return tf.matmul(input, weight, transpose_b=True) + self.bias
+
+
 class Dense(KerasDense, MetaLayer):
     def __init__(self, **kwargs):
         # Set default dtype to tf.float64 if not provided
@@ -247,10 +242,8 @@ def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_
         """
         if isinstance(xinput, (list, tuple)):
             if len(xinput) != basis_size:
-                raise ValueError(
-                    f"""The input of the dense_per_flavour and the basis_size
-doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_size}"""
-                )
+                raise ValueError(f"""The input of the dense_per_flavour and the basis_size
+doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_size}""")
             results = [dens(ilayer) for dens, ilayer in zip(dense_basis, xinput)]
         else:
             results = [dens(xinput) for dens in dense_basis]
@@ -258,6 +251,7 @@ doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_siz
         return results
 
     return apply_dense
+
 
 layers = {
     "dense": (
@@ -286,12 +280,7 @@ layers = {
     ),
     "VBDense": (
         VBDense,
-        {   
-            "in_features" : None, 
-            "out_features" : None, 
-            "prior_prec": None,
-            "std_init": None,
-        },
+        {"in_features": None, "out_features": None, "prior_prec": None, "std_init": None},
     ),
     "dropout": (Dropout, {"rate": 0.0}),
     "concatenate": (Concatenate, {}),

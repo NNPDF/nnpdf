@@ -202,6 +202,7 @@ def performfit(
             theoryid=theoryid,
             lux_params=fiatlux,
             replicas=replica_idxs,
+            replica_path=replica_path / f"replica_{replica_idxs[0]}"
         )
 
         # This is just to give a descriptive name to the fit function
@@ -268,7 +269,7 @@ def performfit(
             n_bnn_samples = parameters.get('n_bnn_samples', 1)
             log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN")
             
-            bnn_predictor = BNNPredictor(pdf_model, n_samples=n_bnn_samples, training_model=result["training_model"])
+            bnn_predictor = BNNPredictor(pdf_model, n_samples=n_bnn_samples)
             pdf_models = bnn_predictor.generate_bnn_replica() # prints [<MetaModel name=PDFs, built=True>, <MetaModel name=PDFs, built=True>] for 2 bnn replica
 
             class BNNStoppingProxy:

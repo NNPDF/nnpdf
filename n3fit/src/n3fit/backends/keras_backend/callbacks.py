@@ -214,12 +214,13 @@ class KLAnnealingCallback(CallbackStep):
         The number of steps (epochs/batches) until kl_beta reaches 1.0.
     """
 
-    def __init__(self, kl_beta, warmup_steps=2000):
+    def __init__(self, kl_beta, warmup_steps=2000, replica_path=None):
         super().__init__()
         self.kl_beta = kl_beta
         self.warmup_steps = max(1, warmup_steps)
         self.total_steps = tf.Variable(0, trainable=False, dtype=tf.float32)
         self.klarray = []
+        self.replica_path = replica_path
 
 
     def linear_annealing(self, step, logs=None):
@@ -290,11 +291,10 @@ class KLAnnealingCallback(CallbackStep):
         self.kl_beta.assign(tf.cast(self.new_beta, self.kl_beta.dtype))
         new_beta = self.kl_beta.read_value()
         self.klarray.append(new_beta)
-        
+    
     def on_train_end(self, logs=None):
-        pd.DataFrame(self.klarray, columns=["kl_beta"]).to_csv(
-            "/mnt/c/Users/daksh/nnpdf_reports/kl.csv", index=False
-        )
+        path = self.replica_path / "kl.csv" if self.replica_path is not None else "kl.csv"
+        pd.DataFrame(self.klarray, columns=["kl_beta"]).to_csv(path, index=False)
 
 
 def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
