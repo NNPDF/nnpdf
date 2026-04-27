@@ -313,23 +313,36 @@ def fittable_datasets_masked(data):
     return validphys_group_extractor(data.datasets)
 
 
-# def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hashrray:
-#     """Wrap the covmat into a Hashrray for caches to work"""
-#     return Hashrray(dataset_inputs_fitting_covmat)
+def _hashed_dataset_inputs_fitting_covmat(loaded_fit_covmat) -> Hashrray:
+    """Wrap the covmat into a Hashrray for caches to work"""
+    return Hashrray(loaded_fit_covmat)
 
 
-# @functools.lru_cache
-def _inv_covmat_prepared(dataset_inputs_fitting_covmat, nnfit_theory_covmat, diagonal_basis=True):
-    """Returns the inverse covmats for training, validation and total
+@functools.lru_cache
+def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat):
+    """Returns the inverse covmats for training, validation and total when diagonal_basis = False"""
+    log.info(
+        f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}"
+    )
+    covmat = _hashed_dataset_inputs_fitting_covmat.array
+
+    diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
+    cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
+    inv_total = (
+        np.diag(diag_inv_sqrt_total) @ np.linalg.inv(cormat_total) @ np.diag(diag_inv_sqrt_total)
+    )
+
+    return inv_total
+
+
+def _covmat_prepared(dataset_inputs_fitting_covmat, nnfit_theory_covmat, diagonal_basis=True):
+    """Returns the covmats for training, validation and total
         attending to the right masks and whether it is diagonal or not.
     s
         Since the masks and number of datapoints need to be treated for 1-point datasets
         it also returns the right ndata and masks for training and validation:
 
     """
-    # log.info(
-    #     f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}, diagonal_basis={diagonal_basis}"
-    # )
 
     # TODO: JtH, note to self: inv_covmat_prepared can no longer be called during n3fit because nnfit_theory_covmat is in a different namespace
 
@@ -356,17 +369,7 @@ def _inv_covmat_prepared(dataset_inputs_fitting_covmat, nnfit_theory_covmat, dia
 
         inv_total = np.diag(1 / eig_vals)
 
-    else:
-
-        diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
-        cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
-        inv_total = (
-            np.diag(diag_inv_sqrt_total)
-            @ np.linalg.inv(cormat_total)
-            @ np.diag(diag_inv_sqrt_total)
-        )
-
-    return (covmat, inv_total, diagonal_rotation, eig_vals)
+    return covmat, diagonal_rotation, eig_vals
 
 
 def fitting_data_dict(
@@ -374,6 +377,7 @@ def fitting_data_dict(
     make_replica,
     dataset_inputs_loaded_cd_with_cuts,
     masks,
+    _inv_covmat_prepared,
     kfold_masks,
     fittable_datasets_masked,
     output_path,
@@ -447,14 +451,7 @@ def fitting_data_dict(
         ).values
         diag_rot = None
         eig_vals = None
-        # TODO: cache this so that is reused
-        diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
-        cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
-        inv_true = (
-            np.diag(diag_inv_sqrt_total)
-            @ np.linalg.inv(cormat_total)
-            @ np.diag(diag_inv_sqrt_total)
-        )
+        inv_true = _inv_covmat_prepared
 
     # get the masks - different for each replica so fine to call here
     tr_mask, vl_mask = masks.tr_masks[0], masks.vl_masks[0]
@@ -582,12 +579,12 @@ exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_
 
 
 @table
-def fitting_covmat_table(output_path, _inv_covmat_prepared, diagonal_basis=True):
+def fitting_covmat_table(output_path, _covmat_prepared, diagonal_basis=True):
     """
     Stores the fitting covariance matrix if diagonal_basis is False, else store the rotation matrix and eigenvalues
     """
     # TODO: JtH, check if this includes the theory covmat
-    covmat, _, diagonal_rotation, eig_vals = _inv_covmat_prepared
+    covmat, diagonal_rotation, eig_vals = _covmat_prepared
 
     if not diagonal_basis:
         log.info("Saving fitting covmat")
