@@ -805,17 +805,16 @@ class CoreConfig(configparser.Config):
         }
 
     @configparser.explicit_node
-    def produce_dataset_inputs_fitting_covmat(self, use_thcovmat_in_fitting=True):
+    def produce_dataset_inputs_fitting_covmat(self):
         """
         Produces the correct covmat to be used in fitting_data_dict according
         to some options: whether to include the theory covmat, whether to
         separate the multiplcative errors and whether to compute the
         experimental covmat using the t0 prescription.
         """
+        # TODO update docstring
         from validphys import covmats
 
-        if use_thcovmat_in_fitting:
-            return covmats.dataset_inputs_t0_total_covmat
         return covmats.dataset_inputs_t0_exp_covmat
 
     def produce_sep_mult(self, separate_multiplicative=False):

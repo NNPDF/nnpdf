@@ -319,7 +319,7 @@ def fittable_datasets_masked(data):
 
 
 # @functools.lru_cache
-def _inv_covmat_prepared(dataset_inputs_fitting_covmat, diagonal_basis=True):
+def _inv_covmat_prepared(dataset_inputs_fitting_covmat, nnfit_theory_covmat, diagonal_basis=True):
     """Returns the inverse covmats for training, validation and total
         attending to the right masks and whether it is diagonal or not.
     s
@@ -330,7 +330,13 @@ def _inv_covmat_prepared(dataset_inputs_fitting_covmat, diagonal_basis=True):
     # log.info(
     #     f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}, diagonal_basis={diagonal_basis}"
     # )
+
+    # TODO: JtH, note to self: inv_covmat_prepared can no longer be called during n3fit because nnfit_theory_covmat is in a different namespace
+
     covmat = dataset_inputs_fitting_covmat
+    if nnfit_theory_covmat is not None:
+        covmat += nnfit_theory_covmat
+
     diagonal_rotation = None
     eig_vals = None
 
@@ -368,7 +374,6 @@ def fitting_data_dict(
     make_replica,
     dataset_inputs_loaded_cd_with_cuts,
     masks,
-    _inv_covmat_prepared,
     kfold_masks,
     fittable_datasets_masked,
     output_path,
@@ -421,17 +426,17 @@ def fitting_data_dict(
     expdata = make_replica
     fittable_datasets = fittable_datasets_masked
 
-    # all covmat manipulation is shared across the replicas for memory purposes
-
-    # TODO: load vp-setupfit table
-    diagonal_basis_saved = "datacuts_theory_fitting_diagonal_basis_rotation_table.csv"
+    # load covmat stored at the time of vp-setupfit
+    diagonal_basis_saved = "datacuts_theory_theorycovmatconfig_diagonal_basis_rotation_table.csv"
     path_diagonal_basis = output_path / "tables" / diagonal_basis_saved
     eigensystem = pd.read_csv(
         path_diagonal_basis, index_col=[0], header=[0], sep="\t|,", engine="python"
     )
-    diag_rot2 = eigensystem.iloc[:, 1:].values
-    eig_vals2 = eigensystem["eig_val"].values
-    covmat, inv_true, diag_rot, eig_vals = _inv_covmat_prepared
+    diag_rot = eigensystem.iloc[:, 1:].values
+    eig_vals = eigensystem["eig_val"].values
+    inv_true = np.diag(1 / eig_vals)
+    covmat = np.diag(eig_vals)
+    # covmat, inv_true, diag_rot, eig_vals = _inv_covmat_prepared
 
     # get the masks - different for each replica so fine to call here
     tr_mask, vl_mask = masks.tr_masks[0], masks.vl_masks[0]
@@ -563,10 +568,12 @@ def diagonal_basis_rotation_table(output_path, _inv_covmat_prepared, diagonal_ba
     """
     Save the diagonal basis rotation.
     """
+    covmat, _, diagonal_rotation, eig_vals = _inv_covmat_prepared
+
     if not diagonal_basis:
+
         return None
 
-    _, _, diagonal_rotation, eig_vals = _inv_covmat_prepared
     if diagonal_rotation is None or eig_vals is None:
         log.warning("No diagonal-basis rotation available; skipping table export.")
         return None
