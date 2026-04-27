@@ -175,7 +175,7 @@ class SetupFitConfig(Config):
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
 
         # The settings for these actions depend on the presence of closuretest
-        SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action, rotation_action]
+        SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
 
         # Check theory covariance matrix configuration
         thconfig = file_content.get('theorycovmatconfig', {})
@@ -190,6 +190,8 @@ class SetupFitConfig(Config):
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )
+
+        SETUPFIT_FIXED_CONFIG['actions_'] += [rotation_action]
 
         # Check fiatlux configuration
         fiatlux = file_content.get('fiatlux')
