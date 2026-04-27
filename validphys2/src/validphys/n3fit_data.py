@@ -313,24 +313,24 @@ def fittable_datasets_masked(data):
     return validphys_group_extractor(data.datasets)
 
 
-def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hashrray:
-    """Wrap the covmat into a Hashrray for caches to work"""
-    return Hashrray(dataset_inputs_fitting_covmat)
+# def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hashrray:
+#     """Wrap the covmat into a Hashrray for caches to work"""
+#     return Hashrray(dataset_inputs_fitting_covmat)
 
 
-@functools.lru_cache
-def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, diagonal_basis=True):
+# @functools.lru_cache
+def _inv_covmat_prepared(dataset_inputs_fitting_covmat, diagonal_basis=True):
     """Returns the inverse covmats for training, validation and total
-    attending to the right masks and whether it is diagonal or not.
-
-    Since the masks and number of datapoints need to be treated for 1-point datasets
-    it also returns the right ndata and masks for training and validation:
+        attending to the right masks and whether it is diagonal or not.
+    s
+        Since the masks and number of datapoints need to be treated for 1-point datasets
+        it also returns the right ndata and masks for training and validation:
 
     """
-    log.info(
-        f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}, diagonal_basis={diagonal_basis}"
-    )
-    covmat = _hashed_dataset_inputs_fitting_covmat.array
+    # log.info(
+    #     f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}, diagonal_basis={diagonal_basis}"
+    # )
+    covmat = dataset_inputs_fitting_covmat
     diagonal_rotation = None
     eig_vals = None
 
