@@ -633,7 +633,7 @@ def replica_pseudodata(
         df.columns = [replica_column]
         return df
 
-    df = pd.concat(diagonal_indexed_make_replica, ignore_index=True)
+    df = diagonal_indexed_make_replica.copy()
     df.columns = [replica_column]
     df.index = pd.Index([f"eigenmode {i}" for i in range(len(df))])
     return df

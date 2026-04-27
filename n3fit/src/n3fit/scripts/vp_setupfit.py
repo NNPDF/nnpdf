@@ -170,6 +170,7 @@ class SetupFitConfig(Config):
             check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
             filter_action = 'datacuts::theory::fitting filter'
+            # TODO: correct namespace?, the rotation needs access to the theory covmat but it's not yet available..
             rotation_action = 'datacuts::theory::fitting diagonal_basis_rotation_table'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
 
