@@ -66,6 +66,7 @@ FILTER_OUTPUT_FOLDER = "filter"
 TABLE_OUTPUT_FOLDER = "tables"
 MD5_FILENAME = "md5"
 INPUT_FOLDER = "input"
+COVMAT_TABLE_FILENAME = "datacuts_theory_theorycovmatconfig_fitting_covmat_table.csv"
 
 
 class SetupFitError(Exception):
@@ -113,13 +114,24 @@ class SetupFitEnvironment(Environment):
         self.input_folder.mkdir(exist_ok=True)
 
     def save_md5(self):
-        """Generate md5 key from file"""
+        """Generate md5 key from the runcard and the stored fitting covmat table."""
         output_filename = self.output_path / MD5_FILENAME
+        covmat_path = self.output_path / TABLE_OUTPUT_FOLDER / COVMAT_TABLE_FILENAME
+        if not covmat_path.exists():
+            raise SetupFitError(
+                f"Cannot compute md5: expected fitting covmat table not found at {covmat_path}."
+            )
+
+        hash_md5 = hashlib.md5()
         with open(self.config_yml, 'rb') as f:
-            hash_md5 = hashlib.md5(f.read()).hexdigest()
+            hash_md5.update(f.read())
+        with open(covmat_path, 'rb') as f:
+            hash_md5.update(f.read())
+
+        digest = hash_md5.hexdigest()
         with open(output_filename, 'w') as g:
-            g.write(hash_md5)
-        log.info(f"md5 {hash_md5} stored in {output_filename}")
+            g.write(digest)
+        log.info(f"md5 {digest} stored in {output_filename}")
 
     @classmethod
     def ns_dump_description(cls):
