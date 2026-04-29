@@ -284,13 +284,12 @@ def concat_matrices(rows, columns, list_of_matrices):
         the final, fully concatenated matrix row by row.
 
     """
-    for i in range(len(list_of_matrices)):
-        list_of_matrices[i] = np.array(list_of_matrices[i])
+    matrices = [np.array(matrix) for matrix in list_of_matrices]
     col_list = []
     for i in range(rows):
         row_list = []
         for j in range(columns):
-            row_list.append(list_of_matrices[j + i * columns])
+            row_list.append(matrices[j + i * columns])
         col_list.append(np.concatenate(tuple(row_list), axis=1))
     final_mat = np.concatenate(tuple(col_list), axis=0)
     final_mat_list = []
@@ -438,6 +437,7 @@ def check_xq2_degenearcy(Q2, x):
             unique kinematics are: {unique_pairs.shape[1]}, original size: {size}"""
         ) from exc
 
+
 def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove_source=True):
     r"""
     Create two new uncertainty files, one where the specified uncertainty
@@ -469,7 +469,9 @@ def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove
     content_uncert = {}
 
     if 'definitions' in content and uncert_name in content['definitions']:
-        content_uncert['definitions'] = {uncert_name: copy.deepcopy(content['definitions'][uncert_name])}
+        content_uncert['definitions'] = {
+            uncert_name: copy.deepcopy(content['definitions'][uncert_name])
+        }
         content_uncert['bins'] = {}
         bins = []
         for i in range(len(content['bins'])):
