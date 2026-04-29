@@ -806,16 +806,18 @@ class CoreConfig(configparser.Config):
         }
 
     @configparser.explicit_node
-    def produce_dataset_inputs_fitting_covmat(self):
+    def produce_dataset_inputs_fitting_covmat(self, use_thcovmat_in_fitting=False):
         """
         Produces the correct covmat to be used in fitting_data_dict according
         to some options: whether to include the theory covmat, whether to
         separate the multiplcative errors and whether to compute the
         experimental covmat using the t0 prescription.
         """
-        # TODO update docstring
+
         from validphys import covmats
 
+        if use_thcovmat_in_fitting:
+            return covmats.dataset_inputs_t0_total_covmat
         return covmats.dataset_inputs_t0_exp_covmat
 
     def produce_sep_mult(self, separate_multiplicative=False):
@@ -901,8 +903,8 @@ class CoreConfig(configparser.Config):
         data_input,
         user_covmat_path=None,
         point_prescriptions=None,
-        use_thcovmat_in_sampling=True,
-        use_thcovmat_in_fitting=True,
+        use_thcovmat_in_sampling=False,
+        use_thcovmat_in_fitting=False,
     ):
         """
         Loads the theory covmat from the correct file according to how it
@@ -1352,6 +1354,7 @@ class CoreConfig(configparser.Config):
         This function is only used in vp-setupfit to store the necessary covmats as .csv files in
         the tables directory.
         """
+
         if point_prescriptions is not None:
             if user_covmat_path is not None:
                 # Both scalevar and user uncertainties

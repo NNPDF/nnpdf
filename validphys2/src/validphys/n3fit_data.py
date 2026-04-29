@@ -350,7 +350,7 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, output_path, dia
     return covmat, inv_total, diag_rot, eig_vals
 
 
-def _fiting_covmat(dataset_inputs_fitting_covmat, nnfit_theory_covmat, diagonal_basis=True):
+def _fiting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
     """Prepare the fitting covariance matrix by optionally adding theory contributions
     and transforming to diagonal basis.
 
@@ -377,15 +377,9 @@ def _fiting_covmat(dataset_inputs_fitting_covmat, nnfit_theory_covmat, diagonal_
         Only returned if diagonal_basis=True, otherwise None.
     """
 
-    # TODO: JtH, note to self: inv_covmat_prepared can no longer be called during n3fit because nnfit_theory_covmat is in a different namespace
-
     covmat = dataset_inputs_fitting_covmat
-    if nnfit_theory_covmat is not None:
-        covmat += nnfit_theory_covmat
-
     diagonal_rotation = None
     eig_vals = None
-
     if diagonal_basis:
         log.info("working in diagonal basis.")
 
