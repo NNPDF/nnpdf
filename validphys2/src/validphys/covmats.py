@@ -413,9 +413,7 @@ def dataset_inputs_t0_total_covmat_separate(
     In this case the t0 prescription is used for the experimental covmat and the multiplicative
     errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_t0_exp_covmat_separate
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_t0_exp_covmat_separate + loaded_theory_covmat
 
 
 def dataset_inputs_t0_exp_covmat_separate(
@@ -448,9 +446,7 @@ def dataset_inputs_total_covmat_separate(dataset_inputs_exp_covmat_separate, loa
     In this case the t0 prescription is not used for the experimental covmat and the multiplicative
     errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_exp_covmat_separate
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_exp_covmat_separate + loaded_theory_covmat
 
 
 def dataset_inputs_exp_covmat_separate(
@@ -482,9 +478,7 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, loaded_theory_c
     by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_t0_exp_covmat
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_t0_exp_covmat + loaded_theory_covmat
 
 
 def dataset_inputs_t0_exp_covmat(
@@ -517,9 +511,7 @@ def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, loaded_theory_covmat)
     by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_exp_covmat
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_exp_covmat + loaded_theory_covmat
 
 
 def dataset_inputs_exp_covmat(
