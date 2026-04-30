@@ -43,4 +43,4 @@ runs:
     - name: Install package with test extras
       shell: bash -l {0}
       run: |
-        pip install -e .${{ inputs.nnpdf-extras }}
+        python -m pip install -e .${{ inputs.nnpdf-extras }}
