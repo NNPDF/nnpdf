@@ -890,7 +890,11 @@ class CoreConfig(configparser.Config):
         fit_covmat_path = output_path / "tables" / generic_path
         if not diagonal_basis:
             fit_covmat = pd.read_csv(
-                fit_covmat_path, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python"
+                fit_covmat_path,
+                index_col=[0, 1, 2, 3],
+                header=[0, 1, 2, 3],
+                sep="\t|,",
+                engine="python",
             ).fillna(0)
             # change ordering according to exp_covmat (so according to runcard order)
             tmp = fit_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
