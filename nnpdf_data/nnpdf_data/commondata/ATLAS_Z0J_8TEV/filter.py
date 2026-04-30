@@ -1,5 +1,6 @@
 import logging
 
+from filter_decorr_unc import filter_unc_ATLAS_Z0J_8TEV
 from filter_utils import Extractor
 import numpy as np
 import yaml
@@ -74,6 +75,9 @@ if __name__ == "__main__":
     ATLAS_Z0J_8TEV_PT_M.generate_data_central('Combination Born')
     ATLAS_Z0J_8TEV_PT_M.generate_uncertainties('./rawdata/hepdata/unnormalized/output')
     ATLAS_Z0J_8TEV_PT_M.generate_uncertainties('./rawdata/hepdata/unnormalized/output', True)
+
+    filter_unc_ATLAS_Z0J_8TEV(MC=False)
+    filter_unc_ATLAS_Z0J_8TEV(MC=True)
 
     # Comparing new anf legacy uncertainties
     # Deprecated

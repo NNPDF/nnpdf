@@ -1,0 +1,2040 @@
+dependent_variables:
+- header: {name: Covariance matrix element}
+  qualifiers:
+  - {name: YBOOST, value: 0.0 <= YBOOST < 1.0}
+  - {name: YSTAR, value: 1.0 <= YSTAR < 2.0}
+  - {name: SQRT(S), units: TeV, value: 8}
+  values:
+  - {value: 1.0}
+  - {value: 0.08}
+  - {value: -0.21}
+  - {value: 0.02}
+  - {value: 0.09}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.08}
+  - {value: 1.0}
+  - {value: 0.07}
+  - {value: -0.42}
+  - {value: 0.03}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: -0.21}
+  - {value: 0.07}
+  - {value: 1.0}
+  - {value: -0.15}
+  - {value: -0.4}
+  - {value: 0.08}
+  - {value: 0.05}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.02}
+  - {value: -0.42}
+  - {value: -0.15}
+  - {value: 1.0}
+  - {value: 0.08}
+  - {value: -0.21}
+  - {value: 0.02}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.09}
+  - {value: 0.03}
+  - {value: -0.4}
+  - {value: 0.08}
+  - {value: 1.0}
+  - {value: 0}
+  - {value: -0.24}
+  - {value: 0.02}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0.08}
+  - {value: -0.21}
+  - {value: 0}
+  - {value: 1.0}
+  - {value: 0}
+  - {value: -0.23}
+  - {value: 0.04}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.05}
+  - {value: 0.02}
+  - {value: -0.24}
+  - {value: 0}
+  - {value: 1.0}
+  - {value: 0.07}
+  - {value: -0.21}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0.02}
+  - {value: -0.23}
+  - {value: 0.07}
+  - {value: 1.0}
+  - {value: 0.06}
+  - {value: -0.24}
+  - {value: 0}
+  - {value: 0.08}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: -0.21}
+  - {value: 0.06}
+  - {value: 1.0}
+  - {value: 0}
+  - {value: -0.28}
+  - {value: 0.08}
+  - {value: 0.07}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: -0.24}
+  - {value: 0}
+  - {value: 1.0}
+  - {value: 0.07}
+  - {value: -0.41}
+  - {value: 0.03}
+  - {value: 0.04}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: 0}
+  - {value: -0.28}
+  - {value: 0.07}
+  - {value: 1.0}
+  - {value: -0.03}
+  - {value: -0.34}
+  - {value: 0.04}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.08}
+  - {value: 0.08}
+  - {value: -0.41}
+  - {value: -0.03}
+  - {value: 1.0}
+  - {value: 0.08}
+  - {value: -0.22}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.07}
+  - {value: 0.03}
+  - {value: -0.34}
+  - {value: 0.08}
+  - {value: 1.0}
+  - {value: 0.1}
+  - {value: -0.23}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: 0.04}
+  - {value: -0.22}
+  - {value: 0.1}
+  - {value: 1.0}
+  - {value: 0.12}
+  - {value: -0.24}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: -0.23}
+  - {value: 0.12}
+  - {value: 1.0}
+  - {value: 0.13}
+  - {value: -0.24}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: -0.24}
+  - {value: 0.13}
+  - {value: 1.0}
+  - {value: 0.14}
+  - {value: -0.24}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: -0.24}
+  - {value: 0.14}
+  - {value: 1.0}
+  - {value: 0.15}
+  - {value: -0.25}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: -0.24}
+  - {value: 0.15}
+  - {value: 1.0}
+  - {value: 0.16}
+  - {value: -0.26}
+  - {value: 0}
+  - {value: 0.05}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: -0.25}
+  - {value: 0.16}
+  - {value: 1.0}
+  - {value: 0.18}
+  - {value: -0.26}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: -0.26}
+  - {value: 0.18}
+  - {value: 1.0}
+  - {value: 0.18}
+  - {value: -0.26}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.03}
+  - {value: 0}
+  - {value: -0.26}
+  - {value: 0.18}
+  - {value: 1.0}
+  - {value: 0.21}
+  - {value: -0.26}
+  - {value: -0.03}
+  - {value: 0.05}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.05}
+  - {value: 0}
+  - {value: -0.26}
+  - {value: 0.21}
+  - {value: 1.0}
+  - {value: 0.2}
+  - {value: -0.27}
+  - {value: -0.04}
+  - {value: 0.04}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: 0}
+  - {value: -0.26}
+  - {value: 0.2}
+  - {value: 1.0}
+  - {value: 0.21}
+  - {value: -0.26}
+  - {value: -0.05}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: -0.03}
+  - {value: -0.27}
+  - {value: 0.21}
+  - {value: 1.0}
+  - {value: 0.26}
+  - {value: -0.25}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.05}
+  - {value: -0.04}
+  - {value: -0.26}
+  - {value: 0.26}
+  - {value: 1.0}
+  - {value: 0.27}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0}
+  - {value: 0.04}
+  - {value: -0.05}
+  - {value: -0.25}
+  - {value: 0.27}
+  - {value: 1.0}
+independent_variables:
+- header: {name: PTAVG, units: GeV}
+  values:
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 1248.0, low: 1172.0}
+- header: {name: PTAVG, units: GeV}
+  values:
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}
+  - {high: 153.0, low: 133.0}
+  - {high: 174.0, low: 153.0}
+  - {high: 196.0, low: 174.0}
+  - {high: 220.0, low: 196.0}
+  - {high: 245.0, low: 220.0}
+  - {high: 272.0, low: 245.0}
+  - {high: 300.0, low: 272.0}
+  - {high: 330.0, low: 300.0}
+  - {high: 362.0, low: 330.0}
+  - {high: 395.0, low: 362.0}
+  - {high: 430.0, low: 395.0}
+  - {high: 468.0, low: 430.0}
+  - {high: 507.0, low: 468.0}
+  - {high: 548.0, low: 507.0}
+  - {high: 592.0, low: 548.0}
+  - {high: 638.0, low: 592.0}
+  - {high: 686.0, low: 638.0}
+  - {high: 737.0, low: 686.0}
+  - {high: 790.0, low: 737.0}
+  - {high: 846.0, low: 790.0}
+  - {high: 905.0, low: 846.0}
+  - {high: 967.0, low: 905.0}
+  - {high: 1032.0, low: 967.0}
+  - {high: 1101.0, low: 1032.0}
+  - {high: 1172.0, low: 1101.0}
+  - {high: 1248.0, low: 1172.0}

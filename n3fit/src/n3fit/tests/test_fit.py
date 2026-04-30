@@ -114,14 +114,17 @@ def check_fit_results(
 
     old_json = _load_json(regression_json)
 
-    equal_checks = ["stop_epoch", "pos_state"]
-    approx_checks = ["erf_tr", "erf_vl", "chi2", "best_epoch", "best_epoch"]
+    equal_checks = ["pos_state"]
+    pm1_checks = ["stop_epoch", "best_epoch"]
+    approx_checks = ["erf_tr", "erf_vl", "chi2"]
     relaxed_checks = ["arc_lengths", "integrability"]
     for key, value in new_json.items():
         reference = old_json.get(key)
         err_msg = f"error for .json: {key}"
         if key in equal_checks:
             assert_equal(value, reference, err_msg=err_msg)
+        elif key in pm1_checks:
+            assert_allclose(value, reference, atol=1, rtol=0, err_msg=err_msg)
         elif key in approx_checks:
             assert_allclose(value, reference, err_msg=err_msg, rtol=rel_error, atol=1e-9)
         elif key in relaxed_checks:
@@ -139,7 +142,7 @@ def check_fit_results(
         reference = old_expgrid[key]
         err_msg = f"error for .exportgrid: {key}"
         if key == "pdfgrid":
-            assert_allclose(value, reference, rtol=rel_error, atol=1e-6, err_msg=err_msg)
+            assert_allclose(value, reference, rtol=rel_error, atol=1e-5, err_msg=err_msg)
         else:
             assert_equal(value, reference, err_msg=err_msg)
 

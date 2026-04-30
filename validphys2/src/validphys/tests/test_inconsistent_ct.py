@@ -13,7 +13,7 @@ import pandas as pd
 class TestInconsistentCommonData(unittest.TestCase):
 
     @patch(
-        'validphys.closuretest.inconsistent_closuretest.inconsistent_ct.InconsistentCommonData',
+        'validphys.closuretest.inconsistent_ct.InconsistentCommonData',
         autospec=True,
     )
     def setUp(self, MockInconsistentCommonData):

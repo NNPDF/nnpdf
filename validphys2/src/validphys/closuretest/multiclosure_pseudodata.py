@@ -36,11 +36,11 @@ def fits_dataset_cvs(fits_dataset):
 data_fits_cv = collect(fits_dataset_cvs, ("data",))
 
 
-def expected_data_delta_chi2(data_fits_cv, internal_multiclosure_data_loader):
+def expected_data_delta_chi2(data_fits_cv, multiclosure_data_loader):
     """For ``data``, calculate the mean of delta chi2 across all fits, returns
     a tuple of number of data points and unnormalised delta chi2.
     """
-    closures_th, law_th, _, sqrt_covmat = internal_multiclosure_data_loader
+    closures_th, law_th, _, sqrt_covmat = multiclosure_data_loader
     law_central = law_th.central_value
     fits_delta_chi2 = []
     for i_fit, fit_th in enumerate(closures_th):

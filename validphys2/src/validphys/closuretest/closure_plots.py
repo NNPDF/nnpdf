@@ -1,26 +1,12 @@
 """
 closuretest/plots.py
 
-Plots of statistical estimators for closure tests
+Plots of statistical estimators for single closure test.
+See multiclosure module for more estimators and plots.
 """
+
 from reportengine.figure import figure
 from validphys import plotutils
-
-
-@figure
-def plot_biases(biases_table):
-    """
-    Plot the bias of each experiment for all fits with bars. For information on
-    how biases is calculated see `bias_experiment`
-    """
-    fig, ax = plotutils.barplot(
-        biases_table.values.T,
-        collabels=biases_table.index.values,
-        datalabels=biases_table.columns.droplevel(1).values,
-    )
-    ax.set_title("Biases per experiment for each fit")
-    ax.legend()
-    return fig
 
 
 @figure
@@ -45,32 +31,6 @@ def errorbar_figure_from_table(df):
     """Given a table with even columns as central values as odd columns as errors
     plot an errorbar plot"""
     fig, ax = plotutils.plot_horizontal_errorbars(
-        df.values[:, ::2].T,
-        df.values[:, 1::2].T,
-        df.index.values,
-        df.columns.unique(0),
-        xlim=0,
+        df.values[:, ::2].T, df.values[:, 1::2].T, df.index.values, df.columns.unique(0), xlim=0
     )
     return fig, ax
-
-
-@figure
-def plot_fits_bootstrap_variance(fits_bootstrap_variance_table):
-    """Plot variance as error bars, with mean and central value calculated
-    from bootstrap sample
-    """
-    fig, ax = errorbar_figure_from_table(fits_bootstrap_variance_table)
-    ax.set_title("Variance by experiment for closure fits")
-    return fig
-
-
-@figure
-def plot_fits_bootstrap_bias(fits_bootstrap_bias_table):
-    """Plot the bias for each experiment for all `fits` as a point with an error bar,
-    where the error bar is given by bootstrapping the bias across replicas
-
-    The number of bootstrap samples can be controlled by the parameter `bootstrap_samples`
-    """
-    fig, ax = errorbar_figure_from_table(fits_bootstrap_bias_table)
-    ax.set_title("Bias by experiment for closure fits")
-    return fig

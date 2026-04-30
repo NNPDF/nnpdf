@@ -136,9 +136,12 @@ def get_lha_datapath():
     The check for existence intends to solve problems where a previously filled `LHAPATH`
     or `LHAPDF_DATA_PATH` environment variable is pointing to a non-existent path or shared
     systems where LHAPDF might be compiled with hard-coded paths not available to all users.
+
+    We check whether the user is able to write to the path to skip situations in which the user
+    cannot save grids to the LHAPDF folder but has its own data path (e.g., nix or a cluster).
     """
     for lhapath in lhapdf.paths()[::-1]:
-        if Path(lhapath).exists():
+        if Path(lhapath).exists() and os.access(lhapath, os.W_OK):
             return lhapath
     return lhapdf.paths()[-1]
 

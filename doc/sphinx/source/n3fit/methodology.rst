@@ -127,8 +127,8 @@ provide a faster convergence to the solution.
 	Parameters like the number of layers, nodes, activation functions are hyper-parameters that require tuning.
 
 
-To see the structure of the model, one can use Keras's ``plot_model`` function as illustrated in the script below.
-See the `Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
+To see the structure of the model, one can use Keras' ``plot_model`` function as illustrated in the script below.
+See the `this section of the Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
 
 .. code-block:: python
 
@@ -206,10 +206,7 @@ Following the gradient descent approach the training is performed in iteration s
   descent update scheme (which controls the convergence step size and speed).
 
 The gradient descent schemes are usually controlled by the **learning rate**, and the total
-**number of iterations**. Examples of fits using the ``n3fit`` methodology are available here:
-
-- DIS-only fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/KTzrle5FQGuuBdcigkDKnQ==/>`_
-- Global fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/qtXzt-BbQZGkV6P4pf9-UA==/>`_
+**number of iterations**.
 
 .. important::
 	The gradient descent scheme (RMSprop, Adagrad, etc.), the learning rate, the number of iteractions are hyper-parameters that require tuning.
@@ -323,7 +320,7 @@ incapable of distinguishing features across many orders of magnitude of ``x``, t
 scaling means that the algorithm is limited to learning features on a logarithmic and linear scale.
 
 To solve this problem there is the possibility to apply a different feature scaling to the input by
-adding a ``interpolation_points: [number of points]`` flag to the ``n3fit`` runcard. By adding this
+adding a ``feature_scaling_points: [number of points]`` flag to the ``n3fit`` runcard. By adding this
 flag the ``(x,log(x))`` scaling is replaced by a scaling in such a way that all input ``x`` values
 are evenly distributed on the domain ``[-1,1]``, and the input node is no longer split in two.
 
@@ -333,7 +330,7 @@ increasing cubic spline is used to interpolate after the scaling has been applie
 function from the scipy library is used. However, this way the neural network will be agnostic to
 the existence of this interpolation function meaning it can no longer learn the true underlying law.
 To fix this, the interpolation function has to be probed as well. This is done by only using
-``[number of points]`` set by the ``interpolation_points`` flag to define the interpolation function
+``[number of points]`` set by the ``feature_scaling_points`` flag to define the interpolation function
 after the scaling has been applied. Using this methodology the points used in the interpolation are
 again evenly distributed.
 
@@ -346,3 +343,58 @@ The figure above provides a schematic representation of this feature scaling met
 2. ``[number of points]`` points are kept (dark blue), while other points are discarded (light blue).
 3. A cubic spline function is used to do the interpolation between the points that have not been
    discarded.
+
+
+Diagonal basis
+--------------
+
+Performing the training and validation split without diagonalising the :math:`t_0` covmat :math:`C_{0}` neglects
+any correlations that may be present between training and validation data. To remedy this,
+we rotate to a basis in which the correlation matrix is diagonal before performing any training/validation split.
+Starting from the definition of the :math:`\chi^2` function in the NNPDF methodology, we have
+
+.. math::
+
+    \chi^2 &= (D-T)^T C_0^{-1} (D-T) \\
+           &= (D-T)^T R^{-1} R C_0^{-1} R R^{-1} (D-T) \\
+           &= (D-T)^T R^{-1} \left( R^{-1} C_0 R^{-1} \right)^{-1} R^{-1} (D-T) \\
+           &\equiv \tilde{\epsilon}^T \rho^{-1} \tilde{\epsilon} \, ,
+
+where we have defined :math:`\tilde{\epsilon} \equiv R^{-1}(D-T)` and :math:`\rho = R^{-1} C_0 R^{-1}`.
+
+Choosing :math:`R_{ii} = \sqrt{C_{0, ii}}`, we have that :math:`R^{-1} C_0 R^{-1}` coincides with the usual definition of the correlation matrix.
+
+Next, we move to the basis in which :math:`\rho` is diagonal. Writing :math:`\rho = \tilde{U}^T \tilde{\Lambda} \tilde{U}`, we find
+
+.. math::
+
+    \chi^2 &= \tilde{\epsilon}^T \rho^{-1} \tilde{\epsilon} \\
+           &= \tilde{\epsilon}^T (\tilde{U}^T \tilde{\Lambda} \tilde{U})^{-1} \tilde{\epsilon} \\
+           &= \tilde{\epsilon}^T \tilde{U}^T \tilde{\Lambda}^{-1} \tilde{U} \tilde{\epsilon} \\
+           &\equiv \tilde{\tilde{\epsilon}}^T \tilde{\Lambda}^{-1} \tilde{\tilde{\epsilon}} \, ,
+
+where on the last line we have defined
+
+.. math::
+
+    \tilde{\tilde{\epsilon}} \equiv \tilde{U}\tilde{\epsilon} = \tilde{U}R^{-1}(D-T).
+
+In index notation, this reads
+
+.. math::
+
+    \tilde{\tilde{\epsilon_i}} = \tilde{U}_{ij} \frac{(D-T)_j}{\sqrt{C_{0, jj}}}
+
+The transformed data :math:`\tilde{\tilde{\epsilon}}` is statistically independent in the diagonal basis of the correlation matrix :math:`\rho`.
+Computing the covariance of :math:`\tilde{\tilde{\epsilon}}`,
+
+.. math::
+
+    \mathbb{E}[\tilde{\tilde{\epsilon}}\tilde{\tilde{\epsilon}}^T]
+      &= \mathbb{E} \big[ (\tilde{U} R^{-1}(D-T)) (\tilde{U} R^{-1}(D-T))^T \big] \\
+      &= \tilde{U} R^{-1} \mathbb{E}[(D-T)(D-T)^T] R^{-1} \tilde{U}^T \\
+      &= \tilde{U} \rho \tilde{U}^T \\
+      &= \tilde{U}\tilde{U}^T \tilde{\Lambda} \tilde{U}\tilde{U}^T \\
+      &= \tilde{\Lambda} \, ,
+
+we find that it is diagonal, which demonstrates that the training/validation data are statistically independent indeed.

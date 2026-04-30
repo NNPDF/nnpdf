@@ -44,6 +44,7 @@ of the code, making runcards using it much more likely to work in the future.
 That others can benefit from the work is of course also a good thing.
 
 .. _extramodules:
+
 Hooking ``validphys`` to external code
 --------------------------------------
 
@@ -70,24 +71,27 @@ There are two ways to take advantage of resources produced using the
      there is currently no way of adding production rules or parsers in this
      way. Prefer this for actions that are too difficult to upstream to
      ``validphys``, but should work as if they were internal. A minimal example
-     for an external module could be::
-         # extra_plots.py
+     for an external module could be:
+    
+    .. code:: python
 
-         from matplotlib.figure import Figure
-         from reportengine.figure import figure
+            # extra_plots.py
 
-         from nnpdf_data.commondataparser import load_commondata
+            from matplotlib.figure import Figure
+            from reportengine.figure import figure
 
-         # A simple plot that probably should be in validphys to begin with.
+            from nnpdf_data.commondataparser import load_commondata
 
-         @figure
-         def plot_central_values(commondata):
-             fig = Figure()
-             ax = fig.subplots()
-             ax.plot(load_commondata(commondata).central_values)
-             return fig
+            # A simple plot that probably should be in validphys to begin with.
 
-     The action ``plot_central_values`` can now be used in a runcard:
+            @figure
+            def plot_central_values(commondata):
+                fig = Figure()
+                ax = fig.subplots()
+                ax.plot(load_commondata(commondata).central_values)
+                return fig
+
+    The action ``plot_central_values`` can now be used in a runcard:
 
      .. code:: yaml
 

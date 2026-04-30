@@ -4,7 +4,7 @@
 Theory data files
 =================
 
-In the ``nnpdf++`` project, ``FK`` tables (or grids) are used to provide the
+In the ``nnpdf`` framework, Fast Kernel tables (``FK`` tables for short) are used to provide the
 information required to compute perturbative QCD cross sections in a compact fashion.  With
 the ``FK`` method a typical hadronic observable data point :math:`\mathcal{O}`, is
 computed as,
@@ -29,170 +29,23 @@ Additional information may be introduced via correction factors known internally
 as :math:`C`-factors. These consist of data point by data point multiplicative
 corrections to the final result of the ``FK`` convolution :math:`\mathcal{O}`. These
 are provided by ``CFACTOR`` files, typical applications being the application
-of NNLO and electroweak corrections.  For processes which depend non-linearly
+of NNLO and electroweak corrections. For processes which depend non-linearly
 upon PDFs, such as cross-section ratios or asymmetries, multiple FK tables may
-be required for one observable. In this case information is provided in the form
-of a ``COMPOUND`` file which specifies how the results from several ``FK``
-tables may be combined to produce the target observable.  In this section we
-shall specify the layout of the ``FK``, ``COMPOUND`` and ``CFACTOR``
-files.
-
-FK table compression
---------------------
-
-It is important to note that the FK table format as described here pertains to
-the *uncompressed* tables. Typically FK tables as found and read by the
-NNPDF code are compressed individually with gzip.
+be required for one observable.
+In this case information is provided in the form of operations defined in the commondata file.
 
 ``FK`` file format
-==================
-
-``FK`` preamble layout
-----------------------
-
-The FK preamble is constructed by a set of data segments, of which there are two
-configurations. The first configuration consists of a list of key-value pairs,
-and the second is a simple data 'blob' with no requirements as to its
-formatting. Each segment begins with a delineating line which for key-value pairs is
-
-    _SegmentName_____________________________________________
-
-and for data blobs is
-
-    {SegmentName_____________________________________________
-
-The key difference being in the first character, underscore (``_``) for
-key-value pair segments, and open curly brace (``{``) for data blobs. The name of
-the segment is specified from the second character, to a terminating
-underscore (``_``). The line is then typically padded out with underscores up
-to 60 characters. Following this delineating line, for a key-value segment, the
-following lines must all be of the format
-
-    *KEY: VALUE
-
-with the first character required to be an asterisk (``*``), then specifying the
-key, and value for that segment. For blob-type segments, no constraints are
-placed upon the format, aside from that each line **must not** begin with
-one of the delineating characters ``{`` or ``_``, as these will trigger the
-construction of a new segment.
-
-While the user may specify additional segments, both key-value pair and
-blob-type for their own use, there are seven segments required by the code.
-These are, specified by their segment name:
-
-* **GridDesc** [BLOB]
-  
-  This segment provides a 'banner' with a short description for the FK table. The contents of this banner are displayed when the table is read from file.
-
-* **VersionInfo** [K-V]
-  
-  A list specifying the versions of the various pieces of code used in the generation of this FK table (minimally libnnpdf and apfel).
-
-* **GridInfo** [K-V]
-  
-  This list specified various architectural points of the FK table. The required keys are specified in :ref:`fk_config_variables`.
-
-* **TheoryInfo** [K-V]
-  
-  A list of all the theory parameters used in the generation of the table. The required keys are specified in :ref:`th_parameter_definitions`.
-
-* **FlavourMap** [BLOB]
-
-  The segment describes the flavour structure of the grid by means of a flavour
-  map. This map details which flavour channels are active in the grid, using the
-  basis specified :ref:`here<flavours>`. For DIS processes, an example
-  section would be
-
-    | {FlavourMap_____________________________________________
-    | 0 1 1 0 0 0 0 0 0 0 1 0 0 0
-
-  which specifies that only the Singlet, gluon and :math:`T_8` channels are populated in
-  the grid. In the case of hadronic FK tables, the full :math:`14\times 14` flavour
-  combination matrix is specified in the same manner. Consider the flavourmap for
-  the CDFR2KT *Dataset*:
-
-    | {FlavourMap_____________________________________________
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 1 1 0 0 0 0 0 0 0 0 0 0 0
-    | 0 1 1 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 1 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 1 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 1 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 1 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 1 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-
-  This flavourmap contains 9 nonzero entries, demonstrating the importance of only
-  computing those flavour combinations that are relevant to the process.
-  Additionally this map instructs the ``nnpdf++`` convolution code as to which
-  elements of the FastKernel grid should be read, to minimise holding zero entries
-  in memory.
-
-* **xGrid** [BLOB]
-  
-  This segment defines the :math:`x`-grid upon which the ``FK`` grid is defined,
-  given as an :math:`N_x` long list of the :math:`x`-grid points. This grid should be
-  optimised to minimise ``FK`` grid zeros in :math:`x`-space. The blob is a simple
-  list of the grid points, here is an example of an :math:`x`-grid with :math:`N_x=5`
-  entries:
-
-    | {xGrid_____________________________________________
-    | 0.10000000000000001
-    | 0.13750000000000001
-    | 0.17499999999999999
-    | 0.21250000000000002
-    | 1.00000000000000000
-
-For examples of complete DIS and hadronic ``FK`` table headers, see
-:ref:`example_fk_preamble`.
-
-``FK`` grid layout
 ------------------
 
-To start the section of the file with the ``FK`` grid itself, we begin with a
-blob-type segment delineator:
+The ``FK`` tables in NNPDF are pineappl grids convoluted with an EKO
+which in turns generates a new pineappl grid collapsed on couplings, scale and orders to speed up
+the calculation.
 
-  {FastKernel_____________________________________________
+More information about the format of these files can be found in the `pineappl docs <https://github.com/NNPDF/pineappl/blob/master/docs/README.md>`_.
 
-The grid itself is now written out. For hadronic data, the format is line by line as follows:
-
-  :math:`d \:\: \alpha \:\: \beta \:\: \sigma^d_{\alpha\beta 1 1} \:\: \sigma^d_{\alpha\beta 1 2}\:\: ....\:\: \sigma^d_{\alpha\beta n n}`
-
-where :math:`d` is the index of the data point for that line, :math:`\alpha` is the :math:`x`-index
-of the first PDF, :math:`\beta` is the :math:`x`-index of the second PDF, the
-:math:`\sigma^d_{\alpha\beta i j}` are the values of the FastKernel grid for data
-point :math:`d` as in the equation :ref:`here<observable>`, and :math:`n=14` is the total number of parton
-flavours in the grid. Therefore the full :math:`14\times 14` flavour space for one
-combination of the indices :math:`\{d,\alpha,\beta\}` is written out on each line.
-These lines should be written out first in :math:`\beta`, then :math:`\alpha` and finally
-:math:`d` so that the ``FK`` grids are written in blocks of data points. All ``FK``
-grid values should be written out in double precision. For DIS data the ``FK``
-grids must be written out as
-
-:math:`d \:\: \alpha \:\: \sigma^d_{\alpha 1} \:\: \sigma^d_{\alpha 2}\:\: ....\:\: \sigma^d_{\alpha n}`
-
-Therefore here all :math:`n=14` values are written out for each combination of :math:`\{d,\alpha\}`.
-When writing out the grids, note that only :math:`x`-grid points for which there are
-nonzero ``FK`` entries are written out. For example, there should be no lines
-such as:
-
-:math:`d \:\: \alpha \:\: \beta \:\: 0 \:\: 0 \:\: 0 \:\: .... \:\: 0`
-
-However, for those :math:`x`-grid points which do have nonzero :math:`\sigma` contributions,
-the full set of flavour contributions must be written out regardless of the
-number of zero entries. This choice was made in order that the nonzero flavour
-entries may be examined/optimised by hand after the FK table is generated.
-
-The ``FK`` file should end on the last entry in the grid, and without empty
-lines at the end of file.
 
 ``CFACTOR`` file format
-=======================
+-----------------------
 
 Additional multiplicative factors to be applied to the output of the ``FK``
 convolution may be introduced by the use of ``CFACTOR`` files. These files
@@ -241,22 +94,23 @@ where the :math:`i^{\text{th}}` line corresponds to the :math:`C`-factor to be a
 the ``FK`` prediction for the :math:`(i-1)^{\text{th}}` data point.  The first column
 denotes the value of the :math:`C`-factor and the second column denotes the
 uncertainty upon it (in absolute terms, not as a percentage or otherwise
-relative to the :math:`C`-factor). For a complete example of a ``CFACTOR`` file,
+relative to the :math:`C`-factor).
+Note that at this moment the uncertainty is not used during the fit.
+For a complete example of a ``CFACTOR`` file,
 please see :ref:`example_cfactor_file`.
 
-``COMPOUND`` file format
-========================
+``FK`` Operations
+-----------------
 
 Some *Datasets* cover observables that depend non-linearly upon the input
 PDFs. For example, the NMCPD *Dataset* is a measurement of the ratio of
-deuteron to proton structure functions. In the ``nnpdf++`` code such sets are
+deuteron to proton structure functions. In the ``nnpdf`` code such sets are
 denoted *Compound Datasets*. In these cases, a prescription must be given for how the
 results from FK convolutions, as in this :ref:`equation<observable>`, should be combined.
 
-The ``COMPOUND`` files are a simple method of providing this information. For
-each *Compound Dataset* a ``COMPOUND`` file is provided that contains the
-information on how to build the observable from constituent ``FK`` tables. The
-following operations are currently implemented:
+The information on the opoeration which compounds the ``FK`` tables is provided in the
+metadata of the observables.
+The following operations are currently implemented:
 
 =================================  =========  =================
 Operation :math:`(N_{\text{FK}})`  Code       Output Observable
@@ -277,27 +131,23 @@ observable prediction for the :math:`d^{\text{th}}` point arising from the
 :math:`i^{\text{th}}` ``FK`` table calculation. Note that here the ordering in :math:`i`
 is important.
 
-The ``COMPOUND`` file layout is as so. The first line is once again a general
-comment line and is not used by the code, and therefore has no particular
-requirements other than its presence. Following this line should come a list of
-the ``FK`` tables required for the calculation. This must be given as the
-table's filename *without* its path, preceded by the string '**FK:**'. For example,
+The information about the composition is, as mentioned above, given in the ``theory``
+entry of the datasets' metadata file.
+For instance:
 
-  | FK: FK_SETNAME_1.dat
-  | FK: FK_SETNAME_2.dat
+  | theory:
+  |   FK_tables:
+  |   - - FK_TABLE_BIN_1
+  |     - FK_TABLE_BIN_2
+  |   - - FK_TABLE_NORM
+  |   operation: "ratio"
 
-The ordering of the list is once again important, and must match the above
+In the above example, the entries `FK_TABLE_BIN_1` and `FK_TABLE_BIN_2` will be concatenated.
+The resulting concatenated table will then be divide (see above) by the `FK_TABLE_NORM`.
+The ordering of the list is important, and must match the above
 table. For example, the observables :math:`\mathcal{O}^{(i)}` arise from the
 computation with the :math:`i^{\text{th}}` element of this list. The final line
 specified the operation to be performed upon the list of tables, and must take
 the form
 
-  OP: **[CODE]**
-
-where the **[CODE]** is given in the above table. Here is an example of a
-complete ``COMPOUND`` file
-
-  | # COMPOUND FK
-  | FK: FK\_NUMERATOR.dat
-  | FK: FK\_DENOMINATOR.dat
-  | OP: RATIO
+  operation: **[CODE]**

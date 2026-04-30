@@ -23,7 +23,6 @@ from reportengine.baseexceptions import AsInputError
 # Maybe move the cuts logic to its own module?
 from validphys import filters, lhaindex
 from validphys.fkparser import load_fktable, parse_cfactor
-from validphys.hyperoptplot import HyperoptTrial
 from validphys.lhapdfset import LHAPDFSet
 from validphys.tableloader import parse_exp_mat
 from validphys.utils import experiments_to_dataset_inputs, yaml_safe
@@ -747,6 +746,8 @@ class HyperscanSpec(FitSpec):
 
         Each hyperopt trial object will also have a reference to all trials in its own file
         """
+        from validphys.hyperoptplot import HyperoptTrial
+
         all_trials = []
         for trial_file in self.tries_files.values():
             with open(trial_file) as tf:

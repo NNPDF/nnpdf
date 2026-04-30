@@ -54,5 +54,5 @@ using these terms in this sense, they will be italicised for clarity.
 Dataset naming conventions
 --------------------------
 
-See :ref:`dataset_naming_convention` for a definition of how datasets should be
+See :ref:`dataset-naming-convention` for a definition of how datasets should be
 named.

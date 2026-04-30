@@ -105,8 +105,8 @@ UNKNOWN_SUM_RULES = {
     "dbar momentum fraction": _make_momentum_fraction_integrand({"dbar": 1}),
     "s momentum fraction": _make_momentum_fraction_integrand({"s": 1}),
     "sbar momentum fraction": _make_momentum_fraction_integrand({"sbar": 1}),
-    "cp momentum fraction": _make_momentum_fraction_integrand({"c": 1, "cbar": 1}),
-    "cm momentum fraction": _make_momentum_fraction_integrand({"c": 1, "cbar": -1}),
+    "c momentum fraction": _make_momentum_fraction_integrand({"c": 1}),
+    "cbar momentum fraction": _make_momentum_fraction_integrand({"cbar": 1}),
     "g momentum fraction": _make_momentum_fraction_integrand({"g": 1}),
     "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
     "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
@@ -206,14 +206,21 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
     return _combine_limits(_sum_rules(UNKNOWN_SUM_RULES, lpdf, Q))
 
 
-def _simple_description(d):
+def _simple_description(data, pdf):
+    """Return a table with simple descriptive statistics over the members of the PDF.
+     The statistics used depend on the type of PDF (MC or Hessian)."""
     res = {}
-    for k, arr in d.items():
-        res[k] = d = {}
-        d["mean"] = np.mean(arr)
-        d["std"] = np.std(arr)
-        d["min"] = np.min(arr)
-        d["max"] = np.max(arr)
+    stats_class = pdf.stats_class
+    for k, arr in data.items():
+        res[k] = stats_dict = {}
+        # Each entry in `data` is expected to be a vector with shape
+        # (central_member + error_members,), hence we reshape to (-1, 1) before
+        # passing to the stats class.
+        stats = stats_class(arr.reshape(-1,1))
+        stats_dict["mean"] = stats.central_value().item()
+        stats_dict["std"] = stats.std_error().item()
+        stats_dict["min"] = np.min(arr)
+        stats_dict["max"] = np.max(arr)
 
     return pd.DataFrame(res).T
 
@@ -233,10 +240,10 @@ def _err_mean_table(d, polarized=False):
 
 
 @table
-def sum_rules_table(sum_rules):
+def sum_rules_table(sum_rules, pdf):
     """Return a table with the descriptive statistics of the sum rules,
     over members of the PDF."""
-    return _simple_description(sum_rules)
+    return _simple_description(sum_rules, pdf)
 
 
 @table

@@ -50,7 +50,7 @@ for k, v in optimizers.items():
 def _default_loss(y_true, y_pred):  # pylint: disable=unused-argument
     """Default loss to be used when the model is compiled with loss = Null
     (for instance if the prediction of the model is already the loss"""
-    return ops.sum(y_pred)
+    return ops.nansum(y_pred)
 
 
 class MetaModel(Model):
@@ -219,7 +219,7 @@ class MetaModel(Model):
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
-                total_loss = ops.sum(predictions, axis=0)
+                total_loss = ops.nansum(predictions, axis=0)
                 ret = [total_loss] + predictions
                 return dict(zip(out_names, ret))
 
@@ -394,6 +394,17 @@ class MetaModel(Model):
         for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
             layer = self.get_layer(layer_type)
             set_layer_replica_weights(layer=layer, weights=weights[layer_type], i_replica=i_replica)
+
+    def set_replica_weights_from_file(self, model_file, i_replica=0):
+        """
+        Set the weights of replica i_replica from a model file.
+        Wrapper around ``set_replica_weights`` that creates a temporary single-replica-model
+        to get the weights in the appropiate format.
+        """
+        single_replica = self.single_replica_generator(i_replica)
+        single_replica.load_weights(model_file)
+        weights = single_replica.get_replica_weights(0)
+        self.set_replica_weights(weights, i_replica)
 
     def split_replicas(self):
         """
