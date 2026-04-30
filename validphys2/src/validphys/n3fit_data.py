@@ -171,12 +171,12 @@ class _Masks(TupleComp):
         super().__init__(group_name, seed)
 
 
-def diagonal_masks(data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=0.75):
+def diagonal_masks(data, replica_trvlseed, loaded_fit_covmat, diagonal_frac=0.75):
 
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
     rng = np.random.Generator(np.random.PCG64(nameseed))
-    ndata = len(dataset_inputs_fitting_covmat)
+    ndata = len(loaded_fit_covmat)
 
     # construct training mask by selecting a fraction of the eigenvalues
     trmax = int(ndata * diagonal_frac)
@@ -350,7 +350,9 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, output_path, dia
     return covmat, inv_total, diag_rot, eig_vals
 
 
-def _fiting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
+def _fiting_covmat(
+    dataset_inputs_fitting_covmat, nnfit_theory_covmat, data_input, diagonal_basis=True
+):
     """Prepare the fitting covariance matrix by optionally adding theory contributions
     and transforming to diagonal basis.
 
@@ -380,6 +382,7 @@ def _fiting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
     covmat = dataset_inputs_fitting_covmat
     diagonal_rotation = None
     eig_vals = None
+
     if diagonal_basis:
         log.info("working in diagonal basis.")
 
@@ -583,11 +586,10 @@ exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_
 
 
 @table
-def fitting_covmat_table(output_path, _fiting_covmat, diagonal_basis=True):
+def fitting_covmat_table(output_path, _fiting_covmat, data_index, diagonal_basis=True):
     """
     Stores the fitting covariance matrix if diagonal_basis is False, else store the rotation matrix and eigenvalues
     """
-    # TODO: JtH, check if this includes the theory covmat
     covmat, diagonal_rotation, eig_vals = _fiting_covmat
 
     if not diagonal_basis:
