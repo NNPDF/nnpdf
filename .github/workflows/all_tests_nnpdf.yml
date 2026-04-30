@@ -78,7 +78,7 @@ jobs:
       - name: Build recipe
         shell: bash -l {0}
         run: |
-          conda -n base install conda-build --yes
+          conda install -n base conda-build --yes
           conda build -q conda-recipe --package-format=1
       - name: Keep conda package as artifact
         if: ${{ !cancelled() }}
