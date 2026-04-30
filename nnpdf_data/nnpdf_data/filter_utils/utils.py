@@ -284,12 +284,13 @@ def concat_matrices(rows, columns, list_of_matrices):
         the final, fully concatenated matrix row by row.
 
     """
-    matrices = [np.array(matrix) for matrix in list_of_matrices]
+    for i in range(len(list_of_matrices)):
+        list_of_matrices[i] = np.array(list_of_matrices[i])
     col_list = []
     for i in range(rows):
         row_list = []
         for j in range(columns):
-            row_list.append(matrices[j + i * columns])
+            row_list.append(list_of_matrices[j + i * columns])
         col_list.append(np.concatenate(tuple(row_list), axis=1))
     final_mat = np.concatenate(tuple(col_list), axis=0)
     final_mat_list = []
