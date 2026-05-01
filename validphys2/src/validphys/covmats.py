@@ -479,7 +479,6 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, nnfit_theory_co
     by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-
     return dataset_inputs_t0_exp_covmat + nnfit_theory_covmat
 
 

@@ -123,7 +123,7 @@ def read_replica_pseudodata(fit, context_index, replica):
 def make_replica(
     central_values_array,
     group_replica_mcseed,
-    loaded_fit_covmat,
+    dataset_inputs_covmat_t0_considered,
     group_multiplicative_errors=None,
     group_positivity_mask=None,
     sep_mult=False,
@@ -195,7 +195,7 @@ def make_replica(
     # Set random seed
     rng = np.random.default_rng(seed=group_replica_mcseed)
     # construct covmat
-    covmat_sqrt = sqrt_covmat(loaded_fit_covmat)
+    covmat_sqrt = sqrt_covmat(dataset_inputs_covmat_t0_considered)
 
     full_mask = (
         group_positivity_mask
@@ -223,7 +223,7 @@ def make_replica(
                 mult_shifts.append(mult_shift)
 
         # If sep_mult is true then the multiplicative shifts were not included in the covmat
-        shifts = covmat_sqrt @ rng.normal(size=loaded_fit_covmat.shape[1])
+        shifts = covmat_sqrt @ rng.normal(size=dataset_inputs_covmat_t0_considered.shape[1])
         mult_part = 1.0
         if sep_mult:
             special_mult_errors = group_multiplicative_errors["special_mult"]

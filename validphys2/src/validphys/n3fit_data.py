@@ -171,12 +171,12 @@ class _Masks(TupleComp):
         super().__init__(group_name, seed)
 
 
-def diagonal_masks(data, replica_trvlseed, loaded_fit_covmat, diagonal_frac=0.75):
+def diagonal_masks(data, replica_trvlseed, dataset_inputs_covmat_t0_considered, diagonal_frac=0.75):
 
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
     rng = np.random.Generator(np.random.PCG64(nameseed))
-    ndata = len(loaded_fit_covmat)
+    ndata = len(dataset_inputs_covmat_t0_considered)
 
     # construct training mask by selecting a fraction of the eigenvalues
     trmax = int(ndata * diagonal_frac)
@@ -313,9 +313,9 @@ def fittable_datasets_masked(data):
     return validphys_group_extractor(data.datasets)
 
 
-def _hashed_dataset_inputs_fitting_covmat(loaded_fit_covmat) -> Hashrray:
+def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_covmat_t0_considered) -> Hashrray:
     """Wrap the covmat into a Hashrray for caches to work"""
-    return Hashrray(loaded_fit_covmat)
+    return Hashrray(dataset_inputs_covmat_t0_considered)
 
 
 @functools.lru_cache
@@ -324,7 +324,7 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, output_path, dia
     log.info(
         f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}"
     )
-    covmat = _hashed_dataset_inputs_fitting_covmat.array
+
     diag_rot = None
     eig_vals = None
 
@@ -336,9 +336,10 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, output_path, dia
         )
         diag_rot = eigensystem.iloc[:, 1:].values
         eig_vals = eigensystem["eig_val"].values
+        covmat = np.diag(eig_vals)
         inv_total = np.diag(1 / eig_vals)
-
     else:
+        covmat = _hashed_dataset_inputs_fitting_covmat.array
         diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
         cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
         inv_total = (
