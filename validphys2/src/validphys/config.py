@@ -806,7 +806,7 @@ class CoreConfig(configparser.Config):
         }
 
     @configparser.explicit_node
-    def produce_dataset_inputs_fitting_covmat(self, use_thcovmat_in_fitting=True):
+    def produce_dataset_inputs_fitting_covmat(self, use_thcovmat_in_fitting=False):
         """
         Produces the correct covmat to be used in fitting_data_dict according
         to some options: whether to include the theory covmat, whether to

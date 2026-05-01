@@ -320,7 +320,32 @@ def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_covmat_t0_considered) -
 
 @functools.lru_cache
 def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, output_path, diagonal_basis=True):
-    """Returns the inverse covmats for training, validation and total when diagonal_basis = False"""
+    """Prepare the covariance matrix and its inverse, optionally transforming to diagonal basis.
+
+    Parameters
+    ----------
+    _hashed_dataset_inputs_fitting_covmat : Hashrray
+        Wrapped covariance matrix for caching purposes.
+    output_path : Path
+        Path to output directory containing diagonal basis data if needed.
+    diagonal_basis : bool, optional
+        If True, load pre-computed diagonal basis from tables. If False, use the
+        covariance matrix directly and compute the inverse via correlation matrix
+        inversion. Default is True.
+
+    Returns
+    -------
+    covmat : np.ndarray
+        The covariance matrix (diagonal if diagonal_basis=True, full otherwise).
+    inv_total : np.ndarray
+        The inverse of the covariance matrix.
+    diag_rot : np.ndarray or None
+        The rotation matrix (eigenvectors transposed) for diagonal basis transformation.
+        Only returned when diagonal_basis=True, otherwise None.
+    eig_vals : np.ndarray or None
+        The eigenvalues of the correlation matrix. Only returned when
+        diagonal_basis=True, otherwise None.
+    """
     log.info(
         f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}"
     )
@@ -351,9 +376,7 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, output_path, dia
     return covmat, inv_total, diag_rot, eig_vals
 
 
-def _fiting_covmat(
-    dataset_inputs_fitting_covmat, nnfit_theory_covmat, data_input, diagonal_basis=True
-):
+def _fiting_covmat(dataset_inputs_fitting_covmat, data_input, diagonal_basis=True):
     """Prepare the fitting covariance matrix by optionally adding theory contributions
     and transforming to diagonal basis.
 
@@ -361,9 +384,6 @@ def _fiting_covmat(
     ----------
     dataset_inputs_fitting_covmat : np.ndarray
         The experimental covariance matrix from the datasets.
-    nnfit_theory_covmat : np.ndarray or None
-        The theory covariance matrix to add to the experimental covmat.
-        If None, only the experimental covmat is used.
     diagonal_basis : bool, optional
         If True, transform the covariance matrix to diagonal basis by extracting
         eigenvalues and eigenvectors of the correlation matrix. Default is True.
