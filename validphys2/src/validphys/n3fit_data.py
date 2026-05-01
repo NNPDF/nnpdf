@@ -319,7 +319,12 @@ def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_covmat_t0_considered) -
 
 
 @functools.lru_cache
-def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, output_path, diagonal_basis=True):
+def _inv_covmat_prepared(
+    _hashed_dataset_inputs_fitting_covmat,
+    output_path,
+    use_thcovmat_in_fitting=False,
+    diagonal_basis=True,
+):
     """Prepare the covariance matrix and its inverse, optionally transforming to diagonal basis.
 
     Parameters
@@ -354,7 +359,10 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, output_path, dia
     eig_vals = None
 
     if diagonal_basis:
-        diagonal_basis_saved = "datacuts_theory_theorycovmatconfig_fitting_covmat_table.csv"
+        if use_thcovmat_in_fitting:
+            diagonal_basis_saved = "datacuts_theory_theorycovmatconfig_fitting_covmat_table.csv"
+        else:
+            diagonal_basis_saved = "datacuts_theory_fitting_covmat_table.csv"
         path_diagonal_basis = output_path / "tables" / diagonal_basis_saved
         eigensystem = pd.read_csv(
             path_diagonal_basis, index_col=[0], header=[0], sep="\t|,", engine="python"

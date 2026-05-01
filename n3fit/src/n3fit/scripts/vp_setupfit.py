@@ -25,6 +25,7 @@ will be stored.
 # top.
 
 
+import copy
 import hashlib
 import logging
 import pathlib
@@ -142,6 +143,9 @@ class SetupFitConfig(Config):
 
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
+        # Create a fresh copy of the fixed config to avoid in-place modifications
+        fixed_config = copy.deepcopy(SETUPFIT_FIXED_CONFIG)
+
         try:
             file_content = yaml_safe.load(o)
         except error.YAMLError as e:
@@ -157,10 +161,10 @@ class SetupFitConfig(Config):
             # Use faketheoryid to create the L0 data to be stored into the filter folder
             # (L1 data is stored if fakedata is True)
             if 'faketheoryid' in closuredict:
-                # make sure theory key exists in SETUPFIT_FIXED_CONFIG
-                SETUPFIT_FIXED_CONFIG.setdefault('theory', {})
+                # make sure theory key exists in fixed_config
+                fixed_config.setdefault('theory', {})
                 # overwrite theoryid with the faketheoryid
-                SETUPFIT_FIXED_CONFIG['theory']['theoryid'] = closuredict['faketheoryid']
+                fixed_config['theory']['theoryid'] = closuredict['faketheoryid']
                 # download theoryid since it will be used in the fit
                 try:
                     loader.check_theoryID(file_content['theory']['theoryid'])
@@ -177,7 +181,7 @@ class SetupFitConfig(Config):
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
 
         # The settings for these actions depend on the presence of closuretest
-        SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action, rotation_action]
+        fixed_config['actions_'] += [check_n3fit_action, filter_action, rotation_action]
 
         # Check theory covariance matrix configuration
         thconfig = file_content.get('theorycovmatconfig', {})
@@ -189,7 +193,7 @@ class SetupFitConfig(Config):
                 "`point_prescriptions: ['9 point', '3 point']`"
             )
         if thconfig:
-            SETUPFIT_FIXED_CONFIG['actions_'].append(
+            fixed_config['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )
 
@@ -219,14 +223,14 @@ class SetupFitConfig(Config):
             if compute_in_setupfit:
                 log.info("Forcing photon computation with FiatLux during setupfit.")
                 # Since the photon will be computed, check that the luxset and additional_errors exist
-                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset_exists')
+                fixed_config['actions_'].append('fiatlux check_luxset_exists')
                 if fiatlux.get("additional_errors"):
-                    SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
-                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux::theory compute_photon_to_disk')
+                    fixed_config['actions_'].append('fiatlux check_additional_errors')
+                fixed_config['actions_'].append('fiatlux::theory compute_photon_to_disk')
 
         # Check positivity bound
         if file_content.get('positivity_bound') is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
+            fixed_config['actions_'].append('positivity_bound check_unpolarized_bc')
 
         # Check hyperscan
         trials_config = file_content.get('trial_specs', {})
@@ -238,7 +242,7 @@ class SetupFitConfig(Config):
             file_content.setdefault(k, v)
 
         # Update file content with fixed configuration
-        file_content.update(SETUPFIT_FIXED_CONFIG)
+        file_content.update(fixed_config)
 
         return cls(file_content, *args, **kwargs)
 
