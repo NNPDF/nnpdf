@@ -69,6 +69,24 @@ INPUT_FOLDER = "input"
 COVMAT_TABLE_FILENAME = "datacuts_theory_theorycovmatconfig_fitting_covmat_table.csv"
 
 
+def _compute_fit_md5(config_yaml: pathlib.Path, output_path: pathlib.Path) -> str:
+    """Compute the md5 hash of the fit when vp-setupfit is run. This utility function
+    is also used in n3fit to check that the fit configuration has not changed
+    since the setup-fit was run."""
+    covmat_path = output_path / TABLE_OUTPUT_FOLDER / COVMAT_TABLE_FILENAME
+    if not covmat_path.exists():
+        raise SetupFitError(
+            f"Cannot compute md5: expected fitting covmat table not found at {covmat_path}."
+        )
+    hash_md5 = hashlib.md5()
+    with open(config_yaml, 'rb') as f:
+        hash_md5.update(f.read())
+    with open(covmat_path, 'rb') as f:
+        hash_md5.update(f.read())
+    digest = hash_md5.hexdigest()
+    return digest
+
+
 class SetupFitError(Exception):
     """Exception raised when setup-fit cannot succeed and knows why"""
 
@@ -116,19 +134,7 @@ class SetupFitEnvironment(Environment):
     def save_md5(self):
         """Generate md5 key from the runcard and the stored fitting covmat table."""
         output_filename = self.output_path / MD5_FILENAME
-        covmat_path = self.output_path / TABLE_OUTPUT_FOLDER / COVMAT_TABLE_FILENAME
-        if not covmat_path.exists():
-            raise SetupFitError(
-                f"Cannot compute md5: expected fitting covmat table not found at {covmat_path}."
-            )
-
-        hash_md5 = hashlib.md5()
-        with open(self.config_yml, 'rb') as f:
-            hash_md5.update(f.read())
-        with open(covmat_path, 'rb') as f:
-            hash_md5.update(f.read())
-
-        digest = hash_md5.hexdigest()
+        digest = _compute_fit_md5(self.config_yml, self.output_path)
         with open(output_filename, 'w') as g:
             g.write(digest)
         log.info(f"md5 {digest} stored in {output_filename}")

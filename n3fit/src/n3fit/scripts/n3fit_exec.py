@@ -13,6 +13,7 @@ import sys
 import pandas as pd
 from ruamel.yaml import error
 
+from n3fit.scripts.vp_setupfit import MD5_FILENAME, SetupFitError, _compute_fit_md5
 from reportengine import colors
 from reportengine.namespaces import NSList
 from validphys.api import API
@@ -71,6 +72,11 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
+
+        # Verify vp-setupfit hash is consistent with the current fit configuration
+        # before we touch anything in the output folder.
+        self._verify_setupfit_md5()
+
         if not (self.output_path / "nnfit").is_dir():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
@@ -102,6 +108,29 @@ class N3FitEnvironment(Environment):
         # avoid conflict with setupfit
         self.input_folder = self.replica_path / INPUT_FOLDER
         self.input_folder.mkdir(exist_ok=True)
+
+    def _verify_setupfit_md5(self):
+        if getattr(self, "skip_md5_check", False):
+            log.warning("Skipping md5 check against vp-setupfit (--skip-md5-check is set).")
+            return
+
+        md5_path = self.output_path / MD5_FILENAME
+        if not md5_path.exists():
+            raise N3FitError(
+                f"No {MD5_FILENAME} file not found at {md5_path}. "
+                "Run vp-setupfit on this runcard before n3fit."
+            )
+        stored = md5_path.read_text().strip()
+        try:
+            current = _compute_fit_md5(self.config_yml, self.output_path)
+        except SetupFitError as e:
+            raise N3FitError(f"Failed to compute current fit md5: {e}") from e
+        if stored != current:
+            raise N3FitError(
+                f"md5 mismatch in {self.output_path}: stored {stored} != current {current}. "
+                "The runcard changed since vp-setupfit was run. Re-run vp-setupfit (or pass "
+                "--skip-md5-check to override this check if this is the desired behaviour)."
+            )
 
     @classmethod
     def ns_dump_description(cls):
@@ -312,6 +341,11 @@ class N3FitApp(App):
             help="End of the range of replicas to compute",
             type=check_positive,
         )
+        parser.add_argument(
+            "--skip-md5-check",
+            help="Skip the integrity check against the md5 written by vp-setupfit.",
+            action="store_true",
+        )
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
@@ -341,6 +375,7 @@ class N3FitApp(App):
             self.environment.db_host = self.args["db_host"]
             self.environment.db_port = self.args["db_port"]
             self.environment.db_name = self.args["db_name"]
+            self.environment.skip_md5_check = self.args["skip_md5_check"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")
