@@ -110,14 +110,14 @@ class N3FitEnvironment(Environment):
         self.input_folder.mkdir(exist_ok=True)
 
     def _verify_setupfit_md5(self):
-        if getattr(self, "skip_md5_check", False):
+        if sekf.skip_md5_check:
             log.warning("Skipping md5 check against vp-setupfit (--skip-md5-check is set).")
             return
 
         md5_path = self.output_path / MD5_FILENAME
         if not md5_path.exists():
             raise N3FitError(
-                f"No {MD5_FILENAME} file not found at {md5_path}. "
+                f"{MD5_FILENAME} file not found at {md5_path}. "
                 "Run vp-setupfit on this runcard before n3fit."
             )
         stored = md5_path.read_text().strip()
@@ -345,6 +345,7 @@ class N3FitApp(App):
             "--skip-md5-check",
             help="Skip the integrity check against the md5 written by vp-setupfit.",
             action="store_true",
+            default=False,
         )
         return parser
 
