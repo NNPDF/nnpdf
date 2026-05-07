@@ -110,7 +110,7 @@ class N3FitEnvironment(Environment):
         self.input_folder.mkdir(exist_ok=True)
 
     def _verify_setupfit_md5(self):
-        if sekf.skip_md5_check:
+        if self.skip_md5_check:
             log.warning("Skipping md5 check against vp-setupfit (--skip-md5-check is set).")
             return
 
