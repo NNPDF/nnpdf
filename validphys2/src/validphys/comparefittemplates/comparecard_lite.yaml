@@ -36,11 +36,11 @@ fits:
 use_cuts: "fromfit"
 use_weights_in_covmat: False
 
-Q: 1.651
+Q: 5.5
 
 Scales:
-  - Q: 1.651
-    Scaletitle: "Q = 1.65 GeV"
+  - Q: 5.5
+    Scaletitle: "Q = 5.5 GeV"
 
 PDFnormalize:
   - Normtitle: Absolute
@@ -49,9 +49,9 @@ PDFnormalize:
     Normtitle: Ratio
 
 Basespecs:
-  - basis: CCBAR_ASYMM_FLAVOUR
+  - basis: BACTIV_FLAVOUR
     Basistitle: Flavour basis
-  - basis: CCBAR_ASYMM
+  - basis: BACTIV
     Basistitle: Evolution basis
 
 PDFscalespecs:

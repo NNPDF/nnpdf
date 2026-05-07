@@ -58,7 +58,7 @@ class FkRotation(Rotation):
     to the dimension-14 evolution basis used by the fktables.
 
     The input to this layer is a `pdf_raw` variable which is expected to have
-    a shape (1,  None, 9), and it is then rotated to an output (1, None, 14)
+    a shape (1,  None, pdfbases.MAX_ACTIVE), and it is then rotated to an output (1, None, 14)
     """
 
     def __init__(self, output_dim=14, name="evolution", **kwargs):
@@ -68,24 +68,7 @@ class FkRotation(Rotation):
 
     def _create_rotation_matrix(self):
         """Create the rotation matrix"""
-        array = np.array(
-            [
-                [0, 0, 0, 0, 0, 0, 0, 0, 0],  # photon
-                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # sigma
-                [0, 1, 0, 0, 0, 0, 0, 0, 0],  # g
-                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v
-                [0, 0, 0, 1, 0, 0, 0, 0, 0],  # v3
-                [0, 0, 0, 0, 1, 0, 0, 0, 0],  # v8
-                [0, 0, 0, 0, 0, 0, 0, 0, 1],  # v15
-                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v24
-                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v35
-                [0, 0, 0, 0, 0, 1, 0, 0, 0],  # t3
-                [0, 0, 0, 0, 0, 0, 1, 0, 0],  # t8
-                [1, 0, 0, 0, 0, 0, 0, -4, 0],  # t15 (c-)
-                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # t24
-                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # t35
-            ]
-        )
+        array = np.array(pdfbases.N3FIT_TO_FKTABLE_TRANSFORMATION)
         tensor = op.numpy_to_tensor(array.T)
         return tensor
 

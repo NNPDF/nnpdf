@@ -12,6 +12,7 @@ import inspect
 
 import numpy as np
 
+from collections import defaultdict
 from reportengine.checks import CheckError
 from validphys.gridvalues import central_grid_values, grid_values
 
@@ -55,6 +56,30 @@ PIDS_DICT = {
 # Canonical ordering of PDG codes (so flavour basis)
 ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
+
+# Define the N3FIT basis which will be 
+N3FIT_BASIS = ("sng", "g", "v", "v3", "v8", "t3", "t8", "cp", "v15", "t24")
+N3FIT_TO_FKTABLE_TRANSFORMATION = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # photon
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # sigma
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],  # g
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],  # v
+    [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],  # v3
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],  # v8
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],  # v15
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],  # v24
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],  # v35
+    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],  # t3
+    [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],  # t8
+    [1, 0, 0, 0, 0, 0, 0,-4, 0, 0],  # t15 (c-)
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],  # t24
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # t35
+]
+assert len(N3FIT_BASIS) == len(N3FIT_TO_FKTABLE_TRANSFORMATION[0])
+# TODO: this intermediate step is unnecessary and the function at the bottom
+# should already return the result in the FKTABLE basis, the N3FIT basis 
+# is completely artificial and a remnant of the NN31IC basis
+
 
 def pdg_id_to_canonical_index(flindex):
     """Given an LHAPDF id, return its index in the ALL_FLAVOURS list."""
@@ -530,6 +555,10 @@ EVOL = evolution
 LUX = copy.deepcopy(evolution)
 LUX.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'V15', 'gluon', 'photon')
 
+BACTIV = copy.deepcopy(evolution)
+BACTIV.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'T24')
+
+
 CCBAR_ASYMM = copy.deepcopy(evolution)
 CCBAR_ASYMM.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'V15')
 
@@ -638,6 +667,23 @@ FLAVOURPC = LinearBasis.from_mapping(
 
 CCBAR_ASYMM_FLAVOUR = copy.deepcopy(FLAVOUR)
 CCBAR_ASYMM_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g')
+
+
+BACTIV_FLAVOUR = LinearBasis.from_mapping(
+    {
+        'u': {'u': 1},
+        'ubar': {'ubar': 1},
+        'd': {'d': 1},
+        'dbar': {'dbar': 1},
+        's': {'s': 1},
+        'sbar': {'sbar': 1},
+        'c': {'c': 1},
+        'b': {'b': 1},
+        'g': {'g': 1},
+        'photon': {'photon':1},
+    },
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'g', 'c', 'b'))
+
 
 LUX_FLAVOUR = copy.deepcopy(FLAVOUR)
 LUX_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', 'photon')
@@ -833,107 +879,60 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
             matrix performing the change of basis from fitbasis to NN31IC
 
     """
+
+    flist = [defaultdict(lambda: 0, {fl: 1}) for fl in N3FIT_BASIS]
+    sng, g, v, v3, v8, t3, t8, cp, v15, t24 = flist
+
     if fitbasis == 'NN31IC':
-        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
-        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
-        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
-        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
-        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 'cp': 0, 'g': 0 }
-        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 'cp': 0, 'g': 0 }
-        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 1, 'g': 0 }
-        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 1 }
-        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
-
+        v15.update({"v": 1})
     elif fitbasis == 'NN31PC':
-        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
-        v =  {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
-        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
-        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 'g': 0 }
-        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 'g': 0 }
-        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 'g': 0 }
-        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
-        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 1 }
-        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0}
-
+        v15.update({"v": 1})
     elif fitbasis == 'FLAVOUR':
-        sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
-        v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
-        v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
-        v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
-        t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
-        t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
-        cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 2, 'g': 0 }
-        g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
-        v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
-
+        sng.update({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": 1, "sbar": 1, "c": 2, "g": 0})
+        v.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": 1, "sbar": -1, "c": 0, "g": 0})
+        v3.update({"u": 1, "ubar": -1, "d": -1, "dbar": 1, "s": 0, "sbar": 0, "c": 0, "g": 0})
+        v8.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": -2, "sbar": 2, "c": 0, "g": 0})
+        t3.update({"u": 1, "ubar": 1, "d": -1, "dbar": -1, "s": 0, "sbar": 0, "c": 0, "g": 0})
+        t8.update({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2, "c": 0, "g": 0})
+        cp.update({"u": 0, "ubar": 0, "d": 0, "dbar": 0, "s": 0, "sbar": 0, "c": 2, "g": 0})
+        g.update({"u": 0, "ubar": 0, "d": 0, "dbar": 0, "s": 0, "sbar": 0, "c": 0, "g": 1})
+        v15.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": 1, "sbar": -1, "c": 0, "g": 0})
     elif fitbasis == 'FLAVOURPC':
-        sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 0, 'g': 0 }
-        v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
-        v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
-        v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
-        t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
-        t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
-        cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
-        g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
-        v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
-
+        sng.update({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": 1, "sbar": 1, "c": 0, "g": 0})
+        v.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": 1, "sbar": -1, "c": 0, "g": 0})
+        v3.update({"u": 1, "ubar": -1, "d": -1, "dbar": 1, "s": 0, "sbar": 0, "c": 0, "g": 0})
+        v8.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": -2, "sbar": 2, "c": 0, "g": 0})
+        t3.update({"u": 1, "ubar": 1, "d": -1, "dbar": -1, "s": 0, "sbar": 0, "c": 0, "g": 0})
+        t8.update({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2, "c": 0, "g": 0})
+        cp.update({"u": 0, "ubar": 0, "d": 0, "dbar": 0, "s": 0, "sbar": 0, "c": 0, "g": 0})
+        g.update({"u": 0, "ubar": 0, "d": 0, "dbar": 0, "s": 0, "sbar": 0, "c": 0, "g": 1})
+        v15.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": 1, "sbar": -1, "c": 0, "g": 0})
     elif fitbasis == 'EVOL' or fitbasis == 'evolution':
-        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
-        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
-        cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
-        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
-        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-
+        cp.update({"sng": 0.25, "t15": -0.25})
+        v15.update({"v": 1})
+    elif fitbasis == 'BACTIV':
+        cp.update({"sng": 0.25, "t15": -0.25})
+        v15.update({"v": 1})
     elif fitbasis == 'PDF4LHC20':
-        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v8 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
-        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
-        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
-        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-
+        v8.update({"v": 1})
+        v15.update({"v": 1})
     elif fitbasis == "CCBAR_ASYMM":
-        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
-        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
-        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
-        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
-        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
-        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0, 'v15': 0 }
-        cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0, 'v15': 0 }
-        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1, 'v15': 0 }
-        v15 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 1 }
-
+        cp.update({"sng": 0.25, "t15": -0.25})
     elif fitbasis == 'CCBAR_ASYMM_FLAVOUR':
-        sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'g': 0 }
-        v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 1, 'cbar': -1, 'g': 0 }
-        v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'cbar': 0, 'g': 0 }
-        v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'cbar': 0, 'g': 0 }
-        t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'cbar': 0, 'g': 0 }
-        t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'cbar': 0, 'g': 0 }
-        cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 1, 'cbar': 1, 'g': 0 }
-        g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'cbar': 0, 'g': 1 }
-        v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': -3, 'cbar': 3, 'g': 0 }
-
-
-    elif fitbasis == 'POLARIZED_EVOL' or fitbasis == "POLARIZED_EVOL_CMP":  # With Perturbative Charm
-        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        v8 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
-        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
-        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
-        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-
-    flist = [sng, g, v, v3, v8, t3, t8, cp, v15]
+        sng.update({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": 1, "sbar": 1, "c": 1, "cbar": 1, "g": 0})
+        v.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": 1, "sbar": -1, "c": 1, "cbar": -1, "g": 0})
+        v3.update({"u": 1, "ubar": -1, "d": -1, "dbar": 1, "s": 0, "sbar": 0, "c": 0, "cbar": 0, "g": 0})
+        v8.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": -2, "sbar": 2, "c": 0, "cbar": 0, "g": 0})
+        t3.update({"u": 1, "ubar": 1, "d": -1, "dbar": -1, "s": 0, "sbar": 0, "c": 0, "cbar": 0, "g": 0})
+        t8.update({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2, "c": 0, "cbar": 0, "g": 0})
+        cp.update({"u": 0, "ubar": 0, "d": 0, "dbar": 0, "s": 0, "sbar": 0, "c": 1, "cbar": 1, "g": 0})
+        g.update({"u": 0, "ubar": 0, "d": 0, "dbar": 0, "s": 0, "sbar": 0, "c": 0, "cbar": 0, "g": 1})
+        v15.update({"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": 1, "sbar": -1, "c": -3, "cbar": 3, "g": 0})
+    elif fitbasis == 'POLARIZED_EVOL' or fitbasis == "POLARIZED_EVOL_CMP":
+        v8.update({"v": 1})
+        v15.update({"v": 1})
+    else:
+        raise ValueError(f"Unknown fit basis '{fitbasis}'")
 
     mat = []
     for f in flist:
@@ -943,4 +942,4 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
 
     nflavs = len(flav_info)
     # Return the transpose of the matrix, to have the first index referring to flavour
-    return np.asarray(mat).reshape(9, nflavs).T
+    return np.asarray(mat).reshape(-1, nflavs).T

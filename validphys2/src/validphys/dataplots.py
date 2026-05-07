@@ -1288,7 +1288,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
             ax.errorbar(
                 xvals,
                 cv,
-                yerr=[cv - lower, upper - cv],
+                yerr=[np.maximum(cv - lower, 0), np.maximum(upper - cv, 0)],
                 linestyle='--',
                 marker='s',
                 label=str(pdf),
