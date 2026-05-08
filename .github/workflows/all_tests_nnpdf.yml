@@ -110,6 +110,7 @@ jobs:
       shell: bash -l {0}
       run: |
         cd n3fit/runcards/examples
+        vp-setupfit Basic_runcard.yml
         n3fit Basic_runcard.yml 4
         cat Basic_runcard/nnfit/*/Basic_runcard.json
     - name: Test we can still run postfit
@@ -139,6 +140,7 @@ jobs:
       shell: bash -l {0}
       run: |
         cd n3fit/runcards/examples
+        vp-setupfit Basic_runcard.yml
         n3fit Basic_runcard.yml 42
         cat Basic_runcard/nnfit/*/Basic_runcard.json
 
