@@ -289,10 +289,11 @@ def _dybosonpt_xq2map(kin_dict):
     Here pT refers to the transverse momentum of the boson.
     """
     pT = kin_dict[_Vars.pT]
-    m_Z2 = kin_dict.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
-    if m_Z2 is None:
-        m_Z = kin_dict.get_one_of(_Vars.m_ll)
-        m_Z2 = m_Z**2
+
+    try:
+        m_Z2 = kin_dict.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
+    except KeyError:
+        m_Z2 = kin_dict.get_one_of(_Vars.m_ll) ** 2
 
     sqrts = kin_dict[_Vars.sqrts]
     ET2 = m_Z2 + pT * pT
@@ -307,7 +308,11 @@ def _dybosonptrap_xq2map(kin_info):
     """
     pT = kin_info[_Vars.pT]
     eta = kin_info.get_one_of(_Vars.eta, _Vars.y, _Vars.abs_y)
-    m_ll2 = kin_info.get_one_of(_Vars.m_ll2, _Vars.m_Z2)
+    try:
+        m_ll2 = kin_dict.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
+    except KeyError:
+        m_ll2 = kin_dict.get_one_of(_Vars.m_ll) ** 2
+        
     sqrts = kin_info[_Vars.sqrts]
     ET2 = m_ll2 + pT * pT
     x1 = (np.sqrt(ET2) + pT) / sqrts * np.exp(-eta)
@@ -496,6 +501,7 @@ DY_PT_RAP = _Process(
         _Vars.abs_y,
         _Vars.eta,
         _Vars.m_ll2,
+        _Vars.m_ll,
     ),
     xq2map_function=_dybosonptrap_xq2map,
 )
