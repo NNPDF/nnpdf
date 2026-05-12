@@ -279,6 +279,18 @@
     description due to unknown reasons.
   rule: "abs_y <= 1.6"
 
+- dataset: CMS_Z0J_13TEV_PT-M
+  reason: Avoid the region where resummation effects become important.
+  rule: "pT >= 30"
+
+- dataset: CMS_Z0J_13TEV_PT-M
+  reason: Avoid the region where EWK corrections are important.
+  rule: "pT <= 170"
+
+- dataset: CMS_Z0J_13TEV_PT-M
+  reason: Remove first invariant mass bin which is completely off.
+  rule: "m_ll >= 76"
+
 - dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.
   local_variables:
