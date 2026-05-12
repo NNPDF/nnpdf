@@ -480,7 +480,7 @@ DY_MLL = _Process(
 DY_PT = _Process(
     "DY_PT",
     "DY W or Z (2 leptons) + j boson transverse momentum",
-    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.m_ll2, _Vsrs.m_ll),
+    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.m_ll2, _Vars.m_ll),
     xq2map_function=_dybosonpt_xq2map,
 )
 
