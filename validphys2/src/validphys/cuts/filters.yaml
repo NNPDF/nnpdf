@@ -289,7 +289,7 @@
 
 - dataset: CMS_Z0J_13TEV_PT-M
   reason: Remove first invariant mass bin which is completely off for unknown reasons.
-  rule: "m_ll >= 76"
+  rule: "m_ll2 >= 5776"
 
 - dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.
