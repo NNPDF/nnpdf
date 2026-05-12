@@ -43,9 +43,9 @@ implemented_observables:
          label: '$p_T$'
          units: "GeV"
       m_ll:
-         description: "Z boson mass squared"
-         label: '$m^2_{\ell \ell}$'
-         units: "GeV^2"
+         description: "dilepton invariant mass"
+         label: '$m_{\ell \ell}$'
+         units: "GeV"
     file: kinematics.yaml
 
   data_central: data.yaml
