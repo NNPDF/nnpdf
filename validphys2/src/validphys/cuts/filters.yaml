@@ -288,7 +288,7 @@
   rule: "pT <= 170"
 
 - dataset: CMS_Z0J_13TEV_PT-M
-  reason: Remove first invariant mass bin which is completely off.
+  reason: Remove first invariant mass bin which is completely off for unknown reasons.
   rule: "m_ll >= 76"
 
 - dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
