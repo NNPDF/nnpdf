@@ -291,9 +291,9 @@ def _dybosonpt_xq2map(kin_dict):
     pT = kin_dict[_Vars.pT]
 
     try:
-        m_Z2 = kin_dict.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
+        m_Z2 = kin_info.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
     except KeyError:
-        m_Z2 = kin_dict.get_one_of(_Vars.m_ll) ** 2
+        m_Z2 = kin_info.get_one_of(_Vars.m_ll) ** 2
 
     sqrts = kin_dict[_Vars.sqrts]
     ET2 = m_Z2 + pT * pT
@@ -309,9 +309,9 @@ def _dybosonptrap_xq2map(kin_info):
     pT = kin_info[_Vars.pT]
     eta = kin_info.get_one_of(_Vars.eta, _Vars.y, _Vars.abs_y)
     try:
-        m_ll2 = kin_dict.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
+        m_ll2 = kin_info.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
     except KeyError:
-        m_ll2 = kin_dict.get_one_of(_Vars.m_ll) ** 2
+        m_ll2 = kin_info.get_one_of(_Vars.m_ll) ** 2
         
     sqrts = kin_info[_Vars.sqrts]
     ET2 = m_ll2 + pT * pT
