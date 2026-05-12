@@ -1,0 +1,590 @@
+definitions:
+  Stat (Data):
+    description: Stat (Data) from HEPDATA
+    treatment: ADD
+    type: UNCORR
+  Stat (MC):
+    description: Stat (MC) from HEPDATA
+    treatment: ADD
+    type: UNCORR
+  Efficiencies (Uncorellated):
+    description: Efficiencies (Uncorellated) from HEPDATA
+    treatment: ADD
+    type: UNCORR
+  Scale:
+    description: Scale from HEPDATA
+    treatment: ADD
+    type: CORR
+  Resolution:
+    description: Resolution from HEPDATA
+    treatment: ADD
+    type: CORR
+  Muon Saggita:
+    description: Muon Saggita from HEPDATA
+    treatment: ADD
+    type: CORR
+  Efficiencies (Corellated):
+    description: Efficiencies (Corellated) from HEPDATA
+    treatment: ADD
+    type: CORR
+  Isolation:
+    description: Isolation from HEPDATA
+    treatment: ADD
+    type: CORR
+  Trigger:
+    description: Trigger from HEPDATA
+    treatment: ADD
+    type: CORR
+  Muon (TTVA):
+    description: Muon (TTVA) from HEPDATA
+    treatment: ADD
+    type: CORR
+  Z-vertex reweighting:
+    description: Z-vertex reweighting from HEPDATA
+    treatment: ADD
+    type: CORR
+  Pile-Up:
+    description: Pile-Up from HEPDATA
+    treatment: ADD
+    type: CORR
+  Model:
+    description: Model from HEPDATA
+    treatment: ADD
+    type: CORR
+  Background:
+    description: Background from HEPDATA
+    treatment: ADD
+    type: CORR
+bins:
+- Stat (Data): 7.33895e-05
+  Stat (MC): 5.61428e-05
+  Efficiencies (Uncorellated): 7.62052e-06
+  Scale: 3.77564e-05
+  Resolution: 1.97555e-05
+  Muon Saggita: 1.3535e-06
+  Efficiencies (Corellated): 2.53077e-07
+  Isolation: -3.21406e-07
+  Trigger: 2.10548e-07
+  Muon (TTVA): 6.50403e-08
+  Z-vertex reweighting: 6.92879e-08
+  Pile-Up: -1.71301e-06
+  Model: 1.17742e-05
+  Background: 2.6144e-06
+- Stat (Data): 7.17653e-05
+  Stat (MC): 5.474e-05
+  Efficiencies (Uncorellated): 7.12003e-06
+  Scale: 1.98692e-05
+  Resolution: 5.84463e-05
+  Muon Saggita: 4.87774e-06
+  Efficiencies (Corellated): 1.95681e-07
+  Isolation: -2.92554e-07
+  Trigger: 1.15319e-07
+  Muon (TTVA): 3.40175e-08
+  Z-vertex reweighting: 1.45025e-07
+  Pile-Up: 5.05812e-07
+  Model: -1.11864e-05
+  Background: 2.53068e-06
+- Stat (Data): 6.94675e-05
+  Stat (MC): 5.2111e-05
+  Efficiencies (Uncorellated): 6.10127e-06
+  Scale: 6.02976e-06
+  Resolution: 6.11683e-05
+  Muon Saggita: 3.25268e-06
+  Efficiencies (Corellated): 1.52499e-07
+  Isolation: -2.18755e-07
+  Trigger: 9.71047e-08
+  Muon (TTVA): 2.47162e-08
+  Z-vertex reweighting: -1.00394e-07
+  Pile-Up: -7.96941e-06
+  Model: -1.47197e-05
+  Background: 2.40286e-06
+- Stat (Data): 6.63969e-05
+  Stat (MC): 4.86351e-05
+  Efficiencies (Uncorellated): 4.94684e-06
+  Scale: -2.79757e-06
+  Resolution: 4.96738e-05
+  Muon Saggita: 9.75616e-07
+  Efficiencies (Corellated): 1.32704e-07
+  Isolation: -1.42078e-07
+  Trigger: 8.05904e-08
+  Muon (TTVA): 2.73643e-08
+  Z-vertex reweighting: -1.59619e-07
+  Pile-Up: -6.7597e-06
+  Model: -3.52029e-06
+  Background: 2.39151e-06
+- Stat (Data): 6.17612e-05
+  Stat (MC): 4.51803e-05
+  Efficiencies (Uncorellated): 3.89108e-06
+  Scale: -6.10522e-06
+  Resolution: 3.30354e-05
+  Muon Saggita: 2.83518e-06
+  Efficiencies (Corellated): 1.27998e-07
+  Isolation: -7.13211e-08
+  Trigger: 8.29725e-08
+  Muon (TTVA): 3.07492e-08
+  Z-vertex reweighting: 1.00215e-07
+  Pile-Up: -5.00779e-07
+  Model: 8.49558e-06
+  Background: 2.44995e-06
+- Stat (Data): 5.77664e-05
+  Stat (MC): 4.23546e-05
+  Efficiencies (Uncorellated): 2.98307e-06
+  Scale: -1.10568e-05
+  Resolution: 2.60181e-05
+  Muon Saggita: 1.95059e-06
+  Efficiencies (Corellated): 1.23313e-07
+  Isolation: -1.24541e-08
+  Trigger: 5.55809e-08
+  Muon (TTVA): 3.15496e-08
+  Z-vertex reweighting: 2.27018e-08
+  Pile-Up: 3.02638e-06
+  Model: -5.49603e-06
+  Background: 2.43522e-06
+- Stat (Data): 5.39635e-05
+  Stat (MC): 3.97985e-05
+  Efficiencies (Uncorellated): 2.29224e-06
+  Scale: -1.23219e-05
+  Resolution: 2.03084e-05
+  Muon Saggita: 1.12455e-06
+  Efficiencies (Corellated): 1.21131e-07
+  Isolation: 3.40861e-08
+  Trigger: 8.62634e-08
+  Muon (TTVA): 4.03474e-08
+  Z-vertex reweighting: -1.27428e-07
+  Pile-Up: -2.07097e-06
+  Model: 2.01242e-06
+  Background: 2.50026e-06
+- Stat (Data): 5.06942e-05
+  Stat (MC): 3.74849e-05
+  Efficiencies (Uncorellated): 1.84072e-06
+  Scale: -1.52471e-05
+  Resolution: 1.38317e-05
+  Muon Saggita: 1.54483e-06
+  Efficiencies (Corellated): 1.17825e-07
+  Isolation: 7.36893e-08
+  Trigger: 9.41138e-08
+  Muon (TTVA): 4.85094e-08
+  Z-vertex reweighting: -1.52972e-07
+  Pile-Up: 7.05864e-07
+  Model: -6.19182e-06
+  Background: 2.64906e-06
+- Stat (Data): 4.75316e-05
+  Stat (MC): 3.53303e-05
+  Efficiencies (Uncorellated): 1.47619e-06
+  Scale: -1.60245e-05
+  Resolution: 1.20235e-05
+  Muon Saggita: 1.77062e-06
+  Efficiencies (Corellated): 1.21933e-07
+  Isolation: 1.05107e-07
+  Trigger: 9.55364e-08
+  Muon (TTVA): 6.22857e-08
+  Z-vertex reweighting: -2.7066e-07
+  Pile-Up: -1.85933e-06
+  Model: 1.60522e-06
+  Background: 2.75984e-06
+- Stat (Data): 4.48241e-05
+  Stat (MC): 3.3345e-05
+  Efficiencies (Uncorellated): 1.19656e-06
+  Scale: -1.56591e-05
+  Resolution: 8.07986e-06
+  Muon Saggita: 1.6488e-06
+  Efficiencies (Corellated): 1.27991e-07
+  Isolation: 1.3236e-07
+  Trigger: 9.55465e-08
+  Muon (TTVA): 6.6568e-08
+  Z-vertex reweighting: -1.97182e-08
+  Pile-Up: -2.63947e-06
+  Model: -2.45685e-06
+  Background: 2.92749e-06
+- Stat (Data): 4.20221e-05
+  Stat (MC): 3.14638e-05
+  Efficiencies (Uncorellated): 1.05868e-06
+  Scale: -1.70632e-05
+  Resolution: 4.19756e-06
+  Muon Saggita: 3.16e-06
+  Efficiencies (Corellated): 1.24853e-07
+  Isolation: 1.53502e-07
+  Trigger: 9.70565e-08
+  Muon (TTVA): 6.23622e-08
+  Z-vertex reweighting: 8.22088e-08
+  Pile-Up: -6.2528e-06
+  Model: -4.081e-07
+  Background: 3.035e-06
+- Stat (Data): 4.00194e-05
+  Stat (MC): 2.96676e-05
+  Efficiencies (Uncorellated): 1.01334e-06
+  Scale: -1.85262e-05
+  Resolution: 1.49509e-06
+  Muon Saggita: 2.9723e-06
+  Efficiencies (Corellated): 1.15733e-07
+  Isolation: 1.65516e-07
+  Trigger: 1.00412e-07
+  Muon (TTVA): 6.4541e-08
+  Z-vertex reweighting: 8.99594e-08
+  Pile-Up: 2.01307e-06
+  Model: -3.29613e-06
+  Background: 3.12866e-06
+- Stat (Data): 3.7446e-05
+  Stat (MC): 2.75656e-05
+  Efficiencies (Uncorellated): 9.52163e-07
+  Scale: -1.85507e-05
+  Resolution: 7.40895e-07
+  Muon Saggita: 1.76665e-06
+  Efficiencies (Corellated): 1.13246e-07
+  Isolation: 1.67276e-07
+  Trigger: 1.12278e-07
+  Muon (TTVA): 6.18923e-08
+  Z-vertex reweighting: 3.73921e-08
+  Pile-Up: 3.8748e-06
+  Model: 2.62187e-06
+  Background: 3.22543e-06
+- Stat (Data): 3.4088e-05
+  Stat (MC): 2.56061e-05
+  Efficiencies (Uncorellated): 9.32742e-07
+  Scale: -1.98298e-05
+  Resolution: 2.58524e-06
+  Muon Saggita: 6.17704e-07
+  Efficiencies (Corellated): 1.05721e-07
+  Isolation: 1.6175e-07
+  Trigger: 8.81191e-08
+  Muon (TTVA): 5.92534e-08
+  Z-vertex reweighting: 1.61865e-07
+  Pile-Up: 4.30215e-06
+  Model: 2.60744e-08
+  Background: 3.35076e-06
+- Stat (Data): 3.18739e-05
+  Stat (MC): 2.40094e-05
+  Efficiencies (Uncorellated): 1.0063e-06
+  Scale: -1.78683e-05
+  Resolution: 4.52804e-06
+  Muon Saggita: 5.04182e-07
+  Efficiencies (Corellated): 9.42208e-08
+  Isolation: 1.46781e-07
+  Trigger: 8.81487e-08
+  Muon (TTVA): 5.41781e-08
+  Z-vertex reweighting: 2.84696e-07
+  Pile-Up: 5.96245e-06
+  Model: 1.08053e-06
+  Background: 3.3264e-06
+- Stat (Data): 3.01246e-05
+  Stat (MC): 2.25086e-05
+  Efficiencies (Uncorellated): 1.12277e-06
+  Scale: -1.78014e-05
+  Resolution: 2.34797e-06
+  Muon Saggita: -1.57807e-07
+  Efficiencies (Corellated): 7.8914e-08
+  Isolation: 1.28402e-07
+  Trigger: 9.25549e-08
+  Muon (TTVA): 4.11462e-08
+  Z-vertex reweighting: 3.49903e-07
+  Pile-Up: 3.93887e-06
+  Model: 2.94885e-06
+  Background: 3.3412e-06
+- Stat (Data): 2.84876e-05
+  Stat (MC): 2.1003e-05
+  Efficiencies (Uncorellated): 1.26063e-06
+  Scale: -1.74292e-05
+  Resolution: 1.90124e-06
+  Muon Saggita: 7.91841e-07
+  Efficiencies (Corellated): 7.02334e-08
+  Isolation: 1.06839e-07
+  Trigger: 1.04588e-07
+  Muon (TTVA): 3.44895e-08
+  Z-vertex reweighting: 6.95854e-08
+  Pile-Up: 1.66478e-06
+  Model: 2.81772e-06
+  Background: 3.53285e-06
+- Stat (Data): 2.70051e-05
+  Stat (MC): 1.96268e-05
+  Efficiencies (Uncorellated): 1.33511e-06
+  Scale: -1.61827e-05
+  Resolution: 1.68493e-06
+  Muon Saggita: -5.67574e-07
+  Efficiencies (Corellated): 6.0653e-08
+  Isolation: 8.23239e-08
+  Trigger: 9.02184e-08
+  Muon (TTVA): 2.86764e-08
+  Z-vertex reweighting: -4.72017e-08
+  Pile-Up: 1.86437e-06
+  Model: 4.04169e-06
+  Background: 3.6471e-06
+- Stat (Data): 2.53968e-05
+  Stat (MC): 1.8331e-05
+  Efficiencies (Uncorellated): 1.37111e-06
+  Scale: -1.48547e-05
+  Resolution: 8.46977e-07
+  Muon Saggita: -1.53013e-06
+  Efficiencies (Corellated): 5.48623e-08
+  Isolation: 5.7094e-08
+  Trigger: 8.77286e-08
+  Muon (TTVA): 2.41059e-08
+  Z-vertex reweighting: -6.21159e-08
+  Pile-Up: -1.53326e-06
+  Model: 4.70821e-06
+  Background: 3.85463e-06
+- Stat (Data): 2.38027e-05
+  Stat (MC): 1.71423e-05
+  Efficiencies (Uncorellated): 1.39809e-06
+  Scale: -1.26621e-05
+  Resolution: 1.00756e-06
+  Muon Saggita: -7.67405e-07
+  Efficiencies (Corellated): 4.72786e-08
+  Isolation: 3.51944e-08
+  Trigger: 7.78705e-08
+  Muon (TTVA): 2.10892e-08
+  Z-vertex reweighting: 5.48967e-08
+  Pile-Up: -2.54874e-06
+  Model: 4.38535e-06
+  Background: 4.07802e-06
+- Stat (Data): 2.30294e-05
+  Stat (MC): 1.64036e-05
+  Efficiencies (Uncorellated): 1.50361e-06
+  Scale: -1.08967e-05
+  Resolution: 9.59722e-07
+  Muon Saggita: -5.12532e-07
+  Efficiencies (Corellated): 4.34535e-08
+  Isolation: 1.79093e-08
+  Trigger: 6.66279e-08
+  Muon (TTVA): 1.48838e-08
+  Z-vertex reweighting: 6.94822e-08
+  Pile-Up: -4.28194e-06
+  Model: 5.17698e-06
+  Background: 4.19639e-06
+- Stat (Data): 2.23957e-05
+  Stat (MC): 1.56341e-05
+  Efficiencies (Uncorellated): 1.6905e-06
+  Scale: -9.89894e-06
+  Resolution: -6.45403e-08
+  Muon Saggita: -8.38272e-08
+  Efficiencies (Corellated): 4.19056e-08
+  Isolation: 4.49587e-09
+  Trigger: 5.70898e-08
+  Muon (TTVA): 1.43036e-08
+  Z-vertex reweighting: 7.28613e-08
+  Pile-Up: -6.36055e-06
+  Model: 6.56265e-06
+  Background: 4.29432e-06
+- Stat (Data): 2.19764e-05
+  Stat (MC): 1.51939e-05
+  Efficiencies (Uncorellated): 2.25177e-06
+  Scale: -9.34883e-06
+  Resolution: -1.17319e-07
+  Muon Saggita: 1.17481e-07
+  Efficiencies (Corellated): 4.39376e-08
+  Isolation: -1.10006e-08
+  Trigger: 6.6948e-08
+  Muon (TTVA): 1.85314e-08
+  Z-vertex reweighting: 2.04456e-08
+  Pile-Up: -4.71622e-06
+  Model: 5.13726e-06
+  Background: 5.11883e-06
+- Stat (Data): 2.13142e-05
+  Stat (MC): 1.46701e-05
+  Efficiencies (Uncorellated): 2.9503e-06
+  Scale: -8.15195e-06
+  Resolution: 1.33488e-06
+  Muon Saggita: -6.24295e-07
+  Efficiencies (Corellated): 4.28303e-08
+  Isolation: -2.44197e-08
+  Trigger: 5.68307e-08
+  Muon (TTVA): 1.78049e-08
+  Z-vertex reweighting: 3.99906e-08
+  Pile-Up: -3.52917e-06
+  Model: 7.06317e-06
+  Background: 5.61711e-06
+- Stat (Data): 2.07709e-05
+  Stat (MC): 1.40044e-05
+  Efficiencies (Uncorellated): 3.4922e-06
+  Scale: -6.65262e-06
+  Resolution: 1.17755e-06
+  Muon Saggita: -1.88947e-07
+  Efficiencies (Corellated): 4.68971e-08
+  Isolation: -3.42587e-08
+  Trigger: 4.72464e-08
+  Muon (TTVA): 1.88156e-08
+  Z-vertex reweighting: 1.90233e-07
+  Pile-Up: -2.83033e-06
+  Model: 6.57973e-06
+  Background: 6.48474e-06
+- Stat (Data): 1.94042e-05
+  Stat (MC): 1.30219e-05
+  Efficiencies (Uncorellated): 3.90433e-06
+  Scale: -6.49504e-06
+  Resolution: 4.24838e-07
+  Muon Saggita: -5.19957e-07
+  Efficiencies (Corellated): 5.24325e-08
+  Isolation: -3.45687e-08
+  Trigger: 3.84579e-08
+  Muon (TTVA): 1.87857e-08
+  Z-vertex reweighting: 1.9247e-07
+  Pile-Up: -1.92523e-06
+  Model: 7.42633e-06
+  Background: 6.60558e-06
+- Stat (Data): 1.84027e-05
+  Stat (MC): 1.21705e-05
+  Efficiencies (Uncorellated): 4.5605e-06
+  Scale: -5.68654e-06
+  Resolution: 5.09838e-07
+  Muon Saggita: -1.45038e-07
+  Efficiencies (Corellated): 5.77501e-08
+  Isolation: -2.76893e-08
+  Trigger: 2.90513e-08
+  Muon (TTVA): 1.83084e-08
+  Z-vertex reweighting: 2.09709e-07
+  Pile-Up: -2.24286e-06
+  Model: 6.24654e-06
+  Background: 6.3272e-06
+- Stat (Data): 1.68795e-05
+  Stat (MC): 1.10661e-05
+  Efficiencies (Uncorellated): 4.88845e-06
+  Scale: -5.25178e-06
+  Resolution: 2.18449e-08
+  Muon Saggita: 1.67385e-07
+  Efficiencies (Corellated): 5.8729e-08
+  Isolation: -1.45591e-08
+  Trigger: 2.99702e-08
+  Muon (TTVA): 1.78685e-08
+  Z-vertex reweighting: 1.87948e-07
+  Pile-Up: -1.31029e-06
+  Model: 6.94908e-06
+  Background: 5.94929e-06
+- Stat (Data): 1.51898e-05
+  Stat (MC): 9.98235e-06
+  Efficiencies (Uncorellated): 5.02588e-06
+  Scale: -4.52099e-06
+  Resolution: 3.78211e-07
+  Muon Saggita: 1.90734e-07
+  Efficiencies (Corellated): 6.20607e-08
+  Isolation: 5.49643e-09
+  Trigger: 2.97613e-08
+  Muon (TTVA): 1.60882e-08
+  Z-vertex reweighting: 1.36273e-07
+  Pile-Up: -1.44537e-06
+  Model: 5.20604e-06
+  Background: 5.65289e-06
+- Stat (Data): 1.35198e-05
+  Stat (MC): 8.93984e-06
+  Efficiencies (Uncorellated): 5.0556e-06
+  Scale: -3.3474e-06
+  Resolution: 1.48667e-06
+  Muon Saggita: -1.2971e-07
+  Efficiencies (Corellated): 6.06227e-08
+  Isolation: 2.20514e-08
+  Trigger: 1.31443e-08
+  Muon (TTVA): 1.0181e-08
+  Z-vertex reweighting: 1.56472e-07
+  Pile-Up: -3.4362e-07
+  Model: 5.02928e-06
+  Background: 4.50194e-06
+- Stat (Data): 1.20941e-05
+  Stat (MC): 7.9546e-06
+  Efficiencies (Uncorellated): 5.01282e-06
+  Scale: -2.65642e-06
+  Resolution: 3.6665e-07
+  Muon Saggita: 2.11125e-07
+  Efficiencies (Corellated): 5.81755e-08
+  Isolation: 3.55273e-08
+  Trigger: 5.87751e-09
+  Muon (TTVA): 7.66417e-09
+  Z-vertex reweighting: 1.86299e-07
+  Pile-Up: 1.57331e-07
+  Model: 3.53347e-06
+  Background: 3.39571e-06
+- Stat (Data): 1.02064e-05
+  Stat (MC): 6.66204e-06
+  Efficiencies (Uncorellated): 4.83028e-06
+  Scale: -1.86636e-06
+  Resolution: 1.29541e-07
+  Muon Saggita: -7.20025e-09
+  Efficiencies (Corellated): 5.07157e-08
+  Isolation: 5.03334e-08
+  Trigger: 4.42277e-09
+  Muon (TTVA): 5.04696e-09
+  Z-vertex reweighting: 1.21902e-07
+  Pile-Up: -1.60957e-06
+  Model: 2.413e-06
+  Background: 1.95583e-06
+- Stat (Data): 8.57885e-06
+  Stat (MC): 5.54456e-06
+  Efficiencies (Uncorellated): 4.5748e-06
+  Scale: -1.01055e-06
+  Resolution: 3.58043e-07
+  Muon Saggita: 5.50235e-07
+  Efficiencies (Corellated): 4.06072e-08
+  Isolation: 5.54564e-08
+  Trigger: 3.94941e-09
+  Muon (TTVA): 3.29871e-09
+  Z-vertex reweighting: 7.91474e-08
+  Pile-Up: -4.53731e-07
+  Model: 1.38539e-06
+  Background: 1.1472e-06
+- Stat (Data): 6.71408e-06
+  Stat (MC): 4.25548e-06
+  Efficiencies (Uncorellated): 3.9375e-06
+  Scale: -7.28519e-07
+  Resolution: 7.01139e-08
+  Muon Saggita: -7.57883e-08
+  Efficiencies (Corellated): 3.23173e-08
+  Isolation: 5.67922e-08
+  Trigger: 3.41196e-09
+  Muon (TTVA): 2.47786e-09
+  Z-vertex reweighting: 1.98127e-08
+  Pile-Up: -2.60461e-08
+  Model: 1.11055e-06
+  Background: 7.45763e-07
+- Stat (Data): 5.30023e-06
+  Stat (MC): 3.18385e-06
+  Efficiencies (Uncorellated): 3.44839e-06
+  Scale: -4.23367e-07
+  Resolution: 1.97343e-07
+  Muon Saggita: 2.2637e-08
+  Efficiencies (Corellated): 2.60259e-08
+  Isolation: 6.69081e-08
+  Trigger: 1.96811e-09
+  Muon (TTVA): 1.53263e-09
+  Z-vertex reweighting: 1.32503e-08
+  Pile-Up: 2.11241e-07
+  Model: 4.41613e-07
+  Background: 5.08448e-07
+- Stat (Data): 4.3265e-06
+  Stat (MC): 2.61206e-06
+  Efficiencies (Uncorellated): 3.04439e-06
+  Scale: -2.73916e-07
+  Resolution: 1.35954e-07
+  Muon Saggita: 4.65252e-08
+  Efficiencies (Corellated): 1.76095e-08
+  Isolation: 6.70416e-08
+  Trigger: 1.48804e-09
+  Muon (TTVA): 7.49586e-10
+  Z-vertex reweighting: 3.37543e-08
+  Pile-Up: -3.27592e-07
+  Model: 4.21401e-07
+  Background: 2.68876e-07
+- Stat (Data): 3.51926e-06
+  Stat (MC): 2.15748e-06
+  Efficiencies (Uncorellated): 2.66722e-06
+  Scale: -1.28097e-07
+  Resolution: -3.82766e-08
+  Muon Saggita: -6.08179e-08
+  Efficiencies (Corellated): 1.34607e-08
+  Isolation: 6.52608e-08
+  Trigger: 1.47186e-09
+  Muon (TTVA): 3.26564e-10
+  Z-vertex reweighting: 1.28093e-08
+  Pile-Up: -4.9854e-07
+  Model: -1.26955e-08
+  Background: 1.52496e-07
+- Stat (Data): 2.7789e-06
+  Stat (MC): 1.6112e-06
+  Efficiencies (Uncorellated): 1.80584e-06
+  Scale: -9.40508e-08
+  Resolution: 3.78e-08
+  Muon Saggita: -8.05586e-08
+  Efficiencies (Corellated): 1.04764e-08
+  Isolation: 6.94277e-08
+  Trigger: 1.43169e-09
+  Muon (TTVA): 3.50994e-10
+  Z-vertex reweighting: 5.65969e-09
+  Pile-Up: 2.46545e-07
+  Model: 1.62069e-07
+  Background: 1.01672e-07
