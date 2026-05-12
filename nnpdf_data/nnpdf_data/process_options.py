@@ -290,6 +290,9 @@ def _dybosonpt_xq2map(kin_dict):
     """
     pT = kin_dict[_Vars.pT]
     m_Z2 = kin_dict.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
+    if m_Z2 is None:
+        m_Z = kin_dict.get_one_of(_Vars.m_ll)
+        m_Z2 = m_Z**2
 
     sqrts = kin_dict[_Vars.sqrts]
     ET2 = m_Z2 + pT * pT
@@ -477,7 +480,7 @@ DY_MLL = _Process(
 DY_PT = _Process(
     "DY_PT",
     "DY W or Z (2 leptons) + j boson transverse momentum",
-    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.m_ll2),
+    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.m_ll2, _Vsrs.m_ll),
     xq2map_function=_dybosonpt_xq2map,
 )
 
