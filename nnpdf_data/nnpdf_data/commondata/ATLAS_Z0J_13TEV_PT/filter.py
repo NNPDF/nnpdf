@@ -41,7 +41,7 @@ def get_all():
                 'pT': {'min': kin_value['low'],
                        'mid': 0.5 * (kin_value['low'] + kin_value['high']),
                        'max': kin_value['high']},
-                'm_ll2': {'min': None, 'mid': 8317.44, 'max': None},}
+                'm_ll': {'min': None, 'mid': 91.2, 'max': None},}
                
             kinematics.append(kin)
         # Uncertainties

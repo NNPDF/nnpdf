@@ -34,12 +34,12 @@ implemented_observables:
     x_scale: log
     plot_x: pT
 
-  kinematic_coverage: [pT, m_ll2]
+  kinematic_coverage: [pT, m_ll]
 
   kinematics:
     variables:
       pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
-      m_ll2: {description: "lepton pair invariant mass squared", label: '$m_{\ell\ell}^2$', units: "GeV2"}
+      m_ll: {description: "lepton pair invariant mass", label: '$m_{\ell\ell}$', units: "GeV"}
 
     file: kinematics.yaml
 
