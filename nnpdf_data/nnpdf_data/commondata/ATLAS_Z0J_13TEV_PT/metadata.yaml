@@ -39,13 +39,25 @@ implemented_observables:
   kinematics:
     variables:
       pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
-      m_ll2: {description: "lepton pair invariant mass squared", label: '$m_{\ell\ell}$', units: "GeV"}
+      m_ll2: {description: "lepton pair invariant mass squared", label: '$m_{\ell\ell}^2$', units: "GeV2"}
 
     file: kinematics.yaml
 
   data_central: data.yaml
   data_uncertainties:
   - uncertainties.yaml
+  variants:
+    v1:
+      data_central: data_v1.yaml
+      data_uncertainties:
+      - uncertainties_v1.yaml
+      #kinematic_coverage: [pT, m_Z2, sqrts]
+      #kinematics:
+      #  variables:
+      #    pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
+      #    m_Z2: {description: "lepton pair invariant mass squared", label: '$m_{\ell\ell}^2$', units: "GeV2"}
+      #    sqrts: {description: "center-of-mass energy", label: '$\sqrt{s}$', units: "GeV"}
+      #  file: kinematics_v1.yaml
 
   # Theory
   theory:
@@ -56,12 +68,11 @@ implemented_observables:
     - - ATLAS_Z0_13TEV_TOT
     operation: 'ratio'
 
-  variants:
-    v1:
-      data_central:
-      - data_v1.yaml
-      kinematics:
-      - file: kinematics_v1.yaml
-      data_uncertainties:
-      - uncertainties_v1.yaml
+  #variants:
+  #  v1:
+  #    data_central: data_v1.yaml
+  #    kinematics:
+  #      file: kinematics_v1.yaml
+  #    data_uncertainties:
+  #    - uncertainties_v1.yaml
       
