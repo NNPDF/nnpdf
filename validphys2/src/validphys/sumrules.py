@@ -24,6 +24,19 @@ from validphys.pdfbases import parse_flarr
 LIMS = [(1e-9, 1e-5), (1e-5, 1e-3), (1e-3, 1)]
 POL_LIMS = ((1e-4, 1e-3), (1e-3, 1))
 
+# For high Mellin moments x**n * f(x) the integrand is dominated by the
+# large-x region; slice (1e-3, 1) further so quad does not have to span
+# many orders of magnitude in a single sub-interval.
+MELLIN_LIMS = [
+    (1e-9, 1e-5),
+    (1e-5, 1e-3),
+    (1e-3, 1e-1),
+    (1e-1, 0.3),
+    (0.3, 0.6),
+    (0.6, 0.9),
+    (0.9, 1.0),
+]
+
 
 def _momentum_sum_rule_integrand(x, lpdf, Q):
     xqvals = lpdf.xfxQ(x, Q)
@@ -90,6 +103,24 @@ def _make_pdf_integrand(fldict):
     return f
 
 
+def _make_mellin_moment_integrand(fldict, n: int):
+    """Make an integrand for the n-th Mellin moment ``∫ x**n · f(x) dx`` of the linear
+    combination of defined by ``fldict``.
+
+    Note that LHAPDF returns ``x*f(x)``, so we multiply by ``x**(n-1)``. Reduces to
+    :py:func:`_make_pdf_integrand` for n=0 and to :py:func:`_make_momentum_fraction_integrand`
+    for n=1.
+    """
+    fldict = {parse_flarr([k])[0]: v for k, v in fldict.items()}
+    exponent = n - 1
+
+    def f(x, lpdf, Q):
+        xfvals = lpdf.xfxQ(x, Q)
+        return x**exponent * sum(multiplier * xfvals[fl] for fl, multiplier in fldict.items())
+
+    return f
+
+
 KNOWN_SUM_RULES = {
     "momentum": _momentum_sum_rule_integrand,
     "uvalence": _make_pdf_integrand({"u": 1, "ubar": -1}),
@@ -120,6 +151,14 @@ POLARIZED_SUM_RULES = {
     "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
     "xV": _make_momentum_fraction_integrand({'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1}),
     "xV3": _make_momentum_fraction_integrand({'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1}),
+}
+
+MELLIN_MOMENTS = {
+    "m_5": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=4),
+    "m_4": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=3),
+    "m_3": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=2),
+    "m_2": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=1),
+    # "Test: u momentum fraction": _make_mellin_moment_integrand({"u": 1}, n=1)
 }
 
 
@@ -206,9 +245,30 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
     return _combine_limits(_sum_rules(UNKNOWN_SUM_RULES, lpdf, Q))
 
 
+@check_positive('Q')
+def partial_mellin_moments(pdf: PDF, Q: numbers.Real, lims: list = MELLIN_LIMS):
+    """Per-interval contributions to the Mellin moments defined in
+    ``MELLIN_MOMENTS``. Returns a list (one entry per element of ``lims``) of dicts
+    ``{moment_name: [value_per_member]}``.
+
+    Useful for diagnosing integration stability: comparing the size of each
+    sub-interval's contribution to its quad tolerance reveals whether a
+    single (1e-3, 1) interval is good enough or whether the large-x region
+    needs to be sliced more finely.
+    """
+    lpdf = pdf.load()
+    return _sum_rules(MELLIN_MOMENTS, lpdf, Q, lims=lims)
+
+
+@check_positive('Q')
+def mellin_moments(partial_mellin_moments):
+    """Sum the partial Mellin-moment integrals over all x sub-intervals."""
+    return _combine_limits(partial_mellin_moments)
+
+
 def _simple_description(data, pdf):
     """Return a table with simple descriptive statistics over the members of the PDF.
-     The statistics used depend on the type of PDF (MC or Hessian)."""
+    The statistics used depend on the type of PDF (MC or Hessian)."""
     res = {}
     stats_class = pdf.stats_class
     for k, arr in data.items():
@@ -216,7 +276,7 @@ def _simple_description(data, pdf):
         # Each entry in `data` is expected to be a vector with shape
         # (central_member + error_members,), hence we reshape to (-1, 1) before
         # passing to the stats class.
-        stats = stats_class(arr.reshape(-1,1))
+        stats = stats_class(arr.reshape(-1, 1))
         stats_dict["mean"] = stats.central_value().item()
         stats_dict["std"] = stats.std_error().item()
         stats_dict["min"] = np.min(arr)
@@ -263,6 +323,25 @@ def central_sum_rules_table(central_sum_rules):
 @table
 def unknown_sum_rules_table(unknown_sum_rules):
     return _err_mean_table(unknown_sum_rules)
+
+
+@table
+def mellin_moments_table(mellin_moments, pdf):
+    """Mean ± std (over PDF members) of the higher Mellin moments."""
+    return _simple_description(mellin_moments, pdf)
+
+
+@table
+def partial_mellin_moments_table(partial_mellin_moments):
+    """Per-interval Mellin-moment contributions, averaged over PDF members.
+    One row per moment, one column per ``MELLIN_LIMS`` interval.
+    Use this to assess whether the integration is stable against slicing.
+    """
+    rows = {}
+    for interval_dict, lim in zip(partial_mellin_moments, MELLIN_LIMS):
+        col = f"({lim[0]:.0e}, {lim[1]:.0e})"
+        rows[col] = {k: float(np.mean(v)) for k, v in interval_dict.items()}
+    return pd.DataFrame(rows)
 
 
 @table
