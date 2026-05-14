@@ -849,11 +849,10 @@ class CoreConfig(configparser.Config):
         """
         from validphys import covmats
 
-        # TODO: JtH also add loaders for the remain covmats
         if use_t0_sampling:
             if use_thcovmat_in_sampling:
                 if sep_mult:
-                    return covmats.dataset_inputs_t0_total_covmat_separate
+                    return covmats.dataset_load_inputs_t0_total_covmat_separate
                 else:
                     return covmats.dataset_load_inputs_t0_total_covmat
             else:
@@ -865,9 +864,9 @@ class CoreConfig(configparser.Config):
         else:
             if use_thcovmat_in_sampling:
                 if sep_mult:
-                    return covmats.dataset_inputs_total_covmat_separate
+                    return covmats.dataset_load_inputs_total_covmat_separate
                 else:
-                    return covmats.dataset_inputs_total_covmat
+                    return covmats.dataset_load_inputs_total_covmat
             else:
                 if sep_mult:
                     return covmats.dataset_inputs_exp_covmat_separate

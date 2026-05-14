@@ -406,6 +406,17 @@ def dataset_inputs_t0_covmat_from_systematics(
     )
 
 
+def dataset_load_inputs_t0_total_covmat_separate(
+    dataset_inputs_t0_exp_covmat_separate, loaded_theory_covmat
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_t0_exp_covmat_separate + loaded_theory_covmat
+
+
 def dataset_inputs_t0_total_covmat_separate(
     dataset_inputs_t0_exp_covmat_separate, nnfit_theory_covmat
 ):
@@ -439,6 +450,17 @@ def dataset_inputs_t0_exp_covmat_separate(
         True,
     )
     return covmat
+
+
+def dataset_load_inputs_total_covmat_separate(
+    dataset_inputs_exp_covmat_separate, loaded_theory_covmat
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_exp_covmat_separate + loaded_theory_covmat
 
 
 def dataset_inputs_total_covmat_separate(dataset_inputs_exp_covmat_separate, nnfit_theory_covmat):
@@ -515,6 +537,15 @@ def dataset_inputs_t0_exp_covmat(
     )
 
     return covmat
+
+
+def dataset_load_inputs_total_covmat(dataset_inputs_exp_covmat, loaded_theory_covmat):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_exp_covmat + loaded_theory_covmat
 
 
 def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, nnfit_theory_covmat):
