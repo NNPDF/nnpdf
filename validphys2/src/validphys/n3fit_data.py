@@ -623,7 +623,7 @@ def fitting_covmat_table(output_path, _fiting_covmat, data_index, diagonal_basis
 
     if not diagonal_basis:
         log.info("Saving fitting covmat")
-        return covmat
+        return pd.DataFrame(covmat, index=data_index, columns=data_index)
 
     df_rotation = pd.DataFrame(diagonal_rotation)
     df_rotation.insert(0, "eig_val", eig_vals)

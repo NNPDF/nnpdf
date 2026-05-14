@@ -483,6 +483,15 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, nnfit_theory_co
     return dataset_inputs_t0_exp_covmat + nnfit_theory_covmat
 
 
+def dataset_load_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, loaded_theory_covmat):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_t0_exp_covmat + loaded_theory_covmat
+
+
 def dataset_inputs_t0_exp_covmat(
     dataset_inputs_loaded_cd_with_cuts,
     *,
@@ -490,7 +499,6 @@ def dataset_inputs_t0_exp_covmat(
     use_weights_in_covmat=True,
     norm_threshold=None,
     dataset_inputs_t0_predictions,
-    procs_index_matched,
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
@@ -505,8 +513,8 @@ def dataset_inputs_t0_exp_covmat(
         dataset_inputs_t0_predictions,
         False,
     )
-    # TODO: how to know for sure if the index matches the covmat value ordering?
-    return pd.DataFrame(covmat, index=procs_index_matched, columns=procs_index_matched)
+
+    return covmat
 
 
 def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, nnfit_theory_covmat):
