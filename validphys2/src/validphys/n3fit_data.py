@@ -313,9 +313,9 @@ def fittable_datasets_masked(data):
     return validphys_group_extractor(data.datasets)
 
 
-def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_covmat_t0_considered) -> Hashrray:
+def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hashrray:
     """Wrap the covmat into a Hashrray for caches to work"""
-    return Hashrray(dataset_inputs_covmat_t0_considered)
+    return Hashrray(dataset_inputs_fitting_covmat)
 
 
 @functools.lru_cache
@@ -384,7 +384,7 @@ def _inv_covmat_prepared(
     return covmat, inv_total, diag_rot, eig_vals
 
 
-def _fiting_covmat(dataset_inputs_fitting_covmat, data_input, diagonal_basis=True):
+def _fiting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
     """Prepare the fitting covariance matrix by optionally adding theory contributions
     and transforming to diagonal basis.
 
@@ -623,7 +623,10 @@ def fitting_covmat_table(output_path, _fiting_covmat, data_index, diagonal_basis
 
     if not diagonal_basis:
         log.info("Saving fitting covmat")
-        return pd.DataFrame(covmat, index=data_index, columns=data_index)
+        if not hasattr(covmat, "index"):
+            return pd.DataFrame(covmat, index=data_index, columns=data_index)
+        else:
+            return covmat
 
     df_rotation = pd.DataFrame(diagonal_rotation)
     df_rotation.insert(0, "eig_val", eig_vals)

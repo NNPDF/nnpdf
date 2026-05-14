@@ -816,7 +816,7 @@ class CoreConfig(configparser.Config):
         from validphys import covmats
 
         if use_thcovmat_in_fitting:
-            return covmats.dataset_inputs_t0_total_covmat
+            return covmats.dataset_load_inputs_t0_total_covmat
         return covmats.dataset_inputs_t0_exp_covmat
 
     def produce_sep_mult(self, separate_multiplicative=False):
