@@ -1,0 +1,69 @@
+{
+  "enabled": true,
+  "action": "exclude_dataset",
+  "dataset_delta_chi2_threshold": 100000.0,
+  "max_outlier_coalitions": 5,
+  "n_outlier_coalitions_detected": 2,
+  "n_outlier_coalitions_analyzed": 2,
+  "coalitions_analyzed": [
+    {
+      "coalition": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "coalition_labels": [
+        "cbar",
+        "sbar",
+        "ubar",
+        "dbar",
+        "g",
+        "d",
+        "u",
+        "s",
+        "c"
+      ],
+      "size": 9,
+      "chi2": 0.014025293472978317,
+      "z_score": 3.5885003239995745,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8
+      ],
+      "coalition_labels": [
+        "cbar",
+        "sbar",
+        "ubar",
+        "dbar",
+        "g",
+        "u",
+        "s",
+        "c"
+      ],
+      "size": 8,
+      "chi2": 0.01306240391004665,
+      "z_score": 3.2146330885097902,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    }
+  ],
+  "n_flagged_datasets": 0,
+  "flagged_datasets": [],
+  "excluded_datasets": []
+}

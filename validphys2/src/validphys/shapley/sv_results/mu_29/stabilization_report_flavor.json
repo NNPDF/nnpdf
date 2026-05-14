@@ -1,0 +1,34 @@
+{
+  "enabled": true,
+  "action": "exclude_dataset",
+  "dataset_delta_chi2_threshold": 100000.0,
+  "max_outlier_coalitions": 5,
+  "n_outlier_coalitions_detected": 1,
+  "n_outlier_coalitions_analyzed": 1,
+  "coalitions_analyzed": [
+    {
+      "coalition": [
+        0,
+        2,
+        4,
+        5,
+        7
+      ],
+      "coalition_labels": [
+        "cbar",
+        "ubar",
+        "g",
+        "d",
+        "s"
+      ],
+      "size": 5,
+      "chi2": 0.0817198632938918,
+      "z_score": 3.2827887383041676,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    }
+  ],
+  "n_flagged_datasets": 0,
+  "flagged_datasets": [],
+  "excluded_datasets": []
+}

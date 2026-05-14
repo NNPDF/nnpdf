@@ -1,0 +1,140 @@
+{
+  "enabled": true,
+  "action": "exclude_dataset",
+  "dataset_delta_chi2_threshold": 100000.0,
+  "max_outlier_coalitions": 5,
+  "n_outlier_coalitions_detected": 6,
+  "n_outlier_coalitions_analyzed": 5,
+  "coalitions_analyzed": [
+    {
+      "coalition": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "coalition_labels": [
+        "cbar",
+        "sbar",
+        "ubar",
+        "dbar",
+        "d",
+        "u",
+        "s",
+        "c"
+      ],
+      "size": 8,
+      "chi2": 0.008926876954481688,
+      "z_score": 4.107978064973345,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        8
+      ],
+      "coalition_labels": [
+        "cbar",
+        "sbar",
+        "ubar",
+        "dbar",
+        "u",
+        "s",
+        "c"
+      ],
+      "size": 7,
+      "chi2": 0.007982196719355183,
+      "z_score": 3.542585503944672,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        7,
+        8
+      ],
+      "coalition_labels": [
+        "cbar",
+        "sbar",
+        "ubar",
+        "d",
+        "u",
+        "s",
+        "c"
+      ],
+      "size": 7,
+      "chi2": 0.007977072878152303,
+      "z_score": 3.53951887717269,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        8
+      ],
+      "coalition_labels": [
+        "cbar",
+        "sbar",
+        "ubar",
+        "dbar",
+        "d",
+        "u",
+        "c"
+      ],
+      "size": 7,
+      "chi2": 0.007842402299112594,
+      "z_score": 3.4589183302921063,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "coalition_labels": [
+        "cbar",
+        "ubar",
+        "dbar",
+        "d",
+        "u",
+        "s",
+        "c"
+      ],
+      "size": 7,
+      "chi2": 0.00781252414319078,
+      "z_score": 3.44103620841921,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    }
+  ],
+  "n_flagged_datasets": 0,
+  "flagged_datasets": [],
+  "excluded_datasets": []
+}

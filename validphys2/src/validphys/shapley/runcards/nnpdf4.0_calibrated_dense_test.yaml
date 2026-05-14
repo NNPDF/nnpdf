@@ -1,0 +1,40 @@
+#
+# Experiment layout
+# -----------------
+#   dense x-scan : 1 log-spaced mu value
+#                  -> produces phi_j(x) heatmap inputs on the full global fit
+#
+# sigma is fixed in log10(x) units (xspace: logx) so the bump width is
+# constant in decades across the full x range.
+
+pdf_name: NNPDF40_nnlo_as_01180
+theory_id: 708
+use_cuts: internal
+n_replicas: 100
+output_root: sv_results/nnpdf40_calibrated
+log_root: slurm/logs/nnpdf40_calibrated
+run_name: calibrated_xscan_dense_evol
+per_replica: false
+
+deterministic_sign_symmetrized: true
+random_sign: false
+
+enforce_sumrules: false
+stabilization:
+  enabled: true
+  action: exclude_dataset
+  dataset_delta_chi2_threshold: 1e5
+  max_outlier_coalitions: 5
+  rerun_stable: true
+experiments:
+
+  # --- Dense x-scan at alpha=1.0 (physical flavour basis) ---------------
+
+  - name: mu_01
+    basis: [flavor]
+    perturbation: {mu: 0.0001, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  
+datasets:
+  # DIS: Fixed-target
+  - {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+ 

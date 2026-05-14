@@ -1,0 +1,10 @@
+{
+  "mu_01": {
+    "output_dir": "/home/dakshanshchawda/nnpdf/validphys2/src/validphys/shapley/sv_results/nnpdf40_physical/20260514_093633_physical_xscan_dense_evol/mu_01",
+    "perturbation": {
+      "mu": 0.0001,
+      "sigma": 0.25,
+      "amplitude": 1.0,
+      "mode": "physical",
+      "xspace": "logx",
+      "ceilings_plus": 

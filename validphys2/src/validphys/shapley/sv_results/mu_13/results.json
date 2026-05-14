@@ -1,0 +1,179 @@
+{
+  "timestamp": "2026-05-14T10:05:43.403179",
+  "results": {
+    "results_by_basis": {
+      "flavor": {
+        "shapley_values": {
+          "cbar": 0.0019117724423606771,
+          "sbar": 0.0010473964345549024,
+          "ubar": 0.0018447433895337076,
+          "dbar": 0.0018043465086349285,
+          "g": 0.003379771623002995,
+          "d": 0.0005309148640253952,
+          "u": 0.002134644430640988,
+          "s": 0.0008238574635399579,
+          "c": 0.001956098662795516
+        },
+        "phi_even": {
+          "cbar": 0.0019117724423606771,
+          "sbar": 0.0010473964345549024,
+          "ubar": 0.0018447433895337076,
+          "dbar": 0.0018043465086349285,
+          "g": 0.003379771623002995,
+          "d": 0.0005309148640253952,
+          "u": 0.002134644430640988,
+          "s": 0.0008238574635399579,
+          "c": 0.001956098662795516
+        },
+        "phi_odd": {
+          "cbar": 0.0010009554289305705,
+          "sbar": 0.0004677362877741597,
+          "ubar": 0.0005056513964591539,
+          "dbar": 0.001368074093699638,
+          "g": 0.0010057581178719915,
+          "d": 2.0780228447662664e-05,
+          "u": 0.0007596408608881644,
+          "s": 0.00013942225547884093,
+          "c": 0.0007715450557499574
+        },
+        "phi_odd_signed": {
+          "cbar": 0.0010009554289305705,
+          "sbar": -0.0004677362877741597,
+          "ubar": 0.0005056513964591539,
+          "dbar": -0.001368074093699638,
+          "g": 0.0010057581178719915,
+          "d": 2.0780228447662664e-05,
+          "u": -0.0007596408608881644,
+          "s": -0.00013942225547884093,
+          "c": 0.0007715450557499574
+        },
+        "sign_sensitivity_abs": {
+          "cbar": 0.0010009554289305705,
+          "sbar": 0.0004677362877741597,
+          "ubar": 0.0005056513964591539,
+          "dbar": 0.001368074093699638,
+          "g": 0.0010057581178719915,
+          "d": 2.0780228447662664e-05,
+          "u": 0.0007596408608881644,
+          "s": 0.00013942225547884093,
+          "c": 0.0007715450557499574
+        },
+        "shapley_values_per_replica": null,
+        "phi_even_per_replica": null,
+        "phi_odd_per_replica": null,
+        "phi_odd_signed_per_replica": null,
+        "shapley_values_per_sign_sample": null,
+        "shapley_std": null,
+        "std_even_rep": null,
+        "shapley_err": null,
+        "shapley_values_odd": {
+          "cbar": 0.0010009554289305705,
+          "sbar": 0.0004677362877741597,
+          "ubar": 0.0005056513964591539,
+          "dbar": 0.001368074093699638,
+          "g": 0.0010057581178719915,
+          "d": 2.0780228447662664e-05,
+          "u": 0.0007596408608881644,
+          "s": 0.00013942225547884093,
+          "c": 0.0007715450557499574
+        },
+        "shapley_odd_std": null,
+        "std_odd_rep": null,
+        "shapley_odd_err": null,
+        "shapley_sign_std": null,
+        "shapley_sign_err": null,
+        "per_replica": false,
+        "random_sign": false,
+        "member_mode": "central",
+        "n_sign_samples": 1,
+        "antithetic_sign": false,
+        "deterministic_sign_symmetrized": true,
+        "random_seed": null,
+        "baseline_chi2": 1.1425467209619293,
+        "validation_checks": {
+          "completeness_even": {
+            "max_abs_diff": 0.0,
+            "tol": 1e-10,
+            "pass": true
+          },
+          "completeness_odd": {
+            "max_abs_diff": 1.0842021724855044e-19,
+            "tol": 1e-10,
+            "pass": true
+          },
+          "empty_even_zero": {
+            "max_abs_diff": 0.0,
+            "tol": 1e-10,
+            "pass": true
+          },
+          "empty_odd_zero": {
+            "max_abs_diff": 0.0,
+            "tol": 1e-10,
+            "pass": true
+          },
+          "chi2_symmetry_residual": 0.006964448582591931,
+          "odd_zero_if_symmetric": {
+            "phi_odd_max_abs": 0.001368074093699638,
+            "tol": 1e-10,
+            "pass": true
+          },
+          "even_vs_pm": {
+            "max_abs_diff": 3.881443777498106e-17,
+            "tol": 1e-10,
+            "pass": true
+          },
+          "odd_vs_pm": {
+            "max_abs_diff": 1.3010426069826053e-18,
+            "tol": 1e-10,
+            "pass": true
+          }
+        },
+        "coalitions_evaluated": 512,
+        "theory_evaluations": 1023,
+        "elapsed_seconds": 1660.9,
+        "n_jobs": 16,
+        "n_datasets_used": 82,
+        "stabilization": {
+          "enabled": true,
+          "action": "exclude_dataset",
+          "dataset_delta_chi2_threshold": 100000.0,
+          "max_outlier_coalitions": 5,
+          "stable_rerun_performed": false,
+          "n_excluded_datasets": 0,
+          "excluded_datasets": [],
+          "report_json": "/home/dakshanshchawda/nnpdf/validphys2/src/validphys/shapley/sv_results/nnpdf40_physical/20260514_093633_physical_xscan_dense_evol/mu_13/stabilization_report_flavor.json"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "runcard": "/home/dakshanshchawda/nnpdf/validphys2/src/validphys/shapley/runcards/nnpdf4.0_physical_dense.yaml",
+    "pdf_name": "NNPDF40_nnlo_as_01180",
+    "theory_id": 708,
+    "n_datasets": 82,
+    "n_replicas": 100,
+    "perturbation": {
+      "mu": 0.000929792247316,
+      "sigma": 0.25,
+      "amplitude": 1.0,
+      "mode": "physical",
+      "xspace": "logx",
+      "per_replica": false,
+      "random_sign": false,
+      "member_mode": "central",
+      "n_sign_samples": 1,
+      "antithetic_sign": false,
+      "deterministic_sign_symmetrized": true,
+      "random_seed": null
+    },
+    "enforce_sumrules": false,
+    "n_jobs": 16,
+    "stabilization": {
+      "enabled": true,
+      "action": "exclude_dataset",
+      "dataset_delta_chi2_threshold": 100000.0,
+      "max_outlier_coalitions": 5,
+      "rerun_stable": true
+    }
+  }
+}

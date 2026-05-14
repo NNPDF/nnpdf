@@ -1,0 +1,116 @@
+{
+  "enabled": true,
+  "action": "exclude_dataset",
+  "dataset_delta_chi2_threshold": 100000.0,
+  "max_outlier_coalitions": 5,
+  "n_outlier_coalitions_detected": 6,
+  "n_outlier_coalitions_analyzed": 5,
+  "coalitions_analyzed": [
+    {
+      "coalition": [
+        0,
+        2,
+        4,
+        5,
+        7
+      ],
+      "coalition_labels": [
+        "cbar",
+        "ubar",
+        "g",
+        "d",
+        "s"
+      ],
+      "size": 5,
+      "chi2": 0.0011357710860169234,
+      "z_score": 3.1768647815543396,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        7
+      ],
+      "coalition_labels": [
+        "cbar",
+        "ubar",
+        "dbar",
+        "g",
+        "d",
+        "s"
+      ],
+      "size": 6,
+      "chi2": 0.001115009644721443,
+      "z_score": 3.1369319368277284,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        2,
+        4,
+        7
+      ],
+      "coalition_labels": [
+        "cbar",
+        "ubar",
+        "g",
+        "s"
+      ],
+      "size": 4,
+      "chi2": 0.0011014728785954109,
+      "z_score": 3.1108951327293073,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        2,
+        3,
+        4,
+        7
+      ],
+      "coalition_labels": [
+        "cbar",
+        "ubar",
+        "dbar",
+        "g",
+        "s"
+      ],
+      "size": 5,
+      "chi2": 0.001080823693754951,
+      "z_score": 3.0711782036284028,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    },
+    {
+      "coalition": [
+        0,
+        2,
+        5,
+        7
+      ],
+      "coalition_labels": [
+        "cbar",
+        "ubar",
+        "d",
+        "s"
+      ],
+      "size": 4,
+      "chi2": 0.0010748972022378567,
+      "z_score": 3.0597791074790797,
+      "n_flagged_datasets": 0,
+      "flagged_datasets": []
+    }
+  ],
+  "n_flagged_datasets": 0,
+  "flagged_datasets": [],
+  "excluded_datasets": []
+}
