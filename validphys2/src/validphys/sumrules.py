@@ -158,7 +158,10 @@ MELLIN_MOMENTS = {
     "m_4": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=3),
     "m_3": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=2),
     "m_2": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=1),
-    # "Test: u momentum fraction": _make_mellin_moment_integrand({"u": 1}, n=1)
+    "gluon m_2": _make_mellin_moment_integrand({"g": 1}, n=1),
+    "gluon m_3": _make_mellin_moment_integrand({"g": 1}, n=2),
+    "gluon m_4": _make_mellin_moment_integrand({"g": 1}, n=3),
+    "gluon m_5": _make_mellin_moment_integrand({"g": 1}, n=4),
 }
 
 
