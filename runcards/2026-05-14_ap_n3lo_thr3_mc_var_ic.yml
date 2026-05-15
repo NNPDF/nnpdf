@@ -74,7 +74,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 3.5
 
 fitting:
-  fitbasis: NN31PC
+  fitbasis: EVOL
   savepseudodata: True
   basis:
   - {fl: sng, trainable: false, smallx: [1.089, 1.119], largex: [1.475, 3.119]}
