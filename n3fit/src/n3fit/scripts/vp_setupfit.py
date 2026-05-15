@@ -174,11 +174,13 @@ class SetupFitConfig(Config):
             check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
             filter_action = 'datacuts::theory::fitting filter'
-            if file_content.get('theorycovmatconfig') is not None:
-                rotation_action = 'datacuts::theory::theorycovmatconfig fitting_covmat_table'
-            else:
-                rotation_action = 'datacuts::theory fitting_covmat_table'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
+
+        # Add rotation action for the total covariance matrix
+        if file_content.get('theorycovmatconfig') is not None:
+            rotation_action = 'datacuts::theory::theorycovmatconfig fitting_covmat_table'
+        else:
+            rotation_action = 'datacuts::theory fitting_covmat_table'
 
         # The settings for these actions depend on the presence of closuretest
         fixed_config['actions_'] += [check_n3fit_action, filter_action, rotation_action]
