@@ -48,9 +48,7 @@ dataset_inputs:
 - {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, variant: legacy_10}
 - {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, variant: legacy_10}
 - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
 - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, frac: 0.75, variant: legacy}
 - {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, frac: 0.75, variant: legacy}
 - {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, variant: legacy_decorrelated}
 - {dataset: ATLAS_2JET_7TEV_R06_M12Y, frac: 0.75, variant: legacy}
@@ -88,6 +86,9 @@ dataset_inputs:
 - {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75}
 #- {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YT, frac: 0.75, variant: legacy}
 # - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
+# - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, frac: 0.75, variant: legacy}
+# - {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
+
 
 ################################################################################
 datacuts:
