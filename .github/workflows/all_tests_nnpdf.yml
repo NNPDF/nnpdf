@@ -103,7 +103,11 @@ jobs:
         sudo rm -rf /opt/hostedtoolcache/Python/{3.9*}
         sudo rm -rf /opt/hostedtoolcache/CodeQL
         sudo rm -rf /usr/local/lib/android/sdk
-        pip install .[nolha,torch]
+        # torch 2.12.0 pulls triton 3.7.0, whose libtriton C extension segfaults
+        # at import on CPU-only Linux + CPython 3.13. Pinning torch<2.12 also
+        # pins triton to 3.6.x. Remove this pin once the upstream issue is
+        # resolved.
+        pip install ".[nolha,torch]" "torch<2.12"
         # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
         lhapdf-management update --init
     - name: Test we can run one runcard
