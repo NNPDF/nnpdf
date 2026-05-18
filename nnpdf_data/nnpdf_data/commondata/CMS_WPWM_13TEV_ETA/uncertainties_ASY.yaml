@@ -2,7 +2,7 @@ definitions:
   Measurement uncertainty:
     description: Measurement uncertainty
     treatment: ADD
-    type: CORR
+    type: UNCORR
 bins:
 - Measurement uncertainty: 0.0012
 - Measurement uncertainty: 0.0012

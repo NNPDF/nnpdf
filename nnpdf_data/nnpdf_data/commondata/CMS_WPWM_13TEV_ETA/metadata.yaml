@@ -101,7 +101,7 @@ implemented_observables:
     label: r"A"
     units: " "
 
-  ndata: 
+  ndata: 18
 
   tables: [18]
   process_type: DY_W_ETA
@@ -128,5 +128,6 @@ implemented_observables:
     # Theory
   theory:
     FK_tables:
-    - - CMS_WPWM_13TEV_ETA_ASY #How to construct this?
-    operation: 'null'
+    - - CMS_WPWM_13TEV_ETA_WM 
+      - CMS_WPWM_13TEV_ETA_WM
+    operation: ASY

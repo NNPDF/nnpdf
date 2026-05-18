@@ -141,7 +141,7 @@ def filter_CMS_W_13TEV_ASY():
         uncertainties[0]['name']: {
             "description": uncertainties[0]['name'],
             "treatment": "ADD",
-            "type": "CORR",
+            "type": "UNCORR",
         }
     }
     errors_yaml = []
