@@ -151,7 +151,7 @@ class N3LHAPDFSet(LHAPDFSet):
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)
-            result[:, :, ii] = result
+            result = result[:, :, np.argsort(ii)]
         return result
 
     def grid_values(self, flavours, xarr, qmat=None):

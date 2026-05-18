@@ -230,6 +230,7 @@ Using ``vp-setupfit`` (preferred)
   locally, the user can proceed to run the fit with ``n3fit`` as usual.
 
 .. _photon_n3fit:
+
 Using ``n3fit`` (discouraged)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   If the user prefers to compute the photon PDF set during the fitting step with

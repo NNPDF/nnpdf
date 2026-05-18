@@ -127,8 +127,8 @@ provide a faster convergence to the solution.
 	Parameters like the number of layers, nodes, activation functions are hyper-parameters that require tuning.
 
 
-To see the structure of the model, one can use Keras's ``plot_model`` function as illustrated in the script below.
-See the `Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
+To see the structure of the model, one can use Keras' ``plot_model`` function as illustrated in the script below.
+See the `this section of the Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
 
 .. code-block:: python
 
@@ -206,10 +206,7 @@ Following the gradient descent approach the training is performed in iteration s
   descent update scheme (which controls the convergence step size and speed).
 
 The gradient descent schemes are usually controlled by the **learning rate**, and the total
-**number of iterations**. Examples of fits using the ``n3fit`` methodology are available here:
-
-- DIS-only fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/KTzrle5FQGuuBdcigkDKnQ==/>`_
-- Global fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/qtXzt-BbQZGkV6P4pf9-UA==/>`_
+**number of iterations**.
 
 .. important::
 	The gradient descent scheme (RMSprop, Adagrad, etc.), the learning rate, the number of iteractions are hyper-parameters that require tuning.
@@ -374,26 +371,26 @@ Next, we move to the basis in which :math:`\rho` is diagonal. Writing :math:`\rh
     \chi^2 &= \tilde{\epsilon}^T \rho^{-1} \tilde{\epsilon} \\
            &= \tilde{\epsilon}^T (\tilde{U}^T \tilde{\Lambda} \tilde{U})^{-1} \tilde{\epsilon} \\
            &= \tilde{\epsilon}^T \tilde{U}^T \tilde{\Lambda}^{-1} \tilde{U} \tilde{\epsilon} \\
-           &\equiv \dbtilde{\epsilon}^T \tilde{\Lambda}^{-1} \dbtilde{\epsilon} \, ,
+           &\equiv \tilde{\tilde{\epsilon}}^T \tilde{\Lambda}^{-1} \tilde{\tilde{\epsilon}} \, ,
 
 where on the last line we have defined
 
 .. math::
 
-    \dbtilde{\epsilon} \equiv \tilde{U}\tilde{\epsilon} = \tilde{U}R^{-1}(D-T).
+    \tilde{\tilde{\epsilon}} \equiv \tilde{U}\tilde{\epsilon} = \tilde{U}R^{-1}(D-T).
 
 In index notation, this reads
 
 .. math::
 
-    \dbtilde{\epsilon_i} = \tilde{U}_{ij} \frac{(D-T)_j}{\sqrt{C_{0, jj}}}
+    \tilde{\tilde{\epsilon_i}} = \tilde{U}_{ij} \frac{(D-T)_j}{\sqrt{C_{0, jj}}}
 
-The transformed data :math:`\dbtilde{\epsilon}` is statistically independent in the diagonal basis of the correlation matrix :math:`\rho`.
-Computing the covariance of :math:`\dbtilde{\epsilon}`,
+The transformed data :math:`\tilde{\tilde{\epsilon}}` is statistically independent in the diagonal basis of the correlation matrix :math:`\rho`.
+Computing the covariance of :math:`\tilde{\tilde{\epsilon}}`,
 
 .. math::
 
-    \mathbb{E}[\dbtilde{\epsilon}\dbtilde{\epsilon}^T]
+    \mathbb{E}[\tilde{\tilde{\epsilon}}\tilde{\tilde{\epsilon}}^T]
       &= \mathbb{E} \big[ (\tilde{U} R^{-1}(D-T)) (\tilde{U} R^{-1}(D-T))^T \big] \\
       &= \tilde{U} R^{-1} \mathbb{E}[(D-T)(D-T)^T] R^{-1} \tilde{U}^T \\
       &= \tilde{U} \rho \tilde{U}^T \\

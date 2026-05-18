@@ -16,7 +16,7 @@ import logging
 from time import time
 
 from keras import backend as K
-from keras.callbacks import Callback, TensorBoard
+from keras import callbacks
 import numpy as np
 
 from .operations import decorator_compiler
@@ -24,7 +24,7 @@ from .operations import decorator_compiler
 log = logging.getLogger(__name__)
 
 
-class CallbackStep(Callback):
+class CallbackStep(callbacks.Callback):
     """
     Wrapper around the keras Callback that keeps track of how the steps are divided
     between epochs and batches.
@@ -214,7 +214,7 @@ def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
             Whether or not to save profiling information (default False)
     """
     profile_batch = 1 if profiling else 0
-    clb = TensorBoard(
+    clb = callbacks.TensorBoard(
         log_dir=log_dir,
         histogram_freq=histogram_freq,
         write_graph=True,

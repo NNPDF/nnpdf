@@ -1,7 +1,7 @@
 .. _upload:
 
 Uploading results to the ``validphys`` repository
-===============================================
+=================================================
 
 The primary method to share results within the collaboration is by uploading the
 corresponding files to the :ref:`NNPDF server <server>`. Most commonly, results are
@@ -10,14 +10,14 @@ uploaded to the ``validphys`` repository, so that they are accessible from
 `https://vp.nnpdf.science <https://vp.nnpdf.science>`_
 
 The files in this repository are backed up to two locations, indexed and cross
-referenced with the :ref:`mailing list <mail>`. The HTTP access to the files is
+referenced with the mailing list. The HTTP access to the files is
 password protected.
 
 The uploading system is designed to be integrated with ``validphys``. Reports,
 hopefully filled with the :ref:`appropriate metadata <vpmetadata>` in the runcard, can
 be :ref:`uploaded directly <uploading-directly-from-validphys>`, or after they have
 been completed using the ``vp-upload`` :ref:`script <vpupload>`. Arbitrary
-files can be uploaded using the ``wiki-upload `` :ref:`script <the-wiki-upload-script>`,
+files can be uploaded using the ``wiki-upload`` :ref:`script <the-wiki-upload-script>`,
 which will interactively ask the user to fill in the metadata. In either case an
 URL will be returned with the location of the resource accessible with a web
 browser.
@@ -30,6 +30,7 @@ Several settings relevant to uploading files are configured in :ref:`profile
 files <nnprofile>`.
 
 .. _vpmetadata:
+
 Metadata
 --------
 
@@ -116,6 +117,7 @@ This is mostly useful for sub-reports not at the top level, in
 more complicated documents.
 
 .. _uploading-directly-from-validphys:
+
 Uploading directly from ``validphys``
 -------------------------------------
 
@@ -123,12 +125,13 @@ When the ``--upload`` flag is set in the invocation of the ``validphys`` command
 the contents of the output folder will be uploaded to the NNPDF data server,
 after validphys is done. Use this if you have :ref:`filled the meta mapping in the
 runcard <vpmetadata>` and already know that the output is going to be good enough
-to share. Otherwise use :ref:`vp-upload <the-vp-upload-script>` after checking the result.
+to share. Otherwise use :ref:`vp-upload <vpupload>` after checking the result.
 
 ``validphys`` will check the SSH connection before doing any work, and
 it will fail early if it cannot be established.
 
 .. _vpupload:
+
 The ``vp-upload`` script
 ------------------------
 
@@ -158,6 +161,7 @@ Note that fits are indexed separately, and can be retrieved with the ``vp-get``
 :ref:`command <download>`.
 
 .. _the-wiki-upload-script:
+
 The ``wiki-upload`` script
 --------------------------
 

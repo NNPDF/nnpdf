@@ -73,6 +73,7 @@ packaging = "*"
 psutil = "*"
 tensorflow = "*"
 keras = "^3.1"
+tensorboard = "*" # keras requires tensorboard but some versions are missing the dependency
 eko = "^0.15.1"
 joblib = "*"
 seaborn = "*"

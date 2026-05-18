@@ -45,6 +45,10 @@ implemented_observables:
     wo-lumi:
       data_uncertainties:
       - uncertainties_dSig_dmttBar_wo-lumi.yaml
+    interspectra:
+      data_uncertainties:
+      - uncertainties_dSig_dmttBar_interspectra.yaml
+      data_central: data_dSig_dmttBar_interspectra.yaml
 
 - observable: {description: "normalized differential cross section w.r.t. ttBar invariant mass", label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$', units: "$\frac{1}{GeV}$"}
   observable_name: MTTBAR-NORM
@@ -100,6 +104,10 @@ implemented_observables:
     wo-lumi:
       data_uncertainties:
       - uncertainties_dSig_dpTt_wo-lumi.yaml
+    interspectra:
+      data_uncertainties:
+        - uncertainties_dSig_dpTt_interspectra.yaml
+      data_central: data_dSig_dpTt_interspectra.yaml
 
 - observable: {description: "normalized differential cross section w.r.t. transverse momentum of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$', units: '$\frac{1}{GeV}$'}
   observable_name: PTT-NORM
@@ -155,6 +163,10 @@ implemented_observables:
     wo-lumi:
       data_uncertainties:
       - uncertainties_dSig_dyt_wo-lumi.yaml
+    interspectra:
+      data_uncertainties:
+        - uncertainties_dSig_dyt_interspectra.yaml
+      data_central: data_dSig_dyt_interspectra.yaml
 
 - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$', units: ""}
   observable_name: YT-NORM
@@ -210,6 +222,10 @@ implemented_observables:
     wo-lumi:
       data_uncertainties:
       - uncertainties_dSig_dyttBar_wo-lumi.yaml
+    interspectra:
+      data_uncertainties:
+        - uncertainties_dSig_dyttBar_interspectra.yaml
+      data_central: data_dSig_dyttBar_interspectra.yaml
 
 - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of ttBar", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: ""}
   observable_name: YTTBAR-NORM

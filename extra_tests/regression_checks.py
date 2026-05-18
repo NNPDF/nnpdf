@@ -8,6 +8,7 @@ import subprocess as sp
 
 import pytest
 
+from n3fit.tests.helpers import run_n3fit
 from n3fit.tests.test_fit import EXE, check_fit_results
 from validphys.utils import yaml_safe
 
@@ -15,6 +16,7 @@ REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regression_fits")
 
 # Avoid always round-number replicas or 1/2
 runcard_and_replicas = {
+    "no_positivity": 316,
     "normal_fit": 72,
     "central": 16,
     "no_diagonal": 45,
@@ -29,6 +31,7 @@ runcard_and_replicas = {
     "polarized_evol": 34,
     "t0theoryid": 100,
     "no_t0_sampling": 430,
+    "hyperopt_sampling": 4,
 }
 
 
@@ -42,7 +45,7 @@ def test_regression_fit(tmp_path, runcard, replica, regenerate):
     if (wname := runcard_info.get("load")) is not None:
         shutil.copy(REGRESSION_FOLDER / wname, tmp_path)
 
-    sp.run(f"{EXE} {runcard_name} {replica}".split(), cwd=tmp_path, check=True)
+    run_n3fit(runcard_name, f"{replica}", cwd=tmp_path, check=True)
     old_json_file = REGRESSION_FOLDER / f"{runcard}_{replica}.json"
 
     check_fit_results(

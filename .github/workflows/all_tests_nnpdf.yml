@@ -28,7 +28,7 @@ jobs:
       fail-fast: false # continue even if some jobs failed
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
         with:
           python-version: ${{ matrix.python-version }}
@@ -48,10 +48,8 @@ jobs:
   regression_tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
-        with:
-          nnpdf-extras: "[qed,tests]"
       - name: Run regression tests
         shell: bash -l {0}
         run: |
@@ -70,7 +68,7 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with: # conda requires fetching the history of the repo to prepare the package name
           fetch-tags: true
           fetch-depth: 0
@@ -80,7 +78,7 @@ jobs:
       - name: Build recipe
         shell: bash -l {0}
         run: |
-          conda install conda-build --yes
+          conda install -n base conda-build --yes
           conda build -q conda-recipe --package-format=1
       - name: Keep conda package as artifact
         if: ${{ !cancelled() }}
@@ -95,7 +93,7 @@ jobs:
     env:
       KERAS_BACKEND: torch
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: actions/setup-python@v5
       with:
         python-version: "3.13"
@@ -112,6 +110,7 @@ jobs:
       shell: bash -l {0}
       run: |
         cd n3fit/runcards/examples
+        vp-setupfit Basic_runcard.yml
         n3fit Basic_runcard.yml 4
         cat Basic_runcard/nnfit/*/Basic_runcard.json
     - name: Test we can still run postfit
@@ -127,7 +126,7 @@ jobs:
     env:
       KERAS_BACKEND: jax
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: actions/setup-python@v5
       with:
         python-version: "3.13"
@@ -141,6 +140,7 @@ jobs:
       shell: bash -l {0}
       run: |
         cd n3fit/runcards/examples
+        vp-setupfit Basic_runcard.yml
         n3fit Basic_runcard.yml 42
         cat Basic_runcard/nnfit/*/Basic_runcard.json
 
@@ -148,7 +148,7 @@ jobs:
     needs: [run_package_tests, regression_tests]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: ./.github/actions/install_conda_pip
       with:
         nnpdf-extras: ""

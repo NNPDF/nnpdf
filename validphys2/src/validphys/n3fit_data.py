@@ -110,6 +110,34 @@ def replica_luxseed(replica, luxseed):
     return replica_nnseed(replica, luxseed)
 
 
+def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cuts, genrep=True):
+    """Generates the ``mcseed`` for a group of datasets. This is done by hashing the names
+      of the datasets in the group and adding it to the ``replica_mcseed`
+    Parameters
+    ---------
+    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`nnpdf_data.coredata.CommonData`]
+        List of CommonData objects which stores information about systematic errors,
+        their treatment and description, for each dataset.
+    replica_mcseed: int
+    """
+    if not genrep:
+        return None
+    names_for_salt = []
+    # Try to use the new dataset name, but make older runs reproducible by keeping the old names.
+    # WARNING: don't rely on this behaviour, this might be removed in future releases
+
+    for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        if loaded_cd.legacy_names is None:
+            names_for_salt.append(loaded_cd.setname)
+        else:
+            names_for_salt.append(loaded_cd.legacy_names[0])
+    name_salt = "-".join(names_for_salt)
+
+    name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
+    res = name_seed + replica_mcseed
+    return res
+
+
 class _Masks(TupleComp):
     """Class holding the training validation mask for a group of datasets
     If the same group of dataset receives the same trvlseed then the mask

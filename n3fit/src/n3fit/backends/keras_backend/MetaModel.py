@@ -395,6 +395,17 @@ class MetaModel(Model):
             layer = self.get_layer(layer_type)
             set_layer_replica_weights(layer=layer, weights=weights[layer_type], i_replica=i_replica)
 
+    def set_replica_weights_from_file(self, model_file, i_replica=0):
+        """
+        Set the weights of replica i_replica from a model file.
+        Wrapper around ``set_replica_weights`` that creates a temporary single-replica-model
+        to get the weights in the appropiate format.
+        """
+        single_replica = self.single_replica_generator(i_replica)
+        single_replica.load_weights(model_file)
+        weights = single_replica.get_replica_weights(0)
+        self.set_replica_weights(weights, i_replica)
+
     def split_replicas(self):
         """
         Split the single multi-replica model into a list of separate single replica models,

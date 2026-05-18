@@ -43,11 +43,7 @@ from validphys.utils import yaml_safe
 loader = FallbackLoader()
 
 SETUPFIT_FIXED_CONFIG = dict(
-    actions_=[
-        'datacuts check_t0pdfset',
-        'theory check_positivity',
-        'theory evolven3fit_checks_action',
-    ]
+    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action']
 )
 
 SETUPFIT_PROVIDERS = [
@@ -70,6 +66,17 @@ FILTER_OUTPUT_FOLDER = "filter"
 TABLE_OUTPUT_FOLDER = "tables"
 MD5_FILENAME = "md5"
 INPUT_FOLDER = "input"
+
+
+def _compute_fit_md5(config_yaml: pathlib.Path, output_path: pathlib.Path) -> str:
+    """Compute the md5 hash of the fit when vp-setupfit is run. This utility function
+    is also used in n3fit to check that the fit configuration has not changed
+    since the setup-fit was run."""
+    hash_md5 = hashlib.md5()
+    with open(config_yaml, 'rb') as f:
+        hash_md5.update(f.read())
+    digest = hash_md5.hexdigest()
+    return digest
 
 
 class SetupFitError(Exception):
@@ -117,13 +124,12 @@ class SetupFitEnvironment(Environment):
         self.input_folder.mkdir(exist_ok=True)
 
     def save_md5(self):
-        """Generate md5 key from file"""
+        """Generate md5 key from the runcard and the stored fitting covmat table."""
         output_filename = self.output_path / MD5_FILENAME
-        with open(self.config_yml, 'rb') as f:
-            hash_md5 = hashlib.md5(f.read()).hexdigest()
+        digest = _compute_fit_md5(self.config_yml, self.output_path)
         with open(output_filename, 'w') as g:
-            g.write(hash_md5)
-        log.info(f"md5 {hash_md5} stored in {output_filename}")
+            g.write(digest)
+        log.info(f"md5 {digest} stored in {output_filename}")
 
     @classmethod
     def ns_dump_description(cls):
@@ -216,6 +222,11 @@ class SetupFitConfig(Config):
         # Check positivity bound
         if file_content.get('positivity_bound') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
+
+        # Check hyperscan
+        trials_config = file_content.get('trial_specs', {})
+        if trials_config:
+            loader.check_hyperscan(trials_config['hyperscan'])
 
         # Sets default values if they are not present in the runcard
         for k, v in SETUPFIT_DEFAULTS.items():

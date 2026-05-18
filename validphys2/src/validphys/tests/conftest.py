@@ -107,15 +107,16 @@ def data_internal_cuts_config(data_config):
 
 
 @pytest.fixture(scope='module')
-def data_internal_cuts_new_theory_config(data_internal_cuts_config):
+def data_internal_cuts_closure_config(data_internal_cuts_config):
+    # Filterseed is not added so that it is changed by the tests
     config = dict(data_internal_cuts_config)
-    config["theoryid"] = THEORYID
+    config["fakepdf"] = PDF
     return config
 
 
 @pytest.fixture(scope='module')
-def data_fromfit_cuts_config(data_internal_cuts_new_theory_config):
-    config = dict(data_internal_cuts_new_theory_config)
+def data_fromfit_cuts_config(data_internal_cuts_config):
+    config = dict(data_internal_cuts_config)
     config.update(use_cuts="fromfit")
     return config
 

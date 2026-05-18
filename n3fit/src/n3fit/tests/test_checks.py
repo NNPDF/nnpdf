@@ -47,12 +47,13 @@ def test_check_basis_with_layer():
     basis = [{"fl": i} for i in flavs]
     layers = [4, 5, 9]
     vp_basis = check_basis("flavour", flavs)["basis"]
+    trial_specs = {}
     with pytest.raises(CheckError):
-        checks.check_basis_with_layers(basis, vp_basis, {"nodes_per_layer": layers})
-    # Or when the wrong kind of basis is veing used
+        checks.check_basis_with_layers(basis, vp_basis, {"nodes_per_layer": layers}, trial_specs)
+    # Or when the wrong kind of basis is being used
     params = {"nodes_per_layer": [4, 5], "activation_per_layer": ["sigmoid", "square_singlet"]}
     with pytest.raises(CheckError):
-        checks.check_basis_with_layers(basis, vp_basis, params)
+        checks.check_basis_with_layers(basis, vp_basis, params, trial_specs)
 
 
 def test_check_optimizer():
