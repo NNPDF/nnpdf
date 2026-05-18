@@ -1,0 +1,26 @@
+definitions:
+  Measurement uncertainty:
+    description: Measurement uncertainty
+    treatment: ADD
+    type: CORR
+bins:
+- name: Measurement uncertainty
+  values:
+  - 0.0012
+  - 0.0012
+  - 0.0014
+  - 0.0011
+  - 0.0011
+  - 0.0012
+  - 0.0011
+  - 0.0012
+  - 0.0013
+  - 0.0011
+  - 0.0011
+  - 0.0013
+  - 0.0013
+  - 0.0012
+  - 0.0013
+  - 0.0016
+  - 0.0015
+  - 0.0016
