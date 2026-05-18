@@ -128,6 +128,6 @@ implemented_observables:
     # Theory
   theory:
     FK_tables:
-    - - CMS_WPWM_13TEV_ETA_WM 
     - - CMS_WPWM_13TEV_ETA_WP
+    - - CMS_WPWM_13TEV_ETA_WM
     operation: ASY
