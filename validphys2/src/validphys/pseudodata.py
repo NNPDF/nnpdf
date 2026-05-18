@@ -31,6 +31,49 @@ class ReplicaGenerationError(Exception):
     pass
 
 
+def fit_diagonal_basis_rotation(fit):
+    """Rotation matrix taking pseudodata from the original to the diagonal basis,
+    or ``None`` if ``fit`` was not run in diagonal basis.
+
+    Sources the matrix from the same eigensystem table that
+    ``_inv_covmat_prepared`` loads when running the fit, so the rotation
+    applied here is bit-identical to the one used at generation time.
+    """
+    runcard = fit.as_input()
+    if not runcard.get("diagonal_basis", True):
+        return None
+    use_thcovmat = runcard.get("theorycovmatconfig", {}).get("use_thcovmat_in_fitting", False)
+    fname = (
+        "datacuts_theory_theorycovmatconfig_fitting_covmat_table.csv"
+        if use_thcovmat
+        else "datacuts_theory_fitting_covmat_table.csv"
+    )
+    eigensystem = pd.read_csv(
+        fit.path / "tables" / fname, index_col=[0], header=[0], sep="\t|,", engine="python"
+    )
+    return eigensystem.iloc[:, 1:].values
+
+
+def diagonal_indexed_recreate_pseudodata(indexed_make_replica, fit_diagonal_basis_rotation):
+    """Recreation-time analogue of
+    :py:func:`validphys.n3fit_data.diagonal_indexed_make_replica`, but doesn't
+    need :py:func:`_inv_covmat_prepared` (through :py:func:`fitting_data_dict`)
+    which requires `output_path` to be available.
+
+    Returns the pseudodata in the diagonal basis (eigenmode-indexed) when the
+    fit was run in diagonal basis, otherwise returns ``indexed_make_replica``
+    untouched (preserving the original ``(group, dataset, id)`` MultiIndex).
+    """
+    diag_rot = fit_diagonal_basis_rotation
+    if diag_rot is None:
+        return indexed_make_replica
+    values = indexed_make_replica.iloc[:, 0].to_numpy()
+    rotated = diag_rot @ values
+    return pd.DataFrame(
+        rotated, index=pd.Index([f"eigenmode {i}" for i in range(len(rotated))]), columns=["data"]
+    )
+
+
 def read_replica_pseudodata(fit, context_index, replica):
     """Function to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
@@ -70,10 +113,8 @@ def read_replica_pseudodata(fit, context_index, replica):
                             5    3.117819
                             6    0.771079
     """
-    # List of length 1 due to the collect
-    context_index = context_index[0]
-    # The [0] is because of how pandas handles sorting a MultiIndex
-    sorted_index = context_index.sortlevel(level=range(1, 3))[0]
+    # Detect whether fit performed in diagonal basis
+    diagonal_basis = fit.as_input().get("diagonal_basis", True)
 
     log.debug(f"Reading pseudodata & training/validation splits from {fit.name}.")
     replica_path = fit.path / "nnfit" / f"replica_{replica}"
@@ -87,9 +128,11 @@ def read_replica_pseudodata(fit, context_index, replica):
         tr_pseudodatafile = "datacuts_theory_fitting_training_pseudodata.csv"
         vl_pseudodatafile = "datacuts_theory_fitting_validation_pseudodata.csv"
 
+    index_col = [0] if diagonal_basis else [0, 1, 2]
+
     try:
-        tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
-        val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+        tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=index_col, sep="\t", header=0)
+        val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=index_col, sep="\t", header=0)
     except FileNotFoundError as e:
         raise FileNotFoundError(
             "Could not find saved training and validation data files. "
@@ -97,22 +140,25 @@ def read_replica_pseudodata(fit, context_index, replica):
         ) from e
 
     tr["type"], val["type"] = "training", "validation"
-
     pseudodata = pd.concat((tr, val))
 
-    # In order for this function to work also with old fit, it is necessary to remap the names
-    # being read (since the names in the context have already been remapped)
-    # The following checks whether a given name is in both the context and the fit, and if not
-    # tries to get it from the old_to_new mapping.
-    mapping = {}
-    context_datasets = context_index.get_level_values("dataset").unique()
-    for dsname in pseudodata.index.get_level_values("dataset").unique():
-        if dsname not in context_datasets:
-            new_name, _ = legacy_to_new_map(dsname)
-            mapping[dsname] = new_name
+    if not diagonal_basis:
+        # In order for this function to work also with old fit, it is necessary to remap the names
+        # being read (since the names in the context have already been remapped)
+        # The following checks whether a given name is in both the context and the fit, and if not
+        # tries to get it from the old_to_new mapping.
+        ctx = context_index[0]
+        sorted_index = ctx.sortlevel(level=range(1, 3))[0]
 
-    pseudodata = pseudodata.rename(mapping, level=1).sort_index(level=range(1, 3))
-    pseudodata.index = sorted_index
+        mapping = {}
+        context_datasets = ctx.get_level_values("dataset").unique()
+        for dsname in pseudodata.index.get_level_values("dataset").unique():
+            if dsname not in context_datasets:
+                new_name, _ = legacy_to_new_map(dsname)
+                mapping[dsname] = new_name
+
+        pseudodata = pseudodata.rename(mapping, level=1).sort_index(level=range(1, 3))
+        pseudodata.index = sorted_index
 
     tr = pseudodata[pseudodata["type"] == "training"]
     val = pseudodata[pseudodata["type"] == "validation"]
@@ -462,7 +508,9 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     return level1_commondata_instances_wc
 
 
-_group_recreate_pseudodata = collect('indexed_make_replica', ('group_dataset_inputs_by_metadata',))
+_group_recreate_pseudodata = collect(
+    'diagonal_indexed_recreate_pseudodata', ('group_dataset_inputs_by_metadata',)
+)
 _recreate_fit_pseudodata = collect('_group_recreate_pseudodata', ('fitreplicas', 'fitenvironment'))
 _recreate_pdf_pseudodata = collect('_group_recreate_pseudodata', ('pdfreplicas', 'fitenvironment'))
 
