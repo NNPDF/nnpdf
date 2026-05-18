@@ -384,9 +384,10 @@ def _inv_covmat_prepared(
     return covmat, inv_total, diag_rot, eig_vals
 
 
-def _fiting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
-    """Prepare the fitting covariance matrix by optionally adding theory contributions
-    and transforming to diagonal basis.
+def setupfit_fitting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
+    """Prepare the fitting covariance matrix in setupfit and store it for later use
+    in the fit. Theory contributions and diagonal basis transformation are specified
+    in the input configuration.
 
     Parameters
     ----------
@@ -407,7 +408,6 @@ def _fiting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
         The eigenvalues of the correlation matrix in diagonal basis.
         Only returned if diagonal_basis=True, otherwise None.
     """
-
     covmat = dataset_inputs_fitting_covmat
     diagonal_rotation = None
     eig_vals = None
@@ -615,11 +615,11 @@ exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_
 
 
 @table
-def fitting_covmat_table(output_path, _fiting_covmat, data_index, diagonal_basis=True):
+def fitting_covmat_table(output_path, setupfit_fitting_covmat, data_index, diagonal_basis=True):
     """
     Stores the fitting covariance matrix if diagonal_basis is False, else store the rotation matrix and eigenvalues
     """
-    covmat, diagonal_rotation, eig_vals = _fiting_covmat
+    covmat, diagonal_rotation, eig_vals = setupfit_fitting_covmat
 
     if not diagonal_basis:
         log.info("Saving fitting covmat")
