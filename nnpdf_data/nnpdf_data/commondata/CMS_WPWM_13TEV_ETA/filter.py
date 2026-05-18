@@ -144,7 +144,12 @@ def filter_CMS_W_13TEV_ASY():
             "type": "CORR",
         }
     }
-    uncertainties_yaml = {"definitions": definitions, "bins": uncertainties}
+    errors_yaml = []
+    unc_name = uncertainties[0]['name']
+    for bin in range(len(central_values)):
+        errors_yaml.append({unc_name: uncertainties[0]['values'][bin]})
+
+    uncertainties_yaml = {"definitions": definitions, "bins": errors_yaml}
     with open("data_ASY.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
     with open("kinematics_ASY.yaml", "w") as file:
