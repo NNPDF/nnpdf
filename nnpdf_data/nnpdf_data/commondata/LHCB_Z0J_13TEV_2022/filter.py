@@ -3,7 +3,7 @@ from collections import defaultdict, namedtuple
 import numpy as np
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -386,7 +386,7 @@ def processData():
                 cov = ComputeCovariance(cormat, v)
 
                 # Single value decomposition
-                sigma = OuterDecomposition(cov)
+                sigma = decompose_covmat(cov)
 
                 # Loop over the bins
                 for k in range(len(error_diag)):

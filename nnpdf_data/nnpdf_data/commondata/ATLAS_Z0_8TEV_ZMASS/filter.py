@@ -2,7 +2,7 @@ from filter_utils import get_data_values, get_kinematics, get_systematics
 import numpy as np
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -50,8 +50,8 @@ def filter_ATLAS_Z0_8TEV_uncertainties():
 
     # compute decomposition of covariance matrix so as to get artificial systematics
     # TODO: use utils once merged in master
-    lamb, mat = np.linalg.eig(cov_matrix)
-    art_sys = np.multiply(np.sqrt(lamb), mat)
+    
+    art_sys = decompose_covmat(cov_matrix)
 
     uncertainties = []
 

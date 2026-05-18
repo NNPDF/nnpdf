@@ -1,5 +1,6 @@
 import numpy as np
 from numpy.linalg import eig
+from nnpdf_data.filter_utils.utils import sort_eigenvalues
 
 
 def upper_triangular_to_symmetric(ut, dim):
@@ -69,6 +70,7 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
         b = i % ndata
         covmat[a][b] = covmat_list[i]
     eigval, eigvec = eig(covmat)
+    eigval, eigvec = sort_eigenvalues(eigval, eigvec)
     for j in range(len(eigval)):
         if eigval[j] < epsilon:
             psd_check = False
