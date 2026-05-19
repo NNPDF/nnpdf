@@ -30,7 +30,7 @@ implemented_observables:
     - Boson
     normalize:
       figure_by:
-      - Boson     
+      - Boson
     extra_labels:
       Boson:
       - $W^+$
@@ -59,7 +59,6 @@ implemented_observables:
   kinematic_coverage:
   - abs_eta
   - m_W2
-  - sqrts
   kinematics:
     variables:
       abs_eta:
@@ -70,12 +69,8 @@ implemented_observables:
         description: 'Squared invariant mass of the W boson'
         label: '$m_W^2$'
         units: 'GeV^2'
-      sqrts:
-        description: 'Square root of the center of mass energy'
-        label: r"\sqrt{s}"
-        units: 'GeV'
     file: kinematics.yaml
-  
+
   data_uncertainties: [uncertainties.yaml]
   variants:
     lumiunc:
@@ -90,4 +85,3 @@ implemented_observables:
     FK_tables:
     - - ATLAS_WP_MU_8TEV_etalept
       - ATLAS_WM_MU_8TEV_etalept
-
