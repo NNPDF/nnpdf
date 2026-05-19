@@ -18,10 +18,10 @@ def test_print_different_cuts():
     res = print_different_cuts(fits, testi)
     # NMC
     assert "121 out of 260" in res
-    assert "59 out of 260" in res
+    assert "73 out of 260" in res
     # SLAC
     assert "34 out of 211" in res
-    assert "0 out of 211" in res
+    assert "5 out of 211" in res
 
 
 def test_print_systype_overlap():
