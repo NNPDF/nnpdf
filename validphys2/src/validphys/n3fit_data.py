@@ -416,13 +416,19 @@ def setupfit_fitting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
         log.info("working in diagonal basis.")
 
         # convert covmat to correlation
-        diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
-        cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
+        sigma = np.sqrt(np.diag(covmat))
+        sigma_inv = 1 / sigma
+        cormat = np.einsum("i, ij, j -> ij", sigma_inv, covmat, sigma_inv)
 
         # diagonalise the correlation matrix
-        eig_vals, uT = np.linalg.eigh(cormat)
-        uT = np.einsum("i, ik -> ik", diag_inv_sqrt, uT)
-        diagonal_rotation = uT.T
+        eig_vals, v = np.linalg.eigh(cormat)  # cormat = V @ diag(eig_vals) @ V.T
+        u = np.einsum("i, ij -> ij", sigma, v)
+        rec_covmat = u @ np.diag(eig_vals) @ u.T
+        assert np.allclose(
+            covmat, rec_covmat
+        ), "Diagonalisation failed to reproduce original covmat"
+
+        diagonal_rotation = np.einsum("ij, j -> ij", v.T, sigma_inv)
 
     return covmat, diagonal_rotation, eig_vals
 
@@ -435,9 +441,7 @@ def fitting_data_dict(
     _inv_covmat_prepared,
     kfold_masks,
     fittable_datasets_masked,
-    output_path,
     threshold=0.0,
-    diagonal_basis=True,
 ):
     """
     Provider which takes  the information from validphys ``data``.

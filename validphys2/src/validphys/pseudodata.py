@@ -31,7 +31,7 @@ class ReplicaGenerationError(Exception):
     pass
 
 
-def fit_diagonal_basis_rotation(fit):
+def fit_diagonal_basis_rotation(fitting_covmat_name, fit):
     """Rotation matrix taking pseudodata from the original to the diagonal basis,
     or ``None`` if ``fit`` was not run in diagonal basis.
 
@@ -40,17 +40,14 @@ def fit_diagonal_basis_rotation(fit):
     applied here is bit-identical to the one used at generation time.
     """
     runcard = fit.as_input()
+
     if not runcard.get("diagonal_basis", True):
         return None
-    use_thcovmat = runcard.get("theorycovmatconfig", {}).get("use_thcovmat_in_fitting", False)
-    fname = (
-        "datacuts_theory_theorycovmatconfig_fitting_covmat_table.csv"
-        if use_thcovmat
-        else "datacuts_theory_fitting_covmat_table.csv"
-    )
+
     eigensystem = pd.read_csv(
-        fit.path / "tables" / fname, index_col=[0], header=[0], sep="\t|,", engine="python"
+        fitting_covmat_name, index_col=[0], header=[0], sep="\t|,", engine="python"
     )
+
     return eigensystem.iloc[:, 1:].values
 
 
