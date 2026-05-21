@@ -1402,7 +1402,7 @@ class CoreConfig(configparser.Config):
             )
 
         if mult_factor is None:
-            return 1.0 if user_covmat_path is not None else None
+            return 1.0
         else:
             return mult_factor
 
