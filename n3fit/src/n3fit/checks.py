@@ -571,4 +571,6 @@ def fktable_hasher(data):
     for dataset in data.datasets:
         fkspecs = dataset.fkspecs
         for fk in fkspecs:
-            print(fk.fkpath)
+            fkpath = fk.fkpath
+            fkhash = hashlib.md5(fkpath.read_bytes()).hexdigest()
+
