@@ -2,6 +2,7 @@
 This module contains checks to be perform by n3fit on the input
 """
 
+import hashlib
 import logging
 import numbers
 import os
@@ -568,9 +569,16 @@ def check_eko_exists(theoryid):
 
 @make_argcheck
 def fktable_hasher(data):
+    """Writes a hash of the fk-table to a log file.
+    This hash can be used to ensure whether two 
+    (supposedely identical) fk-tables of the same 
+    theory and dataset are numerically identical.
+    """
+    keys = {}
     for dataset in data.datasets:
         fkspecs = dataset.fkspecs
         for fk in fkspecs:
-            fkpath = fk.fkpath
+            fkpath = fk.fkpath[0]
             fkhash = hashlib.md5(fkpath.read_bytes()).hexdigest()
-
+            # have to figure out how to write a file to the fitname dir where the other md5 also lives
+            log.info("FK-table hash written to md5fk")

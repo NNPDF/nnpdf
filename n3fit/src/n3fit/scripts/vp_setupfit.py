@@ -41,8 +41,6 @@ from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.loader import FallbackLoader, Loader, PhotonQEDNotFound, TheoryNotFound
 from validphys.utils import yaml_safe
 
-#from pineappl import fk_table
-
 
 loader = FallbackLoader()
 
