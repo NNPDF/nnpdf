@@ -48,7 +48,7 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
-    - - ATLAS_WPWM_13p6TEV_TOT_Z0
+    - - ATLAS_WPWM_13P6TEV_TOT_Z0
   data_uncertainties:
   - uncertainties.yaml
   data_central: data.yaml
