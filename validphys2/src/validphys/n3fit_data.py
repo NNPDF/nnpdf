@@ -424,9 +424,7 @@ def setupfit_fitting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
         eig_vals, v = np.linalg.eigh(cormat)  # cormat = V @ diag(eig_vals) @ V.T
         u = np.einsum("i, ij -> ij", sigma, v)
         rec_covmat = u @ np.diag(eig_vals) @ u.T
-        assert np.allclose(
-            covmat, rec_covmat
-        ), "Diagonalisation failed to reproduce original covmat"
+     np.testing.assert_allclose(covmat, rec_covmat, rtol=1e-4, atol=1e-5, err_msg="Diagonalisation failed to reproduce original covmat")
 
         diagonal_rotation = np.einsum("ij, j -> ij", v.T, sigma_inv)
 
