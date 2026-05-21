@@ -170,10 +170,6 @@ class LoaderBase:
         hyperscan_path.mkdir(parents=True, exist_ok=True)
         return hyperscan_path
 
-    @property
-    def theories_path(self):
-        return self._theories_path
-
     def _vp_cache(self):
         """Return the vp-cache path, and create it if it doesn't exist"""
         vpcache = pathlib.Path(self.nnprofile['validphys_cache_path'])

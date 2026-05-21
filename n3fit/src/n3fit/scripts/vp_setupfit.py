@@ -220,7 +220,8 @@ class SetupFitConfig(Config):
 
         # Save a hash of the FK-Table metadata
         l = Loader()
-        theories_path = l.theories_path
+        
+        TheoryIDSpec = l.check_theoryID(theoryid)
         keys = {}
 
         for ds in file_content["dataset_inputs"]:
@@ -229,13 +230,7 @@ class SetupFitConfig(Config):
 
             fk_tablename = str(cdspec.metadata.theory.FK_tables[0][0])
 
-            # There is probably a more elegant way to get the FK-table path
-            fk_tablepath = (
-                pathlib.Path(theories_path)
-                / f"theory_{theoryid}"
-                / "fastkernel"
-                / f"{fk_tablename}.pineappl.lz4"
-            )
+            fk_tablepath = TheoryIDSpec.path + f"/{fk_tablename}.pineappl.lz4")
 
             # fk = fk_table.FkTable.read(str(fk_tablepath))
             # Should we dump the fk.metadata as opposed to fk_tablepath.read_bytes()?
