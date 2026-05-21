@@ -111,6 +111,7 @@ def read_replica_pseudodata(fit, context_index, replica):
                             6    0.771079
     """
     # Detect whether fit performed in diagonal basis
+    # TODO: change the fit object to return diagonal basis True or False depening on the NNPDF version
     diagonal_basis = fit.as_input().get("diagonal_basis", True)
 
     log.debug(f"Reading pseudodata & training/validation splits from {fit.name}.")
