@@ -334,7 +334,6 @@ class SetupFitApp(App):
             self.environment.save_md5()
 
             # and save the fk hashes
-            import pdb; pdb.set_trace()
             fk_hashes = self.config_class["_fk_hashes"]
             self.environment.save_fk_md5(fk_hashes)
         except SetupFitError as e:
