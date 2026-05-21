@@ -38,7 +38,7 @@ from ruamel.yaml import error
 from reportengine import colors
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
-from validphys.loader import FallbackLoader, PhotonQEDNotFound, TheoryNotFound
+from validphys.loader import FallbackLoader, Loader, PhotonQEDNotFound, TheoryNotFound
 from validphys.utils import yaml_safe
 
 loader = FallbackLoader()
@@ -191,6 +191,7 @@ class SetupFitConfig(Config):
 
         # Check theory covariance matrix configuration
         thconfig = file_content.get('theorycovmatconfig', {})
+        theoryid = file_content['theory']['theoryid']
         if thconfig.get('point_prescription') is not None:
             raise ConfigError(
                 "`point_prescription` has been removed in favor of a list of "
@@ -202,6 +203,12 @@ class SetupFitConfig(Config):
             fixed_config['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )
+
+        # Save a hash of the FK-Tables
+        loader = Loader()
+        theories_path = loader.theories_path
+        
+
 
         # Check fiatlux configuration
         fiatlux = file_content.get('fiatlux')
