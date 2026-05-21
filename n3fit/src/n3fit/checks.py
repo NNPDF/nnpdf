@@ -564,3 +564,11 @@ def check_eko_exists(theoryid):
         _ = FallbackLoader().check_eko(theoryid.id)
     except FileNotFoundError:
         log.error(f"No eko found for {theoryid}")
+
+
+@make_argcheck
+def fktable_hasher(data):
+    for dataset in data.datasets:
+        fkspecs = dataset.fkspecs
+        for fk in fkspecs:
+            print(fk.fkpath)

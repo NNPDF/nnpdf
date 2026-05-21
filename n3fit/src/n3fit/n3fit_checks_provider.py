@@ -8,6 +8,7 @@ import n3fit.checks
 
 
 @n3fit.checks.check_consistent_basis
+@n3fit.checks.fktable_hasher
 @n3fit.checks.wrapper_check_NN
 @n3fit.checks.wrapper_hyperopt
 @n3fit.checks.check_deprecated_options

@@ -219,29 +219,29 @@ class SetupFitConfig(Config):
             )
 
         # Save a hash of the FK-Table metadata
-        l = Loader()
-        
-        TheoryIDSpec = l.check_theoryID(theoryid)
-        keys = {}
+        #keys = {}
 
-        for ds in file_content["dataset_inputs"]:
-            setname = ds["dataset"]
-            cdspec = loader.check_commondata(setname)
+        #l = Loader() 
+        #TheoryIDSpec = l.check_theoryID(theoryid)
+        #
+        #
+        #for ds in file_content["dataset_inputs"]:
+        #    setname = ds["dataset"]
+        #    
+        #    cdspec = loader.check_commondata(setname)
+        #    import pdb; pdb.set_trace()
+        #    fk_tablename = str(cdspec.metadata.theory.FK_tables[0][0])
+        #    fk_tablepath = TheoryIDSpec.path + f"/{fk_tablename}.pineappl.lz4"
 
-            fk_tablename = str(cdspec.metadata.theory.FK_tables[0][0])
+        #    # fk = fk_table.FkTable.read(str(fk_tablepath))
 
-            fk_tablepath = TheoryIDSpec.path + f"/{fk_tablename}.pineappl.lz4")
+        #    # Should we dump the fk.metadata as opposed to fk_tablepath.read_bytes()?
+        #    fkhash = hashlib.md5(fk_tablepath.read_bytes()).hexdigest()
+        #    keys[fk_tablename] = (
+        #        f"{theoryid}_{fk_tablename}_{fkhash}"
+        #    )
 
-            # fk = fk_table.FkTable.read(str(fk_tablepath))
-            # Should we dump the fk.metadata as opposed to fk_tablepath.read_bytes()?
-            fkhash = hashlib.md5(fk_tablepath.read_bytes()).hexdigest()
-            
-
-            keys[fk_tablename] = (
-                f"{theoryid}_{fk_tablename}_{fkhash}"
-            )
-
-        file_content["_fk_hashes"] = keys
+        #file_content["_fk_hashes"] = keys
 
 
         # Check fiatlux configuration
@@ -329,8 +329,8 @@ class SetupFitApp(App):
             self.environment.save_md5()
 
             # and save the fk hashes
-            fk_hashes = self.config_class["_fk_hashes"]
-            self.environment.save_fk_md5(fk_hashes)
+#            fk_hashes = self.config_class["_fk_hashes"]
+#            self.environment.save_fk_md5(fk_hashes)
         except SetupFitError as e:
             log.error(f"Error in setup-fit:\n{e}")
             sys.exit(1)
