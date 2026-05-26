@@ -28,6 +28,7 @@ HYPEROPTIMIZED_PARAMETERS = [
     "layer_type",
     "dropout",
 ]
+MD5FK_FILENAME = "md5fk"
 
 
 def _is_floatable(num):
@@ -567,26 +568,24 @@ def check_eko_exists(theoryid):
         log.error(f"No eko found for {theoryid}")
 
 
-@make_argcheck
 def fktable_hasher(data, output_path):
-    """Writes a hash of the fk-table to a log file.
+    """Writes a hash of the fk-tables to a log file.
     This hash can be used to ensure whether two
     (supposedly identical) fk-tables of the same
     theory and dataset are numerically identical.
     """
-    md5fk_path = output_path / "md5fk"
+    md5fk_path = output_path / MD5FK_FILENAME
+    # Open a file to write in
     with open(md5fk_path, "w") as f:
+        # Loop through the dataspecs object
         for dataset in data.datasets:
             fkspecs = dataset.fkspecs
             for fk in fkspecs:
+                # Make a list of the FK tables
                 table_names = [name for group in fk.metadata.FK_tables for name in group]
-                for fkpath, table_name in zip(
-                    fk.fkpath,
-                    table_names
-                ):
+                import pdb; pdb.set_trace()
+                for fkpath, table_name in zip(fk.fkpath, table_names):
                     for fkpath, table_name in zip(fk.fkpath, table_names):
-                        fkhash = hashlib.md5(
-                            fkpath.read_bytes()
-                        ).hexdigest()
+                        fkhash = hashlib.md5(fkpath.read_bytes()).hexdigest()
                         f.write(f"{table_name} {fkhash}\n")
     log.info(f"FK-table hash written to {md5fk_path}")
