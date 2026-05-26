@@ -38,14 +38,14 @@ from ruamel.yaml import error
 from reportengine import colors
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
-from validphys.loader import FallbackLoader, Loader, PhotonQEDNotFound, TheoryNotFound
+from validphys.loader import FallbackLoader, PhotonQEDNotFound, TheoryNotFound
 from validphys.utils import yaml_safe
 
 
 loader = FallbackLoader()
 
 SETUPFIT_FIXED_CONFIG = dict(
-    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action']
+    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action', 'fktable_hasher']
 )
 
 SETUPFIT_PROVIDERS = [
@@ -68,7 +68,6 @@ RUNCARD_COPY_FILENAME = "filter.yml"
 FILTER_OUTPUT_FOLDER = "filter"
 TABLE_OUTPUT_FOLDER = "tables"
 MD5_FILENAME = "md5"
-MD5FK_FILENAME = "md5fk"
 INPUT_FOLDER = "input"
 
 
@@ -134,16 +133,6 @@ class SetupFitEnvironment(Environment):
         with open(output_filename, 'w') as g:
             g.write(digest)
         log.info(f"md5 {digest} stored in {output_filename}")
-
-    def save_fk_md5(self, keys):
-        """Save FK-table metadata hashes."""
-        output_filename = self.output_path / MD5FK_FILENAME
-
-        with open(output_filename, "w") as f:
-            for _, value in sorted(keys.items()):
-                f.write(f"{value}\n")
-
-        log.info(f"FK hashes stored in {output_filename}")
 
     @classmethod
     def ns_dump_description(cls):
@@ -215,32 +204,6 @@ class SetupFitConfig(Config):
             fixed_config['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )
-
-        # Save a hash of the FK-Table metadata
-        #keys = {}
-
-        #l = Loader() 
-        #TheoryIDSpec = l.check_theoryID(theoryid)
-        #
-        #
-        #for ds in file_content["dataset_inputs"]:
-        #    setname = ds["dataset"]
-        #    
-        #    cdspec = loader.check_commondata(setname)
-        #    import pdb; pdb.set_trace()
-        #    fk_tablename = str(cdspec.metadata.theory.FK_tables[0][0])
-        #    fk_tablepath = TheoryIDSpec.path + f"/{fk_tablename}.pineappl.lz4"
-
-        #    # fk = fk_table.FkTable.read(str(fk_tablepath))
-
-        #    # Should we dump the fk.metadata as opposed to fk_tablepath.read_bytes()?
-        #    fkhash = hashlib.md5(fk_tablepath.read_bytes()).hexdigest()
-        #    keys[fk_tablename] = (
-        #        f"{theoryid}_{fk_tablename}_{fkhash}"
-        #    )
-
-        #file_content["_fk_hashes"] = keys
-
 
         # Check fiatlux configuration
         fiatlux = file_content.get('fiatlux')
@@ -326,9 +289,6 @@ class SetupFitApp(App):
             # if succeeded print md5
             self.environment.save_md5()
 
-            # and save the fk hashes
-#            fk_hashes = self.config_class["_fk_hashes"]
-#            self.environment.save_fk_md5(fk_hashes)
         except SetupFitError as e:
             log.error(f"Error in setup-fit:\n{e}")
             sys.exit(1)
