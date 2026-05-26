@@ -5,7 +5,7 @@
 #   ~/.config/NNPDF/nnprofile.yaml
 # To change the configuration of the NNPDF code framework
 
-nnpdf_share: ~/.local/share/NNPDF/theories
+nnpdf_share: ~/.local/share/NNPDF
 
 results_path: results
 ekos_path: ekos

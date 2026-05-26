@@ -568,17 +568,24 @@ def check_eko_exists(theoryid):
 
 
 @make_argcheck
-def fktable_hasher(data):
+def fktable_hasher(data, output_path):
     """Writes a hash of the fk-table to a log file.
-    This hash can be used to ensure whether two 
-    (supposedely identical) fk-tables of the same 
+    This hash can be used to ensure whether two
+    (supposedly identical) fk-tables of the same
     theory and dataset are numerically identical.
     """
-    keys = {}
-    for dataset in data.datasets:
-        fkspecs = dataset.fkspecs
-        for fk in fkspecs:
-            fkpath = fk.fkpath[0]
-            fkhash = hashlib.md5(fkpath.read_bytes()).hexdigest()
-            # have to figure out how to write a file to the fitname dir where the other md5 also lives
-            log.info("FK-table hash written to md5fk")
+    md5fk_path = output_path / "md5fk"
+    with open(md5fk_path, "w") as f:
+        for dataset in data.datasets:
+            fkspecs = dataset.fkspecs
+            for fk in fkspecs:
+                for fkpaths, table_names in zip(
+                    fk.fkpath,
+                    fk.metadata.FK_tables,
+                ):
+                    for fkpath, table_name in zip(fkpaths, table_names):
+                        fkhash = hashlib.md5(
+                            fkpath.read_bytes()
+                        ).hexdigest()
+                        f.write(f"{table_name} {fkhash}\n")
+    log.info(f"FK-table hash written to {md5fk_path}")
