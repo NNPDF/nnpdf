@@ -579,11 +579,12 @@ def fktable_hasher(data, output_path):
         for dataset in data.datasets:
             fkspecs = dataset.fkspecs
             for fk in fkspecs:
-                for fkpaths, table_names in zip(
+                table_names = [name for group in fk.metadata.FK_tables for name in group]
+                for fkpath, table_name in zip(
                     fk.fkpath,
-                    fk.metadata.FK_tables,
+                    table_names
                 ):
-                    for fkpath, table_name in zip(fkpaths, table_names):
+                    for fkpath, table_name in zip(fk.fkpath, table_names):
                         fkhash = hashlib.md5(
                             fkpath.read_bytes()
                         ).hexdigest()
