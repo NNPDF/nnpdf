@@ -8,7 +8,6 @@ import n3fit.checks
 
 
 @n3fit.checks.check_consistent_basis
-@n3fit.checks.fktable_hasher
 @n3fit.checks.wrapper_check_NN
 @n3fit.checks.wrapper_hyperopt
 @n3fit.checks.check_deprecated_options
@@ -22,7 +21,6 @@ def n3fit_checks_action(
     fitbasis,
     sum_rules=True,
     parameters,
-    output_path,
     save=None,
     load=None,
     load_weights_from_fit=None,
@@ -42,6 +40,6 @@ def n3fit_checks_action(
 @n3fit.checks.check_eko_exists
 def evolven3fit_checks_action(theoryid):
     return
-@n3fit.checks.fktable_hasher
+
 def fktable_hasher(data, output_path):
     return
