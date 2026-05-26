@@ -175,6 +175,26 @@ integrability:
   - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
   - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
 
+drop_internal_rules:
+- LHCB_WPWM_8TEV_MUON_Y
+- LHCB_Z0_8TEV_MUON_Y
+- LHCB_WPWM_7TEV_MUON_Y
+- LHCB_Z0_7TEV_MUON_Y
+- LHCB_Z0_13TEV_DIELECTRON-Y
+- LHCB_Z0_13TEV_DIMUON-Y
+- D0_WPWM_1P96TEV_ASY
+- CMS_Z0J_8TEV_PT-Y
+- CMS_Z0_7TEV_DIMUON_2D
+- ATLAS_Z0_7TEV_LOMASS_M
+
+added_filter_rules:
+- dataset: CMS_Z0J_8TEV_PT-Y
+  reason: Avoid the region where resummation effects become important.
+  rule: pT >= 30
+- dataset: CMS_Z0J_8TEV_PT-Y
+  reason: Avoid the region where EWK corrections are important.
+  rule: pT <= 170
+
 ################################################################################
 debug: false
 maxcores: 16
