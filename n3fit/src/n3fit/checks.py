@@ -583,7 +583,6 @@ def fktable_hasher(data, output_path):
             for fk in fkspecs:
                 # Make a list of the FK tables
                 table_names = [name for group in fk.metadata.FK_tables for name in group]
-                import pdb; pdb.set_trace()
                 for fkpath, table_name in zip(fk.fkpath, table_names):
                     for fkpath, table_name in zip(fk.fkpath, table_names):
                         fkhash = hashlib.md5(fkpath.read_bytes()).hexdigest()
