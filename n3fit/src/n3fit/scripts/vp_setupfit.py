@@ -192,7 +192,6 @@ class SetupFitConfig(Config):
 
         # Check theory covariance matrix configuration
         thconfig = file_content.get('theorycovmatconfig', {})
-        theoryid = file_content['theory']['theoryid']
         if thconfig.get('point_prescription') is not None:
             raise ConfigError(
                 "`point_prescription` has been removed in favor of a list of "
