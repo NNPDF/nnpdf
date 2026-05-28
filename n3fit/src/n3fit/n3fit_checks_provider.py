@@ -4,14 +4,15 @@
 This module contains a checks provider to be used by n3fit apps
 """
 
-import n3fit.checks
 import hashlib
-from pathlib import Path
 import logging
+from pathlib import Path
 
+import n3fit.checks
 
 log = logging.getLogger(__name__)
 MD5FK_FILENAME = "md5fk"
+
 
 @n3fit.checks.check_consistent_basis
 @n3fit.checks.wrapper_check_NN
