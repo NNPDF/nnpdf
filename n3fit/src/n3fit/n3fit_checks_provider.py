@@ -6,7 +6,12 @@ This module contains a checks provider to be used by n3fit apps
 
 import n3fit.checks
 import hashlib
+from pathlib import Path
+import logging
 
+
+log = logging.getLogger(__name__)
+MD5FK_FILENAME = "md5fk"
 
 @n3fit.checks.check_consistent_basis
 @n3fit.checks.wrapper_check_NN
@@ -44,12 +49,11 @@ def evolven3fit_checks_action(theoryid):
 
 
 def fktable_hasher(data, output_path):
-    """Writes a hash of the fk-tables to a log file.
+    """Writes a hash of the FK-tables to a log file.
     This hash can be used to ensure whether two
-    (supposedly identical) fk-tables of the same
+    (supposedly identical) FK-tables of the same
     theory and dataset are numerically identical.
     """
-    MD5FK_FILENAME = "md5fk"
     md5fk_path = output_path / MD5FK_FILENAME
     # Open a file to write in
     with open(md5fk_path, "w") as f:
@@ -57,9 +61,13 @@ def fktable_hasher(data, output_path):
         for dataset in data.datasets:
             fkspecs = dataset.fkspecs
             for fk in fkspecs:
-                # Make a list of the FK tables
-                table_names = [name for group in fk.metadata.FK_tables for name in group]
-                for fkpath, table_name in zip(fk.fkpath, table_names):
-                    for fkpath, table_name in zip(fk.fkpath, table_names):
-                        fkhash = hashlib.md5(fkpath.read_bytes()).hexdigest()
-                        f.write(f"{table_name} {fkhash}\n")
+                # Get the FK-table path
+                fkpaths = fk.fkpath
+                # For older theories, ensure we always pass a tuple
+                if not isinstance(fkpaths, tuple):
+                    fkpaths = (fk.fkpath,)
+                # And then write the hash of the raw bytes
+                for fkpath in fkpaths:
+                    fkhash = hashlib.md5(fkpath.read_bytes()).hexdigest()
+                    f.write(f"{Path(fkpath.stem).stem} {fkhash}\n")
+        log.info(f"FK-table md5 hashes stored in {output_path}/md5fk")
