@@ -3,10 +3,10 @@ Test hyperoptimization features
 """
 
 import json
+import os
 import pathlib
 import shutil
 import subprocess as sp
-import tarfile
 import time
 
 import numpy as np
@@ -15,6 +15,7 @@ import pytest
 
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import ReplicaSettings, generate_pdf_model
+from n3fit.tests.helpers import run_n3fit, run_setupfit
 from n3fit.vpinterface import N3PDF
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID
@@ -139,21 +140,22 @@ def test_restart_from_pickle(tmp_path):
     # cp runcard to tmp folder
     shutil.copy(quickpath, tmp_path)
     # run some trials for the first time
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} -o {output_restart}".split(),
+    run_n3fit(
+        quickpath,
+        f"{REPLICA} --hyperopt {n_trials_stop} -o {output_restart}",
         cwd=tmp_path,
         check=True,
     )
-    # restart and calculate more trials
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} "
-        f"-o {output_restart} --restart".split(),
+    run_n3fit(
+        quickpath,
+        f"{REPLICA} --hyperopt {n_trials_total} -o {output_restart}",
         cwd=tmp_path,
+        setupfit=False,
         check=True,
-    )
-    # start again and calculate all trials at once
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} " f"-o {output_direct}".split(),
+    )  # md5 already in output_restart
+    run_n3fit(
+        quickpath,
+        f"{REPLICA} --hyperopt {n_trials_total} -o {output_direct}",
         cwd=tmp_path,
         check=True,
     )
@@ -168,12 +170,10 @@ def test_restart_from_pickle(tmp_path):
     assert len(restart_json) == len(direct_json)
 
     for i in range(n_trials_total):
+        # A sequential restart won't provide the exact same results
+        # so the only thing reproducible is the number of trials which should be the same
         # check that the files share exactly the same hyperopt history
-        assert restart_json[i]['misc'] == direct_json[i]['misc']
-        assert restart_json[i]['state'] == direct_json[i]['state']
         assert restart_json[i]['tid'] == direct_json[i]['tid']
-        assert restart_json[i]['misc']['idxs'] == direct_json[i]['misc']['idxs']
-    # Note that it doesn't check the final loss of the second trial
 
 
 @pytest.mark.skipif(shutil.which("mongod") is None, reason="mongodb not available")
@@ -185,8 +185,8 @@ def test_parallel_hyperopt(tmp_path):
     quickpath = REGRESSION_FOLDER / quickcard
 
     # Define number of trials and number of mongo-workers to launch
-    n_trials = 6
-    n_mongo_workers = 3
+    n_trials = 8
+    n_mongo_workers = 2
 
     # Set up output directories
     output_sequential = tmp_path / "run_hyperopt_sequential"
@@ -196,35 +196,35 @@ def test_parallel_hyperopt(tmp_path):
     shutil.copy(quickpath, tmp_path)
 
     # Run hyperopt sequentially
-    start_time = time.time()
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials} " f"-o {output_sequential}".split(),
+    run_n3fit(
+        quickpath,
+        f"{REPLICA} --hyperopt {n_trials} -o {output_sequential}",
         cwd=tmp_path,
         check=True,
     )
-    end_time = time.time()
-    sequential_run_time = end_time - start_time
 
     # Run hyperopt in parallel
-    start_time = time.time()
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials} "
-        f"--parallel-hyperopt --num-mongo-workers {n_mongo_workers} "
-        f"-o {output_parallel}".split(),
-        cwd=tmp_path,
-        check=True,
-    )
+    run_setupfit(quickpath, cwd=tmp_path, output=output_parallel)
+    workers = []
+    my_env = os.environ.copy()
+    my_env["CUDA_VISIBLE_DEVICES"] = ""
+    for i in range(n_mongo_workers):
+        tmp = sp.Popen(
+            f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials} --db-host localhost --parallel-hyperopt -o {output_parallel}".split(),
+            cwd=tmp_path,
+            env=my_env,
+        )
+        workers.append(tmp)
+        time.sleep(10)
+    for w in workers:
+        w.wait()
     end_time = time.time()
-    parallel_run_time = end_time - start_time
 
     # Read up generated json files
     sequential_json_path = f"{output_sequential}/nnfit/replica_{REPLICA}/tries.json"
     sequential_json = load_data(sequential_json_path)
     parallel_json_path = f"{output_parallel}/nnfit/replica_{REPLICA}/tries.json"
     parallel_json = load_data(parallel_json_path)
-
-    # Check that the parallel run time is lower than the sequential one
-    assert parallel_run_time < sequential_run_time
 
     # Check that the final json files have the same number of trials
     assert len(parallel_json) == len(sequential_json)
@@ -238,79 +238,52 @@ def test_parallel_hyperopt(tmp_path):
         # which is obviously different between parallel and sequential runs
 
 
-def clean_up_database(tmp_path, database_name):
-    """Stops the MongoDB database."""
-    directory_path = f"{tmp_path}/{database_name}"
-    try:
-        sp.run(f"rm -r {directory_path}", shell=True, check=True)
-    except (sp.CalledProcessError, OSError) as err:
-        msg = f"Error cleaning up database: {err}"
-        raise EnvironmentError(msg) from err
-
-
-def get_tar_size(filetar):
-    """Returns the size of a tar file."""
-
-    def tar_size(tar):
-        return sum(member.size for member in tar.getmembers())
-
-    with tarfile.open(filetar, 'r') as tar:
-        size = tar_size(tar)
-    return size
-
-
 @pytest.mark.skipif(shutil.which("mongod") is None, reason="mongodb not available")
-def test_restart_from_tar(tmp_path):
+def test_parallel_restart(tmp_path):
     """Ensure that our parallel hyperopt restart works as expected."""
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
 
     # Set up some options
-    n_mongo_workers = 3
+    n_workers = 2
     n_trials_stop = 3
-    n_trials_total = 6
+    n_trials_total = n_trials_stop * 2
     output = tmp_path / "output"
-    database_name = f"hyperopt-db-{output.name}"
 
     # cp runcard to tmp folder
     shutil.copy(quickpath, tmp_path)
+    run_setupfit(quickpath, cwd=tmp_path, output=output)
     # run some trials for the first time
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} "
-        f"--parallel-hyperopt --num-mongo-workers {n_mongo_workers} "
-        f"-o {output}".split(),
-        cwd=tmp_path,
-        check=True,
-    )
-    json_path = f"{output}/nnfit/replica_{REPLICA}/tries.json"
-    tar_name = f"{output}/nnfit/replica_{REPLICA}/{database_name}.tar.gz"
-    initial_json = load_data(json_path)
-    initial_tar_size = get_tar_size(tar_name)
+    for i in range(n_workers):
+        tmp = sp.Popen(
+            f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} --db-host localhost "
+            f"--parallel-hyperopt -o {output}".split(),
+            cwd=tmp_path,
+        )
+        if i == 0:
+            time.sleep(10)
+    # Wait for the last one to exit
+    tmp.wait()
 
-    # just in case, remove old database files to ensure that the restart occurs via tar file
-    clean_up_database(tmp_path, database_name)
+    json_path = f"{output}/nnfit/replica_{REPLICA}/tries.json"
+    initial_json = load_data(json_path)
 
     # restart and calculate more trials
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} "
-        f"--parallel-hyperopt --num-mongo-workers {n_mongo_workers} "
-        f"-o {output} --restart".split(),
-        cwd=tmp_path,
-        check=True,
-    )
+    for i in range(n_workers):
+        tmp = sp.Popen(
+            f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop*2} --db-host localhost "
+            f"--parallel-hyperopt -o {output}".split(),
+            cwd=tmp_path,
+        )
+        if i == 0:
+            time.sleep(10)
+    tmp.wait()
     final_json = load_data(json_path)
-    final_tar_size = get_tar_size(tar_name)
 
     # check if the calculations went well
     assert len(initial_json) == n_trials_stop
     assert len(final_json) == n_trials_total
-
-    # check if the tar files were generated correctly
-    assert tarfile.is_tarfile(tar_name) is True
-
-    # check if the final tar file was updated after restart
-    assert final_tar_size > initial_tar_size
 
     for i in range(n_trials_stop):
         # check that the json files share exactly the same hyperopt history until the restart

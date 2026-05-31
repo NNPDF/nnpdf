@@ -183,3 +183,40 @@ class LossIntegrability(LossLagrange):
         y = y_pred * y_pred
         # Sum over the batch and the datapoints
         return op.sum(y, axis=[0, -1])
+
+class LossHyperopt:
+    """
+    Returns L = \\lambda*elu(chi2-chi2ref)
+
+    The hyperotp loss is computed by taking the difference 
+    between the input experimental chi2 and a chi2 reference value chi2ref,
+    and then applying the elu function, defined by
+        f(x) = x if x > 0
+        f(x) = alpha * (e^{x} - 1) if x < 0
+    This is done to avoid a big discontinuity in the derivative at 0 when
+    the lagrange multiplier is very big.
+    In practice this function can produce results in the range (-alpha, inf)
+
+    Example
+    -------
+    >>> import numpy as np
+    >>> from n3fit.layers import losses
+    >>> chi2 = np.asarray(2)
+    >>> alpha = 1e-7
+    >>> c = 1e2
+    >>> chi2ref = np.asarray(1.25)
+    >>> loss_h = losses.LossHyperopt(c=c, alpha=alpha, chi2ref=chi2ref)
+    >>> loss_h(chi2) == np.asarray(c * (chi2-chi2ref))
+    True
+    """
+
+    def __init__(self, c=1e2, alpha=1e-10, chi2ref=1.2):
+        self.c = c
+        self.alpha = alpha
+        self.chi2ref = chi2ref
+
+    def __call__(self, chi2):
+        loss = op.elu(chi2-self.chi2ref, alpha=self.alpha)
+        return self.c * loss.numpy()
+
+    

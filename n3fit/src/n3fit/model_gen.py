@@ -317,7 +317,7 @@ def observable_generator(
         invcovmat=spec_dict["invcovmat_true"],
         covmat=spec_dict["covmat"],
         data=spec_dict["expdata_true"],
-        rotation=None,
+        rotation=obsrot,
     )
 
     layer_info = {

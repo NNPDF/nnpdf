@@ -1,0 +1,20 @@
+# -*- coding: utf-8 -*-
+"""
+Generate an index with the existing internal or unpublished PDFS.
+"""
+
+import pathlib
+import json
+
+root = '/home/nnpdf/WEB/photons'
+
+glob = '*.tar'
+
+indexname = 'photondata.json'
+
+if __name__ == '__main__':
+    p = pathlib.Path(root)
+    files = p.glob(glob)
+    files = [f.name for f in files]
+    with (p/indexname).open('w') as f:
+        json.dump({'files':files}, f, separators=(',',':'))

@@ -1,6 +1,6 @@
 """
-    This module tests the mathematical functions in the n3fit backend
-    and ensures they do the same thing as their numpy counterparts
+This module tests the mathematical functions in the n3fit backend
+and ensures they do the same thing as their numpy counterparts
 """
 
 import operator
@@ -153,3 +153,14 @@ def test_tensor_product():
 
 def test_sum():
     numpy_check(op.sum, np.sum, mode='single')
+
+
+def test_nansum():
+    """Tests that sums with NaN in the arrays work as expected"""
+    arr_nonan = np.array([1.0, 2.0])
+    arr_nan = np.array([2.0, np.nan, 2.0])
+    arr_axis_nan = np.array([[3.0, np.nan], [2.0, 6.0]])
+
+    np.testing.assert_allclose(op.nansum(arr_nonan), np.nansum(arr_nonan))
+    np.testing.assert_allclose(op.nansum(arr_nan), np.nansum(arr_nan))
+    np.testing.assert_allclose(op.nansum(arr_axis_nan, axis=0), np.nansum(arr_axis_nan, axis=0))

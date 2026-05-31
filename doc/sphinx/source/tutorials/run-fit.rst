@@ -75,10 +75,13 @@ Running the fitting code
 After successfully installing the ``n3fit`` package and preparing a runcard
 following the points presented above you can proceed with a fit.
 
-1.  Prepare the fit using ``vp-setupfit``. This command will generate a
-    folder with the same name as the runcard (minus the file extension) in the
-    current directory, which will contain a copy of the original YAML runcard.
-    The required resources will be downloaded, which includes:
+1.  Prepare the fit using ``vp-setupfit``. **This step is mandatory**: it
+    produces resources that ``n3fit`` requires in order to run.
+
+    The command creates a folder with the same name as the runcard (minus the
+    file extension) in the current directory, which will contain a copy of the
+    original YAML runcard. The required resources will be downloaded, which
+    includes:
 
       - The t0 PDF set (an LHAPDF object).
       - The FastKernel tables in the form of a ``theory_xxx.tgz`` file
@@ -86,6 +89,10 @@ following the points presented above you can proceed with a fit.
 
     If the runcard requires to precompute some heavy objects shared among replicas,
     such as the theory covariance matrix, it will be done during this step.
+
+    A file named ``md5`` is also written inside the output folder. It contains a
+    hash of the runcard which ``n3fit`` uses to detect changes made to the
+    runcard between ``vp-setupfit`` and ``n3fit`` (see step 2).
 
 ::
 
@@ -96,6 +103,27 @@ following the points presented above you can proceed with a fit.
     maximum number of desired replicas. Note that if you desire, for example, a 100
     replica fit you should launch more than 100 replicas (e.g. 120) since not all of them will necessarily converge.
     While by default the code runs each replica separately, it is possible to run many replicas in parallel, see :ref:`parallel-label`.
+
+    Before training begins, ``n3fit`` recomputes the md5 hash of the runcard
+    and compares it against the value written by ``vp-setupfit`` in step 1.
+    If the two do not match — i.e. the runcard was modified after
+    ``vp-setupfit`` was run — ``n3fit`` aborts with an error. The fix is to
+    re-run ``vp-setupfit`` so that the md5 (and any heavy resources affected
+    by the change, such as the covariance matrix) are regenerated from the
+    current runcard.
+
+    .. warning::
+
+       The md5 check can be bypassed by passing ``--skip-md5-check`` to
+       ``n3fit``::
+
+          n3fit <runcard>.yml <replica> --skip-md5-check
+
+       Use this flag at your own risk: it disables the only safeguard
+       against running ``n3fit`` on a runcard that has diverged from the
+       one ``vp-setupfit`` was given. Resources cached during ``vp-setupfit``
+       (covariance matrices, t0 PDF, theory tables) may no longer be
+       consistent with the current runcard.
 
 ::
 

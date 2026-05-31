@@ -438,6 +438,7 @@ def check_xq2_degenearcy(Q2, x):
             unique kinematics are: {unique_pairs.shape[1]}, original size: {size}"""
         ) from exc
 
+
 def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove_source=True):
     r"""
     Create two new uncertainty files, one where the specified uncertainty
@@ -469,7 +470,9 @@ def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove
     content_uncert = {}
 
     if 'definitions' in content and uncert_name in content['definitions']:
-        content_uncert['definitions'] = {uncert_name: copy.deepcopy(content['definitions'][uncert_name])}
+        content_uncert['definitions'] = {
+            uncert_name: copy.deepcopy(content['definitions'][uncert_name])
+        }
         content_uncert['bins'] = {}
         bins = []
         for i in range(len(content['bins'])):

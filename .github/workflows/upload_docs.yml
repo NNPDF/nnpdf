@@ -10,7 +10,7 @@ jobs:
   deploy_docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
         with:
           nnpdf-extras: "[qed,docs]"
@@ -18,7 +18,7 @@ jobs:
         shell: bash -l {0}
         run: |
           cd doc/sphinx
-          make html
+          make html SPHINXOPTS="-W --keep-going"
       - name: Upload documentation
         shell: bash -l {0}
         if: github.ref == 'refs/heads/master'

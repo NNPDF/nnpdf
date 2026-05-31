@@ -62,6 +62,7 @@ class HyperoptMetrics:
     chi2: float
     phi2: float
     logp: float
+    chi2exp: float
 
 
 class N3Stats(MCStats):
@@ -150,7 +151,7 @@ class N3LHAPDFSet(LHAPDFSet):
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)
-            result[:, :, ii] = result
+            result = result[:, :, np.argsort(ii)]
         return result
 
     def grid_values(self, flavours, xarr, qmat=None):
@@ -443,6 +444,10 @@ def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
     # Compute the chi2
     total_covmat_chol = la.cholesky(total_covmat, lower=True)
     chi2 = calc_chi2(sqrtcov=total_covmat_chol, diffs=diffs)
+    
+    # Compute the experimental chi2
+    exp_covmat_chol = la.cholesky(exp_cov, lower=True)
+    chi2exp = calc_chi2(sqrtcov=exp_covmat_chol, diffs=diffs)
 
     # Compute phi2
     phi2 = calc_phi(sqrtcov=exp_covmat_col, diffs=diffs_reps)
@@ -450,4 +455,4 @@ def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
     ndat = len(diffs)
     logp = -0.5 * (len(diffs) * np.log(2 * np.pi) + log_det_total_cov + chi2)
 
-    return HyperoptMetrics(chi2=chi2 / ndat, phi2=phi2, logp=-logp / ndat)
+    return HyperoptMetrics(chi2=chi2 / ndat, phi2=phi2, logp=-logp / ndat, chi2exp=chi2exp / ndat)

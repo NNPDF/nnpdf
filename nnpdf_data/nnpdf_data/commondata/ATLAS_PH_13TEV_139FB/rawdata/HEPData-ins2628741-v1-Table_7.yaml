@@ -1,0 +1,1184 @@
+independent_variables:
+ - header: {name: 'E_T(Gamma) range [GeV]'}
+   values:
+    - {low: 250, high: 300}
+    - {low: 300, high: 350}
+    - {low: 350, high: 400}
+    - {low: 400, high: 470}
+    - {low: 470, high: 550}
+    - {low: 550, high: 650}
+    - {low: 650, high: 750}
+    - {low: 750, high: 900}
+    - {low: 900, high: 1100}
+    - {low: 1100, high: 1500}
+    - {low: 1500, high: 2000}
+    - {low: 2000, high: 2500}
+dependent_variables:
+ - header: {name: Cross_Section_Gamma, units: fb/GeV}
+   qualifiers:
+    - {name: '', value: ''}
+   values:
+     - value: 91.8994
+       errors:
+         - {symerror: 0.128614, label: stat} 
+         - {asymerror: {plus: 0.405027, minus: -0.401489}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 0.00516245, minus: -0.00238986}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 0.00544844, minus: -0.00513036}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 2.02431e-09, minus: -2.18912e-15}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 0.0391259, minus: -0.0246054}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 0.010178, minus: -0.0184174}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 2.02702e-09, minus: 4.67201e-16}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -0.0338789, minus: 0.0177776}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -0.0220039, minus: 0.0160652}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 0.014466, minus: -0.0311947}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -8.06205e-10, minus: 3.61724e-19}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 0.0510535, minus: -0.0480891}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 1.86867e-15, minus: -1.88414e-15}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.936829, minus: -0.90161}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.697425, minus: 0.693404}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -7.04845e-17, minus: 2.03035e-09}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -9.61701e-17, minus: -9.10126e-16}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.181052, minus: 0.182759}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -1.49693e-09, minus: 5.0785e-07}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 0.0815129, minus: -0.077839}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 2.28149e-09, minus: -6.62249e-16}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 0.0457943, minus: -0.0498838}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 0.0436566, minus: -0.0422724}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 0.0441041, minus: -0.0390817}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 0.000347638, minus: -0.000651998}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 4.01029e-06, minus: -3.16132e-09}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 6.3441e-11, minus: -7.6046e-07}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -4.75137e-16, minus: -3.95307e-07}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 9.5948e-17, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -1.82995e-10, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 0.0308567, minus: -0.0317682}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 7.67357e-16}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 0.0560051, minus: -0.0553593}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 0.0575364, minus: -0.0531261}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 0.00102841, minus: -4.31932e-06}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 7.84251e-06, minus: -3.14135e-09}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -2.73011e-15, minus: -7.56756e-07}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 7.84209e-16, minus: -4.45766e-07}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 3.61724e-19, minus: -7.8791e-16}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 2.03205e-09, minus: 3.14817e-16}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -2.08225e-16, minus: 5.09512e-17}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 0.0529941, minus: -0.0517218}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 4.61991e-16, minus: -1.73325e-15}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 2.22719e-09, minus: 2.21799e-16}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 3.98108e-16}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 0.0205912, minus: -0.018031}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 2.2443e-09, minus: 9.35648e-16}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.074971, minus: 0.0773879}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.250704, minus: 0.25206}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.107239, minus: 0.104186}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -0.0758254, minus: 0.0760585}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.0784214, minus: 0.0803476}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 0.000107126, minus: 0.000943818}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -3.15036e-09, minus: 3.60191e-06}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -7.6046e-07, minus: 6.3441e-11}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -5.78619e-06, minus: 1.56122e-05}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -6.33403e-16, minus: 2.24153e-09}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.519122, minus: 0.51245}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -0.00103629, minus: 0.0010817}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -2.3457e-15, minus: 2.02845e-09}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.074971}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.227432, minus: 0.225229}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 0.0129927, minus: -0.0136243}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.154034, minus: -0.151832}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.109487, minus: 0.112026}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 0.0683162, minus: -0.0719575}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.222038, minus: -0.2221}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.237916, minus: -0.239036}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 0.0255457, minus: -0.0201412}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0, minus: -0.0740888}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 0.265454, minus: -0.412109}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.596272, minus: -0.598488}, label: 'sysBackground'}
+         - {symerror: 0.376778, label: syselectronBackground} 
+         - {symerror: 0.667786, label: sysSignalLeakage} 
+         - {symerror: 0.40588, label: sysUnfolding} 
+         - {asymerror: {plus: 0.00249786, minus: -0.00355381}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0.249511, minus: -0.19403}, label: 'sysPUrew'}
+         - {symerror: 0.0437372, label: sysMCstats} 
+         - {symerror: 0.0603467, label: sysTrigger} 
+         - {symerror: 0.0152093, label: sysUnfoldingClosure} 
+         - {symerror: 0.188234, label: sysRecoEffPhoton} 
+         - {symerror: 1.56229, label: sysLumi} 
+     - value: 39.5162
+       errors:
+         - {symerror: 0.0847941, label: stat} 
+         - {asymerror: {plus: 0.172937, minus: -0.171442}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 0.00221983, minus: -0.00102762}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 0.0023428, minus: -0.00220602}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 8.70442e-10, minus: -9.41309e-16}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 0.0168239, minus: -0.0105802}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 0.00437647, minus: -0.00791937}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 8.71609e-10, minus: 2.00894e-16}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -0.0145677, minus: 0.00764426}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -0.00946154, minus: 0.00690796}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 0.00622029, minus: -0.0134135}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -3.46663e-10, minus: 1.55539e-19}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 0.022395, minus: -0.0212446}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 8.03517e-16, minus: -8.10171e-16}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.425696, minus: -0.41056}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.314343, minus: 0.314107}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -3.03079e-17, minus: 8.73037e-10}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -4.13526e-17, minus: -3.91349e-16}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.0807134, minus: 0.0809961}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -6.43671e-10, minus: 2.18373e-07}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 0.0356922, minus: -0.0345785}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 9.81029e-10, minus: -2.84763e-16}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 0.0204377, minus: -0.0219177}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 0.0189869, minus: -0.0182816}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 0.0193382, minus: -0.0177152}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 0.000131671, minus: -0.000212334}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 1.7244e-06, minus: -1.35935e-09}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 2.72793e-11, minus: -3.26994e-07}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -2.04306e-16, minus: -1.6998e-07}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 4.12571e-17, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -7.86867e-11, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 0.0136708, minus: -0.0141497}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 3.29959e-16}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 0.0242725, minus: -0.0239209}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 0.0255596, minus: -0.0240566}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 0.000442212, minus: -1.85728e-06}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 3.37223e-06, minus: -1.35076e-09}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -1.17393e-15, minus: -3.25401e-07}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 3.37205e-16, minus: -1.91677e-07}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 1.55539e-19, minus: -3.38797e-16}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 8.7377e-10, minus: 1.3537e-16}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -8.95354e-17, minus: 2.19087e-17}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 0.0232296, minus: -0.0225673}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 1.98653e-16, minus: -7.45288e-16}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 9.57677e-10, minus: 9.53721e-17}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 1.71184e-16}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 0.00901748, minus: -0.00824737}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 9.65036e-10, minus: 4.02323e-16}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.0336691, minus: 0.0343158}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.111741, minus: 0.111658}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.047398, minus: 0.04602}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -0.0330779, minus: 0.0332873}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.0356169, minus: 0.0358175}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 4.60634e-05, minus: 0.000405836}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -1.35464e-09, minus: 1.5488e-06}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -3.26994e-07, minus: 2.72793e-11}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -2.48803e-06, minus: 6.71316e-06}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -2.7236e-16, minus: 9.63844e-10}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.234117, minus: 0.232682}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -0.000445601, minus: 0.000465123}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -1.00864e-15, minus: 8.72224e-10}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.0336691}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.100335, minus: 0.0990116}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 0.0057712, minus: -0.00578869}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.0671863, minus: -0.0665355}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.0479099, minus: 0.0487061}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 0.0306152, minus: -0.0314824}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.0980465, minus: -0.0973625}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.103078, minus: -0.104092}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 0.00749022, minus: -0.00577514}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0, minus: -0.0220184}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 0.0818565, minus: -0.1355}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.195141, minus: -0.195852}, label: 'sysBackground'}
+         - {symerror: 0.161849, label: syselectronBackground} 
+         - {symerror: 0.189482, label: sysSignalLeakage} 
+         - {symerror: 0.174526, label: sysUnfolding} 
+         - {asymerror: {plus: 0.00171378, minus: -0.00189031}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0.107288, minus: -0.0834319}, label: 'sysPUrew'}
+         - {symerror: 0.0172364, label: sysMCstats} 
+         - {symerror: 0.025949, label: sysTrigger} 
+         - {symerror: 0.00574948, label: sysUnfoldingClosure} 
+         - {symerror: 0.0809496, label: sysRecoEffPhoton} 
+         - {symerror: 0.671775, label: sysLumi} 
+     - value: 19.0244
+       errors:
+         - {symerror: 0.0594292, label: stat} 
+         - {asymerror: {plus: 0.123063, minus: -0.121498}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 0.0010687, minus: -0.000494732}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 0.0011279, minus: -0.00106205}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 4.19059e-10, minus: -4.53177e-16}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 0.00809957, minus: -0.00509364}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 0.00210697, minus: -0.00381264}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 4.19621e-10, minus: 9.67167e-17}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -0.00701337, minus: 0.0036802}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -0.00455509, minus: 0.00332572}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 0.00299465, minus: -0.00645771}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -1.66895e-10, minus: 7.48815e-20}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 0.0109987, minus: -0.0105053}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 3.86839e-16, minus: -3.90043e-16}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.215851, minus: -0.208543}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.158481, minus: 0.159073}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -1.45912e-17, minus: 4.20308e-10}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -1.99085e-17, minus: -1.88408e-16}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.0402354, minus: 0.040187}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -3.09884e-10, minus: 1.05132e-07}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 0.0175103, minus: -0.0171854}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 4.72299e-10, minus: -1.37094e-16}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 0.0101987, minus: -0.0107844}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 0.00926164, minus: -0.00886935}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 0.00950095, minus: -0.00895779}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 5.52277e-05, minus: -7.24145e-05}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 8.30183e-07, minus: -6.54436e-10}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 1.31331e-11, minus: -1.57425e-07}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -9.83597e-17, minus: -8.18338e-08}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 1.98625e-17, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -3.78823e-11, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 0.00677547, minus: -0.00704317}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 1.58853e-16}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 0.0118023, minus: -0.0115954}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 0.0126964, minus: -0.0121494}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 0.000212895, minus: -8.94155e-07}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 1.6235e-06, minus: -6.503e-10}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -5.65169e-16, minus: -1.56659e-07}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 1.62342e-16, minus: -9.22795e-08}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 7.48815e-20, minus: -1.63108e-16}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 4.20661e-10, minus: 6.51713e-17}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -4.31053e-17, minus: 1.05476e-17}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 0.0114049, minus: -0.0110365}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 9.56382e-17, minus: -3.58806e-16}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 4.61057e-10, minus: 4.59152e-17}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 8.24135e-17}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 0.00442371, minus: -0.00420074}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 4.646e-10, minus: 1.93692e-16}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.0168937, minus: 0.0170365}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.0557016, minus: 0.0553873}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.0234596, minus: 0.0227709}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -0.0161789, minus: 0.0163376}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.0180336, minus: 0.0178621}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 2.21764e-05, minus: 0.000195383}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -6.52166e-10, minus: 7.45642e-07}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -1.57425e-07, minus: 1.31331e-11}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -1.19782e-06, minus: 3.23194e-06}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -1.31123e-16, minus: 4.64026e-10}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.1181, minus: 0.11808}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -0.000214527, minus: 0.000223925}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -4.8559e-16, minus: 4.19917e-10}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.0168937}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.0495677, minus: 0.0487836}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 0.00286366, minus: -0.00276266}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.032855, minus: -0.0326644}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.0234875, minus: 0.0237434}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 0.0153302, minus: -0.0154391}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.0484807, minus: -0.0478502}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.0500925, minus: -0.0507975}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 0.00255057, minus: -0.00190878}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0, minus: -0.00650923}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 0.0296558, minus: -0.052637}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.0735625, minus: -0.0738399}, label: 'sysBackground'}
+         - {symerror: 0.0778406, label: syselectronBackground} 
+         - {symerror: 0.0637781, label: sysSignalLeakage} 
+         - {symerror: 0.0840224, label: sysUnfolding} 
+         - {asymerror: {plus: 0.00102466, minus: -0.000978993}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0.0391947, minus: -0.0438454}, label: 'sysPUrew'}
+         - {symerror: 0.0120026, label: sysMCstats} 
+         - {symerror: 0.0124991, label: sysTrigger} 
+         - {symerror: 0.00236353, label: sysUnfoldingClosure} 
+         - {symerror: 0.0389752, label: sysRecoEffPhoton} 
+         - {symerror: 0.323414, label: sysLumi} 
+     - value: 8.92937
+       errors:
+         - {symerror: 0.0342943, label: stat} 
+         - {asymerror: {plus: 0.0572037, minus: -0.0564801}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 0.000501608, minus: -0.000232209}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 0.000529396, minus: -0.000498489}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 1.96691e-10, minus: -2.12705e-16}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 0.00380165, minus: -0.00239078}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 0.000988939, minus: -0.00178952}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 1.96955e-10, minus: 4.53954e-17}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -0.00329183, minus: 0.00172735}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -0.002138, minus: 0.00156097}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 0.00140558, minus: -0.00303102}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -7.83346e-11, minus: 3.51467e-20}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 0.00528726, minus: -0.00508997}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 1.81568e-16, minus: -1.83072e-16}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.107394, minus: -0.103936}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.0785271, minus: 0.0791941}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -6.8486e-18, minus: 1.97278e-10}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -9.34433e-18, minus: -8.84321e-17}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.0196605, minus: 0.0195542}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -1.45449e-10, minus: 4.93451e-08}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 0.00841378, minus: -0.00837222}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 2.2168e-10, minus: -6.43472e-17}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 0.00498932, minus: -0.0051973}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 0.00442584, minus: -0.00421215}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 0.00457373, minus: -0.00444051}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 2.15794e-05, minus: -1.90187e-05}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 3.89659e-07, minus: -3.07169e-10}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 6.16422e-12, minus: -7.38898e-08}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -4.61665e-17, minus: -3.84099e-08}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 9.32275e-18, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -1.77806e-11, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 0.00328944, minus: -0.00343305}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 7.456e-17}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 0.0056208, minus: -0.0055012}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 0.00617766, minus: -0.00601235}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 9.99254e-05, minus: -4.19685e-07}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 7.62014e-07, minus: -3.05228e-10}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -2.6527e-16, minus: -7.35299e-08}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 7.61974e-17, minus: -4.33127e-08}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 3.51467e-20, minus: -7.6557e-17}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 1.97443e-10, minus: 3.05891e-17}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -2.02321e-17, minus: 4.95065e-18}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 0.00548296, minus: -0.00528578}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 4.48892e-17, minus: -1.68411e-16}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 2.16404e-10, minus: 2.1551e-17}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 3.8682e-17}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 0.00212507, minus: -0.00209655}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 2.18067e-10, minus: 9.09119e-17}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.00831157, minus: 0.00829622}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.0272235, minus: 0.0269501}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.0113853, minus: 0.0110515}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -0.00775312, minus: 0.00786363}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.00894727, minus: 0.00873688}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 1.04088e-05, minus: 9.17057e-05}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -3.06104e-10, minus: 3.49978e-07}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -7.38898e-08, minus: 6.16422e-12}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -5.62212e-07, minus: 1.51696e-06}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -6.15444e-17, minus: 2.17797e-10}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.0585551, minus: 0.0589116}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -0.000100691, minus: 0.000105103}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -2.27919e-16, minus: 1.97094e-10}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.00831157}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.0240012, minus: 0.0235718}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 0.00138989, minus: -0.00128884}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.0157393, minus: -0.0157066}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.0112755, minus: 0.0113331}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 0.00752476, minus: -0.00741914}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.0234997, minus: -0.0230595}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.0238335, minus: -0.0242615}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 0.000813168, minus: -0.000578837}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0, minus: -0.00112516}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 0.0103714, minus: -0.0201231}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.0281752, minus: -0.0282868}, label: 'sysBackground'}
+         - {symerror: 0.0364913, label: syselectronBackground} 
+         - {symerror: 0.0256216, label: sysSignalLeakage} 
+         - {symerror: 0.0302974, label: sysUnfolding} 
+         - {asymerror: {plus: 0.000728196, minus: -0.000879096}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0.0183966, minus: -0.0205795}, label: 'sysPUrew'}
+         - {symerror: 0.00665527, label: sysMCstats} 
+         - {symerror: 0.00584908, label: sysTrigger} 
+         - {symerror: 0.000747802, label: sysUnfoldingClosure} 
+         - {symerror: 0.0182922, label: sysRecoEffPhoton} 
+         - {symerror: 0.151799, label: sysLumi} 
+     - value: 3.83699
+       errors:
+         - {symerror: 0.021227, label: stat} 
+         - {asymerror: {plus: 0.0245442, minus: -0.0242342}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 0.000215543, minus: -9.97814e-05}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 0.000227484, minus: -0.000214203}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 8.45192e-11, minus: -9.14003e-17}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 0.00163358, minus: -0.00102733}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 0.000424951, minus: -0.000768963}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 8.46324e-11, minus: 1.95066e-17}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -0.00141451, minus: 0.000742251}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -0.000918707, minus: 0.000670756}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 0.000603984, minus: -0.00130244}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -3.36607e-11, minus: 1.51027e-20}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 0.00234071, minus: -0.00227458}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 7.80207e-17, minus: -7.86668e-17}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.0493727, minus: -0.0478617}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.0360447, minus: 0.036535}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -2.94287e-18, minus: 8.47711e-11}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -4.0153e-18, minus: -3.79996e-17}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.00886453, minus: 0.00878731}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -6.24999e-11, minus: 2.12038e-08}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 0.00372746, minus: -0.00376385}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 9.5257e-11, minus: -2.76503e-17}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 0.00225265, minus: -0.00230902}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 0.00195119, minus: -0.00184359}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 0.00203123, minus: -0.00203117}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 7.10846e-06, minus: -1.3313e-06}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 1.67438e-07, minus: -1.31992e-10}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 2.64879e-12, minus: -3.17508e-08}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -1.98379e-17, minus: -1.65049e-08}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 4.00602e-18, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -7.64041e-12, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 0.00147222, minus: -0.00154164}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 3.20387e-17}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 0.0024691, minus: -0.0024048}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 0.00277059, minus: -0.00274342}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 4.29384e-05, minus: -1.8034e-07}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 3.27441e-07, minus: -1.31158e-10}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -1.13988e-16, minus: -3.15961e-08}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 3.27423e-17, minus: -1.86117e-08}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 1.51027e-20, minus: -3.28969e-17}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 8.48423e-11, minus: 1.31443e-17}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -8.69381e-18, minus: 2.12731e-18}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 0.00242926, minus: -0.00233391}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 1.92891e-17, minus: -7.23668e-17}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 9.29895e-11, minus: 9.26054e-18}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 1.66218e-17}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 0.000940866, minus: -0.000964817}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 9.37041e-11, minus: 3.90652e-17}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.00377476, minus: 0.00373225}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.0122815, minus: 0.0121152}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.00510217, minus: 0.00495552}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -0.00342782, minus: 0.00349685}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.0040933, minus: 0.00394705}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 4.47271e-06, minus: 3.94063e-05}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -1.31534e-10, minus: 1.50387e-07}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -3.17508e-08, minus: 2.64879e-12}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -2.41585e-07, minus: 6.51842e-07}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -2.64459e-17, minus: 9.35883e-11}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.0268969, minus: 0.0272388}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -4.32674e-05, minus: 4.5163e-05}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -9.79375e-17, minus: 8.46921e-11}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.00377476}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.0107249, minus: 0.0105215}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 0.000620374, minus: -0.000553417}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.006955, minus: -0.00696331}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.00498904, minus: 0.00498636}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 0.00340796, minus: -0.00328967}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.0105142, minus: -0.0102642}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.0104528, minus: -0.0106725}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 0.000219327, minus: -0.000141302}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.000353465, minus: 0}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 0.00325454, minus: -0.00709427}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.0127306, minus: -0.0128049}, label: 'sysBackground'}
+         - {symerror: 0.0156566, label: syselectronBackground} 
+         - {symerror: 0.00709822, label: sysSignalLeakage} 
+         - {symerror: 0.0130189, label: sysUnfolding} 
+         - {asymerror: {plus: 0.000509534, minus: -0.000386733}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0.00964338, minus: -0.00831336}, label: 'sysPUrew'}
+         - {symerror: 0.00336483, label: sysMCstats} 
+         - {symerror: 0.00319938, label: sysTrigger} 
+         - {symerror: 0.000306358, label: sysUnfoldingClosure} 
+         - {symerror: 0.00785842, label: sysRecoEffPhoton} 
+         - {symerror: 0.0652288, label: sysLumi} 
+     - value: 1.60773
+       errors:
+         - {symerror: 0.0123949, label: stat} 
+         - {asymerror: {plus: 0.0102397, minus: -0.010111}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 9.03144e-05, minus: -4.18093e-05}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 9.53176e-05, minus: -8.97529e-05}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 3.54143e-11, minus: -3.82975e-17}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 0.000684486, minus: -0.000430459}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 0.000178058, minus: -0.000322202}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 3.54617e-11, minus: 8.17343e-18}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -0.000592693, minus: 0.00031101}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -0.000384946, minus: 0.000281053}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 0.000253075, minus: -0.000545735}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -1.41041e-11, minus: 6.32816e-21}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 0.00101639, minus: -0.000998185}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 3.26914e-17, minus: -3.29621e-17}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.022284, minus: -0.0216319}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.0163073, minus: 0.0166119}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -1.23309e-18, minus: 3.55198e-11}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -1.68244e-18, minus: -1.59222e-17}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.00392351, minus: 0.00388354}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -2.6188e-11, minus: 8.88457e-09}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 0.00162261, minus: -0.00166186}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 3.99135e-11, minus: -1.15857e-17}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 0.000998549, minus: -0.00100739}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 0.000846753, minus: -0.000793794}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 0.000886983, minus: -0.000910667}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 1.99364e-06, minus: 2.14463e-06}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 7.01579e-08, minus: -5.53057e-11}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 1.10987e-12, minus: -1.33039e-08}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -8.31227e-18, minus: -6.91569e-09}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 1.67856e-18, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -3.2014e-12, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 0.000646433, minus: -0.000678195}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 1.34245e-17}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 0.0010679, minus: -0.00103395}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 0.00121844, minus: -0.00122589}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 1.79916e-05, minus: -7.55641e-08}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 1.37201e-07, minus: -5.49562e-11}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -4.77618e-17, minus: -1.32391e-08}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 1.37193e-17, minus: -7.79845e-09}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 6.32816e-21, minus: -1.37841e-17}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 3.55497e-11, minus: 5.50756e-18}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -3.64278e-18, minus: 8.91363e-19}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 0.0010568, minus: -0.00101299}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 8.08229e-18, minus: -3.03223e-17}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 3.89634e-11, minus: 3.88025e-18}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 6.96468e-18}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 0.000409109, minus: -0.000434472}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 3.92628e-11, minus: 1.63687e-17}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.00168257, minus: 0.00165181}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.00544173, minus: 0.00535912}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.00224879, minus: 0.00218723}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -0.00149126, minus: 0.00153238}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.00183352, minus: 0.00175271}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 1.8741e-06, minus: 1.65116e-05}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -5.51139e-11, minus: 6.30135e-08}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -1.33039e-08, minus: 1.10987e-12}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -1.01226e-07, minus: 2.73128e-07}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -1.10811e-17, minus: 3.92143e-11}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.0121784, minus: 0.0124116}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -1.81294e-05, minus: 1.89237e-05}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -4.10367e-17, minus: 3.54867e-11}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.00168257}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.00471066, minus: 0.00462462}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 0.000270678, minus: -0.000234026}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.00302337, minus: -0.00303309}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.00216831, minus: 0.00215714}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 0.00151428, minus: -0.00143499}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.00462493, minus: -0.00449985}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.00450981, minus: -0.00460983}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 5.15142e-05, minus: -2.58576e-05}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.000477589, minus: 0}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 0.000990511, minus: -0.00249055}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.00535747, minus: -0.00540326}, label: 'sysBackground'}
+         - {symerror: 0.0065483, label: syselectronBackground} 
+         - {symerror: 0.00243098, label: sysSignalLeakage} 
+         - {symerror: 0.00545505, label: sysUnfolding} 
+         - {asymerror: {plus: 0.000307607, minus: -0.000311184}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0.00404066, minus: -0.00348337}, label: 'sysPUrew'}
+         - {symerror: 0.00110116, label: sysMCstats} 
+         - {symerror: 0.00132816, label: sysTrigger} 
+         - {symerror: 0.000105318, label: sysUnfoldingClosure} 
+         - {symerror: 0.00329384, label: sysRecoEffPhoton} 
+         - {symerror: 0.0273314, label: sysLumi} 
+     - value: 0.674218
+       errors:
+         - {symerror: 0.00803449, label: stat} 
+         - {asymerror: {plus: 0.00428811, minus: -0.00423425}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 3.78742e-05, minus: -1.75331e-05}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 3.99724e-05, minus: -3.76387e-05}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 1.48513e-11, minus: -1.60604e-17}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 0.000287046, minus: -0.000180517}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 7.46705e-05, minus: -0.000135119}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 1.48712e-11, minus: 3.42761e-18}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -0.000248552, minus: 0.000130425}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -0.000161431, minus: 0.000117862}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 0.000106129, minus: -0.000228859}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -5.9147e-12, minus: 2.65378e-21}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 0.00044339, minus: -0.000440249}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 1.37094e-17, minus: -1.3823e-17}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.0100753, minus: -0.0097896}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.00742501, minus: 0.00759717}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -5.17108e-19, minus: 1.48956e-11}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -7.0555e-19, minus: -6.67712e-18}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.00174277, minus: 0.00172687}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -1.09822e-11, minus: 3.72583e-09}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 0.000711163, minus: -0.00073705}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 1.67381e-11, minus: -4.85858e-18}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 0.000444225, minus: -0.000442023}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 0.00037103, minus: -0.000345186}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 0.00039016, minus: -0.000408434}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 4.32616e-07, minus: 1.76299e-06}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 2.94214e-08, minus: -2.3193e-11}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 4.65433e-13, minus: -5.5791e-09}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -3.48583e-18, minus: -2.90016e-09}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 7.0392e-19, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -1.34254e-12, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 0.000284874, minus: -0.000298801}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 5.6297e-18}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 0.000466727, minus: -0.000448942}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 0.00053735, minus: -0.000547516}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 7.54493e-06, minus: -3.16886e-08}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 5.75364e-08, minus: -2.30464e-11}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -2.00294e-17, minus: -5.55193e-09}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 5.75333e-18, minus: -3.27035e-09}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 2.65378e-21, minus: -5.78049e-18}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 1.49081e-11, minus: 2.30965e-18}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -1.52764e-18, minus: 3.73802e-19}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 0.000462441, minus: -0.000443066}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 3.38939e-18, minus: -1.2716e-17}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 1.63397e-11, minus: 1.62722e-18}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 2.92071e-18}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 0.000179002, minus: -0.000195235}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 1.64653e-11, minus: 6.86436e-18}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.000751939, minus: 0.000735744}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.00242105, minus: 0.00238661}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.000997653, minus: 0.000972595}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -0.000654516, minus: 0.000678174}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.000820513, minus: 0.000782119}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 7.85924e-07, minus: 6.9243e-06}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -2.31126e-11, minus: 2.64253e-08}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -5.5791e-09, minus: 4.65433e-13}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -4.24502e-08, minus: 1.14539e-07}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -4.64695e-18, minus: 1.64449e-11}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.00554952, minus: 0.00568667}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -7.60275e-06, minus: 7.93584e-06}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -1.72091e-17, minus: 1.48817e-11}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.000751939}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.00208183, minus: 0.00205001}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 0.000118033, minus: -0.000100395}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.00132559, minus: -0.00132989}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.00094853, minus: 0.000941177}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 0.000674469, minus: -0.000631088}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.00204712, minus: -0.0019907}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.00196452, minus: -0.00200477}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 9.90428e-06, minus: -1.18329e-06}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.000319104, minus: 0}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 0.000307283, minus: -0.000904812}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.00183636, minus: -0.00185512}, label: 'sysBackground'}
+         - {symerror: 0.00274051, label: syselectronBackground} 
+         - {symerror: 0.000753823, label: sysSignalLeakage} 
+         - {symerror: 0.00159225, label: sysUnfolding} 
+         - {asymerror: {plus: 0.000266146, minus: -0.000258252}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0.00191328, minus: -0.00112192}, label: 'sysPUrew'}
+         - {symerror: 0.000737876, label: sysMCstats} 
+         - {symerror: 0.000557091, label: sysTrigger} 
+         - {symerror: 3.36416e-05, label: sysUnfoldingClosure} 
+         - {symerror: 0.00138134, label: sysRecoEffPhoton} 
+         - {symerror: 0.0114617, label: sysLumi} 
+     - value: 0.261551
+       errors:
+         - {symerror: 0.00408811, label: stat} 
+         - {asymerror: {plus: 0.00166097, minus: -0.00164014}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 1.46926e-05, minus: -6.80167e-06}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 1.55066e-05, minus: -1.46013e-05}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 5.76131e-12, minus: -6.23036e-18}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 0.000111354, minus: -7.00284e-05}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 2.89671e-05, minus: -5.24169e-05}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 5.76903e-12, minus: 1.32968e-18}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -9.64212e-05, minus: 5.05961e-05}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -6.26243e-05, minus: 4.57226e-05}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 4.1171e-05, minus: -8.87819e-05}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -2.29451e-12, minus: 1.02949e-21}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 0.000180646, minus: -0.000181647}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 5.31834e-18, minus: -5.36238e-18}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.00425492, minus: -0.00413616}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.00317928, minus: 0.0032666}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -2.00603e-19, minus: 5.77848e-12}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -2.73706e-19, minus: -2.59027e-18}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.000723267, minus: 0.00072006}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -4.26035e-12, minus: 1.44537e-09}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 0.000292143, minus: -0.000305747}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 6.49326e-12, minus: -1.8848e-18}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 0.000184683, minus: -0.000181522}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 0.000153003, minus: -0.000141234}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 0.000161027, minus: -0.000170608}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 4.04199e-09, minus: 8.75524e-07}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 1.14135e-08, minus: -8.99731e-12}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 1.80557e-13, minus: -2.16431e-09}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -1.35227e-18, minus: -1.12507e-09}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 2.73073e-19, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -5.20814e-13, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 0.000117204, minus: -0.000122533}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 2.18394e-18}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 0.000192149, minus: -0.000183372}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 0.000221006, minus: -0.000227369}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 2.92692e-06, minus: -1.2293e-08}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 2.23202e-08, minus: -8.94045e-12}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -7.77005e-18, minus: -2.15377e-09}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 2.2319e-18, minus: -1.26868e-09}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 1.02949e-21, minus: -2.24244e-18}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 5.78334e-12, minus: 8.95988e-19}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -5.92619e-19, minus: 1.4501e-19}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 0.000189387, minus: -0.000181841}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 1.31485e-18, minus: -4.93293e-18}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 6.3387e-12, minus: 6.31251e-19}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 1.13304e-18}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 7.3338e-05, minus: -8.14625e-05}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 6.38741e-12, minus: 2.66291e-18}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.000313776, minus: 0.000307471}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.00100733, minus: 0.000997633}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.00041517, minus: 0.000406281}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -0.000270063, minus: 0.000282769}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.000341289, minus: 0.000326845}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 3.04886e-07, minus: 2.68616e-06}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -8.96611e-12, minus: 1.02512e-08}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -2.16431e-09, minus: 1.80557e-13}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -1.64678e-08, minus: 4.44333e-08}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -1.8027e-18, minus: 6.37952e-12}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.00237836, minus: 0.00244914}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -2.94935e-06, minus: 3.07857e-06}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -6.67598e-18, minus: 5.7731e-12}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.000313776}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.000862257, minus: 0.000854647}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 4.77052e-05, minus: -4.07611e-05}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.000546151, minus: -0.000546387}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.000388681, minus: 0.000385691}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 0.000280329, minus: -0.000260723}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.000849424, minus: -0.000828776}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.000804945, minus: -0.000816637}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 2.44753e-06, minus: 0}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.000167795, minus: 0}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 0.00011266, minus: -0.000308996}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.000556287, minus: -0.000562818}, label: 'sysBackground'}
+         - {symerror: 0.00106043, label: syselectronBackground} 
+         - {symerror: 0.000292432, label: sysSignalLeakage} 
+         - {symerror: 0.000617686, label: sysUnfolding} 
+         - {asymerror: {plus: 0.00011111, minus: -0.000115359}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0.000742224, minus: -0.000435229}, label: 'sysPUrew'}
+         - {symerror: 0.000363838, label: sysMCstats} 
+         - {symerror: 0.000216151, label: sysTrigger} 
+         - {symerror: 9.77624e-06, label: sysUnfoldingClosure} 
+         - {symerror: 0.000535746, label: sysRecoEffPhoton} 
+         - {symerror: 0.00444637, label: sysLumi} 
+     - value: 0.0784546
+       errors:
+         - {symerror: 0.00197737, label: stat} 
+         - {asymerror: {plus: 0.000496593, minus: -0.000490385}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 4.40719e-06, minus: -2.04022e-06}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 4.65134e-06, minus: -4.37979e-06}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 1.72816e-12, minus: -1.86885e-18}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 3.34018e-05, minus: -2.10057e-05}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 8.68895e-06, minus: -1.57229e-05}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 1.73047e-12, minus: 3.9885e-19}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -2.89224e-05, minus: 1.51768e-05}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -1.87847e-05, minus: 1.37149e-05}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 1.23496e-05, minus: -2.66309e-05}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -6.88258e-13, minus: 3.08804e-22}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 5.79948e-05, minus: -5.92495e-05}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 1.59528e-18, minus: -1.6085e-18}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.0014174, minus: -0.00137736}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.0010873, minus: 0.00112154}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -6.01727e-20, minus: 1.73331e-12}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -8.21005e-20, minus: -7.76976e-19}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -0.000236745, minus: 0.000238446}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -1.27793e-12, minus: 4.33552e-10}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 9.52264e-05, minus: -0.000100238}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 1.94771e-12, minus: -5.65363e-19}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 6.05851e-05, minus: -5.89821e-05}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 5.04542e-05, minus: -4.6202e-05}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 5.28379e-05, minus: -5.58883e-05}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: -4.97341e-08, minus: 2.15883e-07}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 3.42359e-09, minus: -2.69883e-12}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 5.41597e-14, minus: -6.49206e-10}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -4.05625e-19, minus: -3.37474e-10}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 8.19109e-20, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -1.56223e-13, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 3.79712e-05, minus: -3.93325e-05}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 6.55094e-19}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 6.33755e-05, minus: -5.98648e-05}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 7.14258e-05, minus: -7.37938e-05}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 8.77958e-07, minus: -3.6874e-09}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 6.69516e-09, minus: -2.68177e-12}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -2.3307e-18, minus: -6.46044e-10}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 6.6948e-19, minus: -3.80551e-10}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 3.08804e-22, minus: -6.7264e-19}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 1.73476e-12, minus: 2.6876e-19}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -1.77762e-19, minus: 4.34971e-20}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 6.13673e-05, minus: -5.93469e-05}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 3.94402e-19, minus: -1.47968e-18}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 1.90135e-12, minus: 1.8935e-19}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 3.39865e-19}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 2.37977e-05, minus: -2.65054e-05}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 1.91596e-12, minus: 7.98764e-19}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -0.00010317, minus: 0.00010215}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -0.000331166, minus: 0.000331797}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -0.00013729, minus: 0.000135233}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -8.89254e-05, minus: 9.44532e-05}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -0.000110882, minus: 0.000108215}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 9.14532e-08, minus: 8.05738e-07}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -2.68947e-12, minus: 3.07495e-09}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -6.49206e-10, minus: 5.41597e-14}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -4.93967e-09, minus: 1.33282e-08}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -5.40737e-19, minus: 1.91359e-12}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.00081427, minus: 0.00084205}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -8.84686e-07, minus: 9.23445e-07}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -2.00252e-18, minus: 1.73169e-12}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -0.00010317}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -0.000283306, minus: 0.000284504}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 1.49598e-05, minus: -1.33929e-05}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 0.000179424, minus: -0.000178031}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -0.000126236, minus: 0.000125928}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 9.16826e-05, minus: -8.58316e-05}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 0.000279741, minus: -0.000275837}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 0.00026353, minus: -0.000263655}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 1.4499e-06, minus: -7.70086e-07}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 6.38487e-05, minus: 0}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 3.37933e-05, minus: -8.23412e-05}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.000286807, minus: -0.000291005}, label: 'sysBackground'}
+         - {symerror: 0.000316949, label: syselectronBackground} 
+         - {symerror: 8.77178e-05, label: sysSignalLeakage} 
+         - {symerror: 0.000185281, label: sysUnfolding} 
+         - {asymerror: {plus: 4.20861e-05, minus: -4.55977e-05}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 5.56275e-05, minus: -7.12223e-05}, label: 'sysPUrew'}
+         - {symerror: 0.000143956, label: sysMCstats} 
+         - {symerror: 6.51709e-05, label: sysTrigger} 
+         - {symerror: 2.6915e-06, label: sysUnfoldingClosure} 
+         - {symerror: 0.000160929, label: sysRecoEffPhoton} 
+         - {symerror: 0.00133373, label: sysLumi} 
+     - value: 0.0149458
+       errors:
+         - {symerror: 0.000626897, label: stat} 
+         - {asymerror: {plus: 9.42865e-05, minus: -9.31117e-05}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 8.39579e-07, minus: -3.88667e-07}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 8.8609e-07, minus: -8.34359e-07}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 3.29217e-13, minus: -3.56021e-19}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 6.36311e-06, minus: -4.00162e-06}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 1.65526e-06, minus: -2.99525e-06}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 3.29659e-13, minus: 7.59817e-20}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -5.50978e-06, minus: 2.8912e-06}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -3.57853e-06, minus: 2.61272e-06}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 2.35263e-06, minus: -5.07325e-06}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -1.31115e-13, minus: 5.88278e-23}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 1.2385e-05, minus: -1.29471e-05}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 3.03905e-19, minus: -3.06422e-19}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 0.000313846, minus: -0.000304208}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -0.000254981, minus: 0.000263841}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -1.1463e-20, minus: 3.30199e-13}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -1.56403e-20, minus: -1.48015e-19}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -5.15531e-05, minus: 5.34812e-05}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -2.43448e-13, minus: 8.25926e-11}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 2.10181e-05, minus: -2.19844e-05}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 3.71043e-13, minus: -1.07703e-19}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 1.3236e-05, minus: -1.28787e-05}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 1.1489e-05, minus: -1.04487e-05}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 1.17928e-05, minus: -1.19817e-05}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: -1.68911e-08, minus: -3.99108e-08}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 6.52201e-10, minus: -5.14132e-13}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 1.03175e-14, minus: -1.23675e-10}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -7.72724e-20, minus: -6.42895e-11}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 1.56042e-20, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -2.97608e-14, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 8.155e-06, minus: -8.23027e-06}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 1.24797e-19}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 1.45061e-05, minus: -1.35045e-05}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 1.52123e-05, minus: -1.55253e-05}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 1.67253e-07, minus: -7.02458e-10}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 1.27544e-09, minus: -5.10883e-13}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -4.44003e-19, minus: -1.23073e-10}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 1.27537e-19, minus: -7.24958e-11}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 5.88278e-23, minus: -1.28139e-19}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 3.30476e-13, minus: 5.11993e-20}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -3.3864e-20, minus: 8.28628e-21}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 1.33674e-05, minus: -1.31941e-05}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 7.51344e-20, minus: -2.81882e-19}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 3.62211e-13, minus: 3.60715e-20}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 6.4745e-20}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 5.20523e-06, minus: -5.55263e-06}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 3.64995e-13, minus: 1.52166e-19}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -2.24952e-05, minus: 2.30415e-05}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -7.2768e-05, minus: 7.50785e-05}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -3.08038e-05, minus: 3.07452e-05}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -2.01122e-05, minus: 2.18471e-05}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -2.33115e-05, minus: 2.41102e-05}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 1.7422e-08, minus: 1.53495e-07}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -5.12349e-13, minus: 5.85785e-10}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -1.23675e-10, minus: 1.03175e-14}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -9.41018e-10, minus: 2.53904e-09}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -1.03011e-19, minus: 3.64544e-13}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -0.000191241, minus: 0.000198239}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -1.68534e-07, minus: 1.75918e-07}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -3.81485e-19, minus: 3.29891e-13}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -2.24952e-05}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -6.29124e-05, minus: 6.50497e-05}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 2.98224e-06, minus: -3.14123e-06}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 4.04131e-05, minus: -3.92236e-05}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -2.76888e-05, minus: 2.81578e-05}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 1.98172e-05, minus: -1.93307e-05}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 6.23354e-05, minus: -6.32548e-05}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 5.95276e-05, minus: -5.75494e-05}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 3.94849e-07, minus: -2.90376e-07}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 1.50893e-05, minus: 0}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 6.4377e-06, minus: -1.39714e-05}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 1.90378e-05, minus: -1.94185e-05}, label: 'sysBackground'}
+         - {symerror: 6.00085e-05, label: syselectronBackground} 
+         - {symerror: 1.67104e-05, label: sysSignalLeakage} 
+         - {symerror: 9.02008e-06, label: sysUnfolding} 
+         - {asymerror: {plus: 7.76722e-06, minus: -7.67972e-06}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 1.05971e-05, minus: -1.3568e-05}, label: 'sysPUrew'}
+         - {symerror: 1.13863e-05, label: sysMCstats} 
+         - {symerror: 1.24545e-05, label: sysTrigger} 
+         - {symerror: 4.79672e-07, label: sysUnfoldingClosure} 
+         - {symerror: 3.06252e-05, label: sysRecoEffPhoton} 
+         - {symerror: 0.000254078, label: sysLumi} 
+     - value: 0.00138834
+       errors:
+         - {symerror: 0.0002005, label: stat} 
+         - {asymerror: {plus: 8.71864e-06, minus: -8.61048e-06}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 7.79902e-08, minus: -3.6104e-08}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 8.23107e-08, minus: -7.75053e-08}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 3.05817e-14, minus: -3.30715e-20}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 5.91082e-07, minus: -3.71719e-07}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 1.53761e-07, minus: -2.78235e-07}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 3.06226e-14, minus: 7.05809e-21}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -5.11815e-07, minus: 2.6857e-07}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -3.32417e-07, minus: 2.42701e-07}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 2.1854e-07, minus: -4.71264e-07}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -1.21795e-14, minus: 5.46463e-24}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 1.35723e-06, minus: -1.45698e-06}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 2.82303e-20, minus: -2.84641e-20}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 3.47653e-05, minus: -3.34651e-05}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -3.12779e-05, minus: 3.23618e-05}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -1.06482e-21, minus: 3.06728e-14}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -1.45286e-21, minus: -1.37495e-20}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -5.68536e-06, minus: 6.24957e-06}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -2.26144e-14, minus: 7.67219e-12}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 2.44061e-06, minus: -2.46772e-06}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 3.44669e-14, minus: -1.00047e-20}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 1.46564e-06, minus: -1.46089e-06}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 1.41428e-06, minus: -1.28676e-06}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 1.39012e-06, minus: -1.25408e-06}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: -5.73735e-10, minus: -2.94695e-08}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 6.05843e-11, minus: -4.77587e-14}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 9.58416e-16, minus: -1.14884e-11}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -7.17799e-21, minus: -5.97198e-12}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 1.4495e-21, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -2.76454e-15, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 8.86402e-07, minus: -8.44298e-07}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 1.15926e-20}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 1.80948e-06, minus: -1.65992e-06}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 1.62122e-06, minus: -1.56769e-06}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 1.55364e-08, minus: -6.52527e-11}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 1.18478e-10, minus: -4.74569e-14}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -4.12443e-20, minus: -1.14325e-11}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 1.18472e-20, minus: -6.73428e-12}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 5.46463e-24, minus: -1.19031e-20}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 3.06986e-14, minus: 4.75601e-21}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -3.14569e-21, minus: 7.69729e-22}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 1.51673e-06, minus: -1.55919e-06}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 6.97939e-21, minus: -2.61846e-20}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 3.36465e-14, minus: 3.35075e-21}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 6.01429e-21}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 5.95623e-07, minus: -5.47929e-07}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 3.39051e-14, minus: 1.4135e-20}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -2.4604e-06, minus: 2.71461e-06}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -8.15388e-06, minus: 8.90123e-06}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -3.61575e-06, minus: 3.68632e-06}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -2.43912e-06, minus: 2.722e-06}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -2.34036e-06, minus: 2.76455e-06}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 1.61837e-09, minus: 1.42584e-08}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -4.75931e-14, minus: 5.44147e-11}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -1.14884e-11, minus: 9.58416e-16}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -8.7413e-11, minus: 2.35857e-10}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -9.56894e-21, minus: 3.38632e-14}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -2.34981e-05, minus: 2.42906e-05}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -1.56555e-08, minus: 1.63414e-08}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -3.54369e-20, minus: 3.06443e-14}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -2.4604e-06}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -7.28524e-06, minus: 7.91966e-06}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 2.7788e-07, minus: -4.19963e-07}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 4.87273e-06, minus: -4.53532e-06}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -3.1872e-06, minus: 3.37793e-06}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 2.14014e-06, minus: -2.31852e-06}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 7.24794e-06, minus: -7.76642e-06}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 7.29399e-06, minus: -6.63387e-06}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 4.38364e-08, minus: -3.5642e-08}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 1.64425e-06, minus: 0}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 5.98011e-07, minus: -1.19437e-06}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 1.75734e-05, minus: -1.82906e-05}, label: 'sysBackground'}
+         - {symerror: 5.52262e-06, label: syselectronBackground} 
+         - {symerror: 1.55226e-06, label: sysSignalLeakage} 
+         - {symerror: 8.37894e-07, label: sysUnfolding} 
+         - {asymerror: {plus: 6.87737e-07, minus: -9.23182e-07}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0, minus: -1.68421e-06}, label: 'sysPUrew'}
+         - {symerror: 3.18163e-06, label: sysMCstats} 
+         - {symerror: 1.1084e-06, label: sysTrigger} 
+         - {symerror: 5.32819e-08, label: sysUnfoldingClosure} 
+         - {symerror: 2.84357e-06, label: sysRecoEffPhoton} 
+         - {symerror: 2.36018e-05, label: sysLumi} 
+     - value: 7.90663e-05
+       errors:
+         - {symerror: 4.09727e-05, label: stat} 
+         - {asymerror: {plus: 5.04369e-07, minus: -4.98016e-07}, label: 'sysPhotonID'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'RESOLUTION_AF2'}
+         - {asymerror: {plus: 4.44156e-09, minus: -2.05613e-09}, label: 'RESOLUTION_MATERIALCALO'}
+         - {asymerror: {plus: 4.68761e-09, minus: -4.41394e-09}, label: 'RESOLUTION_MATERIALCRYO'}
+         - {asymerror: {plus: 1.74163e-15, minus: -1.88343e-21}, label: 'RESOLUTION_MATERIALGAP'}
+         - {asymerror: {plus: 3.36622e-08, minus: -2.11695e-08}, label: 'RESOLUTION_MATERIALIBL'}
+         - {asymerror: {plus: 8.7567e-09, minus: -1.58455e-08}, label: 'RESOLUTION_MATERIALID'}
+         - {asymerror: {plus: 1.74397e-15, minus: 4.0196e-22}, label: 'RESOLUTION_MATERIALPP0'}
+         - {asymerror: {plus: -2.91479e-08, minus: 1.52951e-08}, label: 'RESOLUTION_PILEUP'}
+         - {asymerror: {plus: -1.89312e-08, minus: 1.38218e-08}, label: 'RESOLUTION_SAMPLINGTERM'}
+         - {asymerror: {plus: 1.24459e-08, minus: -2.68386e-08}, label: 'RESOLUTION_ZSMEARING'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_AF2'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_E4SCINTILLATOR__ETABIN1'}
+         - {asymerror: {plus: -6.93624e-16, minus: 3.11212e-25}, label: 'SCALE_E4SCINTILLATOR__ETABIN2'}
+         - {asymerror: {plus: 9.20194e-08, minus: -1.0091e-07}, label: 'SCALE_G4'}
+         - {asymerror: {plus: 1.60772e-21, minus: -1.62104e-21}, label: 'SCALE_L1GAIN'}
+         - {asymerror: {plus: 3.34902e-06, minus: -3.34895e-06}, label: 'SCALE_L2GAIN'}
+         - {asymerror: {plus: -3.36422e-06, minus: 3.24656e-06}, label: 'SCALE_LARCALIB__ETABIN0'}
+         - {asymerror: {plus: -6.06419e-23, minus: 1.74682e-15}, label: 'SCALE_LARCALIB__ETABIN1'}
+         - {asymerror: {plus: -8.27407e-23, minus: -7.83034e-22}, label: 'SCALE_LARELECCALIB'}
+         - {asymerror: {plus: -3.80302e-07, minus: 4.49754e-07}, label: 'SCALE_LARELECUNCONV__ETABIN0'}
+         - {asymerror: {plus: -1.2879e-15, minus: 4.36933e-13}, label: 'SCALE_LARELECUNCONV__ETABIN1'}
+         - {asymerror: {plus: 1.76882e-07, minus: -1.69308e-07}, label: 'SCALE_LARUNCONVCALIB__ETABIN0'}
+         - {asymerror: {plus: 1.9629e-15, minus: -5.69771e-22}, label: 'SCALE_LARUNCONVCALIB__ETABIN1'}
+         - {asymerror: {plus: 9.8413e-08, minus: -1.02799e-07}, label: 'SCALE_MATCALO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN11'}
+         - {asymerror: {plus: 1.09352e-07, minus: -1.00232e-07}, label: 'SCALE_MATCALO__ETABIN1'}
+         - {asymerror: {plus: 1.02144e-07, minus: -7.6746e-08}, label: 'SCALE_MATCALO__ETABIN2'}
+         - {asymerror: {plus: 1.92915e-10, minus: -4.46831e-09}, label: 'SCALE_MATCALO__ETABIN3'}
+         - {asymerror: {plus: 3.45029e-12, minus: -2.71987e-15}, label: 'SCALE_MATCALO__ETABIN4'}
+         - {asymerror: {plus: 5.4582e-17, minus: -6.54268e-13}, label: 'SCALE_MATCALO__ETABIN5'}
+         - {asymerror: {plus: -4.08788e-22, minus: -3.40106e-13}, label: 'SCALE_MATCALO__ETABIN6'}
+         - {asymerror: {plus: 8.25496e-23, minus: 0}, label: 'SCALE_MATCALO__ETABIN7'}
+         - {asymerror: {plus: -1.57441e-16, minus: 0}, label: 'SCALE_MATCALO__ETABIN8'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCALO__ETABIN9'}
+         - {asymerror: {plus: 5.86739e-08, minus: -5.12897e-08}, label: 'SCALE_MATCRYO__ETABIN0'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_MATCRYO__ETABIN10'}
+         - {asymerror: {plus: 0, minus: 6.60202e-22}, label: 'SCALE_MATCRYO__ETABIN11'}
+         - {asymerror: {plus: 1.4214e-07, minus: -1.29232e-07}, label: 'SCALE_MATCRYO__ETABIN1'}
+         - {asymerror: {plus: 1.04248e-07, minus: -9.08935e-08}, label: 'SCALE_MATCRYO__ETABIN2'}
+         - {asymerror: {plus: 8.84804e-10, minus: -3.71616e-12}, label: 'SCALE_MATCRYO__ETABIN3'}
+         - {asymerror: {plus: 6.74736e-12, minus: -2.70268e-15}, label: 'SCALE_MATCRYO__ETABIN4'}
+         - {asymerror: {plus: -2.34887e-21, minus: -6.51081e-13}, label: 'SCALE_MATCRYO__ETABIN5'}
+         - {asymerror: {plus: 6.747e-22, minus: -3.83519e-13}, label: 'SCALE_MATCRYO__ETABIN6'}
+         - {asymerror: {plus: 3.11212e-25, minus: -6.77885e-22}, label: 'SCALE_MATCRYO__ETABIN7'}
+         - {asymerror: {plus: 1.74829e-15, minus: 2.70856e-22}, label: 'SCALE_MATCRYO__ETABIN8'}
+         - {asymerror: {plus: -1.79148e-22, minus: 4.38362e-23}, label: 'SCALE_MATCRYO__ETABIN9'}
+         - {asymerror: {plus: 1.07095e-07, minus: -1.15549e-07}, label: 'SCALE_MATID__ETABIN0'}
+         - {asymerror: {plus: 3.97478e-22, minus: -1.49122e-21}, label: 'SCALE_MATID__ETABIN1'}
+         - {asymerror: {plus: 1.91618e-15, minus: 1.90826e-22}, label: 'SCALE_MATID__ETABIN2'}
+         - {asymerror: {plus: 0, minus: 3.42515e-22}, label: 'SCALE_MATID__ETABIN3'}
+         - {asymerror: {plus: 4.24972e-08, minus: -3.01927e-08}, label: 'SCALE_MATPP0__ETABIN0'}
+         - {asymerror: {plus: 1.9309e-15, minus: 8.04992e-22}, label: 'SCALE_MATPP0__ETABIN1'}
+         - {asymerror: {plus: -1.6157e-07, minus: 1.96959e-07}, label: 'SCALE_PEDESTAL'}
+         - {asymerror: {plus: -5.56241e-07, minus: 6.5075e-07}, label: 'SCALE_PS_BARREL_B12'}
+         - {asymerror: {plus: -2.62182e-07, minus: 2.73381e-07}, label: 'SCALE_PS__ETABIN0'}
+         - {asymerror: {plus: -1.85365e-07, minus: 2.11317e-07}, label: 'SCALE_PS__ETABIN1'}
+         - {asymerror: {plus: -1.33932e-07, minus: 1.93694e-07}, label: 'SCALE_PS__ETABIN2'}
+         - {asymerror: {plus: 9.21663e-11, minus: 8.12021e-10}, label: 'SCALE_PS__ETABIN3'}
+         - {asymerror: {plus: -2.71044e-15, minus: 3.09893e-12}, label: 'SCALE_PS__ETABIN4'}
+         - {asymerror: {plus: -6.54268e-13, minus: 5.4582e-17}, label: 'SCALE_PS__ETABIN5'}
+         - {asymerror: {plus: -4.97819e-12, minus: 1.34321e-11}, label: 'SCALE_PS__ETABIN6'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_PS__ETABIN7'}
+         - {asymerror: {plus: -5.44953e-22, minus: 1.92852e-15}, label: 'SCALE_PS__ETABIN8'}
+         - {asymerror: {plus: -2.65351e-06, minus: 2.32402e-06}, label: 'SCALE_S12__ETABIN0'}
+         - {asymerror: {plus: -8.91584e-10, minus: 9.30646e-10}, label: 'SCALE_S12__ETABIN1'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN2'}
+         - {asymerror: {plus: -2.01814e-21, minus: 1.7452e-15}, label: 'SCALE_S12__ETABIN3'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'SCALE_S12__ETABIN4'}
+         - {asymerror: {plus: 0, minus: -1.6157e-07}, label: 'SCALE_TOPOCLUSTER_THRES'}
+         - {asymerror: {plus: -5.21737e-07, minus: 5.99067e-07}, label: 'SCALE_WTOTS1'}
+         - {asymerror: {plus: 1.44695e-08, minus: -3.57125e-08}, label: 'SCALE_ZEESTAT'}
+         - {asymerror: {plus: 3.68349e-07, minus: -3.2691e-07}, label: 'SCALE_ZEESYST'}
+         - {asymerror: {plus: -2.2908e-07, minus: 2.55159e-07}, label: 'PH_SCALE_CONVEFFICIENCY'}
+         - {asymerror: {plus: 1.38545e-07, minus: -1.73755e-07}, label: 'PH_SCALE_CONVFAKERATE'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'PH_SCALE_CONVRADIUS'}
+         - {asymerror: {plus: 5.2081e-07, minus: -5.93881e-07}, label: 'PH_SCALE_LEAKAGECONV'}
+         - {asymerror: {plus: 5.64316e-07, minus: -4.80755e-07}, label: 'PH_SCALE_LEAKAGEUNCONV'}
+         - {asymerror: {plus: 2.69479e-09, minus: -2.26996e-09}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 1.02775e-07, minus: 0}, label: 'sysBackgroundIsolationUpperLimit'}
+         - {asymerror: {plus: 3.40568e-08, minus: -6.51537e-08}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 1.00081e-06, minus: -1.04165e-06}, label: 'sysBackground'}
+         - {symerror: 3.11243e-07, label: syselectronBackground} 
+         - {symerror: 8.84018e-08, label: sysSignalLeakage} 
+         - {symerror: 4.77182e-08, label: sysUnfolding} 
+         - {asymerror: {plus: 5.08901e-08, minus: -5.27643e-08}, label: 'sysIsolationMC'}
+         - {asymerror: {plus: 0, minus: -9.59161e-08}, label: 'sysPUrew'}
+         - {symerror: 3.54241e-07, label: sysMCstats} 
+         - {symerror: 7.57595e-08, label: sysTrigger} 
+         - {symerror: 2.98243e-09, label: sysUnfoldingClosure} 
+         - {symerror: 1.61798e-07, label: sysRecoEffPhoton} 
+         - {symerror: 1.34413e-06, label: sysLumi} 

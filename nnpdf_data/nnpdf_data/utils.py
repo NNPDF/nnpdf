@@ -102,6 +102,7 @@ def get_nnpdf_profile(profile_path=None):
         "validphys_cache_path",
         "hyperscan_path",
         "ekos_path",
+        "photons_qed_path",
     ]:
         # if there are any problems setting or getting these variable erroring out is more than justified
         absolute_var = nnpdf_share / pathlib.Path(profile_dict[var]).expanduser()
