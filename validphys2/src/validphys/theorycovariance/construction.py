@@ -456,13 +456,10 @@ def total_theory_covmat(theory_covmat_custom, user_covmat):
     return theory_covmat_custom + user_covmat
 
 
-def theory_covmat_custom_fitting(theory_covmat_custom_per_prescription, procs_index_matched):
-    """theory_covmat_custom_per_prescription but reindexed so the order of the datasets matches
-    those in the experiment covmat so they are aligned when fitting."""
-    df = theory_covmat_custom_per_prescription.reindex(procs_index_matched).T.reindex(
-        procs_index_matched
-    )
-    return df
+def _reindex_covmat_to_fitting_order(covmat, index):
+    """Reindex a covmat DataFrame so the dataset ordering matches the experiment
+    covmat (the grouped/runcard order) used when fitting."""
+    return covmat.reindex(index).T.reindex(index)
 
 
 theory_covmats_fitting = collect(theory_covmat_custom_per_prescription, ("point_prescriptions",))
@@ -474,16 +471,33 @@ def theory_covmat_custom(theory_covmats_fitting):
     return sum(theory_covmats_fitting)
 
 
-def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):
-    """total_theory_covmat but reindexed so the order of the datasets matches
-    those in the experiment covmat so they are aligned when fitting."""
-    return theory_covmat_custom_fitting(total_theory_covmat, procs_index_matched)
+def data_input_matched_procs_index(data_input, procs_index):
+    """procs_index ordered according to data_input (runcard order), so that
+    nnfit_theory_covmat is stored in the same order as loaded_theory_covmat."""
+    tups = []
+    for ds in data_input:
+        for orig in procs_index:
+            if orig[1] == str(ds):
+                tups.append(orig)
+    return pd.MultiIndex.from_tuples(tups, names=("process", "dataset", "id"))
 
 
-def user_covmat_fitting(user_covmat, procs_index_matched):
-    """user_covmat but reindexed so the order of the datasets matches
-    those in the experiment covmat so they are aligned when fitting."""
-    return theory_covmat_custom_fitting(user_covmat, procs_index_matched)
+def theory_covmat_custom_fitting(theory_covmat_custom, data_input_matched_procs_index):
+    """theory_covmat_custom (summed over all point prescriptions) reindexed to
+    data_input (runcard) order so it aligns with loaded_theory_covmat in n3fit."""
+    return _reindex_covmat_to_fitting_order(theory_covmat_custom, data_input_matched_procs_index)
+
+
+def total_theory_covmat_fitting(total_theory_covmat, data_input_matched_procs_index):
+    """total_theory_covmat reindexed to data_input (runcard) order so it aligns
+    with loaded_theory_covmat in n3fit."""
+    return _reindex_covmat_to_fitting_order(total_theory_covmat, data_input_matched_procs_index)
+
+
+def user_covmat_fitting(user_covmat, data_input_matched_procs_index):
+    """user_covmat reindexed to data_input (runcard) order so it aligns with
+    loaded_theory_covmat in n3fit."""
+    return _reindex_covmat_to_fitting_order(user_covmat, data_input_matched_procs_index)
 
 
 def procs_index_matched(groups_index, procs_index):
