@@ -177,7 +177,11 @@ class SetupFitConfig(Config):
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
 
         # Add rotation action for the total covariance matrix
-        if file_content.get('theorycovmatconfig') is not None:
+
+        # if file_content.get('theorycovmatconfig') is not None:
+        if (thconfig := file_content.get('theorycovmatconfig')) is not None and thconfig.get(
+            'use_thcovmat_in_fitting', True
+        ):
             rotation_action = 'datacuts::theory::theorycovmatconfig fitting_covmat_table'
         else:
             rotation_action = 'datacuts::theory fitting_covmat_table'
