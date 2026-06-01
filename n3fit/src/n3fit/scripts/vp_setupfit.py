@@ -41,10 +41,11 @@ from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.loader import FallbackLoader, PhotonQEDNotFound, TheoryNotFound
 from validphys.utils import yaml_safe
 
+
 loader = FallbackLoader()
 
 SETUPFIT_FIXED_CONFIG = dict(
-    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action']
+    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action', 'theory fktable_hasher']
 )
 
 SETUPFIT_PROVIDERS = [
@@ -286,6 +287,7 @@ class SetupFitApp(App):
 
             # if succeeded print md5
             self.environment.save_md5()
+
         except SetupFitError as e:
             log.error(f"Error in setup-fit:\n{e}")
             sys.exit(1)
