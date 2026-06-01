@@ -99,7 +99,7 @@ fiatlux = {version = "*", optional = true}
 pdfflow = {version = "^1.2.1", optional = true}
 lhapdf-management = {version = "^0.6", optional = true}
 # neopdf interpolation backend
-neopdf-hep = {version = "*", optional = true}
+neopdf-hep = {version = "^0.3", optional = true}
 # torch
 torch = {version = "*", optional = true}
 # jax
