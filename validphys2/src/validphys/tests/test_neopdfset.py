@@ -330,9 +330,9 @@ class TestBackendFactory:
 
     def test_invalid_env_var_raises(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "pdfflow_is_not_valid_here")
-        from validphys.pdf_backends import make_pdfset
+        from validphys.pdf_backends import InvalidPDFBackend, make_pdfset
 
-        with pytest.raises(ValueError, match="Unknown PDF backend"):
+        with pytest.raises(InvalidPDFBackend, match="Unknown PDF backend"):
             make_pdfset(PDF_NAME, "replicas")
 
     def test_kwarg_overrides_env_var(self, monkeypatch):
