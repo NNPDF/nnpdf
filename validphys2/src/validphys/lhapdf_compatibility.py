@@ -37,6 +37,24 @@ class InvalidPDFBackend(Exception):
     pass
 
 
+def _active_backend():
+    """Return the active PDF backend.
+
+    Resolution order (highest priority first):
+    1. ``NNPDF_PDF_BACKEND`` environment variable
+    2. ``pdf_backend`` key in the NNPDF profile (``nnprofile.yaml``)
+    """
+    backend = os.environ.get(_BACKEND_ENV_VAR)
+    if backend is None:
+        try:
+            from nnpdf_data.utils import get_nnpdf_profile
+
+            backend = get_nnpdf_profile().get("pdf_backend", "lhapdf")
+        except Exception:
+            backend = "lhapdf"
+    return backend.lower()
+
+
 class _PDFFlowPDF:
     """Wrapper around the PDFFlow PDF so that it can be used as an LHAPDF
     set by validphys
@@ -167,7 +185,7 @@ def make_pdf(pdf_name, member=None):
     --------
         list(pdf_sets)
     """
-    backend = os.environ.get(_BACKEND_ENV_VAR, "lhapdf").lower()
+    backend = _active_backend()
 
     if backend not in _VALID_BACKENDS:
         raise InvalidPDFBackend(
