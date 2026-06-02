@@ -291,7 +291,7 @@ class TestBackendFactory:
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "pdfflow_is_not_valid_here")
         from validphys.lhapdf_compatibility import InvalidPDFBackend, make_pdf
 
-        with pytest.raises(InvalidPDFBackend, match="Unknown PDF backend"):
+        with pytest.raises(InvalidPDFBackend, match="Unknown backend"):
             make_pdf(PDF_NAME)
 
     def test_neopdf_single_member_returns_neopdf_member(self, monkeypatch):

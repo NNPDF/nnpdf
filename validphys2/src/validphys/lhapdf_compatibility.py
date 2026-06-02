@@ -6,8 +6,9 @@ If LHAPDF is not available, it will try to use a combination of the packages
     `lhapdf-management` and `pdfflow`
 which cover all the features of LHAPDF used during the fit (and likely most of validphys).
 
-The NeoPDF interpolation library can be selected explicitly by setting the environment
-variable ``NNPDF_PDF_BACKEND=neopdf``.
+The NeoPDF interpolation library can be selected by setting ``pdf_backend: neopdf``
+in the NNPDF profile (``nnprofile.yaml``), or via the ``NNPDF_PDF_BACKEND`` environment
+variable which takes precedence over the profile.
 """
 
 from functools import cached_property
@@ -30,7 +31,7 @@ except ModuleNotFoundError:
     USING_LHAPDF = False
 
 _BACKEND_ENV_VAR = "NNPDF_PDF_BACKEND"
-_VALID_BACKENDS = ("lhapdf", "neopdf")
+_VALID_BACKENDS = ("lhapdf", "pdfflow", "neopdf")
 
 
 class InvalidPDFBackend(Exception):
@@ -61,10 +62,12 @@ class _PDFFlowPDF:
     Takes as input a pdf_meta object (which is a PDFset from lhapdf_management
     and which knows where the PDF needs to be loaded from) and a single member
 
-    Loading the PDF is done in a lazy manner since most of the time only a few members are needed.
+    Loading the PDF is done in a lazy manner since most of the time only a few
+    members are needed.
 
-    Since PDFFlow is only utilized to load the PDF for interpolation, the import is delayed until
-    the first call to `mkPDF`. This allows the usage of most of validphys without tensorflow.
+    Since PDFFlow is only utilized to load the PDF for interpolation, the import
+    is delayed until the first call to `mkPDF`. This allows the usage of most of
+    validphys without tensorflow.
     """
 
     def __init__(self, pdf_meta, member):
@@ -188,10 +191,12 @@ def make_pdf(pdf_name, member=None):
     backend = _active_backend()
 
     if backend not in _VALID_BACKENDS:
-        raise InvalidPDFBackend(
-            f"Unknown PDF backend {backend!r} in {_BACKEND_ENV_VAR}. "
-            f"Valid options are: {_VALID_BACKENDS}"
-        )
+        raise InvalidPDFBackend(f"Unknown backend {backend!r}. Options are: {_VALID_BACKENDS}")
+
+    if backend == "lhapdf":
+        if member is None:
+            return lhapdf.mkPDFs(pdf_name)
+        return [lhapdf.mkPDF(pdf_name, member)]
 
     if backend == "neopdf":
         from neopdf.pdf import PDF as _NeoPDF
@@ -201,11 +206,7 @@ def make_pdf(pdf_name, member=None):
             return [_NeoPDFPDF(m) for m in members]
         return [_NeoPDFPDF(members[member])]
 
-    if USING_LHAPDF:
-        if member is None:
-            return lhapdf.mkPDFs(pdf_name)
-        return [lhapdf.mkPDF(pdf_name, member)]
-
+    # backend == "pdfflow"
     pdf_meta = lhapdf.load_pdf_meta(pdf_name)
     if member is None:
         return [_PDFFlowPDF(pdf_meta, m) for m in range(len(pdf_meta))]
