@@ -67,7 +67,7 @@ photon_qed_urls:
 
 photon_qed_index: 'photondata.json'
 
-# PDF interpolation backend: "lhapdf" (default) or "neopdf"
+# PDF interpolation backend: "lhapdf" (default), "pdfflow", or "neopdf"
 pdf_backend: lhapdf
 
 lhapdf_urls:
