@@ -1,5 +1,5 @@
 ID: 40_027_003
-Comments: Same as 40024003 but kcThr = 2.0 and mc = 1.5
+Comments: NNLO QCD, NNPDF4.0 settings but with mc = 1.5 and kcThr = 2.0. DIS grids generated using this card, hadronic grids from 40009000. 
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
