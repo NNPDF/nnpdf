@@ -1,5 +1,5 @@
 ID: 40_028_003
-Comments: Same as 40024003 but kcThr = 3.0 and mc = 1
+Comments: Same as 40024003 but kcThr = 3.0 and mc = 1. Non-DIS grids from 40009000
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
