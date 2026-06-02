@@ -74,7 +74,6 @@ implemented_observables:
       - CMS_1JET_8TEV_PTY_BIN4
       - CMS_1JET_8TEV_PTY_BIN5
       - CMS_1JET_8TEV_PTY_BIN6
-      - CMS_1JET_8TEV_PTY_BIN7
     operation: 'null'
   plotting:
     dataset_label: CMS jets 8 TeV

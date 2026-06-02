@@ -24,6 +24,7 @@ import pytest
 
 import n3fit
 from n3fit.io.writer import SuperEncoder
+from n3fit.tests.helpers import run_n3fit, run_setupfit
 from validphys.n3fit_data import replica_mcseed, replica_nnseed, replica_trvlseed
 from validphys.utils import yaml_safe
 
@@ -160,7 +161,7 @@ def _auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, r
     shutil.copy(quickpath, tmp_path)
     shutil.copy(weightpath, tmp_path / f"{weight_name}.weights.h5")
     # run the fit
-    sp.run(f"{EXE} {quickcard} {replica}".split(), cwd=tmp_path, check=True)
+    run_n3fit(quickcard, str(replica), cwd=tmp_path, check=True)
 
     # And compare
     check_fit_results(tmp_path, runcard, replica, old_json_file, timing=timing, rel_error=rel_error)
@@ -185,7 +186,7 @@ def test_performfit_with_old_theory(tmp_path):
     quickcard = "quickcard_old.yml"
     quickpath = REGRESSION_FOLDER / quickcard
     shutil.copy(quickpath, tmp_path)
-    sp.run(f"{EXE} {quickcard} 5".split(), cwd=tmp_path, check=True)
+    run_n3fit(quickcard, "5", cwd=tmp_path, check=True)
 
 
 @pytest.mark.skip(reason="Still not implemented in parallel mode")
@@ -198,7 +199,7 @@ def test_hyperopt(tmp_path):
     # We just want to ensure that the hyperopt can run, but we need to kill it ourselves
     # 60 seconds should be enough
     with pytest.raises(sp.TimeoutExpired):
-        sp.run(f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(), cwd=tmp_path, timeout=60)
+        run_n3fit(quickcard, f"{REPLICA} --hyperopt 1000", cwd=tmp_path, timeout=60)
 
 
 def test_novalidation(tmp_path, timing=30):
@@ -209,7 +210,7 @@ def test_novalidation(tmp_path, timing=30):
     quickpath = REGRESSION_FOLDER / quickcard
     shutil.copy(quickpath, tmp_path)
     with pytest.raises(sp.TimeoutExpired):
-        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing)
+        run_n3fit(quickcard, REPLICA, cwd=tmp_path, timeout=timing)
 
 
 def test_weirdbasis(tmp_path, timing=30):
@@ -225,7 +226,7 @@ def test_weirdbasis(tmp_path, timing=30):
     shutil.copy(quickpath, tmp_path)
     #     with pytest.raises(sp.TimeoutExpired):
     with pytest.raises(sp.CalledProcessError):
-        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing, check=True)
+        run_n3fit(quickcard, REPLICA, cwd=tmp_path, timeout=timing, check=True)
 
 
 @pytest.mark.linux
@@ -239,7 +240,7 @@ def test_multireplica_runs(tmp_path, runcard):
         path = tmp_path / name
         path.mkdir()
         shutil.copy(quickpath, path)
-        sp.run(f"{EXE} {quickcard} {replicas}".split(), cwd=path, check=True)
+        run_n3fit(quickcard, replicas, cwd=path, check=True)
 
     for name_1, option_1 in options.items():
         for name_2, option_2 in options.items():
@@ -282,8 +283,11 @@ def test_parallel_against_sequential(tmp_path, rep_from=6, rep_to=8):
         "ATLAS_TTBAR_8TEV_TOT_X-SEC",
         "CMS_SINGLETOP_13TEV_TCHANNEL-XSEC",
     ]
-    dataset_inputs = [{"dataset": d, "frac": 0.6, "variant": "legacy"} for d in datasets]
+    dataset_inputs = [{"dataset": d, "variant": "legacy"} for d in datasets]
     n3fit_input["dataset_inputs"] = dataset_inputs
+    # Using diaogonal basis
+    n3fit_input["diagonal_basis"] = True
+    n3fit_input["diagonal_frac"] = 0.5
     # Exit inmediately
     n3fit_input["parameters"]["epochs"] = 1
     # Save pseudodata
@@ -299,8 +303,8 @@ def test_parallel_against_sequential(tmp_path, rep_from=6, rep_to=8):
 
     # Now run both
     for r in range(rep_from, rep_to + 1):
-        sp.run(f"{EXE} {card_sequenti} {r}".split(), cwd=tmp_path, check=True)
-    sp.run(f"{EXE} {card_parallel} {rep_from} -r {rep_to}".split(), cwd=tmp_path, check=True)
+        run_n3fit(card_sequenti, str(r), cwd=tmp_path, setupfit=(r == rep_from), check=True)
+    run_n3fit(card_parallel, f"{rep_from} -r {rep_to}", cwd=tmp_path, check=True)
 
     # Loop over all pseudodata files for both fits and load them up
     folder_seq = card_sequenti.with_suffix("") / "nnfit"
@@ -310,8 +314,9 @@ def test_parallel_against_sequential(tmp_path, rep_from=6, rep_to=8):
     for csvfile_seq in folder_seq.glob("*/*.csv"):
         csvfile_par = folder_par / csvfile_seq.relative_to(folder_seq)
 
-        result_seq = pd.read_csv(csvfile_seq, sep="\t", index_col=[0, 1, 2], header=0)
-        result_par = pd.read_csv(csvfile_par, sep="\t", index_col=[0, 1, 2], header=0)
+        # Diagonal basis writes single-index csv files
+        result_seq = pd.read_csv(csvfile_seq, sep="\t", index_col=[0], header=0)
+        result_par = pd.read_csv(csvfile_par, sep="\t", index_col=[0], header=0)
         pd.testing.assert_frame_equal(result_seq, result_par)
 
     # Check the rest of the fit, while numerical differences are expected between sequential
@@ -335,3 +340,19 @@ def compare_weights(option_1, option_2, file_1, file_2):
             weight_name = file_1[key].name
             err_msg = f"Difference between runs `n3fit {option_1}` and `n3fit {option_2}` in weights {weight_name}"
             assert_allclose(file_1[key][:], file_2[key][:], rtol=1e-5, atol=1e-5, err_msg=err_msg)
+
+
+def test_md5_mismatch_is_detected(tmp_path):
+    """vp-setupfit, then tamper with the runcard -> n3fit must refuse to start."""
+    quickcard = f"{QUICKNAME}.yml"
+    weight_name = "weights_pol" if "_pol" in quickcard else "weights"
+    weightpath = REGRESSION_FOLDER / f"{weight_name}_1.weights.h5"
+    shutil.copy(REGRESSION_FOLDER / quickcard, tmp_path)
+    shutil.copy(weightpath, tmp_path / f"{weight_name}.weights.h5")
+    run_setupfit(quickcard, cwd=tmp_path)
+
+    runcard_path = tmp_path / quickcard
+    runcard_path.write_text(runcard_path.read_text() + "\n# tampered\n")
+
+    with pytest.raises(sp.CalledProcessError):
+        run_n3fit(quickcard, REPLICA, cwd=tmp_path, setupfit=False, check=True)
