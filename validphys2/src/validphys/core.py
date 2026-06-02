@@ -23,7 +23,7 @@ from reportengine.baseexceptions import AsInputError
 # Maybe move the cuts logic to its own module?
 from validphys import filters, lhaindex
 from validphys.fkparser import load_fktable, parse_cfactor
-from validphys.pdf_backends import make_pdfset
+from validphys.lhapdfset import LHAPDFSet
 from validphys.tableloader import parse_exp_mat
 from validphys.utils import experiments_to_dataset_inputs, yaml_safe
 
@@ -207,12 +207,12 @@ class PDF(TupleComp):
 
     @functools.lru_cache(maxsize=16)
     def load(self):
-        return make_pdfset(self.name, self.error_type)
+        return LHAPDFSet(self.name, self.error_type)
 
     @functools.lru_cache(maxsize=2)
     def load_t0(self):
         """Load the PDF as a t0 set"""
-        return make_pdfset(self.name, "t0")
+        return LHAPDFSet(self.name, "t0")
 
     def __str__(self):
         return self.label

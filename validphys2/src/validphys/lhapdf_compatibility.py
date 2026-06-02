@@ -1,13 +1,17 @@
 """
-    Module for LHAPDF compatibility backends
+Module for LHAPDF compatibility backends
 
-    If LHAPDF is installed, the module will transparently hand over everything to LHAPDF
-    if LHAPDF is not available, it will try to use a combination of the packages
-        `lhapdf-management` and `pdfflow`
-    which cover all the features of LHAPDF used during the fit (and likely most of validphys)
+If LHAPDF is installed, the module will transparently hand over everything to LHAPDF.
+If LHAPDF is not available, it will try to use a combination of the packages
+    `lhapdf-management` and `pdfflow`
+which cover all the features of LHAPDF used during the fit (and likely most of validphys).
+
+The NeoPDF interpolation library can be selected explicitly by setting the environment
+variable ``NNPDF_PDF_BACKEND=neopdf``.
 """
 
 from functools import cached_property
+import os
 
 import numpy as np
 
@@ -24,6 +28,13 @@ except ModuleNotFoundError:
     log.warning("LHAPDF was not found, using an alternative backend")
 
     USING_LHAPDF = False
+
+_BACKEND_ENV_VAR = "NNPDF_PDF_BACKEND"
+_VALID_BACKENDS = ("lhapdf", "neopdf")
+
+
+class InvalidPDFBackend(Exception):
+    pass
 
 
 class _PDFFlowPDF:
@@ -96,13 +107,54 @@ class _PDFFlowPDF:
         return self.xfxQ(a, b, np.sqrt(c))
 
 
-def make_pdf(pdf_name, member=None):
-    """Load a PDF
-    if member is given, load the single member otherwise, load the entire set as a list
+class _NeoPDFPDF:
+    """Thin wrapper around a single NeoPDF member exposing the LHAPDF-compatible interface."""
 
-    if LHAPDF is provided, it returns LHAPDF PDF instances
-    otherwise it returns and object which is _compatible_ with LHAPDF
-    for lhapdf functions for the selected backend
+    def __init__(self, neo_member):
+        self._member = neo_member
+        self._pids = neo_member.pids()
+
+    def flavors(self):
+        return self._pids
+
+    def _xfxQ_all_pid(self, x, q):
+        scalar_input = np.ndim(x) == 0 and np.ndim(q) == 0
+        x = np.atleast_1d(x)
+        q = np.atleast_1d(q)
+        vals = np.array(
+            [
+                self._member.xfxQ2_allpids(self._pids, float(xi), float(qi) ** 2)
+                for xi, qi in zip(x, q)
+            ]
+        )  # (n_points, n_pids)
+        if scalar_input:
+            return dict(zip(self._pids, vals[0]))
+        return dict(zip(self._pids, vals.T))
+
+    def xfxQ(self, a, b, c=None):
+        if c is None:
+            return self._xfxQ_all_pid(a, b)
+        ret_dict = self.xfxQ(b, c)
+        zeros = np.zeros_like(b)
+        if isinstance(a, int):
+            return ret_dict.get(a, zeros)
+        return np.array([ret_dict.get(i, zeros) for i in a]).T
+
+    def xfxQ2(self, a, b, c=None):
+        if c is None:
+            return self.xfxQ(a, np.sqrt(b))
+        return self.xfxQ(a, b, np.sqrt(c))
+
+
+def make_pdf(pdf_name, member=None):
+    """Load a single member if specified, otherwise load the entire set as a list.
+
+    If LHAPDF is provided, it returns LHAPDF PDF instances otherwise it returns and
+    object which is _compatible_ with LHAPDF for lhapdf functions for the selected
+    backend.
+
+    The backend can be overridden by setting the ``NNPDF_PDF_BACKEND`` environment
+    variable to ``neopdf`` to use the NeoPDF interpolation library.
 
     Parameters:
     -----------
@@ -115,6 +167,22 @@ def make_pdf(pdf_name, member=None):
     --------
         list(pdf_sets)
     """
+    backend = os.environ.get(_BACKEND_ENV_VAR, "lhapdf").lower()
+
+    if backend not in _VALID_BACKENDS:
+        raise InvalidPDFBackend(
+            f"Unknown PDF backend {backend!r} in {_BACKEND_ENV_VAR}. "
+            f"Valid options are: {_VALID_BACKENDS}"
+        )
+
+    if backend == "neopdf":
+        from neopdf.pdf import PDF as _NeoPDF
+
+        members = _NeoPDF.mkPDFs(pdf_name)
+        if member is None:
+            return [_NeoPDFPDF(m) for m in members]
+        return [_NeoPDFPDF(members[member])]
+
     if USING_LHAPDF:
         if member is None:
             return lhapdf.mkPDFs(pdf_name)

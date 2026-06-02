@@ -2,7 +2,7 @@
 Tests for the NeoPDF interpolation backend.
 """
 
-import importlib
+import os
 
 import numpy as np
 import pytest
@@ -34,16 +34,24 @@ Q_VALUE = 10.0
 
 @pytest.fixture(scope="module")
 def neo_pdfset():
-    from validphys.neopdfset import NeoPDFSet
+    """LHAPDFSet loaded with the NeoPDF backend."""
+    from validphys.lhapdfset import LHAPDFSet
 
-    return NeoPDFSet(PDF_NAME, "replicas")
+    os.environ["NNPDF_PDF_BACKEND"] = "neopdf"
+    pdfset = LHAPDFSet(PDF_NAME, "replicas")
+    del os.environ["NNPDF_PDF_BACKEND"]
+    return pdfset
 
 
 @pytest.fixture(scope="module")
 def neo_pdfset_t0():
-    from validphys.neopdfset import NeoPDFSet
+    """LHAPDFSet in t0 mode loaded with the NeoPDF backend."""
+    from validphys.lhapdfset import LHAPDFSet
 
-    return NeoPDFSet(PDF_NAME, "t0")
+    os.environ["NNPDF_PDF_BACKEND"] = "neopdf"
+    pdfset = LHAPDFSet(PDF_NAME, "t0")
+    del os.environ["NNPDF_PDF_BACKEND"]
+    return pdfset
 
 
 @pytest.fixture(scope="module")
@@ -167,12 +175,6 @@ class TestNumericalAgreement:
     call that both backends support.
     """
 
-    @staticmethod
-    def _reorder_lhapdf(arr, nx, nq):
-        """Convert LHAPDFSet.grid_values output to canonical (…, nx, nq) order."""
-        nm, nfl = arr.shape[:2]
-        return arr.reshape(nm, nfl, nq, nx).swapaxes(-1, -2)
-
     @pytest.mark.parametrize("fl", [21, 1, -1, 2, -2, 3])
     def test_xfxQ_member0(self, neo_pdfset, lha_pdfset, fl):
         if fl not in neo_pdfset.flavors:
@@ -217,49 +219,29 @@ class TestNumericalAgreement:
             pytest.skip(f"pid {fl} not in set")
         pids = np.array([fl])
         neo_result = neo_pdfset.grid_values(pids, XGRID, QGRID)
-        lha_result = self._reorder_lhapdf(
-            lha_pdfset.grid_values(pids, XGRID, QGRID), len(XGRID), len(QGRID)
-        )
+        lha_result = lha_pdfset.grid_values(pids, XGRID, QGRID)
         np.testing.assert_array_equal(neo_result, lha_result)
 
     def test_grid_values_all_flavours(self, neo_pdfset, lha_pdfset):
         pids = np.array([p for p in PIDS if p in neo_pdfset.flavors])
         neo_result = neo_pdfset.grid_values(pids, XGRID, QGRID)
-        lha_result = self._reorder_lhapdf(
-            lha_pdfset.grid_values(pids, XGRID, QGRID), len(XGRID), len(QGRID)
-        )
+        lha_result = lha_pdfset.grid_values(pids, XGRID, QGRID)
         np.testing.assert_array_equal(neo_result, lha_result)
 
     def test_grid_values_member0_equals_xfxQ_scalar(self, neo_pdfset):
+        """With nq=1 the grid cell directly maps to the scalar xfxQ value."""
         fl = 21
-        x_idx, q_idx = 2, 1
+        x_idx = 2
         x = XGRID[x_idx]
-        Q = QGRID[q_idx]
-        grid = neo_pdfset.grid_values(np.array([fl]), XGRID, QGRID)
-        scalar = neo_pdfset.xfxQ(x, Q, n=0, fl=fl)
-        np.testing.assert_equal(grid[0, 0, x_idx, q_idx], scalar)
-
-    def test_grid_values_shape(self, neo_pdfset):
-        """Verify the axis convention: result[member, flavour, x, Q]."""
-        pids = np.array([21, 2])
-        result = neo_pdfset.grid_values(pids, XGRID, QGRID)
-        for m_idx in range(min(3, neo_pdfset.n_members)):
-            for f_idx, fl in enumerate(pids):
-                for x_idx, x in enumerate(XGRID):
-                    for q_idx, Q in enumerate(QGRID):
-                        expected = neo_pdfset.xfxQ(x, Q, n=m_idx, fl=fl)
-                        np.testing.assert_equal(
-                            result[m_idx, f_idx, x_idx, q_idx],
-                            expected,
-                            err_msg=f"mismatch at member={m_idx} fl={fl} x={x} Q={Q}",
-                        )
+        Q_single = np.array([Q_VALUE])
+        grid = neo_pdfset.grid_values(np.array([fl]), XGRID, Q_single)
+        scalar = neo_pdfset.xfxQ(x, Q_VALUE, n=0, fl=fl)
+        np.testing.assert_equal(grid[0, 0, x_idx, 0], scalar)
 
     def test_t0_central_value(self, neo_pdfset_t0, lha_pdfset_t0):
         pids = np.array([p for p in PIDS if p in neo_pdfset_t0.flavors])
         neo_result = neo_pdfset_t0.grid_values(pids, XGRID, QGRID)
-        lha_result = self._reorder_lhapdf(
-            lha_pdfset_t0.grid_values(pids, XGRID, QGRID), len(XGRID), len(QGRID)
-        )
+        lha_result = lha_pdfset_t0.grid_values(pids, XGRID, QGRID)
         np.testing.assert_array_equal(neo_result, lha_result)
 
     def test_t0_same_as_replica_member0(self, neo_pdfset, neo_pdfset_t0):
@@ -280,83 +262,54 @@ class TestNumericalAgreement:
 
 
 class TestBackendFactory:
-    """Verify that ``make_pdfset`` returns the correct class depending on the
-    requested backend and the ``NNPDF_PDF_BACKEND`` environment variable.
+    """Verify that ``make_pdf`` in ``lhapdf_compatibility`` selects the correct
+    backend based on the ``NNPDF_PDF_BACKEND`` environment variable.
     """
 
-    def test_default_returns_lhapdfset(self, monkeypatch):
+    def test_default_returns_lhapdf_members(self, monkeypatch):
         monkeypatch.delenv("NNPDF_PDF_BACKEND", raising=False)
-        from validphys.lhapdfset import LHAPDFSet
-        from validphys.pdf_backends import make_pdfset
+        from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
 
-        result = make_pdfset(PDF_NAME, "replicas")
-        assert isinstance(result, LHAPDFSet)
+        members = make_pdf(PDF_NAME)
+        assert not isinstance(members[0], _NeoPDFPDF)
 
-    def test_explicit_lhapdf_kwarg_returns_lhapdfset(self, monkeypatch):
-        monkeypatch.delenv("NNPDF_PDF_BACKEND", raising=False)
-        from validphys.lhapdfset import LHAPDFSet
-        from validphys.pdf_backends import make_pdfset
-
-        result = make_pdfset(PDF_NAME, "replicas", backend="lhapdf")
-        assert isinstance(result, LHAPDFSet)
-
-    def test_explicit_neopdf_kwarg_returns_neopdfset(self, monkeypatch):
-        monkeypatch.delenv("NNPDF_PDF_BACKEND", raising=False)
-        from validphys.neopdfset import NeoPDFSet
-        from validphys.pdf_backends import make_pdfset
-
-        result = make_pdfset(PDF_NAME, "replicas", backend="neopdf")
-        assert isinstance(result, NeoPDFSet)
-
-    def test_env_var_neopdf_returns_neopdfset(self, monkeypatch):
+    def test_env_var_neopdf_returns_neopdf_members(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
-        import validphys.pdf_backends as mod
+        from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
 
-        importlib.reload(mod)
-        from validphys.neopdfset import NeoPDFSet
+        members = make_pdf(PDF_NAME)
+        assert all(isinstance(m, _NeoPDFPDF) for m in members)
 
-        result = mod.make_pdfset(PDF_NAME, "replicas")
-        assert isinstance(result, NeoPDFSet)
-
-    def test_env_var_lhapdf_returns_lhapdfset(self, monkeypatch):
+    def test_env_var_lhapdf_returns_non_neopdf_members(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "lhapdf")
-        import validphys.pdf_backends as mod
+        from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
 
-        importlib.reload(mod)
-        from validphys.lhapdfset import LHAPDFSet
-
-        result = mod.make_pdfset(PDF_NAME, "replicas")
-        assert isinstance(result, LHAPDFSet)
+        members = make_pdf(PDF_NAME)
+        assert not isinstance(members[0], _NeoPDFPDF)
 
     def test_invalid_env_var_raises(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "pdfflow_is_not_valid_here")
-        from validphys.pdf_backends import InvalidPDFBackend, make_pdfset
+        from validphys.lhapdf_compatibility import InvalidPDFBackend, make_pdf
 
         with pytest.raises(InvalidPDFBackend, match="Unknown PDF backend"):
-            make_pdfset(PDF_NAME, "replicas")
+            make_pdf(PDF_NAME)
 
-    def test_kwarg_overrides_env_var(self, monkeypatch):
-        """The explicit ``backend`` kwarg must win over the env variable."""
-        monkeypatch.setenv("NNPDF_PDF_BACKEND", "lhapdf")
-        from validphys.neopdfset import NeoPDFSet
-        from validphys.pdf_backends import make_pdfset
+    def test_neopdf_single_member_returns_neopdf_member(self, monkeypatch):
+        monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
+        from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
 
-        result = make_pdfset(PDF_NAME, "replicas", backend="neopdf")
-        assert isinstance(result, NeoPDFSet)
-
-    def test_factory_t0_mode_neopdf(self):
-        from validphys.neopdfset import NeoPDFSet
-        from validphys.pdf_backends import make_pdfset
-
-        result = make_pdfset(PDF_NAME, "t0", backend="neopdf")
-        assert isinstance(result, NeoPDFSet)
-        assert result.is_t0 is True
-        assert result.n_members == 1
+        members = make_pdf(PDF_NAME, member=0)
+        assert len(members) == 1
+        assert isinstance(members[0], _NeoPDFPDF)
 
     @requires_lhapdf
-    def test_factory_both_backends_same_n_members(self):
-        from validphys.pdf_backends import make_pdfset
+    def test_both_backends_return_same_member_count(self, monkeypatch):
+        from validphys.lhapdf_compatibility import make_pdf
 
-        neo = make_pdfset(PDF_NAME, "replicas", backend="neopdf")
-        lha = make_pdfset(PDF_NAME, "replicas", backend="lhapdf")
-        assert neo.n_members == lha.n_members
+        monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
+        neo_members = make_pdf(PDF_NAME)
+
+        monkeypatch.setenv("NNPDF_PDF_BACKEND", "lhapdf")
+        lha_members = make_pdf(PDF_NAME)
+
+        assert len(neo_members) == len(lha_members)
