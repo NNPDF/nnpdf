@@ -44,3 +44,7 @@ runs:
       shell: bash -l {0}
       run: |
         pip install -e .${{ inputs.nnpdf-extras }}
+    - name: Point NeoPDF at the LHAPDF data directory
+      shell: bash -l {0}
+      run: |
+        echo "NEOPDF_DATA_PATH=$(python -c 'import lhapdf; print(lhapdf.paths()[0])')" >> $GITHUB_ENV
