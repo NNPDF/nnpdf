@@ -436,5 +436,6 @@ Session.vim
 # auto-generated tag files
 tags
 
-
 # End of https://www.gitignore.io/api/c++,latex,cmake,python,jupyternotebook,qtcreator,vim
+/nnpdf_data/nnpdf_data/cfactors
+/nnpdf_data/nnpdf_data/cfactors
