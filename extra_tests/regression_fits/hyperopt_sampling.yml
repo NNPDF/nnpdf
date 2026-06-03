@@ -32,11 +32,11 @@ trvlseed: 3
 nnseed: 2
 mcseed: 1
 
-
 trial_specs: 
   hyperscan: 260204-jcm-hyperopt
   thermalization: 400
   number_of_trials: 10
+load: "weights_hyperopt.weights.h5"
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   positivity:

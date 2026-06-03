@@ -53,10 +53,12 @@ jobs:
         shell: bash -l {0}
         run: |
           cd extra_tests/regression_fits/setupfits/
+          cp ../*.h5 . # copy all the weight files to check we have all of them
           for runcard in ../*.yml
           do
-            vp-setupfit ${runcard}
+            vp-setupfit ${runcard} --no-eko-download
           done
+          rm -f *.h5 # and clean it up at the end
       - name: Check for modified files
         uses: tj-actions/verify-changed-files@v20
         id: verify-changed-files
