@@ -74,7 +74,7 @@ dataset_inputs:
 # - {dataset: LHCB_Z0_8TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
 # - {dataset: LHCB_Z0_13TEV_DIMUON-Y, frac: 0.75}
 # - {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75}
-- {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YT, frac: 0.75}
+# - {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YT, frac: 0.75, variant: legacy}
 - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75}
 - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, frac: 0.75}
 - {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, frac: 0.75}
