@@ -44,12 +44,42 @@ jobs:
           name: coverage-package-${{ matrix.os }}
           path: .coverage
 
-
-  regression_tests:
+  regression_setupfit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
+      - name: Regenerate the setupfit folder for all folders
+        shell: bash -l {0}
+        run: |
+          cd extra_tests/regression_fits/setupfits/
+          for runcard in ../*.yml
+          do
+            vp-setupfit ${runcard}
+          done
+      - name: Check for modified files
+        uses: tj-actions/verify-changed-files@v20
+        id: verify-changed-files
+      - name: List all changed files and fail if any
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.verify-changed-files.outputs.changed_files }}
+        run: |
+          echo "Changed files: $CHANGED_FILES"
+          exit 1
+
+  regression_fits:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-22.04]
+        python-version: ["3.11", "3.13"]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: "3.13"
       - name: Run regression tests
         shell: bash -l {0}
         run: |

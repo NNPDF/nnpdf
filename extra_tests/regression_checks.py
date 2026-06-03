@@ -4,15 +4,15 @@ Regression tests
 
 import pathlib
 import shutil
-import subprocess as sp
 
 import pytest
 
 from n3fit.tests.helpers import run_n3fit
-from n3fit.tests.test_fit import EXE, check_fit_results
+from n3fit.tests.test_fit import check_fit_results
 from validphys.utils import yaml_safe
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regression_fits")
+SETUPFIT_FOLDER = REGRESSION_FOLDER / "setupfits"
 
 # Avoid always round-number replicas or 1/2
 runcard_and_replicas = {
@@ -37,15 +37,26 @@ runcard_and_replicas = {
 
 @pytest.mark.parametrize("runcard,replica", runcard_and_replicas.items())
 def test_regression_fit(tmp_path, runcard, replica, regenerate):
+    """Runs the runcard <runcard> for <replica> in the <tmp_path> folder.
+    This test starts from an already ran setupfit and, often, from set weights.
+    """
+    # Copy the runcard to the run folder
     runcard_name = f"{runcard}.yml"
     runcard_file = REGRESSION_FOLDER / runcard_name
     shutil.copy(runcard_file, tmp_path)
 
+    # If weights have to be loaded, copy also the weights
     runcard_info = yaml_safe.load(runcard_file.read_text())
     if (wname := runcard_info.get("load")) is not None:
         shutil.copy(REGRESSION_FOLDER / wname, tmp_path)
 
-    run_n3fit(runcard_name, f"{replica}", cwd=tmp_path, check=True)
+    # Copy setupfit, then run n3fit
+    setupfit_files = SETUPFIT_FOLDER / runcard
+    if not setupfit_files.exists():
+        raise FileNotFoundError(f"The setupfit folder {setupfit_files} could not be found")
+
+    shutil.copytree(setupfit_files, tmp_path / runcard)
+    run_n3fit(runcard_name, f"{replica}", cwd=tmp_path, check=True, setupfit=False)
     old_json_file = REGRESSION_FOLDER / f"{runcard}_{replica}.json"
 
     check_fit_results(
