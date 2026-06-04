@@ -52,7 +52,7 @@ parameters:
     multiplier:
     threshold: 1e-2
   stopping_patience: 0.1
-  stopping_delta: 0.05
+  stopping_delta: 0.1
   layer_type: dense
   dropout: 0.0
   threshold_chi2: 3.5

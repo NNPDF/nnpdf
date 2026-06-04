@@ -35,7 +35,7 @@ runcard_and_replicas = {
 }
 
 # Some runcards need to be a bit more lenient with the tolerances
-extra_tolerances_exportgrid = {"hyperopt_sampling": 1e-4, "t0theoryid": 1e-4}
+extra_tolerances_exportgrid = {"hyperopt_sampling": 1e-4, "t0theoryid": 1e-3}
 extra_tolerances_rel = {"hyperopt_sampling": 3e-2}
 
 

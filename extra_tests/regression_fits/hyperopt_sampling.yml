@@ -32,7 +32,7 @@ trvlseed: 3
 nnseed: 2
 mcseed: 1
 
-trial_specs: 
+trial_specs:
   hyperscan: 260204-jcm-hyperopt
   thermalization: 400
   number_of_trials: 10
@@ -44,6 +44,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     initial: 1.5
   threshold_chi2: 10.0
   feature_scaling_points: 5
+  stopping_delta: 0.05
 
 fitting:
   fitbasis: CCBAR_ASYMM  # EVOL (7), EVOLQED (8), etc.

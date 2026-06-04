@@ -44,6 +44,9 @@ jobs:
           name: coverage-package-${{ matrix.os }}
           path: .coverage
 
+  # This check is potentially too strict
+  # if we find it fails too much, instead of changed files
+  # we'll need to look at the CSV with some tolerance
   regression_setupfit:
     runs-on: ubuntu-latest
     steps:
