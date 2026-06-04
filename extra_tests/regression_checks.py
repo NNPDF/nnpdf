@@ -16,6 +16,7 @@ SETUPFIT_FOLDER = REGRESSION_FOLDER / "setupfits"
 
 # Avoid always round-number replicas or 1/2
 runcard_and_replicas = {
+    "thcovmat": 43,
     "no_positivity": 316,
     "normal_fit": 72,
     "central": 16,

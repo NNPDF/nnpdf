@@ -179,7 +179,7 @@ jobs:
         cat Basic_runcard/nnfit/*/Basic_runcard.json
 
   full_coverage:
-    needs: [run_package_tests, regression_fits]
+    needs: [run_package_tests, regression_tests]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
