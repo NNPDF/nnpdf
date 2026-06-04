@@ -34,7 +34,9 @@ jobs:
       run: |
         git config user.name "Redo regressions bot"
         git config user.email "<>"
-        git add extra_tests/regression_fits/*
+        git add extra_tests/regression_fits/*.json
+        git add extra_tests/regression_fits/*.exportgrid
+        git add extra_tests/regression_fits/setupfits
         git status
         git commit -m "Automatically regenerated regressions from PR ${{ github.event.number }}, branch ${{ github.event.pull_request.head.ref }}."
         git push origin "${{ github.event.pull_request.head.ref }}"

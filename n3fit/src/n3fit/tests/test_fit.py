@@ -84,10 +84,14 @@ def check_fit_results(
     The regression exportgrid is understood to be the same as the ``.json`` file with the
     extension changed to ``.exportgrid``.
 
-    If ``regenerate`` is set to True, it will generate new files instead of testing
+    If ``regenerate`` is set to True, it will generate new files instead of testing.
+    The new files to be regenerated are:
+        - json, which will be copied to the <regression_json>
+        - exportgrid, which will be copied to the same folder as regression_json with `.exportgrid`
+        - setupfit folder, which will be copied to the same folder
     """
-    new_json_file = base_path / f"{fitname}/nnfit/replica_{replica}/{fitname}.json"
-
+    base_runfolder = base_path / fitname
+    new_json_file = base_runfolder / "nnfit" / f"replica_{replica}" / f"{fitname}.json"
     new_expgrid_file = new_json_file.with_suffix(".exportgrid")
     old_expgrid_file = regression_json.with_suffix(".exportgrid")
 
@@ -112,6 +116,7 @@ def check_fit_results(
         with open(regression_json, "w", encoding="utf-8") as fs:
             json.dump(new_json, fs, indent=2, cls=SuperEncoder)
             fs.write('\n')
+        shutil.copytree(base_runfolder, old_expgrid_file.parent / fitname, dirs_exist_ok=True)
 
     old_json = _load_json(regression_json)
 
