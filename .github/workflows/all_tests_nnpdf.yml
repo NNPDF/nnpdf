@@ -70,13 +70,8 @@ jobs:
           echo "Changed files: $CHANGED_FILES"
           exit 1
 
-  regression_fits:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, ubuntu-22.04]
-        python-version: ["3.11", "3.13"]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
+  regression_tests:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip

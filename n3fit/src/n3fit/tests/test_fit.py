@@ -73,7 +73,14 @@ def test_initialize_seeds():
 
 
 def check_fit_results(
-    base_path, fitname, replica, regression_json, regenerate=False, rel_error=2e-3, timing=False
+    base_path,
+    fitname,
+    replica,
+    regression_json,
+    regenerate=False,
+    rel_error=2e-3,
+    atol_exportgrid=1e-5,
+    timing=False,
 ):
     """Regression test checker, checks that the given fit produces the right
     json and exportgrid files.
@@ -83,6 +90,13 @@ def check_fit_results(
     as can be read from the file ``regression_json``.
     The regression exportgrid is understood to be the same as the ``.json`` file with the
     extension changed to ``.exportgrid``.
+
+    The relative error ``rel_error`` is used as given for the exact checks, and with a factor of 10
+    for the relaxed checks (like arc length and integrability).
+    The ``atol_exportgrid`` corresponds to the absolute tolerance for exportgrid.
+
+    The absolute error is only taken into account for the relaxed checks
+    (and with a factor of 10 for the values of exportgrid).
 
     If ``regenerate`` is set to True, it will generate new files instead of testing.
     The new files to be regenerated are:
@@ -148,7 +162,7 @@ def check_fit_results(
         reference = old_expgrid[key]
         err_msg = f"error for .exportgrid: {key}"
         if key == "pdfgrid":
-            assert_allclose(value, reference, rtol=rel_error, atol=1e-5, err_msg=err_msg)
+            assert_allclose(value, reference, rtol=rel_error, atol=atol_exportgrid, err_msg=err_msg)
         else:
             assert_equal(value, reference, err_msg=err_msg)
 

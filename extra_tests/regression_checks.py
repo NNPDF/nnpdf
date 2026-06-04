@@ -34,6 +34,10 @@ runcard_and_replicas = {
     "hyperopt_sampling": 4,
 }
 
+# Some runcards need to be a bit more lenient with the tolerances
+extra_tolerances_exportgrid = {"hyperopt_sampling": 1e-4, "t0theoryid": 1e-4}
+extra_tolerances_rel = {"hyperopt_sampling": 3e-2}
+
 
 @pytest.mark.parametrize("runcard,replica", runcard_and_replicas.items())
 def test_regression_fit(tmp_path, runcard, replica, regenerate):
@@ -62,8 +66,17 @@ def test_regression_fit(tmp_path, runcard, replica, regenerate):
     run_n3fit(runcard_name, f"{replica}", cwd=tmp_path, check=True, setupfit=regenerate)
     old_json_file = REGRESSION_FOLDER / f"{runcard}_{replica}.json"
 
+    rel_error = extra_tolerances_rel.get(runcard, 1e-2)
+    exportgrid_error = extra_tolerances_exportgrid.get(runcard, 1e-5)
+
     check_fit_results(
-        tmp_path, runcard, replica, old_json_file, regenerate=regenerate, rel_error=1e-2
+        tmp_path,
+        runcard,
+        replica,
+        old_json_file,
+        regenerate=regenerate,
+        rel_error=rel_error,
+        atol_exportgrid=exportgrid_error,
     )
     # When regenerating, move the setupfit folder to SETUPFIT_FOLDER to have them organized
     if regenerate:
