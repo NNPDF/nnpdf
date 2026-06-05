@@ -13,6 +13,7 @@ from collections import namedtuple
 from itertools import zip_longest
 import json
 import logging
+import pickle
 
 import numpy as np
 
@@ -113,6 +114,10 @@ class ModelTrainer:
         theoryid=None,
         lux_params=None,
         replicas=None,
+        save_checkpoints=False,
+        replica_path=None,
+        checkpoint_freq=100,
+        dont_stop=False,
         trials=None,
         load_weights_dict=None,
     ):
@@ -155,6 +160,15 @@ class ModelTrainer:
                 if not give, the photon is not generated
             replicas: list
                 list with the replicas ids to be fitted
+            save_checkpoints: bool
+                whether to save checkpoints (i.e. model parameters) during the fit. This requires
+                `replica_path` to be set as well. Not doing this will raise an error.
+            replica_path: Path
+                root path for all replicas.
+            checkpoint_freq: int
+                frequency (in epochs) at which to save checkpoints. Only relevant if `save_checkpoints` is True.
+            dont_stop: bool
+                whether to disable the stopping mechanism, i.e. to run for all epochs regardless of the validation chi2
             trials: str
                 name of the file containing the trials defining the methodology
         """
@@ -173,6 +187,14 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
+        self.dont_stop = dont_stop
+
+        # Checkpointing options
+        self.save_checkpoints = save_checkpoints
+        self.replica_path = replica_path
+        self.checkpoint_freq = checkpoint_freq
+        if self.save_checkpoints and self.replica_path is None:
+            raise ValueError("To save checkpoints, the 'replica_path' key must be set as well.")
         self.trials = trials
 
         # Initialise internal variables which define behaviour
@@ -728,11 +750,24 @@ class ModelTrainer:
             self.training["integmultipliers"],
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
+        callback_list = [callback_st, callback_pos, callback_integ]
+
+        if self.save_checkpoints:
+            pdf_model = training_model.get_layer("PDFs")
+            # Save parameters where colibri will look for checkpoints
+            replica_paths = [
+                self.replica_path.parent / f"fit_replicas/replica_{r}" for r in self.replicas
+            ]
+            checpoint_callback = callbacks.StoreCallback(
+                pdf_model=pdf_model,
+                replica_paths=replica_paths,
+                check_freq=self.checkpoint_freq,
+                stopping_object=stopping_object,
+            )
+            callback_list.append(checpoint_callback)
 
         training_model.perform_fit(
-            epochs=epochs,
-            verbose=False,
-            callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
+            epochs=epochs, verbose=False, callbacks=self.callbacks + callback_list
         )
 
     def _hyperopt_override(self, params):
@@ -928,6 +963,7 @@ class ModelTrainer:
                     nodes=params["nodes_per_layer"],
                     activations=params["activation_per_layer"],
                     initializer=params["initializer"],
+                    initializer_scale=params.get("initializer_scale", 1.0),
                     architecture=params["layer_type"],
                     dropout_rate=params["dropout"],
                     regularizer=params.get("regularizer"),
@@ -949,12 +985,33 @@ class ModelTrainer:
                     nodes=self.trials["nodes_per_layer"][idx_hyperparamters],
                     activations=activations,
                     initializer=self.trials["initializer"][idx_hyperparamters],
+                    initializer_scale=params.get("initializer_scale", 1.0),
                     architecture=self.trials["layer_type"][idx_hyperparamters],
                     dropout_rate=self.trials["dropout"][idx_hyperparamters],
                     regularizer=params.get("regularizer"),
                     regularizer_args=params.get("regularizer_args"),
                 )
                 replicas_settings.append(tmp)
+
+        # TODO: tempoerary fix to use NTK utilities in colibri
+        # Create model pkl for colibri n3fit module
+        _init_args = {
+            "flav_info": self.flavinfo,
+            "replica_range_settings": {
+                "min_replica": np.sort(self.replicas)[0],
+                "max_replica": np.sort(self.replicas)[0],
+            },
+            "impose_sumrule": self.impose_sumrule,
+            "fitbasis": self.fitbasis,
+            "nodes": params["nodes_per_layer"],
+            "activations": params["activation_per_layer"],
+            "initializer_name": params["initializer"],
+            "layer_type": params["layer_type"],
+        }
+        state = {"_init_args": _init_args}
+
+        with open(self.replica_path.parent / "pdf_model.pkl", "wb") as file:
+            pickle.dump(state, file)
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -1030,6 +1087,7 @@ class ModelTrainer:
                 stopping_patience=stopping_epochs,
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
+                dont_stop=self.dont_stop,
             )
 
             if self.mode_hyperopt or (not self.trials):

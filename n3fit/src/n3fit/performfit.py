@@ -44,6 +44,9 @@ def performfit(
     maxcores=None,
     double_precision=False,
     parallel_models=True,
+    save_checkpoints=False,
+    checkpoint_freq=100,
+    dont_stop=False,
 ):
     """
     This action will (upon having read a validcard) process a full PDF fit
@@ -117,7 +120,7 @@ def performfit(
             dictionary containing the details of the hyperscanner
         hyperopt: int
             if given, number of hyperopt iterations to run
-        trials: str 
+        trials: str
             file containing trials defining the methodology
         kfold_parameters: None, dict
             dictionary with kfold settings used in hyperopt.
@@ -132,6 +135,8 @@ def performfit(
             whether to use double precision
         parallel_models: bool
             whether to run models in parallel
+        save_checkpoints: bool
+            whether to save checkpoints (i.e. model parameters) during the fit.
     """
     from n3fit.backends import set_initial_state
 
@@ -201,8 +206,12 @@ def performfit(
             theoryid=theoryid,
             lux_params=fiatlux,
             replicas=replica_idxs,
+            save_checkpoints=save_checkpoints,
+            replica_path=replica_path,
+            checkpoint_freq=checkpoint_freq,
+            dont_stop=dont_stop,
             trials=trials,
-            load_weights_dict=load_weights_dict
+            load_weights_dict=load_weights_dict,
         )
 
         # This is just to give a descriptive name to the fit function

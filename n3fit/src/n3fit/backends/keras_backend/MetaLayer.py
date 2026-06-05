@@ -1,21 +1,26 @@
 """
-    The class MetaLayer is an extension of the backend Layer class
-    with a number of methods and helpers to facilitate writing new custom layers
-    in such a way that the new custom layer don't need to rely in anything backend-dependent
+The class MetaLayer is an extension of the backend Layer class
+with a number of methods and helpers to facilitate writing new custom layers
+in such a way that the new custom layer don't need to rely in anything backend-dependent
 
-    In other words, if you want to implement a new layer and need functions not included here
-    it is better to add a new method which is just a call to the relevant backend-dependent function
-    For instance: np_to_tensor is just a call to K.constant
+In other words, if you want to implement a new layer and need functions not included here
+it is better to add a new method which is just a call to the relevant backend-dependent function
+For instance: np_to_tensor is just a call to K.constant
 """
 
-from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
+from keras.initializers import Constant, RandomUniform, VarianceScaling, glorot_uniform
 from keras.layers import Layer
 
 # Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
 initializers = {
     "random_uniform": (RandomUniform, {"minval": -0.5, "maxval": 0.5}),
     "glorot_uniform": (glorot_uniform, {}),
-    "glorot_normal": (glorot_normal, {}),
+    # glorot_normal expressed via VarianceScaling so its width is tunable through `scale`:
+    # scale=1.0 reproduces keras' glorot_normal exactly; weight std scales as sqrt(scale).
+    "glorot_normal": (
+        VarianceScaling,
+        {"scale": 1.0, "mode": "fan_avg", "distribution": "truncated_normal"},
+    ),
 }
 
 
@@ -91,10 +96,11 @@ class MetaLayer(Layer):
             ) from e
 
         ini_class = ini_tuple[0]
-        ini_args = ini_tuple[1]
+        # Copy so per-call overrides (seed, scale, ...) don't leak into the shared defaults
+        ini_args = dict(ini_tuple[1])
         ini_args["seed"] = seed
 
         for key, value in kwargs.items():
-            if key in ini_args.keys():
+            if key in ini_args:
                 ini_args[key] = value
         return ini_class(**ini_args)
