@@ -29,7 +29,7 @@ from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
 from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 from n3fit.bnn_wrapper import get_vb_layers
-from n3fit.layers.losses import LossKL
+from n3fit.layers.losses import LossKL, LossRepulsion
 
 log = logging.getLogger(__name__)
 
@@ -455,6 +455,22 @@ class ModelTrainer:
         # Training and validation leave out the kofld dataset
         # experiment leaves out the negation
         output_tr = _pdf_injection(split_pdf, self.training["output"], training_mask)
+
+        # Repulsive ensemble
+        # `full_pdf` is the full, normalised multi-replica PDF on the (unique)
+        # training x-grid: shape (1, R, Nx, 14). We use it directly as the anchor
+        # evaluation for the function-space kernel. Training-model only: it is
+        # excluded from validation/experimental, so early stopping stays on chi2.
+        rep_params = getattr(self, "_repulsion_params", None)
+        if rep_params and len(self.replicas) >= 2:
+            repulsion_layer = LossRepulsion(
+                beta=rep_params.get("beta", 1.0),
+                bandwidth=rep_params.get("bandwidth", None),
+                flavour_weights=rep_params.get("flavour_weights", None),
+                name="repulsion",
+            )
+            output_tr = output_tr + [repulsion_layer(full_pdf)]
+
         training = MetaModel(full_model_input_dict, output_tr)
 
         # Validation skips integrability and the "true" chi2 skips also positivity,
@@ -1072,6 +1088,9 @@ class ModelTrainer:
         # when k-folding, these are the same for all folds
         positivity_dict = params.get("positivity", {})
         integrability_dict = params.get("integrability", {})
+        # Function-space repulsion across replicas (repulsive ensemble).
+        # None / missing  -> ordinary (jointly trained) deep ensemble.
+        self._repulsion_params = params.get("repulsion", None)
 
         # Call the new static data preparation function once
         self._generate_static_data(
