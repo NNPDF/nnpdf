@@ -429,6 +429,13 @@ according to their experiment. Additionally, the union of these two is saved in
 ``<fit_directory>/replica_<number>/datacuts_theory_fitting_pseudodata_table.csv``
 if one is not interested in the exact nature of the splitting.
 
+When ``diagonal_basis: true`` is used (by default), the saved pseudodata indices are labeled as
+``eigenmode <i>`` corresponding to the diagonal basis used in the fit. In the presence of a theory covariance matrix,
+``vp-setupfit`` writes one file with the eigenvalues of the total correlation matrix and the rotation matrix that diagonalises
+the :math:`\chi2` under
+``<fit_directory>/tables/datacuts_theory_theorycovmatconfig_fitting_covmat_table.csv``.
+Without a theory covariance matrix, ``vp-setupfit`` writes this file instead under
+``<fit_directory>/tables/datacuts_theory_fitting_covmat_table.csv``.
 
 Imposing sum rules
 ^^^^^^^^^^^^^^^^^^

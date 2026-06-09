@@ -81,18 +81,20 @@ def test_no_savepseudodata():
             func(fit=FIT)
 
 
-def test_read_matches_recreate():
-
-    for fit in [PSEUDODATA_FIT, PSEUDODATA_FIT_DIAG]:
-        diagonal_basis = True if fit == PSEUDODATA_FIT_DIAG else False
-        reads = API.read_fit_pseudodata(fit=fit, diagonal_basis=diagonal_basis)
-        recreates = API.recreate_fit_pseudodata(fit=fit, diagonal_basis=diagonal_basis)
-        for read, recreate in zip(reads, recreates):
-            # We ignore the absolute ordering of the dataframes and just check
-            # that they contain identical elements.
-            pd.testing.assert_frame_equal(read.pseudodata, recreate.pseudodata, check_like=True)
-            pd.testing.assert_index_equal(read.tr_idx, recreate.tr_idx, check_order=False)
-            pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)
+@pytest.mark.parametrize(
+    "fit, diagonal_basis",
+    [(PSEUDODATA_FIT, False), (PSEUDODATA_FIT_DIAG, True)],
+    ids=["standard", "diagonal"],
+)
+def test_read_matches_recreate(fit, diagonal_basis):
+    reads = API.read_fit_pseudodata(fit=fit, diagonal_basis=diagonal_basis)
+    recreates = API.recreate_fit_pseudodata(fit=fit, diagonal_basis=diagonal_basis)
+    for read, recreate in zip(reads, recreates):
+        # We ignore the absolute ordering of the dataframes and just check
+        # that they contain identical elements.
+        pd.testing.assert_frame_equal(read.pseudodata, recreate.pseudodata, check_like=True)
+        pd.testing.assert_index_equal(read.tr_idx, recreate.tr_idx, check_order=False)
+        pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)
 
 
 def test_level0_commondata_wc():
