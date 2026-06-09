@@ -19,9 +19,10 @@ The names of the layer and the activation function are the ones to be used in th
 
 import numpy as np
 import keras.backend as K
+from keras import ops as Kops
+from keras import random as krandom
 import tensorflow as tf
 import math
-from scipy.stats import norm
 
 from keras.layers import Dense as KerasDense
 from keras.layers import Dropout, Lambda, Layer
@@ -83,6 +84,14 @@ def LSTM_modified(**kwargs):
 
 
 class VBDense(Layer):
+    """
+    Mean-field variational Bayesian dense layer for n3fit (backend-agnostic).
+
+    Mirrors the clean `VBLinear` reference (three explicit forward paths + one
+    analytic-KL helper), written with `keras.ops` / `keras.random` so it runs on
+    any Keras-3 backend.
+    """
+
     def __init__(
         self,
         out_features: int,
@@ -98,12 +107,14 @@ class VBDense(Layer):
         self.map = map
         self.prior_prec = tf.cast(prior_prec, K.floatx())
         self.std_init = tf.cast(std_init, K.floatx())
-        self.random = None
+        self.bayesian_bias = bayesian_bias
         self.lbound = -30 if K.floatx() == 'float64' else -20
         self.ubound = 11
         self.eps = 1e-12 if K.floatx() == 'float64' else 1e-8
         self.training = True
-        self.bayesian_bias = bayesian_bias
+        # Frozen eval draws (plain attributes, NOT tracked weights).
+        self.random = None
+        self.random_b = None
 
     def build(self, input_shape):
         self.bias = self.add_weight(
@@ -113,7 +124,6 @@ class VBDense(Layer):
             trainable=True,
             dtype=K.floatx(),
         )
-
         self.mu_w = self.add_weight(
             name='mu_w',
             shape=(self.output_dim, self.input_dim),
@@ -121,7 +131,6 @@ class VBDense(Layer):
             trainable=True,
             dtype=K.floatx(),
         )
-
         self.logsig2_w = self.add_weight(
             name='logsig2_w',
             shape=(self.output_dim, self.input_dim),
@@ -129,7 +138,6 @@ class VBDense(Layer):
             trainable=True,
             dtype=K.floatx(),
         )
-
         if self.bayesian_bias:
             self.bias_logsig2 = self.add_weight(
                 name='bias_logsig2',
@@ -139,19 +147,50 @@ class VBDense(Layer):
                 dtype=K.floatx(),
             )
 
+        # Draw the frozen eval samples once at build time, so the replica is ready to eval immediately after building.
+        self.random = self.add_weight(
+            name='random_w',
+            shape=(self.output_dim, self.input_dim),
+            initializer='zeros',
+            trainable=False,
+            dtype=K.floatx(),
+        )
+        if self.bayesian_bias:
+            self.random_b = self.add_weight(
+                name='random_b',
+                shape=(self.output_dim,),
+                initializer='zeros',
+                trainable=False,
+                dtype=K.floatx(),
+            )
+
         self.reset_parameters()
+        self.reset_random()
 
     def reset_parameters(self):
-        stdv = 1.0 / tf.math.sqrt(tf.cast(self.input_dim, dtype=K.floatx()))
-        self.bias.assign(tf.zeros_like(self.bias))
-        self.mu_w.assign(
-            tf.random.normal(tf.shape(self.mu_w), mean=0, stddev=stdv, dtype=K.floatx())
-        )
+        stdv = 1.0 / math.sqrt(self.input_dim)
+        self.bias.assign(Kops.zeros_like(self.bias))
+        self.mu_w.assign(krandom.normal(self.mu_w.shape, mean=0.0, stddev=stdv, dtype=K.floatx()))
         self.logsig2_w.assign(
-            tf.random.normal(
-                tf.shape(self.logsig2_w), mean=self.std_init, stddev=0.001, dtype=K.floatx()
-            )
+            krandom.normal(self.logsig2_w.shape, mean=self.std_init, stddev=0.001, dtype=K.floatx())
         )
+        if self.bayesian_bias:
+            # Start the bias posterior near-deterministic, like the weights.
+            self.bias_logsig2.assign(
+                krandom.normal(
+                    self.bias_logsig2.shape, mean=self.std_init, stddev=0.001, dtype=K.floatx()
+                )
+            )
+
+    @property
+    def s2_w(self):
+        """Weight variance, sigma_w^2 = exp(logsig2_w)."""
+        return Kops.exp(Kops.clip(self.logsig2_w, self.lbound, self.ubound))
+
+    @property
+    def s2_b(self):
+        """Bias variance, sigma_b^2 = exp(bias_logsig2)."""
+        return Kops.exp(Kops.clip(self.bias_logsig2, self.lbound, self.ubound))
 
     def enable_map(self):
         self.map = True
@@ -160,7 +199,11 @@ class VBDense(Layer):
         self.map = False
 
     def reset_random(self):
-        self.random = None
+        """Redraw the frozen eval samples. Optional - build() already draws once;
+        call this only if you want a fresh posterior sample for the replica."""
+        self.random.assign(krandom.normal(self.random.shape, dtype=K.floatx()))
+        if self.bayesian_bias:
+            self.random_b.assign(krandom.normal(self.random_b.shape, dtype=K.floatx()))
         self.map = False
 
     def train(self):
@@ -169,65 +212,62 @@ class VBDense(Layer):
     def eval(self):
         self.training = False
 
-    def kl_loss(self) -> tf.Tensor:
-        r"""Compute KL divergence between posterior and prior.
-        KL = \int q(w) log(q(w)/p(w)) dw
-        where q(w) is the posterior and p(w) is the prior.
-        """
-        logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
-        kl = 0.5 * tf.reduce_sum(
-            (
-                self.prior_prec * (tf.math.pow(self.mu_w, 2) + tf.math.exp(logsig2_w))
-                - logsig2_w
-                - tf.constant(1.0, dtype=K.floatx())
-                - tf.math.log(self.prior_prec)
-            )
+    def _gaussian_kl(self, mu, logsig2):
+        """Analytic KL[ N(mu, e^logsig2) || N(0, 1/prior_prec) ], summed."""
+        logsig2 = Kops.clip(logsig2, self.lbound, self.ubound)
+        return 0.5 * Kops.sum(
+            self.prior_prec * (Kops.square(mu) + Kops.exp(logsig2))
+            - logsig2
+            - 1.0
+            - Kops.log(self.prior_prec)
         )
+
+    def kl_loss(self):
+        kl = self._gaussian_kl(self.mu_w, self.logsig2_w)
         if self.bayesian_bias:
-            logsig2_b = tf.clip_by_value(self.bias_logsig2, self.lbound, self.ubound)
-            kl += 0.5 * tf.reduce_sum(
-                self.prior_prec * (tf.math.pow(self.bias, 2)) - tf.math.log(self.prior_prec)
-                - logsig2_b
-                - tf.constant(1.0, dtype=K.floatx()
-                - tf.math.log(self.prior_prec))
-            )
+            kl += self._gaussian_kl(self.bias, self.bias_logsig2)
         return kl
 
-    def call(self, input: tf.Tensor) -> tf.Tensor:
-        if self.training:
-            # local reparameterization trick is more efficient and leads to
-            # an estimate of the gradient with smaller variance.
-            # https://arxiv.org/pdf/1506.02557.pdf
-            if self.bayesian_bias:
-                bias = self.bias
-                bias_logsig2 = tf.clip_by_value(self.bias_logsig2, self.lbound, self.ubound)
-                bias_var = bias_logsig2.exp()
-                bias = bias + bias_var.sqrt() * tf.random.normal(tf.shape(bias), dtype=input.dtype) 
-            else:
-                bias = self.bias
-            mu_out = tf.matmul(input, self.mu_w, transpose_b=True) + self.bias
-            logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
-            s2_w = tf.math.exp(logsig2_w)
-            var_out = tf.matmul(tf.math.pow(input, 2), s2_w, transpose_b=True) + self.eps
-            return mu_out + tf.math.sqrt(var_out) * tf.random.normal(
-                shape=tf.shape(mu_out), dtype=input.dtype
-            )
+    def _forward_map_inference(self, input):
+        """Deterministic: posterior means for both weights and bias."""
+        # use maximum-a-posteriori (MAP) method for computing predictions
+        # sets each weight to its mean value (turns off weight sampling)
+        return Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
+
+    def _forward_sample_activations(self, input):
+        """
+        Local reparameterization trick (training). Sample the pre-activation
+        directly from its implied Gaussian. The bias variance (if Bayesian) is
+        added straight into the activation variance. LRT is more efficient
+        and leads to an estimate of the gradient with smaller variance.
+        https://arxiv.org/pdf/1506.02557.pdf
+        """
+        act_mu = Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
+        act_var = Kops.matmul(Kops.square(input), Kops.transpose(self.s2_w))
         if self.bayesian_bias:
-            bias = self.bias
-            bias_logsig2 = tf.clip_by_value(self.bias_logsig2, self.lbound, self.ubound)
-            bias_var = bias_logsig2.exp()
-            bias = bias + bias_var.sqrt() * tf.random.normal(tf.shape(bias), dtype=input.dtype)
-        else:
-            bias = self.bias
+            act_var = act_var + self.s2_b
+        act_var = act_var + self.eps
+        noise = krandom.normal(Kops.shape(act_mu), dtype=input.dtype)
+        return act_mu + Kops.sqrt(act_var) * noise
 
+    def _forward_sample_weights(self, input):
+        """
+        Standard reparameterization (eval). Draw weights (and, if Bayesian, the
+        bias) once, caching the standard normals as plain attributes so the
+        replica stays frozen until reset_random().
+        """
+        weight = self.mu_w + Kops.sqrt(self.s2_w) * self.random
+        bias = self.bias
+        if self.bayesian_bias:
+            bias = self.bias + Kops.sqrt(self.s2_b) * self.random_b
+        return Kops.matmul(input, Kops.transpose(weight)) + bias
+
+    def call(self, input):
+        if self.training:
+            return self._forward_sample_activations(input)
         if self.map:
-            return tf.matmul(input, self.mu_w, transpose_b=True) + self.bias
-
-        logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
-        if self.random is None:
-            self.random = tf.Variable(tf.random.normal(shape=tf.shape(self.mu_w), dtype=input.dtype), trainable=False)
-        weight = self.mu_w + tf.math.sqrt(tf.math.exp(logsig2_w)) * self.random
-        return tf.matmul(input, weight, transpose_b=True) + self.bias
+            return self._forward_map_inference(input)
+        return self._forward_sample_weights(input)
 
 
 class Dense(KerasDense, MetaLayer):
@@ -313,7 +353,14 @@ layers = {
     ),
     "VBDense": (
         VBDense,
-        {"in_features": None, "out_features": None, "prior_prec": None, "std_init": None, "bayesian_bias": False, "map": False},
+        {
+            "in_features": None,
+            "out_features": None,
+            "prior_prec": None,
+            "std_init": None,
+            "bayesian_bias": False,
+            "map": False,
+        },
     ),
     "dropout": (Dropout, {"rate": 0.0}),
     "concatenate": (Concatenate, {}),

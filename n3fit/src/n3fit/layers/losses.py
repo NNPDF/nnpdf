@@ -11,6 +11,7 @@
 from unittest import result
 import numpy as np
 from keras import backend as K
+from keras import ops as Kops
 import logging
 
 from keras import ops as Kops
@@ -108,7 +109,7 @@ class LossKL(MetaLayer):
         super().__init__(**kwargs)
 
     def call(self, y_pred, **kwargs):
-        kl = K.constant(0.0, dtype=K.floatx())
+        kl = Kops.convert_to_tensor(0.0, dtype=K.floatx())
         for layer in self.vb_layers:
             kl += Kops.cast(layer.kl_loss(), K.floatx())
         result = kl * Kops.cast(self.kl_beta.read_value(), K.floatx())

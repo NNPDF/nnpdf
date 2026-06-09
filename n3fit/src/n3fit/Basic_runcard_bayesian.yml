@@ -125,8 +125,8 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     initial: 10
     multiplier:
   stopping_patience: 0.1
-  layer_type: ['dense', 'VBdense', 'VBDense']
-  bayesian_bias: [false, true, false]   # per layer (ignored on non-VBDense layers)
+  layer_type: ['dense', 'VBDense', 'VBDense']
+  bayesian_bias: [false, true, true]   # per layer (ignored on non-VBDense layers)
   dropout: 0.0
   threshold_chi2: 3.5
   prior_prec: 1.0
