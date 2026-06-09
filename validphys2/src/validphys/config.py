@@ -7,12 +7,14 @@ import inspect
 import logging
 import numbers
 import pathlib
+
 import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
 from reportengine import configparser, report
 from reportengine.configparser import ConfigError, _parse_func, element_of, record_from_defaults
-from reportengine.environment import Environment, EnvironmentError_
+from reportengine.environment import Environment as reEnvironment
+from reportengine.environment import EnvironmentError_
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
 from validphys.core import (
@@ -34,7 +36,7 @@ from validphys.filters import (
     default_filter_rules_input,
     default_filter_settings_input,
 )
-from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
+from validphys.fitdata import fitted_replica_indexes, match_datasets_by_name, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
     DataNotFoundError,
@@ -52,7 +54,7 @@ from validphys.utils import yaml_safe
 log = logging.getLogger(__name__)
 
 
-class Environment(Environment):
+class Environment(reEnvironment):
     """Container for information to be filled at run time"""
 
     def __init__(self, *, this_folder=None, net=True, upload=False, dry=False, **kwargs):
@@ -75,8 +77,8 @@ class Environment(Environment):
         except LoaderError as e:
             log.error("Failed to find the paths. These are configured " "in the nnprofile settings")
             raise EnvironmentError_(e) from e
-        self.deta_path = self.loader.datapath
         self.results_path = self.loader.resultspath
+        self.data_paths = self.loader.commondata_folders
 
         self.upload = upload
         super().__init__(**kwargs)
@@ -163,6 +165,29 @@ class CoreConfig(configparser.Config):
 
         return pdf
 
+    def produce_load_weights_dict(self, load_weights_from_fit=None):
+        if load_weights_from_fit is None:
+            return None
+        try:
+            fit_object = self.loader.check_fit(load_weights_from_fit)
+            fit_folder = fit_object.path / "nnfit"
+            weights_name = fit_object.as_input().get("save")
+            if weights_name is None:
+                raise LoadFailedError(f"{load_weights_from_fit} does not have saved weights")
+            # Correct for extension already included
+            if weights_name.endswith(".h5"):
+                weights_name = weights_name[:-3]
+            weights_dict = {}
+            for p in fit_folder.glob(f"replica_*/{weights_name}.weights.h5"):
+                replica_folder = p.parent.name
+                replica_index = int(replica_folder.split("_")[1])
+                weights_dict[replica_index] = p
+            if not weights_dict:
+                raise LoadFailedError(f"No weights found for: {load_weights_from_fit}")
+            return weights_dict
+        except LoadFailedError as e:
+            raise ConfigError(str(e), load_weights_from_fit, self.loader.available_fits) from e
+
     @element_of("unpolarized_bcs")
     @_id_with_label
     def parse_unpolarized_bc(self, name):
@@ -211,7 +236,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
 
         return res
-               
+
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""
         return NSList(range(1, nreplica + 1), nskey="replica")
@@ -780,16 +805,36 @@ class CoreConfig(configparser.Config):
         }
 
     @configparser.explicit_node
-    def produce_dataset_inputs_fitting_covmat(self, use_thcovmat_in_fitting=False):
+    def produce_dataset_inputs_fitting_covmat(
+        self, use_thcovmat_in_fitting=False, load_thcovmat_from_file=False
+    ):
         """
-        Produces the correct covmat to be used in fitting_data_dict according
-        to some options: whether to include the theory covmat, whether to
-        separate the multiplcative errors and whether to compute the
-        experimental covmat using the t0 prescription.
+        Dispatcher node for the covmat used in ``fitting_data_dict``.
+
+        Returns the experimental t0 covmat (``dataset_inputs_t0_exp_covmat``) when
+        no theory covmat is requested. When ``use_thcovmat_in_fitting=True``,
+        returns the total (experimental + theory) covmat — either rebuilt from
+        scratch via ``nnfit_theory_covmat`` (``load_thcovmat_from_file=False``,
+        the default) or with the theory part loaded from a CSV previously
+        written by ``vp-setupfit`` (``load_thcovmat_from_file=True``).
+
+        The two contexts:
+
+        * **vp-setupfit** — leaves ``load_thcovmat_from_file`` at the default. It
+          *writes* the theory covmat CSV, so the load variant would raise
+          FileNotFoundError on a file that does not yet exist. The result feeds
+          ``setupfit_fitting_covmat``, which serialises either the full fitting
+          covmat or its diagonal-basis rotation table.
+        * **n3fit** — sets ``load_thcovmat_from_file=True`` (see
+          ``n3fit_exec.py``). The result feeds ``_inv_covmat_prepared``, which
+          prepares the inverse for the fit.
         """
+
         from validphys import covmats
 
         if use_thcovmat_in_fitting:
+            if load_thcovmat_from_file:
+                return covmats.dataset_load_inputs_t0_total_covmat
             return covmats.dataset_inputs_t0_total_covmat
         return covmats.dataset_inputs_t0_exp_covmat
 
@@ -805,8 +850,13 @@ class CoreConfig(configparser.Config):
         """
         Produces the correct MC replica method sampling covmat to be used in
         make_replica according to some options: whether to sample using a t0
-        covariance matrix, include the theory covmat and whether to
-        separate the multiplcative errors.
+        covariance matrix, include the theory covmat and whether to separate the
+        multiplcative errors.
+
+        This node is never invoked by setupfit, but is used in n3fit when
+        sampling the MC replicas for the fit (``make_replica``). It routes to
+        the load variants under ``use_thcovmat_in_sampling=True``, which load
+        the theory covmat from the CSV file generated by setupfit.
 
         Parameters
         ----------
@@ -826,9 +876,9 @@ class CoreConfig(configparser.Config):
         if use_t0_sampling:
             if use_thcovmat_in_sampling:
                 if sep_mult:
-                    return covmats.dataset_inputs_t0_total_covmat_separate
+                    return covmats.dataset_load_inputs_t0_total_covmat_separate
                 else:
-                    return covmats.dataset_inputs_t0_total_covmat
+                    return covmats.dataset_load_inputs_t0_total_covmat
             else:
                 if sep_mult:
                     return covmats.dataset_inputs_t0_exp_covmat_separate
@@ -838,14 +888,27 @@ class CoreConfig(configparser.Config):
         else:
             if use_thcovmat_in_sampling:
                 if sep_mult:
-                    return covmats.dataset_inputs_total_covmat_separate
+                    return covmats.dataset_load_inputs_total_covmat_separate
                 else:
-                    return covmats.dataset_inputs_total_covmat
+                    return covmats.dataset_load_inputs_total_covmat
             else:
                 if sep_mult:
                     return covmats.dataset_inputs_exp_covmat_separate
                 else:
                     return covmats.dataset_inputs_exp_covmat
+
+    def produce_fitting_covmat_name(self, fit):
+        """Produce the name of the covmat to be used in fitting,
+        according to how it was generated by vp-setupfit.
+        """
+        runcard = fit.as_input()
+        use_thcovmat = runcard.get("theorycovmatconfig", {}).get("use_thcovmat_in_fitting", False)
+        if use_thcovmat:
+            covmat_name = "datacuts_theory_theorycovmatconfig_fitting_covmat_table.csv"
+        else:
+            covmat_name = "datacuts_theory_fitting_covmat_table.csv"
+        path = fit.path / "tables" / covmat_name
+        return path
 
     def produce_loaded_theory_covmat(
         self,
@@ -860,6 +923,7 @@ class CoreConfig(configparser.Config):
         Loads the theory covmat from the correct file according to how it
         was generated by vp-setupfit.
         """
+
         if not use_thcovmat_in_sampling and not use_thcovmat_in_fitting:
             return 0.0
         # Load correct file according to how the thcovmat was generated by vp-setupfit
@@ -903,7 +967,7 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_covmat_from_systematics
 
     @configparser.explicit_node
-    def produce_masks(self, diagonal_basis: bool = False):
+    def produce_masks(self, diagonal_basis: bool = True):
         """Modifies which action is used as masks depending on the flag
         `diagonal_basis`
         """
@@ -979,14 +1043,12 @@ class CoreConfig(configparser.Config):
         for spec in dataspecs:
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
-
                 names = {}
                 for dsin in data_input:
                     cd = self.produce_commondata(dataset_input=dsin)
                     proc = get_info(cd).nnpdf31_process
                     ds = dsin.name
                     names[(proc, ds)] = dsin
-
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
         res = []
@@ -995,11 +1057,60 @@ class CoreConfig(configparser.Config):
             # TODO: Should this have the same name?
             inner_spec_list = inres["dataspecs"] = []
             for ispec, spec in enumerate(dataspecs):
-                # Passing spec by referene
+                # Passing spec by reference
                 d = ChainMap({"dataset_input": all_names[ispec][k]}, spec)
                 inner_spec_list.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
+        return res
+
+    def produce_mismatched_datasets_by_name(self, dataspecs):
+        """
+        Like produce_matched_datasets_from_dataspecs, but for mismatched datasets from a fit comparison.
+        Returns the mismatched datasets, each tagged with more_info from the dataspecs they came from. Set up to work with plot_fancy.
+
+        Datasets are considered a mismatch if the name is different and if the variant is different.
+        """
+
+        self._check_dataspecs_type(dataspecs)
+
+        # Parse the data for the comparison so that only variant and dataset are actually tested
+        parsed_data = []
+        for spec in dataspecs:
+            tmp = [(i.name, i.variant) for i in spec["dataset_inputs"]]
+            parsed_data.append((spec, tmp))
+
+        # TODO:
+        # This is a convoluted way of checking whether there are mismatches
+        # between the lists of dataset inputs of a list of specs.
+        # This is not going to win any codegolf tournaments
+        already_mismatched = []
+        mismatched_dinputs = []
+        for spec, parsed_dinputs in parsed_data:
+            for spec_to_check, parsed_dinputs_to_check in parsed_data:
+                if spec == spec_to_check:
+                    continue
+                for i, parsed_dinput in enumerate(parsed_dinputs):
+                    # Use a list of already mismatched data to avoid duplicates
+                    if parsed_dinput in already_mismatched:
+                        continue
+                    if parsed_dinput not in parsed_dinputs_to_check:
+                        dinput = spec["dataset_inputs"][i]
+                        mismatched_dinputs.append((dinput, spec))
+                        already_mismatched.append(parsed_dinput)
+
+        res = []
+        # prepare output for plot_fancy
+        for dsin, spec in mismatched_dinputs:
+            res.append(
+                {
+                    "dataset_input": dsin,
+                    "dataset_name": dsin.name,
+                    "theoryid": spec["theoryid"],
+                    "pdfs": [i["pdf"] for i in dataspecs],
+                    "fit": spec["fit"],
+                }
+            )
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
@@ -1012,7 +1123,6 @@ class CoreConfig(configparser.Config):
                 names = {(p.name): (p) for p in pos}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
-
         res = []
         for k in used_set:
             inres = {"posdataset_name": k}
@@ -1257,6 +1367,7 @@ class CoreConfig(configparser.Config):
         This function is only used in vp-setupfit to store the necessary covmats as .csv files in
         the tables directory.
         """
+
         if point_prescriptions is not None:
             if user_covmat_path is not None:
                 # Both scalevar and user uncertainties
@@ -1265,9 +1376,9 @@ class CoreConfig(configparser.Config):
                 f = total_theory_covmat_fitting
             else:
                 # Only scalevar uncertainties
-                from validphys.theorycovariance.construction import theory_covmat_custom
+                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
 
-                f = theory_covmat_custom
+                f = theory_covmat_custom_fitting
         elif user_covmat_path is not None:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
@@ -1275,6 +1386,25 @@ class CoreConfig(configparser.Config):
             f = user_covmat_fitting
 
         return f
+
+    def produce_mult_factor_user_covmat(
+        self, mult_factor: float = 1.0, user_covmat_path: str = None
+    ):
+        """
+        Multiplicative factors for the user covmat provided by mult_factors_user_covmat in the runcard.
+        If no factors are provided, returns None.
+        For use in theorycovariance.construction.user_covmat.
+        """
+        # Check that if mult_factors is provided, user_covmat_paths is also provided
+        if mult_factor is not None and user_covmat_path is None:
+            raise ConfigError(
+                "If mult_factors is provided, user_covmat_paths must also be provided."
+            )
+
+        if mult_factor is None:
+            return 1.0
+        else:
+            return mult_factor
 
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
@@ -1312,7 +1442,7 @@ class CoreConfig(configparser.Config):
             if user_covmat_path is not None:
                 # User covmat + point prescriptions
                 if point_prescriptions is not None and point_prescriptions != []:
-                  generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
+                    generic_name = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
                 # Only user covmat
                 else:
                     generic_name = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
@@ -1718,7 +1848,7 @@ class CoreConfig(configparser.Config):
         self,
         use_thcovmat_in_fitting=False,
         use_thcovmat_in_sampling=False,
-        diagonal_basis=False,
+        diagonal_basis=True,
         data_grouping=None,
         data_grouping_recorded_spec_=None,
     ):
@@ -1798,6 +1928,8 @@ class CoreConfig(configparser.Config):
         prescription. The options for the latter are defined in pointprescriptions.yaml.
         This hard codes the theories needed for each prescription to avoid user error."""
         th = t0id.id
+        if point_prescription == 'power corrections':
+            return NSList([t0id], nskey="theoryid")
 
         lsv = yaml_safe.load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
@@ -1907,6 +2039,19 @@ class CoreConfig(configparser.Config):
         if fitthcovmat is None:
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
+
+    @configparser.explicit_node
+    def produce_covs_pt_prescrip(self, point_prescription):
+        if point_prescription == 'power corrections':
+            from validphys.theorycovariance.construction import covs_pt_prescrip_pc
+
+            f = covs_pt_prescrip_pc
+        else:
+            from validphys.theorycovariance.construction import covs_pt_prescrip_mhou
+
+            f = covs_pt_prescrip_mhou
+
+        return f
 
 
 class Config(report.Config, CoreConfig):

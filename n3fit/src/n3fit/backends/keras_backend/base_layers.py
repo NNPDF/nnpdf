@@ -1,20 +1,20 @@
 """
-    This module defines custom base layers to be used by the n3fit
-    Neural Network.
-    These layers can use the keras standard set of activation function
-    or implement their own.
+This module defines custom base layers to be used by the n3fit
+Neural Network.
+These layers can use the keras standard set of activation function
+or implement their own.
 
-    For a layer to be used by n3fit it should be contained in the `layers` dictionary defined below.
-    This dictionary has the following structure:
+For a layer to be used by n3fit it should be contained in the `layers` dictionary defined below.
+This dictionary has the following structure:
 
-        'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
+    'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 
-    In order to add custom activation functions, they must be added to
-    the `custom_activations` dictionary with the following structure:
+In order to add custom activation functions, they must be added to
+the `custom_activations` dictionary with the following structure:
 
-        'name of the activation' : function
+    'name of the activation' : function
 
-    The names of the layer and the activation function are the ones to be used in the n3fit runcard.
+The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 
 from keras.layers import Dense as KerasDense
@@ -25,6 +25,7 @@ from keras.regularizers import l1_l2
 
 from . import operations as ops
 from .MetaLayer import MetaLayer
+
 
 # Custom activation functions
 def square_activation(x):
@@ -75,7 +76,12 @@ def LSTM_modified(**kwargs):
 
 
 class Dense(KerasDense, MetaLayer):
-    pass
+
+    def __init__(self, *args, **kwargs):
+        # In Keras == 3.13, np.int() is not accepted by Dense
+        if "units" in kwargs:
+            kwargs["units"] = int(kwargs["units"])
+        super().__init__(*args, **kwargs)
 
 
 def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_kwargs):

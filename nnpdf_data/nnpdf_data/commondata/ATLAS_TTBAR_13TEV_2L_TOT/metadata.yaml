@@ -1,0 +1,46 @@
+setname: ATLAS_TTBAR_13TEV_2L_TOT
+nnpdf_metadata:
+  nnpdf31_process: TOP
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/2303.15340
+iNSPIRE:
+  url: https://inspirehep.net/literature/2648096
+hepdata:
+  url: NA
+  version:
+version: 1
+version_comment: "This dataset is the 2L analogue of ATLAS_TTBAR_13TEV_TOT, which is based on L+J"
+implemented_observables:
+- observable:
+    description: total cross section of ttBar
+    label: $\sigma_{t\bar{t}}$
+    units: $pb$
+  observable_name: X-SEC
+  process_type: INC
+  ndata: 1
+  tables: []
+  kinematics:
+    variables:
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage:
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}} (2L channel)$
+    plot_x: sqrts
+    y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_13TEV_TOT_X-SEC

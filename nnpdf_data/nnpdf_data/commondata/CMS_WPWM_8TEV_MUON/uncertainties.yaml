@@ -185,1014 +185,1014 @@ definitions:
     type: CMSLUMI12
 bins:
 - sys_corr_1: 6.45761142e+02
-  sys_corr_2: -1.65031617e+02
-  sys_corr_3: -7.35894211e+01
+  sys_corr_2: 1.65031617e+02
+  sys_corr_3: 7.35894211e+01
   sys_corr_4: 8.56692779e+01
-  sys_corr_5: -6.77516605e+01
+  sys_corr_5: 6.77516605e+01
   sys_corr_6: 2.30258784e+01
   sys_corr_7: 9.05322418e+01
-  sys_corr_8: 1.03310221e+00
-  sys_corr_9: -7.86715877e+01
-  sys_corr_10: -7.19488789e+01
-  sys_corr_11: 1.56440426e+01
-  sys_corr_12: -1.45760467e+01
-  sys_corr_13: -2.67433546e+01
-  sys_corr_14: 1.33646902e+01
-  sys_corr_15: 5.56406574e+00
-  sys_corr_16: -5.87228697e+01
-  sys_corr_17: -5.54270670e+00
-  sys_corr_18: 5.31527505e+00
-  sys_corr_19: -5.35126422e+00
-  sys_corr_20: 2.76052579e+01
-  sys_corr_21: -1.47552994e+01
-  sys_corr_22: -4.92062992e+01
-  corr_stat_1: -4.36105927e+03
+  sys_corr_8: 7.86715877e+01
+  sys_corr_9: 7.19488789e+01
+  sys_corr_10: 1.56440426e+01
+  sys_corr_11: 1.45760467e+01
+  sys_corr_12: 2.67433546e+01
+  sys_corr_13: 1.33646902e+01
+  sys_corr_14: 5.56406574e+00
+  sys_corr_15: 5.87228697e+01
+  sys_corr_16: 5.31527505e+00
+  sys_corr_17: 4.92062992e+01
+  sys_corr_18: 1.47552994e+01
+  sys_corr_19: 2.76052579e+01
+  sys_corr_20: 5.35126422e+00
+  sys_corr_21: 5.54270670e+00
+  sys_corr_22: 1.03310221e+00
+  corr_stat_1: 4.36105927e+03
   corr_stat_2: 4.36659677e+03
-  corr_stat_3: -9.48395097e+02
+  corr_stat_3: 9.48395097e+02
   corr_stat_4: 4.97915498e+02
   corr_stat_5: 4.10036539e+01
   corr_stat_6: 3.61267333e+02
   corr_stat_7: 3.11642321e+02
   corr_stat_8: 2.42581575e+01
-  corr_stat_9: -2.78549696e+02
+  corr_stat_9: 2.78549696e+02
   corr_stat_10: 4.59724656e+02
-  corr_stat_11: -1.19020891e+03
-  corr_stat_12: -7.78086020e+02
-  corr_stat_13: -3.25115482e+02
-  corr_stat_14: -1.74120972e+01
-  corr_stat_15: 1.85441751e+02
-  corr_stat_16: 2.46174582e+02
-  corr_stat_17: -3.95553139e+02
-  corr_stat_18: -3.09033979e+02
-  corr_stat_19: -8.90460745e+01
-  corr_stat_20: 7.03132984e+01
-  corr_stat_21: -8.64776886e+01
-  corr_stat_22: -4.95512353e+01
+  corr_stat_11: 7.78086020e+02
+  corr_stat_12: 1.19020891e+03
+  corr_stat_13: 3.25115482e+02
+  corr_stat_14: 1.85441751e+02
+  corr_stat_15: 8.90460745e+01
+  corr_stat_16: 4.95512353e+01
+  corr_stat_17: 8.64776886e+01
+  corr_stat_18: 7.03132984e+01
+  corr_stat_19: 3.09033979e+02
+  corr_stat_20: 3.95553139e+02
+  corr_stat_21: 2.46174582e+02
+  corr_stat_22: 1.74120972e+01
   stat: 700.0
   sys_luminosity: 19336.2
 - sys_corr_1: 6.09844455e+02
-  sys_corr_2: -2.92450574e+02
-  sys_corr_3: -5.23161013e+01
+  sys_corr_2: 2.92450574e+02
+  sys_corr_3: 5.23161013e+01
   sys_corr_4: 2.45494336e+01
-  sys_corr_5: -3.11484574e+01
+  sys_corr_5: 3.11484574e+01
   sys_corr_6: -4.97932769e+00
   sys_corr_7: -1.43988195e+01
-  sys_corr_8: 2.43909974e-01
-  sys_corr_9: 2.52967673e+01
-  sys_corr_10: 3.03547196e+01
-  sys_corr_11: -3.87905875e+00
-  sys_corr_12: 1.43928874e+02
-  sys_corr_13: 1.17977258e+01
-  sys_corr_14: -2.23901410e+00
-  sys_corr_15: 1.47660562e+01
-  sys_corr_16: -1.36485713e+01
-  sys_corr_17: 6.19059669e+01
-  sys_corr_18: -3.43250390e+01
-  sys_corr_19: 3.03160696e+00
-  sys_corr_20: -8.88467529e+00
-  sys_corr_21: 4.24304691e+00
-  sys_corr_22: -7.95213744e+00
-  corr_stat_1: -6.19391576e+03
+  sys_corr_8: -2.52967673e+01
+  sys_corr_9: -3.03547196e+01
+  sys_corr_10: -3.87905875e+00
+  sys_corr_11: -1.43928874e+02
+  sys_corr_12: -1.17977258e+01
+  sys_corr_13: -2.23901410e+00
+  sys_corr_14: 1.47660562e+01
+  sys_corr_15: 1.36485713e+01
+  sys_corr_16: -3.43250390e+01
+  sys_corr_17: 7.95213744e+00
+  sys_corr_18: -4.24304691e+00
+  sys_corr_19: -8.88467529e+00
+  sys_corr_20: -3.03160696e+00
+  sys_corr_21: -6.19059669e+01
+  sys_corr_22: 2.43909974e-01
+  corr_stat_1: 6.19391576e+03
   corr_stat_2: 4.10183217e+03
-  corr_stat_3: -9.40880197e+02
+  corr_stat_3: 9.40880197e+02
   corr_stat_4: 2.43937231e+02
   corr_stat_5: -4.64695670e+02
   corr_stat_6: 2.61157546e+02
   corr_stat_7: -1.07947516e+02
   corr_stat_8: -2.67452791e+02
-  corr_stat_9: -4.67603264e+02
+  corr_stat_9: 4.67603264e+02
   corr_stat_10: -1.34018451e+03
-  corr_stat_11: -3.79455357e+01
-  corr_stat_12: 5.43105707e+02
-  corr_stat_13: -2.30864507e+02
-  corr_stat_14: 2.28105939e+01
-  corr_stat_15: 2.73916318e+02
-  corr_stat_16: 8.24197776e+01
-  corr_stat_17: 2.76294496e+01
-  corr_stat_18: 3.66628325e+02
-  corr_stat_19: -1.57374782e+02
-  corr_stat_20: 2.98681788e+02
-  corr_stat_21: -2.84957711e+02
-  corr_stat_22: -1.05543291e+02
+  corr_stat_11: -5.43105707e+02
+  corr_stat_12: 3.79455357e+01
+  corr_stat_13: 2.30864507e+02
+  corr_stat_14: 2.73916318e+02
+  corr_stat_15: 1.57374782e+02
+  corr_stat_16: 1.05543291e+02
+  corr_stat_17: 2.84957711e+02
+  corr_stat_18: 2.98681788e+02
+  corr_stat_19: -3.66628325e+02
+  corr_stat_20: -2.76294496e+01
+  corr_stat_21: 8.24197776e+01
+  corr_stat_22: -2.28105939e+01
   stat: 700.0
   sys_luminosity: 19487.0
 - sys_corr_1: 6.33941731e+02
-  sys_corr_2: -2.29504109e+02
-  sys_corr_3: -5.22920420e+01
+  sys_corr_2: 2.29504109e+02
+  sys_corr_3: 5.22920420e+01
   sys_corr_4: 2.68354386e+01
-  sys_corr_5: -2.84482478e+01
+  sys_corr_5: 2.84482478e+01
   sys_corr_6: -1.07820941e+00
   sys_corr_7: -1.24127223e+01
-  sys_corr_8: 5.19786845e-01
-  sys_corr_9: 9.26625050e+00
-  sys_corr_10: 8.75502258e+01
-  sys_corr_11: -1.17019912e+02
-  sys_corr_12: -6.12053737e+01
-  sys_corr_13: -1.06467902e+01
-  sys_corr_14: 1.84456705e+01
-  sys_corr_15: 3.90439333e+00
-  sys_corr_16: -2.57684908e+01
-  sys_corr_17: -1.14769546e+01
-  sys_corr_18: -1.53153165e+01
-  sys_corr_19: 6.07192872e+01
-  sys_corr_20: -2.30791628e+01
-  sys_corr_21: 9.86181785e+00
-  sys_corr_22: -4.44995477e+00
-  corr_stat_1: -5.36489830e+03
+  sys_corr_8: -9.26625050e+00
+  sys_corr_9: -8.75502258e+01
+  sys_corr_10: -1.17019912e+02
+  sys_corr_11: 6.12053737e+01
+  sys_corr_12: 1.06467902e+01
+  sys_corr_13: 1.84456705e+01
+  sys_corr_14: 3.90439333e+00
+  sys_corr_15: 2.57684908e+01
+  sys_corr_16: -1.53153165e+01
+  sys_corr_17: 4.44995477e+00
+  sys_corr_18: -9.86181785e+00
+  sys_corr_19: -2.30791628e+01
+  sys_corr_20: -6.07192872e+01
+  sys_corr_21: 1.14769546e+01
+  sys_corr_22: 5.19786845e-01
+  corr_stat_1: 5.36489830e+03
   corr_stat_2: 4.37814383e+03
-  corr_stat_3: -7.83377684e+02
+  corr_stat_3: 7.83377684e+02
   corr_stat_4: 1.79389721e+02
   corr_stat_5: -8.16563671e+01
   corr_stat_6: 1.85234799e+02
   corr_stat_7: 1.85738402e+02
   corr_stat_8: 2.07474394e+01
-  corr_stat_9: -2.16482486e+02
+  corr_stat_9: 2.16482486e+02
   corr_stat_10: 1.12031856e+03
-  corr_stat_11: 4.43031166e+02
-  corr_stat_12: 1.12661630e+03
-  corr_stat_13: -2.74944954e+02
-  corr_stat_14: 5.52990763e+01
-  corr_stat_15: 1.27894440e+02
-  corr_stat_16: 1.24550002e+02
-  corr_stat_17: 4.22149756e+02
-  corr_stat_18: -3.05600313e+02
-  corr_stat_19: -1.08832966e+02
-  corr_stat_20: 6.81959702e+01
-  corr_stat_21: -2.28606746e+01
-  corr_stat_22: -3.59321594e+01
+  corr_stat_11: -1.12661630e+03
+  corr_stat_12: -4.43031166e+02
+  corr_stat_13: 2.74944954e+02
+  corr_stat_14: 1.27894440e+02
+  corr_stat_15: 1.08832966e+02
+  corr_stat_16: 3.59321594e+01
+  corr_stat_17: 2.28606746e+01
+  corr_stat_18: 6.81959702e+01
+  corr_stat_19: 3.05600313e+02
+  corr_stat_20: -4.22149756e+02
+  corr_stat_21: 1.24550002e+02
+  corr_stat_22: -5.52990763e+01
   stat: 700.0
   sys_luminosity: 19549.4
 - sys_corr_1: 6.35295266e+02
-  sys_corr_2: -2.23840330e+02
-  sys_corr_3: -5.82854178e+01
+  sys_corr_2: 2.23840330e+02
+  sys_corr_3: 5.82854178e+01
   sys_corr_4: 1.57443027e+01
-  sys_corr_5: -2.60685678e+01
+  sys_corr_5: 2.60685678e+01
   sys_corr_6: -8.53941538e+00
   sys_corr_7: -3.68108438e+01
-  sys_corr_8: 1.23551826e+00
-  sys_corr_9: 3.51526116e+01
-  sys_corr_10: 6.29508121e+01
-  sys_corr_11: 1.29474878e+02
-  sys_corr_12: -5.44196027e+01
-  sys_corr_13: -1.01840334e+01
-  sys_corr_14: 6.64389303e+00
-  sys_corr_15: 1.04463191e+01
-  sys_corr_16: -1.96110553e+01
-  sys_corr_17: -1.47486736e+01
-  sys_corr_18: -2.21480058e+01
-  sys_corr_19: -3.63204200e+01
-  sys_corr_20: -5.24315941e+01
-  sys_corr_21: 1.34888959e+01
-  sys_corr_22: -4.21030519e+00
-  corr_stat_1: -5.25314143e+03
+  sys_corr_8: -3.51526116e+01
+  sys_corr_9: -6.29508121e+01
+  sys_corr_10: 1.29474878e+02
+  sys_corr_11: 5.44196027e+01
+  sys_corr_12: 1.01840334e+01
+  sys_corr_13: 6.64389303e+00
+  sys_corr_14: 1.04463191e+01
+  sys_corr_15: 1.96110553e+01
+  sys_corr_16: -2.21480058e+01
+  sys_corr_17: 4.21030519e+00
+  sys_corr_18: -1.34888959e+01
+  sys_corr_19: -5.24315941e+01
+  sys_corr_20: 3.63204200e+01
+  sys_corr_21: 1.47486736e+01
+  sys_corr_22: 1.23551826e+00
+  corr_stat_1: 5.25314143e+03
   corr_stat_2: 4.35508919e+03
-  corr_stat_3: -7.62268859e+02
+  corr_stat_3: 7.62268859e+02
   corr_stat_4: -5.14931504e+01
   corr_stat_5: -1.74767514e+02
   corr_stat_6: 1.09505857e+02
   corr_stat_7: 3.84214424e+01
   corr_stat_8: -7.53887615e+01
-  corr_stat_9: 3.54909890e+01
+  corr_stat_9: -3.54909890e+01
   corr_stat_10: 6.46013289e+01
-  corr_stat_11: 1.27302623e+03
-  corr_stat_12: -1.11730633e+03
-  corr_stat_13: -1.94870789e+02
-  corr_stat_14: -7.57330157e+01
-  corr_stat_15: 1.36530310e+02
-  corr_stat_16: -4.91346830e+02
-  corr_stat_17: -5.12303267e+01
-  corr_stat_18: -1.34954332e+02
-  corr_stat_19: -6.61639017e+01
-  corr_stat_20: 4.91250393e+01
-  corr_stat_21: -9.16277313e+01
-  corr_stat_22: -1.02318371e+01
+  corr_stat_11: 1.11730633e+03
+  corr_stat_12: -1.27302623e+03
+  corr_stat_13: 1.94870789e+02
+  corr_stat_14: 1.36530310e+02
+  corr_stat_15: 6.61639017e+01
+  corr_stat_16: 1.02318371e+01
+  corr_stat_17: 9.16277313e+01
+  corr_stat_18: 4.91250393e+01
+  corr_stat_19: 1.34954332e+02
+  corr_stat_20: 5.12303267e+01
+  corr_stat_21: -4.91346830e+02
+  corr_stat_22: 7.57330157e+01
   stat: 700.0
   sys_luminosity: 19630.0
 - sys_corr_1: 6.27613018e+02
-  sys_corr_2: -2.41010989e+02
-  sys_corr_3: -4.87273655e+01
+  sys_corr_2: 2.41010989e+02
+  sys_corr_3: 4.87273655e+01
   sys_corr_4: -1.40528504e+01
-  sys_corr_5: -4.88309362e+00
+  sys_corr_5: 4.88309362e+00
   sys_corr_6: -1.99059531e+01
   sys_corr_7: -7.50438861e+01
-  sys_corr_8: -1.65126667e-01
-  sys_corr_9: 8.24682318e+01
-  sys_corr_10: -1.21386895e+02
-  sys_corr_11: -2.61497976e+01
-  sys_corr_12: -2.89890562e+01
-  sys_corr_13: 8.07817917e+00
-  sys_corr_14: 5.83222955e+00
-  sys_corr_15: 1.34932605e+01
-  sys_corr_16: -1.70851380e+01
-  sys_corr_17: -4.22771713e+00
-  sys_corr_18: -3.32941670e+01
-  sys_corr_19: -4.57651748e+00
-  sys_corr_20: 1.20049164e+01
-  sys_corr_21: -4.18901365e+01
-  sys_corr_22: 5.20829396e+01
-  corr_stat_1: -5.60765008e+03
+  sys_corr_8: -8.24682318e+01
+  sys_corr_9: 1.21386895e+02
+  sys_corr_10: -2.61497976e+01
+  sys_corr_11: 2.89890562e+01
+  sys_corr_12: -8.07817917e+00
+  sys_corr_13: 5.83222955e+00
+  sys_corr_14: 1.34932605e+01
+  sys_corr_15: 1.70851380e+01
+  sys_corr_16: -3.32941670e+01
+  sys_corr_17: -5.20829396e+01
+  sys_corr_18: 4.18901365e+01
+  sys_corr_19: 1.20049164e+01
+  sys_corr_20: 4.57651748e+00
+  sys_corr_21: 4.22771713e+00
+  sys_corr_22: -1.65126667e-01
+  corr_stat_1: 5.60765008e+03
   corr_stat_2: 4.36659746e+03
-  corr_stat_3: -6.03972461e+02
+  corr_stat_3: 6.03972461e+02
   corr_stat_4: -3.89703908e+02
   corr_stat_5: -2.32203944e+02
   corr_stat_6: -4.34091074e+02
   corr_stat_7: -5.47391222e+02
   corr_stat_8: -1.18843303e+02
-  corr_stat_9: 1.66120595e+03
+  corr_stat_9: -1.66120595e+03
   corr_stat_10: -1.49282566e+01
-  corr_stat_11: -3.23545619e+02
-  corr_stat_12: 1.31475743e+02
-  corr_stat_13: -1.60873244e+02
-  corr_stat_14: 1.02178450e+01
-  corr_stat_15: 1.01032667e+02
-  corr_stat_16: 1.46563056e+01
-  corr_stat_17: 7.32192971e+00
-  corr_stat_18: 1.33047638e+02
-  corr_stat_19: -9.89995718e+01
-  corr_stat_20: -4.74557677e+02
-  corr_stat_21: -4.45487591e+01
-  corr_stat_22: -3.70436690e+01
+  corr_stat_11: -1.31475743e+02
+  corr_stat_12: 3.23545619e+02
+  corr_stat_13: 1.60873244e+02
+  corr_stat_14: 1.01032667e+02
+  corr_stat_15: 9.89995718e+01
+  corr_stat_16: 3.70436690e+01
+  corr_stat_17: 4.45487591e+01
+  corr_stat_18: -4.74557677e+02
+  corr_stat_19: -1.33047638e+02
+  corr_stat_20: -7.32192971e+00
+  corr_stat_21: 1.46563056e+01
+  corr_stat_22: -1.02178450e+01
   stat: 700.0
   sys_luminosity: 19809.4
 - sys_corr_1: 6.45051286e+02
-  sys_corr_2: 8.72058533e+01
-  sys_corr_3: -1.07999928e+02
+  sys_corr_2: -8.72058533e+01
+  sys_corr_3: 1.07999928e+02
   sys_corr_4: 2.79147984e+01
-  sys_corr_5: 2.15692381e+02
+  sys_corr_5: -2.15692381e+02
   sys_corr_6: 4.10645227e+01
   sys_corr_7: 1.44120761e+01
-  sys_corr_8: 8.10114620e-01
-  sys_corr_9: -1.11772946e+01
-  sys_corr_10: -4.93645363e-02
-  sys_corr_11: 2.43663131e+00
-  sys_corr_12: 1.23454685e+01
-  sys_corr_13: -2.72060044e+01
-  sys_corr_14: 5.47531790e+01
-  sys_corr_15: -2.65927191e+01
-  sys_corr_16: 2.43459428e+01
-  sys_corr_17: -8.24857834e-01
-  sys_corr_18: 9.22900194e+00
-  sys_corr_19: -2.32494875e+00
-  sys_corr_20: -1.68634675e+00
-  sys_corr_21: -5.20392138e+00
-  sys_corr_22: 6.73086653e-01
-  corr_stat_1: -2.15528824e+03
+  sys_corr_8: 1.11772946e+01
+  sys_corr_9: 4.93645363e-02
+  sys_corr_10: 2.43663131e+00
+  sys_corr_11: -1.23454685e+01
+  sys_corr_12: 2.72060044e+01
+  sys_corr_13: 5.47531790e+01
+  sys_corr_14: -2.65927191e+01
+  sys_corr_15: -2.43459428e+01
+  sys_corr_16: 9.22900194e+00
+  sys_corr_17: -6.73086653e-01
+  sys_corr_18: 5.20392138e+00
+  sys_corr_19: -1.68634675e+00
+  sys_corr_20: 2.32494875e+00
+  sys_corr_21: 8.24857834e-01
+  sys_corr_22: 8.10114620e-01
+  corr_stat_1: 2.15528824e+03
   corr_stat_2: 4.93451654e+03
-  corr_stat_3: -4.71382929e+02
+  corr_stat_3: 4.71382929e+02
   corr_stat_4: -5.81200388e+02
   corr_stat_5: 6.15550183e+02
   corr_stat_6: -9.50967980e+02
   corr_stat_7: -1.06062698e+02
   corr_stat_8: 1.51121906e+03
-  corr_stat_9: -4.30788739e+02
+  corr_stat_9: 4.30788739e+02
   corr_stat_10: -2.25365217e+02
-  corr_stat_11: -5.48458954e+01
-  corr_stat_12: 3.12881270e+01
-  corr_stat_13: -2.04709516e+02
-  corr_stat_14: 3.06913866e+00
-  corr_stat_15: -2.10681508e+01
-  corr_stat_16: -3.52021944e+01
-  corr_stat_17: -1.33321947e+01
-  corr_stat_18: 1.04602918e+02
-  corr_stat_19: 7.82468046e+00
-  corr_stat_20: 4.33424848e+01
-  corr_stat_21: 4.56183345e+02
-  corr_stat_22: -4.35014309e+01
+  corr_stat_11: -3.12881270e+01
+  corr_stat_12: 5.48458954e+01
+  corr_stat_13: 2.04709516e+02
+  corr_stat_14: -2.10681508e+01
+  corr_stat_15: -7.82468046e+00
+  corr_stat_16: 4.35014309e+01
+  corr_stat_17: -4.56183345e+02
+  corr_stat_18: 4.33424848e+01
+  corr_stat_19: -1.04602918e+02
+  corr_stat_20: 1.33321947e+01
+  corr_stat_21: -3.52021944e+01
+  corr_stat_22: -3.06913866e+00
   stat: 700.0
   sys_luminosity: 19916.0
 - sys_corr_1: 5.94931880e+02
-  sys_corr_2: 2.61743257e+02
-  sys_corr_3: -1.02759277e+02
+  sys_corr_2: -2.61743257e+02
+  sys_corr_3: 1.02759277e+02
   sys_corr_4: -1.92504726e+02
-  sys_corr_5: -5.10198149e+01
+  sys_corr_5: 5.10198149e+01
   sys_corr_6: 1.12439543e+02
   sys_corr_7: 2.40651334e+01
-  sys_corr_8: 7.58463637e-01
-  sys_corr_9: -6.74076016e+00
-  sys_corr_10: 2.61442811e+00
-  sys_corr_11: -3.28421326e+00
-  sys_corr_12: 5.04533622e+00
-  sys_corr_13: -3.59882464e+01
-  sys_corr_14: -4.64633609e+01
-  sys_corr_15: -1.76786713e+01
-  sys_corr_16: 1.34009352e+01
-  sys_corr_17: -1.10903951e+00
-  sys_corr_18: 7.65638337e+00
-  sys_corr_19: -2.84616034e-01
-  sys_corr_20: 1.43274392e-01
-  sys_corr_21: -3.00101806e+00
-  sys_corr_22: -1.33360062e-01
-  corr_stat_1: -7.45052022e+02
+  sys_corr_8: 6.74076016e+00
+  sys_corr_9: -2.61442811e+00
+  sys_corr_10: -3.28421326e+00
+  sys_corr_11: -5.04533622e+00
+  sys_corr_12: 3.59882464e+01
+  sys_corr_13: -4.64633609e+01
+  sys_corr_14: -1.76786713e+01
+  sys_corr_15: -1.34009352e+01
+  sys_corr_16: 7.65638337e+00
+  sys_corr_17: 1.33360062e-01
+  sys_corr_18: 3.00101806e+00
+  sys_corr_19: 1.43274392e-01
+  sys_corr_20: 2.84616034e-01
+  sys_corr_21: 1.10903951e+00
+  sys_corr_22: 7.58463637e-01
+  corr_stat_1: 7.45052022e+02
   corr_stat_2: 5.31321142e+03
-  corr_stat_3: -1.86424679e+02
+  corr_stat_3: 1.86424679e+02
   corr_stat_4: -8.89381690e+02
   corr_stat_5: 9.10561693e+02
   corr_stat_6: -8.28811732e+02
   corr_stat_7: 7.22182211e+02
   corr_stat_8: -1.30967298e+03
-  corr_stat_9: -2.44549280e+02
+  corr_stat_9: 2.44549280e+02
   corr_stat_10: -7.71475862e+01
-  corr_stat_11: -7.69659252e+01
-  corr_stat_12: 3.85267500e+01
-  corr_stat_13: -1.00328129e+02
-  corr_stat_14: -1.39260564e+01
-  corr_stat_15: -1.53924285e+02
-  corr_stat_16: 1.28376889e+01
-  corr_stat_17: 8.78571392e+00
-  corr_stat_18: 4.01217138e+01
-  corr_stat_19: 2.76381466e+02
-  corr_stat_20: 2.28153721e-01
-  corr_stat_21: -2.70035106e+01
-  corr_stat_22: 3.00002925e+02
+  corr_stat_11: -3.85267500e+01
+  corr_stat_12: 7.69659252e+01
+  corr_stat_13: 1.00328129e+02
+  corr_stat_14: -1.53924285e+02
+  corr_stat_15: -2.76381466e+02
+  corr_stat_16: -3.00002925e+02
+  corr_stat_17: 2.70035106e+01
+  corr_stat_18: 2.28153721e-01
+  corr_stat_19: -4.01217138e+01
+  corr_stat_20: -8.78571392e+00
+  corr_stat_21: 1.28376889e+01
+  corr_stat_22: 1.39260564e+01
   stat: 700.0
   sys_luminosity: 20134.4
 - sys_corr_1: 5.65300837e+02
-  sys_corr_2: 3.28396726e+02
-  sys_corr_3: -7.48379691e+01
+  sys_corr_2: -3.28396726e+02
+  sys_corr_3: 7.48379691e+01
   sys_corr_4: -6.40978396e+01
-  sys_corr_5: 2.29891088e+00
+  sys_corr_5: -2.29891088e+00
   sys_corr_6: -2.13441524e+02
   sys_corr_7: 6.46097075e+01
-  sys_corr_8: 5.46753712e-01
-  sys_corr_9: -8.33021664e+00
-  sys_corr_10: 4.69125000e+00
-  sys_corr_11: -1.50706549e-01
-  sys_corr_12: -5.56585892e-01
-  sys_corr_13: 4.42587896e+01
-  sys_corr_14: -1.17311145e+01
-  sys_corr_15: -2.51628762e+01
-  sys_corr_16: 7.77426509e+00
-  sys_corr_17: -1.76390095e+00
-  sys_corr_18: 1.53065554e+01
-  sys_corr_19: -2.85618113e-01
-  sys_corr_20: -1.41706889e+00
-  sys_corr_21: -4.76198232e+00
-  sys_corr_22: -2.15999504e-01
-  corr_stat_1: -1.70836402e+02
+  sys_corr_8: 8.33021664e+00
+  sys_corr_9: -4.69125000e+00
+  sys_corr_10: -1.50706549e-01
+  sys_corr_11: 5.56585892e-01
+  sys_corr_12: -4.42587896e+01
+  sys_corr_13: -1.17311145e+01
+  sys_corr_14: -2.51628762e+01
+  sys_corr_15: -7.77426509e+00
+  sys_corr_16: 1.53065554e+01
+  sys_corr_17: 2.15999504e-01
+  sys_corr_18: 4.76198232e+00
+  sys_corr_19: -1.41706889e+00
+  sys_corr_20: 2.85618113e-01
+  sys_corr_21: 1.76390095e+00
+  sys_corr_22: 5.46753712e-01
+  corr_stat_1: 1.70836402e+02
   corr_stat_2: 5.66893285e+03
-  corr_stat_3: 6.68882255e+01
+  corr_stat_3: -6.68882255e+01
   corr_stat_4: -1.07051016e+03
   corr_stat_5: 9.07726568e+02
   corr_stat_6: 1.36602101e+03
   corr_stat_7: -9.97240622e+02
   corr_stat_8: -5.09716585e+01
-  corr_stat_9: -1.30086369e+02
+  corr_stat_9: 1.30086369e+02
   corr_stat_10: -2.85126823e+00
-  corr_stat_11: -5.57930273e+01
-  corr_stat_12: 1.88981368e+01
-  corr_stat_13: 1.21176693e+02
-  corr_stat_14: 1.34979006e+01
-  corr_stat_15: -3.97096467e+02
-  corr_stat_16: -7.17774019e+00
-  corr_stat_17: -4.44743235e-01
-  corr_stat_18: 1.11627626e+01
-  corr_stat_19: -1.14806531e+02
-  corr_stat_20: -1.00575742e+00
-  corr_stat_21: 8.52149745e+00
-  corr_stat_22: 9.93300401e+00
+  corr_stat_11: -1.88981368e+01
+  corr_stat_12: 5.57930273e+01
+  corr_stat_13: -1.21176693e+02
+  corr_stat_14: -3.97096467e+02
+  corr_stat_15: 1.14806531e+02
+  corr_stat_16: -9.93300401e+00
+  corr_stat_17: -8.52149745e+00
+  corr_stat_18: -1.00575742e+00
+  corr_stat_19: -1.11627626e+01
+  corr_stat_20: 4.44743235e-01
+  corr_stat_21: -7.17774019e+00
+  corr_stat_22: -1.34979006e+01
   stat: 700.0
   sys_luminosity: 2.01396000e+04
 - sys_corr_1: 3.83194739e+02
-  sys_corr_2: 5.45092181e+02
-  sys_corr_3: -6.56381298e+01
+  sys_corr_2: -5.45092181e+02
+  sys_corr_3: 6.56381298e+01
   sys_corr_4: 4.69383653e+01
-  sys_corr_5: -3.18434399e+01
+  sys_corr_5: 3.18434399e+01
   sys_corr_6: -7.30622147e+00
   sys_corr_7: -1.51744607e+02
-  sys_corr_8: 6.15650814e-01
-  sys_corr_9: -1.06651614e+02
-  sys_corr_10: -1.32783926e+00
-  sys_corr_11: -4.08119172e+00
-  sys_corr_12: 7.89972980e+00
-  sys_corr_13: 1.59218935e+01
-  sys_corr_14: -1.49776868e+01
-  sys_corr_15: 3.27868642e+01
-  sys_corr_16: 2.69897247e+01
-  sys_corr_17: -1.14886143e+00
-  sys_corr_18: 3.96299743e+01
-  sys_corr_19: -9.89022205e-01
-  sys_corr_20: -2.90122912e+00
-  sys_corr_21: -1.05897022e+01
-  sys_corr_22: -7.04205327e-01
-  corr_stat_1: 2.51748744e+03
+  sys_corr_8: 1.06651614e+02
+  sys_corr_9: 1.32783926e+00
+  sys_corr_10: -4.08119172e+00
+  sys_corr_11: -7.89972980e+00
+  sys_corr_12: -1.59218935e+01
+  sys_corr_13: -1.49776868e+01
+  sys_corr_14: 3.27868642e+01
+  sys_corr_15: -2.69897247e+01
+  sys_corr_16: 3.96299743e+01
+  sys_corr_17: 7.04205327e-01
+  sys_corr_18: 1.05897022e+01
+  sys_corr_19: -2.90122912e+00
+  sys_corr_20: 9.89022205e-01
+  sys_corr_21: 1.14886143e+00
+  sys_corr_22: 6.15650814e-01
+  corr_stat_1: -2.51748744e+03
   corr_stat_2: 5.92176571e+03
-  corr_stat_3: 1.84573643e+02
+  corr_stat_3: -1.84573643e+02
   corr_stat_4: -1.02716927e+03
   corr_stat_5: -7.51224745e+02
   corr_stat_6: 6.94731861e+02
   corr_stat_7: 1.42191408e+03
   corr_stat_8: 5.23897631e+02
-  corr_stat_9: 3.89207402e+02
+  corr_stat_9: -3.89207402e+02
   corr_stat_10: -1.71843974e+02
-  corr_stat_11: -4.86736376e+01
-  corr_stat_12: 8.76017022e+01
-  corr_stat_13: 2.18162536e+02
-  corr_stat_14: 1.52875640e+01
-  corr_stat_15: -2.02327791e+02
-  corr_stat_16: -6.31564464e+00
-  corr_stat_17: -3.46464550e+00
-  corr_stat_18: 1.58469704e+01
-  corr_stat_19: 2.84395264e+02
-  corr_stat_20: -1.97354020e+01
-  corr_stat_21: -1.57067487e+01
-  corr_stat_22: -2.02147131e+02
+  corr_stat_11: -8.76017022e+01
+  corr_stat_12: 4.86736376e+01
+  corr_stat_13: -2.18162536e+02
+  corr_stat_14: -2.02327791e+02
+  corr_stat_15: -2.84395264e+02
+  corr_stat_16: 2.02147131e+02
+  corr_stat_17: 1.57067487e+01
+  corr_stat_18: -1.97354020e+01
+  corr_stat_19: -1.58469704e+01
+  corr_stat_20: 3.46464550e+00
+  corr_stat_21: -6.31564464e+00
+  corr_stat_22: -1.52875640e+01
   stat: 700.0
   sys_luminosity: 20186.4
 - sys_corr_1: 1.72063277e+02
-  sys_corr_2: 5.50153685e+02
-  sys_corr_3: -6.34829856e+01
+  sys_corr_2: -5.50153685e+02
+  sys_corr_3: 6.34829856e+01
   sys_corr_4: 4.55997005e+01
-  sys_corr_5: -1.94101619e+01
+  sys_corr_5: 1.94101619e+01
   sys_corr_6: 1.38484983e+01
   sys_corr_7: 4.88882990e+00
-  sys_corr_8: 3.82224681e+00
-  sys_corr_9: 7.58206813e+01
-  sys_corr_10: 3.58157974e+00
-  sys_corr_11: -2.12437293e+00
-  sys_corr_12: 5.14250673e+00
-  sys_corr_13: -2.00338953e+00
-  sys_corr_14: 6.95751962e+00
-  sys_corr_15: 2.06570160e+01
-  sys_corr_16: -2.91982542e+01
-  sys_corr_17: -8.01536384e+00
-  sys_corr_18: 3.17837282e+01
-  sys_corr_19: -1.06954427e+01
-  sys_corr_20: 5.55104599e+01
-  sys_corr_21: 9.36867223e+01
-  sys_corr_22: 2.89308591e+01
-  corr_stat_1: 4.99434813e+03
+  sys_corr_8: -7.58206813e+01
+  sys_corr_9: -3.58157974e+00
+  sys_corr_10: -2.12437293e+00
+  sys_corr_11: -5.14250673e+00
+  sys_corr_12: 2.00338953e+00
+  sys_corr_13: 6.95751962e+00
+  sys_corr_14: 2.06570160e+01
+  sys_corr_15: 2.91982542e+01
+  sys_corr_16: 3.17837282e+01
+  sys_corr_17: -2.89308591e+01
+  sys_corr_18: -9.36867223e+01
+  sys_corr_19: 5.55104599e+01
+  sys_corr_20: 1.06954427e+01
+  sys_corr_21: 8.01536384e+00
+  sys_corr_22: 3.82224681e+00
+  corr_stat_1: -4.99434813e+03
   corr_stat_2: 5.74599059e+03
-  corr_stat_3: -1.73953444e+02
+  corr_stat_3: 1.73953444e+02
   corr_stat_4: -8.57795823e+02
   corr_stat_5: -1.28975133e+03
   corr_stat_6: -5.33815234e+02
   corr_stat_7: -7.74798615e+02
   corr_stat_8: -2.77804633e+02
-  corr_stat_9: -6.66858189e+02
+  corr_stat_9: 6.66858189e+02
   corr_stat_10: 4.00216318e+02
-  corr_stat_11: -2.01207749e+02
-  corr_stat_12: -1.46830335e+02
-  corr_stat_13: 5.49806804e+02
-  corr_stat_14: -2.19948692e+02
-  corr_stat_15: 1.62009610e+02
-  corr_stat_16: 5.55134469e+01
-  corr_stat_17: 1.58021551e+01
-  corr_stat_18: 1.32857489e+01
-  corr_stat_19: -3.85873596e+01
-  corr_stat_20: 3.86502129e+00
-  corr_stat_21: 2.77759238e+01
-  corr_stat_22: 9.21295540e+01
+  corr_stat_11: 1.46830335e+02
+  corr_stat_12: 2.01207749e+02
+  corr_stat_13: -5.49806804e+02
+  corr_stat_14: 1.62009610e+02
+  corr_stat_15: 3.85873596e+01
+  corr_stat_16: -9.21295540e+01
+  corr_stat_17: -2.77759238e+01
+  corr_stat_18: 3.86502129e+00
+  corr_stat_19: -1.32857489e+01
+  corr_stat_20: -1.58021551e+01
+  corr_stat_21: 5.55134469e+01
+  corr_stat_22: 2.19948692e+02
   stat: 600.0
   sys_luminosity: 2.00486000e+04
 - sys_corr_1: -1.26045326e+02
-  sys_corr_2: 6.72845102e+02
-  sys_corr_3: -5.88185204e+01
+  sys_corr_2: -6.72845102e+02
+  sys_corr_3: 5.88185204e+01
   sys_corr_4: 5.64888658e+01
-  sys_corr_5: -2.23836837e+01
+  sys_corr_5: 2.23836837e+01
   sys_corr_6: 2.64460287e+01
   sys_corr_7: 4.06215255e+01
-  sys_corr_8: -4.23754896e+01
-  sys_corr_9: 2.35471436e+01
-  sys_corr_10: 3.72140043e+00
-  sys_corr_11: -2.36806895e+00
-  sys_corr_12: -1.30957520e+01
-  sys_corr_13: 2.00816985e+01
-  sys_corr_14: -5.22295230e+00
-  sys_corr_15: 1.74316034e+01
-  sys_corr_16: 4.70221203e+01
-  sys_corr_17: -3.56866700e+00
-  sys_corr_18: -7.72921159e+01
-  sys_corr_19: -1.71688971e-01
-  sys_corr_20: -9.76868350e-01
-  sys_corr_21: -1.54647574e+01
-  sys_corr_22: -1.33175020e+01
-  corr_stat_1: 1.67126495e+04
+  sys_corr_8: -2.35471436e+01
+  sys_corr_9: -3.72140043e+00
+  sys_corr_10: -2.36806895e+00
+  sys_corr_11: 1.30957520e+01
+  sys_corr_12: -2.00816985e+01
+  sys_corr_13: -5.22295230e+00
+  sys_corr_14: 1.74316034e+01
+  sys_corr_15: -4.70221203e+01
+  sys_corr_16: -7.72921159e+01
+  sys_corr_17: 1.33175020e+01
+  sys_corr_18: 1.54647574e+01
+  sys_corr_19: -9.76868350e-01
+  sys_corr_20: 1.71688971e-01
+  sys_corr_21: 3.56866700e+00
+  sys_corr_22: -4.23754896e+01
+  corr_stat_1: -1.67126495e+04
   corr_stat_2: 6.43705783e+03
-  corr_stat_3: -1.32588550e+03
+  corr_stat_3: 1.32588550e+03
   corr_stat_4: 8.90876635e+02
   corr_stat_5: 4.39333189e+02
   corr_stat_6: 5.62344128e+01
   corr_stat_7: 3.22338756e+01
   corr_stat_8: 3.52514457e+01
-  corr_stat_9: 3.11008312e+02
+  corr_stat_9: -3.11008312e+02
   corr_stat_10: -1.28337756e+02
-  corr_stat_11: 1.84030848e+02
-  corr_stat_12: 9.43715720e+01
-  corr_stat_13: 3.73036543e+02
-  corr_stat_14: 3.45572602e+02
-  corr_stat_15: 2.56840349e+02
-  corr_stat_16: -1.40084799e+01
-  corr_stat_17: -5.62974853e+01
-  corr_stat_18: -2.23597419e+01
-  corr_stat_19: -3.45850609e+01
-  corr_stat_20: -3.85046945e+00
-  corr_stat_21: 2.41467461e+01
-  corr_stat_22: 1.23973521e+02
+  corr_stat_11: -9.43715720e+01
+  corr_stat_12: -1.84030848e+02
+  corr_stat_13: -3.73036543e+02
+  corr_stat_14: 2.56840349e+02
+  corr_stat_15: 3.45850609e+01
+  corr_stat_16: -1.23973521e+02
+  corr_stat_17: -2.41467461e+01
+  corr_stat_18: -3.85046945e+00
+  corr_stat_19: 2.23597419e+01
+  corr_stat_20: 5.62974853e+01
+  corr_stat_21: -1.40084799e+01
+  corr_stat_22: -3.45572602e+02
   stat: 700.0
   sys_luminosity: 1.94558000e+04
 - sys_corr_1: 5.55917764e+02
-  sys_corr_2: -1.32402942e+02
-  sys_corr_3: 4.81128824e+01
+  sys_corr_2: 1.32402942e+02
+  sys_corr_3: -4.81128824e+01
   sys_corr_4: 6.46293071e+01
-  sys_corr_5: -4.65287468e+01
+  sys_corr_5: 4.65287468e+01
   sys_corr_6: 3.00880315e+01
   sys_corr_7: 7.20599135e+01
-  sys_corr_8: 4.56304607e-01
-  sys_corr_9: -4.41559626e+01
-  sys_corr_10: -3.47744101e+01
-  sys_corr_11: 6.99555136e+00
-  sys_corr_12: -4.82527829e+00
-  sys_corr_13: 7.38686466e+00
-  sys_corr_14: -1.00414021e+01
-  sys_corr_15: -2.03344498e+01
-  sys_corr_16: 5.96347331e+01
-  sys_corr_17: 1.38963541e+01
-  sys_corr_18: 1.66827361e+01
-  sys_corr_19: 1.34884624e+01
-  sys_corr_20: -4.80884996e+01
-  sys_corr_21: 3.08139399e+01
-  sys_corr_22: 8.60131988e+01
-  corr_stat_1: -3.52254891e+03
+  sys_corr_8: 4.41559626e+01
+  sys_corr_9: 3.47744101e+01
+  sys_corr_10: 6.99555136e+00
+  sys_corr_11: 4.82527829e+00
+  sys_corr_12: -7.38686466e+00
+  sys_corr_13: -1.00414021e+01
+  sys_corr_14: -2.03344498e+01
+  sys_corr_15: -5.96347331e+01
+  sys_corr_16: 1.66827361e+01
+  sys_corr_17: -8.60131988e+01
+  sys_corr_18: -3.08139399e+01
+  sys_corr_19: -4.80884996e+01
+  sys_corr_20: -1.34884624e+01
+  sys_corr_21: -1.38963541e+01
+  sys_corr_22: 4.56304607e-01
+  corr_stat_1: 3.52254891e+03
   corr_stat_2: 3.59298781e+03
-  corr_stat_3: 6.67593752e+01
+  corr_stat_3: -6.67593752e+01
   corr_stat_4: 9.10750254e+02
   corr_stat_5: 3.52670668e+01
   corr_stat_6: 1.36065560e+02
   corr_stat_7: 1.52283417e+02
   corr_stat_8: -1.01024193e+01
-  corr_stat_9: -1.49413993e+02
+  corr_stat_9: 1.49413993e+02
   corr_stat_10: 2.21466223e+02
-  corr_stat_11: -5.95612979e+02
-  corr_stat_12: -3.91534987e+02
-  corr_stat_13: 2.84701813e+02
-  corr_stat_14: 9.09401638e+00
-  corr_stat_15: -2.27656995e+02
-  corr_stat_16: -4.51103344e+02
-  corr_stat_17: 7.91059001e+02
-  corr_stat_18: 5.61480830e+02
-  corr_stat_19: 7.32740288e+01
-  corr_stat_20: -1.06379537e+02
-  corr_stat_21: 1.21113787e+02
-  corr_stat_22: 8.27024135e+01
+  corr_stat_11: 3.91534987e+02
+  corr_stat_12: 5.95612979e+02
+  corr_stat_13: -2.84701813e+02
+  corr_stat_14: -2.27656995e+02
+  corr_stat_15: -7.32740288e+01
+  corr_stat_16: -8.27024135e+01
+  corr_stat_17: -1.21113787e+02
+  corr_stat_18: -1.06379537e+02
+  corr_stat_19: -5.61480830e+02
+  corr_stat_20: -7.91059001e+02
+  corr_stat_21: -4.51103344e+02
+  corr_stat_22: -9.09401638e+00
   stat: 600.0
   sys_luminosity: 1.47940000e+04
 - sys_corr_1: 5.28541041e+02
-  sys_corr_2: -2.38959305e+02
-  sys_corr_3: 4.86739823e+01
+  sys_corr_2: 2.38959305e+02
+  sys_corr_3: -4.86739823e+01
   sys_corr_4: 2.13083834e+01
-  sys_corr_5: -1.96554230e+01
+  sys_corr_5: 1.96554230e+01
   sys_corr_6: 7.65946992e+00
   sys_corr_7: 1.39518694e+00
-  sys_corr_8: -1.35394468e-01
-  sys_corr_9: 1.43938756e+01
-  sys_corr_10: 1.95368297e+01
-  sys_corr_11: -2.70254070e+00
-  sys_corr_12: 8.21210892e+01
-  sys_corr_13: 1.44792513e+01
-  sys_corr_14: -9.98195065e+00
-  sys_corr_15: -8.73018884e+00
-  sys_corr_16: 2.89305573e+01
-  sys_corr_17: -1.06374430e+02
-  sys_corr_18: -1.27187453e+00
-  sys_corr_19: -1.81638547e+00
-  sys_corr_20: 1.62591323e+01
-  sys_corr_21: -1.09359847e+01
-  sys_corr_22: -2.39267678e+00
-  corr_stat_1: -5.09936094e+03
+  sys_corr_8: -1.43938756e+01
+  sys_corr_9: -1.95368297e+01
+  sys_corr_10: -2.70254070e+00
+  sys_corr_11: -8.21210892e+01
+  sys_corr_12: -1.44792513e+01
+  sys_corr_13: -9.98195065e+00
+  sys_corr_14: -8.73018884e+00
+  sys_corr_15: -2.89305573e+01
+  sys_corr_16: -1.27187453e+00
+  sys_corr_17: 2.39267678e+00
+  sys_corr_18: 1.09359847e+01
+  sys_corr_19: 1.62591323e+01
+  sys_corr_20: 1.81638547e+00
+  sys_corr_21: 1.06374430e+02
+  sys_corr_22: -1.35394468e-01
+  corr_stat_1: 5.09936094e+03
   corr_stat_2: 3.49465885e+03
-  corr_stat_3: 1.45290381e+02
+  corr_stat_3: -1.45290381e+02
   corr_stat_4: 7.89221723e+02
   corr_stat_5: -2.22517061e+02
   corr_stat_6: 6.60274600e+01
   corr_stat_7: -6.89382643e+01
   corr_stat_8: -1.38252167e+02
-  corr_stat_9: -2.19309455e+02
+  corr_stat_9: 2.19309455e+02
   corr_stat_10: -6.96085155e+02
-  corr_stat_11: -1.14923376e+00
-  corr_stat_12: 2.74332722e+02
-  corr_stat_13: 3.28529536e+02
-  corr_stat_14: -9.33800792e+01
-  corr_stat_15: -3.15980013e+02
-  corr_stat_16: -1.25911016e+02
-  corr_stat_17: -6.32305047e+01
-  corr_stat_18: -7.61861286e+02
-  corr_stat_19: 1.86362860e+02
-  corr_stat_20: -5.41270534e+02
-  corr_stat_21: 4.76003477e+02
-  corr_stat_22: 2.07854329e+02
+  corr_stat_11: -2.74332722e+02
+  corr_stat_12: 1.14923376e+00
+  corr_stat_13: -3.28529536e+02
+  corr_stat_14: -3.15980013e+02
+  corr_stat_15: -1.86362860e+02
+  corr_stat_16: -2.07854329e+02
+  corr_stat_17: -4.76003477e+02
+  corr_stat_18: -5.41270534e+02
+  corr_stat_19: 7.61861286e+02
+  corr_stat_20: 6.32305047e+01
+  corr_stat_21: -1.25911016e+02
+  corr_stat_22: 9.33800792e+01
   stat: 600.0
   sys_luminosity: 1.47914000e+04
 - sys_corr_1: 5.50007250e+02
-  sys_corr_2: -1.73810273e+02
-  sys_corr_3: 5.93029703e+01
+  sys_corr_2: 1.73810273e+02
+  sys_corr_3: -5.93029703e+01
   sys_corr_4: 2.11600754e+01
-  sys_corr_5: -1.83185256e+01
+  sys_corr_5: 1.83185256e+01
   sys_corr_6: 9.71373029e+00
   sys_corr_7: 9.40329066e+00
-  sys_corr_8: 5.27949267e-01
-  sys_corr_9: 2.54506629e+00
-  sys_corr_10: 5.48540787e+01
-  sys_corr_11: -7.03591146e+01
-  sys_corr_12: -3.48772913e+01
-  sys_corr_13: 5.51861321e+00
-  sys_corr_14: -2.11843165e+00
-  sys_corr_15: -1.23901627e+01
-  sys_corr_16: 3.28613881e+01
-  sys_corr_17: 2.33643065e+01
-  sys_corr_18: 8.32497204e+00
-  sys_corr_19: -1.00720239e+02
-  sys_corr_20: 3.47516079e+01
-  sys_corr_21: -1.95118352e+01
-  sys_corr_22: -2.03527885e-01
-  corr_stat_1: -4.11926374e+03
+  sys_corr_8: -2.54506629e+00
+  sys_corr_9: -5.48540787e+01
+  sys_corr_10: -7.03591146e+01
+  sys_corr_11: 3.48772913e+01
+  sys_corr_12: -5.51861321e+00
+  sys_corr_13: -2.11843165e+00
+  sys_corr_14: -1.23901627e+01
+  sys_corr_15: -3.28613881e+01
+  sys_corr_16: 8.32497204e+00
+  sys_corr_17: 2.03527885e-01
+  sys_corr_18: 1.95118352e+01
+  sys_corr_19: 3.47516079e+01
+  sys_corr_20: 1.00720239e+02
+  sys_corr_21: -2.33643065e+01
+  sys_corr_22: 5.27949267e-01
+  corr_stat_1: 4.11926374e+03
   corr_stat_2: 3.60053285e+03
-  corr_stat_3: 2.68593451e+02
+  corr_stat_3: -2.68593451e+02
   corr_stat_4: 7.00282351e+02
   corr_stat_5: 3.42329366e+01
   corr_stat_6: 4.78348902e+01
   corr_stat_7: 7.47447586e+01
   corr_stat_8: -2.04412450e+00
-  corr_stat_9: -1.07405332e+02
+  corr_stat_9: 1.07405332e+02
   corr_stat_10: 5.36523581e+02
-  corr_stat_11: 2.12797827e+02
-  corr_stat_12: 5.40242281e+02
-  corr_stat_13: 2.68474383e+02
-  corr_stat_14: -1.58542411e+02
-  corr_stat_15: -1.77134907e+02
-  corr_stat_16: -2.54771305e+02
-  corr_stat_17: -8.74592783e+02
-  corr_stat_18: 6.05864941e+02
-  corr_stat_19: 1.06576596e+02
-  corr_stat_20: -9.75593998e+01
-  corr_stat_21: 3.86399288e+01
-  corr_stat_22: 4.29982811e+01
+  corr_stat_11: -5.40242281e+02
+  corr_stat_12: -2.12797827e+02
+  corr_stat_13: -2.68474383e+02
+  corr_stat_14: -1.77134907e+02
+  corr_stat_15: -1.06576596e+02
+  corr_stat_16: -4.29982811e+01
+  corr_stat_17: -3.86399288e+01
+  corr_stat_18: -9.75593998e+01
+  corr_stat_19: -6.05864941e+02
+  corr_stat_20: 8.74592783e+02
+  corr_stat_21: -2.54771305e+02
+  corr_stat_22: 1.58542411e+02
   stat: 600.0
   sys_luminosity: 1.46666000e+04
 - sys_corr_1: 5.55226323e+02
-  sys_corr_2: -1.55334933e+02
-  sys_corr_3: 5.91221269e+01
+  sys_corr_2: 1.55334933e+02
+  sys_corr_3: -5.91221269e+01
   sys_corr_4: 1.28709608e+01
-  sys_corr_5: -1.32064203e+01
+  sys_corr_5: 1.32064203e+01
   sys_corr_6: 4.74235749e+00
   sys_corr_7: -9.97837721e+00
-  sys_corr_8: -1.41296559e+00
-  sys_corr_9: 2.08069047e+01
-  sys_corr_10: 4.14905376e+01
-  sys_corr_11: 7.77584638e+01
-  sys_corr_12: -3.26591941e+01
-  sys_corr_13: 4.03450455e+00
-  sys_corr_14: -4.02455560e+00
-  sys_corr_15: -1.48517441e+01
-  sys_corr_16: 4.32286857e+01
-  sys_corr_17: 2.78644079e+01
-  sys_corr_18: 1.28313049e+01
-  sys_corr_19: 6.05339867e+01
-  sys_corr_20: 8.21295297e+01
-  sys_corr_21: -2.99141697e+01
-  sys_corr_22: 7.26577520e-01
-  corr_stat_1: -3.86245442e+03
+  sys_corr_8: -2.08069047e+01
+  sys_corr_9: -4.14905376e+01
+  sys_corr_10: 7.77584638e+01
+  sys_corr_11: 3.26591941e+01
+  sys_corr_12: -4.03450455e+00
+  sys_corr_13: -4.02455560e+00
+  sys_corr_14: -1.48517441e+01
+  sys_corr_15: -4.32286857e+01
+  sys_corr_16: 1.28313049e+01
+  sys_corr_17: -7.26577520e-01
+  sys_corr_18: 2.99141697e+01
+  sys_corr_19: 8.21295297e+01
+  sys_corr_20: -6.05339867e+01
+  sys_corr_21: -2.78644079e+01
+  sys_corr_22: -1.41296559e+00
+  corr_stat_1: 3.86245442e+03
   corr_stat_2: 3.59727546e+03
-  corr_stat_3: 3.27308330e+02
+  corr_stat_3: -3.27308330e+02
   corr_stat_4: 5.16669616e+02
   corr_stat_5: -3.23216148e+01
   corr_stat_6: -1.61624823e+01
   corr_stat_7: -8.72096878e+00
   corr_stat_8: -2.63220728e+01
-  corr_stat_9: 2.62836470e+01
+  corr_stat_9: -2.62836470e+01
   corr_stat_10: 2.38394387e+01
-  corr_stat_11: 6.20649522e+02
-  corr_stat_12: -5.22512421e+02
-  corr_stat_13: 2.02067082e+02
-  corr_stat_14: 1.21989798e+02
-  corr_stat_15: -2.25252690e+02
-  corr_stat_16: 1.04389776e+03
-  corr_stat_17: 1.08609029e+02
-  corr_stat_18: 2.99001804e+02
-  corr_stat_19: 1.08457705e+02
-  corr_stat_20: -9.63836766e+01
-  corr_stat_21: 1.92281904e+02
-  corr_stat_22: -4.55551235e+00
+  corr_stat_11: 5.22512421e+02
+  corr_stat_12: -6.20649522e+02
+  corr_stat_13: -2.02067082e+02
+  corr_stat_14: -2.25252690e+02
+  corr_stat_15: -1.08457705e+02
+  corr_stat_16: 4.55551235e+00
+  corr_stat_17: -1.92281904e+02
+  corr_stat_18: -9.63836766e+01
+  corr_stat_19: -2.99001804e+02
+  corr_stat_20: -1.08609029e+02
+  corr_stat_21: 1.04389776e+03
+  corr_stat_22: -1.21989798e+02
   stat: 600.0
   sys_luminosity: 14458.6
 - sys_corr_1: 5.57104363e+02
-  sys_corr_2: -1.36999735e+02
-  sys_corr_3: 7.32364087e+01
+  sys_corr_2: 1.36999735e+02
+  sys_corr_3: -7.32364087e+01
   sys_corr_4: -7.76561154e+00
-  sys_corr_5: 4.17676002e+00
+  sys_corr_5: -4.17676002e+00
   sys_corr_6: -2.56050109e+00
   sys_corr_7: -3.28639319e+01
-  sys_corr_8: -5.73377379e-01
-  sys_corr_9: 4.38208663e+01
-  sys_corr_10: -7.43089357e+01
-  sys_corr_11: -1.52097964e+01
-  sys_corr_12: -1.95910572e+01
-  sys_corr_13: 1.55920732e+01
-  sys_corr_14: -1.03009101e+01
-  sys_corr_15: -1.30806227e+01
-  sys_corr_16: 5.83109006e+01
-  sys_corr_17: 9.73615389e+00
-  sys_corr_18: 8.81751441e+00
-  sys_corr_19: 7.63097220e+00
-  sys_corr_20: -2.41253329e+01
-  sys_corr_21: 5.73405225e+01
-  sys_corr_22: -9.08795786e+01
-  corr_stat_1: -3.74238323e+03
+  sys_corr_8: -4.38208663e+01
+  sys_corr_9: 7.43089357e+01
+  sys_corr_10: -1.52097964e+01
+  sys_corr_11: 1.95910572e+01
+  sys_corr_12: -1.55920732e+01
+  sys_corr_13: -1.03009101e+01
+  sys_corr_14: -1.30806227e+01
+  sys_corr_15: -5.83109006e+01
+  sys_corr_16: 8.81751441e+00
+  sys_corr_17: 9.08795786e+01
+  sys_corr_18: -5.73405225e+01
+  sys_corr_19: -2.41253329e+01
+  sys_corr_20: -7.63097220e+00
+  sys_corr_21: -9.73615389e+00
+  sys_corr_22: -5.73377379e-01
+  corr_stat_1: 3.74238323e+03
   corr_stat_2: 3.68937879e+03
-  corr_stat_3: 5.28050379e+02
+  corr_stat_3: -5.28050379e+02
   corr_stat_4: 3.61017538e+02
   corr_stat_5: 4.71485341e+00
   corr_stat_6: -2.58660766e+02
   corr_stat_7: -2.39948169e+02
   corr_stat_8: -6.97647327e+00
-  corr_stat_9: 7.20373159e+02
+  corr_stat_9: -7.20373159e+02
   corr_stat_10: -2.32502204e+01
-  corr_stat_11: -1.16004558e+02
-  corr_stat_12: 3.79725151e+01
-  corr_stat_13: 3.56939811e+02
-  corr_stat_14: -3.97181405e+01
-  corr_stat_15: -1.92412647e+02
-  corr_stat_16: -5.08265383e+01
-  corr_stat_17: -1.08235439e+01
-  corr_stat_18: -2.84599571e+02
-  corr_stat_19: 1.83172584e+02
-  corr_stat_20: 1.12483029e+03
-  corr_stat_21: 1.02221720e+02
-  corr_stat_22: 7.74877036e+01
+  corr_stat_11: -3.79725151e+01
+  corr_stat_12: 1.16004558e+02
+  corr_stat_13: -3.56939811e+02
+  corr_stat_14: -1.92412647e+02
+  corr_stat_15: -1.83172584e+02
+  corr_stat_16: -7.74877036e+01
+  corr_stat_17: -1.02221720e+02
+  corr_stat_18: 1.12483029e+03
+  corr_stat_19: 2.84599571e+02
+  corr_stat_20: 1.08235439e+01
+  corr_stat_21: -5.08265383e+01
+  corr_stat_22: 3.97181405e+01
   stat: 600.0
   sys_luminosity: 14289.6
 - sys_corr_1: 5.52234534e+02
-  sys_corr_2: 1.03403385e+02
-  sys_corr_3: 8.78289336e+01
+  sys_corr_2: -1.03403385e+02
+  sys_corr_3: -8.78289336e+01
   sys_corr_4: 1.29509671e+01
-  sys_corr_5: 1.04243149e+02
+  sys_corr_5: -1.04243149e+02
   sys_corr_6: 3.03409355e+01
   sys_corr_7: 2.31884593e+01
-  sys_corr_8: -1.78868013e-01
-  sys_corr_9: -1.33699438e+01
-  sys_corr_10: 6.31225231e+00
-  sys_corr_11: 4.65229462e-01
-  sys_corr_12: -1.51206175e+01
-  sys_corr_13: 5.80268132e+01
-  sys_corr_14: -1.23688869e+02
-  sys_corr_15: 4.68916735e+01
-  sys_corr_16: -5.17870088e+01
-  sys_corr_17: 1.66431283e+00
-  sys_corr_18: -1.03068479e+01
-  sys_corr_19: 4.30402660e+00
-  sys_corr_20: -2.93706330e+00
-  sys_corr_21: 4.79606733e-01
-  sys_corr_22: 2.75056647e+00
-  corr_stat_1: -1.55449324e+03
+  sys_corr_8: 1.33699438e+01
+  sys_corr_9: -6.31225231e+00
+  sys_corr_10: 4.65229462e-01
+  sys_corr_11: 1.51206175e+01
+  sys_corr_12: -5.80268132e+01
+  sys_corr_13: -1.23688869e+02
+  sys_corr_14: 4.68916735e+01
+  sys_corr_15: 5.17870088e+01
+  sys_corr_16: -1.03068479e+01
+  sys_corr_17: -2.75056647e+00
+  sys_corr_18: -4.79606733e-01
+  sys_corr_19: -2.93706330e+00
+  sys_corr_20: -4.30402660e+00
+  sys_corr_21: -1.66431283e+00
+  sys_corr_22: -1.78868013e-01
+  corr_stat_1: 1.55449324e+03
   corr_stat_2: 3.98849023e+03
-  corr_stat_3: 6.93181907e+02
+  corr_stat_3: -6.93181907e+02
   corr_stat_4: 2.66491286e+02
   corr_stat_5: 3.15939128e+02
   corr_stat_6: -4.13658912e+02
   corr_stat_7: -4.53195744e+01
   corr_stat_8: 5.82817704e+02
-  corr_stat_9: -1.34294599e+02
+  corr_stat_9: 1.34294599e+02
   corr_stat_10: -6.60004411e+01
-  corr_stat_11: 1.73172679e+01
-  corr_stat_12: -6.58949312e-02
-  corr_stat_13: 3.13417169e+02
-  corr_stat_14: -2.87346996e+01
-  corr_stat_15: -1.50454329e+02
-  corr_stat_16: 4.03069390e+01
-  corr_stat_17: 5.77813169e+01
-  corr_stat_18: -2.27027221e+02
-  corr_stat_19: 5.06305687e+00
-  corr_stat_20: -2.06091238e+02
-  corr_stat_21: -1.19018037e+03
-  corr_stat_22: 1.06767975e+02
+  corr_stat_11: 6.58949312e-02
+  corr_stat_12: -1.73172679e+01
+  corr_stat_13: -3.13417169e+02
+  corr_stat_14: -1.50454329e+02
+  corr_stat_15: -5.06305687e+00
+  corr_stat_16: -1.06767975e+02
+  corr_stat_17: 1.19018037e+03
+  corr_stat_18: -2.06091238e+02
+  corr_stat_19: 2.27027221e+02
+  corr_stat_20: -5.77813169e+01
+  corr_stat_21: 4.03069390e+01
+  corr_stat_22: 2.87346996e+01
   stat: 600.0
   sys_luminosity: 13928.2
 - sys_corr_1: 4.83632994e+02
-  sys_corr_2: 2.83650153e+02
-  sys_corr_3: 1.07579159e+02
+  sys_corr_2: -2.83650153e+02
+  sys_corr_3: -1.07579159e+02
   sys_corr_4: -7.62534864e+01
-  sys_corr_5: -1.11088317e+01
+  sys_corr_5: 1.11088317e+01
   sys_corr_6: 5.01162264e+01
   sys_corr_7: 1.69007086e+01
-  sys_corr_8: -8.36774392e-01
-  sys_corr_9: -1.98130323e+01
-  sys_corr_10: 7.03074518e-01
-  sys_corr_11: 8.79954738e+00
-  sys_corr_12: 5.42935130e-01
-  sys_corr_13: 9.74107593e+01
-  sys_corr_14: 1.14470945e+02
-  sys_corr_15: 3.88375527e+01
-  sys_corr_16: -2.65768664e+01
-  sys_corr_17: 9.89108536e-01
-  sys_corr_18: 9.88271492e-01
-  sys_corr_19: 1.48259464e+00
-  sys_corr_20: -6.39842543e+00
-  sys_corr_21: -2.80041519e+00
-  sys_corr_22: 1.27306636e+00
-  corr_stat_1: -1.35097096e+02
+  sys_corr_8: 1.98130323e+01
+  sys_corr_9: -7.03074518e-01
+  sys_corr_10: 8.79954738e+00
+  sys_corr_11: -5.42935130e-01
+  sys_corr_12: -9.74107593e+01
+  sys_corr_13: 1.14470945e+02
+  sys_corr_14: 3.88375527e+01
+  sys_corr_15: 2.65768664e+01
+  sys_corr_16: 9.88271492e-01
+  sys_corr_17: -1.27306636e+00
+  sys_corr_18: 2.80041519e+00
+  sys_corr_19: -6.39842543e+00
+  sys_corr_20: -1.48259464e+00
+  sys_corr_21: -9.89108536e-01
+  sys_corr_22: -8.36774392e-01
+  corr_stat_1: 1.35097096e+02
   corr_stat_2: 4.24219437e+03
-  corr_stat_3: 9.94968681e+02
+  corr_stat_3: -9.94968681e+02
   corr_stat_4: 1.08231713e+02
   corr_stat_5: 3.40449166e+02
   corr_stat_6: -2.95566891e+02
   corr_stat_7: 2.32184684e+02
   corr_stat_8: -3.81274777e+02
-  corr_stat_9: -6.44935628e+01
+  corr_stat_9: 6.44935628e+01
   corr_stat_10: -4.45544321e+01
-  corr_stat_11: -9.48428668e+00
-  corr_stat_12: -1.28917984e+01
-  corr_stat_13: 2.90293908e+02
-  corr_stat_14: 4.26834655e+01
-  corr_stat_15: 1.74833397e+02
-  corr_stat_16: -6.83458298e+01
-  corr_stat_17: -4.73037838e+00
-  corr_stat_18: -1.09346620e+02
-  corr_stat_19: -7.44909306e+02
-  corr_stat_20: -5.15898130e+01
-  corr_stat_21: 1.44970738e+02
-  corr_stat_22: -1.01145213e+03
+  corr_stat_11: 1.28917984e+01
+  corr_stat_12: 9.48428668e+00
+  corr_stat_13: -2.90293908e+02
+  corr_stat_14: 1.74833397e+02
+  corr_stat_15: 7.44909306e+02
+  corr_stat_16: 1.01145213e+03
+  corr_stat_17: -1.44970738e+02
+  corr_stat_18: -5.15898130e+01
+  corr_stat_19: 1.09346620e+02
+  corr_stat_20: 4.73037838e+00
+  corr_stat_21: -6.83458298e+01
+  corr_stat_22: -4.26834655e+01
   stat: 600.0
   sys_luminosity: 1.35564000e+04
 - sys_corr_1: 4.86951341e+02
-  sys_corr_2: 2.71666290e+02
-  sys_corr_3: 1.39330141e+02
+  sys_corr_2: -2.71666290e+02
+  sys_corr_3: -1.39330141e+02
   sys_corr_4: -3.52718336e+01
-  sys_corr_5: 1.52540808e+01
+  sys_corr_5: -1.52540808e+01
   sys_corr_6: -6.50471591e+01
   sys_corr_7: 1.02644735e+01
-  sys_corr_8: -1.20155661e+00
-  sys_corr_9: -1.75869028e+01
-  sys_corr_10: -2.96721235e+00
-  sys_corr_11: -1.76598624e+00
-  sys_corr_12: 1.06850971e+01
-  sys_corr_13: -1.25598434e+02
-  sys_corr_14: 1.82292458e+01
-  sys_corr_15: 8.06536559e+01
-  sys_corr_16: 8.78086706e+00
-  sys_corr_17: -5.41747043e-01
-  sys_corr_18: -2.52638221e+01
-  sys_corr_19: 9.09103402e-01
-  sys_corr_20: 5.72672771e-01
-  sys_corr_21: 5.88373417e+00
-  sys_corr_22: 7.00689642e+00
-  corr_stat_1: -2.58946094e+02
+  sys_corr_8: 1.75869028e+01
+  sys_corr_9: 2.96721235e+00
+  sys_corr_10: -1.76598624e+00
+  sys_corr_11: -1.06850971e+01
+  sys_corr_12: 1.25598434e+02
+  sys_corr_13: 1.82292458e+01
+  sys_corr_14: 8.06536559e+01
+  sys_corr_15: -8.78086706e+00
+  sys_corr_16: -2.52638221e+01
+  sys_corr_17: -7.00689642e+00
+  sys_corr_18: -5.88373417e+00
+  sys_corr_19: 5.72672771e-01
+  sys_corr_20: -9.09103402e-01
+  sys_corr_21: 5.41747043e-01
+  sys_corr_22: -1.20155661e+00
+  corr_stat_1: 2.58946094e+02
   corr_stat_2: 4.48317207e+03
-  corr_stat_3: 1.35295265e+03
+  corr_stat_3: -1.35295265e+03
   corr_stat_4: 8.86621853e+01
   corr_stat_5: 2.86602113e+02
   corr_stat_6: 2.97125150e+02
   corr_stat_7: -2.38779362e+02
   corr_stat_8: 2.07172520e+01
-  corr_stat_9: -1.10072487e+01
+  corr_stat_9: 1.10072487e+01
   corr_stat_10: -1.11973342e+01
-  corr_stat_11: -1.68293083e+00
-  corr_stat_12: 8.87169475e+00
-  corr_stat_13: -1.51590352e+02
-  corr_stat_14: -7.81307771e+01
-  corr_stat_15: 1.08251599e+03
-  corr_stat_16: -1.47718942e+01
-  corr_stat_17: 6.35272640e+01
-  corr_stat_18: 4.45710736e-01
-  corr_stat_19: 7.42879158e+02
-  corr_stat_20: -9.45092025e+01
-  corr_stat_21: 7.70629786e+01
-  corr_stat_22: -7.52136725e+01
+  corr_stat_11: -8.87169475e+00
+  corr_stat_12: 1.68293083e+00
+  corr_stat_13: 1.51590352e+02
+  corr_stat_14: 1.08251599e+03
+  corr_stat_15: -7.42879158e+02
+  corr_stat_16: 7.52136725e+01
+  corr_stat_17: -7.70629786e+01
+  corr_stat_18: -9.45092025e+01
+  corr_stat_19: -4.45710736e-01
+  corr_stat_20: -6.35272640e+01
+  corr_stat_21: -1.47718942e+01
+  corr_stat_22: 7.81307771e+01
   stat: 600.0
   sys_luminosity: 1.32158000e+04
 - sys_corr_1: 3.50363805e+02
-  sys_corr_2: 4.46269991e+02
-  sys_corr_3: 1.12578234e+02
+  sys_corr_2: -4.46269991e+02
+  sys_corr_3: -1.12578234e+02
   sys_corr_4: 5.83415693e+00
-  sys_corr_5: -3.60745857e+00
+  sys_corr_5: 3.60745857e+00
   sys_corr_6: -4.20187568e+00
   sys_corr_7: -5.28408698e+01
-  sys_corr_8: -2.64438189e+00
-  sys_corr_9: -3.49776775e+01
-  sys_corr_10: -3.73440929e+00
-  sys_corr_11: 3.58035950e+00
-  sys_corr_12: 7.31574269e+00
-  sys_corr_13: -2.07968860e+01
-  sys_corr_14: 1.28417900e+00
-  sys_corr_15: -1.20975031e+02
-  sys_corr_16: -5.21372326e+01
-  sys_corr_17: 1.43637456e+00
-  sys_corr_18: -5.51858383e+01
-  sys_corr_19: -1.20835521e+00
-  sys_corr_20: 5.77628844e+00
-  sys_corr_21: 1.76875750e+01
-  sys_corr_22: 8.01472453e+00
-  corr_stat_1: 1.62880473e+03
+  sys_corr_8: 3.49776775e+01
+  sys_corr_9: 3.73440929e+00
+  sys_corr_10: 3.58035950e+00
+  sys_corr_11: -7.31574269e+00
+  sys_corr_12: 2.07968860e+01
+  sys_corr_13: 1.28417900e+00
+  sys_corr_14: -1.20975031e+02
+  sys_corr_15: 5.21372326e+01
+  sys_corr_16: -5.51858383e+01
+  sys_corr_17: -8.01472453e+00
+  sys_corr_18: -1.76875750e+01
+  sys_corr_19: 5.77628844e+00
+  sys_corr_20: 1.20835521e+00
+  sys_corr_21: -1.43637456e+00
+  sys_corr_22: -2.64438189e+00
+  corr_stat_1: -1.62880473e+03
   corr_stat_2: 4.54530394e+03
-  corr_stat_3: 1.36885370e+03
+  corr_stat_3: -1.36885370e+03
   corr_stat_4: 1.85070808e+01
   corr_stat_5: -1.62786881e+02
   corr_stat_6: 1.48168716e+02
   corr_stat_7: 3.19045082e+02
   corr_stat_8: 1.15298949e+02
-  corr_stat_9: 1.13960431e+02
+  corr_stat_9: -1.13960431e+02
   corr_stat_10: -7.06222743e+01
-  corr_stat_11: 9.61801124e+00
-  corr_stat_12: 8.85862456e-01
-  corr_stat_13: -3.22588300e+02
-  corr_stat_14: -1.47454585e+01
-  corr_stat_15: 2.40892067e+02
-  corr_stat_16: 1.25478689e+01
-  corr_stat_17: -1.25835132e+01
-  corr_stat_18: 4.21120933e+01
-  corr_stat_19: -8.52260327e+02
-  corr_stat_20: 2.80679390e+01
-  corr_stat_21: 1.46840043e+02
-  corr_stat_22: 8.70863355e+02
+  corr_stat_11: -8.85862456e-01
+  corr_stat_12: -9.61801124e+00
+  corr_stat_13: 3.22588300e+02
+  corr_stat_14: 2.40892067e+02
+  corr_stat_15: 8.52260327e+02
+  corr_stat_16: -8.70863355e+02
+  corr_stat_17: -1.46840043e+02
+  corr_stat_18: 2.80679390e+01
+  corr_stat_19: -4.21120933e+01
+  corr_stat_20: 1.25835132e+01
+  corr_stat_21: 1.25478689e+01
+  corr_stat_22: 1.47454585e+01
   stat: 600.0
   sys_luminosity: 12680.2
 - sys_corr_1: 2.39970761e+02
-  sys_corr_2: 5.20962025e+02
-  sys_corr_3: 6.15223859e+01
+  sys_corr_2: -5.20962025e+02
+  sys_corr_3: -6.15223859e+01
   sys_corr_4: 5.05116455e+01
-  sys_corr_5: -2.22443122e+01
+  sys_corr_5: 2.22443122e+01
   sys_corr_6: 1.72046495e+01
   sys_corr_7: 1.44906594e+01
-  sys_corr_8: -1.07087791e+01
-  sys_corr_9: 9.04331450e+01
-  sys_corr_10: 4.52116699e+00
-  sys_corr_11: -3.27361091e+00
-  sys_corr_12: 1.84176073e+01
-  sys_corr_13: -2.85237319e+01
-  sys_corr_14: -2.71698753e+00
-  sys_corr_15: -2.16786441e+01
-  sys_corr_16: -2.94442784e+01
-  sys_corr_17: 7.45904769e+00
-  sys_corr_18: 8.70890741e+01
-  sys_corr_19: 5.36393987e+00
-  sys_corr_20: -4.23259217e+01
-  sys_corr_21: -5.71149193e+01
-  sys_corr_22: -1.14785978e+01
-  corr_stat_1: 2.76857983e+03
+  sys_corr_8: -9.04331450e+01
+  sys_corr_9: -4.52116699e+00
+  sys_corr_10: -3.27361091e+00
+  sys_corr_11: -1.84176073e+01
+  sys_corr_12: 2.85237319e+01
+  sys_corr_13: -2.71698753e+00
+  sys_corr_14: -2.16786441e+01
+  sys_corr_15: 2.94442784e+01
+  sys_corr_16: 8.70890741e+01
+  sys_corr_17: 1.14785978e+01
+  sys_corr_18: 5.71149193e+01
+  sys_corr_19: -4.23259217e+01
+  sys_corr_20: -5.36393987e+00
+  sys_corr_21: -7.45904769e+00
+  sys_corr_22: -1.07087791e+01
+  corr_stat_1: -2.76857983e+03
   corr_stat_2: 4.18124404e+03
-  corr_stat_3: 8.88678659e+02
+  corr_stat_3: -8.88678659e+02
   corr_stat_4: 1.52453178e+02
   corr_stat_5: -5.82833511e+02
   corr_stat_6: -2.14462712e+02
   corr_stat_7: -3.82429584e+02
   corr_stat_8: -1.49689892e+02
-  corr_stat_9: -2.09823776e+02
+  corr_stat_9: 2.09823776e+02
   corr_stat_10: 7.81250253e+01
-  corr_stat_11: -5.24258466e+01
-  corr_stat_12: -3.29076864e+01
-  corr_stat_13: -7.28757366e+02
-  corr_stat_14: 8.17509997e+02
-  corr_stat_15: -4.42397547e+02
-  corr_stat_16: -1.68566367e+02
-  corr_stat_17: -1.05597375e+02
-  corr_stat_18: -1.86690776e+01
-  corr_stat_19: 2.40952200e+02
-  corr_stat_20: 1.59988128e-01
-  corr_stat_21: -4.18838194e+01
-  corr_stat_22: -1.61279519e+02
+  corr_stat_11: 3.29076864e+01
+  corr_stat_12: 5.24258466e+01
+  corr_stat_13: 7.28757366e+02
+  corr_stat_14: -4.42397547e+02
+  corr_stat_15: -2.40952200e+02
+  corr_stat_16: 1.61279519e+02
+  corr_stat_17: 4.18838194e+01
+  corr_stat_18: 1.59988128e-01
+  corr_stat_19: 1.86690776e+01
+  corr_stat_20: 1.05597375e+02
+  corr_stat_21: -1.68566367e+02
+  corr_stat_22: -8.17509997e+02
   stat: 600.0
   sys_luminosity: 12131.6
 - sys_corr_1: -7.23543052e+01
-  sys_corr_2: 5.85170396e+02
-  sys_corr_3: -9.01953856e+00
+  sys_corr_2: -5.85170396e+02
+  sys_corr_3: 9.01953856e+00
   sys_corr_4: 4.63988271e+01
-  sys_corr_5: -1.88653985e+01
+  sys_corr_5: 1.88653985e+01
   sys_corr_6: 2.07766609e+01
   sys_corr_7: 2.90225269e+01
-  sys_corr_8: 5.70533386e+01
-  sys_corr_9: 3.05676237e+01
-  sys_corr_10: 1.86102482e+00
-  sys_corr_11: -1.63566353e+00
-  sys_corr_12: -5.56053389e+00
-  sys_corr_13: 8.92164545e+00
-  sys_corr_14: -3.66098382e+00
-  sys_corr_15: 4.17286144e+00
-  sys_corr_16: 3.03570261e+01
-  sys_corr_17: -1.27327551e-01
-  sys_corr_18: -4.63390971e+01
-  sys_corr_19: 4.34413287e+00
-  sys_corr_20: -9.33354148e+00
-  sys_corr_21: -2.78157540e+01
-  sys_corr_22: -1.38154369e+01
-  corr_stat_1: 9.56166697e+03
+  sys_corr_8: -3.05676237e+01
+  sys_corr_9: -1.86102482e+00
+  sys_corr_10: -1.63566353e+00
+  sys_corr_11: 5.56053389e+00
+  sys_corr_12: -8.92164545e+00
+  sys_corr_13: -3.66098382e+00
+  sys_corr_14: 4.17286144e+00
+  sys_corr_15: -3.03570261e+01
+  sys_corr_16: -4.63390971e+01
+  sys_corr_17: 1.38154369e+01
+  sys_corr_18: 2.78157540e+01
+  sys_corr_19: -9.33354148e+00
+  sys_corr_20: -4.34413287e+00
+  sys_corr_21: 1.27327551e-01
+  sys_corr_22: 5.70533386e+01
+  corr_stat_1: -9.56166697e+03
   corr_stat_2: 4.35521117e+03
-  corr_stat_3: 2.15157478e+02
+  corr_stat_3: -2.15157478e+02
   corr_stat_4: 5.78927969e+02
   corr_stat_5: -7.25672844e+01
   corr_stat_6: -4.17932158e+01
   corr_stat_7: -1.35031313e+02
   corr_stat_8: -5.64982829e+01
-  corr_stat_9: 1.18678938e+02
+  corr_stat_9: -1.18678938e+02
   corr_stat_10: -7.97131051e+01
-  corr_stat_11: 6.08045840e+01
-  corr_stat_12: 3.94152965e+01
-  corr_stat_13: -7.67952244e+02
-  corr_stat_14: -8.12465805e+02
-  corr_stat_15: -4.36685793e+02
-  corr_stat_16: 7.48470148e+01
-  corr_stat_17: 1.03554500e+02
-  corr_stat_18: 1.45746172e+01
-  corr_stat_19: 1.02574044e+02
-  corr_stat_20: 2.19765423e+01
-  corr_stat_21: -3.44692018e+01
-  corr_stat_22: -2.48607790e+02
+  corr_stat_11: -3.94152965e+01
+  corr_stat_12: -6.08045840e+01
+  corr_stat_13: 7.67952244e+02
+  corr_stat_14: -4.36685793e+02
+  corr_stat_15: -1.02574044e+02
+  corr_stat_16: 2.48607790e+02
+  corr_stat_17: 3.44692018e+01
+  corr_stat_18: 2.19765423e+01
+  corr_stat_19: -1.45746172e+01
+  corr_stat_20: -1.03554500e+02
+  corr_stat_21: 7.48470148e+01
+  corr_stat_22: 8.12465805e+02
   stat: 600.0
   sys_luminosity: 1.14348000e+04

@@ -2,23 +2,12 @@ Field/key, Type, Description, Comments
 ID, Integer, TheoryID, Theory enumerating ID
 PTO, Integer, pQCD order, (0/1/2 = LO/NLO/NNLO)
 FNS, Text, Flavour Number Scheme, "e.g FONLL-A/B/C, ZM-VFNS or FFNS"
-DAMP, Integer, FONLL damping factor switch, Boolean
 IC, Integer, Intrinsic charm switch, Boolean
 ModEv, Text, DGLAP solution mode, EXA/EXP/TRN
 XIR, Real, :math:`\xi_R`, :math:`\mu_R/Q`
 XIF,  Real, :math:`\xi_F`, :math:`\mu_F/Q`
-NfFF, Integer, Number of flavours in the FFNS, 3/4/5/6
-MaxNfAs, Integer, :math:`n^{(\alpha_s)}_{f \textrm{max}}`, Max active flavours in :math:`\alpha_s`
-MaxNfPdf, Integer, :math:`n^{(PDF)}_{f \textrm{max}}`, Max active flavours in PDFs
-Q0, Real, :math:`Q_0`, FK Table initial scale
-alphas, Real, Strong coupling, Format: :math:`\alpha_s(Q_{\textrm{ref}})`
-Qref, Real, :math:`Q_{\textrm{ref}}`, Reference scale for :math:`\alpha_S` in GeV
 QED, Integer, QED switch, Boolean
-alphaqed, Real, QED coupling, Format: :math:`\alpha_{QED}(Q_{\textrm{qedref}})`
-Qedref, Real, :math:`Q_{\textrm{qedref}}`, QED reference scale (GeV) 
-SxRes, Integer, small-:math:`x` resummation switch, Boolean
-SxOrd, Text, small-:math:`x` pt switch, "('LL', 'NLL', 'NLL')"
-HQ, Text, HQ mass treatment, POLE/MSBAR
+Q0, Real, :math:`Q_0`, FK Table initial scale
 mc, Real, :math:`c` quark mass :math:`M_c/m_c(Q_{mc})`, Units: GeV
 Qmc, Real, :math:`Q_{mc}`, :math:`c` reference scale (GeV)
 kcThr, Real, :math:`c` production threshold ratio, Ratio to :math:`m_c`
@@ -35,6 +24,28 @@ GF, Real, :math:`G_F`, Fermi coupling constant
 SIN2TW, Real, :math:`\sin^2\theta_W`,
 TMC, Integer, Target mass corrections, Boolean
 MP, Real, :math:`M_P` Proton mass, Units: GeV
+Comments, Text, General comments
+alphas, Real, Strong coupling, Format: :math:`\alpha_s(Q_{\textrm{ref}})`
+alphaqed, Real, QED coupling, Format: :math:`\alpha_{QED}(Q_{\textrm{qedref}})`
+Qref, Real, :math:`Q_{\textrm{ref}}`, Reference scale for :math:`\alpha_S` and :math:`\alpha_{\rm EW}` in GeV
+XIA, Real, :math:`\xi_A`, :math:`\mu_A/Q`
+NfFF, Integer, Number of flavours in the FFNS, 3/4/5/6
+nfref, Integer, :math:`n_f^{(\textrm{ref})}`, Number of active flavours at :math:`Q_{\textrm{ref}}`
+MaxNfPdf, Integer, :math:`n_f^{\textrm{max}}`, Used by pineko and the photon module to define the thresholds
+nf0, Integer, :math:`n_f^{(0)}`, Number of active flavours at :math:`Q_0`
+HQ, Text, HQ mass treatment, POLE/MSBAR
+IterEv, Integer, iterations for the evolution of the PDF, Defaults to 60 when ModEv = EXA
+ModSV, Text, Scale variation scheme, expanded/exponentiated
+DAMP, Integer, FONLL damping factor switch, Boolean
+DAMPPOWERc, Integer, Damping power for charm in FONLL, needed when DAMP and FONLL are used
+DAMPPOWERb, Integer, Damping power for bottom in FONLL, needed when DAMP and FONLL are used
+n3lo_ad_variation, List, IHOU variation of the N3LO anomalous dimensions, Order is (gg, gq, qg, qq, nsp, nsm, nsv)
+ with values 0 or 1 for FHMRUVV
+n3lo_cf_variation, List, IHOU variations of the N3LO massive DIS coefficient functions, Values are -1, 0, 1
+use_fhmruvv, Integer, use N3LO anomalous dimensions by FHMRUVV group, Boolean
+MaxNfAs, Integer, :math:`n^{(\alpha_s)}_{f \textrm{max}}`, Max active flavours in :math:`\alpha_s`
+SxRes, Integer, small-:math:`x` resummation switch, Boolean
+SxOrd, Text, small-:math:`x` pt switch, "('LL', 'NLL', 'NLL')"
+EScaleVar, Integer, Switch for DGLAP scale variation, Boolean
+Qedref, Real, :math:`Q_{\textrm{qedref}}`, QED reference scale (GeV)
 global_nx, Integer, Global x-grid precision, Default (0) uses set-by-set precision
-EScaleVar, Real, Switch for DGLAP scale variation, Boolean
-Comments, Text, General comments,

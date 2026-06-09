@@ -10,14 +10,21 @@ import re
 import shutil
 import sys
 
+import pandas as pd
 from ruamel.yaml import error
 
+from n3fit.scripts.vp_setupfit import MD5_FILENAME, SetupFitError, _compute_fit_md5
 from reportengine import colors
 from reportengine.namespaces import NSList
+from validphys.api import API
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.core import FitSpec
+from validphys.hyperoptplot import generate_dictionary
+from validphys.loader import FallbackLoader, HyperscanNotFound
 from validphys.utils import yaml_safe
+
+loader = FallbackLoader()
 
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[], allow_legacy_names=False)
 
@@ -65,6 +72,11 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
+
+        # Verify vp-setupfit hash is consistent with the current fit configuration
+        # before we touch anything in the output folder.
+        self._verify_setupfit_md5()
+
         if not (self.output_path / "nnfit").is_dir():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
@@ -96,6 +108,29 @@ class N3FitEnvironment(Environment):
         # avoid conflict with setupfit
         self.input_folder = self.replica_path / INPUT_FOLDER
         self.input_folder.mkdir(exist_ok=True)
+
+    def _verify_setupfit_md5(self):
+        if self.skip_md5_check:
+            log.warning("Skipping md5 check against vp-setupfit (--skip-md5-check is set).")
+            return
+
+        md5_path = self.output_path / MD5_FILENAME
+        if not md5_path.exists():
+            raise N3FitError(
+                f"{MD5_FILENAME} file not found at {md5_path}. "
+                "Run vp-setupfit on this runcard before n3fit."
+            )
+        stored = md5_path.read_text().strip()
+        try:
+            current = _compute_fit_md5(self.config_yml, self.output_path)
+        except SetupFitError as e:
+            raise N3FitError(f"Failed to compute current fit md5: {e}") from e
+        if stored != current:
+            raise N3FitError(
+                f"md5 mismatch in {self.output_path}: stored {stored} != current {current}. "
+                "The runcard changed since vp-setupfit was run. Re-run vp-setupfit (or pass "
+                "--skip-md5-check to override this check if this is the desired behaviour)."
+            )
 
     @classmethod
     def ns_dump_description(cls):
@@ -163,6 +198,9 @@ class N3FitConfig(Config):
             )
             N3FIT_FIXED_CONFIG['point_prescriptions'] = thconfig.get('point_prescriptions')
             N3FIT_FIXED_CONFIG['user_covmat_path'] = thconfig.get('user_covmat_path')
+            # vp-setupfit has already written the theory-covmat CSV. n3fit
+            # should load it instead of rebuilding from scratch.
+            N3FIT_FIXED_CONFIG['load_thcovmat_from_file'] = True
 
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -217,22 +255,49 @@ class N3FitConfig(Config):
         # This needs to be imported here because it needs Tensorflow and n3fit
         from n3fit.hyper_optimization.hyper_scan import HyperScanner
 
+        extra_args = {}
+
         if hyperscan_config is None or hyperopt is None:
             return None
-        if hyperopt and self.environment.restart:
-            hyperscan_config.update({'restart': 'true'})
-        if hyperopt and self.environment.parallel_hyperopt:
+
+        if self.environment.parallel_hyperopt:
             hyperscan_config.update({'parallel': 'true'})
-            hyperscan_config.update(
-                {
-                    'db_host': self.environment.db_host,
-                    'db_port': self.environment.db_port,
-                    'db_name': self.environment.db_name,
-                    'output_path': self.environment.output_path.name,
-                    'num_mongo_workers': self.environment.num_mongo_workers,
-                }
+
+            db_path = (
+                self.environment.output_path / "nnfit" / "replica_1" / self.environment.db_name
             )
-        return HyperScanner(parameters, hyperscan_config)
+            extra_args = {
+                "db_host": self.environment.db_host,
+                "db_port": self.environment.db_port,
+                "db_path": db_path,
+            }
+        return HyperScanner(parameters, hyperscan_config, **extra_args)
+
+    def parse_trial_specs(self, trial_specs):
+        return trial_specs
+
+    def produce_trials(self, trial_specs={}):
+        """Read the input hyperscan and produce a dictionary containing
+        the settings of the best trials"""
+
+        if not trial_specs:
+            return {}
+        else:
+            try:
+                hyperscan = loader.check_hyperscan(trial_specs['hyperscan'])
+            except HyperscanNotFound as e:
+                log.warning(e)
+            dict_trials = generate_dictionary(hyperscan.tries_files[1].parent, "average")
+            hyperopt_dataframe = pd.DataFrame(dict_trials)
+            n_termalization = trial_specs['thermalization']
+            n_best = trial_specs['number_of_trials']
+            best = (
+                hyperopt_dataframe[n_termalization:]
+                .sort_values('loss')[:n_best]
+                .to_dict(orient='list')
+            )
+            best['number_of_trials'] = n_best
+            return best
 
 
 class N3FitApp(App):
@@ -241,8 +306,8 @@ class N3FitApp(App):
     environment_class = N3FitEnvironment
     config_class = N3FitConfig
 
-    def __init__(self):
-        super().__init__(name="n3fit", providers=N3FIT_PROVIDERS)
+    def __init__(self, name="n3fit", providers=N3FIT_PROVIDERS):
+        super().__init__(name=name, providers=providers)
 
     @property
     def argparser(self):
@@ -262,21 +327,16 @@ class N3FitApp(App):
             return ivalue
 
         parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
-        parser.add_argument("--restart", help="Enable hyperopt restarts", action="store_true")
         parser.add_argument(
             "--parallel-hyperopt",
             help="Enable hyperopt run in parallel with MongoDB",
             action="store_true",
         )
-        parser.add_argument("--db-host", help="MongoDB host", default="localhost")
-        parser.add_argument("--db-port", help="MongoDB port", default=27017)
-        parser.add_argument("--db-name", help="MongoDB dataset name", default="hyperopt-db")
         parser.add_argument(
-            "--num-mongo-workers",
-            help="Number of mongo workers to be launched simultaneously",
-            type=check_positive,
-            default=1,
+            "--db-host", help="MongoDB host, if not given the hostname of the computer will be used"
         )
+        parser.add_argument("--db-port", help="MongoDB port", default=27017, type=int)
+        parser.add_argument("--db-name", help="MongoDB dataset name", default="hyperopt-db")
         parser.add_argument("replica", help="MC replica number", type=check_positive)
         parser.add_argument(
             "-r",
@@ -284,21 +344,22 @@ class N3FitApp(App):
             help="End of the range of replicas to compute",
             type=check_positive,
         )
+        parser.add_argument(
+            "--skip-md5-check",
+            help="Skip the integrity check against the md5 written by vp-setupfit.",
+            action="store_true",
+            default=False,
+        )
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
         args = super().get_commandline_arguments(cmdline)
 
         # Validate dependencies related to the --hyperopt argument
-        if args["hyperopt"] is None:
-            if args["restart"]:
-                raise argparse.ArgumentError(
-                    None, "The --restart option requires --hyperopt to be set."
-                )
-            if args["parallel_hyperopt"]:
-                raise argparse.ArgumentError(
-                    None, "The --parallel-hyperopt option requires --hyperopt to be set."
-                )
+        if args["hyperopt"] is None and args["parallel_hyperopt"]:
+            raise argparse.ArgumentError(
+                None, "The --parallel-hyperopt option requires --hyperopt to be set."
+            )
 
         if args["output"] is None:
             args["output"] = pathlib.Path(args["config_yml"]).stem
@@ -314,12 +375,11 @@ class N3FitApp(App):
                 replicas = [replica]
             self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
-            self.environment.restart = self.args["restart"]
             self.environment.parallel_hyperopt = self.args["parallel_hyperopt"]
             self.environment.db_host = self.args["db_host"]
             self.environment.db_port = self.args["db_port"]
             self.environment.db_name = self.args["db_name"]
-            self.environment.num_mongo_workers = self.args["num_mongo_workers"]
+            self.environment.skip_md5_check = self.args["skip_md5_check"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")

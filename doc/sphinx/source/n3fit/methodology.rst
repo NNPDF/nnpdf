@@ -127,8 +127,8 @@ provide a faster convergence to the solution.
 	Parameters like the number of layers, nodes, activation functions are hyper-parameters that require tuning.
 
 
-To see the structure of the model, one can use Keras's ``plot_model`` function as illustrated in the script below.
-See the `Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
+To see the structure of the model, one can use Keras' ``plot_model`` function as illustrated in the script below.
+See the `this section of the Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
 
 .. code-block:: python
 
@@ -206,10 +206,7 @@ Following the gradient descent approach the training is performed in iteration s
   descent update scheme (which controls the convergence step size and speed).
 
 The gradient descent schemes are usually controlled by the **learning rate**, and the total
-**number of iterations**. Examples of fits using the ``n3fit`` methodology are available here:
-
-- DIS-only fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/KTzrle5FQGuuBdcigkDKnQ==/>`_
-- Global fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/qtXzt-BbQZGkV6P4pf9-UA==/>`_
+**number of iterations**.
 
 .. important::
 	The gradient descent scheme (RMSprop, Adagrad, etc.), the learning rate, the number of iteractions are hyper-parameters that require tuning.
@@ -323,7 +320,7 @@ incapable of distinguishing features across many orders of magnitude of ``x``, t
 scaling means that the algorithm is limited to learning features on a logarithmic and linear scale.
 
 To solve this problem there is the possibility to apply a different feature scaling to the input by
-adding a ``interpolation_points: [number of points]`` flag to the ``n3fit`` runcard. By adding this
+adding a ``feature_scaling_points: [number of points]`` flag to the ``n3fit`` runcard. By adding this
 flag the ``(x,log(x))`` scaling is replaced by a scaling in such a way that all input ``x`` values
 are evenly distributed on the domain ``[-1,1]``, and the input node is no longer split in two.
 
@@ -333,7 +330,7 @@ increasing cubic spline is used to interpolate after the scaling has been applie
 function from the scipy library is used. However, this way the neural network will be agnostic to
 the existence of this interpolation function meaning it can no longer learn the true underlying law.
 To fix this, the interpolation function has to be probed as well. This is done by only using
-``[number of points]`` set by the ``interpolation_points`` flag to define the interpolation function
+``[number of points]`` set by the ``feature_scaling_points`` flag to define the interpolation function
 after the scaling has been applied. Using this methodology the points used in the interpolation are
 again evenly distributed.
 
@@ -346,3 +343,95 @@ The figure above provides a schematic representation of this feature scaling met
 2. ``[number of points]`` points are kept (dark blue), while other points are discarded (light blue).
 3. A cubic spline function is used to do the interpolation between the points that have not been
    discarded.
+
+
+Diagonal basis
+--------------
+
+Training and validation data are obtained by performing a random split of the
+original data set. However, data points in the two sets are not necessarily
+statistically independent, as they may be correlated through the fitting
+covariance matrix :math:`C_{\rm fit}`. Here the fitting covariance matrix is the
+sum of the :math:`t_{0}` experimental covariance matrix :math:`C_{0}` and any
+theory covariance matrix :math:`C_{\rm th}` used in the fit, i.e., :math:`C_{\rm
+fit} = C_{0} + C_{\rm th}`. In order to disentangle the training and
+validation data, we perform the training-validation split in a basis in which
+the correlation matrix is diagonal.
+
+We first compute the correlation matrix :math:`\rho`, which is defined as
+
+.. math::
+
+    \rho = \Sigma^{-1} C_{\rm fit} \Sigma^{-1} \, ,
+
+where we have defined :math:`\Sigma_{ij} = \sqrt{C_{\rm fit, ii}} \delta_{ij}` and
+:math:`(\Sigma^{-1})_{ij} = \frac{1}{\sqrt{C_{\rm fit, ii}}} \delta_{ij}`. The
+correlation matrix is a symmetric positive-definite matrix, and therefore it can
+be diagonalized by an orthogonal transformation. Therefore we can write
+
+.. math::
+
+    \rho = V \Lambda V^T \, ,
+
+where :math:`V` is an orthogonal matrix and :math:`\Lambda` is a diagonal matrix
+containing the eigenvalues of :math:`\rho`. The original fitting covariance
+matrix can then be written as
+
+.. math::
+
+    C_{\rm fit} &= \Sigma \rho \Sigma \\
+                &= (\Sigma V) \Lambda (V^T \Sigma) \\
+                &\equiv U \Lambda U^T \, ,
+
+where we have defined the non-orthogonal matrix :math:`U = \Sigma V`. Its
+inverse defines the rotation matrix that diagonalizes the
+:math:`\chi^2`, and is given by :math:`R^T \equiv U^{-1} = V^T \Sigma^{-1}`.
+Therefore, the inverse of the fitting covariance matrix can be written as
+
+.. math::
+
+    C_{\rm fit}^{-1} &= (U \Lambda U^T)^{-1} \\
+                     &= (U^T)^{-1} \Lambda^{-1} U^{-1} \\
+                     &= R \Lambda^{-1} R^T \, .
+
+Considering the definition of the :math:`\chi^2` function in the NNPDF
+methodology, we finally have
+
+.. math::
+
+    \chi^2 &= (D-T)^T C_{\rm fit}^{-1} (D-T) \\
+           &= (D-T)^T R \Lambda^{-1} R^T (D-T) \\
+           &= \epsilon^T \Lambda^{-1} \epsilon \\
+           &= \lVert \epsilon \rVert^2_{\Lambda^{-1}} \, ,
+
+where we have defined the residuals in the diagonal basis as :math:`\epsilon \equiv R^T(D-T)` or, writing it in index notation,
+
+.. math::
+
+    \epsilon_i = (V^T)_{ij} \frac{(D-T)_j}{\sqrt{C_{\rm fit, jj}}} \,.
+
+In this basis, the :math:`\chi^2` becomes a weighted norm of the residuals,
+where the weights are given by the inverse of the eigenvalues of the correlation
+matrix.
+
+The transformed data :math:`\epsilon` are statistically independent in the
+diagonal basis of the correlation matrix :math:`\rho`. As a crosscheck, we
+can compute the covariance of :math:`\epsilon`,
+
+.. math::
+
+    \mathbb{E}[\epsilon \epsilon^T] &= \mathbb{E}[R^T(D-T)(D-T)^T R] \\
+                                    &= R^T \mathbb{E}[(D-T)(D-T)^T] R \\
+                                    &= R^T C_{\rm fit} R \\
+                                    &= R^T U \Lambda U^T R \\
+                                    &= \Lambda \,,
+
+where we have used the fact that :math:`R^T U = I` and the assumption that the
+data are distributed according to the fitting covariance matrix :math:`C_{\rm fit}`
+
+.. math::
+
+    \mathbb{E}[(D-T)(D-T)^T] = C_{\rm fit} \, .
+
+This shows that the correlation is indeed diagonal, and demonstrates that the
+training/validation data are uncorrelated.

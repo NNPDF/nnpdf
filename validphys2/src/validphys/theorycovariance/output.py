@@ -48,9 +48,7 @@ def matrix_plot_labels(df):
 
 def plot_covmat_heatmap(covmat, title):
     """Matrix plot of a covariance matrix."""
-    df = covmat
-    df.sort_index(axis=0, inplace=True)
-    df.sort_index(axis=1, inplace=True)
+    df = covmat.sort_index(axis=0).sort_index(axis=1)
     oldindex = df.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     # reindex index
@@ -150,9 +148,7 @@ def _get_key(element):
 
 def plot_corrmat_heatmap(corrmat, title):
     """Matrix plot of a correlation matrix"""
-    df = corrmat
-    df.sort_index(axis=0, inplace=True)
-    df.sort_index(axis=1, inplace=True)
+    df = corrmat.sort_index(axis=0).sort_index(axis=1)
     oldindex = df.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     # reindex index
@@ -341,15 +337,14 @@ def plot_diag_cov_comparison_by_experiment(
 
     fig, ax = plotutils.subplots(figsize=(20, 10))
 
-    procs_data_values_experiment.sort_index(level=0, inplace=True)
+    procs_data_values_experiment = procs_data_values_experiment.sort_index(level=0)
     data = np.abs(procs_data_values_experiment)
     plot_index = procs_data_values_experiment.index
 
     # plot exp values, take diagonal first
     sqrtdiags_exp = pd.DataFrame(
         np.sqrt(np.diag(experiments_covmat_no_table)), index=experiments_covmat_no_table.index
-    )
-    sqrtdiags_exp.sort_index(level=0, inplace=True)
+    ).sort_index(level=0)
     sqrtdiags_exp = sqrtdiags_exp[0] / data.values
     ax.plot(sqrtdiags_exp.values, "*", markersize=4, label="Experimental uncertanties")
 

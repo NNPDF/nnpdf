@@ -106,11 +106,11 @@ The kinematic variables that can be used within the rule depends on the
 process type. A full list of available parameters can be found by
 running:
 
-.. code:: ipython
+.. code:: pycon
 
-   In [1]: from NNPDF import CommonData
+   >>> from NNPDF import CommonData
 
-   In [2]: print(dict(CommonData.kinLabel))
+   >>> print(dict(CommonData.kinLabel))
 
 The user may additionally define their own variables by adding the
 ``local_variables`` field to their rule. For example, I can use ``w2``
@@ -307,7 +307,7 @@ append a list of filter rules to the rules obtained by the mechanisms described 
 The value of ``added_filter_rules`` should be a list of rules with the same format as ``filter_rules``.
 
 
-.. _drop_filter_rules::
+.. _drop_filter_rules:
 
 Dropping filter rules for selected datasets
 -------------------------------------------
@@ -370,16 +370,16 @@ be evaluated provided the ``theory`` perturbative order is **strictly**
 less than NNLO (i.e LO or NLO). I check what the process type of
 ``CMSDY2D12`` is:
 
-.. code:: ipython
+.. code:: pycon
 
-   In [1]: from validphys.loader import Loader
+   >>> from validphys.loader import Loader
 
-   In [2]: l = Loader()
+   >>> l = Loader()
 
-   In [3]: cd = l.check_commondata("CMSDY2D12")
+   >>> cd = l.check_commondata("CMSDY2D12")
 
-   In [4]: cd.process_type
-   Out[4]: 'EWK_RAP'
+   >>> cd.process_type
+   'EWK_RAP'
 
 Then cross check this against ``NNPDF.CommonData.kinLabels`` to see that
 the relevant kinematic variables are:

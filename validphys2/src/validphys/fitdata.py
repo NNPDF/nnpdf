@@ -509,8 +509,7 @@ def datasets_properties_table(data_input):
         dataset_property_dict["Other fields"].append(
             ", ".join([f"{k}: {v}" for k, v in ds_input_dict.items()]) if ds_input_dict else "-"
         )
-    df = pd.DataFrame(dataset_property_dict)
-    df.set_index("Dataset", inplace=True)
+    df = pd.DataFrame(dataset_property_dict).set_index("Dataset")
     df = df[["Training fraction", "Weight", "C-factors", "Other fields"]]
     return df
 
@@ -583,7 +582,5 @@ fits_fit_code_version = collect("fit_code_version", ("fits",))
 @table
 def fits_version_table(fits_fit_code_version):
     """Produces a table of version information for multiple fits."""
-    vtable = pd.concat(fits_fit_code_version, axis=1)
     # Fill NaNs with "unavailable"
-    vtable.fillna("unavailable", inplace=True)
-    return vtable
+    return pd.concat(fits_fit_code_version, axis=1).fillna("unavailable")

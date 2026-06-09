@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-    setup-fit - prepare and apply data cuts before fit
-    setup-fit constructs the fit [results] folder where data used by nnfit
-    will be stored.
+setup-fit - prepare and apply data cuts before fit
+setup-fit constructs the fit [results] folder where data used by nnfit
+will be stored.
 """
 
 # Implementation notes
@@ -25,6 +25,7 @@
 # top.
 
 
+import copy
 import hashlib
 import logging
 import pathlib
@@ -37,17 +38,14 @@ from ruamel.yaml import error
 from reportengine import colors
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
-from validphys.loader import Loader, TheoryNotFound
+from validphys.loader import FallbackLoader, PhotonQEDNotFound, TheoryNotFound
 from validphys.utils import yaml_safe
 
-l = Loader()
+
+loader = FallbackLoader()
 
 SETUPFIT_FIXED_CONFIG = dict(
-    actions_=[
-        'datacuts check_t0pdfset',
-        'theory check_positivity',
-        'theory evolven3fit_checks_action',
-    ]
+    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action', 'theory fktable_hasher']
 )
 
 SETUPFIT_PROVIDERS = [
@@ -57,9 +55,11 @@ SETUPFIT_PROVIDERS = [
     'validphys.filters',
     'validphys.results',
     'validphys.theorycovariance.construction',
+    'validphys.photon.compute',
+    'validphys.n3fit_data',
 ]
 
-SETUPFIT_DEFAULTS = dict(use_cuts='internal')
+SETUPFIT_DEFAULTS = dict(use_cuts='internal', use_t0=True)
 
 
 log = logging.getLogger(__name__)
@@ -69,6 +69,17 @@ FILTER_OUTPUT_FOLDER = "filter"
 TABLE_OUTPUT_FOLDER = "tables"
 MD5_FILENAME = "md5"
 INPUT_FOLDER = "input"
+
+
+def _compute_fit_md5(config_yaml: pathlib.Path, output_path: pathlib.Path) -> str:
+    """Compute the md5 hash of the fit when vp-setupfit is run. This utility function
+    is also used in n3fit to check that the fit configuration has not changed
+    since the setup-fit was run."""
+    hash_md5 = hashlib.md5()
+    with open(config_yaml, 'rb') as f:
+        hash_md5.update(f.read())
+    digest = hash_md5.hexdigest()
+    return digest
 
 
 class SetupFitError(Exception):
@@ -116,13 +127,12 @@ class SetupFitEnvironment(Environment):
         self.input_folder.mkdir(exist_ok=True)
 
     def save_md5(self):
-        """Generate md5 key from file"""
+        """Generate md5 key from the runcard and the stored fitting covmat table."""
         output_filename = self.output_path / MD5_FILENAME
-        with open(self.config_yml, 'rb') as f:
-            hash_md5 = hashlib.md5(f.read()).hexdigest()
+        digest = _compute_fit_md5(self.config_yml, self.output_path)
         with open(output_filename, 'w') as g:
-            g.write(hash_md5)
-        log.info(f"md5 {hash_md5} stored in {output_filename}")
+            g.write(digest)
+        log.info(f"md5 {digest} stored in {output_filename}")
 
     @classmethod
     def ns_dump_description(cls):
@@ -134,6 +144,9 @@ class SetupFitConfig(Config):
 
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
+        # Create a fresh copy of the fixed config to avoid in-place modifications
+        fixed_config = copy.deepcopy(SETUPFIT_FIXED_CONFIG)
+
         try:
             file_content = yaml_safe.load(o)
         except error.YAMLError as e:
@@ -149,13 +162,13 @@ class SetupFitConfig(Config):
             # Use faketheoryid to create the L0 data to be stored into the filter folder
             # (L1 data is stored if fakedata is True)
             if 'faketheoryid' in closuredict:
-                # make sure theory key exists in SETUPFIT_FIXED_CONFIG
-                SETUPFIT_FIXED_CONFIG.setdefault('theory', {})
+                # make sure theory key exists in fixed_config
+                fixed_config.setdefault('theory', {})
                 # overwrite theoryid with the faketheoryid
-                SETUPFIT_FIXED_CONFIG['theory']['theoryid'] = closuredict['faketheoryid']
+                fixed_config['theory']['theoryid'] = closuredict['faketheoryid']
                 # download theoryid since it will be used in the fit
                 try:
-                    l.check_theoryID(file_content['theory']['theoryid'])
+                    loader.check_theoryID(file_content['theory']['theoryid'])
                 except TheoryNotFound as e:
                     log.warning(e)
             filter_action = 'datacuts::closuretest::theory::fitting filter'
@@ -164,8 +177,18 @@ class SetupFitConfig(Config):
             filter_action = 'datacuts::theory::fitting filter'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
 
+        # Add rotation action for the total covariance matrix
+
+        # if file_content.get('theorycovmatconfig') is not None:
+        if (thconfig := file_content.get('theorycovmatconfig')) is not None and thconfig.get(
+            'use_thcovmat_in_fitting', True
+        ):
+            rotation_action = 'datacuts::theory::theorycovmatconfig fitting_covmat_table'
+        else:
+            rotation_action = 'datacuts::theory fitting_covmat_table'
+
         # The settings for these actions depend on the presence of closuretest
-        SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
+        fixed_config['actions_'] += [check_n3fit_action, filter_action, rotation_action]
 
         # Check theory covariance matrix configuration
         thconfig = file_content.get('theorycovmatconfig', {})
@@ -177,27 +200,56 @@ class SetupFitConfig(Config):
                 "`point_prescriptions: ['9 point', '3 point']`"
             )
         if thconfig:
-            SETUPFIT_FIXED_CONFIG['actions_'].append(
+            fixed_config['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )
 
         # Check fiatlux configuration
         fiatlux = file_content.get('fiatlux')
         if fiatlux is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset')
-            if fiatlux.get("additional_errors"):
-                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
+            luxset = fiatlux['luxset']
+            theoryid = file_content['theory']['theoryid']
+            compute_in_setupfit = fiatlux.get('compute_in_setupfit', False)
+            try:
+                _ = loader.check_photonQED(theoryid, luxset)
+                log.info(f"Photon QED set found for {theoryid} with luxset {luxset}.")
+            except PhotonQEDNotFound:
+                if compute_in_setupfit:
+                    log.warning(
+                        f"Photon QED set for theory {theoryid} with luxset {luxset} not found. "
+                        "It will be computed in vp-setupfit."
+                    )
+                else:
+                    log.warning(
+                        f"No photon set found for theory {theoryid} with luxset {luxset}. Consider "
+                        "using `compute_in_setupfit` in the runcard to compute all replicas of the photon "
+                        "in vp-setupfit. Otherwise n3fit "
+                        "will take care of the photon computation. May impact performance."
+                    )
+
+            if compute_in_setupfit:
+                log.info("Forcing photon computation with FiatLux during setupfit.")
+                # Since the photon will be computed, check that the luxset and additional_errors exist
+                fixed_config['actions_'].append('fiatlux check_luxset_exists')
+                if fiatlux.get("additional_errors"):
+                    fixed_config['actions_'].append('fiatlux check_additional_errors')
+                fixed_config['actions_'].append('fiatlux::theory compute_photon_to_disk')
 
         # Check positivity bound
         if file_content.get('positivity_bound') is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
+            fixed_config['actions_'].append('positivity_bound check_unpolarized_bc')
+
+        # Check hyperscan
+        trials_config = file_content.get('trial_specs', {})
+        if trials_config:
+            loader.check_hyperscan(trials_config['hyperscan'])
 
         # Sets default values if they are not present in the runcard
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
 
         # Update file content with fixed configuration
-        file_content.update(SETUPFIT_FIXED_CONFIG)
+        file_content.update(fixed_config)
 
         return cls(file_content, *args, **kwargs)
 
@@ -235,6 +287,7 @@ class SetupFitApp(App):
 
             # if succeeded print md5
             self.environment.save_md5()
+
         except SetupFitError as e:
             log.error(f"Error in setup-fit:\n{e}")
             sys.exit(1)

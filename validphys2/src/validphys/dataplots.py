@@ -2,8 +2,6 @@
 Plots of relations between data PDFs and fits.
 """
 
-from __future__ import generator_stop
-
 from collections import defaultdict
 from collections.abc import Sequence
 import itertools
@@ -25,13 +23,13 @@ from reportengine.figure import figure, figuregen
 from reportengine.floatformatting import format_number
 from validphys import plotutils
 from validphys.checks import check_not_using_pdferr
+from validphys.commondata import loaded_commondata_with_cuts
 from validphys.core import CutsPolicy, MCStats, cut_mask, load_commondata
+from validphys.covmats import shifts_from_systematics
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
-from validphys.sumrules import POL_LIMS, partial_polarized_sum_rules
+from validphys.sumrules import POL_LIMS
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
-from validphys.commondata import loaded_commondata_with_cuts
-from validphys.covmats import shifts_from_systematics
 
 log = logging.getLogger(__name__)
 
@@ -226,12 +224,12 @@ def check_normalize_to(ns, **kwargs):
 # TODO: This interface is horrible.
 # We need to think how to adapt it to make this use case easier
 def _plot_fancy_impl(
-        results,
-        commondata,
-        cutlist,
-        normalize_to: (int, type(None)) = None,
-        labellist=None,
-        with_shift: bool = True,
+    results,
+    commondata,
+    cutlist,
+    normalize_to: (int, type(None)) = None,
+    labellist=None,
+    with_shift: bool = True,
 ):
     """Implementation of the data-theory comparison plots. Providers are
     supposed to call (yield from) this.
@@ -253,13 +251,12 @@ def _plot_fancy_impl(
         (from the PDF names) if None is given.
     with_shift: bool
         This option specifies wheter one wants (True) or not (False) to shift
-        the theoretical predictions by a shift due to the correlated part of 
-        the experimental uncertainty. The default is True. 
+        the theoretical predictions by a shift due to the correlated part of
+        the experimental uncertainty. The default is True.
     Returns
     -------
     A generator over figures.
     """
-
     info = get_info(commondata, normalize=(normalize_to is not None))
 
     table = kitable(commondata, info)
@@ -267,14 +264,13 @@ def _plot_fancy_impl(
     ndata = len(table)
 
     # Compute shifts due to the correlated part of the exp cov matrix
-    lcd_wc = loaded_commondata_with_cuts(commondata,cutlist[0])
+    lcd_wc = loaded_commondata_with_cuts(commondata, cutlist[0])
     theory_predictions = results[1].central_value
-    shifts, alpha = shifts_from_systematics(lcd_wc,theory_predictions)
-    
+
     # This is easier than cheking every time
     if labellist is None:
         labellist = [None] * len(results)
-        
+
     if normalize_to is not None:
         norm_result = results[normalize_to]
         mask = cut_mask(cutlist[normalize_to])
@@ -284,27 +280,41 @@ def _plot_fancy_impl(
         err[mask] = norm_result.std_error
         # We modify the table, so we pass only the label columns
         norm_cv, _ = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
-        
+
     cvcols = []
-    
+
+    # Compute systematic shifts
+    # For unknown reasons, `shifts_from_systematics` may
+    # randomly fails. If a LinAlgError is raised, shifts are not included in
+    # the final plot.
+    if with_shift:
+        try:
+            shifts, alpha = shifts_from_systematics(lcd_wc, theory_predictions)
+        except np.linalg.LinAlgError:
+            log.warning(
+                "Error occurred in computing systematic shifts for "
+                f"{info.ds_metadata.name}. These will be disregarded in the plots."
+            )
+            with_shift = False
+
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
         # We modify the table, so we pass only the label columns
         mask = cut_mask(cuts)
         cv = np.full(ndata, np.nan)
         err = np.full(ndata, np.nan)
         # Shift the theory when with_shift option is True
-        if i==1 and with_shift:
-            cv[mask] = result.central_value + shifts
+        if i == 1 and with_shift:
+            cv[mask] = result.central_value - shifts
         else:
-            cv[mask] = result.central_value           
+            cv[mask] = result.central_value
         # Retain only the uncorrelated part of the error if shifting the data
-        if i==0 and with_shift:
+        if i == 0 and with_shift:
             err[mask] = alpha
         else:
             err[mask] = result.std_error
 
         cv, err = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
-        
+
         # By doing tuple keys we avoid all possible name collisions
         cvcol = ('cv', i)
         if normalize_to is None:
@@ -316,7 +326,7 @@ def _plot_fancy_impl(
         cvcols.append(cvcol)
 
     figby = sane_groupby_iter(table, info.figure_by)
-    
+
     for samefig_vals, fig_data in figby:
         # Nothing to plot if all data is cut away
         if np.all(np.isnan(fig_data[cvcols])):
@@ -325,8 +335,15 @@ def _plot_fancy_impl(
         min_vals = []
         max_vals = []
         fig, ax = plotutils.subplots()
+
+        if with_shift:
+            shift_label = "(shifted)"
+        else:
+            shift_label = "(unshifted)"
         ax.set_title(
-            "{} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by))
+            "{} {} {}".format(
+                info.dataset_label, info.group_label(samefig_vals, info.figure_by), shift_label
+            )
         )
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
@@ -358,7 +375,7 @@ def _plot_fancy_impl(
             # and follow the cycle for
             # the rest.
             next_color = itertools.chain(['#262626'], plotutils.color_iter())
-            
+
             for i, (res, lb, color) in enumerate(zip(results, labellist, next_color)):
                 if labels:
                     if lb:
@@ -367,7 +384,7 @@ def _plot_fancy_impl(
                         label = res.label
                 else:
                     label = None
-                    
+
                 cv = line_data[('cv', i)].values
                 err = line_data[('err', i)].values
                 ax.errorbar(
@@ -541,7 +558,7 @@ def plot_fancy_dataspecs(
         - or None (default) to plot absolute values.
 
     ``with_shift`` be either:
-        
+
         - True (default): this shifts theoretical predictions by an amount that
           depends on the correlated part of the experimental uncertainty,
           according to Eqs.(7)-(9) of arXiv:hep-ph/0201195. In this case only
@@ -1237,7 +1254,7 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
 
 @figure
-def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=False):
+def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=True):
     """Plot an errorbar spanning the central 68% CI of a positivity
     observable as well as a point indicating the central value (according
     to the ``pdf.stats_class.central_value()``).
@@ -1255,8 +1272,9 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     xvals = []
 
     if pos_use_kin:
+        kin_label = posset.kin_variables[0]
         kin_name = KIN_NAMES[0]
-        ax.set_xlabel(kin_name)
+        ax.set_xlabel(kin_label)
         xvals = posset.kinematics[kin_name].values
     else:
         ax.set_xlabel('idat')
@@ -1328,7 +1346,7 @@ def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
 
 @make_argcheck
 def _check_marker_by(marker_by):
-    markers = ('process type', 'experiment', 'dataset', 'group')
+    markers = ('process type', 'experiment', 'dataset', 'group', 'kinematics')
     if marker_by not in markers:
         raise CheckError("Unknown marker_by value", marker_by, markers)
 
@@ -1387,7 +1405,8 @@ def plot_xq2(
     will be displaed and marked.
 
     The points are grouped according to the `marker_by` option. The possible
-    values are: "process type", "experiment", "group" or "dataset".
+    values are: "process type", "experiment", "group" or "dataset" for discrete
+    colors, or "kinematics" for coloring by 1/(Q2(1-x))
 
     Some datasets can be made to appear highlighted in the figure: Define a key
     called ``highlight_datasets`` containing the names of the datasets to be
@@ -1518,6 +1537,7 @@ def plot_xq2(
 
     xh = defaultdict(list)
     q2h = defaultdict(list)
+    cvdict = defaultdict(list)
 
     if not highlight_datasets:
         highlight_datasets = set()
@@ -1548,6 +1568,8 @@ def plot_xq2(
         elif marker_by == "group":
             # if group is None then make sure that shows on legend.
             key = str(group)
+        elif marker_by == "kinematics":
+            key = None
         else:
             raise ValueError('Unknown marker_by value')
 
@@ -1563,6 +1585,7 @@ def plot_xq2(
             xdict = x
             q2dict = q2
 
+        cvdict[key].append(commondata.load().get_cv())
         xdict[key].append(fitted[0])
         q2dict[key].append(fitted[1])
         if display_cuts:
@@ -1577,6 +1600,13 @@ def plot_xq2(
         else:
             # This is to get the label key
             coords = [], []
+        if marker_by == "kinematics":
+            ht_magnitude = np.concatenate(cvdict[key]) / (coords[1] * (1 - coords[0]))
+            out = ax.scatter(
+                *coords, marker='.', c=ht_magnitude, cmap="viridis", norm=mcolors.LogNorm()
+            )
+            clb = fig.colorbar(out)
+            clb.ax.set_title(r'$F_\mathrm{exp}\frac{1}{Q^2(1-x)}$')
         ax.plot(*coords, label=key, markeredgewidth=1, markeredgecolor=None, **key_options[key])
 
     # Iterate again so highlights are printed on top.

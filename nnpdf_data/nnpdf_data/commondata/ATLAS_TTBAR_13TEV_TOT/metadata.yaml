@@ -43,7 +43,7 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}}$
+    dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}} (l+j channel)$
     plot_x: sqrts
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:

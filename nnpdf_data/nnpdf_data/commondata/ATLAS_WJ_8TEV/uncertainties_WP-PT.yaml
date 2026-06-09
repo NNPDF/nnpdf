@@ -280,21 +280,21 @@ definitions:
     treatment: MULT
     type: UNCORR
 bins:
-- art_stat_corr_1: -1.98542171e+00
+- art_stat_corr_1: 1.98542171e+00
   art_stat_corr_2: 9.56548751e-02
   art_stat_corr_3: 1.88862080e-01
   art_stat_corr_4: 9.28404853e-02
   art_stat_corr_5: 5.61228648e-02
   art_stat_corr_6: 3.85627331e-02
   art_stat_corr_7: 5.00592572e-03
-  art_stat_corr_8: -7.85567390e-04
-  art_stat_corr_9: -1.33589803e-04
-  art_stat_corr_10: -1.79785626e-05
-  art_stat_corr_11: -1.05988974e-06
-  art_stat_corr_12: -1.19526188e-07
+  art_stat_corr_8: 7.85567390e-04
+  art_stat_corr_9: 1.33589803e-04
+  art_stat_corr_10: 1.79785626e-05
+  art_stat_corr_11: 1.05988974e-06
+  art_stat_corr_12: 1.19526188e-07
   art_stat_corr_13: 4.35508103e-08
-  art_stat_corr_14: -1.05397397e-08
-  art_stat_corr_15: -1.19261727e-09
+  art_stat_corr_14: 1.05397397e-08
+  art_stat_corr_15: 1.19261727e-09
   art_stat_corr_16: 2.06555333e-10
   JetScaleEff1: 1.25501992e+02
   JetScaleEff2: 3.15079355e+01
@@ -350,21 +350,21 @@ bins:
   UnfoldMCstat: -4
   UnfoldOtherGen: 40
   UnfoldReweight: 48
-- art_stat_corr_1: -5.46002087e-01
+- art_stat_corr_1: 5.46002087e-01
   art_stat_corr_2: -4.27285350e-01
   art_stat_corr_3: -5.57536453e-01
   art_stat_corr_4: -3.52843748e-01
   art_stat_corr_5: -2.29862118e-01
   art_stat_corr_6: -1.74358239e-01
   art_stat_corr_7: -2.65003448e-02
-  art_stat_corr_8: 4.78636812e-03
-  art_stat_corr_9: 8.72668337e-04
-  art_stat_corr_10: 1.25908437e-04
-  art_stat_corr_11: 7.17572327e-06
-  art_stat_corr_12: 9.20534997e-07
+  art_stat_corr_8: -4.78636812e-03
+  art_stat_corr_9: -8.72668337e-04
+  art_stat_corr_10: -1.25908437e-04
+  art_stat_corr_11: -7.17572327e-06
+  art_stat_corr_12: -9.20534997e-07
   art_stat_corr_13: -2.11361624e-07
-  art_stat_corr_14: 5.74752177e-08
-  art_stat_corr_15: 1.00856463e-08
+  art_stat_corr_14: -5.74752177e-08
+  art_stat_corr_15: -1.00856463e-08
   art_stat_corr_16: 7.42301837e-10
   JetScaleEff1: 2.79014337e+02
   JetScaleEff2: 6.95035970e+01
@@ -420,21 +420,21 @@ bins:
   UnfoldMCstat: -7
   UnfoldOtherGen: 463
   UnfoldReweight: -29
-- art_stat_corr_1: -2.59558118e-02
+- art_stat_corr_1: 2.59558118e-02
   art_stat_corr_2: -8.80092582e-01
   art_stat_corr_3: -3.05579700e-01
   art_stat_corr_4: 1.69517565e-01
   art_stat_corr_5: 2.20631802e-01
   art_stat_corr_6: 2.26747457e-01
   art_stat_corr_7: 4.93373007e-02
-  art_stat_corr_8: -1.07753162e-02
-  art_stat_corr_9: -2.23453199e-03
-  art_stat_corr_10: -3.37011786e-04
-  art_stat_corr_11: -2.09343662e-05
-  art_stat_corr_12: -2.37162477e-06
+  art_stat_corr_8: 1.07753162e-02
+  art_stat_corr_9: 2.23453199e-03
+  art_stat_corr_10: 3.37011786e-04
+  art_stat_corr_11: 2.09343662e-05
+  art_stat_corr_12: 2.37162477e-06
   art_stat_corr_13: 4.40014236e-07
-  art_stat_corr_14: -8.99435481e-08
-  art_stat_corr_15: -1.28832719e-08
+  art_stat_corr_14: 8.99435481e-08
+  art_stat_corr_15: 1.28832719e-08
   art_stat_corr_16: 4.60457365e-10
   JetScaleEff1: 1.28548629e+02
   JetScaleEff2: 25.0
@@ -490,21 +490,21 @@ bins:
   UnfoldMCstat: -4
   UnfoldOtherGen: 58
   UnfoldReweight: -7
-- art_stat_corr_1: 8.37164657e-02
+- art_stat_corr_1: -8.37164657e-02
   art_stat_corr_2: -7.40666480e-01
   art_stat_corr_3: 6.12723683e-01
   art_stat_corr_4: 1.00961042e-01
   art_stat_corr_5: -8.01740596e-02
   art_stat_corr_6: -2.13197843e-01
   art_stat_corr_7: -7.97042497e-02
-  art_stat_corr_8: 2.27702330e-02
-  art_stat_corr_9: 5.29738728e-03
-  art_stat_corr_10: 8.71305458e-04
-  art_stat_corr_11: 5.44526894e-05
-  art_stat_corr_12: 6.25756472e-06
+  art_stat_corr_8: -2.27702330e-02
+  art_stat_corr_9: -5.29738728e-03
+  art_stat_corr_10: -8.71305458e-04
+  art_stat_corr_11: -5.44526894e-05
+  art_stat_corr_12: -6.25756472e-06
   art_stat_corr_13: -8.84903348e-07
-  art_stat_corr_14: 1.90042862e-07
-  art_stat_corr_15: 1.09490964e-08
+  art_stat_corr_14: -1.90042862e-07
+  art_stat_corr_15: -1.09490964e-08
   art_stat_corr_16: 1.90345122e-09
   JetScaleEff1: 42.0
   JetScaleEff2: 4.0
@@ -560,21 +560,21 @@ bins:
   UnfoldMCstat: -2
   UnfoldOtherGen: 29
   UnfoldReweight: -3
-- art_stat_corr_1: 2.55145732e-02
+- art_stat_corr_1: -2.55145732e-02
   art_stat_corr_2: -1.66290402e-01
   art_stat_corr_3: 4.34534384e-01
   art_stat_corr_4: -4.55649045e-01
   art_stat_corr_5: -7.46825792e-02
   art_stat_corr_6: 1.79573386e-01
   art_stat_corr_7: 1.54332967e-01
-  art_stat_corr_8: -5.78625089e-02
-  art_stat_corr_9: -1.61711675e-02
-  art_stat_corr_10: -2.82076836e-03
-  art_stat_corr_11: -1.95618782e-04
-  art_stat_corr_12: -2.12328617e-05
+  art_stat_corr_8: 5.78625089e-02
+  art_stat_corr_9: 1.61711675e-02
+  art_stat_corr_10: 2.82076836e-03
+  art_stat_corr_11: 1.95618782e-04
+  art_stat_corr_12: 2.12328617e-05
   art_stat_corr_13: 3.11642427e-06
-  art_stat_corr_14: -6.35594969e-07
-  art_stat_corr_15: 1.02852373e-08
+  art_stat_corr_14: 6.35594969e-07
+  art_stat_corr_15: -1.02852373e-08
   art_stat_corr_16: -3.41829418e-10
   JetScaleEff1: 1.56514376e+01
   JetScaleEff2: 1.10905365e+00
@@ -630,21 +630,21 @@ bins:
   UnfoldMCstat: -1.4
   UnfoldOtherGen: 18.6
   UnfoldReweight: -1.5
-- art_stat_corr_1: 2.51761439e-03
+- art_stat_corr_1: -2.51761439e-03
   art_stat_corr_2: 1.98165033e-02
   art_stat_corr_3: 8.58050707e-02
   art_stat_corr_4: -3.46827952e-01
   art_stat_corr_5: 2.58158877e-01
   art_stat_corr_6: 1.01902953e-01
   art_stat_corr_7: -1.71380028e-01
-  art_stat_corr_8: 1.17764641e-01
-  art_stat_corr_9: 4.01731969e-02
-  art_stat_corr_10: 8.04717395e-03
-  art_stat_corr_11: 5.82381468e-04
-  art_stat_corr_12: 7.08732061e-05
+  art_stat_corr_8: -1.17764641e-01
+  art_stat_corr_9: -4.01731969e-02
+  art_stat_corr_10: -8.04717395e-03
+  art_stat_corr_11: -5.82381468e-04
+  art_stat_corr_12: -7.08732061e-05
   art_stat_corr_13: -9.79281907e-06
-  art_stat_corr_14: 2.12651117e-06
-  art_stat_corr_15: -5.60753977e-08
+  art_stat_corr_14: -2.12651117e-06
+  art_stat_corr_15: 5.60753977e-08
   art_stat_corr_16: 1.68372271e-09
   JetScaleEff1: 6.65338260e+00
   JetScaleEff2: 1.35185058e+00
@@ -700,21 +700,21 @@ bins:
   UnfoldMCstat: -0.9
   UnfoldOtherGen: 4.3
   UnfoldReweight: -0.7
-- art_stat_corr_1: -8.03408678e-04
+- art_stat_corr_1: 8.03408678e-04
   art_stat_corr_2: 3.06889418e-02
   art_stat_corr_3: -2.25053233e-02
   art_stat_corr_4: -1.46579824e-01
   art_stat_corr_5: 4.00242437e-01
   art_stat_corr_6: -2.29587157e-01
   art_stat_corr_7: -1.37926731e-02
-  art_stat_corr_8: -1.01904208e-01
-  art_stat_corr_9: -5.84075702e-02
-  art_stat_corr_10: -1.31766944e-02
-  art_stat_corr_11: -1.15896269e-03
-  art_stat_corr_12: -1.38265644e-04
+  art_stat_corr_8: 1.01904208e-01
+  art_stat_corr_9: 5.84075702e-02
+  art_stat_corr_10: 1.31766944e-02
+  art_stat_corr_11: 1.15896269e-03
+  art_stat_corr_12: 1.38265644e-04
   art_stat_corr_13: 2.11414152e-05
-  art_stat_corr_14: -4.43170489e-06
-  art_stat_corr_15: 1.80455595e-07
+  art_stat_corr_14: 4.43170489e-06
+  art_stat_corr_15: -1.80455595e-07
   art_stat_corr_16: 5.99134321e-10
   JetScaleEff1: 3.55070416e+00
   JetScaleEff2: 1.15217186e+00
@@ -770,21 +770,21 @@ bins:
   UnfoldMCstat: -0.6
   UnfoldOtherGen: 2.6
   UnfoldReweight: -0.4
-- art_stat_corr_1: -3.87209868e-04
+- art_stat_corr_1: 3.87209868e-04
   art_stat_corr_2: 8.68187011e-03
   art_stat_corr_3: -1.81399120e-02
   art_stat_corr_4: -8.86357012e-03
   art_stat_corr_5: 1.60217683e-01
   art_stat_corr_6: -1.89584752e-01
   art_stat_corr_7: 2.35803745e-01
-  art_stat_corr_8: 7.35596006e-02
-  art_stat_corr_9: 7.70634415e-02
-  art_stat_corr_10: 2.33806806e-02
-  art_stat_corr_11: 2.19424159e-03
-  art_stat_corr_12: 3.22092689e-04
+  art_stat_corr_8: -7.35596006e-02
+  art_stat_corr_9: -7.70634415e-02
+  art_stat_corr_10: -2.33806806e-02
+  art_stat_corr_11: -2.19424159e-03
+  art_stat_corr_12: -3.22092689e-04
   art_stat_corr_13: -4.57266799e-05
-  art_stat_corr_14: 1.06428903e-05
-  art_stat_corr_15: -3.98033596e-07
+  art_stat_corr_14: -1.06428903e-05
+  art_stat_corr_15: 3.98033596e-07
   art_stat_corr_16: 5.67892573e-09
   JetScaleEff1: 1.98126222e+00
   JetScaleEff2: 7.85286572e-01
@@ -840,21 +840,21 @@ bins:
   UnfoldMCstat: -0.46
   UnfoldOtherGen: 1.41
   UnfoldReweight: -0.2
-- art_stat_corr_1: -3.82463633e-05
+- art_stat_corr_1: 3.82463633e-05
   art_stat_corr_2: 2.42918591e-04
   art_stat_corr_3: -2.31167392e-03
   art_stat_corr_4: 9.68858537e-03
   art_stat_corr_5: -1.99313094e-03
   art_stat_corr_6: -1.96235212e-02
   art_stat_corr_7: 8.52584543e-02
-  art_stat_corr_8: 1.51261283e-01
-  art_stat_corr_9: -1.09905334e-01
-  art_stat_corr_10: -3.66859804e-02
-  art_stat_corr_11: -6.08394655e-03
-  art_stat_corr_12: -7.81098367e-04
+  art_stat_corr_8: -1.51261283e-01
+  art_stat_corr_9: 1.09905334e-01
+  art_stat_corr_10: 3.66859804e-02
+  art_stat_corr_11: 6.08394655e-03
+  art_stat_corr_12: 7.81098367e-04
   art_stat_corr_13: 1.51417046e-04
-  art_stat_corr_14: -3.24003437e-05
-  art_stat_corr_15: 2.09035085e-06
+  art_stat_corr_14: 3.24003437e-05
+  art_stat_corr_15: -2.09035085e-06
   art_stat_corr_16: 1.64786681e-08
   JetScaleEff1: 9.25243211e-01
   JetScaleEff2: 4.53541619e-01
@@ -910,21 +910,21 @@ bins:
   UnfoldMCstat: -0.24
   UnfoldOtherGen: 0.68
   UnfoldReweight: -0.09
-- art_stat_corr_1: 9.76535268e-07
+- art_stat_corr_1: -9.76535268e-07
   art_stat_corr_2: -1.21827150e-04
   art_stat_corr_3: 1.22650116e-04
   art_stat_corr_4: 1.36102455e-03
   art_stat_corr_5: -5.76850772e-03
   art_stat_corr_6: 5.67446450e-03
   art_stat_corr_7: -5.27574622e-03
-  art_stat_corr_8: 1.31489012e-02
-  art_stat_corr_9: -6.19883840e-02
-  art_stat_corr_10: 1.11921847e-01
-  art_stat_corr_11: 1.56260979e-02
-  art_stat_corr_12: 4.27178777e-03
+  art_stat_corr_8: -1.31489012e-02
+  art_stat_corr_9: 6.19883840e-02
+  art_stat_corr_10: -1.11921847e-01
+  art_stat_corr_11: -1.56260979e-02
+  art_stat_corr_12: -4.27178777e-03
   art_stat_corr_13: -6.31359205e-04
-  art_stat_corr_14: 1.84094088e-04
-  art_stat_corr_15: -9.58588930e-06
+  art_stat_corr_14: -1.84094088e-04
+  art_stat_corr_15: 9.58588930e-06
   art_stat_corr_16: 1.43675568e-07
   JetScaleEff1: 3.30302891e-01
   JetScaleEff2: 0.22
@@ -980,21 +980,21 @@ bins:
   UnfoldMCstat: -0.13
   UnfoldOtherGen: 0.35
   UnfoldReweight: -0.03
-- art_stat_corr_1: 1.04476827e-06
+- art_stat_corr_1: -1.04476827e-06
   art_stat_corr_2: -1.19348689e-05
   art_stat_corr_3: 3.67093521e-05
   art_stat_corr_4: -6.28857452e-06
   art_stat_corr_5: -4.86076754e-04
   art_stat_corr_6: 8.55713655e-04
   art_stat_corr_7: -2.63950943e-03
-  art_stat_corr_8: -4.41894848e-03
-  art_stat_corr_9: -1.18220721e-03
-  art_stat_corr_10: 2.77028976e-02
-  art_stat_corr_11: -7.58091099e-02
-  art_stat_corr_12: -1.29041734e-02
+  art_stat_corr_8: 4.41894848e-03
+  art_stat_corr_9: 1.18220721e-03
+  art_stat_corr_10: -2.77028976e-02
+  art_stat_corr_11: 7.58091099e-02
+  art_stat_corr_12: 1.29041734e-02
   art_stat_corr_13: 3.64871064e-03
-  art_stat_corr_14: -9.11288519e-04
-  art_stat_corr_15: 7.29594623e-05
+  art_stat_corr_14: 9.11288519e-04
+  art_stat_corr_15: -7.29594623e-05
   art_stat_corr_16: -3.30961000e-07
   JetScaleEff1: 1.52527866e-01
   JetScaleEff2: 9.55026178e-02
@@ -1050,21 +1050,21 @@ bins:
   UnfoldMCstat: -0.083
   UnfoldOtherGen: 0.148
   UnfoldReweight: -0.015
-- art_stat_corr_1: 6.50343122e-07
+- art_stat_corr_1: -6.50343122e-07
   art_stat_corr_2: 1.57890322e-07
   art_stat_corr_3: 2.32849206e-07
   art_stat_corr_4: -1.39954492e-05
   art_stat_corr_5: 3.64873973e-05
   art_stat_corr_6: -7.87403716e-06
   art_stat_corr_7: -1.45104053e-04
-  art_stat_corr_8: -8.62249823e-04
-  art_stat_corr_9: 2.46100497e-03
-  art_stat_corr_10: -2.68465619e-03
-  art_stat_corr_11: -2.18964582e-02
-  art_stat_corr_12: 4.91971317e-02
+  art_stat_corr_8: 8.62249823e-04
+  art_stat_corr_9: -2.46100497e-03
+  art_stat_corr_10: 2.68465619e-03
+  art_stat_corr_11: 2.18964582e-02
+  art_stat_corr_12: -4.91971317e-02
   art_stat_corr_13: -9.74369038e-03
-  art_stat_corr_14: 4.01904849e-03
-  art_stat_corr_15: -2.55004545e-04
+  art_stat_corr_14: -4.01904849e-03
+  art_stat_corr_15: 2.55004545e-04
   art_stat_corr_16: 4.73501064e-06
   JetScaleEff1: 7.06735453e-02
   JetScaleEff2: 5.74521540e-02
@@ -1120,21 +1120,21 @@ bins:
   UnfoldMCstat: -0.058
   UnfoldOtherGen: 0.07
   UnfoldReweight: -0.007
-- art_stat_corr_1: 2.50914363e-07
+- art_stat_corr_1: -2.50914363e-07
   art_stat_corr_2: 7.08829439e-07
   art_stat_corr_3: -8.08250005e-07
   art_stat_corr_4: -2.17678136e-06
   art_stat_corr_5: 6.40393969e-06
   art_stat_corr_6: -1.07739641e-05
   art_stat_corr_7: 2.36426280e-05
-  art_stat_corr_8: -8.18635182e-06
-  art_stat_corr_9: 3.66849880e-04
-  art_stat_corr_10: -1.54156800e-03
-  art_stat_corr_11: 1.55115468e-03
-  art_stat_corr_12: 1.76856583e-02
+  art_stat_corr_8: 8.18635182e-06
+  art_stat_corr_9: -3.66849880e-04
+  art_stat_corr_10: 1.54156800e-03
+  art_stat_corr_11: -1.55115468e-03
+  art_stat_corr_12: -1.76856583e-02
   art_stat_corr_13: 3.04415772e-02
-  art_stat_corr_14: -1.10896220e-02
-  art_stat_corr_15: 1.27679701e-03
+  art_stat_corr_14: 1.10896220e-02
+  art_stat_corr_15: -1.27679701e-03
   art_stat_corr_16: -7.79414269e-06
   JetScaleEff1: 3.45651559e-02
   JetScaleEff2: 3.80361670e-02
@@ -1190,21 +1190,21 @@ bins:
   UnfoldMCstat: -0.04
   UnfoldOtherGen: -0.127
   UnfoldReweight: -0.003
-- art_stat_corr_1: 1.31936803e-07
+- art_stat_corr_1: -1.31936803e-07
   art_stat_corr_2: 4.34991951e-07
   art_stat_corr_3: 1.85999180e-07
   art_stat_corr_4: -8.11455742e-08
   art_stat_corr_5: 1.02742860e-08
   art_stat_corr_6: -1.15397923e-06
   art_stat_corr_7: 4.12967598e-06
-  art_stat_corr_8: 1.39068120e-05
-  art_stat_corr_9: -9.23663655e-06
-  art_stat_corr_10: -1.49457422e-04
-  art_stat_corr_11: 1.51969278e-03
-  art_stat_corr_12: -5.26536676e-04
+  art_stat_corr_8: -1.39068120e-05
+  art_stat_corr_9: 9.23663655e-06
+  art_stat_corr_10: 1.49457422e-04
+  art_stat_corr_11: -1.51969278e-03
+  art_stat_corr_12: 5.26536676e-04
   art_stat_corr_13: 1.77547117e-02
-  art_stat_corr_14: 2.14925510e-02
-  art_stat_corr_15: -2.05576130e-03
+  art_stat_corr_14: -2.14925510e-02
+  art_stat_corr_15: 2.05576130e-03
   art_stat_corr_16: 7.04718859e-05
   JetScaleEff1: 1.91970701e-02
   JetScaleEff2: 2.09625261e-02
@@ -1260,21 +1260,21 @@ bins:
   UnfoldMCstat: -0.0321
   UnfoldOtherGen: 0.0821
   UnfoldReweight: -0.0019
-- art_stat_corr_1: 1.30061274e-07
+- art_stat_corr_1: -1.30061274e-07
   art_stat_corr_2: 7.98741208e-08
   art_stat_corr_3: -1.93687703e-07
   art_stat_corr_4: 3.58689892e-07
   art_stat_corr_5: -1.11709636e-07
   art_stat_corr_6: 1.32679720e-06
   art_stat_corr_7: -5.50196269e-07
-  art_stat_corr_8: 4.03190669e-07
-  art_stat_corr_9: -6.51126851e-06
-  art_stat_corr_10: 8.05781043e-06
-  art_stat_corr_11: 8.64437157e-05
-  art_stat_corr_12: -6.98268212e-04
+  art_stat_corr_8: -4.03190669e-07
+  art_stat_corr_9: 6.51126851e-06
+  art_stat_corr_10: -8.05781043e-06
+  art_stat_corr_11: -8.64437157e-05
+  art_stat_corr_12: 6.98268212e-04
   art_stat_corr_13: -3.53199429e-04
-  art_stat_corr_14: 4.09541540e-03
-  art_stat_corr_15: 1.45126679e-02
+  art_stat_corr_14: -4.09541540e-03
+  art_stat_corr_15: -1.45126679e-02
   art_stat_corr_16: 1.15572376e-05
   JetScaleEff1: 8.31925477e-03
   JetScaleEff2: 9.03493221e-03
@@ -1330,21 +1330,21 @@ bins:
   UnfoldMCstat: -0.0147
   UnfoldOtherGen: 0.0465
   UnfoldReweight: -0.0008
-- art_stat_corr_1: 1.11398353e-07
+- art_stat_corr_1: -1.11398353e-07
   art_stat_corr_2: 3.24988255e-07
   art_stat_corr_3: -8.65289205e-08
   art_stat_corr_4: 3.89964532e-08
   art_stat_corr_5: -1.37778583e-07
   art_stat_corr_6: 2.24358749e-07
   art_stat_corr_7: -2.97882687e-07
-  art_stat_corr_8: -5.74799347e-07
-  art_stat_corr_9: 2.97442785e-07
-  art_stat_corr_10: 7.86376700e-07
-  art_stat_corr_11: -3.28327078e-06
-  art_stat_corr_12: -9.19301890e-06
+  art_stat_corr_8: 5.74799347e-07
+  art_stat_corr_9: -2.97442785e-07
+  art_stat_corr_10: -7.86376700e-07
+  art_stat_corr_11: 3.28327078e-06
+  art_stat_corr_12: 9.19301890e-06
   art_stat_corr_13: -1.61447339e-04
-  art_stat_corr_14: -2.79764316e-04
-  art_stat_corr_15: -1.95739182e-06
+  art_stat_corr_14: 2.79764316e-04
+  art_stat_corr_15: 1.95739182e-06
   art_stat_corr_16: 5.96124704e-03
   JetScaleEff1: 2.14015770e-03
   JetScaleEff2: 2.33012339e-03

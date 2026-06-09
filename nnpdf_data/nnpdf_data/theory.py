@@ -29,7 +29,6 @@ class TheoryCard:
     ModEv: Literal["EXA", "TRN"]  # DGLAP evolution solution method (e.g. EXA or TRN)
     XIR: float  # Renormalization scale over the hard scattering scale ratio
     XIF: float  # Factorization scale over the hard scattering scale ratio
-    NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
     QED: int  # Max order of alpha_qed in the evolution
     Q0: float  # [GeV] Parametrization scale for the fit (and the photon)
     mc: float  # [GeV] charm mass
@@ -55,6 +54,7 @@ class TheoryCard:
     alphaqed: float  # Values of alpha QED at the scale Qref
     Qref: float  # [GeV] Reference scale for alphas and alphaqed
     XIA: float = 1.0  # Fragmentation scale over the hard scattering scale ratio
+    NfFF: Optional[int] = None  # Number of active flavors, only for FFNS or FFN0 schemes
     nfref: Optional[int] = None  # nf at Qref (its default depend on Qref)
     MaxNfPdf: Optional[int] = 5  # Used by pineko and the photon module to define the thresholds
     ## Fit theory parameters default
@@ -79,7 +79,7 @@ class TheoryCard:
     # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
     n3lo_cf_variation: Optional[int] = 0
     # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
-    use_fhmruvv: Optional[bool] = False
+    use_fhmruvv: Optional[bool] = True
     ###### Keys for compatibility with old NNPDF theories, their values will be dropped immediately after reading to avoid problems
     ###### they will be set to ``None`` immediately after loading the theory
     MaxNfAs: Optional[int] = None

@@ -105,14 +105,14 @@ def make_pdf(pdf_name, member=None):
     for lhapdf functions for the selected backend
 
     Parameters:
-    ----------
+    -----------
         pdf_name: str
             name of the PDF to load
         member: int
             index of the member of the PDF to load
 
     Returns:
-    -------
+    --------
         list(pdf_sets)
     """
     if USING_LHAPDF:

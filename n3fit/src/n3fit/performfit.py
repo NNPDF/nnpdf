@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
-@n3fit.checks.check_multireplica_qed
+@n3fit.checks.check_photonQED_exists
 @n3fit.checks.check_polarized_configs
 def performfit(
     *,
@@ -28,6 +28,7 @@ def performfit(
     basis,
     fitbasis,
     positivity_bound,
+    load_weights_dict,
     sum_rules=True,
     parameters,
     replica_path,
@@ -36,6 +37,7 @@ def performfit(
     load=None,
     hyperscanner=None,
     hyperopt=None,
+    trials,
     kfold_parameters,
     tensorboard=None,
     debug=False,
@@ -111,10 +113,12 @@ def performfit(
             ``load``.
         load: None, str
             model file from which to load weights from.
-        hyperscanner: dict
+        hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
             dictionary containing the details of the hyperscanner
         hyperopt: int
             if given, number of hyperopt iterations to run
+        trials: str 
+            file containing trials defining the methodology
         kfold_parameters: None, dict
             dictionary with kfold settings used in hyperopt.
         tensorboard: None, dict
@@ -197,6 +201,8 @@ def performfit(
             theoryid=theoryid,
             lux_params=fiatlux,
             replicas=replica_idxs,
+            trials=trials,
+            load_weights_dict=load_weights_dict
         )
 
         # This is just to give a descriptive name to the fit function
@@ -215,7 +221,9 @@ def performfit(
         if hyperopt:
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
-            replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
+            # TODO: save everything to a hyperopt folder instead
+            # Save everything to replica_1 regardless of which replicas are we running
+            replica_path_set = replica_path / "replica_1"
             hyper_scan_wrapper(
                 replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
             )
@@ -259,7 +267,7 @@ def performfit(
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time
+            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time, trials
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 

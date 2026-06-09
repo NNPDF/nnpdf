@@ -49,8 +49,8 @@ from validobj.custom import Parser
 
 from .coredata import KIN_NAMES, CommonData
 from .process_options import ValidProcess
-from .utils import parse_yaml_inp, quick_yaml_load
-from .validphys_compatibility import legacy_to_new_map, new_to_legacy_map, path_commondata
+from .utils import DEFAULT_PATH_VPDATA, parse_yaml_inp, quick_yaml_load
+from .validphys_compatibility import legacy_to_new_map, new_to_legacy_map
 
 try:
     from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
@@ -78,6 +78,7 @@ log = logging.getLogger(__name__)
 
 KINLABEL_LATEX = {
     "DIJET": ("\\eta", "$\\m_{1,2} (GeV)", "$\\sqrt{s} (GeV)"),
+    "DIJET_3D": ("$y_b$", "$y^*$", "\\m_{1,2} (GeV)"),
     "DIS": ("$x$", "$Q^2 (GeV^2)$", "$y$"),
     "DYP": ("$y$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "EWJ_JPT": ("$p_T (GeV)$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
@@ -132,6 +133,7 @@ PROCESS_DESCRIPTION_LABEL = {
     "EWJ_MLL": "Jet Mass Distribution",
     "EWK_MLL": "Drell-Yan Mass Distribution",
     "DIJET": "Dijets Invariant Mass and Rapidity Distribution",
+    "DIJET_3D": "Dijet triple-differential Invariant Mass and Rapidities Distribution",
     "DYP": "Fixed-Target Drell-Yan",
     "JET_POL": "Inclusive Jet longitudinal double-spin asymmetry",
     "DIJET_POL": "Dijets longitudinal double-spin asymmetry",
@@ -627,7 +629,7 @@ class ObservableMetaData:
                 for i in range(3 - ncol):
                     dbin[f"extra_{i}"] = d
 
-            kin_dict[bin_index] = pd.DataFrame(dbin).stack()
+            kin_dict[bin_index] = pd.DataFrame(dbin).stack().dropna()
 
         if len(kin_dict) != self.ndata:
             raise ValueError(
@@ -803,10 +805,14 @@ class SetMetaData:
     arXiv: Optional[ValidReference] = None
     iNSPIRE: Optional[ValidReference] = None
     hepdata: Optional[ValidReference] = None
+    metadata_file: Optional[Path] = None
 
     @property
     def folder(self):
-        return path_commondata / self.setname
+        if self.metadata_file is not None:
+            return self.metadata_file.parent
+        else:
+            return DEFAULT_PATH_VPDATA / self.setname
 
     @property
     def cm_energy(self):
@@ -867,7 +873,10 @@ If this is a mistake, please use '{new_name}' instead. E.g.,
 @cache
 def parse_set_metadata(metadata_file):
     """Read the metadata file"""
-    return parse_yaml_inp(metadata_file, SetMetaData)
+    ret = parse_yaml_inp(metadata_file, SetMetaData)
+    # Burn the path to the metadata file before returning
+    object.__setattr__(ret, "metadata_file", metadata_file)
+    return ret
 
 
 @cache
@@ -888,6 +897,18 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
         metadata = metadata.apply_variant(variant)
 
     return metadata
+
+
+def _check_if_statistical(col):
+    """Receives the header of a column of the uncertainties dataframe which includes:
+    (name of the uncertainty, treatment, type)
+    Returns true if and only if the column name stats with "stat",
+    its treatment is additive and it is not correlated (type == UNCORR)
+    """
+    if col[0].lower() == "stat":
+        assert col[1] == "ADD" and col[2] == "UNCORR"
+        return True
+    return False
 
 
 def load_commondata(metadata):
@@ -929,9 +950,7 @@ def load_commondata(metadata):
     kin_df = metadata.load_kinematics()
 
     # Once we have loaded all uncertainty files, let's check how many sys we have
-    nsys = len(
-        [i for i in uncertainties_df.columns.get_level_values(0) if not i.startswith("stat")]
-    )
+    nsys = len([i for i in uncertainties_df.columns if not _check_if_statistical(i)])
 
     # Backwards-compatibility
     # Finally, create the commondata by merging the dataframes in the old commondata_table
@@ -948,7 +967,7 @@ def load_commondata(metadata):
     new_columns = []
     systypes = {"treatment": [], "name": []}
     for col in uncertainties_df.columns:
-        if col[0].startswith("stat"):
+        if _check_if_statistical(col):
             new_columns.append("stat")
         else:
             # if it is syst add the ADD/MULT information

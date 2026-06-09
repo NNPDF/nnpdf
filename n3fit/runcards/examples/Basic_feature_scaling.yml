@@ -5,9 +5,6 @@
 description: Basic feature scaling
 
 ############################################################
-# frac: training fraction
-# ewk: apply ewk k-factors
-# sys: systematics treatment (see systypes)
 dataset_inputs:
 - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
@@ -28,6 +25,7 @@ trvlseed: 1
 nnseed: 2
 mcseed: 3
 genrep: True     # true = generate MC replicas, false = use real data
+diagonal_basis: false
 
 save: 'weights.h5'
 
@@ -51,25 +49,21 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   stopping_patience: 0.30 # percentage of the number of epochs
   layer_type: 'dense'
   dropout: 0.0
-  interpolation_points: 40
+  feature_scaling_points: 40
   threshold_chi2: 5.0
 
 fitting:
-  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
-      - { fl: sng,  smallx: [1.05,1.19], largex: [1.47,2.70], trainable: False }
-      - { fl: g,    smallx: [0.94,1.25], largex: [0.11,5.87], trainable: False }
-      - { fl: v,    smallx: [0.54,0.75], largex: [1.15,2.76], trainable: False }
-      - { fl: v3,   smallx: [0.21,0.57], largex: [1.35,3.08] }
-      - { fl: v8,   smallx: [0.52,0.76], largex: [0.77,3.56], trainable: True }
-      - { fl: t3,   smallx: [-0.37,1.52], largex: [1.74,3.39] }
-      - { fl: t8,   smallx: [0.56,1.29], largex: [1.45,3.03] }
-      - { fl: cp,   smallx: [0.12,1.19], largex: [1.83,6.70] }
+      - { fl: sng,  smallx: [1.05,1.19], trainable: False }
+      - { fl: g,    smallx: [0.94,1.25], trainable: False }
+      - { fl: v,    smallx: [0.54,0.75], trainable: False }
+      - { fl: v3,   smallx: [0.21,0.57] }
+      - { fl: v8,   smallx: [0.52,0.76], trainable: True }
+      - { fl: t3,  smallx: [-0.37,1.52] }
+      - { fl: t8,   smallx: [0.56,1.29] }
+      - { fl: cp,   smallx: [0.12,1.19] }
 
 ############################################################
 positivity:

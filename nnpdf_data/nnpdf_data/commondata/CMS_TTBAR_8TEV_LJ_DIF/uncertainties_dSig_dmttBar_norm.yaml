@@ -77,11 +77,11 @@ definitions:
     type: CORR
 bins:
 - stat: 0
-  ArtUnc_1: -9.43887452e-05
+  ArtUnc_1: 9.43887452e-05
   ArtUnc_2: 3.03640604e-05
-  ArtUnc_3: -1.13675084e-05
+  ArtUnc_3: 1.13675084e-05
   ArtUnc_4: 4.12678602e-06
-  ArtUnc_5: -1.23312756e-06
+  ArtUnc_5: 1.23312756e-06
   ArtUnc_6: 1.32665809e-07
   ArtUnc_7: 0.0
   LEP: 4.69e-06
@@ -96,11 +96,11 @@ bins:
   TopMass: 2.34500000e-05
   PDF: 0.0
 - stat: 0
-  ArtUnc_1: 8.68440624e-05
+  ArtUnc_1: -8.68440624e-05
   ArtUnc_2: 2.51184959e-05
-  ArtUnc_3: -1.37048478e-05
+  ArtUnc_3: 1.37048478e-05
   ArtUnc_4: 5.73098205e-06
-  ArtUnc_5: -1.57315027e-06
+  ArtUnc_5: 1.57315027e-06
   ArtUnc_6: 1.68825252e-07
   ArtUnc_7: 0.0
   LEP: 0.0
@@ -115,11 +115,11 @@ bins:
   TopMass: 3.44e-05
   PDF: 0.0
 - stat: 0
-  ArtUnc_1: -1.36042381e-05
+  ArtUnc_1: 1.36042381e-05
   ArtUnc_2: -5.06886227e-05
-  ArtUnc_3: -9.84804925e-06
+  ArtUnc_3: 9.84804925e-06
   ArtUnc_4: 6.41364138e-06
-  ArtUnc_5: -1.85298859e-06
+  ArtUnc_5: 1.85298859e-06
   ArtUnc_6: 1.90294585e-07
   ArtUnc_7: 0.0
   LEP: 0.0
@@ -134,11 +134,11 @@ bins:
   TopMass: 2.67000000e-06
   PDF: 0.0
 - stat: 0
-  ArtUnc_1: -5.68386200e-07
+  ArtUnc_1: 5.68386200e-07
   ArtUnc_2: 7.49407304e-06
-  ArtUnc_3: 2.53014696e-05
+  ArtUnc_3: -2.53014696e-05
   ArtUnc_4: 6.81884541e-06
-  ArtUnc_5: -2.38659930e-06
+  ArtUnc_5: 2.38659930e-06
   ArtUnc_6: 2.44101629e-07
   ArtUnc_7: 0.0
   LEP: 1.17000000e-06
@@ -153,11 +153,11 @@ bins:
   TopMass: 3.27600000e-05
   PDF: 0.0
 - stat: 0
-  ArtUnc_1: 1.58369868e-06
+  ArtUnc_1: -1.58369868e-06
   ArtUnc_2: -4.23409893e-07
-  ArtUnc_3: -1.50459099e-06
+  ArtUnc_3: 1.50459099e-06
   ArtUnc_4: -1.07378191e-05
-  ArtUnc_5: -4.13895264e-06
+  ArtUnc_5: 4.13895264e-06
   ArtUnc_6: 3.44390468e-07
   ArtUnc_7: 0.0
   LEP: 9.32e-07
@@ -172,11 +172,11 @@ bins:
   TopMass: 1.02520000e-05
   PDF: 4.66e-07
 - stat: 0
-  ArtUnc_1: 6.46978314e-08
+  ArtUnc_1: -6.46978314e-08
   ArtUnc_2: -2.74327991e-07
-  ArtUnc_3: 9.49113325e-08
+  ArtUnc_3: -9.49113325e-08
   ArtUnc_4: -7.00153810e-07
-  ArtUnc_5: 3.10521696e-06
+  ArtUnc_5: -3.10521696e-06
   ArtUnc_6: 1.01724156e-06
   ArtUnc_7: 0.0
   LEP: 2.28000000e-07
@@ -191,11 +191,11 @@ bins:
   TopMass: 2.28e-06
   PDF: 1.14000000e-07
 - stat: 0
-  ArtUnc_1: 2.98863163e-08
+  ArtUnc_1: -2.98863163e-08
   ArtUnc_2: 3.58681565e-08
-  ArtUnc_3: 7.63152204e-08
+  ArtUnc_3: -7.63152204e-08
   ArtUnc_4: -1.33153081e-08
-  ArtUnc_5: 4.79889512e-07
+  ArtUnc_5: -4.79889512e-07
   ArtUnc_6: -7.68868816e-07
   ArtUnc_7: 0.0
   LEP: 4.40000000e-08

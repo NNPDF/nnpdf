@@ -21,8 +21,6 @@ from reportengine.baseexceptions import ErrorWithAlternatives
 from reportengine import colors
 from validphys.loader import FallbackLoader as Loader, LoadFailedError
 
-
-
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 log.addHandler(colors.ColorHandler())
@@ -51,14 +49,16 @@ def main():
         sys.exit(1)
     p.add_argument('resource_type', help="Type of the resource to be obtained. "
                    "See --list for a list of resource types.")
-    p.add_argument('resource_name', help="Identifier of the resource.")
+    p.add_argument('resource_name', help="Identifier of the resource.", nargs='+')
     p.add_argument('--list', action=ListAction, loader=l, nargs=0,
                    help="List available resources and exit.")
     args = p.parse_args()
 
-
     tp = args.resource_type
     name = args.resource_name
+
+    if len(name) > 1 and tp != 'photonQED':
+        sys.exit("Only 'photonQED' resource type requires theoryID and luxset.")
 
     try:
         f = getattr(l, f'check_{tp}')
@@ -66,7 +66,7 @@ def main():
         sys.exit(f"No such resource {tp}")
 
     try:
-        res = f(name)
+        res = f(*name)
     except LoadFailedError as e:
         print(ErrorWithAlternatives(f"Could not find resource ({tp}): '{name}'.", name))
         sys.exit("Failed to download resource.")

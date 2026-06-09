@@ -99,11 +99,16 @@ $\phi$ by {@processed_metadata_group@}
 {@plot_fits_groups_data_phi@}
 {@endwith@}
 
+
+
 Dataset plots
 -------------
 {@with matched_datasets_from_dataspecs@}
 [Plots for {@dataset_name@}]({@dataset_report report@})
 {@endwith@}
+
+[Mismatched datasets]({@mismatched_information report@})
+--------------------
 
 Positivity
 ----------

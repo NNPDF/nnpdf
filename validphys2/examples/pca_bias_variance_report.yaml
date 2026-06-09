@@ -40,11 +40,10 @@ template_text: |
   ------------------------------------------------------
 
   ## Table of bias and variance
-  {@table_bias_variance_datasets@}
-
+  {@table_bias_datasets@}
 
   ## Bootstrapped table for full dataset  
-  {@bootstrapped_table_bias_variance_data@}
+  {@bootstrapped_table_bias_data@}
 
   ## L2 condition number
   {@plot_l2_condition_number@}

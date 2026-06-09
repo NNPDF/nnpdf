@@ -31,6 +31,46 @@ class ReplicaGenerationError(Exception):
     pass
 
 
+def fit_diagonal_basis_rotation(fitting_covmat_name, fit):
+    """Rotation matrix taking pseudodata from the original to the diagonal basis,
+    or ``None`` if ``fit`` was not run in diagonal basis.
+
+    Sources the matrix from the same eigensystem table that
+    ``_inv_covmat_prepared`` loads when running the fit, so the rotation
+    applied here is bit-identical to the one used at generation time.
+    """
+    runcard = fit.as_input()
+
+    if not runcard.get("diagonal_basis", True):
+        return None
+
+    eigensystem = pd.read_csv(
+        fitting_covmat_name, index_col=[0], header=[0], sep="\t|,", engine="python"
+    )
+
+    return eigensystem.iloc[:, 1:].values
+
+
+def diagonal_indexed_recreate_pseudodata(indexed_make_replica, fit_diagonal_basis_rotation):
+    """Recreation-time analogue of
+    :py:func:`validphys.n3fit_data.diagonal_indexed_make_replica`, but doesn't
+    need :py:func:`_inv_covmat_prepared` (through :py:func:`fitting_data_dict`)
+    which requires `output_path` to be available.
+
+    Returns the pseudodata in the diagonal basis (eigenmode-indexed) when the
+    fit was run in diagonal basis, otherwise returns ``indexed_make_replica``
+    untouched (preserving the original ``(group, dataset, id)`` MultiIndex).
+    """
+    diag_rot = fit_diagonal_basis_rotation
+    if diag_rot is None:
+        return indexed_make_replica
+    values = indexed_make_replica.iloc[:, 0].to_numpy()
+    rotated = diag_rot @ values
+    return pd.DataFrame(
+        rotated, index=pd.Index([f"eigenmode {i}" for i in range(len(rotated))]), columns=["data"]
+    )
+
+
 def read_replica_pseudodata(fit, context_index, replica):
     """Function to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
@@ -70,10 +110,9 @@ def read_replica_pseudodata(fit, context_index, replica):
                             5    3.117819
                             6    0.771079
     """
-    # List of length 1 due to the collect
-    context_index = context_index[0]
-    # The [0] is because of how pandas handles sorting a MultiIndex
-    sorted_index = context_index.sortlevel(level=range(1, 3))[0]
+    # Detect whether fit performed in diagonal basis
+    # TODO: change the fit object to return diagonal basis True or False depening on the NNPDF version
+    diagonal_basis = fit.as_input().get("diagonal_basis", True)
 
     log.debug(f"Reading pseudodata & training/validation splits from {fit.name}.")
     replica_path = fit.path / "nnfit" / f"replica_{replica}"
@@ -87,9 +126,11 @@ def read_replica_pseudodata(fit, context_index, replica):
         tr_pseudodatafile = "datacuts_theory_fitting_training_pseudodata.csv"
         vl_pseudodatafile = "datacuts_theory_fitting_validation_pseudodata.csv"
 
+    index_col = [0] if diagonal_basis else [0, 1, 2]
+
     try:
-        tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
-        val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+        tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=index_col, sep="\t", header=0)
+        val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=index_col, sep="\t", header=0)
     except FileNotFoundError as e:
         raise FileNotFoundError(
             "Could not find saved training and validation data files. "
@@ -97,24 +138,25 @@ def read_replica_pseudodata(fit, context_index, replica):
         ) from e
 
     tr["type"], val["type"] = "training", "validation"
-
     pseudodata = pd.concat((tr, val))
 
-    # In order for this function to work also with old fit, it is necessary to remap the names
-    # being read (since the names in the context have already been remapped)
-    # The following checks whether a given name is in both the context and the fit, and if not
-    # tries to get it from the old_to_new mapping.
-    mapping = {}
-    context_datasets = context_index.get_level_values("dataset").unique()
-    for dsname in pseudodata.index.get_level_values("dataset").unique():
-        if dsname not in context_datasets:
-            new_name, _ = legacy_to_new_map(dsname)
-            mapping[dsname] = new_name
+    if not diagonal_basis:
+        # In order for this function to work also with old fit, it is necessary to remap the names
+        # being read (since the names in the context have already been remapped)
+        # The following checks whether a given name is in both the context and the fit, and if not
+        # tries to get it from the old_to_new mapping.
+        ctx = context_index[0]
+        sorted_index = ctx.sortlevel(level=range(1, 3))[0]
 
-    pseudodata.rename(mapping, level=1, inplace=True)
+        mapping = {}
+        context_datasets = ctx.get_level_values("dataset").unique()
+        for dsname in pseudodata.index.get_level_values("dataset").unique():
+            if dsname not in context_datasets:
+                new_name, _ = legacy_to_new_map(dsname)
+                mapping[dsname] = new_name
 
-    pseudodata.sort_index(level=range(1, 3), inplace=True)
-    pseudodata.index = sorted_index
+        pseudodata = pseudodata.rename(mapping, level=1).sort_index(level=range(1, 3))
+        pseudodata.index = sorted_index
 
     tr = pseudodata[pseudodata["type"] == "training"]
     val = pseudodata[pseudodata["type"] == "validation"]
@@ -123,16 +165,17 @@ def read_replica_pseudodata(fit, context_index, replica):
 
 
 def make_replica(
-    groups_dataset_inputs_loaded_cd_with_cuts,
-    replica_mcseed,
+    central_values_array,
+    group_replica_mcseed,
     dataset_inputs_sampling_covmat,
+    group_multiplicative_errors=None,
+    group_positivity_mask=None,
     sep_mult=False,
     genrep=True,
     max_tries=int(1e6),
-    resample_negative_pseudodata=False,
 ):
-    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
-    objects and returns a pseudodata replica accounting for
+    """Function that takes in a central value array and a covariance matrix
+    and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
 
     The function loops until positive definite pseudodata is generated for any
@@ -141,16 +184,21 @@ def make_replica(
 
     Parameters
     ---------
-    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`nnpdf_data.coredata.CommonData`]
-        List of CommonData objects which stores information about systematic errors,
-        their treatment and description, for each dataset.
+    central_values_array: np.array
+        Numpy array which is N_dat (where N_dat is the combined number of data points after cuts)
+        containing the central values of the data.
 
-    replica_mcseed: int, None
-        Seed used to initialise the numpy random number generator. If ``None`` then a random seed is
-        allocated using the default numpy behaviour.
+    group_replica_mcseed: int
+        Seed used to initialise the numpy random number generator.
 
     dataset_inputs_sampling_covmat: np.array
         Full covmat to be used. It can be either only experimental or also theoretical.
+
+    group_multiplicative_errors: dict
+        Dictionary containing the multiplicative uncertainties contribution to the pseudodata replica.
+
+    group_positivity_mask: np.array
+        Boolean array of shape (N_dat,) indicating which data points should be positive.
 
     sep_mult: bool
         Specifies whether computing the shifts with the full covmat
@@ -164,9 +212,6 @@ def make_replica(
         If after max_tries (default=1e6) no physical configuration is found,
         it will raise a :py:class:`ReplicaGenerationError`
 
-    resample_negative_pseudodata: bool
-        When True, replicas that produce negative predictions will be resampled for ``max_tries``
-        until all points are positive (default: False)
     Returns
     -------
     pseudodata: np.array
@@ -189,39 +234,84 @@ def make_replica(
        0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
     """
     if not genrep:
-        return np.concatenate(
-            [cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts]
-        )
-    # Seed the numpy RNG with the seed and the name of the datasets in this run
+        return central_values_array
 
-    # TODO: to be simplified after the reader is merged, together with an update of the regression tests
-    # this is necessary to reproduce exactly the results due to the replicas being generated with a hash
-    # Only when the sets are legacy (or coming from a legacy runcard) this shall be used
-    names_for_salt = []
-    for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
-        if loaded_cd.legacy_names is None:
-            names_for_salt.append(loaded_cd.setname)
-        else:
-            names_for_salt.append(loaded_cd.legacy_names[0])
-    name_salt = "-".join(names_for_salt)
-
-    name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
-    rng = np.random.default_rng(seed=replica_mcseed + name_seed)
+    # Set random seed
+    rng = np.random.default_rng(seed=group_replica_mcseed)
     # construct covmat
-    covmat = dataset_inputs_sampling_covmat
-    covmat_sqrt = sqrt_covmat(covmat)
-    # Loading the data
-    pseudodatas = []
-    check_positive_masks = []
+    covmat_sqrt = sqrt_covmat(dataset_inputs_sampling_covmat)
+
+    full_mask = (
+        group_positivity_mask
+        if group_positivity_mask is not None
+        else np.zeros_like(central_values_array, dtype=bool)
+    )
+    # The inner while True loop is for ensuring a positive definite
+    # pseudodata replica
+    for _ in range(max_tries):
+        mult_shifts = []
+        # Prepare the per-dataset multiplicative shifts
+        if group_multiplicative_errors is not None:
+            for mult_uncorr_errors, mult_corr_errors in group_multiplicative_errors[
+                "nonspecial_mult"
+            ]:
+                # convert to from percent to fraction
+                mult_shift = (
+                    1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
+                ).prod(axis=1)
+
+                mult_shift *= (
+                    1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
+                ).prod(axis=1)
+
+                mult_shifts.append(mult_shift)
+
+        # If sep_mult is true then the multiplicative shifts were not included in the covmat
+        shifts = covmat_sqrt @ rng.normal(size=dataset_inputs_sampling_covmat.shape[1])
+        mult_part = 1.0
+        if sep_mult:
+            special_mult_errors = group_multiplicative_errors["special_mult"]
+            special_mult = (
+                1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100
+            ).prod(axis=1)
+            mult_part = np.concatenate(mult_shifts, axis=0) * special_mult
+        # Shifting pseudodata
+        shifted_pseudodata = (central_values_array + shifts) * mult_part
+        # positivity control
+        if np.all(shifted_pseudodata[full_mask] >= 0):
+            return shifted_pseudodata
+
+    # Find which dataset index corresponds to the negative points, and print it out for debugging purposes
+    negative_mask = shifted_pseudodata < 0 & full_mask
+    negative_indices = np.where(negative_mask)[0]
+
+    raise ReplicaGenerationError(
+        f"No valid replica found after {max_tries} attempts. "
+        f"Negative global indices: {negative_indices.tolist()}"
+    )
+
+
+def central_values_array(groups_dataset_inputs_loaded_cd_with_cuts):
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
+    and returns the central values concatenated in a single array.
+    """
+    central_values = []
+    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        central_values.append(cd.central_values.to_numpy())
+    return np.concatenate(central_values, axis=0)
+
+
+def group_multiplicative_errors(groups_dataset_inputs_loaded_cd_with_cuts, sep_mult=False):
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
+    and returns the multiplicative uncertainties contribution to the pseudodata replica.
+    """
+    if not sep_mult:
+        return None
+
     nonspecial_mult = []
     special_mult = []
+    special_mult_errors = []
     for cd in groups_dataset_inputs_loaded_cd_with_cuts:
-        # copy here to avoid mutating the central values.
-        pseudodata = cd.central_values.to_numpy()
-
-        pseudodatas.append(pseudodata)
-        # Separation of multiplicative errors. If sep_mult is True also the exp_covmat is produced
-        # without multiplicative errors
         if sep_mult:
             mult_errors = cd.multiplicative_errors
             mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
@@ -230,49 +320,35 @@ def make_replica(
             special_mult.append(
                 mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
             )
-        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
-            check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
-        else:
-            check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
-    # concatenating special multiplicative errors, pseudodatas and positive mask
+
+    # concatenating special multiplicative errors
     if sep_mult:
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
-    all_pseudodata = np.concatenate(pseudodatas, axis=0)
+
+    multiplicative_errors = {
+        "nonspecial_mult": nonspecial_mult,
+        "special_mult": special_mult_errors,
+    }
+
+    return multiplicative_errors
+
+
+def group_positivity_mask(
+    groups_dataset_inputs_loaded_cd_with_cuts, resample_negative_pseudodata=False
+):
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
+    and returns a boolean mask indicating which data points should be positive.
+    """
+    if not resample_negative_pseudodata:
+        return None
+    check_positive_masks = []
+    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
+            check_positive_masks.append(np.zeros_like(cd.central_values.to_numpy(), dtype=bool))
+        else:
+            check_positive_masks.append(np.ones_like(cd.central_values.to_numpy(), dtype=bool))
     full_mask = np.concatenate(check_positive_masks, axis=0)
-    # The inner while True loop is for ensuring a positive definite
-    # pseudodata replica
-    for _ in range(max_tries):
-        mult_shifts = []
-        # Prepare the per-dataset multiplicative shifts
-        for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
-            # convert to from percent to fraction
-            mult_shift = (
-                1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
-            ).prod(axis=1)
-
-            mult_shift *= (
-                1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
-            ).prod(axis=1)
-
-            mult_shifts.append(mult_shift)
-
-        # If sep_mult is true then the multiplicative shifts were not included in the covmat
-        shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
-        mult_part = 1.0
-        if sep_mult:
-            special_mult = (
-                1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100
-            ).prod(axis=1)
-            mult_part = np.concatenate(mult_shifts, axis=0) * special_mult
-        # Shifting pseudodata
-        shifted_pseudodata = (all_pseudodata + shifts) * mult_part
-        # positivity control
-        if np.all(shifted_pseudodata[full_mask] >= 0) or not resample_negative_pseudodata:
-            return shifted_pseudodata
-
-    dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
-    log.error(f"Error generating replicas for the group: {dfail}")
-    raise ReplicaGenerationError(f"No valid replica found after {max_tries} attempts")
+    return full_mask
 
 
 def indexed_make_replica(groups_index, make_replica):
@@ -399,8 +475,17 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     )
 
     # ================== generation of Level1 data ======================#
+    central_vals = central_values_array(level0_commondata_wc)
+    group_mult_errs = group_multiplicative_errors(level0_commondata_wc, sep_mult=sep_mult)
+    group_pos_mask = group_positivity_mask(level0_commondata_wc)
     level1_data = make_replica(
-        level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
+        central_vals,
+        filterseed,
+        covmat,
+        group_multiplicative_errors=group_mult_errs,
+        group_positivity_mask=group_pos_mask,
+        sep_mult=sep_mult,
+        genrep=True,
     )
 
     indexed_level1_data = indexed_make_replica(data_index, level1_data)
@@ -421,7 +506,9 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     return level1_commondata_instances_wc
 
 
-_group_recreate_pseudodata = collect('indexed_make_replica', ('group_dataset_inputs_by_metadata',))
+_group_recreate_pseudodata = collect(
+    'diagonal_indexed_recreate_pseudodata', ('group_dataset_inputs_by_metadata',)
+)
 _recreate_fit_pseudodata = collect('_group_recreate_pseudodata', ('fitreplicas', 'fitenvironment'))
 _recreate_pdf_pseudodata = collect('_group_recreate_pseudodata', ('pdfreplicas', 'fitenvironment'))
 
