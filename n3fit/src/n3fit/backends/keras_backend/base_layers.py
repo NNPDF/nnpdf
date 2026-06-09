@@ -90,6 +90,7 @@ class VBDense(Layer):
         prior_prec: float = 1.0,
         std_init: float = -9.0,
         map: bool = False,
+        bayesian_bias: bool = False,
     ):
         super().__init__()
         self.output_dim = out_features
@@ -102,6 +103,7 @@ class VBDense(Layer):
         self.ubound = 11
         self.eps = 1e-12 if K.floatx() == 'float64' else 1e-8
         self.training = True
+        self.bayesian_bias = bayesian_bias
 
     def build(self, input_shape):
         self.bias = self.add_weight(
@@ -127,6 +129,15 @@ class VBDense(Layer):
             trainable=True,
             dtype=K.floatx(),
         )
+
+        if self.bayesian_bias:
+            self.bias_logsig2 = self.add_weight(
+                name='bias_logsig2',
+                shape=(self.output_dim,),
+                initializer='glorot_normal',
+                trainable=True,
+                dtype=K.floatx(),
+            )
 
         self.reset_parameters()
 
@@ -172,6 +183,14 @@ class VBDense(Layer):
                 - tf.math.log(self.prior_prec)
             )
         )
+        if self.bayesian_bias:
+            logsig2_b = tf.clip_by_value(self.bias_logsig2, self.lbound, self.ubound)
+            kl += 0.5 * tf.reduce_sum(
+                self.prior_prec * (tf.math.pow(self.bias, 2)) - tf.math.log(self.prior_prec)
+                - logsig2_b
+                - tf.constant(1.0, dtype=K.floatx()
+                - tf.math.log(self.prior_prec))
+            )
         return kl
 
     def call(self, input: tf.Tensor) -> tf.Tensor:
@@ -179,6 +198,13 @@ class VBDense(Layer):
             # local reparameterization trick is more efficient and leads to
             # an estimate of the gradient with smaller variance.
             # https://arxiv.org/pdf/1506.02557.pdf
+            if self.bayesian_bias:
+                bias = self.bias
+                bias_logsig2 = tf.clip_by_value(self.bias_logsig2, self.lbound, self.ubound)
+                bias_var = bias_logsig2.exp()
+                bias = bias + bias_var.sqrt() * tf.random.normal(tf.shape(bias), dtype=input.dtype) 
+            else:
+                bias = self.bias
             mu_out = tf.matmul(input, self.mu_w, transpose_b=True) + self.bias
             logsig2_w = tf.clip_by_value(self.logsig2_w, self.lbound, self.ubound)
             s2_w = tf.math.exp(logsig2_w)
@@ -186,6 +212,13 @@ class VBDense(Layer):
             return mu_out + tf.math.sqrt(var_out) * tf.random.normal(
                 shape=tf.shape(mu_out), dtype=input.dtype
             )
+        if self.bayesian_bias:
+            bias = self.bias
+            bias_logsig2 = tf.clip_by_value(self.bias_logsig2, self.lbound, self.ubound)
+            bias_var = bias_logsig2.exp()
+            bias = bias + bias_var.sqrt() * tf.random.normal(tf.shape(bias), dtype=input.dtype)
+        else:
+            bias = self.bias
 
         if self.map:
             return tf.matmul(input, self.mu_w, transpose_b=True) + self.bias
@@ -280,7 +313,7 @@ layers = {
     ),
     "VBDense": (
         VBDense,
-        {"in_features": None, "out_features": None, "prior_prec": None, "std_init": None},
+        {"in_features": None, "out_features": None, "prior_prec": None, "std_init": None, "bayesian_bias": False, "map": False},
     ),
     "dropout": (Dropout, {"rate": 0.0}),
     "concatenate": (Concatenate, {}),

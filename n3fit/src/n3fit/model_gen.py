@@ -374,6 +374,7 @@ class ReplicaSettings:
     prior_prec: float = None
     std_init: float = None
     dropout_rate_bayesian: float = None
+    bayesian_bias: Union[bool, list] = False
 
     def __post_init__(self):
         """Apply checks to the input, and expand hyperopt callables"""
@@ -385,6 +386,15 @@ class ReplicaSettings:
 
         if self.regularizer_args is None:
             self.regularizer_args = dict()
+
+        # Normalize bayesian_bias to one entry per layer
+        if self.bayesian_bias is None or isinstance(self.bayesian_bias, bool):
+            self.bayesian_bias = [bool(self.bayesian_bias)] * len(self.nodes)
+        elif len(self.bayesian_bias) != len(self.nodes):
+            raise ValueError(
+                f"bayesian_bias ({self.bayesian_bias}) must match the number of layers "
+                f"({len(self.nodes)})"
+            )
 
         # Checks
         if len(self.nodes) != len(self.activations):
@@ -827,10 +837,10 @@ def _generate_nn(
     dropout_rate: float = 0.0,
     regularizer: str = None,
     regularizer_args: dict = field(default_factory=dict),
-    # NEW: BNN-specific parameters
     prior_prec: float = None,
     std_init: float = None,
     dropout_rate_bayesian: float = None,
+    bayesian_bias: list = None,
     training: bool = True
 ) -> MetaModel:
     """
@@ -901,7 +911,8 @@ def _generate_nn(
                 prior_prec=prior_prec,
                 std_init=std_init,
                 in_features=nodes_in,
-                out_features=nodes_out, 
+                out_features=nodes_out,
+                bayesian_bias=bool(bayesian_bias[i_layer]), 
             )            
 
         else:
