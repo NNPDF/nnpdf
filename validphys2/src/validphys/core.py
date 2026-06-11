@@ -886,6 +886,9 @@ class MCStats(Stats):
         up = np.nanpercentile(self.error_members(), 84.13, axis=0)
         return down, up
 
+    def median(self):
+        return np.median(self.error_members(), axis=0)
+
     def sample_values(self, size):
         return np.random.choice(self, size=size)
 

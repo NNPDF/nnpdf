@@ -13,6 +13,7 @@ single batch instead. So callbacks must use ``on_batch_end``.
 """
 
 import logging
+from pathlib import Path
 from time import time
 
 from keras import backend as K
@@ -194,6 +195,64 @@ class LagrangeCallback(CallbackStep):
         """Function to be called at the end of every epoch"""
         if (epoch + 1) % self.update_freq == 0:
             self._update_weights()
+
+
+class StoreCallback(CallbackStep):
+    """
+    Given a ``savedir``, the callback will store the model parameters in
+    that directory every ``check_freq`` epochs.
+
+    Parameters
+    ----------
+        pdf_model: MetaModel
+            The multi-replica PDF model
+        replica_paths: list[Path]
+            One path for replica. Weights are saved under <path>/weights/.
+        check_freq: int
+            Save every this many epochs (default: 100)
+    """
+
+    def __init__(self, pdf_model, replica_paths, stopping_object, check_freq=100):
+        super().__init__()
+        self.check_freq = check_freq
+        self.pdf_model = pdf_model
+        self.weight_dirs = []
+        self.stopping_object = stopping_object
+        for path in replica_paths:
+            weight_dir = path / "parameters"
+            weight_dir.mkdir(parents=True, exist_ok=True)
+            self.weight_dirs.append(weight_dir)
+
+    def _save_weights(self, epoch, tr_weights, weight_dir):
+        filepath = weight_dir / f"params_{epoch}.npz"
+        # save parameters as expected by colibri
+        trainable_weights_flat = np.concatenate([np.asarray(w).flatten() for w in tr_weights])
+        np.savez(filepath, params=trainable_weights_flat)
+        log.info(f"Saved parameters at epoch {epoch} in {filepath}")
+
+    def on_step_end(self, epoch, logs=None):
+        """Function to be called at the end of every epoch
+        Every ``check_freq`` number of epochs, the parameters of the model will
+        be stored in the indicated directory.
+        """
+        if ((epoch + 1) % self.check_freq) == 0:
+            pdf_replicas = self.pdf_model.split_replicas()
+            for replica_model, weight_dir in zip(pdf_replicas, self.weight_dirs):
+                weights = replica_model.trainable_weights
+                self._save_weights(epoch + 1, weights, weight_dir)
+
+    def on_train_end(self, logs=None):
+        """Store the best parameters"""
+        for idx, weight_dir in enumerate(self.weight_dirs):
+            weights = self.stopping_object._best_weights[idx]
+            if weights is not None:
+                best_weights = weights['all_NNs']
+                best_epoch = self.stopping_object._best_epochs[idx]
+                self._save_weights(best_epoch, best_weights, weight_dir)
+            else:
+                log.warning(
+                    f"No best weights found for replica {idx+1}, skipping saving best parameters."
+                )
 
 
 def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
