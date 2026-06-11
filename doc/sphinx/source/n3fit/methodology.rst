@@ -348,53 +348,90 @@ The figure above provides a schematic representation of this feature scaling met
 Diagonal basis
 --------------
 
-Performing the training and validation split without diagonalising the :math:`t_0` covmat :math:`C_{0}` neglects
-any correlations that may be present between training and validation data. To remedy this,
-we rotate to a basis in which the correlation matrix is diagonal before performing any training/validation split.
-Starting from the definition of the :math:`\chi^2` function in the NNPDF methodology, we have
+Training and validation data are obtained by performing a random split of the
+original data set. However, data points in the two sets are not necessarily
+statistically independent, as they may be correlated through the fitting
+covariance matrix :math:`C_{\rm fit}`. Here the fitting covariance matrix is the
+sum of the :math:`t_{0}` experimental covariance matrix :math:`C_{0}` and any
+theory covariance matrix :math:`C_{\rm th}` used in the fit, i.e., :math:`C_{\rm
+fit} = C_{0} + C_{\rm th}`. In order to disentangle the training and
+validation data, we perform the training-validation split in a basis in which
+the correlation matrix is diagonal.
+
+We first compute the correlation matrix :math:`\rho`, which is defined as
 
 .. math::
 
-    \chi^2 &= (D-T)^T C_0^{-1} (D-T) \\
-           &= (D-T)^T R^{-1} R C_0^{-1} R R^{-1} (D-T) \\
-           &= (D-T)^T R^{-1} \left( R^{-1} C_0 R^{-1} \right)^{-1} R^{-1} (D-T) \\
-           &\equiv \tilde{\epsilon}^T \rho^{-1} \tilde{\epsilon} \, ,
+    \rho = \Sigma^{-1} C_{\rm fit} \Sigma^{-1} \, ,
 
-where we have defined :math:`\tilde{\epsilon} \equiv R^{-1}(D-T)` and :math:`\rho = R^{-1} C_0 R^{-1}`.
-
-Choosing :math:`R_{ii} = \sqrt{C_{0, ii}}`, we have that :math:`R^{-1} C_0 R^{-1}` coincides with the usual definition of the correlation matrix.
-
-Next, we move to the basis in which :math:`\rho` is diagonal. Writing :math:`\rho = \tilde{U}^T \tilde{\Lambda} \tilde{U}`, we find
+where we have defined :math:`\Sigma_{ij} = \sqrt{C_{\rm fit, ii}} \delta_{ij}` and
+:math:`(\Sigma^{-1})_{ij} = \frac{1}{\sqrt{C_{\rm fit, ii}}} \delta_{ij}`. The
+correlation matrix is a symmetric positive-definite matrix, and therefore it can
+be diagonalized by an orthogonal transformation. Therefore we can write
 
 .. math::
 
-    \chi^2 &= \tilde{\epsilon}^T \rho^{-1} \tilde{\epsilon} \\
-           &= \tilde{\epsilon}^T (\tilde{U}^T \tilde{\Lambda} \tilde{U})^{-1} \tilde{\epsilon} \\
-           &= \tilde{\epsilon}^T \tilde{U}^T \tilde{\Lambda}^{-1} \tilde{U} \tilde{\epsilon} \\
-           &\equiv \tilde{\tilde{\epsilon}}^T \tilde{\Lambda}^{-1} \tilde{\tilde{\epsilon}} \, ,
+    \rho = V \Lambda V^T \, ,
 
-where on the last line we have defined
-
-.. math::
-
-    \tilde{\tilde{\epsilon}} \equiv \tilde{U}\tilde{\epsilon} = \tilde{U}R^{-1}(D-T).
-
-In index notation, this reads
+where :math:`V` is an orthogonal matrix and :math:`\Lambda` is a diagonal matrix
+containing the eigenvalues of :math:`\rho`. The original fitting covariance
+matrix can then be written as
 
 .. math::
 
-    \tilde{\tilde{\epsilon_i}} = \tilde{U}_{ij} \frac{(D-T)_j}{\sqrt{C_{0, jj}}}
+    C_{\rm fit} &= \Sigma \rho \Sigma \\
+                &= (\Sigma V) \Lambda (V^T \Sigma) \\
+                &\equiv U \Lambda U^T \, ,
 
-The transformed data :math:`\tilde{\tilde{\epsilon}}` is statistically independent in the diagonal basis of the correlation matrix :math:`\rho`.
-Computing the covariance of :math:`\tilde{\tilde{\epsilon}}`,
+where we have defined the non-orthogonal matrix :math:`U = \Sigma V`. Its
+inverse defines the rotation matrix that diagonalizes the
+:math:`\chi^2`, and is given by :math:`R^T \equiv U^{-1} = V^T \Sigma^{-1}`.
+Therefore, the inverse of the fitting covariance matrix can be written as
 
 .. math::
 
-    \mathbb{E}[\tilde{\tilde{\epsilon}}\tilde{\tilde{\epsilon}}^T]
-      &= \mathbb{E} \big[ (\tilde{U} R^{-1}(D-T)) (\tilde{U} R^{-1}(D-T))^T \big] \\
-      &= \tilde{U} R^{-1} \mathbb{E}[(D-T)(D-T)^T] R^{-1} \tilde{U}^T \\
-      &= \tilde{U} \rho \tilde{U}^T \\
-      &= \tilde{U}\tilde{U}^T \tilde{\Lambda} \tilde{U}\tilde{U}^T \\
-      &= \tilde{\Lambda} \, ,
+    C_{\rm fit}^{-1} &= (U \Lambda U^T)^{-1} \\
+                     &= (U^T)^{-1} \Lambda^{-1} U^{-1} \\
+                     &= R \Lambda^{-1} R^T \, .
 
-we find that it is diagonal, which demonstrates that the training/validation data are statistically independent indeed.
+Considering the definition of the :math:`\chi^2` function in the NNPDF
+methodology, we finally have
+
+.. math::
+
+    \chi^2 &= (D-T)^T C_{\rm fit}^{-1} (D-T) \\
+           &= (D-T)^T R \Lambda^{-1} R^T (D-T) \\
+           &= \epsilon^T \Lambda^{-1} \epsilon \\
+           &= \lVert \epsilon \rVert^2_{\Lambda^{-1}} \, ,
+
+where we have defined the residuals in the diagonal basis as :math:`\epsilon \equiv R^T(D-T)` or, writing it in index notation,
+
+.. math::
+
+    \epsilon_i = (V^T)_{ij} \frac{(D-T)_j}{\sqrt{C_{\rm fit, jj}}} \,.
+
+In this basis, the :math:`\chi^2` becomes a weighted norm of the residuals,
+where the weights are given by the inverse of the eigenvalues of the correlation
+matrix.
+
+The transformed data :math:`\epsilon` are statistically independent in the
+diagonal basis of the correlation matrix :math:`\rho`. As a crosscheck, we
+can compute the covariance of :math:`\epsilon`,
+
+.. math::
+
+    \mathbb{E}[\epsilon \epsilon^T] &= \mathbb{E}[R^T(D-T)(D-T)^T R] \\
+                                    &= R^T \mathbb{E}[(D-T)(D-T)^T] R \\
+                                    &= R^T C_{\rm fit} R \\
+                                    &= R^T U \Lambda U^T R \\
+                                    &= \Lambda \,,
+
+where we have used the fact that :math:`R^T U = I` and the assumption that the
+data are distributed according to the fitting covariance matrix :math:`C_{\rm fit}`
+
+.. math::
+
+    \mathbb{E}[(D-T)(D-T)^T] = C_{\rm fit} \, .
+
+This shows that the correlation is indeed diagonal, and demonstrates that the
+training/validation data are uncorrelated.
