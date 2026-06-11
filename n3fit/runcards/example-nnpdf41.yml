@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ######################################################################################
-description: Runcard for the NNPDF4.1 series of fits -- baseline 26-03-13; WIP
+description: Runcard for the NNPDF4.1 series of fits -- last updated 11 June 2026; WIP
 
 ######################################################################################
 dataset_inputs:
@@ -43,8 +43,8 @@ dataset_inputs:
 - {dataset: ATLAS_WPWM_13TEV_TOT, cfac: [NRM]}
 - {dataset: ATLAS_WJ_8TEV_WP-PT}
 - {dataset: ATLAS_WJ_8TEV_WM-PT}
-- {dataset: ATLAS_Z0J_8TEV_PT-M}
-- {dataset: ATLAS_Z0J_8TEV_PT-Y}
+- {dataset: ATLAS_Z0J_8TEV_PT-M, cfac: [RES]}
+- {dataset: ATLAS_Z0J_8TEV_PT-Y, cfac: [RES]}
 - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC}
 - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC}
 - {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC}
@@ -64,7 +64,7 @@ dataset_inputs:
 - {dataset: CMS_WPWM_7TEV_MUON_ASY}
 - {dataset: CMS_Z0_7TEV_DIMUON_2D}
 - {dataset: CMS_WPWM_8TEV_MUON_Y}
-- {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM]}
+- {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM,RES]}
 - {dataset: CMS_2JET_7TEV_M12-Y}
 - {dataset: CMS_1JET_8TEV_PTY, variant: legacy_data}
 - {dataset: CMS_TTBAR_7TEV_TOT_X-SEC}
