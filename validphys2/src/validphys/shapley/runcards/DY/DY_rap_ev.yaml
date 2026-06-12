@@ -11,10 +11,10 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
-output_root: sv_results/DY
-log_root: slurm/logs/DY
-run_name: xscan_DY_other
-enforce_sumrules: false
+output_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/sv_results/DY
+log_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/logs/DY
+run_name: DY_rap_ev
+enforce_sumrules: true
 per_replica: true
 deterministic_sign_symmetrized: true
 random_sign: false
@@ -29,7 +29,7 @@ experiments:
   # --- x-scan 
 
   - name:  1e-4
-    basis: [flavor]
+    basis: [evolution]
     perturbation:
       mu: 0.0001
       sigma: 0.2      
@@ -38,7 +38,7 @@ experiments:
       xspace: logx
 
   - name:  1e-3
-    basis: [flavor]
+    basis: [evolution]
     perturbation:
       mu: 0.001
       sigma: 0.3       
@@ -47,7 +47,7 @@ experiments:
       xspace: logx
 
   - name:  1e-2
-    basis: [flavor]
+    basis: [evolution]
     perturbation:
       mu: 0.01
       sigma: 0.3      
@@ -56,7 +56,7 @@ experiments:
       xspace: logx
 
   - name:  1e-1
-    basis: [flavor]
+    basis: [evolution]
     perturbation:
       mu: 0.1
       sigma: 0.3       
@@ -65,7 +65,7 @@ experiments:
       xspace: logx
 
   - name:  5e-1
-    basis: [flavor]
+    basis: [evolution]
     perturbation:
       mu: 0.5
       sigma: 0.2       
@@ -73,7 +73,7 @@ experiments:
       mode: calibrated
       xspace: logx
   - name:  8e-1
-    basis: [flavor]
+    basis: [evolution]
     perturbation:
       mu: 0.8
       sigma: 0.2       
@@ -83,31 +83,17 @@ experiments:
 
 datasets:
 
-  # DY: Fixed-target
-  - {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, variant: legacy}
-  - {dataset: DYE866_Z0_800GEV_PXSEC, variant: legacy}
-  - {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy}
-  - {dataset: DYE906_Z0_120GEV_DW_PDXSECRATIO, cfac: [ACC], variant: legacy}
-  # DY: Tevatron
   - {dataset: CDF_Z0_1P96TEV_ZRAP, variant: legacy}
   - {dataset: D0_Z0_1P96TEV_ZRAP, variant: legacy}
-  - {dataset: D0_WPWM_1P96TEV_ASY, variant: legacy}
   # DY: ATLAS
   - {dataset: ATLAS_WPWM_7TEV_36PB_ETA, variant: legacy}
   - {dataset: ATLAS_Z0_7TEV_36PB_ETA, variant: legacy}
-  - {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, variant: legacy}
-  - {dataset: ATLAS_Z0_7TEV_LOMASS_M, variant: legacy}
   - {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA, variant: legacy}
   - {dataset: ATLAS_Z0_7TEV_46FB_CC-Y, variant: legacy}
   - {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, variant: legacy}
   - {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y, variant: legacy}
   - {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, variant: legacy}
-  - {dataset: ATLAS_Z0_13TEV_TOT, cfac: [NRM], variant: legacy}
-  - {dataset: ATLAS_WPWM_13TEV_TOT, cfac: [NRM], variant: legacy}
   # DY: CMS
-  - CMS_WPWM_7TEV_ELECTRON_ASY
-  - {dataset: CMS_WPWM_7TEV_MUON_ASY, variant: legacy}
-  - CMS_Z0_7TEV_DIMUON_2D
   - {dataset: CMS_WPWM_8TEV_MUON_Y, variant: legacy}
   # DY: LHCb
   - LHCB_Z0_7TEV_DIELECTRON_Y

@@ -1,7 +1,7 @@
 #
 # Experiment layout
 # -----------------
-#   x-scan : 5 log-spaced mu values covering [1e-4, 0.5], alpha=1.0
+#   x-scan : 5 log-spaced mu values covering [1e-4, 0.5], alpha=-1.0
 #            -> produces phi_j(x) Shapley density on the full global fit
 #
 # sigma is fixed in log10(x) units (xspace: logx) so the bump width is
@@ -11,30 +11,32 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
-output_root: sv_results/nnpdf40_calibrated
-log_root: slurm/logs/nnpdf40_calibrated
-run_name: calibrated_xscan_ev
-
-enforce_sumrules: false
+output_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/sv_results/nnpdf40_calibrated
+log_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/logs/nnpdf40_calibrated
+run_name: calibrated_xscan_sr_ev
 per_replica: true
+
 deterministic_sign_symmetrized: true
 random_sign: false
+
+enforce_sumrules: true
+use_full_covmat: true
 stabilization:
   enabled: true
   action: exclude_dataset
-  dataset_delta_chi2_threshold: 1e6   
+  dataset_delta_chi2_threshold: 1e5
   max_outlier_coalitions: 5
   rerun_stable: true
 experiments:
 
-  # --- x-scan at alpha=1.0 (1-sigma shift per flavour) -------------------
+  # --- x-scan at alpha=-1.0 (1-sigma shift per flavour) -------------------
 
   - name:  1e-4
     basis: [evolution]
     perturbation:
       mu: 0.0001
       sigma: 0.2      
-      amplitude:  1.0  
+      amplitude:  1.0   
       mode: calibrated
       xspace: logx
 
@@ -81,6 +83,7 @@ experiments:
       amplitude:  1.0
       mode: calibrated
       xspace: logx
+
 datasets:
   # DIS: Fixed-target
   - {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}

@@ -27,7 +27,7 @@ output_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/sv_results/ab
 log_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/logs/ablation
 enforce_sumrules: false
 use_full_covmat: false
-run_name: flavor
+run_name: evolution
 
 stabilization:
   enabled: true
@@ -38,7 +38,7 @@ stabilization:
 experiments:
 
   - name: ablation
-    basis: [flavor]
+    basis: [evolution]
     perturbation:
       mu: 0.0        # ignored for mode=ablation
       sigma: 1.0     # ignored for mode=ablation

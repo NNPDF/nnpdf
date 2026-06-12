@@ -11,10 +11,11 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
-output_root: sv_results/gluon
-log_root: slurm/logs/gluon
+output_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/sv_results/gluon
+log_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/logs/gluon
 run_name: xscan_tt
-enforce_sumrules: false
+enforce_sumrules: true
+use_full_covmat: true
 per_replica: true
 deterministic_sign_symmetrized: true
 random_sign: false

@@ -13,7 +13,7 @@ use_cuts: internal
 n_replicas: 100
 output_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/sv_results/nnpdf40_calibrated
 log_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/logs/nnpdf40_calibrated
-run_name: calibrated_xscan_dense
+run_name: calibrated_xscan_dense_ev
 per_replica: false
 
 deterministic_sign_symmetrized: true
@@ -32,154 +32,154 @@ experiments:
   # --- Dense x-scan at alpha=1.0 (calibrated flavour basis) ---------------
 
   - name: mu_01
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0001, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_02
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000120420056524, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_03
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000145009900131, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_04
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000174621003703, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_05
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000210278711361, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_06
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000253217743078, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_07
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000304924949343, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_08
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000367190796353, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_09
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000442171364517, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_10
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000532463007083, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_11
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000641192254096, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_12
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000772124074808, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_13
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.000929792247316, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_14
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00111965634977, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_15
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00134829080926, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_16
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00162361255462, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_17
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00195515515599, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_18
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00235439894397, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_19
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00283516853912, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_20
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00341411155735, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_21
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00411127506713, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_22
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00495079975968, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_23
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00596175586898, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_24
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00717914978722, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_25
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.00864513623168, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_26
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0104104779367, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_27
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0125363034158, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_28
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0150962236593, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_29
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0181788810634, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_30
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0218910188519, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_31
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0263611772751, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_32
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0317441445749, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_33
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.03822631684, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_34
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0460321523456, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_35
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0554319438736, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_36
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0667511781448, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_37
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0803818064521, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_38
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.0967958167643, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_39
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.11656157726, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_40
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.140363517221, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_41
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.169025826776, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_42
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.203540996143, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_43
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.245104182605, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_44
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.295154595234, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_45
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.355425330413, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_46
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.428003383782, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_47
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.515401916674, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_48
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.620647279382, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_49
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.747383804644, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
   - name: mu_50
-    basis: [flavor]
+    basis: [evolution]
     perturbation: {mu: 0.9, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
 
 datasets:

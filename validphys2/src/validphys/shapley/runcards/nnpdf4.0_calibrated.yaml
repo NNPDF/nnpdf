@@ -11,15 +11,16 @@ pdf_name: NNPDF40_nnlo_as_01180
 theory_id: 708
 use_cuts: internal
 n_replicas: 100
-output_root: sv_results/nnpdf40_calibrated
-log_root: slurm/logs/nnpdf40_calibrated
-run_name: calibrated_xscan
+output_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/sv_results/nnpdf40_calibrated
+log_root: /leonardo_scratch/large/userexternal/rbonnetg/shapley/logs/nnpdf40_calibrated
+run_name: calibrated_xscan_sr
 per_replica: true
 
 deterministic_sign_symmetrized: true
 random_sign: false
 
-enforce_sumrules: false
+enforce_sumrules: true
+use_full_covmat: true
 stabilization:
   enabled: true
   action: exclude_dataset
