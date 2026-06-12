@@ -82,9 +82,12 @@ class NNPDFShapleyAnalyzer:
 
     def __init__(self, pdf, observables, flavor_info, n_replicas=None,
                  basis='evolution', enforce_sumrules=False,
-                 member_mode='replicas'):
+                 member_mode='replicas',
+                 full_L_inv=None, full_data_central=None):
         self.pdf = pdf
         self.observables = observables
+        self.full_L_inv = full_L_inv
+        self.full_data_central = full_data_central
         self.flavor_info = flavor_info
         self.n_replicas = n_replicas
         self.basis = basis
@@ -219,9 +222,9 @@ class NNPDFShapleyAnalyzer:
 
         if self.basis == 'evolution':
             gv = self._sr_gv_evol.copy()
-            perturb_idx = [self.flavor_indices[p] for p in flavor_subset]
+            perturb_idx, sign_cols = self._expand_flavor_indices(flavor_subset)
             perturb_signs = (
-                random_sign_matrix[:, flavor_subset]
+                random_sign_matrix[:, sign_cols]
                 if random_sign_matrix is not None else None
             )
             gv_pert = apply_gaussian_perturbation(
@@ -232,9 +235,9 @@ class NNPDFShapleyAnalyzer:
             )
         else:
             gv_flav = self._sr_gv_flav.copy()
-            perturb_idx = [self.flavor_indices[p] for p in flavor_subset]
+            perturb_idx, sign_cols = self._expand_flavor_indices(flavor_subset)
             perturb_signs = (
-                random_sign_matrix[:, flavor_subset]
+                random_sign_matrix[:, sign_cols]
                 if random_sign_matrix is not None else None
             )
             gv_flav_pert = apply_gaussian_perturbation(
@@ -363,16 +366,53 @@ class NNPDFShapleyAnalyzer:
         return local
 
     def _local_flavor_indices_and_players_for_entry(self, entry, global_flavor_subset):
-        """Map global player indices to local FK columns, preserving order."""
+        """Map global player indices to local FK columns, preserving order.
+
+        Handles compound players (list of FK indices) by expanding each
+        constituent and assigning it the same player index for sign-matrix
+        slicing -- identical to _expand_flavor_indices but filtered to the
+        columns present in this FK entry.
+        """
         local = []
         players = []
         fi_list = entry.flavor_indices.tolist()
         for player in global_flavor_subset:
-            global_fi = self.flavor_indices[player]
-            if global_fi in fi_list:
-                local.append(fi_list.index(global_fi))
-                players.append(player)
+            entry_val = self.flavor_indices[player]
+            constituents = entry_val if isinstance(entry_val, (list, tuple)) else [entry_val]
+            for global_fi in constituents:
+                if global_fi in fi_list:
+                    local.append(fi_list.index(global_fi))
+                    players.append(player)
         return local, players
+
+    def _expand_flavor_indices(self, flavor_subset):
+        """Expand player indices, duplicating sign columns for compound players.
+
+        A compound player has a list of constituent ALL_FLAVOURS indices; all
+        constituents share the same sign column so they are always perturbed
+        with the same sign (e.g. c+ perturbs both c and cbar identically,
+        keeping c_v = c - cbar = 0).
+
+        Returns
+        -------
+        flat_idx : list[int]
+            Flat list of ALL_FLAVOURS indices to pass to apply_gaussian_perturbation.
+        sign_cols : list[int]
+            Parallel list of Shapley-player indices to use when slicing the
+            sign matrix (random_sign_matrix[:, sign_cols]).
+        """
+        flat_idx = []
+        sign_cols = []
+        for p in flavor_subset:
+            entry = self.flavor_indices[p]
+            if isinstance(entry, (list, tuple)):
+                for fi in entry:
+                    flat_idx.append(fi)
+                    sign_cols.append(p)
+            else:
+                flat_idx.append(entry)
+                sign_cols.append(p)
+        return flat_idx, sign_cols
 
     def _infer_n_members(self):
         """Infer the number of PDF members currently loaded by the analyzer."""
@@ -483,21 +523,19 @@ class NNPDFShapleyAnalyzer:
         total_chi2 = 0.0          # used when per_replica=False
         total_chi2_rep = None     # used when per_replica=True  shape (nrep,)
         total_ndata = 0
+        all_preds = [] if self.full_L_inv is not None else None
 
         for obs in self.observables:
             if self.basis == 'flavor':
                 gv_pert_list = []
-                perturb_players = list(flavor_subset)
+                perturb_idx, sign_cols = self._expand_flavor_indices(flavor_subset)
                 perturb_signs = (
-                    random_sign_matrix[:, perturb_players]
+                    random_sign_matrix[:, sign_cols]
                     if random_sign_matrix is not None else None
                 )
                 for idx, entry in enumerate(obs.fk_entries):
                     gv_flav = self._get_flavor_gv_for_entry(obs, idx)
                     gv_flav_calib = self._get_calibration_flavor_gv_for_entry(obs, idx)
-                    perturb_idx = [
-                        self.flavor_indices[p] for p in flavor_subset
-                    ]
                     gv_pert = apply_gaussian_perturbation(
                         gv_flav, perturb_idx, mu, sigma, amplitude,
                         entry.xgrid, mode=mode, xspace=xspace,
@@ -517,19 +555,23 @@ class NNPDFShapleyAnalyzer:
                         )
                         for gv, entry in zip(gv_evol_list, obs.fk_entries)
                     ]
-                    chi2_arr = obs.chi2(gv_evol_list)
+                    if all_preds is not None:
+                        all_preds.append(obs.convolve(gv_evol_list))
+                    else:
+                        chi2_arr = obs.chi2(gv_evol_list)
                 else:
-                    chi2_arr = obs.chi2_from_flavor(gv_pert_list)
+                    if all_preds is not None:
+                        gv_evol_list = obs.rotate_to_evolution(gv_pert_list)
+                        all_preds.append(obs.convolve(gv_evol_list))
+                    else:
+                        chi2_arr = obs.chi2_from_flavor(gv_pert_list)
             else:
                 gv_pert_list = []
                 for idx, entry in enumerate(obs.fk_entries):
                     if entry.hadronic:
                         gv = self._get_gv_all14_for_entry(obs, idx)
                         gv_calib = self._get_calibration_gv_all14_for_entry(obs, idx)
-                        perturb_players = list(flavor_subset)
-                        perturb_idx = [
-                            self.flavor_indices[p] for p in flavor_subset
-                        ]
+                        perturb_idx, perturb_players = self._expand_flavor_indices(flavor_subset)
                     else:
                         gv = self._get_gv_for_entry(obs, idx)
                         gv_calib = self._get_calibration_gv_for_entry(obs, idx)
@@ -555,16 +597,29 @@ class NNPDFShapleyAnalyzer:
                             gv_pert, sr_norm, fi
                         )
                     gv_pert_list.append(gv_pert)
-                chi2_arr = obs.chi2(gv_pert_list)
-
-            if per_replica:
-                if total_chi2_rep is None:
-                    total_chi2_rep = chi2_arr.copy()
+                if all_preds is not None:
+                    all_preds.append(obs.convolve(gv_pert_list))
                 else:
-                    total_chi2_rep += chi2_arr
-            else:
-                total_chi2 += np.mean(chi2_arr)
+                    chi2_arr = obs.chi2(gv_pert_list)
+
             total_ndata += obs.ndata
+            if all_preds is None:
+                if per_replica:
+                    if total_chi2_rep is None:
+                        total_chi2_rep = chi2_arr.copy()
+                    else:
+                        total_chi2_rep += chi2_arr
+                else:
+                    total_chi2 += np.mean(chi2_arr)
+
+        if all_preds is not None:
+            preds_concat = np.concatenate(all_preds, axis=0)
+            diffs = preds_concat - self.full_data_central.reshape(-1, 1)
+            vec = self.full_L_inv @ diffs
+            chi2_arr = np.einsum('ir,ir->r', vec, vec)
+            if per_replica:
+                return chi2_arr / total_ndata
+            return float(np.mean(chi2_arr)) / total_ndata
 
         if per_replica:
             return total_chi2_rep / total_ndata
@@ -1825,7 +1880,26 @@ class NNPDFShapleyAnalyzer:
         plot_target = PlotTarget()
         plot_target.Q0 = Q0
         plot_target.xgrid = x_plot
-        plot_target.flavor_indices = np.asarray(self.flavor_indices)
+        # Expand compound players so each constituent gets its own plot panel.
+        # Compound players (e.g. c+) have both constituents shown separately
+        # to verify symmetry -- curves will be identical when c = cbar.
+        _pdg_to_name = {
+            -6: 'tbar', -5: 'bbar', -4: 'cbar', -3: 'sbar',
+            -2: 'ubar', -1: 'dbar', 21: 'g',
+            1: 'd', 2: 'u', 3: 's', 4: 'c', 5: 'b', 6: 't', 22: 'photon',
+        }
+        plot_sel = []
+        plot_panel_labels = []
+        for p, entry in enumerate(self.flavor_indices):
+            if isinstance(entry, (list, tuple)):
+                for fi in entry:
+                    plot_sel.append(fi)
+                    pdg = ALL_FLAVOURS[fi]
+                    plot_panel_labels.append(_pdg_to_name.get(pdg, str(pdg)))
+            else:
+                plot_sel.append(entry)
+                plot_panel_labels.append(self.flavor_labels[p])
+        plot_target.flavor_indices = np.asarray(plot_sel)
 
         if self.basis == 'flavor':
             gv_ref_all = get_pdf_flavor_grid_values(
@@ -1837,9 +1911,8 @@ class NNPDFShapleyAnalyzer:
                 member_mode='replicas',
             )
             # get_pdf_flavor_grid_values returns all 14 PDG flavours in
-            # ALL_FLAVOURS order. Shapley players are a subset given by
-            # self.flavor_indices (indices into that 14-flavour axis).
-            sel = np.asarray(self.flavor_indices, dtype=int)
+            # ALL_FLAVOURS order. Select one panel index per constituent.
+            sel = np.asarray(plot_sel, dtype=int)
             gv_ref = gv_ref_all[:, sel, :]
             gv_calib = gv_calib_all[:, sel, :]
         else:
@@ -1851,6 +1924,7 @@ class NNPDFShapleyAnalyzer:
                 self.pdf, plot_target, n_replicas=self.n_replicas,
                 member_mode='replicas',
             )
+            plot_panel_labels = list(self.flavor_labels)
 
         gv_pert = apply_gaussian_perturbation(
             gv_ref,
@@ -1864,7 +1938,7 @@ class NNPDFShapleyAnalyzer:
             calibration_gv=gv_calib,
         )
 
-        n = len(self.flavor_short)
+        n = len(plot_panel_labels)
         ncols = min(3, n)
         nrows = int(np.ceil(n / ncols))
         fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 4 * nrows))
@@ -1883,7 +1957,7 @@ class NNPDFShapleyAnalyzer:
             )
             ax.plot(x_plot, pert_mean, "r--", lw=1.5, label="Perturbed")
             ax.set_xscale(x_axis_scale)
-            ax.set_title(self.flavor_labels[i])
+            ax.set_title(plot_panel_labels[i])
             ax.set_xlabel("x")
             ax.set_ylabel("xf(x)")
             ax.legend(fontsize=8)
@@ -1936,3 +2010,350 @@ class NNPDFShapleyAnalyzer:
         plt.tight_layout()
         plt.show()
         return fig
+
+
+class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
+    """Vectorized-x game: players are (flavor, x_value) pairs.
+
+    Each player ``p = j * n_x + k`` represents flavor ``j`` perturbed at
+    x value ``x_values[k]``.  When multiple players sharing the same flavor
+    appear in a coalition their Gaussian bumps are **superimposed** before
+    convolution.
+
+    The ``n_flavors`` attribute is set to ``n_base_flavors * n_x`` so the
+    inherited dual-game loop in ``exact_shap`` iterates over all players
+    without modification.  The ``_evaluate_chi2`` and ``_compute_sumrule_norm``
+    methods are overridden to ignore the global ``mu`` argument and instead use
+    player-specific x values read from ``self._x_values``.
+
+    Parameters
+    ----------
+    pdf, observables, flavor_info, n_replicas, basis, enforce_sumrules,
+    member_mode, full_L_inv, full_data_central
+        Forwarded to ``NNPDFShapleyAnalyzer.__init__``.
+    x_values : list of float
+        The K x values shared by all flavors (K <= 2 strongly recommended).
+    vec_sigma : float
+        Gaussian width applied to every player.
+    vec_amplitude : float
+        Gaussian peak amplitude multiplier applied to every player.
+    vec_mode : str
+        Perturbation mode ('calibrated', 'additive', 'multiplicative', 'ablation').
+    vec_xspace : str
+        x-space for Gaussian ('logx' or 'linear').
+    """
+
+    def __init__(self, pdf, observables, flavor_info, x_values,
+                 vec_sigma, vec_amplitude, vec_mode, vec_xspace,
+                 n_replicas=None, basis='evolution',
+                 enforce_sumrules=False, member_mode='replicas',
+                 full_L_inv=None, full_data_central=None):
+        super().__init__(
+            pdf, observables, flavor_info,
+            n_replicas=n_replicas, basis=basis,
+            enforce_sumrules=enforce_sumrules, member_mode=member_mode,
+            full_L_inv=full_L_inv, full_data_central=full_data_central,
+        )
+
+        self._x_values = list(x_values)
+        self._n_x = len(x_values)
+        self._vec_sigma = float(vec_sigma)
+        self._vec_amplitude = float(vec_amplitude)
+        self._vec_mode = str(vec_mode)
+        self._vec_xspace = str(vec_xspace)
+
+        # Save base flavor metadata before expanding.
+        self._base_n_flavors = self.n_flavors
+        self._base_flavor_indices = list(self.flavor_indices)   # may contain compound entries
+        self._base_flavor_labels = list(self.flavor_labels)
+        self._base_flavor_short = list(self.flavor_short)
+
+        # Expand players: p = j * n_x + k  ->  (flavor_j, x_k)
+        n_players = self._base_n_flavors * self._n_x
+        self._player_flavor_idx = []   # p -> base flavor index j
+        self._player_x_idx = []        # p -> x-bin index k
+        player_labels = []
+        player_short = []
+
+        for j in range(self._base_n_flavors):
+            for k in range(self._n_x):
+                self._player_flavor_idx.append(j)
+                self._player_x_idx.append(k)
+                x_k = x_values[k]
+                x_str = f"{x_k:.0e}"
+                base_label = self._base_flavor_labels[j]
+                base_short = self._base_flavor_short[j]
+                player_labels.append(f"{base_label}@{x_str}")
+                player_short.append(f"{base_short}@{x_str}")
+
+        # Override n_flavors so ExactShapley iterates over all n_players.
+        self.n_flavors = n_players
+        self.flavor_labels = player_labels
+        self.flavor_short = player_short
+
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+
+    def _build_vec_x_specs_for_entry(self, entry, player_subset):
+        """Map player indices to (local_fi, mu_k, sign_col) specs for one FK entry.
+
+        Returns
+        -------
+        specs : list of (local_fi, mu_k, sign_col)
+            Each tuple describes one player's contribution to this entry's
+            flavour grid.  Players whose flavor is absent from this entry are
+            silently dropped.
+        """
+        specs = []
+        fi_list = entry.flavor_indices.tolist() if not entry.hadronic else None
+
+        for p in player_subset:
+            j = self._player_flavor_idx[p]
+            k = self._player_x_idx[p]
+            mu_k = self._x_values[k]
+            base_entry = self._base_flavor_indices[j]
+
+            if isinstance(base_entry, (list, tuple)):
+                constituents = base_entry
+            else:
+                constituents = [base_entry]
+
+            for global_fi in constituents:
+                if fi_list is None:
+                    # Hadronic (all-14): global index = local index
+                    specs.append((global_fi, mu_k, p))
+                elif global_fi in fi_list:
+                    local_fi = fi_list.index(global_fi)
+                    specs.append((local_fi, mu_k, p))
+
+        return specs
+
+    def _build_vec_x_specs_flavor_basis(self, player_subset):
+        """Map player indices to (flavor_basis_fi, mu_k, sign_col) specs.
+
+        For the flavor basis the grid holds all 14 physical flavors and no
+        per-entry remapping is needed; ``flavor_basis_fi`` equals the position
+        in the ALL_FLAVOURS ordering stored in ``self._base_flavor_indices``.
+        """
+        specs = []
+        for p in player_subset:
+            j = self._player_flavor_idx[p]
+            k = self._player_x_idx[p]
+            mu_k = self._x_values[k]
+            base_entry = self._base_flavor_indices[j]
+
+            if isinstance(base_entry, (list, tuple)):
+                for fi in base_entry:
+                    specs.append((fi, mu_k, p))
+            else:
+                specs.append((base_entry, mu_k, p))
+
+        return specs
+
+    # ------------------------------------------------------------------
+    # Overrides
+    # ------------------------------------------------------------------
+
+    def _compute_sumrule_norm(self, player_subset, mu, sigma, amplitude,
+                              mode, xspace, random_sign_matrix=None):
+        """Override: use per-player x values for sum rule perturbation."""
+        ready = (
+            self._sr_xgrid is not None
+            and self._sr_weights is not None
+            and self._sr_gv_evol is not None
+            and (
+                self.basis != 'flavor'
+                or (self._sr_gv_flav is not None and self._sr_rotation is not None)
+            )
+        )
+        if not ready:
+            with self._sumrule_lock:
+                ready = (
+                    self._sr_xgrid is not None
+                    and self._sr_weights is not None
+                    and self._sr_gv_evol is not None
+                    and (
+                        self.basis != 'flavor'
+                        or (self._sr_gv_flav is not None and self._sr_rotation is not None)
+                    )
+                )
+                if not ready:
+                    self._setup_sumrule_grid()
+
+        from .perturbation import apply_multi_gaussian_perturbation
+
+        if self.basis == 'evolution':
+            # No outer .copy() -- apply_multi_gaussian_perturbation copies internally.
+            specs = []
+            for p in player_subset:
+                j = self._player_flavor_idx[p]
+                k = self._player_x_idx[p]
+                mu_k = self._x_values[k]
+                base_entry = self._base_flavor_indices[j]
+                if isinstance(base_entry, (list, tuple)):
+                    for fi in base_entry:
+                        specs.append((fi, mu_k, p))
+                else:
+                    specs.append((base_entry, mu_k, p))
+
+            perturb_signs = (
+                random_sign_matrix[:, [sc for _, _, sc in specs]]
+                if random_sign_matrix is not None else None
+            )
+            gv_pert = apply_multi_gaussian_perturbation(
+                self._sr_gv_evol, specs, self._vec_sigma, self._vec_amplitude,
+                self._sr_xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
+                flavor_signs=perturb_signs,
+                calibration_gv=self._sr_calib_gv_evol,
+            )
+        else:  # flavor basis
+            # No outer .copy() -- apply_multi_gaussian_perturbation copies internally.
+            specs = self._build_vec_x_specs_flavor_basis(player_subset)
+            perturb_signs = (
+                random_sign_matrix[:, [sc for _, _, sc in specs]]
+                if random_sign_matrix is not None else None
+            )
+            gv_flav_pert = apply_multi_gaussian_perturbation(
+                self._sr_gv_flav, specs, self._vec_sigma, self._vec_amplitude,
+                self._sr_xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
+                flavor_signs=perturb_signs,
+                calibration_gv=self._sr_calib_gv_flav,
+            )
+            gv_pert = np.einsum('ef,rfx->rex', self._sr_rotation, gv_flav_pert)
+
+        return compute_sumrule_normalization(
+            gv_pert, self._sr_xgrid, self._sr_weights
+        )
+
+    def _evaluate_chi2(self, player_subset, mu, sigma, amplitude,
+                       mode='additive', xspace='linear',
+                       per_replica=False, random_sign=False,
+                       random_sign_matrix=None):
+        """Override: mu/sigma/amplitude/mode/xspace args are ignored.
+
+        Perturbation parameters come from ``self._vec_*`` attributes and the
+        player-specific x values in ``self._x_values``.
+        """
+        from .perturbation import apply_multi_gaussian_perturbation
+
+        sr_norm = None
+        if self.enforce_sumrules:
+            sr_norm = self._compute_sumrule_norm(
+                player_subset, mu=None,
+                sigma=self._vec_sigma, amplitude=self._vec_amplitude,
+                mode=self._vec_mode, xspace=self._vec_xspace,
+                random_sign_matrix=random_sign_matrix,
+            )
+
+        total_chi2 = 0.0
+        total_chi2_rep = None
+        total_ndata = 0
+        all_preds = [] if self.full_L_inv is not None else None
+
+        for obs in self.observables:
+            if self.basis == 'flavor':
+                specs = self._build_vec_x_specs_flavor_basis(player_subset)
+                perturb_signs = (
+                    random_sign_matrix[:, [sc for _, _, sc in specs]]
+                    if random_sign_matrix is not None and specs else None
+                )
+                gv_pert_list = []
+                for idx, entry in enumerate(obs.fk_entries):
+                    gv_flav = self._get_flavor_gv_for_entry(obs, idx)
+                    gv_flav_calib = self._get_calibration_flavor_gv_for_entry(obs, idx)
+                    gv_pert = apply_multi_gaussian_perturbation(
+                        gv_flav, specs,
+                        self._vec_sigma, self._vec_amplitude,
+                        entry.xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
+                        flavor_signs=perturb_signs,
+                        calibration_gv=gv_flav_calib,
+                    )
+                    gv_pert_list.append(gv_pert)
+
+                if sr_norm is not None:
+                    gv_evol_list = obs.rotate_to_evolution(gv_pert_list)
+                    gv_evol_list = [
+                        self._apply_norm_to_gv(
+                            gv, sr_norm,
+                            range(14) if e.hadronic else e.flavor_indices
+                        )
+                        for gv, e in zip(gv_evol_list, obs.fk_entries)
+                    ]
+                    if all_preds is not None:
+                        all_preds.append(obs.convolve(gv_evol_list))
+                    else:
+                        chi2_arr = obs.chi2(gv_evol_list)
+                else:
+                    if all_preds is not None:
+                        gv_evol_list = obs.rotate_to_evolution(gv_pert_list)
+                        all_preds.append(obs.convolve(gv_evol_list))
+                    else:
+                        chi2_arr = obs.chi2_from_flavor(gv_pert_list)
+
+            else:  # evolution basis
+                gv_pert_list = []
+                for idx, entry in enumerate(obs.fk_entries):
+                    if entry.hadronic:
+                        gv = self._get_gv_all14_for_entry(obs, idx)
+                        gv_calib = self._get_calibration_gv_all14_for_entry(obs, idx)
+                        # Build specs with global fi (= local fi for all-14 grid)
+                        specs = []
+                        for p in player_subset:
+                            j = self._player_flavor_idx[p]
+                            k = self._player_x_idx[p]
+                            base_entry = self._base_flavor_indices[j]
+                            constituents = (
+                                base_entry if isinstance(base_entry, (list, tuple))
+                                else [base_entry]
+                            )
+                            for fi in constituents:
+                                specs.append((fi, self._x_values[k], p))
+                    else:
+                        gv = self._get_gv_for_entry(obs, idx)
+                        gv_calib = self._get_calibration_gv_for_entry(obs, idx)
+                        specs = self._build_vec_x_specs_for_entry(entry, player_subset)
+
+                    perturb_signs = (
+                        random_sign_matrix[:, [sc for _, _, sc in specs]]
+                        if random_sign_matrix is not None and specs else None
+                    )
+                    gv_pert = apply_multi_gaussian_perturbation(
+                        gv, specs,
+                        self._vec_sigma, self._vec_amplitude,
+                        entry.xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
+                        flavor_signs=perturb_signs,
+                        calibration_gv=gv_calib,
+                    )
+                    if sr_norm is not None:
+                        fi_range = range(14) if entry.hadronic else entry.flavor_indices
+                        gv_pert = self._apply_norm_to_gv(gv_pert, sr_norm, fi_range)
+                    gv_pert_list.append(gv_pert)
+
+                if all_preds is not None:
+                    all_preds.append(obs.convolve(gv_pert_list))
+                else:
+                    chi2_arr = obs.chi2(gv_pert_list)
+
+            total_ndata += obs.ndata
+            if all_preds is None:
+                if per_replica:
+                    if total_chi2_rep is None:
+                        total_chi2_rep = chi2_arr.copy()
+                    else:
+                        total_chi2_rep += chi2_arr
+                else:
+                    total_chi2 += float(np.mean(chi2_arr))
+
+        if all_preds is not None:
+            preds_concat = np.concatenate(all_preds, axis=0)
+            diffs = preds_concat - self.full_data_central.reshape(-1, 1)
+            vec = self.full_L_inv @ diffs
+            chi2_arr = np.einsum('ir,ir->r', vec, vec)
+            if per_replica:
+                return chi2_arr / total_ndata
+            return float(np.mean(chi2_arr)) / total_ndata
+
+        if per_replica:
+            return total_chi2_rep / total_ndata
+        return total_chi2 / total_ndata

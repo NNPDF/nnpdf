@@ -34,6 +34,7 @@ from .setup import (
 from .perturbation import (
     gaussian_profile,
     apply_gaussian_perturbation,
+    apply_multi_gaussian_perturbation,
     PERTURBATION_MODES,
     PERTURBATION_XSPACES,
 )
@@ -41,7 +42,7 @@ from .sumrules import (
     gen_integration_input,
     compute_sumrule_normalization,
 )
-from .analyzer import NNPDFShapleyAnalyzer
+from .analyzer import NNPDFShapleyAnalyzer, NNPDFShapleyAnalyzerVecX
 
 __all__ = [
     # Setup
@@ -55,11 +56,13 @@ __all__ = [
     # Perturbation
     "gaussian_profile",
     "apply_gaussian_perturbation",
+    "apply_multi_gaussian_perturbation",
     "PERTURBATION_MODES",
     "PERTURBATION_XSPACES",
     # Sum rules
     "gen_integration_input",
     "compute_sumrule_normalization",
-    # Analyzer
+    # Analyzers
     "NNPDFShapleyAnalyzer",
+    "NNPDFShapleyAnalyzerVecX",
 ]

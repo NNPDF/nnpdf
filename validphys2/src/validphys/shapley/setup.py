@@ -160,13 +160,15 @@ class NNPDFObservable:
     """
 
     def __init__(self, name, fk_entries, operation, data_central,
-                 sqrt_covmat, ndata):
+                 sqrt_covmat, ndata, stat_errors=None, sys_errors=None):
         self.name = name
         self.fk_entries = fk_entries
         self.operation = operation
         self.data_central = data_central
         self.sqrt_covmat = sqrt_covmat
         self.ndata = ndata
+        self.stat_errors = stat_errors  # raw 1-D array, kept for full-covmat rebuild
+        self.sys_errors = sys_errors    # raw DataFrame, kept for full-covmat rebuild
         self._precompute_inv_covmat()
 
     # -- Properties (delegate to first FK entry) ----------------------------
@@ -343,13 +345,15 @@ def setup_observables(
     theoryid = loader.check_theoryID(theory_id)
     pdf = loader.check_pdf(pdf_name)
 
-    print(f"PDF set     : {pdf_name}")
-    print(f"Theory ID   : {theory_id}")
-    print(f"Cut policy  : {use_cuts}")
-    print(f"Datasets    : {len(datasets)}\n")
+    print(f"PDF set     : {pdf_name}", flush=True)
+    print(f"Theory ID   : {theory_id}", flush=True)
+    print(f"Cut policy  : {use_cuts}", flush=True)
+    print(f"Datasets    : {len(datasets)}\n", flush=True)
 
     observables = []
     all_flavor_indices = set()
+    _all_stat_errors = []
+    _all_sys_errors = []
 
     for entry in datasets:
         ds_name, ds_variant, ds_cfac = _parse_dataset_entry(entry)
@@ -400,6 +404,8 @@ def setup_observables(
         sys_errors = loaded_cd.systematic_errors()
         covmat = construct_covmat(stat_errors, sys_errors)
         L = cholesky(covmat, lower=True)
+        _all_stat_errors.append(stat_errors)
+        _all_sys_errors.append(sys_errors)
 
         obs = NNPDFObservable(
             name=ds_name,
@@ -408,6 +414,8 @@ def setup_observables(
             data_central=data_central,
             sqrt_covmat=L,
             ndata=loaded_cd.ndata,
+            stat_errors=stat_errors,
+            sys_errors=sys_errors,
         )
         observables.append(obs)
 
@@ -418,24 +426,49 @@ def setup_observables(
         nfk_str = f"  #FK={len(fk_entries)}" if len(fk_entries) > 1 else ""
         if fk0.hadronic:
             print(f"  {ds_name:45s}  ndata={obs.ndata:4d}  "
-                  f"nx={len(fk0.xgrid):3d}  [{tag}]{op_str}{nfk_str}")
+                  f"nx={len(fk0.xgrid):3d}  [{tag}]{op_str}{nfk_str}", flush=True)
         else:
             flavour_names = FK_FLAVOURS[fk0.flavor_indices].tolist()
             print(f"  {ds_name:45s}  ndata={obs.ndata:4d}  "
                   f"nx={len(fk0.xgrid):3d}  [{tag}]{op_str}{nfk_str}  "
-                  f"fl={flavour_names}")
+                  f"fl={flavour_names}", flush=True)
 
     # Evolution-basis flavor metadata
     sorted_fi = sorted(all_flavor_indices)
-    flavor_info = {
-        "indices": sorted_fi,
-        "names": FK_FLAVOURS[sorted_fi].tolist(),
-        "n_flavors": len(sorted_fi),
-    }
+
+    # V (FK idx 2) = V15 (FK idx 5) identically in NNPDF4.0 (c- = b- = 0).
+    # Treating them as separate players creates unphysical V != V15 configurations
+    # when only one is perturbed, causing chi2 explosions in neutrino DIS datasets.
+    # Merge them into a single compound player so both are always perturbed together.
+    _V_IDX, _V15_IDX = 3, 6
+    if _V_IDX in sorted_fi and _V15_IDX in sorted_fi:
+        merged_indices = []
+        merged_names = []
+        for fi in sorted_fi:
+            if fi == _V_IDX:
+                merged_indices.append([_V_IDX, _V15_IDX])
+                merged_names.append("V/V15")
+            elif fi == _V15_IDX:
+                pass  # absorbed into V/V15 compound player
+            else:
+                merged_indices.append(fi)
+                merged_names.append(str(FK_FLAVOURS[fi]))
+        flavor_info = {
+            "indices": merged_indices,
+            "names": merged_names,
+            "n_flavors": len(merged_indices),
+        }
+    else:
+        flavor_info = {
+            "indices": sorted_fi,
+            "names": FK_FLAVOURS[sorted_fi].tolist(),
+            "n_flavors": len(sorted_fi),
+        }
 
     print(f"\nEvolution flavours used ({flavor_info['n_flavors']}):")
-    for idx, name in zip(sorted_fi, flavor_info["names"]):
-        print(f"  [{idx:2d}] {name}")
+    for idx, name in zip(flavor_info["indices"], flavor_info["names"]):
+        label = f"[{idx}]" if isinstance(idx, int) else f"{idx}"
+        print(f"  {label:10s} {name}")
 
     # Physical flavor-basis metadata
     all_fl_col_inds = set()
@@ -457,7 +490,58 @@ def setup_observables(
     ):
         print(f"  [{idx:2d}] PDG {pdg:+3d}  {name}")
 
-    return pdf, observables, flavor_info, flavor_basis_info
+    full_L_inv, full_data_central = _build_full_L_inv(
+        _all_stat_errors, _all_sys_errors,
+        [obs.data_central for obs in observables],
+    )
+    return pdf, observables, flavor_info, flavor_basis_info, full_L_inv, full_data_central
+
+
+def _build_full_covmat(all_stat_errors, all_sys_errors):
+    """Build the full inter-dataset covariance matrix.
+
+    Mirrors validphys.covmats.dataset_inputs_covmat_from_systematics:
+    - INTRA_DATASET_SYS_NAME columns (UNCORR/CORR/THEORYUNCORR/THEORYCORR) are
+      dataset-local and contribute only to that dataset's block diagonal.
+    - All other named systematic columns are concatenated across datasets and
+      aligned by name; shared names produce off-diagonal inter-dataset
+      correlations via outer product.
+    """
+    import scipy.linalg as la
+    from validphys.covmats import INTRA_DATASET_SYS_NAME
+
+    block_diags = []
+    special_corrs = []
+    for stat, sys in zip(all_stat_errors, all_sys_errors):
+        is_intra = sys.columns.isin(INTRA_DATASET_SYS_NAME)
+        block_diags.append(construct_covmat(stat, sys.loc[:, is_intra]))
+        special_corrs.append(sys.loc[:, ~is_intra])
+
+    special_sys = pd.concat(special_corrs, axis=0, sort=False).fillna(0)
+    diag = la.block_diag(*block_diags)
+    return diag + special_sys.to_numpy() @ special_sys.to_numpy().T
+
+
+def _build_full_L_inv(all_stat_errors, all_sys_errors, all_data_central):
+    full_covmat = _build_full_covmat(all_stat_errors, all_sys_errors)
+    full_L = cholesky(full_covmat, lower=True)
+    n = full_L.shape[0]
+    full_L_inv = solve_triangular(full_L, np.eye(n), lower=True, check_finite=False)
+    full_data_central = np.concatenate(all_data_central)
+    return full_L_inv, full_data_central
+
+
+def build_full_covmat_for_observables(observables):
+    """Build the full inter-dataset covariance L_inv and data vector for a
+    subset of NNPDFObservable objects.  Requires that each observable was
+    constructed with stat_errors/sys_errors stored (the default since this
+    feature was added).
+    """
+    return _build_full_L_inv(
+        [obs.stat_errors for obs in observables],
+        [obs.sys_errors for obs in observables],
+        [obs.data_central for obs in observables],
+    )
 
 
 # ---------------------------------------------------------------------------

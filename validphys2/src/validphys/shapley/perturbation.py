@@ -197,3 +197,120 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
         became_negative = (gv[:, fi, :] >= 0.0) & (gv_pert[:, fi, :] < 0.0)
         gv_pert[:, fi, :] = np.where(became_negative, 0.0, gv_pert[:, fi, :])
     return gv_pert
+
+
+def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
+                                      xgrid, mode='calibrated', xspace='logx',
+                                      flavor_signs=None, calibration_gv=None):
+    """Perturb flavours with a superposition of per-player Gaussian bumps.
+
+    Each entry in *specs* describes one (flavor, x) player in a coalition.
+    Multiple specs sharing the same local_fi accumulate their bumps additively
+    on that flavour channel, then positivity is enforced once at the end.
+
+    Parameters
+    ----------
+    gv : np.ndarray, shape (nrep, nfl, nx)
+        Grid values to perturb.
+    specs : list of (local_fi, mu_k, sign_col)
+        One tuple per player in the coalition:
+        - local_fi  : index into the flavour axis of *gv*
+        - mu_k      : Gaussian centre (x value for this player)
+        - sign_col  : column index in *flavor_signs* carrying this player's signs
+    sigma : float
+        Gaussian width (shared across all players).
+    amplitude : float
+        Peak amplitude multiplier (shared across all players).
+    xgrid : array-like
+        x values corresponding to the last axis of *gv*.
+    mode : str
+        'additive', 'multiplicative', 'calibrated', or 'ablation'.
+    xspace : str
+        'linear' or 'logx'.
+    flavor_signs : np.ndarray or None
+        Shape ``(nrep, n_players)`` -- column *sign_col* carries the per-replica
+        sign for the corresponding player.  None -> all signs +1.
+    calibration_gv : np.ndarray or None
+        Replica ensemble used only in calibrated mode to compute q84/q16.
+
+    Returns
+    -------
+    gv_pert : np.ndarray
+        Perturbed copy of *gv* with positivity enforced on modified channels.
+    """
+    if not specs:
+        return gv
+
+    if mode not in PERTURBATION_MODES:
+        raise ValueError(
+            f"Unknown perturbation mode '{mode}'. Choose from {PERTURBATION_MODES}."
+        )
+    if xspace not in PERTURBATION_XSPACES:
+        raise ValueError(
+            f"Unknown perturbation xspace '{xspace}'. Choose from {PERTURBATION_XSPACES}."
+        )
+
+    gv_pert = gv.copy()
+    nrep = gv.shape[0]
+    xgrid_arr = np.asarray(xgrid)
+
+    if mode == 'ablation':
+        unique_fi = set(fi for fi, _, _ in specs)
+        for fi in unique_fi:
+            gv_pert[:, fi, :] = 0.0
+        return gv_pert
+
+    # Group specs by flavour index so we can accumulate bumps per flavour.
+    from collections import defaultdict
+    fi_to_specs = defaultdict(list)
+    for fi, mu_k, sign_col in specs:
+        fi_to_specs[fi].append((mu_k, sign_col))
+
+    gv_sigma = gv if calibration_gv is None else np.asarray(calibration_gv, dtype=float)
+
+    for fi, mu_sign_list in fi_to_specs.items():
+        # Accumulate delta across all (mu_k, sign_col) entries for this flavour.
+        delta = np.zeros((nrep, xgrid_arr.shape[0]), dtype=float)
+
+        for mu_k, sign_col in mu_sign_list:
+            signs = (
+                flavor_signs[:, sign_col:sign_col + 1].astype(float)
+                if flavor_signs is not None
+                else np.ones((nrep, 1), dtype=float)
+            )
+
+            if mode == 'calibrated':
+                idx_mu = int(np.argmin(np.abs(xgrid_arr - mu_k)))
+                calib_vals = gv_sigma[:, fi, idx_mu].astype(float)
+                c_ref = float(np.mean(calib_vals))
+                q16 = float(np.percentile(calib_vals, 16.0))
+                q84 = float(np.percentile(calib_vals, 84.0))
+                amp_plus = float(amplitude) * max(q84 - c_ref, 0.0)
+                amp_minus = float(amplitude) * max(c_ref - q16, 0.0)
+                gauss_plus = gaussian_profile(xgrid_arr, mu_k, sigma, amp_plus, xspace)
+                gauss_minus = gaussian_profile(xgrid_arr, mu_k, sigma, amp_minus, xspace)
+                d = np.where(
+                    signs >= 0.0,
+                    gauss_plus[np.newaxis, :],
+                    -gauss_minus[np.newaxis, :],
+                )
+            elif mode == 'additive':
+                gauss = gaussian_profile(xgrid_arr, mu_k, sigma, amplitude, xspace)
+                d = signs * gauss[np.newaxis, :]
+            else:  # multiplicative -- accumulate additive deltas; (1+G1)(1+G2) ~ 1+G1+G2
+                gauss = gaussian_profile(xgrid_arr, mu_k, sigma, amplitude, xspace)
+                d = signs * gauss[np.newaxis, :]
+
+            delta += d
+
+        if mode in ('additive', 'calibrated'):
+            gv_pert[:, fi, :] += delta
+        else:  # multiplicative: apply compound factor (1 + sum_k G_k)
+            gv_pert[:, fi, :] *= (1.0 + delta)
+
+    # Enforce positivity on all modified channels.
+    for fi in fi_to_specs:
+        became_negative = (gv[:, fi, :] >= 0.0) & (gv_pert[:, fi, :] < 0.0)
+        gv_pert[:, fi, :] = np.where(became_negative, 0.0, gv_pert[:, fi, :])
+
+    return gv_pert
