@@ -438,6 +438,7 @@ tags
 
 # Shapley values results
 sv_results
+validphys2/src/validphys/shapley/slurm/logs/
 
 
 

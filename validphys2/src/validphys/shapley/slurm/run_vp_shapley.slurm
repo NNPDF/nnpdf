@@ -224,7 +224,7 @@ if [[ -z "${SLURM_JOB_ID:-}" && "${SPLIT_EXPERIMENTS}" == "1" ]]; then
   agg_submit_out="$(
     sbatch \
       --job-name="vp_shapley_${RUN_TOKEN}_aggregate" \
-      --dependency="afterok:${ARRAY_JOB_ID}" \
+      --dependency="afterany:${ARRAY_JOB_ID}" \
       --cpus-per-task="${CPUS_PER_TASK}" \
       --export=ALL,RUNCARD="${RUNCARD_PATH}",OUTPUT_DIR="${EFFECTIVE_OUTPUT_DIR}",AGGREGATE_ONLY=1 \
       "${SCRIPT_PATH}" "${RUNCARD_PATH}" "${EXTRA_ARGS[@]}"
@@ -232,7 +232,7 @@ if [[ -z "${SLURM_JOB_ID:-}" && "${SPLIT_EXPERIMENTS}" == "1" ]]; then
   echo "${agg_submit_out}" >&2
 
   echo "Submitted array job : ${ARRAY_JOB_ID}" >&2
-  echo "Submitted aggregate : (afterok:${ARRAY_JOB_ID})" >&2
+  echo "Submitted aggregate : (afterany:${ARRAY_JOB_ID})" >&2
   exit 0
 fi
 

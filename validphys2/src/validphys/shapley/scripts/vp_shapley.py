@@ -22,7 +22,10 @@ from matplotlib.colors import LogNorm, SymLogNorm
 import numpy as np
 import yaml
 
-from validphys.shapley.setup import setup_observables
+from validphys.shapley.setup import (
+    setup_observables,
+    build_full_covmat_for_observables,
+)
 from validphys.shapley.analyzer import NNPDFShapleyAnalyzer
 from validphys.shapley.perturbation import apply_gaussian_perturbation
 import matplotlib.lines as mlines
@@ -211,7 +214,7 @@ def _normalize_experiments(cfg):
 
 def _build_setup_context(cfg):
     """Load PDF and observables once for all experiments in a runcard."""
-    pdf, observables, flavor_info, _ = setup_observables(
+    pdf, observables, flavor_info, _, full_L_inv, full_data_central = setup_observables(
         pdf_name=cfg["pdf_name"],
         datasets=cfg["datasets"],
         theory_id=cfg.get("theory_id", 708),
@@ -222,6 +225,8 @@ def _build_setup_context(cfg):
         "pdf": pdf,
         "observables": observables,
         "flavor_info": flavor_info,
+        "full_L_inv": full_L_inv,
+        "full_data_central": full_data_central,
     }
 
 
@@ -978,9 +983,11 @@ def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=No
 
             if analyzer.basis == "flavor":
                 gv_pert_list = []
-                perturb_idx = [analyzer.flavor_indices[p] for p in coalition]
+                # Expand compound players (e.g. c+) into their constituent
+                # ALL_FLAVOURS indices, keeping sign columns aligned per player.
+                perturb_idx, perturb_players = analyzer._expand_flavor_indices(coalition)
                 perturb_signs = (
-                    sign_matrix[:, coalition] if sign_matrix is not None else None
+                    sign_matrix[:, perturb_players] if sign_matrix is not None else None
                 )
                 for idx, entry in enumerate(obs.fk_entries):
                     gv_flav = analyzer._get_flavor_gv_for_entry(obs, idx)
@@ -1018,8 +1025,7 @@ def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=No
                     if entry.hadronic:
                         gv = analyzer._get_gv_all14_for_entry(obs, idx)
                         gv_calib = analyzer._get_calibration_gv_all14_for_entry(obs, idx)
-                        perturb_players = list(coalition)
-                        perturb_idx = [analyzer.flavor_indices[p] for p in coalition]
+                        perturb_idx, perturb_players = analyzer._expand_flavor_indices(coalition)
                     else:
                         gv = analyzer._get_gv_for_entry(obs, idx)
                         gv_calib = analyzer._get_calibration_gv_for_entry(obs, idx)
@@ -1277,6 +1283,24 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
         diagnostic = bool(cfg.get("diagnostic", False))
     diag_sigma = float(cfg.get("outlier_n_sigma", outlier_n_sigma))
 
+    # Full experimental covariance: include cross-dataset correlations from
+    # shared named systematics (e.g. HC_*, NUCLEAR*, *LUMI*). When off, the
+    # chi2 is a sum of per-dataset blocks (intra-dataset correlations only).
+    use_full_covmat = bool(cfg.get("use_full_covmat", False))
+    if use_full_covmat:
+        full_L_inv = setup_context.get("full_L_inv")
+        full_data_central = setup_context.get("full_data_central")
+        if full_L_inv is None or full_data_central is None:
+            raise ValueError(
+                "use_full_covmat=true but the setup context carries no full "
+                "covariance; rebuild the context with _build_setup_context."
+            )
+        print("Covariance        : FULL experimental (cross-dataset correlations ON)")
+    else:
+        full_L_inv = None
+        full_data_central = None
+        print("Covariance        : per-dataset blocks (cross-dataset correlations OFF)")
+
     stabilization = _resolve_stabilization_cfg(cfg)
     if stabilization["enabled"]:
         print(
@@ -1297,11 +1321,15 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
         print(f"{'=' * 60}\n")
 
         if basis == "flavor":
+            # 8 players, matching the NNPDF4.0 fitting basis: charm enters as a
+            # single compound player c+ (c and cbar always perturbed together,
+            # preserving c = cbar). Indices refer to ALL_FLAVOURS positions:
+            # 2 = cbar (PDG -4), 10 = c (PDG 4).
             fi = {
-                "indices": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-                "pdg_codes": [-4, -3, -2, -1, 21, 1, 2, 3, 4],
-                "names": ["cbar", "sbar", "ubar", "dbar", "g", "d", "u", "s", "c"],
-                "n_flavors": 9,
+                "indices": [3, 4, 5, 6, 7, 8, 9, [2, 10]],
+                "pdg_codes": [-3, -2, -1, 21, 1, 2, 3, None],
+                "names": ["sbar", "ubar", "dbar", "g", "d", "u", "s", "c+"],
+                "n_flavors": 8,
             }
         else:
             fi = flavor_info
@@ -1312,6 +1340,8 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             basis=basis,
             enforce_sumrules=enforce_sumrules,
             member_mode=member_mode,
+            full_L_inv=full_L_inv,
+            full_data_central=full_data_central,
         )
 
         t0 = time.time()
@@ -1366,6 +1396,15 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                         f"  Excluding {len(excluded_datasets)} dataset(s) and "
                         f"re-running stable Shapley on {len(kept)} dataset(s)."
                     )
+                    # The full covmat is indexed by the original dataset list;
+                    # it must be rebuilt for the surviving subset.
+                    if use_full_covmat:
+                        kept_L_inv, kept_data_central = (
+                            build_full_covmat_for_observables(kept)
+                        )
+                    else:
+                        kept_L_inv = None
+                        kept_data_central = None
                     stable_analyzer = NNPDFShapleyAnalyzer(
                         pdf,
                         kept,
@@ -1374,6 +1413,8 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                         basis=basis,
                         enforce_sumrules=enforce_sumrules,
                         member_mode=member_mode,
+                        full_L_inv=kept_L_inv,
+                        full_data_central=kept_data_central,
                     )
                     results_final = stable_analyzer.exact_shap(
                         mu=mu, sigma=sigma, amplitude=amplitude,
@@ -1562,6 +1603,7 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             "per_replica": per_replica,
             "random_sign": random_sign,
             "member_mode": member_mode,
+            "use_full_covmat": use_full_covmat,
             "n_sign_samples": int(results_final.get("n_sign_samples", n_sign_samples)),
             "antithetic_sign": bool(
                 results_final.get("random_sign") and results_final.get("n_sign_samples", 1) > 1
@@ -1614,6 +1656,7 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             "random_seed": random_seed,
         },
         "enforce_sumrules": enforce_sumrules,
+        "use_full_covmat": use_full_covmat,
         "n_jobs": int(n_jobs),
         "stabilization": {
             "enabled": bool(stabilization["enabled"]),
