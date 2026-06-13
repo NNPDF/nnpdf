@@ -1,5 +1,5 @@
-ID: 40_030_003
-Comments: Same as 40030002 but mc=0.8, kcThr=3.75
+ID: 40_030_302
+Comments: Same as 40030002 but alphas=0.120
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
@@ -11,9 +11,9 @@ XIF: 1.0
 NfFF: 5
 QED: 0
 HQ: POLE
-mc: 0.8
+mc: 2
 Qmc: 1.51
-kcThr: 3.75
+kcThr: 1.5
 mb: 4.92
 Qmb: 4.92
 kbThr: 1.0
@@ -37,5 +37,5 @@ SIN2TW: 0.23126
 TMC: 1
 MP: 0.938
 Qref: 91.2
-alphas: 0.118
+alphas: 0.120
 alphaqed: 0.0077553
