@@ -98,11 +98,11 @@ def get_kinematics_CMS_2JET_7TEV(tables, version):
             input = yaml.safe_load(file)
 
         rapidity_interval = input['dependent_variables'][0]['qualifiers'][0]['value']
-        ydiff = {}
+        ymax = {}
         if rapidity_interval == '< 0.5':
-            ydiff['min'], ydiff['max'], ydiff['mid'] = 0.0, 0.5, 0.25
+            ymax['min'], ymax['max'], ymax['mid'] = 0.0, 0.5, 0.25
         else:
-            ydiff = range_str_to_floats(rapidity_interval)
+            ymax = range_str_to_floats(rapidity_interval)
 
         sqrts = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
 
@@ -115,7 +115,7 @@ def get_kinematics_CMS_2JET_7TEV(tables, version):
             m_jj['mid'] = float(f"{0.5 * (m_jj['low']+m_jj['high']):.3f}")
 
             kin_value = {
-                'ydiff': {'min': ydiff['min'], 'mid': ydiff['mid'], 'max': ydiff['max']},
+                'ymax': {'min': ymax['min'], 'mid': ymax['mid'], 'max': ymax['max']},
                 'm_jj': {'min': m_jj['low'], 'mid': m_jj['mid'], 'max': m_jj['high']},
                 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }

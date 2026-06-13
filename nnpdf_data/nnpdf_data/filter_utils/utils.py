@@ -106,6 +106,30 @@ def cormat_to_covmat(err_list, cormat_list):
         covmat_list.append(cormat_list[i] * err_list[a] * err_list[b])
     return covmat_list
 
+def sort_eigenvalues(evals, evecs):
+    r"""Defines ordering of the eigenvalues and eigenvectors such
+    that eigenvalues are given in decreasing order and the first
+    non-zero entry of each eigenvector is positive.
+    Parameters
+    ----------
+    evals, evecs : output of np.linalg.eig
+
+    Returns
+    -------
+    evacs_sorted, evecs_sorted : ordered eigen- values and vectors,
+    as defined above
+    
+    """
+    idx = evals.argsort()[::-1]   
+    evals_sorted = evals[idx]
+    evecs_sorted = evecs[:,idx]
+    for i in range(len(evecs_sorted)):
+        j = 0
+        while evecs_sorted[j,i] == 0:
+            j += 1
+        if evecs_sorted[j,i] < 0:
+            evecs_sorted[:, i] *= -1
+    return evals_sorted, evecs_sorted
 
 def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
     r"""Convert the covariance matrix to a matrix of
@@ -152,6 +176,7 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
         b = i % ndata
         covmat[a][b] = covmat_list[i]
     eigval, eigvec = eig(covmat)
+    eigval, eigvec = sort_eigenvalues(eigval, eigvec)
     for j in range(len(eigval)):
         if eigval[j] < epsilon:
             psd_check = False
@@ -397,7 +422,8 @@ def decompose_covmat(covmat):
     giving ndat correlated systematics for each of the ndat point.
     The original covmat is obtained by doing sys@sys.T"""
 
-    lamb, mat = np.linalg.eig(covmat)
+    lamb, mat = eig(covmat)
+    lamb, mat = sort_eigenvalues(lamb, mat)
     sys = np.multiply(np.sqrt(lamb), mat)
     return sys
 

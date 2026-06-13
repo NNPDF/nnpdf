@@ -1,0 +1,571 @@
+dependent_variables:
+- header: {name: 'W+'}
+  qualifiers:
+  - {name: RE, value: P P --> (W+) X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  - {name: '', value: 'Individual cross-sections, sums and ratio'}
+  values:
+  - errors:
+    - {symerror: -0.02, label: 'sys,Muon ID Smearing'}
+    - {symerror: -0.03, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.08, label: 'sys,Muon Scale'}
+    - {symerror: 0.01, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: 0.06, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.37, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: 0.02, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.10, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.08, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.26, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.35, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.10, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 3'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.04, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.03, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 11'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 12'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.01, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.11, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.04, label: 'sys,Zmumu'}
+    - {symerror: -0.04, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.01, label: 'sys,Z-vertex'}
+    - {symerror: 0.02, label: 'sys,PDF CT14'}
+    - {symerror: 0.01, label: 'sys,PDF MSTW'}
+    - {symerror: -0.13, label: 'sys,Pileup'}
+    - {symerror: 0.67, label: 'sys,Modelling'}
+    - {symerror: -0.40, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.14, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.14, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.10, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.00, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.17, label: 'sys,MC stat. unc'}
+    - {symerror: 0.06, label: stat}
+    value: 630
+  - errors:
+    - {symerror: -0.02, label: 'sys,Muon ID Smearing'}
+    - {symerror: 0.01, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.06, label: 'sys,Muon Scale'}
+    - {symerror: -0.01, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: -0.02, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.16, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: -0.00, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.10, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.27, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.39, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.09, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 3'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.02, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.02, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 11'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.01, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.11, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.04, label: 'sys,Zmumu'}
+    - {symerror: -0.04, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.03, label: 'sys,Z-vertex'}
+    - {symerror: 0.01, label: 'sys,PDF CT14'}
+    - {symerror: 0.00, label: 'sys,PDF MSTW'}
+    - {symerror: -0.09, label: 'sys,Pileup'}
+    - {symerror: 0.40, label: 'sys,Modelling'}
+    - {symerror: -0.39, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.06, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.06, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.08, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.00, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.13, label: 'sys,MC stat. unc'}
+    - {symerror: 0.05, label: stat}
+    value: 635
+  - errors:
+    - {symerror: -0.03, label: 'sys,Muon ID Smearing'}
+    - {symerror: -0.03, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.07, label: 'sys,Muon Scale'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: -0.02, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.17, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: -0.02, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.10, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.27, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.38, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.10, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 3'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.03, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.03, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 11'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.01, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.10, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.06, label: 'sys,Zmumu'}
+    - {symerror: -0.04, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.01, label: 'sys,Z-vertex'}
+    - {symerror: 0.01, label: 'sys,PDF CT14'}
+    - {symerror: 0.00, label: 'sys,PDF MSTW'}
+    - {symerror: -0.10, label: 'sys,Pileup'}
+    - {symerror: 0.31, label: 'sys,Modelling'}
+    - {symerror: -0.37, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.05, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.05, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.08, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.39, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.13, label: 'sys,MC stat. unc'}
+    - {symerror: 0.05, label: stat}
+    value: 642
+  - errors:
+    - {symerror: 0.04, label: 'sys,Muon ID Smearing'}
+    - {symerror: -0.01, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.06, label: 'sys,Muon Scale'}
+    - {symerror: -0.03, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: 0.04, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.17, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: 0.01, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.11, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.25, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.44, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.09, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 1'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 3'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.02, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.02, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 11'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.01, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.10, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.08, label: 'sys,Zmumu'}
+    - {symerror: -0.03, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.03, label: 'sys,Z-vertex'}
+    - {symerror: 0.02, label: 'sys,PDF CT14'}
+    - {symerror: 0.01, label: 'sys,PDF MSTW'}
+    - {symerror: -0.12, label: 'sys,Pileup'}
+    - {symerror: 0.31, label: 'sys,Modelling'}
+    - {symerror: -0.39, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.08, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.08, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.09, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.00, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.14, label: 'sys,MC stat. unc'}
+    - {symerror: 0.06, label: stat}
+    value: 638
+  - errors:
+    - {symerror: -0.02, label: 'sys,Muon ID Smearing'}
+    - {symerror: -0.01, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.06, label: 'sys,Muon Scale'}
+    - {symerror: 0.05, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: 0.09, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.17, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: 0.00, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.11, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.28, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.52, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.09, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 3'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.03, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.02, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 11'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.01, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.10, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.11, label: 'sys,Zmumu'}
+    - {symerror: -0.03, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.00, label: 'sys,Z-vertex'}
+    - {symerror: 0.00, label: 'sys,PDF CT14'}
+    - {symerror: 0.02, label: 'sys,PDF MSTW'}
+    - {symerror: -0.10, label: 'sys,Pileup'}
+    - {symerror: 0.37, label: 'sys,Modelling'}
+    - {symerror: -0.35, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.10, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.10, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.09, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.22, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.14, label: 'sys,MC stat. unc'}
+    - {symerror: 0.06, label: stat}
+    value: 643
+  - errors:
+    - {symerror: 0.00, label: 'sys,Muon ID Smearing'}
+    - {symerror: -0.00, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.10, label: 'sys,Muon Scale'}
+    - {symerror: 0.01, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: 0.02, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.19, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: -0.02, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.11, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.27, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.48, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.10, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 3'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.04, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.02, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 11'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.01, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.10, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.15, label: 'sys,Zmumu'}
+    - {symerror: -0.02, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.02, label: 'sys,Z-vertex'}
+    - {symerror: 0.01, label: 'sys,PDF CT14'}
+    - {symerror: -0.00, label: 'sys,PDF MSTW'}
+    - {symerror: -0.11, label: 'sys,Pileup'}
+    - {symerror: 0.57, label: 'sys,Modelling'}
+    - {symerror: -0.33, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.07, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.07, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.06, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.24, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.09, label: 'sys,MC stat. unc'}
+    - {symerror: 0.04, label: stat}
+    value: 655
+  - errors:
+    - {symerror: 0.02, label: 'sys,Muon ID Smearing'}
+    - {symerror: -0.01, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.07, label: 'sys,Muon Scale'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: -0.05, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.16, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: -0.04, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.11, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.26, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.48, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.09, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 3'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.04, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.03, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 11'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.01, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.10, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.19, label: 'sys,Zmumu'}
+    - {symerror: -0.02, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.01, label: 'sys,Z-vertex'}
+    - {symerror: -0.00, label: 'sys,PDF CT14'}
+    - {symerror: 0.01, label: 'sys,PDF MSTW'}
+    - {symerror: -0.12, label: 'sys,Pileup'}
+    - {symerror: 0.86, label: 'sys,Modelling'}
+    - {symerror: -0.34, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.06, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.06, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.09, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.00, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.12, label: 'sys,MC stat. unc'}
+    - {symerror: 0.06, label: stat}
+    value: 661
+  - errors:
+    - {symerror: 0.01, label: 'sys,Muon ID Smearing'}
+    - {symerror: 0.03, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.09, label: 'sys,Muon Scale'}
+    - {symerror: 0.02, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: -0.02, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.16, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: -0.02, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.11, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.25, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.56, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.08, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 1'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 3'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.03, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.02, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 11'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.00, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.10, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.22, label: 'sys,Zmumu'}
+    - {symerror: -0.02, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.03, label: 'sys,Z-vertex'}
+    - {symerror: -0.01, label: 'sys,PDF CT14'}
+    - {symerror: 0.00, label: 'sys,PDF MSTW'}
+    - {symerror: -0.13, label: 'sys,Pileup'}
+    - {symerror: 0.97, label: 'sys,Modelling'}
+    - {symerror: -0.24, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.14, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.14, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.07, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.16, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.10, label: 'sys,MC stat. unc'}
+    - {symerror: 0.05, label: stat}
+    value: 662
+  - errors:
+    - {symerror: 0.05, label: 'sys,Muon ID Smearing'}
+    - {symerror: 0.03, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.08, label: 'sys,Muon Scale'}
+    - {symerror: 0.01, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: 0.02, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.22, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: 0.02, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.11, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.24, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.55, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.10, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 3'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.05, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.02, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 11'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.00, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.10, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.25, label: 'sys,Zmumu'}
+    - {symerror: -0.01, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.01, label: 'sys,single top'}
+    - {symerror: 0.02, label: 'sys,Z-vertex'}
+    - {symerror: -0.01, label: 'sys,PDF CT14'}
+    - {symerror: 0.02, label: 'sys,PDF MSTW'}
+    - {symerror: -0.14, label: 'sys,Pileup'}
+    - {symerror: 0.85, label: 'sys,Modelling'}
+    - {symerror: -0.23, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.10, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.10, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.07, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.34, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.10, label: 'sys,MC stat. unc'}
+    - {symerror: 0.05, label: stat}
+    value: 662
+  - errors:
+    - {symerror: 0.02, label: 'sys,Muon ID Smearing'}
+    - {symerror: 0.01, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.14, label: 'sys,Muon Scale'}
+    - {symerror: 0.03, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: 0.06, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.21, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: 0.04, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.11, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.18, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.50, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.08, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 3'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.01, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.04, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.03, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 11'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.00, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.11, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.28, label: 'sys,Zmumu'}
+    - {symerror: -0.01, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.00, label: 'sys,single top'}
+    - {symerror: 0.03, label: 'sys,Z-vertex'}
+    - {symerror: 0.01, label: 'sys,PDF CT14'}
+    - {symerror: 0.02, label: 'sys,PDF MSTW'}
+    - {symerror: -0.16, label: 'sys,Pileup'}
+    - {symerror: 0.76, label: 'sys,Modelling'}
+    - {symerror: -0.26, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.09, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.09, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.07, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.39, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.10, label: 'sys,MC stat. unc'}
+    - {symerror: 0.05, label: stat}
+    value: 658
+  - errors:
+    - {symerror: 0.07, label: 'sys,Muon ID Smearing'}
+    - {symerror: 0.02, label: 'sys,Muon MS Smearing'}
+    - {symerror: -0.24, label: 'sys,Muon Scale'}
+    - {symerror: -0.02, label: 'sys,Muon TrigEff Isolation'}
+    - {symerror: 0.06, label: 'sys,Muon TrigEff Mass Win'}
+    - {symerror: 0.00, label: 'sys,Muon TrigEff Stat.'}
+    - {symerror: -0.31, label: 'sys,Muon RecoEff Syst'}
+    - {symerror: 0.04, label: 'sys,Muon Sagitta'}
+    - {symerror: -0.02, label: 'sys,Muon IsoEff'}
+    - {symerror: -0.11, label: 'sys,Muon D0Eff'}
+    - {symerror: -0.02, label: 'sys,Muon RecoEff Stat'}
+    - {symerror: 0.13, label: 'sys,SoftTrkScale'}
+    - {symerror: 0.45, label: 'sys,SoftTrkResoCorr'}
+    - {symerror: 0.09, label: 'sys,MET Jet Syst 0'}
+    - {symerror: -0.02, label: 'sys,MET Jet Syst 1'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 2'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 3'}
+    - {symerror: -0.00, label: 'sys,MET Jet Syst 4'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 5'}
+    - {symerror: 0.05, label: 'sys,MET Jet Syst 6'}
+    - {symerror: 0.03, label: 'sys,MET Jet Syst 7'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 8'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 9'}
+    - {symerror: -0.01, label: 'sys,MET Jet Syst 10'}
+    - {symerror: -0.03, label: 'sys,MET Jet Syst 11'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 12'}
+    - {symerror: 0.00, label: 'sys,MET Jet Syst 13'}
+    - {symerror: -0.00, label: 'sys,WW'}
+    - {symerror: -0.00, label: 'sys,WZ'}
+    - {symerror: -0.00, label: 'sys,ZZ'}
+    - {symerror: -0.10, label: 'sys,Wtaunu'}
+    - {symerror: -0.00, label: 'sys,Ztautau'}
+    - {symerror: -0.30, label: 'sys,Zmumu'}
+    - {symerror: -0.01, label: 'sys,ttbar'}
+    - {symerror: -0.00, label: 'sys,photon'}
+    - {symerror: -0.00, label: 'sys,single top'}
+    - {symerror: -0.04, label: 'sys,Z-vertex'}
+    - {symerror: 0.01, label: 'sys,PDF CT14'}
+    - {symerror: 0.01, label: 'sys,PDF MSTW'}
+    - {symerror: -0.11, label: 'sys,Pileup'}
+    - {symerror: 0.88, label: 'sys,Modelling'}
+    - {symerror: -0.21, label: 'sys,MJ - Extrap Bkg'}
+    - {symerror: -0.09, label: 'sys,MJ - Method Corr'}
+    - {symerror: -0.09, label: 'sys,MJ - Method Uncorr'}
+    - {symerror: -0.07, label: 'sys,MJ - Uncorr'}
+    - {symerror: 0.00, label: 'sys,F/B Compatibility'}
+    - {symerror: 0.10, label: 'sys,MC stat. unc'}
+    - {symerror: 0.05, label: stat}
+    value: 642
+independent_variables:
+- header: {name: Absolute muon $\eta$}
+  values:
+  - {high: 0.21, low: 0.00}
+  - {high: 0.42, low: 0.21}
+  - {high: 0.63, low: 0.42}
+  - {high: 0.84, low: 0.63}
+  - {high: 1.05, low: 0.84}
+  - {high: 1.37, low: 1.05}
+  - {high: 1.52, low: 1.37}
+  - {high: 1.74, low: 1.52}
+  - {high: 1.95, low: 1.74}
+  - {high: 2.18, low: 1.95}
+  - {high: 2.40, low: 2.18}

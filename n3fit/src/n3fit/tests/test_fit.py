@@ -283,8 +283,11 @@ def test_parallel_against_sequential(tmp_path, rep_from=6, rep_to=8):
         "ATLAS_TTBAR_8TEV_TOT_X-SEC",
         "CMS_SINGLETOP_13TEV_TCHANNEL-XSEC",
     ]
-    dataset_inputs = [{"dataset": d, "frac": 0.6, "variant": "legacy"} for d in datasets]
+    dataset_inputs = [{"dataset": d, "variant": "legacy"} for d in datasets]
     n3fit_input["dataset_inputs"] = dataset_inputs
+    # Using diaogonal basis
+    n3fit_input["diagonal_basis"] = True
+    n3fit_input["diagonal_frac"] = 0.5
     # Exit inmediately
     n3fit_input["parameters"]["epochs"] = 1
     # Save pseudodata
@@ -311,8 +314,9 @@ def test_parallel_against_sequential(tmp_path, rep_from=6, rep_to=8):
     for csvfile_seq in folder_seq.glob("*/*.csv"):
         csvfile_par = folder_par / csvfile_seq.relative_to(folder_seq)
 
-        result_seq = pd.read_csv(csvfile_seq, sep="\t", index_col=[0, 1, 2], header=0)
-        result_par = pd.read_csv(csvfile_par, sep="\t", index_col=[0, 1, 2], header=0)
+        # Diagonal basis writes single-index csv files
+        result_seq = pd.read_csv(csvfile_seq, sep="\t", index_col=[0], header=0)
+        result_par = pd.read_csv(csvfile_par, sep="\t", index_col=[0], header=0)
         pd.testing.assert_frame_equal(result_seq, result_par)
 
     # Check the rest of the fit, while numerical differences are expected between sequential
