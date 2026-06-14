@@ -263,10 +263,6 @@ def _plot_fancy_impl(
     nkinlabels = len(table.columns)
     ndata = len(table)
 
-    # Compute shifts due to the correlated part of the exp cov matrix
-    lcd_wc = loaded_commondata_with_cuts(commondata, cutlist[0])
-    theory_predictions = results[1].central_value
-
     # This is easier than cheking every time
     if labellist is None:
         labellist = [None] * len(results)
@@ -281,36 +277,49 @@ def _plot_fancy_impl(
         # We modify the table, so we pass only the label columns
         norm_cv, _ = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
 
-    cvcols = []
-
-    # Compute systematic shifts
-    # For unknown reasons, `shifts_from_systematics` may
-    # randomly fails. If a LinAlgError is raised, shifts are not included in
-    # the final plot.
-    if with_shift:
-        try:
-            shifts, alpha = shifts_from_systematics(lcd_wc, theory_predictions)
-        except np.linalg.LinAlgError:
-            log.warning(
-                "Error occurred in computing systematic shifts for "
-                f"{info.ds_metadata.name}. These will be disregarded in the plots."
-            )
-            with_shift = False
-
+    cvcols = []     
+    
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
-        # We modify the table, so we pass only the label columns
+
         mask = cut_mask(cuts)
         cv = np.full(ndata, np.nan)
         err = np.full(ndata, np.nan)
-        # Shift the theory when with_shift option is True
-        if i == 1 and with_shift:
-            cv[mask] = result.central_value - shifts
+
+        shifts = None
+        alpha = None
+        do_shift = with_shift
+
+        # Compute shifts due to the correlated part on the experiemntal ucnertainty
+        if with_shift:
+            lcd_wc = loaded_commondata_with_cuts(commondata, cuts)
+            theory_predictions = result.central_value
+
+            # For unknown reasons, `shifts_from_systematics` may randomly fail.
+            # If a LinAlgError is raised, shifts are not included in the final plot. 
+            try:
+                shifts, alpha = shifts_from_systematics(lcd_wc, theory_predictions)
+            except np.linalg.LinAlgError:
+                log.warning(
+                    "Error occurred in computing systematic shifts for "
+                    f"{info.ds_metadata.name}. These will be disregarded in the plots."
+                )
+                do_shift = False
+
+            # Shift theory predictions, but not data
+            if i >= 1 and do_shift:
+                cv[mask] = result.central_value - shifts
+            else:
+                cv[mask] = result.central_value
+
+            # Retain only the uncorrelated part of the data error if shifting the data
+            if i == 0 and do_shift:
+                err[mask] = alpha
+            else:
+                err[mask] = result.std_error
+
+        # No shifts
         else:
             cv[mask] = result.central_value
-        # Retain only the uncorrelated part of the error if shifting the data
-        if i == 0 and with_shift:
-            err[mask] = alpha
-        else:
             err[mask] = result.std_error
 
         cv, err = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
