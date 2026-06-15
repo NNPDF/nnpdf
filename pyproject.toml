@@ -104,6 +104,8 @@ torch = {version = "*", optional = true}
 jax = {version = "*", optional = true}
 # parallel hyperopt
 pymongo = {version = "<4", optional = true}
+# HOPPET evolution backend
+hoppet = {version = "*", optional = true}
 
 # Optional dependencies
 [tool.poetry.extras]
@@ -115,6 +117,7 @@ torch = ["torch"]
 jax = ["jax"]
 hyperopt = ["hyperopt", "setuptools"]
 parallelhyperopt = ["pymongo", "hyperopt", "setuptools"]
+hoppet = ["hoppet"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
