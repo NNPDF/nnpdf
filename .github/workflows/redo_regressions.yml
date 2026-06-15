@@ -15,7 +15,7 @@ env:
 jobs:
   build:
     if: contains(github.event.pull_request.labels.*.name, 'redo-regressions')
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
       NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}

@@ -44,7 +44,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     initial: 1.5
   threshold_chi2: 10.0
   feature_scaling_points: 5
-  stopping_delta: 0.05
+  stopping_delta: 0.1
 
 fitting:
   fitbasis: CCBAR_ASYMM  # EVOL (7), EVOLQED (8), etc.
