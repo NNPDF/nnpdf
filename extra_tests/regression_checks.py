@@ -1,5 +1,5 @@
 """
-Regression tests
+Regression tests for full fits.
 """
 
 import pathlib
@@ -15,7 +15,7 @@ REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regression_fits")
 SETUPFIT_FOLDER = REGRESSION_FOLDER / "setupfits"
 
 # Avoid always round-number replicas or 1/2
-runcard_and_replicas = {
+RUNCARD_AND_REPLICAS = {
     "thcovmat": 43,
     "no_positivity": 316,
     "normal_fit": 72,
@@ -41,22 +41,29 @@ extra_tolerances_exportgrid = {"hyperopt_sampling": 1e-4, "t0theoryid": 1e-3, "n
 extra_tolerances_rel = {"hyperopt_sampling": 3e-2}
 
 
-@pytest.mark.parametrize("runcard,replica", runcard_and_replicas.items())
-def test_regression_fit(tmp_path, runcard, replica, regenerate):
-    """Runs the runcard <runcard> for <replica> in the <tmp_path> folder.
-    This test starts from an already ran setupfit and, often, from set weights.
-
-    If regenerate is set to `True`, then setupfit will be also be run.
+def prepare_runcard(tmp_path, runcard_filename):
+    """Copies the the runcard file to the path in which the test will run.
+    If there are weights to be loaded, they will also be copied to the same folder.
     """
     # Copy the runcard to the run folder
-    runcard_name = f"{runcard}.yml"
-    runcard_file = REGRESSION_FOLDER / runcard_name
+    runcard_file = REGRESSION_FOLDER / runcard_filename
     shutil.copy(runcard_file, tmp_path)
 
     # If weights have to be loaded, copy also the weights
     runcard_info = yaml_safe.load(runcard_file.read_text())
     if (wname := runcard_info.get("load")) is not None:
         shutil.copy(REGRESSION_FOLDER / wname, tmp_path)
+
+
+@pytest.mark.parametrize("runcard,replica", RUNCARD_AND_REPLICAS.items())
+def test_regression_fit(tmp_path, runcard, replica, regenerate):
+    """Runs the runcard <runcard> for <replica> in the <tmp_path> folder.
+    This test starts from an already ran setupfit and, often, from set weights.
+
+    If regenerate is set to `True`, then setupfit will be also be run.
+    """
+    runcard_filename = f"{runcard}.yml"
+    prepare_runcard(tmp_path, runcard_filename)
 
     # Copy setupfit, then run n3fit
     setupfit_files = SETUPFIT_FOLDER / runcard
@@ -65,7 +72,7 @@ def test_regression_fit(tmp_path, runcard, replica, regenerate):
             raise FileNotFoundError(f"The setupfit folder {setupfit_files} could not be found")
         shutil.copytree(setupfit_files, tmp_path / runcard)
 
-    run_n3fit(runcard_name, f"{replica}", cwd=tmp_path, check=True, setupfit=regenerate)
+    run_n3fit(runcard_filename, f"{replica}", cwd=tmp_path, check=True, setupfit=regenerate)
     old_json_file = REGRESSION_FOLDER / f"{runcard}_{replica}.json"
 
     rel_error = extra_tolerances_rel.get(runcard, 1e-2)
