@@ -72,4 +72,4 @@ integrability:
 
 ############################################################
 debug: true
-double_precision: false
+double_precision: true

@@ -155,8 +155,8 @@ class ModelTrainer:
                 if not give, the photon is not generated
             replicas: list
                 list with the replicas ids to be fitted
-            trials: str
-                name of the file containing the trials defining the methodology
+            trials: dict
+                dictionary containing the trials defining the methodology
         """
         # Save all input information
         self.exp_info = list(exp_info)

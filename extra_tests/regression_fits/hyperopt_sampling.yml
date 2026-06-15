@@ -36,6 +36,8 @@ trial_specs:
   hyperscan: 260204-jcm-hyperopt
   thermalization: 400
   number_of_trials: 10
+  override:
+    epochs: 500
 load: "weights_hyperopt.weights.h5"
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
@@ -72,4 +74,4 @@ integrability:
 
 ############################################################
 debug: true
-double_precision: false
+double_precision: true
