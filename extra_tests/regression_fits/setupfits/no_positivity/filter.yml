@@ -51,6 +51,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   dropout: 0.0
   threshold_chi2: 10.0
   feature_scaling_points: 15
+  stopping_delta: 0.05
 
 fitting:
   savepseudodata: False
