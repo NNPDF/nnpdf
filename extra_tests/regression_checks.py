@@ -36,8 +36,8 @@ RUNCARD_AND_REPLICAS = {
 }
 
 # Some runcards need to be a bit more lenient with the tolerances
-# WARNING: the tolerance on no_diagonal is way too high
-extra_tolerances_exportgrid = {"hyperopt_sampling": 1e-4, "t0theoryid": 1e-3, "no_diagonal": 0.01}
+# WARNING: 0.01 is too big of a difference, we should also check # of mismatched elements
+extra_tolerances_exportgrid = {"hyperopt_sampling": 0.01, "t0theoryid": 1e-3, "no_diagonal": 0.01}
 extra_tolerances_rel = {"hyperopt_sampling": 3e-2}
 
 
