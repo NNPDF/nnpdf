@@ -1,0 +1,10 @@
+FROM debian:12-slim
+
+ARG PYTHON_V=3.12
+
+ENV MAMBA_ROOT_PREFIX="/opt/conda"
+ENV PATH="/opt/conda/bin:${PATH}"
+
+COPY build-container.sh /tmp/
+
+RUN PYTHON_V="${PYTHON_V}" /tmp/build-container.sh && rm /tmp/build-container.sh

@@ -3,6 +3,8 @@ name: Test CommonData
 
 on:
   push:
+    branches-ignore:
+      - add-container
   workflow_dispatch:
 
 jobs:

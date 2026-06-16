@@ -16,6 +16,8 @@ jobs:
   build:
     if: contains(github.event.pull_request.labels.*.name, 'redo-regressions')
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/nnpdf/nnpdf-container:latest
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
       NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
@@ -24,13 +26,14 @@ jobs:
       with:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
-    - uses: ./.github/actions/install_conda_pip
+    - name: Install NNPDF
+      run: |
+        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
+        pip install -e .[qed,tests,hyperopt]
     - name: Regenerate regressions
-      shell: bash -l {0}
       run: |
         pytest extra_tests/regression_checks.py --regenerate True
     - name: Commit
-      shell: bash -l {0}
       run: |
         git config user.name "Redo regressions bot"
         git config user.email "<>"

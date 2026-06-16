@@ -4,7 +4,11 @@ name: All tests NNPDF
 # the environment and installation steps are shared as they are using
 # the custom actions in .github/actions/
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - add-container
+
 # Define a group based on on branch name (github.head_ref) and .... (github.ref)
 # use this group to identify which processes to cancel due to cancel-in-progress
 concurrency:
