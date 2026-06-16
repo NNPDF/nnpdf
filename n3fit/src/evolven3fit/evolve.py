@@ -24,6 +24,8 @@ from eko.io import manipulate
 from validphys.pdfbases import PIDS_DICT
 from validphys.utils import yaml_safe
 
+from . import hoppet_evolve
+
 _logger = logging.getLogger(__name__)
 
 LOG_FILE = "evolven3fit.log"
@@ -95,58 +97,13 @@ class ExportGrid:
         return self.pdfgrid.T / self.xgrid
 
 
-def evolve_exportgrid(eko_path: pathlib.Path, exportgrids: list[ExportGrid]):
+def _evolve_exportgrids_with_eko(eko_op: pathlib.Path, exportgrids: list[ExportGrid]):
     """
-    Takes the path to an EKO and a list of exportgrids,
-    returns a tuple with an info file and the
-    evolved exportgrid as a dictionary of the form:
-
-    .. code-block:: python
-
-        {
-            (Q_1^2, nf1): (replica, flavours, x),
-            (Q_2^2, nf1): (replica, flavours, x),
-            ...
-            (Q_3^2, nf2): (replica, flavours, x),
-        }
-
-
-    with the output grouped by nf and sorted in ascending order by Q2.
-
-    Parameters
-    ----------
-    eko_path: pathlib.Path
-        Path to the evolution eko
-    exportgrids: list[ExportGrid]
-        List of ExportGrid objects to be evolved
-
-    Returns
-    -------
-    info_file: eko_box.info_file
-        Dict-like object with the info file information.
-    evolved_replicas: dict
-        a dictionary containing all evolved PDFs.
-        The format of the output is
-        { (q2, flavour number): np.ndarray(replica, flavours, x) }
+    Evolves the set of exportgrids using EKO.
     """
-    # Check that all exportgrid objects have been evaluated for 1) The same value of Q, the same value of x
     ref = exportgrids[0]
-    hessian_fit = ref.hessian
-
-    for egrid in exportgrids:
-        assert egrid.q20 == ref.q20, "Different values of q0 found among the exportgrids"
-        np.testing.assert_allclose(
-            ref.xgrid, egrid.xgrid, err_msg="ExportGrids are not all evaluate at the same x nodes"
-        )
-        assert (
-            hessian_fit == egrid.hessian
-        ), "Trying to evolve hessian and non-hessian fit at the same time"
-
-    # Read the EKO and the operator and theory cards
-    eko_op = eko.EKO.read(eko_path)
     theory = eko_op.theory_card
     op = eko_op.operator_card
-
     assert ref.q20 == op.mu20, f"The EKO can only evolve from {op.mu20}, PDF asked for {ref.q20}"
 
     _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
@@ -160,7 +117,6 @@ def evolve_exportgrid(eko_path: pathlib.Path, exportgrids: list[ExportGrid]):
     if XGrid(x_grid) != eko_original_xgrid:
         new_xgrid = XGrid(x_grid)
         new_metadata = dataclasses.replace(eko_op.metadata, xgrid=new_xgrid)
-
         new_operators = {}
         for target_key in eko_op.operators:
             elem = eko_op[target_key.ep]
@@ -199,17 +155,84 @@ def evolve_exportgrid(eko_path: pathlib.Path, exportgrids: list[ExportGrid]):
 
     # output is a dictionary {(Q2, nf): (replica, flavour, x)}
     all_evolved, _ = apply.apply_grids(eko_op, np.array(all_replicas))
+    info = info_file.build(theory, op, 1, info_update={})
+
     # sort the output in terms of (Q2, nf) but grouped by nf
     sorted_evolved = dict(sorted(all_evolved.items(), key=lambda item: (item[0][1], item[0][0])))
 
-    info = info_file.build(theory, op, 1, info_update={})
+    return info, sorted_evolved
+
+
+def evolve_exportgrid(
+    eko_path: pathlib.Path, exportgrids: list[ExportGrid], theory_id: int = -1, hoppet: bool = False
+):
+    """
+    Takes the path to an EKO and a list of exportgrids,
+    returns a tuple with an info file and the
+    evolved exportgrid as a dictionary of the form:
+
+    .. code-block:: python
+
+        {
+            (Q_1^2, nf1): (replica, flavours, x),
+            (Q_2^2, nf1): (replica, flavours, x),
+            ...
+            (Q_3^2, nf2): (replica, flavours, x),
+        }
+
+
+    with the output grouped by nf and sorted in ascending order by Q2.
+
+    Parameters
+    ----------
+    eko_path: pathlib.Path
+        Path to the evolution eko
+    exportgrids: list[ExportGrid]
+        List of ExportGrid objects to be evolved
+    theory_id: int
+        Theory ID of evolution (only needed for hoppet)
+    hoppet: bool
+        Whether to use HOPPET evolution
+
+    Returns
+    -------
+    info_file: eko_box.info_file
+        Dict-like object with the info file information.
+    evolved_replicas: dict
+        a dictionary containing all evolved PDFs.
+        The format of the output is
+        { (q2, flavour number): np.ndarray(replica, flavours, x) }
+    """
+    # Check that all exportgrid objects have been evaluated for 1) The same value of Q, the same value of x
+    ref = exportgrids[0]
+    hessian_fit = ref.hessian
+
+    for egrid in exportgrids:
+        assert egrid.q20 == ref.q20, "Different values of q0 found among the exportgrids"
+        np.testing.assert_allclose(
+            ref.xgrid, egrid.xgrid, err_msg="ExportGrids are not all evaluate at the same x nodes"
+        )
+        assert (
+            hessian_fit == egrid.hessian
+        ), "Trying to evolve hessian and non-hessian fit at the same time"
+
+    if hoppet:
+        info, sorted_evolved = hoppet_evolve.evolve_exportgrids_with_hoppet(
+            eko_path, exportgrids, theory_id
+        )
+    else:
+        # We read the EKO to a temporary directory that will vanish upon exiting
+        with tempfile.TemporaryDirectory() as temp_dir:
+            eko_op = eko.EKO.read(eko_path, dest=pathlib.Path(temp_dir))
+            info, sorted_evolved = _evolve_exportgrids_with_eko(eko_op, exportgrids)
+
     info["NumMembers"] = "REPLACE_NREP"
     if hessian_fit:
         info["ErrorType"] = "hessian"
     else:
         info["ErrorType"] = "replicas"
-    info["XMin"] = float(x_grid[0])
-    info["XMax"] = float(x_grid[-1])
+    info["XMin"] = float(ref.xgrid[0])
+    info["XMax"] = float(ref.xgrid[-1])
     info["Flavors"] = basis_rotation.flavor_basis_pids
     info.setdefault("NumFlavors", 5)
 
@@ -222,6 +245,8 @@ def evolve_exportgrids_into_lhapdf(
     output_files: list[pathlib.Path],
     info_file: pathlib.Path,
     finalize: bool = False,
+    theory_id: int = -1,
+    hoppet: bool = False,
 ):
     """
     Exportgrid evolution function.
@@ -242,6 +267,10 @@ def evolve_exportgrids_into_lhapdf(
             path to the info file
         finalize: bool
             If True, try to finalize the info file, otherwise keep placeholders to be filled at a later step
+        theory_id: int
+            Theory ID of evolution (only needed for hoppet)
+        hoppet: bool
+            Whether to use HOPPET evolution
     """
     if len(exportgrids) != len(output_files):
         raise ValueError("The length of output_files and exportgrids must be equal")
@@ -253,56 +282,61 @@ def evolve_exportgrids_into_lhapdf(
 
     # all evolved is a dictionary {(Q2, nf): (replica, flavour, x)}
     # ordered first by nf and then by Q2 in ascending order
-    info, all_evolved = evolve_exportgrid(eko_path, exportgrids)
+    info, all_evolved = evolve_exportgrid(eko_path, exportgrids, theory_id=theory_id, hoppet=hoppet)
 
     # The ``dump`` functions from eko's genpdf are very opinionated regarding the output folder of the files
     # therefore we create a temporary directory where to put stuff and then move it to the right place
-    temp_dir = tempfile.TemporaryDirectory()
-    temp_path = pathlib.Path(temp_dir.name)
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = pathlib.Path(temp_dir)
 
-    if finalize:
-        info["NumMembers"] = len(exportgrids)
+        if finalize:
+            info["NumMembers"] = len(exportgrids)
 
-    genpdf.export.dump_info(temp_path, info)
-    temp_info = temp_path / f"{temp_path.stem}.info"
-    shutil.move(temp_info, info_file)
+        genpdf.export.dump_info(temp_path, info)
+        temp_info = temp_path / f"{temp_path.stem}.info"
+        shutil.move(temp_info, info_file)
 
-    # Dump LHAPDF files as .dat files in blocks of nf
-    targetgrid = exportgrids[0].xgrid.tolist()
-    q2block_per_nf = defaultdict(list)
-    for q2, nf in all_evolved.keys():
-        q2block_per_nf[nf].append(q2)
+        # Dump LHAPDF files as .dat files in blocks of nf
+        targetgrid = exportgrids[0].xgrid.tolist()
+        q2block_per_nf = defaultdict(list)
+        for q2, nf in all_evolved.keys():
+            q2block_per_nf[nf].append(q2)
 
-    for enum, (exportgrid, output_file) in enumerate(zip(exportgrids, output_files)):
-        replica_idx = exportgrid.replica
-        if replica_idx is None and exportgrid.hessian:
-            replica_idx = enum
-        blocks = []
+        for enum, (exportgrid, output_file) in enumerate(zip(exportgrids, output_files)):
+            replica_idx = exportgrid.replica
+            if replica_idx is None and exportgrid.hessian:
+                replica_idx = enum
+            blocks = []
 
-        for nf, q2grid in q2block_per_nf.items():
+            for nf, q2grid in q2block_per_nf.items():
 
-            def pdf_xq2(pid, x, Q2):
-                x_idx = targetgrid.index(x)
-                pid_idx = info["Flavors"].index(pid)
-                ret = x * all_evolved[(Q2, nf)][enum][pid_idx][x_idx]
-                return ret
+                def pdf_xq2(pid, x, Q2):
+                    x_idx = targetgrid.index(x)
+                    pid_idx = info["Flavors"].index(pid)
+                    ret = x * all_evolved[(Q2, nf)][enum][pid_idx][x_idx]
+                    return ret
 
-            block = genpdf.generate_block(
-                pdf_xq2, xgrid=targetgrid, sorted_q2grid=q2grid, pids=info["Flavors"]
-            )
-            blocks.append(block)
+                block = genpdf.generate_block(
+                    pdf_xq2, xgrid=targetgrid, sorted_q2grid=q2grid, pids=info["Flavors"]
+                )
+                blocks.append(block)
 
-        dat_path = dump_evolved_replica(blocks, temp_path, replica_idx, exportgrid.hessian)
-        if not dat_path.exists():
-            raise FileNotFoundError(
-                "The expected {dat_path} file was not found after dumping the blocks"
-            )
-        shutil.move(dat_path, output_file)
-
-    temp_dir.cleanup()
+            dat_path = dump_evolved_replica(blocks, temp_path, replica_idx, exportgrid.hessian)
+            if not dat_path.exists():
+                raise FileNotFoundError(
+                    "The expected {dat_path} file was not found after dumping the blocks"
+                )
+            shutil.move(dat_path, output_file)
 
 
-def evolve_fit(fit_folder, force, eko_path, hessian_fit=False):
+def evolve_fit(
+    fit_folder: pathlib.Path,
+    theory_id: int,
+    force: bool = False,
+    hessian_fit: bool = False,
+    eko_path: pathlib.Path = None,
+    hoppet: bool = False,
+):
     """
     Evolves all the fitted replica in fit_folder/nnfit
 
@@ -311,13 +345,16 @@ def evolve_fit(fit_folder, force, eko_path, hessian_fit=False):
 
         fit_folder: str or pathlib.Path
             path to the folder containing the fit
+        theory_id: int
+            Theory ID of evolution
         force: bool
             whether to force the evolution to be done again
-        eko_path: str or pathlib.Path
-            path where the eko is stored (if None the eko will be
-            recomputed)
         hessian_fit: bool
             wether the fit is hessian
+        eko_path: str or pathlib.Path
+            path where the eko is stored (if None the eko will be recomputed)
+        hoppet: bol
+            Whether to use HOPPET evolution
     """
     fit_folder = pathlib.Path(fit_folder)
     log_file = fit_folder / LOG_FILE
@@ -353,7 +390,9 @@ def evolve_fit(fit_folder, force, eko_path, hessian_fit=False):
         output_files.append(exportgrid_file.with_suffix(".dat"))
 
     info_path = fit_folder / "nnfit" / f"{fit_folder.name}.info"
-    evolve_exportgrids_into_lhapdf(eko_path, exportgrids, output_files, info_path)
+    evolve_exportgrids_into_lhapdf(
+        eko_path, exportgrids, output_files, info_path, theory_id=theory_id, hoppet=hoppet
+    )
 
 
 def dump_evolved_replica(evolved_blocks, dump_folder, replica_num, hessian_fit=False):

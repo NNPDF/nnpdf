@@ -106,25 +106,6 @@ def construct_evolven3fit_parser(subparsers):
     parser.add_argument(
         "--hoppet", action="store_true", help="Use Hoppet instead of EKO for the evolution"
     )
-    # Hoppet overrides
-    # note that some defaults are a bit more aggressive than hoppet's manual would like
-    # but this is to improve the agreement with EKO
-    parser.add_argument(
-        "--dy", type=float, default=0.025, help="HOPPET ln(1/x) internal grid spacing."
-    )
-    # The two below are unimportant
-    parser.add_argument(
-        "--y-order",
-        type=int,
-        default=None,
-        help="Override HOPPET interpolation order in y=ln(1/x).",
-    )
-    parser.add_argument(
-        "--lnlnq-order",
-        type=int,
-        default=None,
-        help="Override HOPPET interpolation order in lnlnQ.",
-    )
     return parser
 
 
@@ -164,19 +145,16 @@ def main():
             # to be used for the evolution will be loaded from that path.
             eko_path = args.load
 
-        if args.hoppet:
-            hoppet_evolve.evolve_fit_with_hoppet(
-                fit_folder,
-                theoryID,
-                force=args.force,
-                hessian_fit=args.hessian_fit,
-                dy=args.dy,
-                y_order=args.y_order,
-                lnlnq_order=args.lnlnq_order,
-                eko_path=eko_path,
-            )
-        else:
-            cli.cli_evolven3fit(fit_folder, args.force, eko_path, args.hessian_fit)
+        utils.check_nnfit_folder(fit_folder)
+
+        evolve.evolve_fit(
+            fit_folder,
+            theoryID,
+            force=args.force,
+            hessian_fit=args.hessian_fit,
+            eko_path=eko_path,
+            hoppet=args.hoppet,
+        )
 
     else:
         # If we are in the business of producing an eko, do some checks before starting:
