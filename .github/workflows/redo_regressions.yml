@@ -28,6 +28,7 @@ jobs:
         ref: ${{ github.event.pull_request.head.ref }}
     - name: Install NNPDF
       run: |
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
         pip install -e .[qed,tests,hyperopt]
     - name: Regenerate regressions

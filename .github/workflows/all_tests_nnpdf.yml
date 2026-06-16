@@ -57,6 +57,7 @@ jobs:
       - uses: actions/checkout@v6
       - name: Install NNPDF
         run: |
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
           echo "$NETRC_FILE" | base64 --decode > ~/.netrc
           pip install -e .[qed,tests,hyperopt]
       - name: Run regression tests
