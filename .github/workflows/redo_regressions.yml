@@ -40,5 +40,5 @@ jobs:
         git config user.email "<>"
         git add extra_tests/regression_fits/*
         git diff --cached --quiet && echo "No changes to commit." && exit 0
-        git commit -m "Automatically regenerated regressions from PR ${{ github.event.number }}, branch ${{ github.event.pull_request.head.ref }}."
-        git push origin "${{ github.event.pull_request.head.ref }}"
+        git commit -m "Automatically regenerated regressions from PR ${{ github.event.pull_request.number }}, branch ${{ github.ref_name }}."
+        git push origin "${{ github.ref_name }}"
