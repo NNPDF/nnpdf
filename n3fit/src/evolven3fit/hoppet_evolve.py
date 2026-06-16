@@ -148,8 +148,7 @@ def _configure_hoppet(hp, theory: HoppetTheory, x_grid, q_values, dy, lnlnq_orde
     xmin = float(x_grid[0])
     ymax = -np.log(xmin)
 
-    qmin = max(np.min(q_values), theory.q0)
-    # TODO: can hoppet do an invert pass over the charm threshold?
+    qmin = min(np.min(q_values), theory.q0)
     qmax = max(np.max(q_values), theory.q0)
     hp.StartExtended(
         ymax,
@@ -168,6 +167,7 @@ def _configure_hoppet(hp, theory: HoppetTheory, x_grid, q_values, dy, lnlnq_orde
     if theory.max_nf_pdf < 6:
         masses[2] = max(qmax * 2.0, masses[2])
 
+    hp.SetPoleMassVFN(*masses)
     if theory.fns == "FFNS":
         hp.SetFFN(theory.max_nf_pdf)
     elif theory.mass_scheme == "MSBAR":
@@ -260,7 +260,6 @@ def evolve_exportgrid_with_hoppet(
     eko_q_by_nf = op_card.raw["mugrid"]
     q_values = sorted({q for q, _ in eko_q_by_nf})
     all_evolved = defaultdict(list)
-    zero_pdf = np.zeros((len(basis_rotation.flavor_basis_pids), len(ref.xgrid)))
 
     try:
         _configure_hoppet(
@@ -271,17 +270,13 @@ def evolve_exportgrid_with_hoppet(
         # tensor with replicas as an index.
         # Hoppet instead will do them one by one, but hopefully
         # caches the intermediate results?
-        # Fingers crossed! # TODO: ask Alexander
         for exportgrid in exportgrids:
             evolved_replica = _evolve_one_exportgrid(
                 hoppet_module, hoppet_theory, exportgrid, eko_q_by_nf
             )
 
             for q, nf in eko_q_by_nf:
-                if q < np.sqrt(ref.q20):
-                    all_evolved[(q**2, nf)].append(zero_pdf)
-                else:
-                    all_evolved[(q**2, nf)].append(evolved_replica[(q, nf)])
+                all_evolved[(q**2, nf)].append(evolved_replica[(q, nf)])
     finally:
         hoppet_module.DeleteAll()
 

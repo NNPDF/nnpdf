@@ -82,6 +82,11 @@ class ExportGrid:
         if self.labels is None:
             self.labels = [PIDS_DICT[i] for i in self.pids]
 
+        # Setting the charm to 0 gets matching results with EKO's expanded inversion
+
+    #         self.pdfgrid[:,self.pids.index(-4)] = 0.0
+    #         self.pdfgrid[:,self.pids.index(4)] = 0.0
+
     @property
     def pdfvalues(self):
         """Return the PDF, i.e., pdfgrid / xgrid,
