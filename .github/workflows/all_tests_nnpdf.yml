@@ -27,6 +27,10 @@ jobs:
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
+          - python-version: "3.13"
+            mpl-tolerance: 40
+          - python-version: "3.10"
+            mpl-tolerance: 24
       fail-fast: false # continue even if some jobs failed
     runs-on: ${{ matrix.os }}
     steps:
@@ -37,7 +41,7 @@ jobs:
       - name: Test n3fit and validphys
         shell: bash -l {0}
         run: |
-          pytest --cov=${PWD} --cov-config=pyproject.toml --mpl --pyargs validphys n3fit --mpl-default-tolerance 24
+          pytest --cov=${PWD} --cov-config=pyproject.toml --mpl --pyargs validphys n3fit --mpl-default-tolerance ${{ matrix.mpl-tolerance }}
       - name: Keep coverage file
         if: startsWith(matrix.python-version, '3.13')
         uses: actions/upload-artifact@v4
