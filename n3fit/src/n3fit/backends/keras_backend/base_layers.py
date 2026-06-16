@@ -106,7 +106,7 @@ class VBDense(Layer):
         self.input_dim = in_features
         self.map = map
         self.prior_prec = tf.cast(prior_prec, K.floatx())
-        self.std_init = tf.cast(std_init, K.floatx())
+        self.std_init = -np.log(self.prior_prec)
         self.bayesian_bias = bayesian_bias
         self.lbound = -30 if K.floatx() == 'float64' else -20
         self.ubound = 11
