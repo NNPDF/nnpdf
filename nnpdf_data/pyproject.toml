@@ -41,9 +41,10 @@ numpy = "*"
 scipy = {version = "*", optional = true}
 openpyxl = {version = "*", optional = true}
 uproot = {version = "*", optional = true}
+pyyaml = {version = "*", optional = true}
 
 [tool.poetry.extras]
-filter = ["openpyxl", "scipy", "uproot"]
+filter = ["openpyxl", "scipy", "uproot", "pyyaml"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
