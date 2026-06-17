@@ -7,7 +7,7 @@ on: [push]
 
 jobs:
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'regenerate-data')
+    # if: contains(github.event.pull_request.labels.*.name, 'regenerate-data')
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/nnpdf/nnpdf-container:latest
