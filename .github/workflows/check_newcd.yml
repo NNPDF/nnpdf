@@ -2,12 +2,14 @@
 name: Test CommonData
 
 on:
-  push:
+  # push:
   workflow_dispatch:
 
 jobs:
   test-commondata:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/nnpdf/nnpdf-container:latest
 
     steps:
       - uses: actions/checkout@v6
@@ -15,9 +17,10 @@ jobs:
           fetch-tags: true
           fetch-depth: 0
       - name: Install NNPDF data package 🐍
-        run: pip install ./nnpdf_data/'[filter]'
+        run: |
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+          pip install ./nnpdf_data/'[filter]'
       - name: Run the filters 📦
-        shell: bash -l {0}
         run: |
           here=$PWD
           readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/commondata -name "filter.py" -print0)

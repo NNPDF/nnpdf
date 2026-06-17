@@ -1,23 +1,26 @@
 # CI script with github workflow to regenerate the data
 name: Regenerate Commondata
 
-on:
-  pull_request:
-    types: [labeled]
+on: [push]
+  # pull_request:
+  #   types: [labeled]
 
 jobs:
   build:
     if: contains(github.event.pull_request.labels.*.name, 'regenerate-data')
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/nnpdf/nnpdf-container:latest
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
       - name: Install NNPDF data package 🐍
-        run: pip install ./nnpdf_data/'[filter]'
+        run: |
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+          pip install ./nnpdf_data/'[filter]'
       - name: Run the filters 📦
-        shell: bash -l {0}
         run: |
           here=$PWD
           readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/commondata -name "filter.py" -print0)
@@ -27,7 +30,6 @@ jobs:
         id: verify-changed-files
       - name: Commit the changed files 🛎️
         if: steps.verify-changed-files.outputs.files_changed == 'true'
-        shell: bash -l {0}
         run: |
           git config user.name "Regenerate Commondata"
           git config user.email "<>"
