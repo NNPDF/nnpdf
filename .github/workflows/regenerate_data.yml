@@ -21,6 +21,7 @@ jobs:
           git config --global --add safe.directory "${GITHUB_WORKSPACE}"
           pip install ./nnpdf_data/'[filter]'
       - name: Run the filters 📦
+        shell: bash
         run: |
           here=$PWD
           readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/commondata -name "filter.py" -print0)
