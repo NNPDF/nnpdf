@@ -442,3 +442,5 @@ sv_results
 
 
 # End of https://www.gitignore.io/api/c++,latex,cmake,python,jupyternotebook,qtcreator,vim
+extra_tests/**/filter/
+extra_tests/**/nnfit/

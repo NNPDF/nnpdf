@@ -1,3 +1,5 @@
+.. _conda-packages:
+
 How to build conda-packages
 ---------------------------
 

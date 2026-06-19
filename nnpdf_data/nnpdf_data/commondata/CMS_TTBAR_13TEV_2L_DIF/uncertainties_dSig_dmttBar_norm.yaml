@@ -25,38 +25,38 @@ definitions:
     type: CORR
 bins:
 - ArtUnc_1: 1.68424966e-04
-  ArtUnc_2: -7.35143680e-05
+  ArtUnc_2: 7.35143680e-05
   ArtUnc_3: 8.45460577e-06
-  ArtUnc_4: -2.65770955e-06
+  ArtUnc_4: 2.65770955e-06
   ArtUnc_5: 4.64805401e-07
   ArtUnc_6: 9.31507153e-08
 - ArtUnc_1: -1.77220585e-04
-  ArtUnc_2: -6.65144034e-05
+  ArtUnc_2: 6.65144034e-05
   ArtUnc_3: 9.03007785e-06
-  ArtUnc_4: -3.12504751e-06
+  ArtUnc_4: 3.12504751e-06
   ArtUnc_5: 5.28285452e-07
   ArtUnc_6: 1.05876848e-07
 - ArtUnc_1: 1.05613423e-05
-  ArtUnc_2: 5.13163372e-05
+  ArtUnc_2: -5.13163372e-05
   ArtUnc_3: 3.14463314e-05
-  ArtUnc_4: -6.88674580e-06
+  ArtUnc_4: 6.88674580e-06
   ArtUnc_5: 9.63665441e-07
   ArtUnc_6: 1.84137275e-07
 - ArtUnc_1: 4.49933553e-06
-  ArtUnc_2: 1.17419645e-05
+  ArtUnc_2: -1.17419645e-05
   ArtUnc_3: -3.42675963e-05
-  ArtUnc_4: -6.61575884e-06
+  ArtUnc_4: 6.61575884e-06
   ArtUnc_5: 1.38647543e-06
   ArtUnc_6: 2.52025016e-07
 - ArtUnc_1: -3.67515539e-07
-  ArtUnc_2: 2.77930673e-06
+  ArtUnc_2: -2.77930673e-06
   ArtUnc_3: 4.03821181e-06
-  ArtUnc_4: 1.00336926e-05
+  ArtUnc_4: -1.00336926e-05
   ArtUnc_5: 1.85233903e-06
   ArtUnc_6: 3.53673157e-07
 - ArtUnc_1: 1.97509807e-07
-  ArtUnc_2: 7.82149124e-07
+  ArtUnc_2: -7.82149124e-07
   ArtUnc_3: -5.11201383e-07
-  ArtUnc_4: -5.45200289e-08
+  ArtUnc_4: 5.45200289e-08
   ArtUnc_5: -2.00917879e-06
   ArtUnc_6: 6.37686390e-07

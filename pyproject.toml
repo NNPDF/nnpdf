@@ -63,7 +63,6 @@ python = ">=3.9"
 shapley-values = {git = "https://github.com/rbonnetguerrini/shapley-values.git", branch = "main"}
 matplotlib = "^3.9"
 pineappl = "^1.0.0"
-# TODO: make the code compatible with pandas 3
 pandas = "*"
 numpy = "*"
 "ruamel.yaml" = {version = ">=0.19.1", extras=["oldlibyaml"]}
@@ -75,6 +74,7 @@ packaging = "*"
 psutil = "*"
 tensorflow = "*"
 keras = "^3.1"
+tensorboard = "*" # keras requires tensorboard but some versions are missing the dependency
 eko = "^0.15.1"
 joblib = "*"
 seaborn = "*"

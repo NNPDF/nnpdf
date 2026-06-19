@@ -67,7 +67,7 @@ In the case of conda, it defaults to ``${CONDA_PREFIX}/share/NNPDF``.
 It is possible to configure where to download theory and results using a ``nnprofile`` file as described in :ref:`nnprofile`.
 
 
-
+.. _docker:
 
 Using the code with docker
 --------------------------

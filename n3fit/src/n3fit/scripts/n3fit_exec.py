@@ -10,14 +10,21 @@ import re
 import shutil
 import sys
 
+import pandas as pd
 from ruamel.yaml import error
 
+from n3fit.scripts.vp_setupfit import MD5_FILENAME, SetupFitError, _compute_fit_md5
 from reportengine import colors
 from reportengine.namespaces import NSList
+from validphys.api import API
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.core import FitSpec
+from validphys.hyperoptplot import generate_dictionary
+from validphys.loader import FallbackLoader, HyperscanNotFound
 from validphys.utils import yaml_safe
+
+loader = FallbackLoader()
 
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[], allow_legacy_names=False)
 
@@ -65,6 +72,11 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
+
+        # Verify vp-setupfit hash is consistent with the current fit configuration
+        # before we touch anything in the output folder.
+        self._verify_setupfit_md5()
+
         if not (self.output_path / "nnfit").is_dir():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
@@ -96,6 +108,29 @@ class N3FitEnvironment(Environment):
         # avoid conflict with setupfit
         self.input_folder = self.replica_path / INPUT_FOLDER
         self.input_folder.mkdir(exist_ok=True)
+
+    def _verify_setupfit_md5(self):
+        if self.skip_md5_check:
+            log.warning("Skipping md5 check against vp-setupfit (--skip-md5-check is set).")
+            return
+
+        md5_path = self.output_path / MD5_FILENAME
+        if not md5_path.exists():
+            raise N3FitError(
+                f"{MD5_FILENAME} file not found at {md5_path}. "
+                "Run vp-setupfit on this runcard before n3fit."
+            )
+        stored = md5_path.read_text().strip()
+        try:
+            current = _compute_fit_md5(self.config_yml, self.output_path)
+        except SetupFitError as e:
+            raise N3FitError(f"Failed to compute current fit md5: {e}") from e
+        if stored != current:
+            raise N3FitError(
+                f"md5 mismatch in {self.output_path}: stored {stored} != current {current}. "
+                "The runcard changed since vp-setupfit was run. Re-run vp-setupfit (or pass "
+                "--skip-md5-check to override this check if this is the desired behaviour)."
+            )
 
     @classmethod
     def ns_dump_description(cls):
@@ -163,6 +198,9 @@ class N3FitConfig(Config):
             )
             N3FIT_FIXED_CONFIG['point_prescriptions'] = thconfig.get('point_prescriptions')
             N3FIT_FIXED_CONFIG['user_covmat_path'] = thconfig.get('user_covmat_path')
+            # vp-setupfit has already written the theory-covmat CSV. n3fit
+            # should load it instead of rebuilding from scratch.
+            N3FIT_FIXED_CONFIG['load_thcovmat_from_file'] = True
 
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -235,6 +273,38 @@ class N3FitConfig(Config):
             }
         return HyperScanner(parameters, hyperscan_config, **extra_args)
 
+    def parse_trial_specs(self, trial_specs):
+        return trial_specs
+
+    def produce_trials(self, trial_specs={}):
+        """Read the input hyperscan and produce a dictionary containing
+        the settings of the best trials.
+
+        The trial specs can include overrides as a dict, e.g.,
+            epochs: 500
+        such that the value for the number of epochs will be 500 for all trials.
+        """
+
+        if not trial_specs:
+            return {}
+
+        try:
+            hyperscan = loader.check_hyperscan(trial_specs['hyperscan'])
+        except HyperscanNotFound as e:
+            log.warning(e)
+        dict_trials = generate_dictionary(hyperscan.tries_files[1].parent, "average")
+        hyperopt_dataframe = pd.DataFrame(dict_trials)
+        n_termalization = trial_specs['thermalization']
+        n_best = trial_specs['number_of_trials']
+        best = (
+            hyperopt_dataframe[n_termalization:].sort_values('loss')[:n_best].to_dict(orient='list')
+        )
+        best['number_of_trials'] = n_best
+
+        for key, setting in trial_specs.get("override", {}).items():
+            best[key] = [setting] * n_best
+        return best
+
 
 class N3FitApp(App):
     """The class which parsers and performs the fit"""
@@ -242,8 +312,8 @@ class N3FitApp(App):
     environment_class = N3FitEnvironment
     config_class = N3FitConfig
 
-    def __init__(self):
-        super().__init__(name="n3fit", providers=N3FIT_PROVIDERS)
+    def __init__(self, name="n3fit", providers=N3FIT_PROVIDERS):
+        super().__init__(name=name, providers=providers)
 
     @property
     def argparser(self):
@@ -280,6 +350,12 @@ class N3FitApp(App):
             help="End of the range of replicas to compute",
             type=check_positive,
         )
+        parser.add_argument(
+            "--skip-md5-check",
+            help="Skip the integrity check against the md5 written by vp-setupfit.",
+            action="store_true",
+            default=False,
+        )
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
@@ -309,6 +385,7 @@ class N3FitApp(App):
             self.environment.db_host = self.args["db_host"]
             self.environment.db_port = self.args["db_port"]
             self.environment.db_name = self.args["db_name"]
+            self.environment.skip_md5_check = self.args["skip_md5_check"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")

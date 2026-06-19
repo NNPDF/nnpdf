@@ -15,6 +15,7 @@ import pytest
 
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import ReplicaSettings, generate_pdf_model
+from n3fit.tests.helpers import run_n3fit, run_setupfit
 from n3fit.vpinterface import N3PDF
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID
@@ -139,20 +140,22 @@ def test_restart_from_pickle(tmp_path):
     # cp runcard to tmp folder
     shutil.copy(quickpath, tmp_path)
     # run some trials for the first time
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} -o {output_restart}".split(),
+    run_n3fit(
+        quickpath,
+        f"{REPLICA} --hyperopt {n_trials_stop} -o {output_restart}",
         cwd=tmp_path,
         check=True,
     )
-    # restart the hyperopt and calculate more trials
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} -o {output_restart}".split(),
+    run_n3fit(
+        quickpath,
+        f"{REPLICA} --hyperopt {n_trials_total} -o {output_restart}",
         cwd=tmp_path,
+        setupfit=False,
         check=True,
-    )
-    # start again and calculate all trials at once
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} -o {output_direct}".split(),
+    )  # md5 already in output_restart
+    run_n3fit(
+        quickpath,
+        f"{REPLICA} --hyperopt {n_trials_total} -o {output_direct}",
         cwd=tmp_path,
         check=True,
     )
@@ -193,13 +196,15 @@ def test_parallel_hyperopt(tmp_path):
     shutil.copy(quickpath, tmp_path)
 
     # Run hyperopt sequentially
-    sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials} -o {output_sequential}".split(),
+    run_n3fit(
+        quickpath,
+        f"{REPLICA} --hyperopt {n_trials} -o {output_sequential}",
         cwd=tmp_path,
         check=True,
     )
 
     # Run hyperopt in parallel
+    run_setupfit(quickpath, cwd=tmp_path, output=output_parallel)
     workers = []
     my_env = os.environ.copy()
     my_env["CUDA_VISIBLE_DEVICES"] = ""
@@ -248,6 +253,7 @@ def test_parallel_restart(tmp_path):
 
     # cp runcard to tmp folder
     shutil.copy(quickpath, tmp_path)
+    run_setupfit(quickpath, cwd=tmp_path, output=output)
     # run some trials for the first time
     for i in range(n_workers):
         tmp = sp.Popen(

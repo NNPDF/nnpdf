@@ -5,7 +5,7 @@ import os
 import numpy as np
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -229,8 +229,8 @@ class Extractor:
         # eigenvector basis, hence they are called "artificial uncertainties".
         # The original covmat can be reconstruted as covat = art_stat.T @ art_stat
         covmat = self._build_covmat()
-        eigvals, eigvecs = np.linalg.eig(covmat)
-        art_stat = np.sqrt(eigvals) * eigvecs * self.mult_factor
+
+        art_stat = decompose_covmat(covmat) * self.mult_factor
 
         unc_vals = []  # Initialize vector of uncertainties
         for data_idx, data in enumerate(central_data):

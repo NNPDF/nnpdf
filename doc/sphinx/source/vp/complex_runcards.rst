@@ -447,10 +447,10 @@ the `fitcontext` rule. The above example can be simplified like this:
 
 Note that one still needs to set manually other keys like `description` and `pdfs`.
 
-from_: Null
------------
+``from_: Null``
+---------------
 
-As a special case, `from_: Null` will retrieve the variable from the
+As a special case, ``from_: Null`` will retrieve the variable from the
 current namespace. This comes handy to transform lists of items into
 other items. Consider for example:
 
