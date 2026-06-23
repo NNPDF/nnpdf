@@ -120,7 +120,7 @@ implemented_observables:
       - uncertainties_dSig_dpTt_wo-lumi.yaml
     interspectra:
       data_uncertainties:
-        - uncertainties_dSig_dpTt_interspectra.yaml
+      - uncertainties_dSig_dpTt_interspectra.yaml
       data_central: data_dSig_dpTt_interspectra.yaml
 
     mc_uncertainties:
@@ -193,7 +193,7 @@ implemented_observables:
       - uncertainties_dSig_dyt_wo-lumi.yaml
     interspectra:
       data_uncertainties:
-        - uncertainties_dSig_dyt_interspectra.yaml
+      - uncertainties_dSig_dyt_interspectra.yaml
       data_central: data_dSig_dyt_interspectra.yaml
 
     mc_uncertainties:
@@ -266,7 +266,7 @@ implemented_observables:
       - uncertainties_dSig_dyttBar_wo-lumi.yaml
     interspectra:
       data_uncertainties:
-        - uncertainties_dSig_dyttBar_interspectra.yaml
+      - uncertainties_dSig_dyttBar_interspectra.yaml
       data_central: data_dSig_dyttBar_interspectra.yaml
 
     mc_uncertainties:

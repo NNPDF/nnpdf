@@ -4,10 +4,10 @@ definitions:
     treatment: ADD
     type: CORR
 bins:
-- topo_unc: 0.02119572981513834
-- topo_unc: 0.019566657364117186
-- topo_unc: 0.016398234712231667
-- topo_unc: 0.007663361284564472
+- topo_unc: 0.04239145963027668
+- topo_unc: 0.03913331472823437
+- topo_unc: 0.032796469424463334
+- topo_unc: 0.015326722569128945
 - topo_unc: 0.0
 - topo_unc: 0.0
 - topo_unc: 0.0
