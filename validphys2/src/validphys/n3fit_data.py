@@ -171,12 +171,12 @@ class _Masks(TupleComp):
         super().__init__(group_name, seed)
 
 
-def diagonal_masks(data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=0.75):
+def diagonal_masks(data, replica_trvlseed, dataset_inputs_covmat_t0_considered, diagonal_frac=0.75):
 
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
     rng = np.random.Generator(np.random.PCG64(nameseed))
-    ndata = len(dataset_inputs_fitting_covmat)
+    ndata = len(dataset_inputs_covmat_t0_considered)
 
     # construct training mask by selecting a fraction of the eigenvalues
     trmax = int(ndata * diagonal_frac)
@@ -319,39 +319,56 @@ def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hash
 
 
 @functools.lru_cache
-def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, diagonal_basis=True):
-    """Returns the inverse covmats for training, validation and total
-    attending to the right masks and whether it is diagonal or not.
+def _inv_covmat_prepared(
+    _hashed_dataset_inputs_fitting_covmat,
+    fitting_covmat_name,
+    output_path,
+    use_thcovmat_in_fitting=False,
+    diagonal_basis=True,
+):
+    """Prepare the covariance matrix and its inverse, optionally transforming to diagonal basis.
 
-    Since the masks and number of datapoints need to be treated for 1-point datasets
-    it also returns the right ndata and masks for training and validation:
+    Parameters
+    ----------
+    _hashed_dataset_inputs_fitting_covmat : Hashrray
+        Wrapped covariance matrix for caching purposes.
+    output_path : Path
+        Path to output directory containing diagonal basis data if needed.
+    diagonal_basis : bool, optional
+        If True, load pre-computed diagonal basis from tables. If False, use the
+        covariance matrix directly and compute the inverse via correlation matrix
+        inversion. Default is True.
 
+    Returns
+    -------
+    covmat : np.ndarray
+        The covariance matrix (diagonal if diagonal_basis=True, full otherwise).
+    inv_total : np.ndarray
+        The inverse of the covariance matrix.
+    diag_rot : np.ndarray or None
+        The rotation matrix (eigenvectors transposed) for diagonal basis transformation.
+        Only returned when diagonal_basis=True, otherwise None.
+    eig_vals : np.ndarray or None
+        The eigenvalues of the correlation matrix. Only returned when
+        diagonal_basis=True, otherwise None.
     """
     log.info(
-        f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}, diagonal_basis={diagonal_basis}"
+        f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}"
     )
-    covmat = _hashed_dataset_inputs_fitting_covmat.array
-    diagonal_rotation = None
+
+    diag_rot = None
     eig_vals = None
 
     if diagonal_basis:
-        log.info("working in diagonal basis.")
-
-        # convert covmat to correlation
-        diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
-        cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
-
-        # diagonalise the correlation matrix
-        eig_vals, uT = np.linalg.eigh(cormat)
-        uT = np.einsum("i, ik -> ik", diag_inv_sqrt, uT)
-        diagonal_rotation = uT.T
-
-        ndata = len(eig_vals)
-
+        eigensystem = pd.read_csv(
+            fitting_covmat_name, index_col=[0], header=[0], sep="\t|,", engine="python"
+        )
+        diag_rot = eigensystem.iloc[:, 1:].values
+        eig_vals = eigensystem["eig_val"].values
+        covmat = np.diag(eig_vals)
         inv_total = np.diag(1 / eig_vals)
-
     else:
-
+        covmat = _hashed_dataset_inputs_fitting_covmat.array
         diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
         cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
         inv_total = (
@@ -360,7 +377,60 @@ def _inv_covmat_prepared(_hashed_dataset_inputs_fitting_covmat, diagonal_basis=T
             @ np.diag(diag_inv_sqrt_total)
         )
 
-    return (covmat, inv_total, diagonal_rotation, eig_vals)
+    return covmat, inv_total, diag_rot, eig_vals
+
+
+def setupfit_fitting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
+    """Prepare the fitting covariance matrix in setupfit and store it for later use
+    in the fit. Theory contributions and diagonal basis transformation are specified
+    in the input configuration.
+
+    Parameters
+    ----------
+    dataset_inputs_fitting_covmat : np.ndarray
+        The experimental covariance matrix from the datasets.
+    diagonal_basis : bool, optional
+        If True, transform the covariance matrix to diagonal basis by extracting
+        eigenvalues and eigenvectors of the correlation matrix. Default is True.
+
+    Returns
+    -------
+    covmat : np.ndarray
+        The prepared covariance matrix (sum of experimental and theory covmats).
+    diagonal_rotation : np.ndarray or None
+        The rotation matrix (transposed eigenvectors) to transform data to diagonal basis.
+        Only returned if diagonal_basis=True, otherwise None.
+    eig_vals : np.ndarray or None
+        The eigenvalues of the correlation matrix in diagonal basis.
+        Only returned if diagonal_basis=True, otherwise None.
+    """
+    covmat = dataset_inputs_fitting_covmat
+    diagonal_rotation = None
+    eig_vals = None
+
+    if diagonal_basis:
+        log.info("working in diagonal basis.")
+
+        # convert covmat to correlation
+        sigma = np.sqrt(np.diag(covmat))
+        sigma_inv = 1 / sigma
+        cormat = np.einsum("i, ij, j -> ij", sigma_inv, covmat, sigma_inv)
+
+        # diagonalise the correlation matrix
+        eig_vals, v = np.linalg.eigh(cormat)  # cormat = V @ diag(eig_vals) @ V.T
+        u = np.einsum("i, ij -> ij", sigma, v)
+        rec_covmat = u @ np.diag(eig_vals) @ u.T
+        np.testing.assert_allclose(
+            covmat,
+            rec_covmat,
+            rtol=1e-4,
+            atol=1e-5,
+            err_msg="Diagonalisation failed to reproduce original covmat",
+        )
+
+        diagonal_rotation = np.einsum("ij, j -> ij", v.T, sigma_inv)
+
+    return covmat, diagonal_rotation, eig_vals
 
 
 def fitting_data_dict(
@@ -420,7 +490,7 @@ def fitting_data_dict(
     expdata = make_replica
     fittable_datasets = fittable_datasets_masked
 
-    # all covmat manipulation is shared across the replicas for memory purposes
+    # load covmat stored at the time of vp-setupfit
     covmat, inv_true, diag_rot, eig_vals = _inv_covmat_prepared
 
     # get the masks - different for each replica so fine to call here
@@ -548,6 +618,27 @@ def fitting_data_dict(
 exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
 
 
+@table
+def fitting_covmat_table(output_path, setupfit_fitting_covmat, data_index, diagonal_basis=True):
+    """
+    Stores the fitting covariance matrix if diagonal_basis is False, else store the rotation matrix and eigenvalues
+    """
+    covmat, diagonal_rotation, eig_vals = setupfit_fitting_covmat
+
+    if not diagonal_basis:
+        log.info("Saving fitting covmat")
+        if not hasattr(covmat, "index"):
+            return pd.DataFrame(covmat, index=data_index, columns=data_index)
+        else:
+            return covmat
+
+    df_rotation = pd.DataFrame(diagonal_rotation)
+    df_rotation.insert(0, "eig_val", eig_vals)
+    df_rotation.index = pd.Index([f"eigenmode {i}" for i in range(len(eig_vals))])
+    log.info("Saving diagonal-basis rotation table")
+    return df_rotation
+
+
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
     """For a single replica return a tuple of the inputs to this function.
     Used with `collect` over replicas to avoid having to perform multiple
@@ -575,7 +666,17 @@ experiment_indexed_make_replica = collect(
 )
 
 
-def replica_pseudodata(experiment_indexed_make_replica, replica):
+def diagonal_indexed_make_replica(indexed_make_replica, fitting_data_dict):
+    """Rotate one group pseudodata block to the diagonal basis."""
+    values = indexed_make_replica.iloc[:, 0].to_numpy()
+    diag_rot = fitting_data_dict.get("data_transformation")
+    rotated_values = values if diag_rot is None else diag_rot @ values
+    return pd.DataFrame(rotated_values, columns=["data"])
+
+
+def replica_pseudodata(
+    experiment_indexed_make_replica, diagonal_indexed_make_replica, replica, diagonal_basis=True
+):
     """Creates a pandas DataFrame containing the generated pseudodata.
     The index is :py:func:`validphys.results.experiments_index` and the columns
     is the replica numbers.
@@ -586,8 +687,16 @@ def replica_pseudodata(experiment_indexed_make_replica, replica):
     `fitting::savepseudodata` is `true` (as per the default setting)
     The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
     """
-    df = pd.concat(experiment_indexed_make_replica)
-    df.columns = [f"replica {replica}"]
+    replica_column = f"replica {replica}"
+
+    if not diagonal_basis:
+        df = pd.concat(experiment_indexed_make_replica)
+        df.columns = [replica_column]
+        return df
+
+    df = diagonal_indexed_make_replica.copy()
+    df.columns = [replica_column]
+    df.index = pd.Index([f"eigenmode {i}" for i in range(len(df))])
     return df
 
 
