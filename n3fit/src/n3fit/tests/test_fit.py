@@ -73,7 +73,14 @@ def test_initialize_seeds():
 
 
 def check_fit_results(
-    base_path, fitname, replica, regression_json, regenerate=False, rel_error=2e-3, timing=False
+    base_path,
+    fitname,
+    replica,
+    regression_json,
+    regenerate=False,
+    rel_error=2e-3,
+    atol_exportgrid=1e-5,
+    timing=False,
 ):
     """Regression test checker, checks that the given fit produces the right
     json and exportgrid files.
@@ -84,10 +91,21 @@ def check_fit_results(
     The regression exportgrid is understood to be the same as the ``.json`` file with the
     extension changed to ``.exportgrid``.
 
-    If ``regenerate`` is set to True, it will generate new files instead of testing
-    """
-    new_json_file = base_path / f"{fitname}/nnfit/replica_{replica}/{fitname}.json"
+    The relative error ``rel_error`` is used as given for the exact checks, and with a factor of 10
+    for the relaxed checks (like arc length and integrability).
+    The ``atol_exportgrid`` corresponds to the absolute tolerance for exportgrid.
 
+    The absolute error is only taken into account for the relaxed checks
+    (and with a factor of 10 for the values of exportgrid).
+
+    If ``regenerate`` is set to True, it will generate new files instead of testing.
+    The new files to be regenerated are:
+        - json, which will be copied to the <regression_json>
+        - exportgrid, which will be copied to the same folder as regression_json with `.exportgrid`
+        - setupfit folder, which will be copied to the same folder
+    """
+    base_runfolder = base_path / fitname
+    new_json_file = base_runfolder / "nnfit" / f"replica_{replica}" / f"{fitname}.json"
     new_expgrid_file = new_json_file.with_suffix(".exportgrid")
     old_expgrid_file = regression_json.with_suffix(".exportgrid")
 
@@ -112,6 +130,7 @@ def check_fit_results(
         with open(regression_json, "w", encoding="utf-8") as fs:
             json.dump(new_json, fs, indent=2, cls=SuperEncoder)
             fs.write('\n')
+        shutil.copytree(base_runfolder, old_expgrid_file.parent / fitname, dirs_exist_ok=True)
 
     old_json = _load_json(regression_json)
 
@@ -143,7 +162,7 @@ def check_fit_results(
         reference = old_expgrid[key]
         err_msg = f"error for .exportgrid: {key}"
         if key == "pdfgrid":
-            assert_allclose(value, reference, rtol=rel_error, atol=1e-5, err_msg=err_msg)
+            assert_allclose(value, reference, rtol=rel_error, atol=atol_exportgrid, err_msg=err_msg)
         else:
             assert_equal(value, reference, err_msg=err_msg)
 
