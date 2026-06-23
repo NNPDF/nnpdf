@@ -320,14 +320,11 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
         # alphas is correlated for all datapoints and the covmat construction is
         # therefore equivalent to that of the factorization scale variations
         s = covmat_3fpt(deltas1, deltas2)
-<<<<<<< HEAD
     elif point_prescription.startswith("mtop"):
         s = covmat_3fpt(deltas1, deltas2)
-=======
     elif point_prescription == 'power corrections':
         # Shifts computed from power corrected predictions
         s = covmat_power_corrections(deltas1, deltas2)
->>>>>>> origin/master
     return s
 
 
