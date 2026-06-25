@@ -27,7 +27,7 @@ from validphys.commondata import loaded_commondata_with_cuts
 from validphys.core import CutsPolicy, MCStats, cut_mask, load_commondata
 from validphys.covmats import shifts_from_systematics, unco_unc
 from validphys.plotoptions.core import get_info, kitable, transform_result
-from validphys.results import chi2_stat_labels, chi2_stats
+from validphys.results import chi2_stat_labels, chi2_stats, DataResult
 from validphys.sumrules import POL_LIMS
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 
@@ -288,9 +288,9 @@ def _plot_fancy_impl(
         shifts = None
         alpha = None
         do_shift = with_shift
-
+        
         # Compute shifts due to the correlated part on the experiemntal ucnertainty
-        if with_shift:
+        if do_shift:
             lcd_wc = loaded_commondata_with_cuts(commondata, cuts)
             theory_predictions = result.central_value
 
@@ -298,25 +298,15 @@ def _plot_fancy_impl(
             # If a LinAlgError is raised, shifts are not included in the final plot. 
             try:
                 shifts = shifts_from_systematics(lcd_wc, theory_predictions)
-                alpha = unco_unc(lcd_wc)
             except np.linalg.LinAlgError:
                 log.warning(
                     "Error occurred in computing systematic shifts for "
                     f"{info.ds_metadata.name}. These will be disregarded in the plots."
                 )
-                do_shift = False
+                shifts = 0.
 
-            # Shift theory predictions, but not data
-            if i >= 1 and do_shift:
-                cv[mask] = result.central_value - shifts
-            else:
-                cv[mask] = result.central_value
-
-            # Retain only the uncorrelated part of the data error if shifting the data
-            if i == 0 and do_shift:
-                err[mask] = alpha
-            else:
-                err[mask] = result.std_error
+            cv[mask] = result.central_value - shifts
+            err[mask] = unco_unc(lcd_wc)
 
         # No shifts
         else:
