@@ -59,7 +59,6 @@ jobs:
     - name: Postfit and upload fit
       shell: bash -l {0}
       run: |
-        conda activate nnpdfenv
         cd $RUNFOLDER
         postfit $POSTFIT_NREP $RUNCARD --at-least-nrep
         ln -s ${PWD}/${RUNCARD} ${CONDA_PREFIX}/share/NNPDF/results
@@ -67,7 +66,7 @@ jobs:
         echo "PATH_TO_SAVE=${PWD}/${RUNCARD}.tar.gz" >> ${GITHUB_ENV}
     - name: Keep the fit as an artifact
       if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ env.RUNCARD }}.tar.gz
         path: ${{ env.PATH_TO_SAVE }}
@@ -81,7 +80,6 @@ jobs:
     - name: Building and upload report
       shell: bash -l {0}
       run: |
-        conda activate nnpdfenv
         vp-comparefits $RUNCARD $REFERENCE_SET \
                     --title "Automatic check fit $RUNCARD" \
                     --author bot \
