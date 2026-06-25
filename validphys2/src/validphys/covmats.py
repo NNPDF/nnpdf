@@ -252,23 +252,16 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
         points) containing the numerical value of the systematic shifts
         due to correlated uncertainties
     """
-
-    # Separate statistical and systematic errors
-    stat_errors = lcd_wc.stat_errors.to_numpy()
-    syst_errors = lcd_wc.systematic_errors(None)
-
-    # Determine the uncorrelated part of the error
-    alpha2 = stat_errors**2
-    is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
-    alpha2 += (syst_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
-    alpha = np.sqrt(alpha2)
+    
+    # Separate the uncorrelated and correlated parts of the exp uncertainty 
+    alpha = unco_unc(lcd_wc)
+    beta  = corr_unc(lcd_wc)
 
     if alpha.all() == 0:
         shifts = np.zeros(len(alpha))
     else:
 
         # Determine the correlated part of the error
-        beta = syst_errors.loc[:, ~is_uncorr].to_numpy()
         beta = beta / alpha[:, np.newaxis]
 
         # The number of data points and the number of correlated systematics
@@ -294,7 +287,7 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
 
     return shifts
 
-def extract_uncorr_unc(lcd_wc):
+def unco_unc(lcd_wc):
     """Extract the uncorrelated part of the experimental uncertainty
     from a :py:class:`validphys.coredata.CommonData` object
      Parameters
@@ -306,8 +299,8 @@ def extract_uncorr_unc(lcd_wc):
     -------
     alpha: np.array
         Numpy array of dimension N_dat (where N_dat is the number of data
-        points) containing the numericla value of the uncorrelated part of
-        the experimental uncertainty
+        points) containing the numerical value of the uncorrelated 
+        part of the experimental uncertainty
     """
     # Separate statistical and systematic errors
     stat_errors = lcd_wc.stat_errors.to_numpy()
@@ -320,6 +313,28 @@ def extract_uncorr_unc(lcd_wc):
     alpha = np.sqrt(alpha2)
 
     return alpha
+
+def corr_unc(lcd_wc):
+    """Extract the correlated part of the experimental uncertainty
+    from a :py:class:`validphys.coredata.CommonData` object
+     Parameters
+    ----------
+    loaded_commondata_with_cuts : validphys.coredata.CommonData
+        CommonData which stores information about systematic errors,
+        their treatment and description.
+    Returns
+    -------
+    beta: np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data
+        points) containing the numerical value of the correlated 
+        part of the experimental uncertainty
+    """
+    # Separate statistical and systematic errors
+    syst_errors = lcd_wc.systematic_errors(None)
+    is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
+    beta = syst_errors.loc[:, ~is_uncorr].to_numpy()
+
+    return beta    
     
 @check_cuts_considered
 @functools.lru_cache

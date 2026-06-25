@@ -25,7 +25,7 @@ from validphys import plotutils
 from validphys.checks import check_not_using_pdferr
 from validphys.commondata import loaded_commondata_with_cuts
 from validphys.core import CutsPolicy, MCStats, cut_mask, load_commondata
-from validphys.covmats import shifts_from_systematics
+from validphys.covmats import shifts_from_systematics, unco_unc
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
 from validphys.sumrules import POL_LIMS
@@ -297,7 +297,8 @@ def _plot_fancy_impl(
             # For unknown reasons, `shifts_from_systematics` may randomly fail.
             # If a LinAlgError is raised, shifts are not included in the final plot. 
             try:
-                shifts, alpha = shifts_from_systematics(lcd_wc, theory_predictions)
+                shifts = shifts_from_systematics(lcd_wc, theory_predictions)
+                alpha = unco_unc(lcd_wc)
             except np.linalg.LinAlgError:
                 log.warning(
                     "Error occurred in computing systematic shifts for "
