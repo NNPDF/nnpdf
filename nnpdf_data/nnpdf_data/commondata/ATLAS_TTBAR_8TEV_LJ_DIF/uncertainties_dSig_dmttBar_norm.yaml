@@ -341,7 +341,7 @@ bins:
   ArtUnc_19: 3.42118022e-07
   ArtUnc_20: 2.01077543e-08
   ArtUnc_21: 5.71134457e-08
-  ArtUnc_22: 1.39186723e-10
+  ArtUnc_22: 1.39187249e-10
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
   ArtUnc_25: 0.0
@@ -421,7 +421,7 @@ bins:
   ArtUnc_19: 3.34482597e-07
   ArtUnc_20: 2.62810991e-08
   ArtUnc_21: 9.16924805e-08
-  ArtUnc_22: 2.16633999e-10
+  ArtUnc_22: 2.16634816e-10
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
   ArtUnc_25: 0.0
@@ -500,8 +500,8 @@ bins:
   ArtUnc_18: 3.78058035e-07
   ArtUnc_19: 8.07584121e-07
   ArtUnc_20: 4.65428036e-08
-  ArtUnc_21: 9.82419195e-08
-  ArtUnc_22: 2.48803492e-10
+  ArtUnc_21: 9.82419194e-08
+  ArtUnc_22: 2.48804431e-10
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
   ArtUnc_25: 0.0
@@ -575,13 +575,13 @@ bins:
   ArtUnc_13: -6.06996872e-07
   ArtUnc_14: 4.03755932e-06
   ArtUnc_15: 2.69135078e-06
-  ArtUnc_16: -5.99439900e-07
+  ArtUnc_16: -5.99439901e-07
   ArtUnc_17: 4.15685723e-06
   ArtUnc_18: -7.92405784e-07
   ArtUnc_19: 7.77833832e-08
   ArtUnc_20: 1.75282548e-08
   ArtUnc_21: 1.55030683e-07
-  ArtUnc_22: 3.38259334e-10
+  ArtUnc_22: 3.38260610e-10
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
   ArtUnc_25: 0.0
@@ -661,7 +661,7 @@ bins:
   ArtUnc_19: 2.49796626e-06
   ArtUnc_20: 1.49940476e-07
   ArtUnc_21: 1.81597592e-07
-  ArtUnc_22: 5.55223147e-10
+  ArtUnc_22: 5.55225243e-10
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
   ArtUnc_25: 0.0
@@ -741,7 +741,7 @@ bins:
   ArtUnc_19: -1.03409467e-06
   ArtUnc_20: -1.79441382e-07
   ArtUnc_21: 7.34998385e-07
-  ArtUnc_22: 1.19011208e-09
+  ArtUnc_22: 1.19011657e-09
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
   ArtUnc_25: 0.0
@@ -808,20 +808,20 @@ bins:
   ArtUnc_6: -2.09652196e-08
   ArtUnc_7: -8.82012617e-10
   ArtUnc_8: -3.85258165e-08
-  ArtUnc_9: -3.67764403e-08
+  ArtUnc_9: -3.67764404e-08
   ArtUnc_10: -2.96500067e-08
   ArtUnc_11: 4.84818583e-08
   ArtUnc_12: 5.83754164e-08
   ArtUnc_13: -3.79717767e-08
   ArtUnc_14: -4.35230109e-08
   ArtUnc_15: -9.44605746e-08
-  ArtUnc_16: 7.77689100e-08
+  ArtUnc_16: 7.77689101e-08
   ArtUnc_17: -1.38772245e-07
   ArtUnc_18: -1.29144394e-07
-  ArtUnc_19: -2.82112769e-07
+  ArtUnc_19: -2.82112768e-07
   ArtUnc_20: 5.84390859e-08
   ArtUnc_21: -6.05203899e-07
-  ArtUnc_22: 1.78496757e-09
+  ArtUnc_22: 1.78497431e-09
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
   ArtUnc_25: 0.0

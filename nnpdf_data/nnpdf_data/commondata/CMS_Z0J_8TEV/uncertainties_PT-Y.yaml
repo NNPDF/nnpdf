@@ -607,7 +607,7 @@ bins:
   art_corr_unc_45: 3.94105206e-03
   art_corr_unc_46: 1.38700204e-05
   art_corr_unc_47: 9.26002490e-06
-  art_corr_unc_48: 2.03490566e-07
+  art_corr_unc_48: 2.03490567e-07
   art_corr_unc_49: 2.70369067e-06
   art_corr_unc_50: 6.06026828e-07
   corr_lumi_unc: 1.60784
@@ -752,7 +752,7 @@ bins:
   art_corr_unc_37: -7.82309881e-04
   art_corr_unc_38: 8.28187831e-04
   art_corr_unc_39: 2.67580106e-04
-  art_corr_unc_40: 1.57112645e-04
+  art_corr_unc_40: 1.57112644e-04
   art_corr_unc_41: 2.80391046e-04
   art_corr_unc_42: 2.31424081e-04
   art_corr_unc_43: 2.98402811e-04
@@ -912,7 +912,7 @@ bins:
   art_corr_unc_44: -1.26922910e-04
   art_corr_unc_45: 7.42065941e-05
   art_corr_unc_46: -4.63997689e-07
-  art_corr_unc_47: 7.78006263e-08
+  art_corr_unc_47: 7.78006262e-08
   art_corr_unc_48: 1.38496663e-06
   art_corr_unc_49: -1.54745864e-07
   art_corr_unc_50: -3.29231733e-07
@@ -1271,7 +1271,7 @@ bins:
   art_corr_unc_46: -4.91769957e-03
   art_corr_unc_47: 2.31299867e-04
   art_corr_unc_48: -1.28671718e-02
-  art_corr_unc_49: 5.03885265e-04
+  art_corr_unc_49: 5.03885264e-04
   art_corr_unc_50: -1.58039616e-04
   corr_lumi_unc: 1.59172000e-02
 - art_corr_unc_1: 2.62202338e+02
@@ -1319,7 +1319,7 @@ bins:
   art_corr_unc_43: -2.80642636e-05
   art_corr_unc_44: -3.53336012e-05
   art_corr_unc_45: -4.23631685e-05
-  art_corr_unc_46: 5.04099906e-09
+  art_corr_unc_46: 5.04099905e-09
   art_corr_unc_47: 1.08703638e-07
   art_corr_unc_48: -3.13889917e-08
   art_corr_unc_49: -5.20623619e-08
@@ -1626,7 +1626,7 @@ bins:
   art_corr_unc_44: 1.36869599e-04
   art_corr_unc_45: -1.52870532e-03
   art_corr_unc_46: 2.01059669e-05
-  art_corr_unc_47: 9.26203778e-07
+  art_corr_unc_47: 9.26203779e-07
   art_corr_unc_48: 4.84568896e-06
   art_corr_unc_49: 2.24627317e-06
   art_corr_unc_50: 3.36192418e-06
@@ -1882,7 +1882,7 @@ bins:
   art_corr_unc_45: 7.81114453e-05
   art_corr_unc_46: -8.99264607e-07
   art_corr_unc_47: -1.01364255e-06
-  art_corr_unc_48: -6.96411337e-08
+  art_corr_unc_48: -6.96411338e-08
   art_corr_unc_49: -3.22941003e-07
   art_corr_unc_50: -3.24096637e-07
   corr_lumi_unc: 50.258
@@ -2290,7 +2290,7 @@ bins:
   art_corr_unc_45: -3.63259599e-04
   art_corr_unc_46: -1.91429475e-03
   art_corr_unc_47: 2.04631162e-03
-  art_corr_unc_48: 1.41110914e-04
+  art_corr_unc_48: 1.41110915e-04
   art_corr_unc_49: -1.28029326e-02
   art_corr_unc_50: 2.96496126e-05
   corr_lumi_unc: 1.21082000e-02
@@ -2596,7 +2596,7 @@ bins:
   art_corr_unc_45: -7.79768377e-03
   art_corr_unc_46: 2.56940603e-06
   art_corr_unc_47: -9.54980047e-06
-  art_corr_unc_48: -4.03577912e-07
+  art_corr_unc_48: -4.03577913e-07
   art_corr_unc_49: 6.63590758e-06
   art_corr_unc_50: 7.26085263e-06
   corr_lumi_unc: 1.2324
@@ -2647,7 +2647,7 @@ bins:
   art_corr_unc_45: -7.44425988e-03
   art_corr_unc_46: 9.87039735e-06
   art_corr_unc_47: -8.56509364e-06
-  art_corr_unc_48: 2.02942268e-08
+  art_corr_unc_48: 2.02942266e-08
   art_corr_unc_49: 9.15909645e-06
   art_corr_unc_50: 1.25456766e-05
   corr_lumi_unc: 0.73788
