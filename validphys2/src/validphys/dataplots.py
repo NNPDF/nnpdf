@@ -285,35 +285,79 @@ def _plot_fancy_impl(
         cv = np.full(ndata, np.nan)
         err = np.full(ndata, np.nan)
 
-        #shifts = None
-        #alpha = None
-        #do_shift = with_shift
-        
-        # Compute shifts due to the correlated part on the experiemntal ucnertainty
+        # With shifts
         if with_shift:
+            shifts = 0.
             lcd_wc = loaded_commondata_with_cuts(commondata, cuts)
-            theory_predictions = result.central_value
 
-            # For unknown reasons, `shifts_from_systematics` may randomly fail.
-            # If a LinAlgError is raised, shifts are not included in the final plot. 
-            try:
-                shifts = shifts_from_systematics(lcd_wc, theory_predictions)
-            except np.linalg.LinAlgError:
-                log.warning(
-                    "Error occurred in computing systematic shifts for "
-                    f"{info.ds_metadata.name}. These will be disregarded in the plots."
-                )
-                shifts = 0.
+            # Determine data uncertainty
+            if isinstance(result, DataResult):
+                alpha = unco_unc(lcd_wc)
+                if alpha.all() == 0.:
+                    err[mask] = result.std_error
+                    with_shift = False
+                else:
+                    err[mask] = alpha
+            # Determine theory shift
+            else:
+                err[mask] = result.std_error
+                theory_predictions = result.central_value
+                try:
+                    shifts = shifts_from_systematics(lcd_wc, theory_predictions)
+                except np.linalg.LinAlgError:
+                    log.warning(
+                        "Error occurred in computing systematic shifts for "
+                        f"{info.ds_metadata.name}. These will be disregarded in the plots."
+                    )
+                    with_shift = False
 
             cv[mask] = result.central_value - shifts
-            err[mask] = unco_unc(lcd_wc)
-
+    
         # No shifts
         else:
             cv[mask] = result.central_value
             err[mask] = result.std_error
 
         cv, err = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
+
+        """
+        # Compute shifts due to the correlated part on the experimental ucnertainty
+        if with_shift and not isinstance(result, DataResult):
+            lcd_wc = loaded_commondata_with_cuts(commondata, cuts)
+            theory_predictions = result.central_value
+
+            # Check if the uncorrelated part of the uncertainty is zero or non-zero
+            #alpha = unco_unc(lcd_wc)
+            if alpha.all() == 0.:
+                shifts = 0.
+                err[mask] = result.std_error
+                with_shift = False
+            else:
+            
+                # For unknown reasons, `shifts_from_systematics` may randomly fail.
+                # If a LinAlgError is raised, shifts are not included in the final plot. 
+                try:
+                    shifts = shifts_from_systematics(lcd_wc, theory_predictions)
+                    err[mask] = alpha
+                except np.linalg.LinAlgError:
+                    log.warning(
+                        "Error occurred in computing systematic shifts for "
+                        f"{info.ds_metadata.name}. These will be disregarded in the plots."
+                    )
+                    shifts = 0.
+                    err[mask] = result.std_error
+                    with_shift = False
+
+            cv[mask] = result.central_value - shifts
+    
+        # No shifts
+        else:
+            cv[mask] = result.central_value
+            err[mask] = result.std_error
+
+        cv, err = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
+        """
+
 
         # By doing tuple keys we avoid all possible name collisions
         cvcol = ('cv', i)
