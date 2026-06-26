@@ -44,12 +44,34 @@ jobs:
           name: coverage-package-${{ matrix.os }}
           path: .coverage
 
+  # This check is potentially too strict
+  # if we find it fails too much, instead of changed files
+  # we'll need to look at the CSV with some tolerance
+  regression_setupfit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: "3.13"
+      - name: Run regression tests
+        shell: bash -l {0}
+        run: |
+          pytest --cov=${PWD} --cov-config=pyproject.toml extra_tests/regression_setupfit.py
+      - name: Keep coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          include-hidden-files: true
+          name: coverage-setupfit
+          path: .coverage
 
   regression_tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: "3.13"
       - name: Run regression tests
         shell: bash -l {0}
         run: |
@@ -149,7 +171,7 @@ jobs:
         cat Basic_runcard/nnfit/*/Basic_runcard.json
 
   full_coverage:
-    needs: [run_package_tests, regression_tests]
+    needs: [run_package_tests, regression_tests, regression_setupfit]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
