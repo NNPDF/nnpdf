@@ -285,12 +285,12 @@ def _plot_fancy_impl(
         cv = np.full(ndata, np.nan)
         err = np.full(ndata, np.nan)
 
-        shifts = None
-        alpha = None
-        do_shift = with_shift
+        #shifts = None
+        #alpha = None
+        #do_shift = with_shift
         
         # Compute shifts due to the correlated part on the experiemntal ucnertainty
-        if do_shift:
+        if with_shift:
             lcd_wc = loaded_commondata_with_cuts(commondata, cuts)
             theory_predictions = result.central_value
 
