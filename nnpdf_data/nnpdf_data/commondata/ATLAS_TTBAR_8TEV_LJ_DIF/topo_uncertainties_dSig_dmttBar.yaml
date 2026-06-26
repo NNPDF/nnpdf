@@ -4,7 +4,7 @@ definitions:
     treatment: ADD
     type: CORR
 bins:
-- topo_unc: 0.02343141361476022
+- topo_unc: 0.04686282722952044
 - topo_unc: 0.0
 - topo_unc: 0.0
 - topo_unc: 0.0
