@@ -230,6 +230,13 @@ class StoreCallback(CallbackStep):
         np.savez(filepath, params=trainable_weights_flat)
         log.info(f"Saved parameters at epoch {epoch} in {filepath}")
 
+    def on_train_begin(self, logs=None):
+        """Store the model parameters at initialisation (epoch 0), before any
+        gradient step has been taken."""
+        pdf_replicas = self.pdf_model.split_replicas()
+        for replica_model, weight_dir in zip(pdf_replicas, self.weight_dirs):
+            self._save_weights(0, replica_model.trainable_weights, weight_dir)
+
     def on_step_end(self, epoch, logs=None):
         """Function to be called at the end of every epoch
         Every ``check_freq`` number of epochs, the parameters of the model will
