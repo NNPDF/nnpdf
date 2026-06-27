@@ -112,11 +112,16 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
-      - - ATLAS_Z0J_8TEV_PT.pT_mll_12_20
-        - ATLAS_Z0J_8TEV_PT.pT_mll_20_30
-        - ATLAS_Z0J_8TEV_PT.pT_mll_30_46
-        - ATLAS_Z0J_8TEV_PT.pT_mll_46_66
-        - ATLAS_Z0J_8TEV_PT.pT_mll_116_150
+      - - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN1_ptZ
+        - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN2_ptZ
+        - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN3_ptZ
+        - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ
+        - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ
+      # - - ATLAS_Z0J_8TEV_PT.pT_mll_12_20
+      #   - ATLAS_Z0J_8TEV_PT.pT_mll_20_30
+      #   - ATLAS_Z0J_8TEV_PT.pT_mll_30_46
+      #   - ATLAS_Z0J_8TEV_PT.pT_mll_46_66
+      #   - ATLAS_Z0J_8TEV_PT.pT_mll_116_150
   data_uncertainties: [uncertainties_PT-M.yaml]
   variants:
     legacy_theory:

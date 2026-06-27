@@ -87,10 +87,11 @@ implemented_observables:
       theory: *id002
   theory:
     FK_tables:
-    - - ATLAS_1JET_8TEV_R06_PTY_BIN1
-      - ATLAS_1JET_8TEV_R06_PTY_BIN2
-      - ATLAS_1JET_8TEV_R06_PTY_BIN3
-      - ATLAS_1JET_8TEV_R06_PTY_BIN4
-      - ATLAS_1JET_8TEV_R06_PTY_BIN5
-      - ATLAS_1JET_8TEV_R06_PTY_BIN6
+    - - ATLAS_1JET_8TEV_R06
+    # - - ATLAS_1JET_8TEV_R06_PTY_BIN1
+    #   - ATLAS_1JET_8TEV_R06_PTY_BIN2
+    #   - ATLAS_1JET_8TEV_R06_PTY_BIN3
+    #   - ATLAS_1JET_8TEV_R06_PTY_BIN4
+    #   - ATLAS_1JET_8TEV_R06_PTY_BIN5
+    #   - ATLAS_1JET_8TEV_R06_PTY_BIN6
     operation: 'null'
