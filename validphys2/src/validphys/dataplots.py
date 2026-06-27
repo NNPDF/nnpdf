@@ -289,17 +289,10 @@ def _plot_fancy_impl(
         if with_shift:
             shifts = 0.
             lcd_wc = loaded_commondata_with_cuts(commondata, cuts)
-
-            # Determine data uncertainty
-            if isinstance(result, DataResult):
-                alpha = unco_unc(lcd_wc)
-                if alpha.all() == 0.:
-                    err[mask] = result.std_error
-                    with_shift = False
-                else:
-                    err[mask] = alpha
+            fail = False
+            
             # Determine theory shift
-            else:
+            if not isinstance(result, DataResult):
                 err[mask] = result.std_error
                 theory_predictions = result.central_value
                 try:
@@ -309,7 +302,16 @@ def _plot_fancy_impl(
                         "Error occurred in computing systematic shifts for "
                         f"{info.ds_metadata.name}. These will be disregarded in the plots."
                     )
+                    fail = True
+                    
+            # Determine data uncertainty   
+            else:
+                alpha = unco_unc(lcd_wc)
+                if alpha.all() == 0. or fail:
+                    err[mask] = result.std_error
                     with_shift = False
+                else:
+                    err[mask] = alpha
 
             cv[mask] = result.central_value - shifts
     
