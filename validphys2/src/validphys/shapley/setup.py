@@ -436,7 +436,7 @@ def setup_observables(
     # Evolution-basis flavor metadata
     sorted_fi = sorted(all_flavor_indices)
 
-    # V (FK idx 2) = V15 (FK idx 5) identically in NNPDF4.0 (c- = b- = 0).
+    # V (FK idx 3) = V15 (FK idx 6) identically in NNPDF4.0 (c- = b- = 0).
     # Treating them as separate players creates unphysical V != V15 configurations
     # when only one is perturbed, causing chi2 explosions in neutrino DIS datasets.
     # Merge them into a single compound player so both are always perturbed together.
@@ -549,12 +549,24 @@ def build_full_covmat_for_observables(observables):
 # ---------------------------------------------------------------------------
 
 def _select_pdf_members(gv, n_replicas=None, member_mode="replicas"):
-    """Select either replica members or the central member from a PDF grid."""
+    """Select members from a PDF grid.
+
+    member_mode:
+      'central'  -> only the central member (row 0).
+      'replicas' -> error members 1..n_replicas (drops the central member).
+      'all'      -> the full member array unchanged (central at row 0 followed
+                    by every error member). Use this for stats_class, which
+                    expects member 0 to be the central value. n_replicas is
+                    ignored so Hessian sets keep all eigenvector members.
+    """
     if member_mode == "central":
         return gv[:1]
+    if member_mode == "all":
+        return gv
     if member_mode != "replicas":
         raise ValueError(
-            f"Unknown member_mode '{member_mode}'. Choose from ('replicas', 'central')."
+            f"Unknown member_mode '{member_mode}'. "
+            "Choose from ('replicas', 'central', 'all')."
         )
     if n_replicas is not None:
         return gv[1: n_replicas + 1]

@@ -83,7 +83,8 @@ class NNPDFShapleyAnalyzer:
     def __init__(self, pdf, observables, flavor_info, n_replicas=None,
                  basis='evolution', enforce_sumrules=False,
                  member_mode='replicas',
-                 full_L_inv=None, full_data_central=None):
+                 full_L_inv=None, full_data_central=None,
+                 calibration_pdf=None):
         self.pdf = pdf
         self.observables = observables
         self.full_L_inv = full_L_inv
@@ -96,6 +97,18 @@ class NNPDFShapleyAnalyzer:
         if self.member_mode not in {"replicas", "central"}:
             raise ValueError(
                 f"Unknown member_mode '{member_mode}'. Use 'replicas' or 'central'."
+            )
+
+        # Calibrated-mode envelope is derived from the calibration PDF (defaults to the evaluated PDF -> native per-set uncertainty). stats_class makes the 68% band correct for Monte-Carlo and Hessian sets alike.
+        self.calibration_pdf = calibration_pdf if calibration_pdf is not None else pdf
+        self.calibration_stats_class = self.calibration_pdf.stats_class
+
+        # Treating Hessian eigenvector members as a Monte-Carlo sample is statistically invalid; per-replica evaluation only makes sense for 'replicas'-type sets.
+        if self.member_mode == "replicas" and self.pdf.error_type != "replicas":
+            raise ValueError(
+                f"member_mode='replicas' requires a Monte-Carlo PDF, but "
+                f"'{self.pdf.name}' has error_type='{self.pdf.error_type}'. "
+                "Use member_mode='central' (per_replica: false) for Hessian sets."
             )
 
         self._gv_cache: dict = {}
@@ -146,15 +159,12 @@ class NNPDFShapleyAnalyzer:
             n_replicas=self.n_replicas,
             member_mode=self.member_mode,
         )
-        if self.member_mode == "central":
-            sr_gv_calib_evol = get_pdf_grid_values_all14(
-                self.pdf,
-                type("SumruleTarget", (), {"Q0": Q0, "xgrid": sr_xgrid})(),
-                n_replicas=self.n_replicas,
-                member_mode="replicas",
-            )
-        else:
-            sr_gv_calib_evol = sr_gv_evol
+        # Calibration ensemble: full member array from the calibration PDF so stats_class sees the central member at row 0 (correct for MC and Hessian sets, and possibly a different set when transposing).
+        sr_gv_calib_evol = get_pdf_grid_values_all14(
+            self.calibration_pdf,
+            type("SumruleTarget", (), {"Q0": Q0, "xgrid": sr_xgrid})(),
+            member_mode="all",
+        )
 
         sr_gv_flav = None
         sr_gv_calib_flav = None
@@ -167,15 +177,11 @@ class NNPDFShapleyAnalyzer:
                 n_replicas=self.n_replicas,
                 member_mode=self.member_mode,
             )
-            if self.member_mode == "central":
-                sr_gv_calib_flav = get_pdf_flavor_grid_values(
-                    self.pdf,
-                    type("SumruleTarget", (), {"Q0": Q0, "xgrid": sr_xgrid})(),
-                    n_replicas=self.n_replicas,
-                    member_mode="replicas",
-                )
-            else:
-                sr_gv_calib_flav = sr_gv_flav
+            sr_gv_calib_flav = get_pdf_flavor_grid_values(
+                self.calibration_pdf,
+                type("SumruleTarget", (), {"Q0": Q0, "xgrid": sr_xgrid})(),
+                member_mode="all",
+            )
 
             evol_row_inds = evol_basis._to_indexes(FK_FLAVOURS)
             sr_rotation = evol_basis.from_flavour_mat[evol_row_inds, :]
@@ -232,6 +238,7 @@ class NNPDFShapleyAnalyzer:
                 self._sr_xgrid, mode=mode, xspace=xspace,
                 flavor_signs=perturb_signs,
                 calibration_gv=self._sr_calib_gv_evol,
+                calibration_stats=self.calibration_stats_class,
             )
         else:
             gv_flav = self._sr_gv_flav.copy()
@@ -245,6 +252,7 @@ class NNPDFShapleyAnalyzer:
                 self._sr_xgrid, mode=mode, xspace=xspace,
                 flavor_signs=perturb_signs,
                 calibration_gv=self._sr_calib_gv_flav,
+                calibration_stats=self.calibration_stats_class,
             )
             gv_pert = np.einsum(
                 'ef,rfx->rex', self._sr_rotation, gv_flav_pert
@@ -281,15 +289,14 @@ class NNPDFShapleyAnalyzer:
         return self._gv_cache[key]
 
     def _get_calibration_gv_for_entry(self, obs, entry_idx):
-        """Cached evolution-basis replica ensemble used for calibration."""
+        """Cached evolution-basis calibration ensemble (full members)."""
         key = (obs.name, entry_idx, 'evol_calib')
         if key not in self._gv_calib_cache:
             with self._gv_cache_lock:
                 if key not in self._gv_calib_cache:
                     entry = obs.fk_entries[entry_idx]
                     self._gv_calib_cache[key] = get_pdf_grid_values(
-                        self.pdf, entry, n_replicas=self.n_replicas,
-                        member_mode='replicas',
+                        self.calibration_pdf, entry, member_mode='all',
                     )
         return self._gv_calib_cache[key]
 
@@ -307,15 +314,14 @@ class NNPDFShapleyAnalyzer:
         return self._gv_cache[key]
 
     def _get_calibration_flavor_gv_for_entry(self, obs, entry_idx):
-        """Cached flavor-basis replica ensemble used for calibration."""
+        """Cached flavor-basis calibration ensemble (full members)."""
         key = (obs.name, entry_idx, 'flavor_calib')
         if key not in self._gv_calib_cache:
             with self._gv_cache_lock:
                 if key not in self._gv_calib_cache:
                     entry = obs.fk_entries[entry_idx]
                     self._gv_calib_cache[key] = get_pdf_flavor_grid_values(
-                        self.pdf, entry, n_replicas=self.n_replicas,
-                        member_mode='replicas',
+                        self.calibration_pdf, entry, member_mode='all',
                     )
         return self._gv_calib_cache[key]
 
@@ -333,15 +339,14 @@ class NNPDFShapleyAnalyzer:
         return self._gv_cache[key]
 
     def _get_calibration_gv_all14_for_entry(self, obs, entry_idx):
-        """Cached full 14-flavour replica ensemble used for calibration."""
+        """Cached full 14-flavour calibration ensemble (full members)."""
         key = (obs.name, entry_idx, 'evol_all14_calib')
         if key not in self._gv_calib_cache:
             with self._gv_cache_lock:
                 if key not in self._gv_calib_cache:
                     entry = obs.fk_entries[entry_idx]
                     self._gv_calib_cache[key] = get_pdf_grid_values_all14(
-                        self.pdf, entry, n_replicas=self.n_replicas,
-                        member_mode='replicas',
+                        self.calibration_pdf, entry, member_mode='all',
                     )
         return self._gv_calib_cache[key]
 
@@ -542,6 +547,7 @@ class NNPDFShapleyAnalyzer:
                         random_sign=random_sign, rng=rng,
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_flav_calib,
+                        calibration_stats=self.calibration_stats_class,
                     )
                     gv_pert_list.append(gv_pert)
 
@@ -590,6 +596,7 @@ class NNPDFShapleyAnalyzer:
                         random_sign=random_sign, rng=rng,
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_calib,
+                        calibration_stats=self.calibration_stats_class,
                     )
                     if sr_norm is not None:
                         fi = (range(14) if entry.hadronic else entry.flavor_indices)
@@ -1907,8 +1914,7 @@ class NNPDFShapleyAnalyzer:
                 member_mode=self.member_mode,
             )
             gv_calib_all = get_pdf_flavor_grid_values(
-                self.pdf, plot_target, n_replicas=self.n_replicas,
-                member_mode='replicas',
+                self.calibration_pdf, plot_target, member_mode='all',
             )
             # get_pdf_flavor_grid_values returns all 14 PDG flavours in
             # ALL_FLAVOURS order. Select one panel index per constituent.
@@ -1921,8 +1927,7 @@ class NNPDFShapleyAnalyzer:
                 member_mode=self.member_mode,
             )
             gv_calib = get_pdf_grid_values(
-                self.pdf, plot_target, n_replicas=self.n_replicas,
-                member_mode='replicas',
+                self.calibration_pdf, plot_target, member_mode='all',
             )
             plot_panel_labels = list(self.flavor_labels)
 
@@ -1936,6 +1941,7 @@ class NNPDFShapleyAnalyzer:
             mode=mode,
             xspace=xspace,
             calibration_gv=gv_calib,
+            calibration_stats=self.calibration_stats_class,
         )
 
         n = len(plot_panel_labels)
@@ -2047,12 +2053,14 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                  vec_sigma, vec_amplitude, vec_mode, vec_xspace,
                  n_replicas=None, basis='evolution',
                  enforce_sumrules=False, member_mode='replicas',
-                 full_L_inv=None, full_data_central=None):
+                 full_L_inv=None, full_data_central=None,
+                 calibration_pdf=None):
         super().__init__(
             pdf, observables, flavor_info,
             n_replicas=n_replicas, basis=basis,
             enforce_sumrules=enforce_sumrules, member_mode=member_mode,
             full_L_inv=full_L_inv, full_data_central=full_data_central,
+            calibration_pdf=calibration_pdf,
         )
 
         self._x_values = list(x_values)
@@ -2206,6 +2214,7 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                 self._sr_xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
                 flavor_signs=perturb_signs,
                 calibration_gv=self._sr_calib_gv_evol,
+                calibration_stats=self.calibration_stats_class,
             )
         else:  # flavor basis
             # No outer .copy() -- apply_multi_gaussian_perturbation copies internally.
@@ -2219,6 +2228,7 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                 self._sr_xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
                 flavor_signs=perturb_signs,
                 calibration_gv=self._sr_calib_gv_flav,
+                calibration_stats=self.calibration_stats_class,
             )
             gv_pert = np.einsum('ef,rfx->rex', self._sr_rotation, gv_flav_pert)
 
@@ -2268,6 +2278,7 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                         entry.xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_flav_calib,
+                        calibration_stats=self.calibration_stats_class,
                     )
                     gv_pert_list.append(gv_pert)
 
@@ -2324,6 +2335,7 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                         entry.xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_calib,
+                        calibration_stats=self.calibration_stats_class,
                     )
                     if sr_norm is not None:
                         fi_range = range(14) if entry.hadronic else entry.flavor_indices
