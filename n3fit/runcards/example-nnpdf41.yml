@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ######################################################################################
-description: Runcard for the NNPDF4.1 series of fits -- last updated 11 June 2026; WIP
+description: Runcard for the NNPDF4.1 series of fits -- last updated 29 June 2026; cuts of numerical origin lifted; 1% extra uncertainty on ZpT data removed; resummation K-factors added to ZpT data; EWK corrections added; ewk cuts lifted; no new data sets added.
 
 ######################################################################################
 dataset_inputs:
@@ -31,28 +31,28 @@ dataset_inputs:
 - {dataset: CDF_Z0_1P96TEV_ZRAP}
 - {dataset: D0_Z0_1P96TEV_ZRAP}
 - {dataset: D0_WPWM_1P96TEV_ASY}
-- {dataset: ATLAS_WPWM_7TEV_36PB_ETA}
-- {dataset: ATLAS_Z0_7TEV_36PB_ETA}
-- {dataset: ATLAS_Z0_7TEV_49FB_HIMASS}
-- {dataset: ATLAS_Z0_7TEV_LOMASS_M}
-- {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA}
-- {dataset: ATLAS_Z0_7TEV_46FB_CC-Y}
-- {dataset: ATLAS_Z0_7TEV_46FB_CF-Y}
+- {dataset: ATLAS_WPWM_7TEV_36PB_ETA, cfac: [EWK]}
+- {dataset: ATLAS_Z0_7TEV_36PB_ETA, cfac: [EWK]}
+- {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, cfac: [EWK]}
+- {dataset: ATLAS_Z0_7TEV_LOMASS_M, cfac: [EWK]}
+- {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA, cfac: [EWK]}
+- {dataset: ATLAS_Z0_7TEV_46FB_CC-Y, cfac: [EWK]}
+- {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, cfac: [EWK]}
 - {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y}
-- {dataset: ATLAS_Z0_13TEV_TOT, cfac: [NRM]}
-- {dataset: ATLAS_WPWM_13TEV_TOT, cfac: [NRM]}
+- {dataset: ATLAS_Z0_13TEV_TOT, cfac: [NRM,EWK]}
+- {dataset: ATLAS_WPWM_13TEV_TOT, cfac: [NRM,EWK]}
 - {dataset: ATLAS_WJ_8TEV_WP-PT}
 - {dataset: ATLAS_WJ_8TEV_WM-PT}
 - {dataset: ATLAS_Z0J_8TEV_PT-M, cfac: [RES]}
 - {dataset: ATLAS_Z0J_8TEV_PT-Y, cfac: [RES]}
-- {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC}
-- {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC}
-- {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC}
-- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM}
-- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM}
-- {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM}
-- {dataset: ATLAS_1JET_8TEV_R06_PTY, variant: legacy_data}
-- {dataset: ATLAS_2JET_7TEV_R06_M12Y}
+- {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, cfac: [EWK]}
+- {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, cfac: [EWK]}
+- {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, cfac: [EWK]}
+- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, cfac: [EWK]}
+- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, cfac: [EWK]}
+- {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, cfac: [EWK]}
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, variant: legacy_data, cfac: [EWK]}
+- {dataset: ATLAS_2JET_7TEV_R06_M12Y, cfac: [EWK]}
 - {dataset: ATLAS_PH_13TEV_XSEC, cfac: [EWK]}
 - {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC}
 - {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC}
@@ -62,47 +62,29 @@ dataset_inputs:
 - {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM}
 - {dataset: CMS_WPWM_7TEV_ELECTRON_ASY}
 - {dataset: CMS_WPWM_7TEV_MUON_ASY}
-- {dataset: CMS_Z0_7TEV_DIMUON_2D}
+- {dataset: CMS_Z0_7TEV_DIMUON_2D, cfac: [EWK]}
 - {dataset: CMS_WPWM_8TEV_MUON_Y}
-- {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM,RES]}
-- {dataset: CMS_2JET_7TEV_M12-Y}
-- {dataset: CMS_1JET_8TEV_PTY, variant: legacy_data}
-- {dataset: CMS_TTBAR_7TEV_TOT_X-SEC}
-- {dataset: CMS_TTBAR_8TEV_TOT_X-SEC}
-- {dataset: CMS_TTBAR_13TEV_TOT_X-SEC}
-- {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM}
-- {dataset: CMS_TTBAR_5TEV_TOT_X-SEC}
-- {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM}
-- {dataset: CMS_TTBAR_13TEV_2L_DIF_YT}
-- {dataset: CMS_TTBAR_13TEV_LJ_DIF_YT}
+- {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM, RES]}
+- {dataset: CMS_2JET_7TEV_M12-Y, cfac: [EWK]}
+- {dataset: CMS_1JET_8TEV_PTY, variant: legacy_data, cfac: [EWK]}
+- {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, cfac: [EWK]}
+- {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, cfac: [EWK]}
+- {dataset: CMS_TTBAR_13TEV_TOT_X-SEC, cfac: [EWK]}
+- {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, cfac: [EWK]}
+- {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, cfac: [EWK]}
+- {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, cfac: [EWK]}
+- {dataset: CMS_TTBAR_13TEV_2L_DIF_YT, cfac: [EWK]}
 - {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC}
 - {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC}
 - {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC}
-- {dataset: LHCB_Z0_7TEV_DIELECTRON_Y}
-- {dataset: LHCB_Z0_8TEV_DIELECTRON_Y}
-- {dataset: LHCB_WPWM_7TEV_MUON_Y, cfac: [NRM]}
-- {dataset: LHCB_Z0_7TEV_MUON_Y, cfac: [NRM]}
-- {dataset: LHCB_WPWM_8TEV_MUON_Y, cfac: [NRM]}
-- {dataset: LHCB_Z0_8TEV_MUON_Y, cfac: [NRM]}
-- {dataset: LHCB_Z0_13TEV_DIMUON-Y}
-- {dataset: LHCB_Z0_13TEV_DIELECTRON-Y}
-- {dataset: ATLAS_TTBAR_13P6TEV_TOT_X-SEC}
-- {dataset: ATLAS_TTBAR_5TEV_TOT_X-SEC}
-- {dataset: ATLAS_TTBAR_13TEV_2L_TOT_X-SEC}
-- {dataset: CMS_TTBAR_13TEV_35P9FB-1_TOT_X-SEC}
-- {dataset: CMS_TTBAR_13TEV_35P9FB-1_TAU_TOT_X-SEC}
-- {dataset: CMS_TTBAR_13P6TEV_TOT_X-SEC}
-- {dataset: H1_1JET_319GEV_290PB-1_DIF_PTQ2}
-- {dataset: H1_1JET_319GEV_351PB-1_DIF_PTQ2}
-- {dataset: H1_2JET_319GEV_290PB-1_DIF_PTQ2}
-- {dataset: H1_2JET_319GEV_351PB-1_DIF_PTQ2}
-- {dataset: ZEUS_1JET_300GEV_38P6PB-1_DIF_ETQ2}
-- {dataset: ZEUS_1JET_319GEV_82PB-1_DIF_ETQ2}
-- {dataset: ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2}
-- {dataset: ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR}
-- {dataset: ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR}
-- {dataset: CMS_TTBAR_13TEV_2L_138FB-1_DIF_MTTBAR}
-- {dataset: CMS_TTBAR_13TEV_LJ_DIF_MTTBAR}
+- {dataset: LHCB_Z0_7TEV_DIELECTRON_Y, cfac: [EWK]}
+- {dataset: LHCB_Z0_8TEV_DIELECTRON_Y, cfac: [EWK]}
+- {dataset: LHCB_WPWM_7TEV_MUON_Y, cfac: [NRM,EWK]}
+- {dataset: LHCB_Z0_7TEV_MUON_Y, cfac: [NRM,EWK]}
+- {dataset: LHCB_WPWM_8TEV_MUON_Y, cfac: [NRM,EWK]}
+- {dataset: LHCB_Z0_8TEV_MUON_Y, cfac: [NRM,EWK]}
+- {dataset: LHCB_Z0_13TEV_DIMUON-Y, cfac: [EWK]}
+- {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, cfac: [EWK]}
 
 
 ################################################################################
@@ -183,17 +165,18 @@ drop_internal_rules:
 - LHCB_Z0_13TEV_DIELECTRON-Y
 - LHCB_Z0_13TEV_DIMUON-Y
 - D0_WPWM_1P96TEV_ASY
-- CMS_Z0J_8TEV_PT-Y
 - CMS_Z0_7TEV_DIMUON_2D
 - ATLAS_Z0_7TEV_LOMASS_M
+- ATLAS_Z0J_8TEV_PT-Y
+- CMS_Z0J_8TEV_PT-Y
 
 added_filter_rules:
 - dataset: CMS_Z0J_8TEV_PT-Y
   reason: Avoid the region where resummation effects become important.
   rule: pT >= 30
-- dataset: CMS_Z0J_8TEV_PT-Y
-  reason: Avoid the region where EWK corrections are important.
-  rule: pT <= 170
+- dataset: ATLAS_Z0J_8TEV_PT-Y
+  reason: Avoid the region where resummation effects become important.
+  rule: "pT >= 30"
 
 ################################################################################
 debug: false
