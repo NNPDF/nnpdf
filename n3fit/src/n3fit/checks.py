@@ -99,6 +99,9 @@ def check_stopping(parameters):
     epochs = parameters["epochs"]
     if epochs < 1:
         raise CheckError(f"Needs to run at least 1 epoch, got: {epochs}")
+    pdelta = parameters.get("stopping_delta", 1.0)
+    if pdelta < 0:
+        raise CheckError(f"Needs stopping_delta={pdelta} to be positive")
 
 
 def check_basis_with_layers(basis, validphys_basis, parameters, trial_specs):

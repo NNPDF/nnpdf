@@ -202,18 +202,18 @@ definitions:
     treatment: ADD
     type: LHCBLUMI161718
 bins:
-- Stat_corr_1: 6.65387161e-13
-  Stat_corr_2: 9.65682442e-12
-  Stat_corr_3: 3.91697743e-11
-  Stat_corr_4: 7.25401338e-11
-  Stat_corr_5: 7.73248544e-11
-  Stat_corr_6: 4.78868190e-11
-  Stat_corr_7: 1.37428169e-11
-  Stat_corr_8: 1.14832951e-12
-  Stat_corr_9: 1.45597110e-18
+- Stat_corr_1: 6.65387851e-13
+  Stat_corr_2: 9.65682700e-12
+  Stat_corr_3: 3.91697749e-11
+  Stat_corr_4: 7.25401316e-11
+  Stat_corr_5: 7.73248550e-11
+  Stat_corr_6: 4.78868204e-11
+  Stat_corr_7: 1.37428159e-11
+  Stat_corr_8: 1.14832888e-12
+  Stat_corr_9: 1.45597119e-18
   Stat_corr_10: 2.53958761e-06
   Stat_corr_11: 2.59015872e-06
-  Stat_corr_12: 8.90779839e-19
+  Stat_corr_12: 8.90779895e-19
   Stat_corr_13: 3.22637899e-24
   Stat_corr_14: 1.27312908e-03
   Stat_corr_15: 2.34182415e-24
@@ -247,19 +247,19 @@ bins:
   Sys_align_corr: 2.44376104e-02
   Sys_align_unc: 2.44376104e-02
   Luminosity: 0.3
-- Stat_corr_1: 6.83871866e-10
-  Stat_corr_2: 9.79326887e-09
-  Stat_corr_3: 3.93347794e-08
-  Stat_corr_4: 7.21373311e-08
-  Stat_corr_5: 7.61782687e-08
-  Stat_corr_6: 4.67063318e-08
+- Stat_corr_1: 6.83871920e-10
+  Stat_corr_2: 9.79326947e-09
+  Stat_corr_3: 3.93347798e-08
+  Stat_corr_4: 7.21373306e-08
+  Stat_corr_5: 7.61782688e-08
+  Stat_corr_6: 4.67063323e-08
   Stat_corr_7: 1.32682763e-08
-  Stat_corr_8: 1.09303777e-09
-  Stat_corr_9: 8.45659203e-16
+  Stat_corr_8: 1.09303766e-09
+  Stat_corr_9: 8.45659210e-16
   Stat_corr_10: 1.44541278e-03
   Stat_corr_11: 1.45528054e-03
-  Stat_corr_12: 4.89658772e-16
-  Stat_corr_13: 7.83955482e-22
+  Stat_corr_12: 4.89658778e-16
+  Stat_corr_13: 7.83955483e-22
   Stat_corr_14: 2.99991788e-01
   Stat_corr_15: 5.33791107e-22
   Stat_corr_16: -8.48745740e-04
@@ -292,14 +292,14 @@ bins:
   Sys_align_corr: 6.28476507e-02
   Sys_align_unc: 6.28476507e-02
   Luminosity: 0.8
-- Stat_corr_1: 3.20272254e-07
+- Stat_corr_1: 3.20272255e-07
   Stat_corr_2: 4.50736521e-06
   Stat_corr_3: 1.78732701e-05
   Stat_corr_4: 3.23618928e-05
   Stat_corr_5: 3.37569805e-05
   Stat_corr_6: 2.04257837e-05
   Stat_corr_7: 5.72504147e-06
-  Stat_corr_8: 4.62826576e-07
+  Stat_corr_8: 4.62826575e-07
   Stat_corr_9: 1.72577848e-13
   Stat_corr_10: 2.85000967e-01
   Stat_corr_11: 2.80663641e-01
@@ -327,7 +327,7 @@ bins:
   Sys_corr_eff_15: -6.60048929e-04
   Sys_corr_eff_16: -1.22166463e-04
   Sys_corr_eff_17: 7.13733300e-05
-  Sys_corr_eff_18: 5.60991944e-07
+  Sys_corr_eff_18: 5.60991943e-07
   Sys_back_corr: 1.29089414e-01
   Sys_back_unc: 1.29089414e-01
   Sys_fsr_corr: 1.38310086e-02
@@ -397,7 +397,7 @@ bins:
   Stat_corr_13: 1.80792076e-17
   Stat_corr_14: -1.21239986e-07
   Stat_corr_15: -1.41195442e-17
-  Stat_corr_16: 8.89132205e-11
+  Stat_corr_16: 8.89132211e-11
   Stat_corr_17: 4.46200679e-24
   Stat_corr_18: 4.66107247e-24
   Sys_corr_eff_1: 5.36310922e-01
@@ -440,9 +440,9 @@ bins:
   Stat_corr_11: -7.32735378e-05
   Stat_corr_12: -5.48519815e-11
   Stat_corr_13: -1.53403190e-15
-  Stat_corr_14: 1.41513014e-09
+  Stat_corr_14: 1.41513027e-09
   Stat_corr_15: 1.22220041e-15
-  Stat_corr_16: -7.90626798e-13
+  Stat_corr_16: -7.90626807e-13
   Stat_corr_17: -5.73484788e-22
   Stat_corr_18: -5.99192307e-22
   Sys_corr_eff_1: 6.83661925e-01
@@ -485,9 +485,9 @@ bins:
   Stat_corr_11: 2.06907761e-06
   Stat_corr_12: 2.08542971e-09
   Stat_corr_13: 1.02229323e-13
-  Stat_corr_14: -2.26560676e-11
+  Stat_corr_14: -2.26557749e-11
   Stat_corr_15: -8.32255786e-14
-  Stat_corr_16: 9.64269438e-15
+  Stat_corr_16: 9.64269362e-15
   Stat_corr_17: 6.04595515e-20
   Stat_corr_18: 6.31843922e-20
   Sys_corr_eff_1: 8.10562754e-01
@@ -526,13 +526,13 @@ bins:
   Stat_corr_7: -2.74930711e-01
   Stat_corr_8: -1.07919605e-01
   Stat_corr_9: -9.42846548e-08
-  Stat_corr_10: 7.02322696e-08
-  Stat_corr_11: -6.58748932e-08
+  Stat_corr_10: 7.02322695e-08
+  Stat_corr_11: -6.58748933e-08
   Stat_corr_12: -6.64560009e-08
   Stat_corr_13: -5.63335586e-12
-  Stat_corr_14: 3.96148676e-13
+  Stat_corr_14: 3.95921648e-13
   Stat_corr_15: 4.68283885e-12
-  Stat_corr_16: -1.25409505e-16
+  Stat_corr_16: -1.25409776e-16
   Stat_corr_17: -5.16614411e-18
   Stat_corr_18: -5.40015577e-18
   Sys_corr_eff_1: 8.83527584e-01
@@ -571,13 +571,13 @@ bins:
   Stat_corr_7: 1.98521448e-01
   Stat_corr_8: 1.96754075e-01
   Stat_corr_9: 2.19996814e-06
-  Stat_corr_10: -2.85617987e-09
-  Stat_corr_11: 2.63181192e-09
+  Stat_corr_10: -2.85617957e-09
+  Stat_corr_11: 2.63181183e-09
   Stat_corr_12: 1.66894892e-06
   Stat_corr_13: 2.40255771e-10
-  Stat_corr_14: -8.76505440e-15
+  Stat_corr_14: -8.63602032e-15
   Stat_corr_15: -2.03744214e-10
-  Stat_corr_16: 2.08020726e-18
+  Stat_corr_16: 2.07984554e-18
   Stat_corr_17: 3.33779247e-16
   Stat_corr_18: 3.48969778e-16
   Sys_corr_eff_1: 9.35128111e-01
@@ -594,7 +594,7 @@ bins:
   Sys_corr_eff_12: -6.61930999e-03
   Sys_corr_eff_13: 3.95455640e-05
   Sys_corr_eff_14: -3.17344774e-04
-  Sys_corr_eff_15: 1.27131463e-05
+  Sys_corr_eff_15: 1.27131464e-05
   Sys_corr_eff_16: 1.91363345e-04
   Sys_corr_eff_17: -3.37605094e-06
   Sys_corr_eff_18: 1.71090869e-04
@@ -616,13 +616,13 @@ bins:
   Stat_corr_7: 2.44504056e-04
   Stat_corr_8: -2.75944205e-01
   Stat_corr_9: -4.50980522e-05
-  Stat_corr_10: 1.37213100e-10
-  Stat_corr_11: -1.24263324e-10
+  Stat_corr_10: 1.37213301e-10
+  Stat_corr_11: -1.24263741e-10
   Stat_corr_12: -3.68594836e-05
   Stat_corr_13: -9.09542299e-09
-  Stat_corr_14: 1.62306773e-16
+  Stat_corr_14: 3.24770753e-16
   Stat_corr_15: 7.87224311e-09
-  Stat_corr_16: -4.19618954e-20
+  Stat_corr_16: -4.23539486e-20
   Stat_corr_17: -1.93622576e-14
   Stat_corr_18: -2.02477226e-14
   Sys_corr_eff_1: 9.26000175e-01
@@ -661,13 +661,13 @@ bins:
   Stat_corr_7: -1.75575681e-01
   Stat_corr_8: 2.83880539e-01
   Stat_corr_9: 8.06425863e-04
-  Stat_corr_10: -7.37871313e-12
-  Stat_corr_11: 6.56542399e-12
+  Stat_corr_10: -7.37888453e-12
+  Stat_corr_11: 6.56585382e-12
   Stat_corr_12: 7.09517037e-04
   Stat_corr_13: 2.97534057e-07
-  Stat_corr_14: -1.75658925e-17
+  Stat_corr_14: -4.45216245e-18
   Stat_corr_15: -2.62716884e-07
-  Stat_corr_16: 1.28636555e-21
+  Stat_corr_16: 9.49096735e-22
   Stat_corr_17: 9.59724016e-13
   Stat_corr_18: 1.00381873e-12
   Sys_corr_eff_1: 8.20365435e-01
@@ -706,13 +706,13 @@ bins:
   Stat_corr_7: 1.72016104e-01
   Stat_corr_8: -1.80320742e-01
   Stat_corr_9: -1.34580726e-02
-  Stat_corr_10: 4.38467877e-13
-  Stat_corr_11: -3.72824494e-13
+  Stat_corr_10: 4.38360904e-13
+  Stat_corr_11: -3.72453994e-13
   Stat_corr_12: -1.27572221e-02
   Stat_corr_13: -9.16270952e-06
-  Stat_corr_14: -4.85157744e-18
+  Stat_corr_14: 4.50793989e-18
   Stat_corr_15: 8.25682332e-06
-  Stat_corr_16: 1.74210796e-22
+  Stat_corr_16: -2.36663981e-23
   Stat_corr_17: -4.52091400e-11
   Stat_corr_18: -4.72962157e-11
   Sys_corr_eff_1: 6.66413657e-01
@@ -751,13 +751,13 @@ bins:
   Stat_corr_7: 8.44528422e-03
   Stat_corr_8: -9.16313583e-03
   Stat_corr_9: 2.79474820e-01
-  Stat_corr_10: -1.20279394e-13
-  Stat_corr_11: -1.28707384e-13
+  Stat_corr_10: -1.20283964e-13
+  Stat_corr_11: -1.28692151e-13
   Stat_corr_12: 2.85230259e-01
   Stat_corr_13: 3.48387000e-04
-  Stat_corr_14: -1.78740398e-19
+  Stat_corr_14: 5.06763304e-20
   Stat_corr_15: -3.20282260e-04
-  Stat_corr_16: 9.12875533e-24
+  Stat_corr_16: 8.02236712e-25
   Stat_corr_17: 2.60513104e-09
   Stat_corr_18: 2.72595381e-09
   Sys_corr_eff_1: 5.06543793e-01
@@ -796,13 +796,13 @@ bins:
   Stat_corr_7: 3.29018305e-04
   Stat_corr_8: -3.69578620e-04
   Stat_corr_9: 2.91325540e-01
-  Stat_corr_10: -5.74645802e-13
-  Stat_corr_11: 4.94842573e-13
+  Stat_corr_10: -5.74646011e-13
+  Stat_corr_11: 4.94843228e-13
   Stat_corr_12: -2.73913766e-01
   Stat_corr_13: -7.20345002e-03
-  Stat_corr_14: -3.15673017e-21
+  Stat_corr_14: 6.14373963e-22
   Stat_corr_15: 6.93193724e-03
-  Stat_corr_16: 2.55348063e-25
+  Stat_corr_16: -2.21134227e-26
   Stat_corr_17: -1.18167755e-07
   Stat_corr_18: -1.23688670e-07
   Sys_corr_eff_1: 3.57869790e-01
@@ -841,13 +841,13 @@ bins:
   Stat_corr_7: 4.94985226e-06
   Stat_corr_8: -5.66580680e-06
   Stat_corr_9: 9.27008887e-03
-  Stat_corr_10: -1.89258543e-14
-  Stat_corr_11: 1.66627788e-14
+  Stat_corr_10: -1.89258565e-14
+  Stat_corr_11: 1.66627862e-14
   Stat_corr_12: -9.58078684e-03
   Stat_corr_13: 2.11139877e-01
-  Stat_corr_14: -3.47646896e-23
+  Stat_corr_14: 4.46202626e-23
   Stat_corr_15: -2.12702200e-01
-  Stat_corr_16: 4.84991169e-27
+  Stat_corr_16: 1.03132576e-27
   Stat_corr_17: 7.60392596e-06
   Stat_corr_18: 7.96179245e-06
   Sys_corr_eff_1: 2.29839228e-01
@@ -886,13 +886,13 @@ bins:
   Stat_corr_7: 5.10320242e-08
   Stat_corr_8: -5.95241726e-08
   Stat_corr_9: 2.02074993e-04
-  Stat_corr_10: -4.26991958e-16
-  Stat_corr_11: 3.84349989e-16
+  Stat_corr_10: -4.26991978e-16
+  Stat_corr_11: 3.84350054e-16
   Stat_corr_12: -2.29546143e-04
   Stat_corr_13: 2.16622130e-01
-  Stat_corr_14: -9.18333463e-22
+  Stat_corr_14: -9.17732830e-22
   Stat_corr_15: 2.07543863e-01
-  Stat_corr_16: 3.05707930e-30
+  Stat_corr_16: -3.29273903e-29
   Stat_corr_17: -3.80722601e-04
   Stat_corr_18: -3.98885161e-04
   Sys_corr_eff_1: 1.34155752e-01
@@ -931,13 +931,13 @@ bins:
   Stat_corr_7: 9.58288294e-11
   Stat_corr_8: -1.13168029e-10
   Stat_corr_9: 5.81561757e-07
-  Stat_corr_10: -1.24904270e-18
-  Stat_corr_11: 1.13598102e-18
+  Stat_corr_10: -1.24904275e-18
+  Stat_corr_11: 1.13598116e-18
   Stat_corr_12: -6.90375318e-07
   Stat_corr_13: 1.17138956e-03
-  Stat_corr_14: -5.05955461e-24
+  Stat_corr_14: -5.05811685e-24
   Stat_corr_15: 1.16801732e-03
-  Stat_corr_16: -4.20493011e-31
+  Stat_corr_16: -4.84080627e-31
   Stat_corr_17: 6.90129940e-02
   Stat_corr_18: 7.23496388e-02
   Sys_corr_eff_1: 4.54208121e-02
@@ -976,13 +976,13 @@ bins:
   Stat_corr_7: 9.98669710e-15
   Stat_corr_8: -1.19406081e-14
   Stat_corr_9: 9.28862454e-11
-  Stat_corr_10: -2.02771624e-22
-  Stat_corr_11: 1.86332060e-22
+  Stat_corr_10: -2.02771628e-22
+  Stat_corr_11: 1.86332074e-22
   Stat_corr_12: -1.15231924e-10
   Stat_corr_13: 3.51537893e-07
-  Stat_corr_14: -1.54764256e-27
+  Stat_corr_14: -1.54757304e-27
   Stat_corr_15: 3.64805133e-07
-  Stat_corr_16: -3.88727200e-34
+  Stat_corr_16: -3.94957137e-34
   Stat_corr_17: 7.25282797e-02
   Stat_corr_18: -6.88451062e-02
   Sys_corr_eff_1: 3.81648718e-03

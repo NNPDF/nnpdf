@@ -12,8 +12,8 @@ env:
   POSTFIT_NREP: 15 # requested minimum replicas for postfit
   # IMPORTANT
   # WHEN CHANGING THE REFERENCE SET, THE NEW REFERENCE MUST BE MANUALLY UPLOADED TO THE SERVER
-  REFERENCE_SET: NNBOT-351efa9ef-2026-03-11 # reference set for exact results
-  STABLE_REFERENCE_SET: NNBOT-99108504e-2025-11-22 # reference set for last tag
+  REFERENCE_SET: NNBOT-b0e4b6227-2026-06-25
+  STABLE_REFERENCE_SET: NNBOT-b0e4b6227-2026-06-25
   PYTHONHASHSEED: "0"
 
 jobs:
@@ -26,23 +26,9 @@ jobs:
       with:
         fetch-tags: true
         fetch-depth: 0
-    - uses: conda-incubator/setup-miniconda@v3
-      with:
-        python-version: "3.12"
-        use-mamba: true
-        channels: conda-forge
-        show-channel-urls: true
-        auto-update-conda: true
-        activate-environment: nnpdfenv
-    - name: Install lhapdf and pandoc
-      shell: bash -l {0}
-      run: |
-        conda install lhapdf pandoc
-    - name: Install nnpdf with pip
-      shell: bash -l {0}
-      run: |
-        pip install .
-    # create fancy runcards
+    # Install the software with pip, from conda only LHAPDF/pandoc/pip
+    - uses: ./.github/actions/install_conda_pip
+    # Create the fit runcard taking the commit hash
     - name: Preparing fit runcard
       run: |
         # set runcard name
@@ -50,36 +36,29 @@ jobs:
         export TIMESTAMP=`date --iso-8601`
         echo "RUNCARD=NNBOT-$COMMIT-$TIMESTAMP" >> $GITHUB_ENV
         echo "RUNFOLDER=n3fit/runcards/examples" >> $GITHUB_ENV
-    # downloading theory, t0 and eko
-    - name: Downloading requirements
+    # Run vp-setupfit: download theory, t0 and eko
+    - name: Fit setup
       shell: bash -l {0}
       run: |
         cd $RUNFOLDER
         cp developing.yml $RUNCARD.yml
         vp-setupfit $RUNCARD.yml
-    # try running the n3fit replicas in parallel
+    # Run n3fit in parallel, this is ok for the 30 replicas we want
     - name: Running n3fit
       shell: bash -l {0}
       run: |
         cd $RUNFOLDER
         n3fit $RUNCARD.yml 1 -r $N3FIT_MAXNREP
-    # performing DGLAP
+    # Evolve the fit
     - name: Running dglap
       shell: bash -l {0}
       run: |
         cd $RUNFOLDER
         evolven3fit evolve $RUNCARD
-    # running postfit and upload the fit to the server
-    - name: Install SSH key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.NNPDF_SSA }}
-        name: id_rsa
-        known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }}
+    # Run postfit and keep the fit as an artifact
     - name: Postfit and upload fit
       shell: bash -l {0}
       run: |
-        conda activate nnpdfenv
         cd $RUNFOLDER
         postfit $POSTFIT_NREP $RUNCARD --at-least-nrep
         ln -s ${PWD}/${RUNCARD} ${CONDA_PREFIX}/share/NNPDF/results
@@ -87,14 +66,20 @@ jobs:
         echo "PATH_TO_SAVE=${PWD}/${RUNCARD}.tar.gz" >> ${GITHUB_ENV}
     - name: Keep the fit as an artifact
       if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ env.RUNCARD }}.tar.gz
         path: ${{ env.PATH_TO_SAVE }}
+    # Generate the report and upload it to the server
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.NNPDF_SSA }}
+        name: id_rsa
+        known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }}
     - name: Building and upload report
       shell: bash -l {0}
       run: |
-        conda activate nnpdfenv
         vp-comparefits $RUNCARD $REFERENCE_SET \
                     --title "Automatic check fit $RUNCARD" \
                     --author bot \
