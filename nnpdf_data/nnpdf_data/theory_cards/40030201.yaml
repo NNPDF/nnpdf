@@ -1,5 +1,5 @@
 ID: 40_030_201
-Comments: Same as 40030000 but kcThr=2.5
+Comments: Same as 40030015 but kcThr=2.5 (matching scale 3.75)
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
@@ -37,5 +37,5 @@ SIN2TW: 0.23126
 TMC: 1
 MP: 0.938
 Qref: 91.2
-alphas: 0.118
+alphas: 0.120
 alphaqed: 0.0077553
