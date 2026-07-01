@@ -61,7 +61,6 @@ vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
 python = ">=3.9"
 matplotlib = "^3.9"
 pineappl = "^1.0.0"
-# TODO: make the code compatible with pandas 3
 pandas = "*"
 numpy = "*"
 "ruamel.yaml" = {version = ">=0.19.1", extras=["oldlibyaml"]}
@@ -74,7 +73,7 @@ psutil = "*"
 tensorflow = "*"
 keras = "^3.1"
 tensorboard = "*" # keras requires tensorboard but some versions are missing the dependency
-eko = "^0.15.1"
+eko = "^0.15.3"
 joblib = "*"
 seaborn = "*"
 # Hyperopt

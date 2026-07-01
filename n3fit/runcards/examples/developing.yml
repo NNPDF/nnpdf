@@ -48,7 +48,7 @@ diagonal_frac: 0.75
 
 ############################################################
 datacuts:
-  t0pdfset: 251105-jcm-nnpdf41-mhou
+  t0pdfset: 260313_kl_nnpdf41_hyopt
   q2min: 3.49
   w2min: 12.5
 
@@ -60,10 +60,12 @@ theory:
 trvlseed: 1
 nnseed: 2
 mcseed: 3
-# load: 'developing.weights.h5'
-genrep: true   # true = generate MC replicas, false = use real data
+genrep: true
 
-parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+# Note: the actual 4.1 runcard uses the hyperopt sampling and theory covmat.
+# At the moment the fitbot uses neither, but this will be changed.
+
+parameters:
   nodes_per_layer: [20, 20, 32, 9]
   activation_per_layer: ['tanh', 'sigmoid', 'sigmoid', 'linear']
   initializer: 'glorot_normal'
@@ -71,7 +73,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 5.e-5
     learning_rate: 6.e-3
     optimizer_name: Nadam
-  epochs: 10000
+  epochs: 15000
   integrability:
     initial:
     multiplier: 1.03
@@ -81,21 +83,22 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   stopping_patience: 0.1 # percentage of the number of epochs
   layer_type: 'dense'
   dropout: 0.01
-  feature_scaling_points: 7
+  threshold_chi2: 3.5
+  feature_scaling_points: 5
 
 fitting:
   fitbasis: CCBAR_ASYMM
   savepseudodata: true
   basis:
-  - {fl : sng, trainable : false, smallx : [1.095, 1.146], largex   : [0., 0.]}
-  - {fl : g, trainable   : false, smallx : [0.7978, 1.087], largex  : [0., 0.]}
-  - {fl : v, trainable   : false, smallx : [0.4775, 0.6577], largex : [0., 0.]}
-  - {fl : v3, trainable  : false, smallx : [0.1068, 0.493], largex  : [0., 0.]}
-  - {fl : v8, trainable  : false, smallx : [0.5914, 0.7776], largex : [0., 0.]}
-  - {fl : t3, trainable  : false, smallx : [-0.3737, 1.0], largex   : [0., 0.]}
-  - {fl : t8, trainable  : false, smallx : [0.5771, 0.9486], largex : [0., 0.]}
-  - {fl : t15, trainable : false, smallx : [1.062, 1.153], largex   : [0., 0.]}
-  - {fl : v15, trainable : false, smallx : [0.4515, 0.7648], largex : [0., 0.]}
+  - {fl: sng, trainable: false, smallx: [1.023, 1.153]}
+  - {fl: g, trainable: false, smallx: [0.8591, 1.148]}
+  - {fl: v, trainable: false, smallx: [0.4141, 0.6628]}
+  - {fl: v3, trainable: false, smallx: [0.09623, 0.5375]}
+  - {fl: v8, trainable: false, smallx: [0.5572, 0.7787]}
+  - {fl: t3, trainable: false, smallx: [-0.559, 1.0]}
+  - {fl: t8, trainable: false, smallx: [0.5409, 0.9899]}
+  - {fl: t15, trainable: false, smallx: [1.044, 1.148]}
+  - {fl: v15, trainable: false, smallx: [0.4547, 0.7577]}
 
 ############################################################
 positivity:
