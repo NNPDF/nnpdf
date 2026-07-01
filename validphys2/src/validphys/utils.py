@@ -89,9 +89,9 @@ def experiments_to_dataset_inputs(experiments_list):
     >>> experiments = fit.as_input()['experiments']
     >>> dataset_inputs = experiments_to_dataset_inputs(experiments)
     >>> dataset_inputs[:3]
-    [{'dataset': 'NMCPD', 'frac': 0.5},
-     {'dataset': 'NMC', 'frac': 0.5},
-     {'dataset': 'SLACP', 'frac': 0.5}]
+    [{'dataset': 'NMC_NC_NOTFIXED_EM-F2', 'variant': 'legacy', 'frac': 0.5},
+     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.5},
+     {'dataset': 'SLAC_NC_NOTFIXED_P_EM-F2', 'variant': 'legacy', 'frac': 0.5}]
     """
     dataset_inputs = []
     for experiment in experiments_list:

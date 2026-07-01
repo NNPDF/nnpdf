@@ -1141,7 +1141,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
     --------
     >>> from validphys.api import API
     >>> data_input = {
-    >>>    "dataset_input" : {"dataset": "HERACOMBNCEP920"},
+    >>>    "dataset_input" : {"dataset": "HERA_NC_318GEV_EP-SIGMARED", "variant": "legacy", "frac": 0.75},
     >>>    "theoryid": 200,
     >>>     "use_cuts": "internal",
     >>>     "pdf": "NNPDF40_nnlo_as_01180",

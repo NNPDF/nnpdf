@@ -266,10 +266,19 @@ def kfold_masks(kpartitions, data):
     --------
     >>> from validphys.api import API
     >>> partitions=[
-    ...     {"datasets": ["HERACOMBCCEM", "HERACOMBNCEP460", "NMC", "NTVNBDMNFe"]},
-    ...     {"datasets": ["HERACOMBCCEP", "HERACOMBNCEP575", "NMCPD", "NTVNUDMNFe"]}
+    ...     {"datasets": ["HERA_CC_318GEV_EM-SIGMARED", "HERA_NC_225GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_P_EM-SIGMARED", "NTVNBDMNFe"]},
+    ...     {"datasets": ["HERA_CC_318GEV_EP-SIGMARED", "HERA_NC_251GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_EM-F2", "NTVNUDMNFe"]}
     ... ]
-    >>> ds_inputs = [{"dataset": ds} for part in partitions for ds in part["datasets"]]
+    >>> ds_inputs = [
+    ...     {"dataset": "HERA_CC_318GEV_EM-SIGMARED", "variant": "legacy", "frac": 0.75},
+    ...     {"dataset": "HERA_NC_225GEV_EP-SIGMARED", "variant": "legacy", "frac": 0.75},
+    ...     {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy", "frac": 0.75},
+    ...     {"dataset": "NTVNBDMNFe", "frac": 0.75},
+    ...     {"dataset": "HERA_CC_318GEV_EP-SIGMARED", "variant": "legacy", "frac": 0.75},
+    ...     {"dataset": "HERA_NC_251GEV_EP-SIGMARED", "variant": "legacy", "frac": 0.75},
+    ...     {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy", "frac": 0.75},
+    ...     {"dataset": "NTVNUDMNFe", "frac": 0.75},
+    ... ]
     >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=53, use_cuts="nocuts")
     >>> len(kfold_masks) # one element for each partition
     2
@@ -881,7 +890,7 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     Examples
     --------
     >>> from validphys.api import API
-    >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
+    >>> integdatasets = [{"dataset": "NNPDF_INTEG_3GEV_XT3", "maxlambda": 1e2}]
     >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
     >>> len(res), len(res[0])
     (1, 9)
