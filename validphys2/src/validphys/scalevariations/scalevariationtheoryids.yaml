@@ -429,17 +429,6 @@ scale_variations_for:
   - theoryid: 41_000_000
     variations: *nnlo_41
 
-  # aN3LO QCD-only, alphas=0.118
-  - theoryid: 41_000_100
-    variations:
-      (0.5, 0.5): 41_000_112  # XIF=0.5, XIR=0.5
-      (0.5, 1):   41_000_111  # XIF=0.5, XIR=1.0
-      (1, 0.5):   41_000_110  # XIF=1.0, XIR=0.5
-      (1, 1):     41_000_100  # XIF=1.0, XIR=1.0
-      (1, 2):     41_000_113  # XIF=1.0, XIR=2.0
-      (2, 1):     41_000_114  # XIF=2.0, XIR=1.0
-      (2, 2):     41_000_115  # XIF=2.0, XIR=2.0
-
   # 4.0 series:
   # NLO alphas=0.117
   - theoryid: 834
