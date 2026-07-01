@@ -286,6 +286,12 @@ def _plot_fancy_impl(
         err = np.full(ndata, np.nan)
 
         # w/ shifts
+        '''
+        N.B. If this fails, e.g. triggering an error due to a division by zero,
+        it is very likely that the data set implementation is bugged. For
+        instance, the uncorrelated part of the uncertainty may be present, 
+        but set to zero. If so, that must be simply removed.
+        '''
         if with_shift:
             shifts = 0.
             lcd_wc = loaded_commondata_with_cuts(commondata, cuts)
@@ -300,12 +306,9 @@ def _plot_fancy_impl(
                     err[mask] = alpha
             # Determine shift           
             else:
-                if with_shift:
-                    theory_predictions = result.central_value
-                    shifts = shifts_from_systematics(lcd_wc, theory_predictions)
-                    cv[mask] = result.central_value - shifts
-                else:
-                    cv[mask] = result.central_value
+                theory_predictions = result.central_value
+                shifts = shifts_from_systematics(lcd_wc, theory_predictions)
+                cv[mask] = result.central_value - shifts
                 err[mask] = result.std_error 
             
         # w/o shifts
