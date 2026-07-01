@@ -26,7 +26,7 @@ where the setname is defined by::
 
     <experiment>_<process>_<energy>{_<extras>}
 
-The naming convention for the set names is defined in the :ref:`naming convention documentation<dataset-naming-convention>`.
+The naming convention for the set names is defined in the :ref:`naming convention documentation <dataset-naming-convention>`.
 
 Each ``<setname>`` defines a folder in which the data is contained.
 While the separation of data in different folders can be arbitrary,
