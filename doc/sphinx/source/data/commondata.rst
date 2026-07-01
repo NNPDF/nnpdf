@@ -15,6 +15,7 @@ standard data format has been iteratively developed, now denoted ``CommonData``.
 This documentation describes the ``CommonData`` format
 used in NNPDF starting from code version 4.0.10 and compatible with releases beyond 4.0.
 
+.. _dataset-naming-convention:
 
 Naming convention and organization of the datasets
 --------------------------------------------------
@@ -56,6 +57,8 @@ The format of this mapping is as follow:
         dataset: new_name_1
         variant: legacy
 
+
+.. _metadata-spec:
 
 CommonData Metadata specification
 ---------------------------------
