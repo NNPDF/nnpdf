@@ -270,14 +270,14 @@ def kfold_masks(kpartitions, data):
     ...     {"datasets": ["HERA_CC_318GEV_EP-SIGMARED", "HERA_NC_251GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_EM-F2", "NTVNUDMNFe"]}
     ... ]
     >>> ds_inputs = [
-    ...     {"dataset": "HERA_CC_318GEV_EM-SIGMARED", "variant": "legacy", "frac": 0.75},
-    ...     {"dataset": "HERA_NC_225GEV_EP-SIGMARED", "variant": "legacy", "frac": 0.75},
-    ...     {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy", "frac": 0.75},
-    ...     {"dataset": "NTVNBDMNFe", "frac": 0.75},
-    ...     {"dataset": "HERA_CC_318GEV_EP-SIGMARED", "variant": "legacy", "frac": 0.75},
-    ...     {"dataset": "HERA_NC_251GEV_EP-SIGMARED", "variant": "legacy", "frac": 0.75},
-    ...     {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy", "frac": 0.75},
-    ...     {"dataset": "NTVNUDMNFe", "frac": 0.75},
+    ...     {"dataset": "HERA_CC_318GEV_EM-SIGMARED"},
+    ...     {"dataset": "HERA_NC_225GEV_EP-SIGMARED"},
+    ...     {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
+    ...     {"dataset": "NTVNBDMNFe"},
+    ...     {"dataset": "HERA_CC_318GEV_EP-SIGMARED"},
+    ...     {"dataset": "HERA_NC_251GEV_EP-SIGMARED"},
+    ...     {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy_dw"},
+    ...     {"dataset": "NTVNUDMNFe"},
     ... ]
     >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=53, use_cuts="nocuts")
     >>> len(kfold_masks) # one element for each partition
@@ -783,7 +783,7 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=True):
     >>> from validphys.api import API
     >>> ds_inp = [
     ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.75},
-    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory', 'frac': 0.75},
+    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'frac': 0.75},
     ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',), 'frac': 0.75},
     ... ]
     >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=40_000_000, use_cuts="nocuts", mcseed=None, genrep=False)

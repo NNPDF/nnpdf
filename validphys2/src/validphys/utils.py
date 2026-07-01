@@ -88,10 +88,10 @@ def experiments_to_dataset_inputs(experiments_list):
     >>> fit = API.fit(fit='NNPDF31_nnlo_as_0118_1000')
     >>> experiments = fit.as_input()['experiments']
     >>> dataset_inputs = experiments_to_dataset_inputs(experiments)
-    >>> dataset_inputs[:3]
-    [{'dataset': 'NMC_NC_NOTFIXED_EM-F2', 'variant': 'legacy', 'frac': 0.5},
-     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.5},
-     {'dataset': 'SLAC_NC_NOTFIXED_P_EM-F2', 'variant': 'legacy', 'frac': 0.5}]
+    >>> [{k: v for k, v in ds.items() if k != 'frac'} for ds in dataset_inputs[:3]]
+    [{'dataset': 'NMC_NC_NOTFIXED_EM-F2', 'variant': 'legacy_dw'},
+     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+     {'dataset': 'SLAC_NC_NOTFIXED_P_EM-F2', 'variant': 'legacy_dw'}]
     """
     dataset_inputs = []
     for experiment in experiments_list:
