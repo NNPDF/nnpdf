@@ -68,3 +68,4 @@ Miscellaneous
    ./addspecialgrouping.rst
    ./conda.rst
    ./futuretests.rst
+   ./data-implementation.rst
