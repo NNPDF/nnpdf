@@ -266,18 +266,18 @@ def kfold_masks(kpartitions, data):
     --------
     >>> from validphys.api import API
     >>> partitions=[
-    ...     {"datasets": ["HERA_CC_318GEV_EM-SIGMARED", "HERA_NC_225GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_P_EM-SIGMARED", "NTVNBDMNFe"]},
-    ...     {"datasets": ["HERA_CC_318GEV_EP-SIGMARED", "HERA_NC_251GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_EM-F2", "NTVNUDMNFe"]}
+    ...     {"datasets": ["HERA_CC_318GEV_EM-SIGMARED", "HERA_NC_225GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_P_EM-SIGMARED", "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED"]},
+    ...     {"datasets": ["HERA_CC_318GEV_EP-SIGMARED", "HERA_NC_251GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_EM-F2", "NUTEV_CC_NOTFIXED_FE_NU-SIGMARED"]}
     ... ]
     >>> ds_inputs = [
     ...     {"dataset": "HERA_CC_318GEV_EM-SIGMARED"},
     ...     {"dataset": "HERA_NC_225GEV_EP-SIGMARED"},
     ...     {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
-    ...     {"dataset": "NTVNBDMNFe"},
+    ...     {"dataset": "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED", "variant": "legacy_dw"},
     ...     {"dataset": "HERA_CC_318GEV_EP-SIGMARED"},
     ...     {"dataset": "HERA_NC_251GEV_EP-SIGMARED"},
     ...     {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy_dw"},
-    ...     {"dataset": "NTVNUDMNFe"},
+    ...     {"dataset": "NUTEV_CC_NOTFIXED_FE_NU-SIGMARED", "variant": "legacy_dw"},
     ... ]
     >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=53, use_cuts="nocuts")
     >>> len(kfold_masks) # one element for each partition
