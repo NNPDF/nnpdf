@@ -104,7 +104,7 @@ def read_replica_pseudodata(fit, context_index, replica):
     >>> rep_info.pseudodata.loc[rep_info.tr_idx].head()
                                 replica 1
     group dataset           id
-    ATLAS ATLASZPT8TEVMDIST 1   30.665835
+    ATLAS ATLAS_Z0J_8TEV_PT-M 1   30.665835
                             3   15.795880
                             4    8.769734
                             5    3.117819
@@ -222,7 +222,10 @@ def make_replica(
     -------
     >>> from validphys.api import API
     >>> pseudodata = API.make_replica(
-                                    dataset_inputs=[{"dataset":"NMC"}, {"dataset": "NMCPD"}],
+                                    dataset_inputs=[
+                                        {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
+                                        {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy_dw"},
+                                    ],
                                     use_cuts="nocuts",
                                     theoryid=53,
                                     replica=1,
@@ -380,9 +383,14 @@ def level0_commondata_wc(data, fakepdf):
     Example
     -------
     >>> from validphys.api import API
-    >>> API.level0_commondata_wc(dataset_inputs = [{"dataset":"NMC"}], use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
+    >>> API.level0_commondata_wc(
+    ...     dataset_inputs=[{"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"}],
+    ...     use_cuts="internal",
+    ...     theoryid=200,
+    ...     fakepdf="NNPDF40_nnlo_as_01180",
+    ... )
 
-    [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
+    [CommonData(setname='NMC_NC_NOTFIXED_P_EM-SIGMARED', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
     from validphys.covmats import dataset_t0_predictions
 
@@ -456,11 +464,11 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     -------
 
     >>> from validphys.api import API
-    >>> dataset='NMC'
-    >>> l1_cd = API.make_level1_data(dataset_inputs = [{"dataset":dataset}],use_cuts="internal", theoryid=200,
+    >>> dataset = {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"}
+    >>> l1_cd = API.make_level1_data(dataset_inputs=[dataset], use_cuts="internal", theoryid=200,
                              fakepdf = "NNPDF40_nnlo_as_01180",filterseed=1)
     >>> l1_cd
-    [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
+    [CommonData(setname='NMC_NC_NOTFIXED_P_EM-SIGMARED', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
 
     dataset_input_list = list(data.dsinputs)

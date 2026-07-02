@@ -266,10 +266,19 @@ def kfold_masks(kpartitions, data):
     --------
     >>> from validphys.api import API
     >>> partitions=[
-    ...     {"datasets": ["HERACOMBCCEM", "HERACOMBNCEP460", "NMC", "NTVNBDMNFe"]},
-    ...     {"datasets": ["HERACOMBCCEP", "HERACOMBNCEP575", "NMCPD", "NTVNUDMNFe"]}
+    ...     {"datasets": ["HERA_CC_318GEV_EM-SIGMARED", "HERA_NC_225GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_P_EM-SIGMARED", "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED"]},
+    ...     {"datasets": ["HERA_CC_318GEV_EP-SIGMARED", "HERA_NC_251GEV_EP-SIGMARED", "NMC_NC_NOTFIXED_EM-F2", "NUTEV_CC_NOTFIXED_FE_NU-SIGMARED"]}
     ... ]
-    >>> ds_inputs = [{"dataset": ds} for part in partitions for ds in part["datasets"]]
+    >>> ds_inputs = [
+    ...     {"dataset": "HERA_CC_318GEV_EM-SIGMARED"},
+    ...     {"dataset": "HERA_NC_225GEV_EP-SIGMARED"},
+    ...     {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
+    ...     {"dataset": "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED", "variant": "legacy_dw"},
+    ...     {"dataset": "HERA_CC_318GEV_EP-SIGMARED"},
+    ...     {"dataset": "HERA_NC_251GEV_EP-SIGMARED"},
+    ...     {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy_dw"},
+    ...     {"dataset": "NUTEV_CC_NOTFIXED_FE_NU-SIGMARED", "variant": "legacy_dw"},
+    ... ]
     >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=53, use_cuts="nocuts")
     >>> len(kfold_masks) # one element for each partition
     2
@@ -774,7 +783,7 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=True):
     >>> from validphys.api import API
     >>> ds_inp = [
     ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.75},
-    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory', 'frac': 0.75},
+    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'frac': 0.75},
     ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',), 'frac': 0.75},
     ... ]
     >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=40_000_000, use_cuts="nocuts", mcseed=None, genrep=False)
@@ -881,7 +890,7 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     Examples
     --------
     >>> from validphys.api import API
-    >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
+    >>> integdatasets = [{"dataset": "NNPDF_INTEG_3GEV_XT3", "maxlambda": 1e2}]
     >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
     >>> len(res), len(res[0])
     (1, 9)
