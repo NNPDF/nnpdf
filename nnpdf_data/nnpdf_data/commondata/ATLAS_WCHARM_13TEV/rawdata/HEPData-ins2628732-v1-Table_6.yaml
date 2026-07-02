@@ -1,0 +1,59 @@
+dependent_variables:
+- header: {name: INT(DSIG/DLEP_ABS_ETA), units: pb}
+  qualifiers:
+  - {name: LUMINOSITY, units: 'fb$^{-1}$', value: 139}
+  - {name: SQRT(S), units: GeV, value: 13000}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.13}
+    - {label: syst, asymerror: {minus: -0.62, plus: 0.65}}
+    value: 11.87
+  - errors:
+    - {label: stat, symerror: 0.12}
+    - {label: syst, asymerror: {minus: -0.60, plus: 0.61}}
+    value: 11.55
+  - errors:
+    - {label: stat, symerror: 0.12}
+    - {label: syst, asymerror: {minus: -0.57, plus: 0.61}}
+    value: 10.09
+  - errors:
+    - {label: stat, symerror: 0.12}
+    - {label: syst, asymerror: {minus: -0.41, plus: 0.43}}
+    value: 8.60
+  - errors:
+    - {label: stat, symerror: 0.11}
+    - {label: syst, asymerror: {minus: -0.35, plus: 0.37}}
+    value: 6.25
+- header: {name: 1/SIG INT(DSIG/DLEP_ABD_ETA)}
+  qualifiers:
+  - {name: LUMINOSITY, units: 'fb$^{-1}$', value: 139}
+  - {name: SQRT(S), units: GeV, value: 13000}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0024}
+    - {label: syst, asymerror: {minus: -0.0037, plus: 0.0037}}
+    value: 0.2455
+  - errors:
+    - {label: stat, symerror: 0.0023}
+    - {label: syst, asymerror: {minus: -0.0041, plus: 0.0041}}
+    value: 0.2387
+  - errors:
+    - {label: stat, symerror: 0.0023}
+    - {label: syst, asymerror: {minus: -0.0040, plus: 0.0042}}
+    value: 0.2087
+  - errors:
+    - {label: stat, symerror: 0.0022}
+    - {label: syst, asymerror: {minus: -0.0042, plus: 0.0042}}
+    value: 0.1779
+  - errors:
+    - {label: stat, symerror: 0.0022}
+    - {label: syst, asymerror: {minus: -0.0037, plus: 0.0038}}
+    value: 0.1292
+independent_variables:
+- header: {name: 'LEP_ABS_ETA'}
+  values:
+  - {low: 0.0, high: 0.5}
+  - {low: 0.5, high: 1.0}
+  - {low: 1.0, high: 1.5}
+  - {low: 1.5, high: 2.0}
+  - {low: 2.0, high: 2.5}
