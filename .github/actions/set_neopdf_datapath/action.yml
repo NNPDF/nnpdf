@@ -1,0 +1,12 @@
+name: Set NEOPDF_DATA_PATH
+
+# Point NeoPDF at the directory where lhapdf-management stores PDF sets,
+# so it reads local files instead of downloading from the LHAPDF servers.
+
+runs:
+  using: "composite"
+  steps:
+    - name: Point NeoPDF at the LHAPDF data directory
+      shell: bash -l {0}
+      run: |
+        echo "NEOPDF_DATA_PATH=$(python -c 'from lhapdf_management.configuration import environment; print(environment.datapath)')" >> $GITHUB_ENV

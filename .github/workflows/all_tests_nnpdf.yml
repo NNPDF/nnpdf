@@ -114,6 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       KERAS_BACKEND: torch
+      NNPDF_PDF_BACKEND: neopdf
     steps:
     - uses: actions/checkout@v6
     - uses: actions/setup-python@v5
@@ -129,9 +130,10 @@ jobs:
         # at import on CPU-only Linux + CPython 3.13. Pinning torch<2.12 also
         # pins triton to 3.6.x. Remove this pin once the upstream issue is
         # resolved (see https://github.com/nascheme/triton/issues/43).
-        pip install ".[nolha,torch]" "torch<2.12"
+        pip install ".[neopdf,torch]" "torch<2.12"
         # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
         lhapdf-management update --init
+    - uses: ./.github/actions/set_neopdf_datapath
     - name: Test we can run one runcard
       shell: bash -l {0}
       run: |
@@ -151,6 +153,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       KERAS_BACKEND: jax
+      NNPDF_PDF_BACKEND: neopdf
     steps:
     - uses: actions/checkout@v6
     - uses: actions/setup-python@v5
@@ -159,9 +162,10 @@ jobs:
     - name: Install nnpdf without LHAPDF
       shell: bash -l {0}
       run: |
-        pip install .[nolha,jax]
+        pip install .[neopdf,jax]
         # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
         lhapdf-management update --init
+    - uses: ./.github/actions/set_neopdf_datapath
     - name: Test we can run one runcard
       shell: bash -l {0}
       run: |
