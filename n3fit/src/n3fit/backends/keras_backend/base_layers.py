@@ -97,7 +97,6 @@ class VBDense(Layer):
         out_features: int,
         in_features: int,
         prior_prec: float = 1.0,
-        std_init: float = -9.0,
         map: bool = False,
         bayesian_bias: bool = False,
     ):
@@ -357,7 +356,6 @@ layers = {
             "in_features": None,
             "out_features": None,
             "prior_prec": None,
-            "std_init": None,
             "bayesian_bias": False,
             "map": False,
         },
