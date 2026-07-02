@@ -372,7 +372,6 @@ class ReplicaSettings:
     regularizer_args: dict = field(default_factory=dict)
     # NEW: BNN-specific parameters
     prior_prec: float = None
-    std_init: float = None
     dropout_rate_bayesian: float = None
     bayesian_bias: Union[bool, list] = False
 
@@ -838,7 +837,6 @@ def _generate_nn(
     regularizer: str = None,
     regularizer_args: dict = field(default_factory=dict),
     prior_prec: float = None,
-    std_init: float = None,
     dropout_rate_bayesian: float = None,
     bayesian_bias: list = None,
     training: bool = True
@@ -909,7 +907,6 @@ def _generate_nn(
             return base_layer_selector(
                 architecture_type,
                 prior_prec=prior_prec,
-                std_init=std_init,
                 in_features=nodes_in,
                 out_features=nodes_out,
                 bayesian_bias=bool(bayesian_bias[i_layer]), 
