@@ -1,0 +1,55 @@
+dependent_variables:
+- header: {name: SIG(Q=P)/SIG(Q=HAD)}
+  qualifiers:
+  - {name: RE(Q=HAD), value: E+ E- --> CHGD-HADRONS}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: '34.0'}
+  - {name: SQRT(S), units: GeV, value: '34.0'}
+  values:
+  - errors:
+    - {symerror: 0.005}
+    value: 0.009
+  - errors:
+    - {symerror: 0.003}
+    value: 0.016
+  - errors:
+    - {symerror: 0.002}
+    value: 0.022
+  - errors:
+    - {symerror: 0.004}
+    value: 0.034
+  - errors:
+    - {symerror: 0.009}
+    value: 0.039
+  - errors:
+    - {symerror: 0.005}
+    value: 0.055
+  - errors:
+    - {symerror: 0.012}
+    value: 0.073
+  - errors:
+    - {symerror: 0.026}
+    value: 0.085
+  - errors:
+    - {symerror: 0.032}
+    value: 0.102
+  - errors:
+    - {symerror: 0.037}
+    value: 0.094
+  - errors:
+    - {symerror: 0.081}
+    value: 0.16
+independent_variables:
+- header: {name: X(DEF=P(P=3)/P(P=1))}
+  values:
+  - {high: 0.0229, low: 0.0171}
+  - {high: 0.0286, low: 0.0229}
+  - {high: 0.0343, low: 0.0286}
+  - {high: 0.04, low: 0.0343}
+  - {high: 0.0457, low: 0.04}
+  - {high: 0.0686, low: 0.0457}
+  - {high: 0.0914, low: 0.0686}
+  - {high: 0.114, low: 0.0914}
+  - {high: 0.217, low: 0.171}
+  - {high: 0.343, low: 0.217}
+  - {high: 0.971, low: 0.571}

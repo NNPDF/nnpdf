@@ -1,0 +1,26 @@
+dependent_variables:
+- header: {name: (D(SIG(Q=KAON))/DP)/(D(SIG(Q=CHGD))/DP)}
+  qualifiers:
+  - {name: RE(Q=CHGD), value: E+ E- --> CHGD-HADRON X}
+  - {name: RE(Q=KAON), value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '12.0'}
+  - {name: SQRT(S), units: GeV, value: '12.0'}
+  values:
+  - errors:
+    - {symerror: 0.04}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.12
+  - errors:
+    - {symerror: 0.07}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.22
+  - errors:
+    - {symerror: 0.1}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.33
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {value: 0.45}
+  - {value: 0.55}
+  - {value: 0.8}

@@ -1,0 +1,36 @@
+dependent_variables:
+- header: {name: SIG(Q=P), units: NB}
+  qualifiers:
+  - {name: P(P=3), units: GEV, value: 0.5 TO 2.2}
+  - {name: RE(Q=MU), value: E+ E- --> MU+ MU-}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: 12.0-27.0}
+  values:
+  - errors:
+    - {symerror: 0.19}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.58
+  - errors:
+    - {symerror: 0.04}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.14
+- header: {name: SIG(Q=P)/SIG(Q=MU)}
+  qualifiers:
+  - {name: P(P=3), units: GEV, value: 0.5 TO 2.2}
+  - {name: RE(Q=MU), value: E+ E- --> MU+ MU-}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: 12.0-27.0}
+  values:
+  - errors:
+    - {symerror: 0.3}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.9
+  - errors:
+    - {symerror: 0.4}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 1.5
+independent_variables:
+- header: {name: SQRT(S), units: GEV}
+  values:
+  - {value: 12.0}
+  - {high: 31.6, low: 27.0}
