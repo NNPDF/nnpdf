@@ -1,0 +1,156 @@
+dependent_variables:
+- header: {name: ''}
+  qualifiers:
+  - {name: ., value: Correlation matrix}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.02'
+  - errors: []
+    value: '-0.17'
+  - errors: []
+    value: '-0.40'
+  - errors: []
+    value: '-0.27'
+  - errors: []
+    value: '-0.16'
+  - errors: []
+    value: '0.02'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.60'
+  - errors: []
+    value: '0.49'
+  - errors: []
+    value: '0.35'
+  - errors: []
+    value: '0.22'
+  - errors: []
+    value: '-0.17'
+  - errors: []
+    value: '0.60'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.69'
+  - errors: []
+    value: '0.49'
+  - errors: []
+    value: '0.34'
+  - errors: []
+    value: '-0.40'
+  - errors: []
+    value: '0.49'
+  - errors: []
+    value: '0.69'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.77'
+  - errors: []
+    value: '0.57'
+  - errors: []
+    value: '-0.27'
+  - errors: []
+    value: '0.35'
+  - errors: []
+    value: '0.49'
+  - errors: []
+    value: '0.77'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.85'
+  - errors: []
+    value: '-0.16'
+  - errors: []
+    value: '0.22'
+  - errors: []
+    value: '0.34'
+  - errors: []
+    value: '0.57'
+  - errors: []
+    value: '0.85'
+  - errors: []
+    value: '1.00'
+independent_variables:
+- header: {name: '$N_{{\mathrm{jets}}}$ ($p_{\mathrm{T}}$>25 GeV)'}
+  values:
+  - {high: 1.0, low: 0.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 1000.0, low: 5.0}
+- header: {name: '$N_{{\mathrm{jets}}}$ ($p_{\mathrm{T}}$>25 GeV)'}
+  values:
+  - {high: 1.0, low: 0.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 1.0, low: 0.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 2.0, low: 1.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 3.0, low: 2.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 4.0, low: 3.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 5.0, low: 4.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1000.0, low: 5.0}
+  - {high: 1000.0, low: 5.0}

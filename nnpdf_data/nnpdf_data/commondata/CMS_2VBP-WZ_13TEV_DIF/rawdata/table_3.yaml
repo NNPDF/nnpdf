@@ -1,0 +1,161 @@
+independent_variables:
+- header: {name: A table}
+  values:
+    - {value: 'Electron efficiency'}
+    - {value: 'Electron energy scale'}
+    - {value: 'Muon efficiency'}
+    - {value: 'Muon momentum scale'}
+    - {value: 'Trigger efficiency'}
+    - {value: 'Jet energy scale'}
+    - {value: '\cPqb-tagging (id.)'}
+    - {value: '\cPqb-tagging (mis-id.)'}
+    - {value: 'Pileup'}
+    - {value: '\ZZ'}
+    - {value: 'Nonprompt norm.'}
+    - {value: 'Nonprompt (EWK subtr.)'}
+    - {value: '\vvv norm.'}
+    - {value: 'V\PH norm.'}
+    - {value: '\ttbar\PV norm.'}
+    - {value: 't\cPZ\cPq\ norm.'}
+    - {value: 'X+$\gamma$ norm.'}
+    - {value: 'Total systematic'}
+    - {value: 'Integrated luminosity'}
+    - {value: 'Statistical'}
+    - {value: 'Total experimental'}
+    - {value: 'Theoretical'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: 'Combined'}
+  values:
+  - {value: '1.9'}
+  - {value: '0.3'}
+  - {value: '1.9'}
+  - {value: '0.5'}
+  - {value: '1.9'}
+  - {value: '0.9'}
+  - {value: '2.6'}
+  - {value: '0.9'}
+  - {value: '0.8'}
+  - {value: '0.6'}
+  - {value: '1.2'}
+  - {value: '1.0'}
+  - {value: '0.5'}
+  - {value: '0.2'}
+  - {value: '0.5'}
+  - {value: '0.1'}
+  - {value: '0.3'}
+  - {value: '4.7'}
+  - {value: '2.8'}
+  - {value: '2.1'}
+  - {value: '6.0'}
+  - {value: '0.9'}
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '\eee'}
+  values:
+  - {value: '5.9'}
+  - {value: '0.9'}
+  - {value: 'NA'}
+  - {value: 'NA'}
+  - {value: '2.0'}
+  - {value: '1.6'}
+  - {value: '2.7'}
+  - {value: '1.0'}
+  - {value: '0.9'}
+  - {value: '0.7'}
+  - {value: '2.0'}
+  - {value: '1.5'}
+  - {value: '0.6'}
+  - {value: '0.2'}
+  - {value: '0.5'}
+  - {value: '0.1'}
+  - {value: '0.8'}
+  - {value: '7.8'}
+  - {value: '2.9'}
+  - {value: '6.0'}
+  - {value: '10.8'}
+  - {value: '0.9'}
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '\eem'}
+  values:
+  - {value: '3.9'}
+  - {value: '0.2'}
+  - {value: '0.8'}
+  - {value: '0.7'}
+  - {value: '1.9'}
+  - {value: '1.0'}
+  - {value: '2.6'}
+  - {value: '0.9'}
+  - {value: '0.3'}
+  - {value: '0.4'}
+  - {value: '1.2'}
+  - {value: '1.0'}
+  - {value: '0.6'}
+  - {value: '0.3'}
+  - {value: '0.5'}
+  - {value: '0.1'}
+  - {value: '<0.1'}
+  - {value: '5.8'}
+  - {value: '2.8'}
+  - {value: '4.8'}
+  - {value: '8.0'}
+  - {value: '0.9'}
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '\emm'}
+  values:
+  - {value: '1.9'}
+  - {value: '0.6'}
+  - {value: '1.8'}
+  - {value: '0.3'}
+  - {value: '1.9'}
+  - {value: '1.7'}
+  - {value: '2.6'}
+  - {value: '1.0'}
+  - {value: '1.3'}
+  - {value: '0.8'}
+  - {value: '1.5'}
+  - {value: '1.3'}
+  - {value: '0.6'}
+  - {value: '0.2'}
+  - {value: '0.5'}
+  - {value: '0.1'}
+  - {value: '0.7'}
+  - {value: '5.4'}
+  - {value: '2.9'}
+  - {value: '4.1'}
+  - {value: '7.5'}
+  - {value: '0.9'}
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '\mmm'}
+  values:
+  - {value: 'NA'}
+  - {value: 'NA'}
+  - {value: '2.6'}
+  - {value: '0.9'}
+  - {value: '1.8'}
+  - {value: '0.8'}
+  - {value: '2.4'}
+  - {value: '0.7'}
+  - {value: '1.4  [cmsTabSkip]'}
+  - {value: '0.5'}
+  - {value: '1.0'}
+  - {value: '0.8'}
+  - {value: '0.5'}
+  - {value: '0.2'}
+  - {value: '0.5'}
+  - {value: '0.1'}
+  - {value: '<0.1    [cmsTabSkip]'}
+  - {value: '4.6  [cmsTabSkip]'}
+  - {value: '2.8  [cmsTabSkip]'}
+  - {value: '3.1  [cmsTabSkip]'}
+  - {value: '6.3  [cmsTabSkip]'}
+  - {value: '0.9'}

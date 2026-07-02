@@ -1,0 +1,189 @@
+independent_variables:
+- header: {name: A table}
+  values:
+    - {value: 'Nonprompt'}
+    - {value: '\ZZ'}
+    - {value: 'X$\gamma$'}
+    - {value: '\ttbar\PV'}
+    - {value: '\vvv'}
+    - {value: 'V\PH'}
+    - {value: 't\cPZ\cPq'}
+    - {value: 'Total background'}
+    - {value: '\WZ'}
+    - {value: 'Data'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '\eee'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 12.4}
+    value: '30.0'
+  - errors:
+    - {label: stat+syst, symerror: 4.1}
+    value: '43.4'
+  - errors:
+    - {label: stat+syst, symerror: 5.2}
+    value: '16.8'
+  - errors:
+    - {label: stat+syst, symerror: 2.8}
+    value: '8.5'
+  - errors:
+    - {label: stat+syst, symerror: 2.5}
+    value: '6.2'
+  - errors:
+    - {label: stat+syst, symerror: 0.8}
+    value: '3.3'
+  - errors:
+    - {label: stat+syst, symerror: 1.30}
+    value: '3.9'
+  - errors:
+    - {label: stat+syst, symerror: 15}
+    value: '112'
+  - errors:
+    - {label: stat+syst, symerror: 18}
+    value: '398'
+  - errors:
+    - {label: stat+syst, symerror: 23}
+    value: '513'
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '\eem'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 10.4}
+    value: '25.0'
+  - errors:
+    - {label: stat+syst, symerror: 3.4}
+    value: '44.4'
+  - errors:
+    - {label: stat+syst, symerror: 0.7}
+    value: '2.0'
+  - errors:
+    - {label: stat+syst, symerror: 4.1}
+    value: '11.6'
+  - errors:
+    - {label: stat+syst, symerror: 3.4}
+    value: '8.6'
+  - errors:
+    - {label: stat+syst, symerror: 1.6}
+    value: '6.4'
+  - errors:
+    - {label: stat+syst, symerror: 1.9}
+    value: '5.7'
+  - errors:
+    - {label: stat+syst, symerror: 15}
+    value: '104'
+  - errors:
+    - {label: stat+syst, symerror: 21}
+    value: '579'
+  - errors:
+    - {label: stat+syst, symerror: 26}
+    value: '673'
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '\emm'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 20.7}
+    value: '45.7'
+  - errors:
+    - {label: stat+syst, symerror: 9.2}
+    value: '100.1'
+  - errors:
+    - {label: stat+syst, symerror: 8.8}
+    value: '26.9'
+  - errors:
+    - {label: stat+syst, symerror: 5.5}
+    value: '16.8'
+  - errors:
+    - {label: stat+syst, symerror: 4.6}
+    value: '11.4'
+  - errors:
+    - {label: stat+syst, symerror: 1.9}
+    value: '7.7'
+  - errors:
+    - {label: stat+syst, symerror: 2.8}
+    value: '8.4'
+  - errors:
+    - {label: stat+syst, symerror: 28}
+    value: '217'
+  - errors:
+    - {label: stat+syst, symerror: 29}
+    value: '856'
+  - errors:
+    - {label: stat+syst, symerror: 32}
+    value: '1058'
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '\mmm'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 19.3}
+    value: '50.3'
+  - errors:
+    - {label: stat+syst, symerror: 8.3}
+    value: '107.1'
+  - errors:
+    - {label: stat+syst, symerror: 2.0}
+    value: '7.6'
+  - errors:
+    - {label: stat+syst, symerror: 9.0}
+    value: '25.8'
+  - errors:
+    - {label: stat+syst, symerror: 6.8}
+    value: '16.9'
+  - errors:
+    - {label: stat+syst, symerror: 3.0}
+    value: '12.1'
+  - errors:
+    - {label: stat+syst, symerror: 4.3}
+    value: '12.6'
+  - errors:
+    - {label: stat+syst, symerror: 29}
+    value: '233'
+  - errors:
+    - {label: stat+syst, symerror: 47}
+    value: '1333'
+  - errors:
+    - {label: stat+syst, symerror: 40}
+    value: '1587'
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: 'Total'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 63}
+    value: '151'
+  - errors:
+    - {label: stat+syst, symerror: 24}
+    value: '295'
+  - errors:
+    - {label: stat+syst, symerror: 16}
+    value: '53'
+  - errors:
+    - {label: stat+syst, symerror: 21}
+    value: '63'
+  - errors:
+    - {label: stat+syst, symerror: 17}
+    value: '43'
+  - errors:
+    - {label: stat+syst, symerror: 7.2}
+    value: '29.6'
+  - errors:
+    - {label: stat+syst, symerror: 10}
+    value: '31'
+  - errors:
+    - {label: stat+syst, symerror: 45}
+    value: '666'
+  - errors:
+    - {label: stat+syst, symerror: 62}
+    value: '3166'
+  - errors:
+    - {label: stat+syst, symerror: 62}
+    value: '3831'

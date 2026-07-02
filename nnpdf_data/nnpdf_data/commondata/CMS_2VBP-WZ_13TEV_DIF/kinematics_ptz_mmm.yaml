@@ -1,0 +1,45 @@
+bins:
+- ptZ:
+    min: 0
+    mid: null
+    max: 10
+- ptZ:
+    min: 10
+    mid: null
+    max: 20
+- ptZ:
+    min: 20
+    mid: null
+    max: 30
+- ptZ:
+    min: 30
+    mid: null
+    max: 50
+- ptZ:
+    min: 50
+    mid: null
+    max: 70
+- ptZ:
+    min: 70
+    mid: null
+    max: 90
+- ptZ:
+    min: 90
+    mid: null
+    max: 110
+- ptZ:
+    min: 110
+    mid: null
+    max: 130
+- ptZ:
+    min: 130
+    mid: null
+    max: 160
+- ptZ:
+    min: 160
+    mid: null
+    max: 200
+- ptZ:
+    min: 200
+    mid: null
+    max: 300

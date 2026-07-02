@@ -1,0 +1,61 @@
+bins:
+- pt_em:
+    min: 30.0
+    mid: null
+    max: 35.0
+- pt_em:
+    min: 35.0
+    mid: null
+    max: 40.0
+- pt_em:
+    min: 40.0
+    mid: null
+    max: 45.0
+- pt_em:
+    min: 45.0
+    mid: null
+    max: 50.0
+- pt_em:
+    min: 50.0
+    mid: null
+    max: 55.0
+- pt_em:
+    min: 55.0
+    mid: null
+    max: 60.0
+- pt_em:
+    min: 60.0
+    mid: null
+    max: 65.0
+- pt_em:
+    min: 65.0
+    mid: null
+    max: 70.0
+- pt_em:
+    min: 70.0
+    mid: null
+    max: 75.0
+- pt_em:
+    min: 75.0
+    mid: null
+    max: 80.0
+- pt_em:
+    min: 80.0
+    mid: null
+    max: 90.0
+- pt_em:
+    min: 90.0
+    mid: null
+    max: 105.0
+- pt_em:
+    min: 105.0
+    mid: null
+    max: 140.0
+- pt_em:
+    min: 140.0
+    mid: null
+    max: 200.0
+- pt_em:
+    min: 200.0
+    mid: null
+    max: 999.0

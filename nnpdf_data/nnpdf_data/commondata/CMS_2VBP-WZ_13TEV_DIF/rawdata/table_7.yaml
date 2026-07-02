@@ -1,0 +1,349 @@
+independent_variables:
+- header: {name: A table}
+  values:
+    - {value: 'eee'}
+    - {value: '$[0, 10]$'}
+    - {value: '$[10, 20]$'}
+    - {value: '$[20, 30]$'}
+    - {value: '$[30, 50]$'}
+    - {value: '$[50, 70]$'}
+    - {value: '$[70, 90]$'}
+    - {value: '$[90, 110]$'}
+    - {value: '$[110, 130]$'}
+    - {value: '$[130, 160]$'}
+    - {value: '$[160, 200]$'}
+    - {value: '$[200, 300]$'}
+    - {value: 'eem'}
+    - {value: '$[0, 10]$'}
+    - {value: '$[10, 20]$'}
+    - {value: '$[20, 30]$'}
+    - {value: '$[30, 50]$'}
+    - {value: '$[50, 70]$'}
+    - {value: '$[70, 90]$'}
+    - {value: '$[90, 110]$'}
+    - {value: '$[110, 130]$'}
+    - {value: '$[130, 160]$'}
+    - {value: '$[160, 200]$'}
+    - {value: '$[200, 300]$'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: 'Central value'}
+  values:
+  - {value: 'eee'}
+  - {value: '0.024'}
+  - {value: '0.102'}
+  - {value: '0.169'}
+  - {value: '0.122'}
+  - {value: '0.180'}
+  - {value: '0.132'}
+  - {value: '0.092'}
+  - {value: '0.078'}
+  - {value: '0.053'}
+  - {value: '0.037'}
+  - {value: '0.010'}
+  - {value: 'eem'}
+  - {value: '0.033'}
+  - {value: '0.101'}
+  - {value: '0.177'}
+  - {value: '0.188'}
+  - {value: '0.148'}
+  - {value: '0.103'}
+  - {value: '0.080'}
+  - {value: '0.090'}
+  - {value: '0.049'}
+  - {value: '0.015'}
+  - {value: '0.015'}
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(stat)'}
+  values:
+  - {value: 'eee'}
+  - errors:
+    - {label: stat, symerror: 0.016}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.030}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.039}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.024}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.027}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.023}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.020}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.018}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.012}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.008}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.003}
+    value: ''
+  - {value: 'eem'}
+  - errors:
+    - {label: stat, symerror: 0.013}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.023}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.030}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.020}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.019}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.016}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.015}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.015}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.009}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat, symerror: 0.003}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(bgr)'}
+  values:
+  - {value: 'eee'}
+  - errors:
+    - {label: bgr, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: bgr, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: bgr, symerror: 0.010}
+    value: ''
+  - errors:
+    - {label: bgr, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: bgr, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: bgr, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: bgr, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.00025}
+    value: ''
+  - {value: 'eem'}
+  - errors:
+    - {label: bgr+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: bgr+syst, symerror: 0.00025}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(other syst)'}
+  values:
+  - {value: 'eee'}
+  - errors:
+    - {label: other syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.001}
+    value: ''
+  - {value: 'eem'}
+  - errors:
+    - {label: other syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: other syst, symerror: 0.00025}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(total)'}
+  values:
+  - {value: 'eee'}
+  - errors:
+    - {label: total, symerror: 0.016)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.031)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.041)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.025)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.028)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.024)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.022)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.019)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.013)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.008)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.003)}
+    value: '('
+  - {value: 'eem'}
+  - errors:
+    - {label: total, symerror: 0.014)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.024)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.030)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.021)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.019)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.017)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.015)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.015)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.009)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.005)}
+    value: '('
+  - errors:
+    - {label: total, symerror: 0.003)}
+    value: '('

@@ -1,0 +1,112 @@
+dependent_variables:
+- header: {name: ''}
+  qualifiers:
+  - {name: ., value: Correlation matrix}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.69'
+  - errors: []
+    value: '0.68'
+  - errors: []
+    value: '0.65'
+  - errors: []
+    value: '0.56'
+  - errors: []
+    value: '0.69'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.67'
+  - errors: []
+    value: '0.64'
+  - errors: []
+    value: '0.58'
+  - errors: []
+    value: '0.68'
+  - errors: []
+    value: '0.67'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.65'
+  - errors: []
+    value: '0.58'
+  - errors: []
+    value: '0.65'
+  - errors: []
+    value: '0.64'
+  - errors: []
+    value: '0.65'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.54'
+  - errors: []
+    value: '0.56'
+  - errors: []
+    value: '0.58'
+  - errors: []
+    value: '0.58'
+  - errors: []
+    value: '0.54'
+  - errors: []
+    value: '1.00'
+independent_variables:
+- header: {name: '$|y_Z - y_{\ell, W}|$'}
+  values:
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.4, low: 0.8}
+  - {high: 2.2, low: 1.4}
+  - {high: 5.0, low: 2.2}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.4, low: 0.8}
+  - {high: 2.2, low: 1.4}
+  - {high: 5.0, low: 2.2}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.4, low: 0.8}
+  - {high: 2.2, low: 1.4}
+  - {high: 5.0, low: 2.2}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.4, low: 0.8}
+  - {high: 2.2, low: 1.4}
+  - {high: 5.0, low: 2.2}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.4, low: 0.8}
+  - {high: 2.2, low: 1.4}
+  - {high: 5.0, low: 2.2}
+- header: {name: '$|y_Z - y_{\ell, W}|$'}
+  values:
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.4, low: 0.8}
+  - {high: 1.4, low: 0.8}
+  - {high: 1.4, low: 0.8}
+  - {high: 1.4, low: 0.8}
+  - {high: 1.4, low: 0.8}
+  - {high: 2.2, low: 1.4}
+  - {high: 2.2, low: 1.4}
+  - {high: 2.2, low: 1.4}
+  - {high: 2.2, low: 1.4}
+  - {high: 2.2, low: 1.4}
+  - {high: 5.0, low: 2.2}
+  - {high: 5.0, low: 2.2}
+  - {high: 5.0, low: 2.2}
+  - {high: 5.0, low: 2.2}
+  - {high: 5.0, low: 2.2}
