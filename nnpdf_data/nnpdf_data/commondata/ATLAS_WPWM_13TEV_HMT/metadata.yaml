@@ -1,0 +1,222 @@
+setname: ATLAS_WPWM_13TEV_HMT
+version: 1
+version_comment: Only combined channel to be used as EW corrections are not available for the dimuon channel.
+nnpdf_metadata:
+  nnpdf31_process: DY_W_MT CC
+  experiment: ATLAS
+arXiv:
+  url: "https://arxiv.org/abs/2502.21088"
+  journal: JHEP 07 (2025) 026
+iNSPIRE:
+  url: "https://inspirehep.net/literature/2895869"
+hepdata:
+  url: "https://www.hepdata.net/record/ins2895869"
+  version: 2
+implemented_observables:
+  - observable_name: DIF-LEP
+    observable:
+      description: Combined Born-level single-differential cross-section in the $l^+$ and $l^-$ channels in sequence
+      label: ATLAS $W$ 13 TeV Differential
+      units: "pb/GeV"
+    process_type: DY_W_MT
+    tables: [38, 39]
+    npoints: [24]
+    ndata: 24
+    plotting:
+      dataset_label: ATLAS $W$ 13 TeV Differential
+      y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
+      line_by:
+        - charge
+      normalize:
+        figure_by:
+          - charge
+      plot_x: mt
+    kinematic_coverage:
+      - mt
+      - M2
+      - charge
+    kinematics:
+      variables:
+        mt:
+          description: Transverse mass of the W boson
+          label: "$m_T^W$"
+          units: "GeV"
+        M2:
+          description: W boson squared mass
+          label: "$m_W^2$"
+          units: "GeV$^2$"
+        charge:
+          description: W boson charge
+          label: "charge"
+          units: ""
+      file: kinematics_DIF-LEP.yaml
+    theory:
+      conversion_factor: 0.001
+      operation: "null"
+      FK_tables:
+        - - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WP
+          - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WM
+    data_uncertainties:
+      - uncertainties_DIF-LEP.yaml
+    data_central: data_DIF-LEP.yaml
+
+  - observable_name: DIF-MUON
+    observable:
+      description: Born-level single-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence
+      label: ATLAS $W$ 13 TeV Differential
+      units: "pb/GeV"
+    process_type: DY_W_MT
+    tables: [20, 21]
+    npoints: [24]
+    ndata: 24
+    plotting:
+      dataset_label: ATLAS $W$ 13 TeV Differential
+      y_label: $\frac{d \sigma}{d m_T^W}$ (pb/GeV)
+      line_by:
+        - charge
+      normalize:
+        figure_by:
+          - charge
+      plot_x: mt
+    kinematic_coverage:
+      - mt
+      - M2
+      - charge
+    kinematics:
+      variables:
+        mt:
+          description: Transverse mass of the W boson
+          label: "$m_T^W$"
+          units: "GeV"
+        M2:
+          description: W boson squared mass
+          label: "$m_W^2$"
+          units: "GeV$^2$"
+        charge:
+          description: W boson charge
+          label: "charge"
+          units: ""
+      file: kinematics_DIF-MUON.yaml
+    theory:
+      conversion_factor: 0.001
+      operation: "null"
+      FK_tables:
+        - - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WP #Should this be the same as the lep observables?
+          - FK_ATLAS_WPWM_13TEV_HMT_DIF-LEP-WM
+    data_uncertainties:
+      - uncertainties_DIF-MUON.yaml
+    data_central: data_DIF-MUON.yaml
+
+  - observable_name: DDIF-LEP
+    observable:
+      description: Combined Born-level double-differential cross-section in the $l^+$ and $l^-$ channels in sequence
+      label: ATLAS $W$ 13 TeV Double-Differential
+      units: "pb/GeV"
+    process_type: DY_CC_PT
+    tables: [44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    npoints: []
+    ndata: 80
+    plotting:
+      dataset_label: ATLAS $W$ 13 TeV Double-Differential
+      y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
+      line_by:
+        - mt
+      normalize:
+        figure_by:
+          - charge
+        line_by:
+          - mt
+      plot_x: eta
+    kinematic_coverage:
+      - eta
+      - mt
+      - charge
+    kinematics:
+      variables:
+        eta:
+          description: Absolute lepton pseudorapidity
+          label: "$|eta|$"
+          units: ""
+        mt:
+          description: Transverse mass of the W boson
+          label: "$m_T^W$"
+          units: "GeV"
+        charge:
+          description: W boson charge
+          label: "charge"
+          units: ""
+      file: kinematics_DDIF-LEP.yaml
+    theory:
+      conversion_factor: 0.002
+      operation: "null"
+      FK_tables:
+        - - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-0
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-1
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-2
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-3
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-4
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-0
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-1
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-2
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-3
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-4
+    data_uncertainties:
+      - uncertainties_DDIF-LEP.yaml
+    data_central: data_DDIF-LEP.yaml
+
+  - observable_name: DDIF-MUON
+    observable:
+      description: Combined Born-level double-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence
+      label: ATLAS $W$ 13 TeV Double-Differential
+      units: "pb/GeV"
+    process_type: DY_CC_PT
+    tables: [23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+    npoints: []
+    ndata: 80
+    plotting:
+      dataset_label: ATLAS $W$ 13 TeV Double-Differential
+      y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
+      line_by:
+        - mt
+      normalize:
+        figure_by:
+          - charge
+        line_by:
+          - mt
+      plot_x: eta
+    kinematic_coverage:
+      - eta
+      - mt
+      - charge
+    kinematics:
+      variables:
+        eta:
+          description: Absolute lepton pseudorapidity
+          label: "$|eta|$"
+          units: ""
+        mt:
+          description: Transverse mass of the W boson
+          label: "$m_T^W$"
+          units: "GeV"
+        charge:
+          description: W boson charge
+          label: "charge"
+          units: ""
+      file: kinematics_DDIF-MUON.yaml
+    theory:
+      conversion_factor: 0.002
+      operation: "null"
+      FK_tables:
+        - - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-0
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-1
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-2
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-3
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WP-4
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-0
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-1
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-2
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-3
+          - FK_ATLAS_WPWM_13TEV_HMT_DDIF-LEP-WM-4
+    data_uncertainties:
+      - uncertainties_DDIF-MUON.yaml
+    data_central: data_DDIF-MUON.yaml
