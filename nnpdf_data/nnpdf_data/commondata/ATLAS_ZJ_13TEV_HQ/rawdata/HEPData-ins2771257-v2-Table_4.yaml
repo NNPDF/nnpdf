@@ -1,0 +1,2706 @@
+independent_variables:
+- header: {name: "Z $p_{\\text{T}}$ in $Z +\\ge 1 c$-jet", units: GeV}
+  values:
+  - {low: 0, high: 15}
+  - {low: 15, high: 30}
+  - {low: 30, high: 40}
+  - {low: 40, high: 50}
+  - {low: 50, high: 60}
+  - {low: 60, high: 75}
+  - {low: 75, high: 90}
+  - {low: 90, high: 110}
+  - {low: 110, high: 130}
+  - {low: 130, high: 180}
+  - {low: 180, high: 240}
+  - {low: 240, high: 350}
+  - {low: 350, high: 500}
+  - {low: 500, high: 1000}
+dependent_variables:
+- header: {name: DSIG/DPT, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: Data}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.07346
+    errors: 
+     - {symerror: 0.000469357, label: stat}
+     - {symerror: 0.000784863, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.000203848, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.000355408, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.000690989, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.0035184, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000122454, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.000220113, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000139512, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.000139974, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 1.93566e-05, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 3.69251e-05, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.000141375, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.000161838, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.000145383, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.0001399, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.00018844, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 3.50624e-05, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.000300463, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.000133965, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.000141479, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 9.62391e-05, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 9.45106e-05, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.000147365, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.000177152, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 4.55976e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.000149056, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.00013978, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 2.48067e-05, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.00018473, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 1.08518e-05, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.000141367, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.00013981, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.000158798, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.0004474, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 9.27448e-05, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 5.81518e-06, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.00013987, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.000151623, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.000104535, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 6.51181e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 2.24635e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 1.2964e-06, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 2.96906e-06, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 2.23517e-08, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 5.10365e-07, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.000436485, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.000132699, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.00029365, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.000960931, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.000638135, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.000884712, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.00114838, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.000953317, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.000145622, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.000633866, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.000138164, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.000139907, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 9.63435e-05, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.000140831, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.000140078, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 9.32887e-05, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 5.02691e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.000150181, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.000139609, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 5.01126e-05, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.000188004, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.000141487, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 0.000177614, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.000373635, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.00025326, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.000135906, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 0.00020482, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.000569835, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 6.49579e-05, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.00164491, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00121461, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 9.10833e-05, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.000252273, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.000202693, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000297856, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 8.86992e-05, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.000141174, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 1.86265e-07, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.38419e-07, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 2.23517e-08, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 1.18464e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 2.68221e-07, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 5.21541e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 1.22935e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 1.46031e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 2.86847e-07, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 1.46031e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 2.86847e-07, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.00206759, label: 'sys,JET_BJES_Response' }
+     - {symerror: 0.000120461, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.000144269, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 9.23723e-05, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 0.000188362, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.00015536, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.000997413, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.000215225, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 7.79703e-05, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 8.91015e-05, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 9.68203e-05, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00020013, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 5.37857e-05, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.000102125, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.000159495, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.000100181, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.00050379, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 1.11759e-07, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.000217639, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.000150464, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.000318207, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.000641849, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.000291325, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.000415869, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.000672039, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 7.69123e-05, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.00260719, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 9.23872e-07, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.49012e-07, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.000641283, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.00107189, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.00116057, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.000942897, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.00101818, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.000546668, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.000353653, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.000891913, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 6.89179e-07, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 5.20013e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.000104655, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.000105496, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 9.61348e-05, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000142775, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.41186e-05, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.08033e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.9744e-07, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 9.90927e-07, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 8.79169e-07, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 1.92225e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 3.72529e-08, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 7.63014e-05, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 6.878e-05, label: 'sys,MUON_SCALE' }
+     - {symerror: 2.23517e-08, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 2.23517e-08, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.000180032, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.000118844, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.000199284, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00013813, label: 'sys,DIBOSON' }
+     - {symerror: 2.23517e-08, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 2.23517e-08, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 7.31647e-06, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000350591, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000389792, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.000744954, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.000839561, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.00895324, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.00688481, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.000508957, label: 'sys,MCStatistics' }
+     - {symerror: 0.000567403, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 6.25849e-07, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.00061284, label: 'sys,FxFxSig' }
+     - {symerror: 0.000505716, label: 'sys,FxFxBkg' }
+  - value: 0.162233
+    errors: 
+     - {symerror: 0.000596121, label: stat}
+     - {symerror: 0.0015129, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.000419751, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.000569783, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.00122024, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.00681268, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000139013, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.000316076, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000126496, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 0.000127181, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 0.000141874, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 0.000141919, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 0.000130817, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.000189632, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.000102878, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000127062, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 0.000240505, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 6.75917e-05, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.000470683, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.000283748, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 0.000130966, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 0.000185043, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.00010702, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00028272, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.000154331, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 9.16347e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 0.000259742, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.000126854, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.000138596, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.000250414, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 2.04593e-05, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.000130758, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.000360429, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 0.000127271, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.000512458, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 0.000135034, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 1.25766e-05, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.000127032, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.000487842, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.00019937, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.16825e-05, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 3.72529e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 6.92904e-06, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 7.66665e-06, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 4.69387e-07, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.11759e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.000672653, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00039681, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.000686839, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.00138096, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.000991978, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.00146927, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.00167906, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.00142883, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.000374943, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.000922449, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.000197716, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 0.000130489, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.000232972, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.000252873, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 0.00012739, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 0.000138283, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 3.25665e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.000101253, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 0.00012663, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 6.66901e-05, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.000124969, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 0.000131026, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 8.39382e-05, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 5.29438e-05, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.000275232, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 0.000125661, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 9.23723e-05, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.000350311, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.000170656, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.000903226, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00139616, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 0.000133261, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.00022874, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.000266373, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000278331, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 0.000131369, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 0.000130281, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 1.78814e-07, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.08616e-07, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 4.02331e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 9.23872e-07, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 4.47035e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 3.7998e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 3.8594e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.02073e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 3.8594e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.02073e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.00303165, label: 'sys,JET_BJES_Response' }
+     - {symerror: 8.95262e-05, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 0.000134692, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 0.000152573, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 9.95547e-05, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 0.000187658, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.00171642, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 0.000168107, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.000155717, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.000147998, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 0.000146002, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.00030148, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 0.000143334, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 0.000164106, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 0.000199094, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.000161707, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.00124967, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 5.96046e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 0.000107065, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 4.11272e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.000478417, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.000705205, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.000219464, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.000230819, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.00123943, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 7.87824e-05, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.00461337, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 1.95205e-06, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 7.45058e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 2.95863e-05, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.000814885, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.00100204, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.000596896, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.00055375, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.000533678, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.000305809, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.000457071, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.885e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 3.47346e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.000128314, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.000192039, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.5225e-05, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000134185, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000138387, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.12924e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 8.64267e-07, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 2.71946e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 2.51085e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 5.07385e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 1.04308e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 0.000105001, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 8.72463e-05, label: 'sys,MUON_SCALE' }
+     - {symerror: 8.19564e-08, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 5.96046e-08, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.000363454, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.000354394, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.000324123, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.00011982, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 8.19564e-08, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 1.98856e-05, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000288077, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000994347, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.000761911, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.00136311, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.0101626, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.00797661, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.000638366, label: 'sys,MCStatistics' }
+     - {symerror: 0.00134803, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 1.89245e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.000537768, label: 'sys,FxFxSig' }
+     - {symerror: 0.00117417, label: 'sys,FxFxBkg' }
+  - value: 0.168554
+    errors: 
+     - {symerror: 0.00068374, label: stat}
+     - {symerror: 0.00153355, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.000301838, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.000378631, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.000981063, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.00577391, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000738181, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.000512779, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 6.73234e-05, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 6.81281e-05, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 2.31415e-05, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 4.72367e-05, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 2.86996e-05, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 9.68575e-05, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 0.000134692, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 0.000114709, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 9.55835e-05, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 5.61103e-05, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.00031966, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.000264756, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 5.33611e-05, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 8.64193e-05, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.000228323, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.000219934, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 0.000135362, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 7.88271e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 9.88394e-05, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 0.000112474, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 0.000126749, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.000303194, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 0.000100322, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.000136062, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.000161931, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 6.86049e-05, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.000314914, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 2.77981e-05, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 9.27001e-05, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 8.20905e-05, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.000519432, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.000163138, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 6.51926e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.51992e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 1.53109e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 1.05053e-05, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 1.34856e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.3113e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.00106038, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.000733219, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.000690721, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.00128226, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.000828788, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.000565827, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.000633203, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.000894882, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 6.75917e-05, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.000251919, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 8.18446e-05, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 7.8842e-05, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.000157326, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.000195011, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 6.81281e-05, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 7.41333e-05, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 8.04067e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 0.000106469, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 6.78301e-05, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 8.04663e-05, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.000139266, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 3.04431e-05, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 4.77135e-05, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.000311814, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 1.35228e-05, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 5.97239e-05, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 7.50646e-05, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.000277251, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 0.000101328, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.000271685, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.000583768, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 2.73585e-05, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 2.86028e-05, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 4.77284e-05, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 9.3855e-05, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 8.52048e-05, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 2.37748e-05, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 1.3411e-07, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 1.41561e-07, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 5.81145e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.20699e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 5.96046e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 5.58794e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 5.75185e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.63168e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 5.75185e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.63168e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.00224955, label: 'sys,JET_BJES_Response' }
+     - {symerror: 3.41833e-05, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 3.66718e-05, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 3.78862e-05, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 8.73953e-05, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 8.11815e-05, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.00135659, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 6.26594e-05, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 0.000109889, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 0.000122957, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 4.47631e-05, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 0.000249259, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 2.44901e-05, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 4.98816e-05, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 1.05277e-05, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 0.000104144, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.00100421, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 6.70552e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 4.04119e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 0.000136264, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 0.000226371, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.000582479, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.000460505, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.000338309, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.00131004, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 0.000207141, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.00429262, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 1.49012e-06, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.49012e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.000155948, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.000941366, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.000942431, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.000685401, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.000404961, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.000463896, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.000320569, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.000391439, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 2.26498e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 5.73695e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 2.39313e-05, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.00030379, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.66183e-05, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00010708, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 7.39843e-05, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.8743e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.27405e-06, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 3.66569e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 3.2559e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 5.94556e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 2.68221e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 8.85725e-05, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000136122, label: 'sys,MUON_SCALE' }
+     - {symerror: 8.19564e-08, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 8.19564e-08, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.000184394, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.000162944, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00019747, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 6.27115e-05, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 1.19209e-07, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 2.63751e-05, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000264421, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000905596, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.00146177, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.000780851, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.00789475, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.00638889, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.000758201, label: 'sys,MCStatistics' }
+     - {symerror: 0.0013384, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 2.563e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.000528805, label: 'sys,FxFxSig' }
+     - {symerror: 0.000606805, label: 'sys,FxFxBkg' }
+  - value: 0.136476
+    errors: 
+     - {symerror: 0.000624821, label: stat}
+     - {symerror: 0.00117601, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.000215121, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.000266105, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.000604376, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.00373745, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000947595, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.000415377, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000129938, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 5.0351e-05, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 1.57952e-05, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 1.44839e-05, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 9.10461e-06, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 0.000101253, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 8.5555e-05, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 7.49454e-05, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 7.17416e-05, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 3.57404e-05, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.000218704, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 0.000187904, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 1.97291e-05, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 4.34816e-05, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 0.000157744, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 0.00012444, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 9.16943e-05, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 5.47171e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 6.84783e-05, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 5.94333e-05, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 9.10759e-05, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 0.000217326, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 6.97598e-05, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 0.00010208, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 0.000131018, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 5.12153e-05, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.000251345, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 1.4089e-05, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 6.7167e-05, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 7.68304e-05, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.000387147, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 0.000105888, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 9.31323e-07, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 6.4075e-07, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 1.94982e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 1.06469e-05, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 2.42144e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.42306e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.00017862, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.000122517, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 2.61962e-05, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.000306673, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.000382684, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 0.000205934, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.000673577, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.000935554, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 0.000118308, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.000517726, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 0.000124089, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 4.9457e-05, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 9.88021e-05, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 0.000233226, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 5.0351e-05, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 5.18709e-05, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 5.43147e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 1.37985e-05, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 4.96358e-05, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 5.46724e-05, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 0.000133649, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 2.27168e-05, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 7.67261e-05, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 0.00013788, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 0.000171103, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 2.87965e-05, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 3.4973e-05, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.000206023, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 6.18398e-05, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.000398614, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.000864454, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 8.32379e-05, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 0.000124596, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 0.000183754, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 0.000136755, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 4.1686e-05, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 1.24052e-05, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 9.68576e-08, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 6.70552e-08, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 5.85616e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.25915e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 8.19564e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 5.36442e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 5.8338e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.54227e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 5.8338e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.54227e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.000545286, label: 'sys,JET_BJES_Response' }
+     - {symerror: 1.53035e-05, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 2.13534e-05, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 3.07709e-05, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 5.60135e-05, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 5.96195e-05, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.000184342, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 1.18539e-05, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 2.16514e-05, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 8.81031e-05, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 3.30061e-05, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 4.78029e-05, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 1.38059e-05, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 3.16873e-05, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 8.79914e-06, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 4.65214e-05, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 0.000276387, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 6.70552e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 1.809e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 7.41184e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 8.23662e-05, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.00117433, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.000623792, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 0.000257201, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 0.000241198, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 5.95599e-05, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.000269257, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 1.2219e-06, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 7.45058e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.000161827, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.000780359, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.00121113, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.000796787, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.00107242, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.00037019, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.000321843, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.000529498, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.85519e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 9.19849e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 6.10575e-05, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.000292845, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.97177e-05, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.000102207, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 5.2318e-05, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.72529e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.31875e-06, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 3.89665e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 3.42727e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 4.98444e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 3.20375e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 6.19888e-05, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 0.000105701, label: 'sys,MUON_SCALE' }
+     - {symerror: 8.9407e-08, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 8.9407e-08, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.000258222, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.00028041, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.00027062, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 0.000101209, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 5.96046e-08, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 2.82004e-05, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.00022608, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000958897, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.00145274, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 7.33882e-05, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.00339231, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.00305194, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.000585794, label: 'sys,MCStatistics' }
+     - {symerror: 0.00109968, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 2.6077e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.000467472, label: 'sys,FxFxSig' }
+     - {symerror: 0.000668131, label: 'sys,FxFxBkg' }
+  - value: 0.0904545
+    errors: 
+     - {symerror: 0.000427507, label: stat}
+     - {symerror: 0.0007765, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 0.000160307, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.000157632, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.000354473, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.00211721, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000675041, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 0.000157252, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000155579, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 9.05283e-05, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 1.07475e-05, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 1.62423e-06, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 4.96767e-05, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 6.56806e-05, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 3.81358e-05, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 1.28001e-05, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 3.72492e-05, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 2.0992e-05, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 0.000159852, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 6.97486e-05, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 4.03076e-06, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 1.7833e-05, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 6.0223e-05, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 3.48613e-05, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 6.25812e-05, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 3.99426e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 8.41133e-05, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 3.37139e-05, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 2.05971e-05, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 5.61327e-05, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 4.5184e-05, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 3.44589e-05, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 5.47916e-05, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 3.76105e-05, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 0.000134386, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 4.07286e-05, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 8.16956e-06, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 0.000163537, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 0.000158995, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 2.85767e-05, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.11386e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.49012e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 1.52774e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 6.76885e-06, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 3.06591e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.30758e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.00031634, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.000195928, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.0001515, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.00040317, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.000294667, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 3.88399e-05, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.000258852, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.000429794, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 6.22533e-05, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.000200272, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 1.50166e-05, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 8.81404e-05, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 0.000111431, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 7.11232e-05, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 5.05857e-05, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 5.04442e-05, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 4.296e-05, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 3.69363e-05, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 3.75994e-05, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 3.64035e-05, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 8.48249e-05, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 1.34707e-05, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 1.04085e-05, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 3.33488e-05, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 6.38776e-05, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 9.63733e-06, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 1.27107e-05, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 0.000126831, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 8.53576e-05, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 0.000147212, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.00027813, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 1.53705e-05, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 1.63876e-05, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 7.23489e-05, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 7.08438e-05, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 4.37349e-06, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 6.02379e-06, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 5.96046e-08, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 5.21541e-08, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 7.45058e-09, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 5.59539e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.18837e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 4.84288e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 5.62519e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 7.0855e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.63913e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 7.0855e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.63913e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.000376191, label: 'sys,JET_BJES_Response' }
+     - {symerror: 1.56648e-05, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 6.03124e-06, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 7.71508e-06, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 1.00806e-05, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 2.66358e-05, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 0.000113148, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 3.89963e-05, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 4.03449e-05, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 9.93908e-06, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 1.44988e-05, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 5.86361e-06, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 6.05732e-06, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 2.72095e-05, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 2.35662e-05, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 1.88127e-05, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 2.30521e-05, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 7.45058e-09, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 7.59959e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 3.22089e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 6.14822e-05, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.000221401, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.000120826, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 8.58977e-05, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 9.81018e-05, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 6.23167e-05, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.000461221, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 2.45869e-07, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 6.70552e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 0.000193793, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.000523619, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.00064446, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.000399251, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.000464126, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 0.000266153, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 0.0002787, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.000371587, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 2.10851e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 6.76289e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 0.000206403, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 0.000207942, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.75062e-05, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 0.00010528, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.8979e-05, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.50177e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.30013e-06, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 3.91528e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 3.35276e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 4.8019e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 3.27826e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 7.85515e-05, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 5.98207e-05, label: 'sys,MUON_SCALE' }
+     - {symerror: 1.11759e-07, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.11759e-07, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.000203609, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.000234388, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.000168763, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 5.50449e-05, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 4.47035e-08, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 2.86885e-05, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000151083, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000461783, label: 'sys,PRW_DATASF' }
+     - {symerror: 4.68418e-05, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 0.000186466, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.00232071, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.00203791, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.000465952, label: 'sys,MCStatistics' }
+     - {symerror: 0.000738487, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 2.54065e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.000140101, label: 'sys,FxFxSig' }
+     - {symerror: 0.00021258, label: 'sys,FxFxBkg' }
+  - value: 0.0605338
+    errors: 
+     - {symerror: 0.000286754, label: stat}
+     - {symerror: 0.000522682, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 9.4194e-05, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 0.000116102, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 0.000169132, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.00123049, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000476172, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 3.65283e-05, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 0.000134323, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 4.00078e-05, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 6.05173e-06, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 4.35673e-06, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 3.45111e-05, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 2.33911e-05, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 7.69272e-06, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 1.08741e-05, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 4.08106e-05, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 1.45193e-05, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 7.22073e-05, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 8.23569e-05, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 3.95626e-06, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 3.36785e-05, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 3.68804e-05, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 2.28249e-05, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 2.14092e-05, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 2.42703e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 1.05537e-05, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 4.36399e-05, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 1.36923e-05, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 7.68937e-05, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 3.21772e-05, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 4.93173e-05, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 3.81414e-05, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 2.41026e-06, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 6.53304e-05, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 4.6799e-05, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 5.76638e-05, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 6.25029e-05, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 9.31956e-05, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 4.12948e-05, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.53296e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.89617e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 3.46284e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 2.80142e-06, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 3.44776e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.0673e-06, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.00034368, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 0.00018692, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 0.000140361, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.000329658, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.000183132, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 7.25575e-05, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 8.11163e-05, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.000215078, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 3.53828e-05, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 0.000110123, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 5.85951e-05, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 1.34706e-05, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 8.04551e-05, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 4.22448e-06, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 2.53003e-05, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 3.61726e-05, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 8.68365e-06, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 3.04878e-05, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 2.00272e-05, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 2.29776e-05, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 5.8189e-05, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 1.02874e-05, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 2.62037e-05, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 1.10641e-06, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 2.14297e-05, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 3.07336e-06, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 9.36165e-06, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 5.88968e-05, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 3.92441e-05, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 7.06725e-05, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.000111857, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 2.35103e-05, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 4.66406e-05, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 6.97169e-05, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 3.08733e-05, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 2.33166e-05, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 3.50736e-06, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 4.47035e-08, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.04891e-08, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 3.72529e-09, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 5.49667e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.2815e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 1.49012e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 5.47618e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 2.26721e-05, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.54972e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 2.26721e-05, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.54972e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 0.000178974, label: 'sys,JET_BJES_Response' }
+     - {symerror: 1.5242e-05, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 3.96371e-06, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 2.44007e-06, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 1.88779e-05, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 1.8619e-05, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 7.99708e-05, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 2.72654e-05, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 2.47397e-05, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 6.00517e-06, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 6.22124e-06, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 2.59224e-05, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 4.7572e-06, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 1.6259e-05, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 1.88686e-05, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 1.08089e-05, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 2.27876e-05, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 1.37836e-07, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 2.06959e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 2.10609e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 3.25143e-05, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.000139963, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 6.47195e-05, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 4.2351e-05, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 3.82066e-05, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 1.89189e-05, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 0.000277404, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 3.55765e-07, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.82539e-07, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 5.70081e-05, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.000246173, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.000216704, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 0.000126846, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 0.000205683, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 3.37362e-05, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 6.00331e-05, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 0.000106715, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.99489e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 2.56058e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 6.95474e-05, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 9.35309e-05, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.69059e-05, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.10889e-05, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.33762e-05, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.83705e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.32434e-06, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 4.09782e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 3.39933e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 4.05312e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 3.1665e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 5.68517e-05, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 7.15814e-05, label: 'sys,MUON_SCALE' }
+     - {symerror: 1.69501e-07, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.41561e-07, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.000138178, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.000133017, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.000134351, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 4.17829e-05, label: 'sys,DIBOSON' }
+     - {symerror: 3.72529e-09, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 5.58794e-08, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 2.74219e-05, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000160834, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000412496, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.000652947, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 6.62282e-05, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.000995733, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.000909925, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.000262972, label: 'sys,MCStatistics' }
+     - {symerror: 0.000509081, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 2.49408e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.000100063, label: 'sys,FxFxSig' }
+     - {symerror: 0.000525141, label: 'sys,FxFxBkg' }
+  - value: 0.0400218
+    errors: 
+     - {symerror: 0.000241276, label: stat}
+     - {symerror: 0.000347214, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 5.52442e-05, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 7.07563e-05, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 9.25288e-05, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.000719501, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000323247, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 2.15117e-05, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 9.42349e-05, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 2.12193e-05, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 2.58349e-06, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 7.68527e-06, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 2.17557e-05, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 1.92318e-05, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 5.19119e-06, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 6.83032e-06, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 2.582e-05, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 1.15577e-05, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 4.46029e-05, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 4.98295e-05, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 2.5928e-06, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 2.08728e-05, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 2.25808e-05, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 1.43908e-05, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 1.62255e-05, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 1.46795e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 7.54744e-06, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 2.63657e-05, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 8.60356e-06, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 4.54951e-05, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 2.26628e-05, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 3.35835e-05, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 2.55611e-05, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 1.47522e-06, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 4.3178e-05, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 2.91225e-05, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 3.84152e-05, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 3.92944e-05, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 5.40223e-05, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 2.72747e-05, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.4659e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 2.01538e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 2.26013e-05, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 3.85568e-07, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 3.12366e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 4.95464e-07, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.000108832, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 4.32078e-05, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 2.69264e-05, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.000152124, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 0.000101967, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 9.36426e-05, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 0.000133442, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 0.000165516, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 3.3481e-05, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 7.73836e-05, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 1.52886e-05, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 2.15229e-05, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 3.36319e-05, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 3.02438e-05, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 1.47074e-05, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 3.61186e-05, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 9.68762e-06, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 1.6924e-05, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 1.42045e-05, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 3.81134e-05, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 9.41679e-05, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 5.37746e-06, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 2.61161e-05, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 1.25915e-05, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 3.51928e-05, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 2.83495e-06, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 8.59424e-06, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 4.49121e-05, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 2.79006e-05, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 6.31083e-05, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 0.000111442, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 1.73617e-05, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 2.13459e-05, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 6.38179e-05, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 1.64732e-05, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 1.50464e-05, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 2.36183e-06, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 4.09782e-08, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.23517e-08, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 3.72529e-09, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 5.899e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.50874e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 8.75443e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 5.06639e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 1.47559e-05, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.28895e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 1.47559e-05, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.28895e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 6.68354e-05, label: 'sys,JET_BJES_Response' }
+     - {symerror: 9.76585e-06, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 3.92087e-06, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 4.8317e-06, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 1.49347e-05, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 1.43014e-05, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 1.88611e-05, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 1.45696e-05, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 1.47931e-05, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 6.56024e-06, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 4.6771e-06, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 1.21035e-05, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 3.62843e-06, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 1.15391e-05, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 1.13416e-05, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 9.49763e-06, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 2.4803e-05, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 1.11759e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 1.01998e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 1.52607e-05, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 9.1102e-06, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 0.000186922, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 0.000106372, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 6.5878e-05, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 7.18627e-05, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 3.93018e-06, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 3.15476e-05, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 4.06057e-07, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 0, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 1.75629e-05, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.000248428, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.000145394, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 9.28473e-05, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 6.69938e-05, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 8.48211e-05, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 5.91837e-05, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 4.81457e-05, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.78255e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 4.32022e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 2.4911e-05, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 6.69975e-05, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.93883e-05, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.52979e-05, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.47037e-05, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.77534e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.04308e-06, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 3.74392e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 3.05846e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 1.56648e-06, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 2.81259e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 2.38977e-05, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 1.98204e-05, label: 'sys,MUON_SCALE' }
+     - {symerror: 1.63913e-07, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.28523e-07, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.000114406, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 0.000118122, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 0.000110859, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 2.13888e-05, label: 'sys,DIBOSON' }
+     - {symerror: 3.72529e-09, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 2.42144e-08, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 2.36258e-05, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 0.000126049, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000278102, label: 'sys,PRW_DATASF' }
+     - {symerror: 1.19954e-06, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 1.17384e-05, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.00025437, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.000238512, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.000181474, label: 'sys,MCStatistics' }
+     - {symerror: 0.000339089, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 2.44007e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 0.000160955, label: 'sys,FxFxSig' }
+     - {symerror: 0.000393532, label: 'sys,FxFxBkg' }
+  - value: 0.0247272
+    errors: 
+     - {symerror: 0.000154331, label: stat}
+     - {symerror: 0.000204841, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 4.09065e-05, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 4.93787e-05, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 5.41182e-05, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.000406364, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000185786, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 4.84418e-05, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 5.78901e-05, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 8.64267e-06, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 9.91672e-06, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 8.16956e-06, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 1.44411e-05, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 8.58866e-06, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 1.17831e-05, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 1.12439e-05, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 8.45268e-06, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 8.3521e-06, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 2.60081e-05, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 2.93441e-05, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 8.26269e-06, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 8.28132e-06, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 2.21105e-05, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 8.28318e-06, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 8.58866e-06, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 1.83033e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 1.49105e-05, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 8.29436e-06, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 1.38497e-05, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 1.67796e-05, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 1.61491e-05, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 1.06459e-05, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 8.81776e-06, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 8.54395e-06, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 1.57403e-05, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 8.64174e-06, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 2.28323e-05, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 1.43219e-05, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 2.99308e-05, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 8.35769e-06, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.61491e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 2.25753e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 8.16397e-06, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 2.49594e-07, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 2.06009e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 7.63685e-08, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 0.000123409, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 6.0454e-05, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 3.68329e-05, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 0.000121748, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 8.12812e-05, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 7.76425e-05, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 8.31261e-05, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 5.76265e-05, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 8.4471e-06, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 3.6818e-05, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 1.25328e-05, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 2.53338e-05, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 3.30666e-05, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 9.08226e-06, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 8.38004e-06, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 9.36817e-06, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 8.30181e-06, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 8.367e-06, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 3.34345e-07, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 4.93601e-07, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 5.90766e-05, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 1.14478e-05, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 1.0971e-05, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 6.42519e-06, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 2.83234e-05, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 1.28848e-05, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 6.47083e-06, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 2.21077e-05, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 2.57371e-05, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 2.11457e-05, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 5.58011e-05, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 8.462e-06, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 8.41729e-06, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 2.37273e-05, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 1.6205e-05, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 8.99658e-07, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 8.53278e-06, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 1.67638e-08, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 6.51926e-09, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 4.65661e-09, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 8.08202e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 8.35769e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 5.4948e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 5.34579e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 6.28456e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.02688e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 6.28456e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.02688e-05, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 6.69714e-05, label: 'sys,JET_BJES_Response' }
+     - {symerror: 8.17887e-06, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 1.66986e-06, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 1.8429e-05, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 1.58735e-05, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 9.08412e-06, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 2.27457e-05, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 1.54786e-06, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 8.83639e-06, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 1.84402e-05, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 1.83079e-05, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 2.72505e-06, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 9.60939e-06, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 9.7435e-06, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 9.67458e-06, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 9.94839e-06, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 1.77603e-05, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 4.56348e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 4.12576e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 8.58214e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 9.54419e-06, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 8.1799e-05, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 4.3801e-05, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 3.88287e-05, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 7.44499e-06, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 5.86081e-06, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 5.60954e-05, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 1.4063e-07, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.86265e-09, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 1.54683e-05, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.000137889, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 0.000102383, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 5.4799e-05, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 5.86463e-05, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 4.90416e-05, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 3.91305e-05, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 4.49037e-05, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.23587e-06, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 1.27684e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 1.25347e-05, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 4.5592e-05, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 8.18074e-06, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.47611e-05, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 8.62591e-06, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.82539e-07, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 7.60891e-07, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 2.81166e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 2.26777e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 1.82539e-07, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 3.90224e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 2.31918e-05, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 1.37854e-05, label: 'sys,MUON_SCALE' }
+     - {symerror: 1.62981e-07, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.22003e-07, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 0.0001162, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 9.574e-05, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 8.1189e-05, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 5.03315e-05, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 1.95578e-08, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 1.64257e-05, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 7.55126e-05, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 0.000112143, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.000218472, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 2.18041e-05, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 0.000170592, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 0.000165412, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 0.000104386, label: 'sys,MCStatistics' }
+     - {symerror: 0.000210109, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 2.34321e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 7.20453e-05, label: 'sys,FxFxSig' }
+     - {symerror: 8.16667e-05, label: 'sys,FxFxBkg' }
+  - value: 0.0147844
+    errors: 
+     - {symerror: 0.000128821, label: stat}
+     - {symerror: 0.000124676, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 1.83145e-05, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 2.84389e-05, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 2.81641e-05, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 0.000221052, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 0.000117525, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 3.40417e-05, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 2.00891e-05, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 5.51343e-06, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 4.98351e-06, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 4.97978e-06, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 1.12057e-05, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 9.84641e-06, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 8.18726e-06, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 3.76254e-07, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 2.87779e-07, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 5.31739e-06, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 1.46469e-05, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 1.93086e-05, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 5.78584e-06, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 4.79631e-07, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 1.93836e-05, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 6.79865e-07, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 1.25496e-06, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 1.76695e-05, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 1.44229e-05, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 5.04311e-06, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 7.77747e-06, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 4.44846e-06, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 1.42693e-05, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 6.58585e-06, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 5.39701e-06, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 3.84636e-07, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 1.44318e-05, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 5.39841e-06, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 1.26273e-05, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 1.28611e-05, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 1.08853e-05, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 1.02231e-05, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.59582e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 2.28966e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 2.06893e-06, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 3.11993e-07, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 1.01654e-06, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.58325e-07, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 9.76874e-05, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 7.11484e-06, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 1.71657e-05, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 9.72427e-05, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 4.25875e-05, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 5.01727e-05, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 4.43519e-05, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 2.17566e-05, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 8.43778e-07, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 2.2369e-05, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 6.55698e-06, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 2.45776e-06, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 1.83904e-05, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 5.65778e-06, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 4.60073e-06, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 1.30031e-05, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 9.56841e-06, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 2.34554e-06, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 5.14183e-06, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 6.50948e-06, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 5.27548e-06, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 7.63591e-06, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 5.12321e-06, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 1.11293e-06, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 2.19108e-05, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 1.76509e-05, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 1.25291e-05, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 1.07735e-05, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 9.42871e-06, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 1.63182e-05, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 3.95738e-05, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 9.98378e-06, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 1.31782e-06, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 2.23406e-05, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 1.05272e-05, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 3.78722e-06, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 7.73463e-07, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 9.31323e-09, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 8.3819e-09, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 9.31323e-10, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 4.93694e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.72993e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 3.25963e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 5.55534e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 4.67198e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.45705e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 4.67198e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.45705e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 3.89135e-05, label: 'sys,JET_BJES_Response' }
+     - {symerror: 4.28502e-06, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 1.22422e-06, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 6.43916e-06, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 3.97116e-06, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 4.97512e-06, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 9.43383e-06, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 4.81959e-06, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 5.05801e-06, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 1.98372e-07, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 4.62867e-07, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 4.26266e-06, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 1.16136e-06, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 5.13438e-06, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 4.57931e-06, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 1.15857e-06, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 3.47476e-06, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 5.12227e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 4.66313e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 4.26918e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 4.25987e-06, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 4.54667e-05, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 2.51848e-05, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 2.36863e-05, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 4.67617e-06, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 4.55091e-06, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 3.14373e-05, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 2.57045e-07, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 6.61239e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 3.06056e-05, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 0.000109687, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 9.70731e-05, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 4.06555e-05, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 3.03383e-05, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 3.21646e-05, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 5.21396e-05, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 3.52156e-05, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 6.49132e-07, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 1.31493e-05, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 1.92374e-05, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 3.05064e-05, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 5.19631e-06, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.37351e-05, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 5.43799e-06, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 6.00703e-08, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 3.66475e-07, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 1.50502e-06, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 1.21025e-06, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 2.79397e-07, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 2.91504e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 8.61753e-06, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 1.03293e-05, label: 'sys,MUON_SCALE' }
+     - {symerror: 9.87202e-08, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 6.89179e-08, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 9.39234e-05, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 8.7949e-05, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 8.52467e-05, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 9.76631e-06, label: 'sys,DIBOSON' }
+     - {symerror: 9.31323e-10, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 9.77889e-09, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 8.13417e-06, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 3.84124e-05, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 9.75057e-05, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.000157781, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 1.56006e-05, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 2.35159e-06, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 5.85802e-07, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 7.19605e-05, label: 'sys,MCStatistics' }
+     - {symerror: 0.000123838, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 2.07219e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 4.23877e-05, label: 'sys,FxFxSig' }
+     - {symerror: 0.000248882, label: 'sys,FxFxBkg' }
+  - value: 0.0071367
+    errors: 
+     - {symerror: 5.17177e-05, label: stat}
+     - {symerror: 6.11402e-05, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 8.5379e-06, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 1.30138e-05, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 1.21533e-05, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 9.79793e-05, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 5.71641e-05, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 1.96199e-05, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 4.44101e-06, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 4.92763e-06, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 2.37254e-06, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 2.37115e-06, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 3.54904e-06, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 2.55136e-06, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 2.47546e-06, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 6.03031e-07, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 1.82772e-07, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 2.02772e-06, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 8.05384e-06, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 9.43779e-06, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 2.67685e-06, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 2.71481e-07, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 8.88063e-06, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 4.24683e-07, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 6.34231e-07, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 7.6436e-06, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 6.47339e-06, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 2.41259e-06, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 3.60329e-06, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 1.90199e-06, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 6.27781e-06, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 3.05567e-06, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 2.60118e-06, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 1.99769e-07, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 6.71181e-06, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 2.62866e-06, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 5.58235e-06, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 5.85709e-06, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 4.44474e-06, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 4.96884e-06, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.16741e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.1276e-06, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 1.02399e-06, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 3.06638e-07, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 2.35625e-07, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 6.93835e-08, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 5.56379e-05, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 1.06785e-05, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 7.15349e-06, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 2.80242e-05, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 6.73672e-06, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 1.89377e-05, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 2.72067e-05, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 1.98937e-05, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 4.73461e-06, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 6.16862e-06, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 6.58864e-06, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 3.26242e-06, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 9.76678e-06, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 4.57745e-07, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 2.68687e-06, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 3.40608e-06, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 2.96463e-06, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 1.04518e-06, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 2.41352e-06, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 2.35299e-06, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 2.34589e-05, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 2.39303e-06, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 1.2219e-06, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 1.4673e-06, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 9.02056e-06, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 6.84941e-06, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 6.03055e-06, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 4.39282e-06, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 4.83822e-06, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 6.02659e-06, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 1.63869e-05, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 5.94486e-06, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 2.40933e-06, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 3.63844e-06, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 1.34017e-06, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 1.99792e-06, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 3.75323e-07, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 3.72529e-09, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 3.72529e-09, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 3.78839e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.48755e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 8.98726e-08, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 6.021e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 1.80095e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.9467e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 1.80095e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.9467e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 1.30807e-05, label: 'sys,JET_BJES_Response' }
+     - {symerror: 2.53925e-06, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 4.69154e-07, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 3.32063e-06, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 2.63285e-06, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 2.11247e-06, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 7.70181e-06, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 1.80164e-06, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 3.15066e-06, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 4.45638e-07, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 3.43658e-07, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 1.63959e-06, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 4.58676e-07, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 2.95183e-06, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 3.08361e-06, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 8.08621e-07, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 3.28012e-06, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 4.70318e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 1.70758e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 2.98908e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 1.68639e-06, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 8.32789e-06, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 7.96164e-06, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 5.88922e-06, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 8.13324e-06, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 4.82635e-06, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 1.15084e-05, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 3.72529e-08, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 6.75209e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 2.55182e-06, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 1.34832e-05, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 1.58576e-05, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 5.4168e-06, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 6.92741e-06, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 3.93484e-06, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 9.73442e-06, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 5.90715e-06, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 2.93367e-07, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 1.76718e-06, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 1.79757e-05, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 2.04705e-05, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.15603e-06, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 9.18168e-06, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.57557e-06, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.65661e-10, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 9.66247e-08, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 5.16418e-07, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 4.21656e-07, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 2.0233e-07, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 1.47847e-07, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 3.39258e-06, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 1.91992e-06, label: 'sys,MUON_SCALE' }
+     - {symerror: 2.23517e-08, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.44355e-08, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 1.16825e-05, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 6.24033e-06, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 7.8869e-06, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 2.06227e-05, label: 'sys,DIBOSON' }
+     - {symerror: 4.65661e-10, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 3.72529e-09, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 3.61283e-06, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 1.29486e-05, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 2.05205e-05, label: 'sys,PRW_DATASF' }
+     - {symerror: 0.000104662, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 2.27103e-06, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 2.14679e-05, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 2.11536e-05, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 2.45604e-05, label: 'sys,MCStatistics' }
+     - {symerror: 6.04482e-05, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 1.52993e-06, label: 'sys,ZH_Xsec' }
+     - {symerror: 2.38866e-05, label: 'sys,FxFxSig' }
+     - {symerror: 6.30754e-05, label: 'sys,FxFxBkg' }
+  - value: 0.00228987
+    errors: 
+     - {symerror: 2.53359e-05, label: stat}
+     - {symerror: 1.96624e-05, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 2.76149e-06, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 4.89643e-06, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 1.74996e-06, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 2.94859e-05, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 1.78271e-05, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 7.26862e-06, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 1.75415e-06, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 7.44476e-07, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 1.70432e-06, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 3.01283e-06, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 9.23406e-07, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 8.91741e-07, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 8.44011e-07, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 1.71782e-06, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 3.99491e-06, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 1.70525e-06, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 3.9445e-06, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 5.47059e-06, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 1.71084e-06, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 1.17125e-06, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 2.12062e-06, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 1.71107e-06, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 1.70921e-06, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 1.33819e-06, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 2.09582e-06, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 1.69547e-06, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 1.23016e-06, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 1.50281e-06, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 1.90071e-06, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 1.69408e-06, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 1.75671e-06, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 1.71876e-06, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 2.18826e-06, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 9.53674e-07, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 1.73168e-06, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 9.93838e-07, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 1.73296e-06, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 1.73831e-06, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.72108e-06, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 8.54488e-08, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 8.88715e-07, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 1.08033e-07, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 3.53903e-08, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 1.19908e-08, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 2.96864e-05, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 3.56406e-06, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 1.24029e-06, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 1.29889e-05, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 2.5169e-06, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 3.74706e-06, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 5.65453e-06, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 4.97955e-06, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 1.73086e-06, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 2.7382e-06, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 1.75415e-06, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 8.3074e-07, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 1.94472e-06, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 1.73086e-06, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 1.71829e-06, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 8.40053e-07, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 1.70153e-06, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 1.73924e-06, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 1.69687e-06, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 1.69268e-06, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 7.9904e-06, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 2.92691e-06, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 3.96278e-07, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 8.9407e-07, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 3.81982e-06, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 9.35514e-07, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 2.75311e-06, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 1.84262e-06, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 1.70572e-06, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 2.34158e-06, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 3.74787e-06, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 1.73319e-06, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 1.72807e-06, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 1.9134e-06, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 1.7425e-06, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 1.23319e-06, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 9.0152e-07, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 1.04774e-09, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 1.16415e-09, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 1.70409e-06, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.70618e-06, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 1.72062e-06, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 1.70269e-06, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 1.74064e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.73878e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 1.74064e-06, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.73878e-06, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 2.63238e-06, label: 'sys,JET_BJES_Response' }
+     - {symerror: 6.00237e-07, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 7.78702e-07, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 1.6978e-06, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 7.18748e-07, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 1.56765e-06, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 1.51037e-06, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 1.39559e-06, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 1.43237e-06, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 8.52626e-07, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 8.26782e-07, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 1.2829e-06, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 8.42847e-07, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 8.81031e-07, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 1.57743e-06, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 7.91159e-07, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 5.18514e-07, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 1.67638e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 2.02842e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 1.60979e-06, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 1.72434e-06, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 1.15146e-06, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 1.32713e-06, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 1.20408e-06, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 2.14973e-06, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 8.99076e-07, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 2.99909e-06, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 1.5134e-08, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.6531e-08, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 1.75787e-06, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 1.36916e-06, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 1.15344e-06, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 2.00048e-06, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 1.29163e-06, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 1.24658e-06, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 1.75973e-06, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 1.48872e-06, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 7.72998e-08, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 5.1735e-07, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 8.86025e-06, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 7.45954e-06, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.69268e-06, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.26765e-06, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.77464e-06, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.65661e-09, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.74623e-09, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 8.55653e-08, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 7.29924e-08, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 5.80912e-08, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 4.65661e-10, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 4.81028e-07, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 1.79349e-06, label: 'sys,MUON_SCALE' }
+     - {symerror: 3.60887e-09, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.74623e-09, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 1.00816e-07, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 1.03493e-07, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 1.75321e-07, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 5.14381e-06, label: 'sys,DIBOSON' }
+     - {symerror: 2.32831e-10, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 2.91038e-09, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 9.70671e-07, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 1.32201e-06, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 6.81123e-06, label: 'sys,PRW_DATASF' }
+     - {symerror: 1.04525e-05, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 1.26427e-06, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 6.21658e-07, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 3.79514e-07, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 1.00737e-05, label: 'sys,MCStatistics' }
+     - {symerror: 1.87807e-05, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 6.98259e-07, label: 'sys,ZH_Xsec' }
+     - {symerror: 6.97339e-06, label: 'sys,FxFxSig' }
+     - {symerror: 1.61817e-06, label: 'sys,FxFxBkg' }
+  - value: 0.000580101
+    errors: 
+     - {symerror: 9.50723e-06, label: stat}
+     - {symerror: 6.17368e-06, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 6.33387e-07, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 2.32234e-06, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 2.75113e-06, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 7.83792e-06, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 3.71379e-06, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 1.34244e-06, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 2.68104e-07, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 2.30677e-07, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 8.35862e-07, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 6.6022e-07, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 1.17085e-07, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 4.97792e-07, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 4.93193e-07, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 4.91389e-07, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 1.13252e-06, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 4.96366e-07, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 1.61619e-06, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 1.43319e-06, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 2.16824e-07, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 4.96919e-07, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 6.06495e-07, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 4.89585e-07, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 4.89352e-07, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 5.85569e-07, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 5.70813e-07, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 4.89585e-07, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 3.38128e-07, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 1.56258e-07, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 2.66242e-07, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 4.89352e-07, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 2.63157e-07, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 4.93892e-07, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 5.75325e-07, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 1.52213e-08, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 2.62691e-07, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 2.71073e-07, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 5.26139e-07, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 3.85189e-07, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 3.77215e-07, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 2.47383e-09, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 6.03031e-08, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 1.55414e-08, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 1.15833e-08, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 9.31323e-10, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 1.03462e-05, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 1.81157e-06, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 2.73343e-07, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 4.53755e-06, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 3.24595e-07, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 7.96688e-07, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 1.73427e-06, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 1.47306e-06, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 2.17406e-07, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 7.8429e-07, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 4.95638e-07, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 4.97035e-07, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 2.8935e-07, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 4.35451e-07, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 4.93892e-07, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 4.94707e-07, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 4.87256e-07, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 9.08913e-08, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 4.91913e-07, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 2.59897e-07, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 1.69885e-06, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 1.43214e-06, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 6.4302e-07, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 3.42174e-07, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 1.77175e-06, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 5.16709e-07, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 7.0114e-07, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 5.84056e-07, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 4.8842e-07, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 5.59288e-07, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 1.39899e-06, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 2.17929e-07, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 2.13971e-07, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 3.99596e-07, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 5.24567e-07, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 2.66766e-07, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 2.99769e-08, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 2.32831e-10, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 3.49246e-10, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 2.5722e-07, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 4.93717e-07, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 2.1531e-07, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 4.87606e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 4.02913e-07, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 8.92615e-08, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 4.02913e-07, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 8.92615e-08, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 8.85193e-07, label: 'sys,JET_BJES_Response' }
+     - {symerror: 1.98896e-07, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 1.84227e-08, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 4.58967e-07, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 4.21831e-07, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 2.21713e-07, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 3.86091e-07, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 4.13274e-07, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 4.22064e-07, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 4.50818e-08, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 3.88245e-08, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 4.56173e-07, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 3.64962e-08, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 2.54891e-07, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 2.34635e-07, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 2.49885e-07, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 4.44066e-07, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 1.74623e-10, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 3.9232e-07, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 4.92611e-07, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 6.51053e-07, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 3.73693e-07, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 2.82365e-07, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 5.78177e-07, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 6.30447e-07, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 4.91797e-07, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 7.30623e-07, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 2.09548e-09, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 1.74623e-10, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 1.65455e-07, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 5.2515e-07, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 7.76345e-07, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 5.51285e-07, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 4.87838e-07, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 3.34374e-07, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 5.10248e-07, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 4.32367e-07, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.44937e-08, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 1.86556e-07, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 4.13487e-06, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 2.43128e-06, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.92844e-07, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 8.13539e-07, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.27534e-07, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.68802e-09, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 6.8394e-09, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 9.57516e-09, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 8.41101e-09, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 1.34169e-08, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 3.7835e-09, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 7.15867e-07, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 4.29864e-07, label: 'sys,MUON_SCALE' }
+     - {symerror: 2.00816e-09, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.22236e-09, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 1.88593e-08, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 3.18396e-08, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 2.24682e-08, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 2.40793e-06, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 5.82077e-11, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 1.46596e-07, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 2.3446e-07, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 2.49161e-06, label: 'sys,PRW_DATASF' }
+     - {symerror: 1.23832e-05, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 7.60599e-07, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 2.33878e-07, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 1.55298e-07, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 2.62115e-06, label: 'sys,MCStatistics' }
+     - {symerror: 5.03892e-06, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 2.16387e-07, label: 'sys,ZH_Xsec' }
+     - {symerror: 3.31184e-06, label: 'sys,FxFxSig' }
+     - {symerror: 2.85107e-06, label: 'sys,FxFxBkg' }
+  - value: 0.000106301
+    errors: 
+     - {symerror: 4.14819e-06, label: stat}
+     - {symerror: 1.25363e-06, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 2.00125e-08, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 7.4635e-07, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 1.31411e-06, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 1.38332e-06, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 5.10587e-07, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 8.97526e-08, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 1.19526e-07, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 2.48729e-08, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 1.12956e-07, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 8.07813e-08, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 9.42309e-08, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 1.80262e-08, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 3.69691e-08, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 6.80411e-08, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 8.81409e-08, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 4.62096e-08, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 3.72223e-07, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 2.29473e-07, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 3.89264e-09, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 4.5482e-08, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 1.67161e-07, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 1.85646e-08, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 1.10671e-07, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 1.22018e-07, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 1.25743e-07, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 1.59707e-08, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 2.37778e-08, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 3.18614e-08, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 1.05396e-07, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 1.03464e-07, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 9.83309e-08, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 4.55912e-08, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 5.93354e-08, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 5.66069e-09, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 9.71268e-08, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 9.98807e-08, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 4.43069e-08, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 1.92122e-08, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 1.45956e-08, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.89539e-09, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 9.22591e-09, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 1.18598e-09, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 2.18279e-09, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 5.82077e-11, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 2.19961e-06, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 5.06367e-07, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 3.61215e-08, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 8.59764e-07, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 5.41804e-08, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 2.18301e-07, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 2.75802e-07, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 2.43814e-07, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 6.85177e-08, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 2.07761e-07, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 5.03496e-08, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 1.11067e-08, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 6.71316e-08, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 9.48421e-08, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 4.55839e-08, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 4.5562e-08, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 2.48656e-08, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 2.40689e-08, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 5.63305e-08, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 3.10974e-08, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 9.85128e-08, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 5.12817e-07, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 1.98539e-07, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 1.15793e-07, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 6.54491e-07, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 1.11366e-07, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 3.21183e-07, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 1.59489e-07, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 6.49488e-08, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 1.05116e-07, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 4.69307e-07, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 1.0389e-07, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 6.08488e-08, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 1.06014e-07, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 9.90731e-08, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 6.10526e-08, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 4.71118e-09, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 5.09317e-11, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 6.18456e-11, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 0, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 6.48914e-07, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 1.31033e-07, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 1.94483e-07, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 1.95218e-07, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 5.04355e-07, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 3.99163e-07, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 5.04355e-07, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 3.99163e-07, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 1.9246e-07, label: 'sys,JET_BJES_Response' }
+     - {symerror: 5.62068e-08, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 9.30231e-09, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 1.64473e-08, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 1.67856e-08, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 5.17211e-08, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 1.4895e-07, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 3.45099e-08, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 4.06071e-08, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 2.11148e-08, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 1.53886e-08, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 3.79005e-08, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 7.9599e-09, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 2.84745e-08, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 4.65698e-08, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 2.46691e-08, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 8.77953e-08, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 0, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 3.72529e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 3.40406e-08, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 5.03387e-08, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 1.02009e-07, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 1.35915e-07, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 3.6307e-08, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 3.31165e-08, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 3.95739e-08, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 3.18749e-07, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 1.03682e-09, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 0, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 8.07668e-08, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 3.76662e-07, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 4.23552e-07, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 3.90784e-07, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 3.59105e-07, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 3.20757e-07, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 1.06844e-07, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 3.13681e-07, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 1.20781e-09, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 7.86531e-09, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 8.51851e-07, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 8.57879e-07, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 8.32988e-08, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.64146e-07, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.42588e-08, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.60071e-10, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.13869e-09, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 3.4197e-10, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 3.6016e-10, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 1.68438e-09, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 7.23958e-10, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 8.92796e-08, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 4.35466e-08, label: 'sys,MUON_SCALE' }
+     - {symerror: 2.21917e-10, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 1.63709e-10, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 1.15688e-09, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 6.54836e-11, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 5.74801e-10, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 3.95154e-07, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 0, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 1.7284e-08, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 9.27685e-09, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 1.14553e-07, label: 'sys,PRW_DATASF' }
+     - {symerror: 2.76135e-06, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 2.60399e-07, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 6.22851e-07, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 7.75173e-07, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 7.34559e-07, label: 'sys,MCStatistics' }
+     - {symerror: 9.61438e-07, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 4.29682e-08, label: 'sys,ZH_Xsec' }
+     - {symerror: 4.86409e-07, label: 'sys,FxFxSig' }
+     - {symerror: 1.91023e-06, label: 'sys,FxFxBkg' }
+  - value: 6.74316e-06
+    errors: 
+     - {symerror: 6.00408e-07, label: stat}
+     - {symerror: 9.29874e-08, label: 'sys,FT_EFF_Eigen_B_0' }
+     - {symerror: 1.47402e-08, label: 'sys,FT_EFF_Eigen_B_1' }
+     - {symerror: 5.3019e-08, label: 'sys,FT_EFF_Eigen_B_2' }
+     - {symerror: 6.74711e-08, label: 'sys,FT_EFF_Eigen_B_3' }
+     - {symerror: 8.46817e-08, label: 'sys,FT_EFF_Eigen_B_4' }
+     - {symerror: 3.10263e-08, label: 'sys,FT_EFF_Eigen_B_5' }
+     - {symerror: 2.37947e-09, label: 'sys,FT_EFF_Eigen_B_6' }
+     - {symerror: 1.06929e-08, label: 'sys,FT_EFF_Eigen_B_7' }
+     - {symerror: 3.63389e-09, label: 'sys,FT_EFF_Eigen_B_8' }
+     - {symerror: 7.40351e-09, label: 'sys,FT_EFF_Eigen_B_9' }
+     - {symerror: 8.65202e-09, label: 'sys,FT_EFF_Eigen_B_10' }
+     - {symerror: 7.23139e-09, label: 'sys,FT_EFF_Eigen_B_11' }
+     - {symerror: 1.23464e-09, label: 'sys,FT_EFF_Eigen_B_12' }
+     - {symerror: 2.18643e-09, label: 'sys,FT_EFF_Eigen_B_13' }
+     - {symerror: 6.22936e-09, label: 'sys,FT_EFF_Eigen_B_14' }
+     - {symerror: 7.26664e-09, label: 'sys,FT_EFF_Eigen_B_15' }
+     - {symerror: 3.3142e-09, label: 'sys,FT_EFF_Eigen_B_16' }
+     - {symerror: 2.57276e-08, label: 'sys,FT_EFF_Eigen_B_17' }
+     - {symerror: 1.46315e-08, label: 'sys,FT_EFF_Eigen_B_18' }
+     - {symerror: 2.44881e-10, label: 'sys,FT_EFF_Eigen_B_19' }
+     - {symerror: 3.28782e-09, label: 'sys,FT_EFF_Eigen_B_20' }
+     - {symerror: 1.22468e-08, label: 'sys,FT_EFF_Eigen_B_21' }
+     - {symerror: 1.41063e-09, label: 'sys,FT_EFF_Eigen_B_22' }
+     - {symerror: 8.02538e-09, label: 'sys,FT_EFF_Eigen_B_23' }
+     - {symerror: 9.12041e-09, label: 'sys,FT_EFF_Eigen_B_24' }
+     - {symerror: 9.21364e-09, label: 'sys,FT_EFF_Eigen_B_25' }
+     - {symerror: 9.627e-10, label: 'sys,FT_EFF_Eigen_B_26' }
+     - {symerror: 1.62845e-09, label: 'sys,FT_EFF_Eigen_B_27' }
+     - {symerror: 1.96655e-09, label: 'sys,FT_EFF_Eigen_B_28' }
+     - {symerror: 7.89419e-09, label: 'sys,FT_EFF_Eigen_B_29' }
+     - {symerror: 7.53698e-09, label: 'sys,FT_EFF_Eigen_B_30' }
+     - {symerror: 7.61656e-09, label: 'sys,FT_EFF_Eigen_B_31' }
+     - {symerror: 3.25917e-09, label: 'sys,FT_EFF_Eigen_B_32' }
+     - {symerror: 5.55838e-09, label: 'sys,FT_EFF_Eigen_B_33' }
+     - {symerror: 2.33058e-10, label: 'sys,FT_EFF_Eigen_B_34' }
+     - {symerror: 7.33098e-09, label: 'sys,FT_EFF_Eigen_B_35' }
+     - {symerror: 7.47082e-09, label: 'sys,FT_EFF_Eigen_B_36' }
+     - {symerror: 2.97132e-09, label: 'sys,FT_EFF_Eigen_B_37' }
+     - {symerror: 1.09958e-09, label: 'sys,FT_EFF_Eigen_B_38' }
+     - {symerror: 7.2373e-10, label: 'sys,FT_EFF_Eigen_B_39' }
+     - {symerror: 1.7917e-10, label: 'sys,FT_EFF_Eigen_B_40' }
+     - {symerror: 5.57975e-10, label: 'sys,FT_EFF_Eigen_B_41' }
+     - {symerror: 4.43379e-11, label: 'sys,FT_EFF_Eigen_B_42' }
+     - {symerror: 1.35742e-10, label: 'sys,FT_EFF_Eigen_B_43' }
+     - {symerror: 2.27374e-12, label: 'sys,FT_EFF_Eigen_B_44' }
+     - {symerror: 1.66263e-07, label: 'sys,FT_EFF_Eigen_C_0' }
+     - {symerror: 1.44203e-08, label: 'sys,FT_EFF_Eigen_C_1' }
+     - {symerror: 1.47222e-08, label: 'sys,FT_EFF_Eigen_C_2' }
+     - {symerror: 5.12428e-08, label: 'sys,FT_EFF_Eigen_C_3' }
+     - {symerror: 2.78558e-08, label: 'sys,FT_EFF_Eigen_C_4' }
+     - {symerror: 1.54159e-08, label: 'sys,FT_EFF_Eigen_C_5' }
+     - {symerror: 2.06792e-08, label: 'sys,FT_EFF_Eigen_C_6' }
+     - {symerror: 1.92317e-08, label: 'sys,FT_EFF_Eigen_C_7' }
+     - {symerror: 3.0127e-09, label: 'sys,FT_EFF_Eigen_C_8' }
+     - {symerror: 3.56749e-09, label: 'sys,FT_EFF_Eigen_C_9' }
+     - {symerror: 1.14778e-09, label: 'sys,FT_EFF_Eigen_C_10' }
+     - {symerror: 2.03067e-09, label: 'sys,FT_EFF_Eigen_C_11' }
+     - {symerror: 4.03816e-09, label: 'sys,FT_EFF_Eigen_C_12' }
+     - {symerror: 5.14069e-09, label: 'sys,FT_EFF_Eigen_C_13' }
+     - {symerror: 3.26008e-09, label: 'sys,FT_EFF_Eigen_C_14' }
+     - {symerror: 3.90946e-09, label: 'sys,FT_EFF_Eigen_C_15' }
+     - {symerror: 3.45449e-09, label: 'sys,FT_EFF_Eigen_C_16' }
+     - {symerror: 3.9488e-09, label: 'sys,FT_EFF_Eigen_C_17' }
+     - {symerror: 4.03315e-09, label: 'sys,FT_EFF_Eigen_C_18' }
+     - {symerror: 2.5284e-10, label: 'sys,FT_EFF_Eigen_C_19' }
+     - {symerror: 1.03869e-07, label: 'sys,FT_EFF_Eigen_Light_0' }
+     - {symerror: 1.82577e-08, label: 'sys,FT_EFF_Eigen_Light_1' }
+     - {symerror: 1.91426e-09, label: 'sys,FT_EFF_Eigen_Light_2' }
+     - {symerror: 4.32419e-09, label: 'sys,FT_EFF_Eigen_Light_3' }
+     - {symerror: 1.7598e-08, label: 'sys,FT_EFF_Eigen_Light_4' }
+     - {symerror: 5.9224e-09, label: 'sys,FT_EFF_Eigen_Light_5' }
+     - {symerror: 1.25556e-08, label: 'sys,FT_EFF_Eigen_Light_6' }
+     - {symerror: 2.31239e-09, label: 'sys,FT_EFF_Eigen_Light_7' }
+     - {symerror: 3.20165e-09, label: 'sys,FT_EFF_Eigen_Light_8' }
+     - {symerror: 3.43402e-09, label: 'sys,FT_EFF_Eigen_Light_9' }
+     - {symerror: 1.79657e-08, label: 'sys,FT_EFF_Eigen_Light_10' }
+     - {symerror: 1.20692e-08, label: 'sys,FT_EFF_Eigen_Light_11' }
+     - {symerror: 5.60021e-09, label: 'sys,FT_EFF_Eigen_Light_12' }
+     - {symerror: 1.07343e-08, label: 'sys,FT_EFF_Eigen_Light_13' }
+     - {symerror: 4.09273e-11, label: 'sys,FT_EFF_Eigen_Light_14' }
+     - {symerror: 5.59658e-09, label: 'sys,FT_EFF_Eigen_Light_15' }
+     - {symerror: 3.26736e-10, label: 'sys,FT_EFF_Eigen_Light_16' }
+     - {symerror: 3.86535e-12, label: 'sys,FT_EFF_Eigen_Light_17' }
+     - {symerror: 2.50111e-12, label: 'sys,FT_EFF_Eigen_Light_18' }
+     - {symerror: 9.09495e-13, label: 'sys,FT_EFF_Eigen_Light_19' }
+     - {symerror: 2.27918e-07, label: 'sys,extrapolation_pt_l_Eigen_0' }
+     - {symerror: 6.20623e-08, label: 'sys,extrapolation_pt_l_Eigen_1' }
+     - {symerror: 9.6195e-09, label: 'sys,extrapolation_pt_l_Eigen_2' }
+     - {symerror: 4.81486e-09, label: 'sys,extrapolation_pt_l_Eigen_5' }
+     - {symerror: 1.40304e-07, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.38018e-08, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 1.40304e-07, label: 'sys,extrapolation_pt_c_Eigen_0' }
+     - {symerror: 1.38018e-08, label: 'sys,extrapolation_pt_c_Eigen_1' }
+     - {symerror: 9.15679e-09, label: 'sys,JET_BJES_Response' }
+     - {symerror: 3.54521e-09, label: 'sys,JET_EffectiveNP_Detector1' }
+     - {symerror: 1.10526e-09, label: 'sys,JET_EffectiveNP_Detector2' }
+     - {symerror: 1.51658e-09, label: 'sys,JET_EffectiveNP_Mixed1' }
+     - {symerror: 3.92174e-09, label: 'sys,JET_EffectiveNP_Mixed2' }
+     - {symerror: 2.4952e-09, label: 'sys,JET_EffectiveNP_Mixed3' }
+     - {symerror: 1.02639e-08, label: 'sys,JET_EffectiveNP_Modelling1' }
+     - {symerror: 4.81623e-09, label: 'sys,JET_EffectiveNP_Modelling2' }
+     - {symerror: 5.18367e-09, label: 'sys,JET_EffectiveNP_Modelling3' }
+     - {symerror: 1.30308e-09, label: 'sys,JET_EffectiveNP_Modelling4' }
+     - {symerror: 1.43746e-09, label: 'sys,JET_EffectiveNP_Statistical1' }
+     - {symerror: 2.78078e-09, label: 'sys,JET_EffectiveNP_Statistical2' }
+     - {symerror: 2.09639e-10, label: 'sys,JET_EffectiveNP_Statistical3' }
+     - {symerror: 1.96496e-09, label: 'sys,JET_EffectiveNP_Statistical4' }
+     - {symerror: 2.5957e-09, label: 'sys,JET_EffectiveNP_Statistical5' }
+     - {symerror: 1.83945e-09, label: 'sys,JET_EffectiveNP_Statistical6' }
+     - {symerror: 1.19212e-08, label: 'sys,JET_EtaIntercalibration_Modelling' }
+     - {symerror: 0, label: 'sys,JET_EtaIntercalibration_NonClosure_highE' }
+     - {symerror: 2.8142e-09, label: 'sys,JET_EtaIntercalibration_NonClosure_negEta' }
+     - {symerror: 2.05091e-09, label: 'sys,JET_EtaIntercalibration_NonClosure_posEta' }
+     - {symerror: 5.29053e-09, label: 'sys,JET_EtaIntercalibration_TotalStat' }
+     - {symerror: 3.99209e-08, label: 'sys,JET_Flavor_Composition' }
+     - {symerror: 2.47246e-08, label: 'sys,JET_Flavor_Response' }
+     - {symerror: 5.87761e-09, label: 'sys,JET_Pileup_OffsetMu' }
+     - {symerror: 5.76983e-09, label: 'sys,JET_Pileup_OffsetNPV' }
+     - {symerror: 5.05838e-09, label: 'sys,JET_Pileup_PtTerm' }
+     - {symerror: 2.23015e-08, label: 'sys,JET_Pileup_RhoTopology' }
+     - {symerror: 7.41238e-11, label: 'sys,JET_PunchThrough_MC16' }
+     - {symerror: 0, label: 'sys,JET_SingleParticle_HighPt' }
+     - {symerror: 1.17052e-09, label: 'sys,JET_JER_DataVsMC_MC16' }
+     - {symerror: 2.42312e-09, label: 'sys,JET_JER_EffectiveNP_1' }
+     - {symerror: 9.20227e-09, label: 'sys,JET_JER_EffectiveNP_2' }
+     - {symerror: 1.23032e-09, label: 'sys,JET_JER_EffectiveNP_3' }
+     - {symerror: 7.20433e-09, label: 'sys,JET_JER_EffectiveNP_4' }
+     - {symerror: 1.29276e-08, label: 'sys,JET_JER_EffectiveNP_5' }
+     - {symerror: 6.35464e-09, label: 'sys,JET_JER_EffectiveNP_6' }
+     - {symerror: 7.24958e-09, label: 'sys,JET_JER_EffectiveNP_7restTerm' }
+     - {symerror: 8.4583e-11, label: 'sys,JET_JvtEfficiency' }
+     - {symerror: 6.76528e-09, label: 'sys,EG_RESOLUTION_ALL' }
+     - {symerror: 1.90404e-07, label: 'sys,EG_SCALE_ALL' }
+     - {symerror: 1.22373e-07, label: 'sys,EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 3.83982e-08, label: 'sys,EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 1.27741e-08, label: 'sys,EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 2.15527e-09, label: 'sys,EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR' }
+     - {symerror: 4.54747e-12, label: 'sys,MUON_EFF_STAT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_STAT_LOWPT' }
+     - {symerror: 0, label: 'sys,MUON_EFF_SYS_LOWPT' }
+     - {symerror: 1.50521e-10, label: 'sys,MUON_EFF_SYS' }
+     - {symerror: 8.6402e-12, label: 'sys,MUON_EFF_TrigSystUncertainty' }
+     - {symerror: 5.68434e-12, label: 'sys,MUON_EFF_TrigStatUncertainty' }
+     - {symerror: 9.70886e-11, label: 'sys,MUON_ISO_SYS' }
+     - {symerror: 2.70575e-11, label: 'sys,MUON_ISO_STAT' }
+     - {symerror: 7.82045e-08, label: 'sys,MUON_SAGITTA_RESBIAS' }
+     - {symerror: 6.93717e-09, label: 'sys,MUON_SCALE' }
+     - {symerror: 1.09139e-11, label: 'sys,MUON_TTVA_SYS' }
+     - {symerror: 6.13909e-12, label: 'sys,MUON_TTVA_STAT' }
+     - {symerror: 1.72577e-10, label: 'sys,MET_SoftTrk_Scale' }
+     - {symerror: 2.20552e-11, label: 'sys,MET_SoftTrk_ResoPerp' }
+     - {symerror: 2.28965e-10, label: 'sys,MET_SoftTrk_ResoPara' }
+     - {symerror: 1.33459e-07, label: 'sys,DIBOSON' }
+     - {symerror: 0, label: 'sys,SingletopS_Xsec' }
+     - {symerror: 0, label: 'sys,SingletopT_Xsec' }
+     - {symerror: 1.06093e-09, label: 'sys,SingletopWt_Xsec' }
+     - {symerror: 1.24146e-10, label: 'sys,TTbarExtrapolationUncertainty' }
+     - {symerror: 6.08525e-08, label: 'sys,PRW_DATASF' }
+     - {symerror: 5.98694e-07, label: 'sys,VjBkg_Sherpa' }
+     - {symerror: 4.08209e-08, label: 'sys,Modelling_UnfoldingBias' }
+     - {symerror: 1.03842e-07, label: 'sys,Modelling_AltGenNonClosure' }
+     - {symerror: 1.18979e-07, label: 'sys,Modelling_SignalModelling' }
+     - {symerror: 5.7687e-08, label: 'sys,MCStatistics' }
+     - {symerror: 6.6007e-08, label: 'sys,Lumi' }
+     - {symerror: 0, label: 'sys,Ztautau_Xsec' }
+     - {symerror: 3.5925e-09, label: 'sys,ZH_Xsec' }
+     - {symerror: 1.75278e-08, label: 'sys,FxFxSig' }
+     - {symerror: 6.33171e-07, label: 'sys,FxFxBkg' }
+- header: {name: DSIG/DPT, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: MGaMC+Py8 FxFx 5FS (NLO)}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.0875647
+    errors: 
+     - asymerror: {minus: -0.0058489, plus: 0.0043181}
+  - value: 0.197561
+    errors: 
+     - asymerror: {minus: -0.0138363, plus: 0.0108721}
+  - value: 0.20193
+    errors: 
+     - asymerror: {minus: -0.013897, plus: 0.0114641}
+  - value: 0.149325
+    errors: 
+     - asymerror: {minus: -0.00931284, plus: 0.00813596}
+  - value: 0.0998462
+    errors: 
+     - asymerror: {minus: -0.00641509, plus: 0.00505861}
+  - value: 0.0647703
+    errors: 
+     - asymerror: {minus: -0.00453949, plus: 0.00303895}
+  - value: 0.0408614
+    errors: 
+     - asymerror: {minus: -0.00319926, plus: 0.00168543}
+  - value: 0.0249715
+    errors: 
+     - asymerror: {minus: -0.0021046, plus: 0.00102338}
+  - value: 0.0147015
+    errors: 
+     - asymerror: {minus: -0.00134189, plus: 0.000747647}
+  - value: 0.00666348
+    errors: 
+     - asymerror: {minus: -0.000674229, plus: 0.000454552}
+  - value: 0.00210769
+    errors: 
+     - asymerror: {minus: -0.000241374, plus: 0.000197108}
+  - value: 0.000520864
+    errors: 
+     - asymerror: {minus: -7.29891e-05, plus: 6.42609e-05}
+  - value: 8.69446e-05
+    errors: 
+     - asymerror: {minus: -1.45367e-05, plus: 1.41821e-05}
+  - value: 6.07939e-06
+    errors: 
+     - asymerror: {minus: -1.19446e-06, plus: 1.31794e-06}
+- header: {name: DSIG/DPT, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: Sherpa 5FS (NLO)}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.0990005
+    errors: 
+     - asymerror: {minus: -0.00884376, plus: 0.018816}
+  - value: 0.210592
+    errors: 
+     - asymerror: {minus: -0.0140562, plus: 0.0256415}
+  - value: 0.211486
+    errors: 
+     - asymerror: {minus: -0.0153215, plus: 0.0220432}
+  - value: 0.156023
+    errors: 
+     - asymerror: {minus: -0.0130782, plus: 0.0182198}
+  - value: 0.10426
+    errors: 
+     - asymerror: {minus: -0.01001, plus: 0.0136634}
+  - value: 0.0682141
+    errors: 
+     - asymerror: {minus: -0.00721561, plus: 0.0103482}
+  - value: 0.0428165
+    errors: 
+     - asymerror: {minus: -0.0051381, plus: 0.00727849}
+  - value: 0.0260583
+    errors: 
+     - asymerror: {minus: -0.00334297, plus: 0.00478162}
+  - value: 0.0152833
+    errors: 
+     - asymerror: {minus: -0.00205839, plus: 0.00296448}
+  - value: 0.00685733
+    errors: 
+     - asymerror: {minus: -0.000964282, plus: 0.00139686}
+  - value: 0.00212212
+    errors: 
+     - asymerror: {minus: -0.000319216, plus: 0.000490428}
+  - value: 0.000508721
+    errors: 
+     - asymerror: {minus: -8.14106e-05, plus: 0.000128863}
+  - value: 8.24931e-05
+    errors: 
+     - asymerror: {minus: -1.46487e-05, plus: 2.21383e-05}
+  - value: 5.63752e-06
+    errors: 
+     - asymerror: {minus: -1.09718e-06, plus: 1.53997e-06}
+- header: {name: DSIG/DPT, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: MGaMC+Py8 4FS (NLO)}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.0398529
+    errors: 
+     - asymerror: {minus: -0.00536247, plus: 0.00610907}
+  - value: 0.115621
+    errors: 
+     - asymerror: {minus: -0.0153786, plus: 0.0173554}
+  - value: 0.127301
+    errors: 
+     - asymerror: {minus: -0.0166792, plus: 0.018734}
+  - value: 0.0989981
+    errors: 
+     - asymerror: {minus: -0.0127227, plus: 0.0141834}
+  - value: 0.0683552
+    errors: 
+     - asymerror: {minus: -0.00856949, plus: 0.00943788}
+  - value: 0.0436985
+    errors: 
+     - asymerror: {minus: -0.00534798, plus: 0.00586392}
+  - value: 0.0269869
+    errors: 
+     - asymerror: {minus: -0.00333457, plus: 0.00370805}
+  - value: 0.0167301
+    errors: 
+     - asymerror: {minus: -0.00215406, plus: 0.0024607}
+  - value: 0.00969277
+    errors: 
+     - asymerror: {minus: -0.00136961, plus: 0.00161973}
+  - value: 0.00410221
+    errors: 
+     - asymerror: {minus: -0.000606454, plus: 0.000724391}
+  - value: 0.00125906
+    errors: 
+     - asymerror: {minus: -0.000203704, plus: 0.000250614}
+  - value: 0.000267598
+    errors: 
+     - asymerror: {minus: -4.65502e-05, plus: 5.90146e-05}
+  - value: 3.89178e-05
+    errors: 
+     - asymerror: {minus: -6.60633e-06, plus: 8.04611e-06}
+  - value: 3.26514e-06
+    errors: 
+     - asymerror: {minus: -6.6176e-07, plus: 8.87961e-07}
+- header: {name: DSIG/DPT, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: MGaMC+Py8 5FS (NLO)}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.0751373
+    errors: 
+     - asymerror: {minus: -0.00843664, plus: 0.00778418}
+  - value: 0.215759
+    errors: 
+     - asymerror: {minus: -0.0162964, plus: 0.0202484}
+  - value: 0.217245
+    errors: 
+     - asymerror: {minus: -0.0157668, plus: 0.0192387}
+  - value: 0.158451
+    errors: 
+     - asymerror: {minus: -0.0102789, plus: 0.0126783}
+  - value: 0.105777
+    errors: 
+     - asymerror: {minus: -0.00597327, plus: 0.00744377}
+  - value: 0.0682052
+    errors: 
+     - asymerror: {minus: -0.00419757, plus: 0.00444981}
+  - value: 0.0431507
+    errors: 
+     - asymerror: {minus: -0.00277133, plus: 0.0025502}
+  - value: 0.0266665
+    errors: 
+     - asymerror: {minus: -0.00193617, plus: 0.00172166}
+  - value: 0.0156082
+    errors: 
+     - asymerror: {minus: -0.00114681, plus: 0.00101503}
+  - value: 0.00706935
+    errors: 
+     - asymerror: {minus: -0.000531239, plus: 0.000466522}
+  - value: 0.00227193
+    errors: 
+     - asymerror: {minus: -0.000178188, plus: 0.000154582}
+  - value: 0.000572803
+    errors: 
+     - asymerror: {minus: -5.4122e-05, plus: 4.436e-05}
+  - value: 9.6092e-05
+    errors: 
+     - asymerror: {minus: -1.0308e-05, plus: 8.59e-06}
+  - value: 7.137e-06
+    errors: 
+     - asymerror: {minus: -1.07e-06, plus: 8.61e-07}
+- header: {name: DSIG/DPT, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: NLO Fixed Order}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.06539
+    errors: 
+     - asymerror: {minus: -0.0164394, plus: 0.0120669}
+  - value: 0.1898
+    errors: 
+     - asymerror: {minus: -0.0158581, plus: 0.0151533}
+  - value: 0.2058
+    errors: 
+     - asymerror: {minus: -0.0146936, plus: 0.017703}
+  - value: 0.1376
+    errors: 
+     - asymerror: {minus: -0.00951851, plus: 0.0114854}
+  - value: 0.08666
+    errors: 
+     - asymerror: {minus: -0.00609797, plus: 0.00695938}
+  - value: 0.05428
+    errors: 
+     - asymerror: {minus: -0.00416184, plus: 0.00405196}
+  - value: 0.03296
+    errors: 
+     - asymerror: {minus: -0.00270057, plus: 0.00240788}
+  - value: 0.01952
+    errors: 
+     - asymerror: {minus: -0.00162295, plus: 0.00142301}
+  - value: 0.01107
+    errors: 
+     - asymerror: {minus: -0.000937656, plus: 0.000814609}
+  - value: 0.004729
+    errors: 
+     - asymerror: {minus: -0.000407418, plus: 0.000350548}
+  - value: 0.001359
+    errors: 
+     - asymerror: {minus: -0.000122943, plus: 0.000105943}
+  - value: 0.0002942
+    errors: 
+     - asymerror: {minus: -2.69208e-05, plus: 2.30033e-05}
+  - value: 4.116e-05
+    errors: 
+     - asymerror: {minus: -3.99286e-06, plus: 3.4279e-06}
+  - value: 2.282e-06
+    errors: 
+     - asymerror: {minus: -2.75987e-07, plus: 2.39859e-07}
+- header: {name: DSIG/DPT, units: PB/GeV}
+  qualifiers:
+  - {name: Distribution, value: NNLO Fixed Order}
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  values:
+  - value: 0.07685
+    errors: 
+     - asymerror: {minus: -0.0278994, plus: 0.00616164}
+  - value: 0.172
+    errors: 
+     - asymerror: {minus: -0.00194186, plus: 0.00855501}
+  - value: 0.1909
+    errors: 
+     - asymerror: {minus: -0.000206373, plus: 0.00796094}
+  - value: 0.1441
+    errors: 
+     - asymerror: {minus: -0.0160185, plus: 0.00434102}
+  - value: 0.09357
+    errors: 
+     - asymerror: {minus: -0.013008, plus: 0.00354627}
+  - value: 0.06095
+    errors: 
+     - asymerror: {minus: -0.0108318, plus: 0.00273938}
+  - value: 0.03731
+    errors: 
+     - asymerror: {minus: -0.00705057, plus: 0.00177022}
+  - value: 0.023
+    errors: 
+     - asymerror: {minus: -0.00510295, plus: 0.0011801}
+  - value: 0.01306
+    errors: 
+     - asymerror: {minus: -0.00292766, plus: 0.000664873}
+  - value: 0.005717
+    errors: 
+     - asymerror: {minus: -0.00139542, plus: 0.000302515}
+  - value: 0.001706
+    errors: 
+     - asymerror: {minus: -0.000469943, plus: 0.000105042}
+  - value: 0.0003861
+    errors: 
+     - asymerror: {minus: -0.000118821, plus: 2.53711e-05}
+  - value: 5.811e-05
+    errors: 
+     - asymerror: {minus: -2.09429e-05, plus: 4.86529e-06}
+  - value: 3.532e-06
+    errors: 
+     - asymerror: {minus: -1.52599e-06, plus: 3.93571e-07}

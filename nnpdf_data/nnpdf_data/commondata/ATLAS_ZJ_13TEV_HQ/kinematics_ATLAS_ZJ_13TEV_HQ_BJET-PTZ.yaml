@@ -1,0 +1,169 @@
+bins:
+- pT:
+    min: 0
+    mid: 7.5
+    max: 15
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 15
+    mid: 22.5
+    max: 30
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 30
+    mid: 35.0
+    max: 40
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 40
+    mid: 45.0
+    max: 50
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 50
+    mid: 55.0
+    max: 60
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 60
+    mid: 67.5
+    max: 75
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 75
+    mid: 82.5
+    max: 90
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 90
+    mid: 100.0
+    max: 110
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 110
+    mid: 120.0
+    max: 130
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 130
+    mid: 155.0
+    max: 180
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 180
+    mid: 210.0
+    max: 240
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 240
+    mid: 295.0
+    max: 350
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 350
+    mid: 425.0
+    max: 500
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 500
+    mid: 750.0
+    max: 1000
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
