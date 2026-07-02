@@ -1,0 +1,278 @@
+#
+# Experiment layout
+# -----------------
+#   dense x-scan : 50 log-spaced mu values covering [1e-4, 0.9]
+#                  -> produces phi_j(x) heatmap inputs on the full global fit
+#
+# sigma is fixed in log10(x) units (xspace: logx) so the bump width is
+# constant in decades across the full x range.
+
+pdf_name: NNPDF40_nnlo_as_01180
+theory_id: 708
+use_cuts: internal
+n_replicas: 100
+output_root: sv_results/nnpdf40_calibrated
+log_root: slurm/logs/nnpdf40_calibrated
+run_name: calibrated_xscan_dense_evol
+per_replica: false
+
+deterministic_sign_symmetrized: true
+random_sign: false
+
+enforce_sumrules: false
+stabilization:
+  enabled: true
+  action: exclude_dataset
+  dataset_delta_chi2_threshold: 1e5
+  max_outlier_coalitions: 5
+  rerun_stable: true
+experiments:
+
+  # --- Dense x-scan at alpha=1.0 (calibrated flavour basis) ---------------
+
+  - name: mu_01
+    basis: [evolution]
+    perturbation: {mu: 0.0001, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_02
+    basis: [evolution]
+    perturbation: {mu: 0.000120420056524, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_03
+    basis: [evolution]
+    perturbation: {mu: 0.000145009900131, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_04
+    basis: [evolution]
+    perturbation: {mu: 0.000174621003703, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_05
+    basis: [evolution]
+    perturbation: {mu: 0.000210278711361, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_06
+    basis: [evolution]
+    perturbation: {mu: 0.000253217743078, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_07
+    basis: [evolution]
+    perturbation: {mu: 0.000304924949343, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_08
+    basis: [evolution]
+    perturbation: {mu: 0.000367190796353, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_09
+    basis: [evolution]
+    perturbation: {mu: 0.000442171364517, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_10
+    basis: [evolution]
+    perturbation: {mu: 0.000532463007083, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_11
+    basis: [evolution]
+    perturbation: {mu: 0.000641192254096, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_12
+    basis: [evolution]
+    perturbation: {mu: 0.000772124074808, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_13
+    basis: [evolution]
+    perturbation: {mu: 0.000929792247316, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_14
+    basis: [evolution]
+    perturbation: {mu: 0.00111965634977, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_15
+    basis: [evolution]
+    perturbation: {mu: 0.00134829080926, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_16
+    basis: [evolution]
+    perturbation: {mu: 0.00162361255462, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_17
+    basis: [evolution]
+    perturbation: {mu: 0.00195515515599, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_18
+    basis: [evolution]
+    perturbation: {mu: 0.00235439894397, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_19
+    basis: [evolution]
+    perturbation: {mu: 0.00283516853912, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_20
+    basis: [evolution]
+    perturbation: {mu: 0.00341411155735, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_21
+    basis: [evolution]
+    perturbation: {mu: 0.00411127506713, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_22
+    basis: [evolution]
+    perturbation: {mu: 0.00495079975968, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_23
+    basis: [evolution]
+    perturbation: {mu: 0.00596175586898, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_24
+    basis: [evolution]
+    perturbation: {mu: 0.00717914978722, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_25
+    basis: [evolution]
+    perturbation: {mu: 0.00864513623168, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_26
+    basis: [evolution]
+    perturbation: {mu: 0.0104104779367, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_27
+    basis: [evolution]
+    perturbation: {mu: 0.0125363034158, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_28
+    basis: [evolution]
+    perturbation: {mu: 0.0150962236593, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_29
+    basis: [evolution]
+    perturbation: {mu: 0.0181788810634, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_30
+    basis: [evolution]
+    perturbation: {mu: 0.0218910188519, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_31
+    basis: [evolution]
+    perturbation: {mu: 0.0263611772751, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_32
+    basis: [evolution]
+    perturbation: {mu: 0.0317441445749, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_33
+    basis: [evolution]
+    perturbation: {mu: 0.03822631684, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_34
+    basis: [evolution]
+    perturbation: {mu: 0.0460321523456, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_35
+    basis: [evolution]
+    perturbation: {mu: 0.0554319438736, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_36
+    basis: [evolution]
+    perturbation: {mu: 0.0667511781448, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_37
+    basis: [evolution]
+    perturbation: {mu: 0.0803818064521, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_38
+    basis: [evolution]
+    perturbation: {mu: 0.0967958167643, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_39
+    basis: [evolution]
+    perturbation: {mu: 0.11656157726, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_40
+    basis: [evolution]
+    perturbation: {mu: 0.140363517221, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_41
+    basis: [evolution]
+    perturbation: {mu: 0.169025826776, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_42
+    basis: [evolution]
+    perturbation: {mu: 0.203540996143, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_43
+    basis: [evolution]
+    perturbation: {mu: 0.245104182605, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_44
+    basis: [evolution]
+    perturbation: {mu: 0.295154595234, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_45
+    basis: [evolution]
+    perturbation: {mu: 0.355425330413, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_46
+    basis: [evolution]
+    perturbation: {mu: 0.428003383782, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_47
+    basis: [evolution]
+    perturbation: {mu: 0.515401916674, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_48
+    basis: [evolution]
+    perturbation: {mu: 0.620647279382, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_49
+    basis: [evolution]
+    perturbation: {mu: 0.747383804644, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+  - name: mu_50
+    basis: [evolution]
+    perturbation: {mu: 0.9, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+
+datasets:
+  # DIS: Fixed-target
+  - {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+  - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+  - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+  - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+  - {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+  - {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, variant: legacy_dw}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], variant: legacy_dw}
+  # DIS: HERA combined
+  - {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_251GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_300GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EM-SIGMARED, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, variant: legacy}
+  # DY: Fixed-target
+  - {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, variant: legacy}
+  - {dataset: DYE866_Z0_800GEV_PXSEC, variant: legacy}
+  - {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy}
+  - {dataset: DYE906_Z0_120GEV_DW_PDXSECRATIO, cfac: [ACC], variant: legacy}
+  # DY: Tevatron
+  - {dataset: CDF_Z0_1P96TEV_ZRAP, variant: legacy}
+  - {dataset: D0_Z0_1P96TEV_ZRAP, variant: legacy}
+  - {dataset: D0_WPWM_1P96TEV_ASY, variant: legacy}
+  # DY: ATLAS
+  - {dataset: ATLAS_WPWM_7TEV_36PB_ETA, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_36PB_ETA, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_LOMASS_M, variant: legacy}
+  - {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_46FB_CC-Y, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, variant: legacy}
+  - {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y, variant: legacy}
+  - {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, variant: legacy}
+  - {dataset: ATLAS_Z0_13TEV_TOT, cfac: [NRM], variant: legacy}
+  - {dataset: ATLAS_WPWM_13TEV_TOT, cfac: [NRM], variant: legacy}
+  - {dataset: ATLAS_WJ_8TEV_WP-PT, variant: legacy}
+  - {dataset: ATLAS_WJ_8TEV_WM-PT, variant: legacy}
+  - {dataset: ATLAS_Z0J_8TEV_PT-M, variant: legacy_10}
+  - {dataset: ATLAS_Z0J_8TEV_PT-Y, variant: legacy_10}
+  # DY: CMS
+  - CMS_WPWM_7TEV_ELECTRON_ASY
+  - {dataset: CMS_WPWM_7TEV_MUON_ASY, variant: legacy}
+  - CMS_Z0_7TEV_DIMUON_2D
+  - {dataset: CMS_WPWM_8TEV_MUON_Y, variant: legacy}
+  - {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy_10}
+  # DY: LHCb
+  - LHCB_Z0_7TEV_DIELECTRON_Y
+  - LHCB_Z0_8TEV_DIELECTRON_Y
+  - {dataset: LHCB_WPWM_7TEV_MUON_Y, cfac: [NRM]}
+  - {dataset: LHCB_Z0_7TEV_MUON_Y, cfac: [NRM]}
+  - {dataset: LHCB_WPWM_8TEV_MUON_Y, cfac: [NRM]}
+  - {dataset: LHCB_Z0_8TEV_MUON_Y, cfac: [NRM]}
+  - LHCB_Z0_13TEV_DIMUON-Y
+  - LHCB_Z0_13TEV_DIELECTRON-Y
+  # Top: ttbar total cross-sections
+  - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, variant: legacy}
+  # Top: ttbar differential
+  - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_2L_DIF_YT, variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YT, variant: legacy}
+  # Jets
+  - {dataset: ATLAS_1JET_8TEV_R06_PTY, variant: legacy_decorrelated}
+  - {dataset: ATLAS_2JET_7TEV_R06_M12Y, variant: legacy}
+  - {dataset: CMS_2JET_7TEV_M12-Y, variant: legacy}
+  - {dataset: CMS_1JET_8TEV_PTY, variant: legacy}
+  # Prompt photon
+  - {dataset: ATLAS_PH_13TEV_XSEC, cfac: [EWK], variant: legacy}
+  # Single top
+  - {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM, variant: legacy}
+  - {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC, variant: legacy}
+  - {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, variant: legacy}
+  - {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, variant: legacy}
