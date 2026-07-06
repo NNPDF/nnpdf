@@ -74,6 +74,14 @@ implemented_observables:
     legacy:
       theory: *theory
       data_uncertainties: *data
+    legacy_weaker:
+      theory: *theory
+      data_uncertainties:
+      - uncertainties_weaker.yaml
+    legacy_stronger:
+      theory: *theory
+      data_uncertainties:
+      - uncertainties_stronger.yaml
 
   # Theory
   theory:
