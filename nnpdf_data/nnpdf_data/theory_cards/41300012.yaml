@@ -9,6 +9,7 @@ ModEv: EXA
 IterEv: 60
 XIR: 0.5
 XIF: 0.5
+ModSV: expanded
 NfFF: 5
 QED: 2
 HQ: POLE
