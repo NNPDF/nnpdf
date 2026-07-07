@@ -88,7 +88,7 @@ class PDF(TupleComp):
     >>> pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
     >>> preds = predictions(ds, pdf)
     >>> preds.shape
-    (11, 100)
+    (11, 101)
     """
 
     def __init__(self, name, boundary=None):
