@@ -5,7 +5,7 @@ import os
 import numpy as np
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -211,8 +211,8 @@ class Extractor:
         if self.observable == 'WPWM-TOT':
             # Generate covmat and perform eigen decomposition
             covmat = self._generate_covmat(sys_unc)
-            eigvals, eigvecs = np.linalg.eig(covmat)
-            art_unc = np.sqrt(eigvals) * eigvecs
+            
+            art_unc = decompose_covmat(covmat)
 
             # Loop over bins
             for data_idx in range(len(central_data)):

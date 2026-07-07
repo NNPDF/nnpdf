@@ -2,7 +2,7 @@ import numpy as np
 import uproot
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -81,16 +81,6 @@ def get_data_values(version, figure):
         data_central.append(value['value'])
 
     return data_central
-
-
-def decompose_covmat(covmat):
-    """Given a covmat it return an array sys with shape (ndat,ndat)
-    giving ndat correlated systematics for each of the ndat point.
-    The original covmat is obtained by doing sys@sys.T"""
-
-    lamb, mat = np.linalg.eig(covmat)
-    sys = np.multiply(np.sqrt(lamb), mat)
-    return sys
 
 
 def get_systematics(observable, version, figure):
