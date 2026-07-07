@@ -56,6 +56,7 @@ def calc_chi2(sqrtcov, diffs):
     44.64401691354948
     >>> diffs@la.inv(cov)@diffs
     44.64401691354948
+    #TODO: Getting different values here
 
     """
     # handle empty data

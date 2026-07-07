@@ -840,16 +840,16 @@ def get_cuts_for_dataset(commondata, rules) -> list:
     Example
     -------
     >>> from validphys.filters import (get_cuts_for_dataset, Rule,
-    ...     default_filter_settings, default_filter_rules_input)
+    ...     default_filter_settings_input, default_filter_rules_input)
     >>> from validphys.loader import Loader
     >>> l = Loader()
-    >>> cd = l.check_commondata("NMC")
-    >>> theory = l.check_theoryID(53)
-    >>> filter_defaults = default_filter_settings()
+    >>> cd = l.check_commondata("NMC_NC_NOTFIXED_P_EM-SIGMARED",variant='legacy')
+    >>> theory = l.check_theoryID(40000000)
+    >>> filter_defaults = default_filter_settings_input()
     >>> params = theory.get_description()
     >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params)
     ...     for i in default_filter_rules_input()]
-    >>> get_cuts_for_dataset(cd, rules=rule_list)
+    >>> cuts = get_cuts_for_dataset(cd, rules=tuple(rule_list))
     """
     dataset = commondata.load()
 
