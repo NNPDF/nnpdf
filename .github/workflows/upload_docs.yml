@@ -18,7 +18,7 @@ jobs:
         shell: bash -l {0}
         run: |
           cd doc/sphinx
-          make html
+          make html SPHINXOPTS="-W --keep-going"
       - name: Upload documentation
         shell: bash -l {0}
         if: github.ref == 'refs/heads/master'

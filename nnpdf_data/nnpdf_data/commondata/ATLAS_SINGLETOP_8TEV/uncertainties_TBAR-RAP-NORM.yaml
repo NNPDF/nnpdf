@@ -76,7 +76,7 @@ definitions:
     treatment: MULT
     type: CORR
 bins:
-- sys_corr_1: -4.58704797e-02
+- sys_corr_1: 4.58704797e-02
   sys_corr_2: 2.60138756e-02
   sys_corr_3: 1.11947720e-02
   sys_corr_4: 5.60090160e-03
@@ -95,7 +95,7 @@ bins:
   sys_corr_17: 4.90078890e-03
   sys_corr_18: 9.80157780e-03
   sys_corr_19: 5.45683845e-03
-- sys_corr_1: 4.77687935e-02
+- sys_corr_1: -4.77687935e-02
   sys_corr_2: 1.84667968e-02
   sys_corr_3: 1.44466958e-02
   sys_corr_4: 4.38221910e-03
@@ -114,7 +114,7 @@ bins:
   sys_corr_17: 6.26031300e-03
   sys_corr_18: 2.00330016e-02
   sys_corr_19: 1.08431802e-03
-- sys_corr_1: -9.92291305e-03
+- sys_corr_1: 9.92291305e-03
   sys_corr_2: -3.13549407e-02
   sys_corr_3: 1.77963533e-02
   sys_corr_4: 3.25164690e-03

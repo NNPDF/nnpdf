@@ -903,7 +903,10 @@ def _check_if_statistical(col):
     Returns true if and only if the column name stats with "stat",
     its treatment is additive and it is not correlated (type == UNCORR)
     """
-    return col[0].lower().startswith("stat") and col[1] == "ADD" and col[2] == "UNCORR"
+    if col[0].lower() == "stat":
+        assert col[1] == "ADD" and col[2] == "UNCORR"
+        return True
+    return False
 
 
 def load_commondata(metadata):

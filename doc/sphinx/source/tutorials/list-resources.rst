@@ -5,7 +5,7 @@ How to list the available resources
 
 
 Using ``vp-list``
-----------------
+-----------------
 
 In order to check what resources are available locally and for download, use
 ``vp-list`` which will print out the names of resources.

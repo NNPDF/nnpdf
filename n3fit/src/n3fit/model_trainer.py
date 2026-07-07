@@ -11,8 +11,8 @@ between iterations while at the same time keeping the amount of redundant calls 
 
 from collections import namedtuple
 from itertools import zip_longest
-import logging
 import json
+import logging
 
 import numpy as np
 
@@ -27,10 +27,11 @@ from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
 from validphys.core import DataGroupSpec
+from validphys.loader import Loader
 from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
-
+l = Loader()
 # Threshold defaults
 # Any partition with a chi2 over the threshold will discard its hyperparameters
 HYPER_THRESHOLD = 50.0
@@ -84,15 +85,14 @@ class ModelTrainer:
 
     Wrapper around the fitting code and the generation of the Neural Network
 
-    When the "hyperparametrizable"* function is called with a dictionary of parameters,
+    The ``hyperparametrizable`` method accepts a dictionary of hyper-parameters
+    which defines the Neural Network.
+    When it is called with a dictionary of parameters,
     it generates a NN and subsequentially performs a fit.
 
     The motivation behind this class is minimising the amount
     of redundant calls of each hyperopt run, in particular this allows to completely reset
     the NN at the beginning of each iteration reusing some of the previous work.
-
-    *called in this way because it accept a dictionary of hyper-parameters
-    which defines the Neural Network
     """
 
     def __init__(
@@ -114,6 +114,7 @@ class ModelTrainer:
         lux_params=None,
         replicas=None,
         trials=None,
+        load_weights_dict=None,
     ):
         """
         Parameters
@@ -154,8 +155,8 @@ class ModelTrainer:
                 if not give, the photon is not generated
             replicas: list
                 list with the replicas ids to be fitted
-            trials: str
-                name of the file containing the trials defining the methodology
+            trials: dict
+                dictionary containing the trials defining the methodology
         """
         # Save all input information
         self.exp_info = list(exp_info)
@@ -172,7 +173,7 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
-        self.trials=trials
+        self.trials = trials
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -180,6 +181,7 @@ class ModelTrainer:
         else:
             self.max_cores = max_cores
         self.model_file = model_file
+        self.load_weights_dict = load_weights_dict
         self.print_summary = True
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
@@ -851,6 +853,8 @@ class ModelTrainer:
         Parameters used only here:
             - ``epochs``: maximum number of iterations for the fit to run
             - ``stopping_patience``: patience of the stopper after finding a new minimum
+            - ``stopping_delta``: minimum improvement to consider it a new minimum
+
         All other parameters are passed to the corresponding functions
         """
 
@@ -868,13 +872,12 @@ class ModelTrainer:
         if self.mode_hyperopt or (not self.trials):
             epochs = int(params["epochs"])
             stopping_patience = params["stopping_patience"]
-            stopping_epochs = int(epochs * stopping_patience)
         else:
             idx_hyperparamters = self.replicas[0] % self.trials["number_of_trials"]
             epochs = int(self.trials["epochs"][idx_hyperparamters])
             stopping_patience = self.trials["stopping_patience"][idx_hyperparamters]
-            stopping_epochs = int(epochs * stopping_patience)
-
+        stopping_delta = params.get("stopping_delta", 0.0)
+        stopping_epochs = int(epochs * stopping_patience)
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
@@ -936,7 +939,9 @@ class ModelTrainer:
             # read hyperparameter values from hyperopt results
             for rep, seed in zip(self.replicas, self._nn_seeds):
                 idx_hyperparamters = rep % self.trials["number_of_trials"]
-                activations = [self.trials["activation_per_layer"][idx_hyperparamters]] * (len(self.trials["nodes_per_layer"][idx_hyperparamters])-1)
+                activations = [self.trials["activation_per_layer"][idx_hyperparamters]] * (
+                    len(self.trials["nodes_per_layer"][idx_hyperparamters]) - 1
+                )
                 # last layer activation is always linear
                 activations.append('linear')
 
@@ -986,11 +991,19 @@ class ModelTrainer:
             # together with pdf model generated above
             models = self._model_generation(xinput, pdf_model, partition, k)
 
-            # Only after model generation, apply possible weight file
-            # Starting every replica with the same weights
+            # After model generation, apply possible weights files.
+            # The possibilities are a single model file (`load:`)
+            # so that every replica starts with the same weights
+            # or a weight per replica from `load_weights_from_fit`
             if self.model_file:
                 log.info("Applying model file %s", self.model_file)
                 pdf_model.load_identical_replicas(self.model_file)
+
+            if self.load_weights_dict:
+                for replica in self.replicas:
+                    weights_path = self.load_weights_dict[replica]
+                    log.info("Loading weights from path: " + str(weights_path))
+                    pdf_model.set_replica_weights_from_file(weights_path)
 
             if k > 0:
                 # Reset the positivity and integrability multipliers
@@ -1016,10 +1029,11 @@ class ModelTrainer:
                 pdf_model,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
+                stopping_delta=stopping_delta,
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
             )
-            
+
             if self.mode_hyperopt or (not self.trials):
                 optimizer_params = params["optimizer"]
             else:
@@ -1028,8 +1042,8 @@ class ModelTrainer:
                 optimizer_params["clipnorm"] = self.trials['clipnorm'][idx_hyperparamters]
                 optimizer_params["learning_rate"] = self.trials['learning_rate'][idx_hyperparamters]
                 optimizer_params["optimizer_name"] = self.trials['optimizer'][idx_hyperparamters]
-                
-            # Compile each of the training/validation models with the same  optimization parameters  
+
+            # Compile each of the training/validation models with the same  optimization parameters
             for model in models.values():
                 model.compile(**optimizer_params)
             self._train_and_fit(models["training"], stopping_object, epochs=epochs)

@@ -225,6 +225,7 @@ def dataset_inputs_covmat_from_systematics(
         covmat = (covmat / sqrt_weights).T / sqrt_weights
     if norm_threshold is not None:
         covmat = regularize_covmat(covmat, norm_threshold=norm_threshold)
+
     return covmat
 
 
@@ -251,23 +252,16 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
         points) containing the numerical value of the systematic shifts
         due to correlated uncertainties
     """
-
-    # Separate statistical and systematic errors
-    stat_errors = lcd_wc.stat_errors.to_numpy()
-    syst_errors = lcd_wc.systematic_errors(None)
-
-    # Determine the uncorrelated part of the error
-    alpha2 = stat_errors**2
-    is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
-    alpha2 += (syst_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
-    alpha = np.sqrt(alpha2)
+    
+    # Separate the uncorrelated and correlated parts of the exp uncertainty 
+    alpha = unco_unc(lcd_wc)
+    beta  = corr_unc(lcd_wc)
 
     if alpha.all() == 0:
         shifts = np.zeros(len(alpha))
     else:
 
         # Determine the correlated part of the error
-        beta = syst_errors.loc[:, ~is_uncorr].to_numpy()
         beta = beta / alpha[:, np.newaxis]
 
         # The number of data points and the number of correlated systematics
@@ -291,9 +285,57 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
         # Compute the shifts
         shifts = -np.matmul(beta * alpha[:, np.newaxis], r)
 
-    return shifts, alpha
+    return shifts
 
+def unco_unc(lcd_wc):
+    """Extract the uncorrelated part of the experimental uncertainty
+    from a :py:class:`validphys.coredata.CommonData` object
+     Parameters
+    ----------
+    loaded_commondata_with_cuts : validphys.coredata.CommonData
+        CommonData which stores information about systematic errors,
+        their treatment and description.
+    Returns
+    -------
+    alpha: np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data
+        points) containing the numerical value of the uncorrelated 
+        part of the experimental uncertainty
+    """
+    # Separate statistical and systematic errors
+    stat_errors = lcd_wc.stat_errors.to_numpy()
+    syst_errors = lcd_wc.systematic_errors(None)
 
+    # Determine the uncorrelated part of the error
+    alpha2 = stat_errors**2
+    is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
+    alpha2 += (syst_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
+    alpha = np.sqrt(alpha2)
+
+    return alpha
+
+def corr_unc(lcd_wc):
+    """Extract the correlated part of the experimental uncertainty
+    from a :py:class:`validphys.coredata.CommonData` object
+     Parameters
+    ----------
+    loaded_commondata_with_cuts : validphys.coredata.CommonData
+        CommonData which stores information about systematic errors,
+        their treatment and description.
+    Returns
+    -------
+    beta: np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data
+        points) containing the numerical value of the correlated 
+        part of the experimental uncertainty
+    """
+    # Separate statistical and systematic errors
+    syst_errors = lcd_wc.systematic_errors(None)
+    is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
+    beta = syst_errors.loc[:, ~is_uncorr].to_numpy()
+
+    return beta    
+    
 @check_cuts_considered
 @functools.lru_cache
 def dataset_t0_predictions(t0dataset, t0set):
@@ -405,7 +447,7 @@ def dataset_inputs_t0_covmat_from_systematics(
     )
 
 
-def dataset_inputs_t0_total_covmat_separate(
+def dataset_load_inputs_t0_total_covmat_separate(
     dataset_inputs_t0_exp_covmat_separate, loaded_theory_covmat
 ):
     """
@@ -413,9 +455,18 @@ def dataset_inputs_t0_total_covmat_separate(
     In this case the t0 prescription is used for the experimental covmat and the multiplicative
     errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_t0_exp_covmat_separate
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_t0_exp_covmat_separate + loaded_theory_covmat
+
+
+def dataset_inputs_t0_total_covmat_separate(
+    dataset_inputs_t0_exp_covmat_separate, nnfit_theory_covmat
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_t0_exp_covmat_separate + nnfit_theory_covmat
 
 
 def dataset_inputs_t0_exp_covmat_separate(
@@ -442,15 +493,24 @@ def dataset_inputs_t0_exp_covmat_separate(
     return covmat
 
 
-def dataset_inputs_total_covmat_separate(dataset_inputs_exp_covmat_separate, loaded_theory_covmat):
+def dataset_load_inputs_total_covmat_separate(
+    dataset_inputs_exp_covmat_separate, loaded_theory_covmat
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
     In this case the t0 prescription is not used for the experimental covmat and the multiplicative
     errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_exp_covmat_separate
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_exp_covmat_separate + loaded_theory_covmat
+
+
+def dataset_inputs_total_covmat_separate(dataset_inputs_exp_covmat_separate, nnfit_theory_covmat):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_exp_covmat_separate + nnfit_theory_covmat
 
 
 def dataset_inputs_exp_covmat_separate(
@@ -476,15 +536,23 @@ def dataset_inputs_exp_covmat_separate(
     return covmat
 
 
-def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, loaded_theory_covmat):
+def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, nnfit_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_t0_exp_covmat
-    covmat += loaded_theory_covmat
-    return covmat
+
+    return dataset_inputs_t0_exp_covmat + nnfit_theory_covmat
+
+
+def dataset_load_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, loaded_theory_covmat):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_t0_exp_covmat + loaded_theory_covmat
 
 
 def dataset_inputs_t0_exp_covmat(
@@ -508,18 +576,26 @@ def dataset_inputs_t0_exp_covmat(
         dataset_inputs_t0_predictions,
         False,
     )
+
     return covmat
 
 
-def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, loaded_theory_covmat):
+def dataset_load_inputs_total_covmat(dataset_inputs_exp_covmat, loaded_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_exp_covmat
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_exp_covmat + loaded_theory_covmat
+
+
+def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, nnfit_theory_covmat):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_exp_covmat + nnfit_theory_covmat
 
 
 def dataset_inputs_exp_covmat(

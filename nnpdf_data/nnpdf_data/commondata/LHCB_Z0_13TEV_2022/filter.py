@@ -3,7 +3,7 @@ from collections import defaultdict, namedtuple
 import numpy as np
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -45,40 +45,6 @@ for observable in metadata['implemented_observables']:
 
 # Utility functions
 # ________________________________________________________
-def OuterDecomposition(matrix):
-    r"""Compute the single value decomposition of the matrix A.
-
-    Returns the set of vector \sigma_{i}^{(k)} defined as
-
-        \sigma_{i}^{(k)} = v_{i}^{(k)} * \lambda^{(k)},
-
-    where v_{i}^{(k)} is the k-th eigenvector of the matrix A
-    associated to the k-th eigenvalue \lambda^{(k)}. The vectors
-    \sigma_{i}^{(k)} are defined such that
-
-        A_{ij} = \sum_{k=1}^{dim(A)} \sigma_{i}^{(k)} \sigma_{j}^{(k)}.
-
-    If A is a correlation matrix, for each data point i there will be
-    an associated vector \sigma_{i} = (sigma_{i}^{(1)}, ... , sigma_{i}^{(dim(A))}).
-
-    Parameters
-    ----------
-    A: the matrix to be decomposed.
-
-    Returns
-    -------
-    sigma: A matrix containing the set of vectors whose outer product reconstruct the original matrix.
-            The matrix has two indices sigma[i,k] - the first one refers to the component of the k-th
-            eigenvector, whereas the other one selects the eigenvalue.
-    """
-    eigenvalues, eigenvectors = np.linalg.eig(matrix)
-    sigma = np.zeros_like(matrix, dtype=float)
-    for i in range(np.size(eigenvalues)):
-        for j in range(np.size(eigenvalues)):
-            sigma[i][j] = eigenvectors[i][j] * np.sqrt(eigenvalues[j])
-    return sigma
-
-
 def ExtractCorrelation(yaml_file, N):
     """Convert a list of values into a matrix
 
@@ -313,7 +279,7 @@ def processData():
                 cov = ComputeCovariance(cormat, v)
 
                 # Single value decomposition
-                sigma = OuterDecomposition(cov)
+                sigma = decompose_covmat(cov)
 
                 # Loop over the bins
                 for k in range(len(error_diag)):

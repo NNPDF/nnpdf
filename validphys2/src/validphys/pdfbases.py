@@ -152,7 +152,7 @@ class UnknownElement(KeyError):
 
 class Basis(abc.ABC):
     """A Basis maps a set of PDF flavours (typically as given by
-    :ref:`LHAPDF <lhapdf>`) to functions thereof. This abstract class provides
+    :ref:`LHAPDF <lhapdf-code>`) to functions thereof. This abstract class provides
     functionalities to manage labels (used for plotting) and defaults, while
     the concrete implementation of the transformations is handled by the
     subclasses (by implementing the

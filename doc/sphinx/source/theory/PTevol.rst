@@ -687,7 +687,7 @@ N space solutions to the evolution equations (Ref. )
 
     \binom{\Sigma}{g}(N,a_s) = \bigg[\mathbb{I}+\sum_{k=1}^{\infty}a_s^kU_k(N)\bigg] \mathbf{L}(a_s,a_0,N)\bigg[\mathbb{I}+\sum_{k=1}^{\infty}a_0^kU_k(N)\bigg]^{-1}\binom{\Sigma}{g}(N,a_0)\equiv \mathbf{\Gamma}_S(N,a_s,a_0)\binom{\Sigma}{g}(N,a_0)
 
--  The *fully truncated*\  [1]_ expression of the matrix evolution
+-  The *fully truncated* expression of the matrix evolution
    kernel up to NNLO reads
 
 .. math::
@@ -761,20 +761,20 @@ N space solutions to the evolution equations (Ref. )
 
 .. math::
 
-    \Gamma_{NS,LO}^{\pm,v}(N,a_s,a_0)= (\frac{a_s}{a_0})^{-R_0^{ns}}
+    \Gamma_{\rm NS,LO}^{\pm,v}(N,a_s,a_0)= (\frac{a_s}{a_0})^{-R_0^{ns}}
 
 -  Both iterated and truncated non-singlet solutions can be written down
    in a compact closed form at NLO as well. Iterated solution:
 
 .. math::
 
-    \Gamma^{\pm,v}_{NS,NLO}(N,a_s,a_0) =\exp\bigg{\frac{U^{\pm,v}_1} {b_1}\ln(\frac{1+b_1a_s}{1+b_1 a_0})\bigg}(\frac{a_s}{a_0})^{-R_0^{ns}}.
+    \Gamma^{\pm,v}_{\rm NS,NLO}(N,a_s,a_0) =\exp\bigg(\frac{U^{\pm,v}_1} {b_1}\ln(\frac{1+b_1a_s}{1+b_1 a_0})\bigg)(\frac{a_s}{a_0})^{-R_0^{ns}}.
 
 -  Truncated solution:
 
-$$\label{ns-sol0} \\Gamma^{\pm,v}_{\rm NS,NLO} (N,a_s,a_0)\: = \\:\left(
-1 - U_1^{\,\pm,v} (a_s - a_0) \\right) \\left( \\frac{a_s}{a_0}
-\\right)^{-R_0^{\:\!\rm ns}}.$$
+.. math::
+
+    \Gamma^{\pm,v}_{\rm NS,NLO}(N,a_s,a_0) = \left(1 - U_1^{\,\pm,v} (a_s - a_0) \right) \left( \frac{a_s}{a_0}\right)^{-R_0^{\:\!\rm ns}}.
 
 Getting back the x-space PDF’s
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,0 +1,296 @@
+dependent_variables:
+- header:
+    name: $\mathrm{d}\sigma/\mathrm{d}p_T(ll)$
+    units: pb/GeV
+  values:
+  - errors:
+    - label: Data stat.
+      symerror: 0.00025654
+    - label: Unfolding stat.
+      symerror: 7.3288e-05
+    - label: Unfolding model
+      symerror: 0.00011534
+    - label: Int. luminosity
+      symerror: 3.5644e-05
+    - label: Lepton energy
+      symerror: 7.6262e-05
+    - label: Efficiency
+      symerror: 5.3118e-05
+    - label: Backgrounds
+      symerror: 4.7014e-05
+    - label: Jet energy
+      symerror: 2.8126e-07
+    - label: Others
+      symerror: 1.0691e-05
+    value: 0.0023774
+  - errors:
+    - label: Data stat.
+      symerror: 0.00037499
+    - label: Unfolding stat.
+      symerror: 0.00011066
+    - label: Unfolding model
+      symerror: 0.00018716
+    - label: Int. luminosity
+      symerror: 7.8404e-05
+    - label: Lepton energy
+      symerror: 4.9356e-05
+    - label: Efficiency
+      symerror: 0.00012792
+    - label: Backgrounds
+      symerror: 8.2519e-05
+    - label: Jet energy
+      symerror: 4.1687e-07
+    - label: Others
+      symerror: 2.671e-05
+    value: 0.0056498
+  - errors:
+    - label: Data stat.
+      symerror: 0.00037839
+    - label: Unfolding stat.
+      symerror: 0.00011649
+    - label: Unfolding model
+      symerror: 0.00014386
+    - label: Int. luminosity
+      symerror: 9.0336e-05
+    - label: Lepton energy
+      symerror: 0.00014317
+    - label: Efficiency
+      symerror: 0.00015637
+    - label: Backgrounds
+      symerror: 4.397e-05
+    - label: Jet energy
+      symerror: 4.5782e-07
+    - label: Others
+      symerror: 4.0138e-05
+    value: 0.0069927
+  - errors:
+    - label: Data stat.
+      symerror: 0.00036654
+    - label: Unfolding stat.
+      symerror: 0.0001121
+    - label: Unfolding model
+      symerror: 3.0691e-05
+    - label: Int. luminosity
+      symerror: 8.6017e-05
+    - label: Lepton energy
+      symerror: 0.0001234
+    - label: Efficiency
+      symerror: 0.00015053
+    - label: Backgrounds
+      symerror: 2.2779e-05
+    - label: Jet energy
+      symerror: 3.5745e-06
+    - label: Others
+      symerror: 3.9597e-05
+    value: 0.0068868
+  - errors:
+    - label: Data stat.
+      symerror: 0.00033726
+    - label: Unfolding stat.
+      symerror: 0.00010504
+    - label: Unfolding model
+      symerror: 0.00011385
+    - label: Int. luminosity
+      symerror: 7.5391e-05
+    - label: Lepton energy
+      symerror: 6.3459e-05
+    - label: Efficiency
+      symerror: 0.00013504
+    - label: Backgrounds
+      symerror: 1.9512e-05
+    - label: Jet energy
+      symerror: 8.4474e-06
+    - label: Others
+      symerror: 4.0985e-05
+    value: 0.0061386
+  - errors:
+    - label: Data stat.
+      symerror: 0.00035578
+    - label: Unfolding stat.
+      symerror: 0.0001074
+    - label: Unfolding model
+      symerror: 0.00018158
+    - label: Int. luminosity
+      symerror: 7.4391e-05
+    - label: Lepton energy
+      symerror: 3.4407e-05
+    - label: Efficiency
+      symerror: 0.00012618
+    - label: Backgrounds
+      symerror: 4.0363e-05
+    - label: Jet energy
+      symerror: 1.4749e-06
+    - label: Others
+      symerror: 3.648e-05
+    value: 0.0060243
+  - errors:
+    - label: Data stat.
+      symerror: 0.00032693
+    - label: Unfolding stat.
+      symerror: 9.937e-05
+    - label: Unfolding model
+      symerror: 0.0001435
+    - label: Int. luminosity
+      symerror: 6.6968e-05
+    - label: Lepton energy
+      symerror: 2.8957e-05
+    - label: Efficiency
+      symerror: 0.00011085
+    - label: Backgrounds
+      symerror: 6.9448e-05
+    - label: Jet energy
+      symerror: 1.4751e-06
+    - label: Others
+      symerror: 3.2506e-05
+    value: 0.0052844
+  - errors:
+    - label: Data stat.
+      symerror: 0.00029204
+    - label: Unfolding stat.
+      symerror: 8.8605e-05
+    - label: Unfolding model
+      symerror: 3.5417e-05
+    - label: Int. luminosity
+      symerror: 6.492e-05
+    - label: Lepton energy
+      symerror: 1.6724e-05
+    - label: Efficiency
+      symerror: 0.00010783
+    - label: Backgrounds
+      symerror: 7.2037e-05
+    - label: Jet energy
+      symerror: 8.0529e-07
+    - label: Others
+      symerror: 2.7093e-05
+    value: 0.0051086
+  - errors:
+    - label: Data stat.
+      symerror: 0.00028087
+    - label: Unfolding stat.
+      symerror: 9.0018e-05
+    - label: Unfolding model
+      symerror: 6.5164e-05
+    - label: Int. luminosity
+      symerror: 5.8385e-05
+    - label: Lepton energy
+      symerror: 1.855e-05
+    - label: Efficiency
+      symerror: 9.6505e-05
+    - label: Backgrounds
+      symerror: 5.7071e-05
+    - label: Jet energy
+      symerror: 6.448e-06
+    - label: Others
+      symerror: 2.3351e-05
+    value: 0.0045253
+  - errors:
+    - label: Data stat.
+      symerror: 0.00025308
+    - label: Unfolding stat.
+      symerror: 8.3498e-05
+    - label: Unfolding model
+      symerror: 0.00014292
+    - label: Int. luminosity
+      symerror: 5.2936e-05
+    - label: Lepton energy
+      symerror: 4.8075e-05
+    - label: Efficiency
+      symerror: 8.3615e-05
+    - label: Backgrounds
+      symerror: 5.2583e-05
+    - label: Jet energy
+      symerror: 9.2384e-06
+    - label: Others
+      symerror: 1.3277e-05
+    value: 0.004045
+  - errors:
+    - label: Data stat.
+      symerror: 9.1275e-05
+    - label: Unfolding stat.
+      symerror: 3.0305e-05
+    - label: Unfolding model
+      symerror: 5.1798e-05
+    - label: Int. luminosity
+      symerror: 3.1416e-05
+    - label: Lepton energy
+      symerror: 2.411e-05
+    - label: Efficiency
+      symerror: 3.9469e-05
+    - label: Backgrounds
+      symerror: 5.1012e-05
+    - label: Jet energy
+      symerror: 5.1131e-06
+    - label: Others
+      symerror: 1.5135e-05
+    value: 0.0021176
+  - errors:
+    - label: Data stat.
+      symerror: 2.4725e-05
+    - label: Unfolding stat.
+      symerror: 7.8213e-06
+    - label: Unfolding model
+      symerror: 3.964e-07
+    - label: Int. luminosity
+      symerror: 1.1015e-05
+    - label: Lepton energy
+      symerror: 6.2416e-06
+    - label: Efficiency
+      symerror: 1.0517e-05
+    - label: Backgrounds
+      symerror: 2.6267e-05
+    - label: Jet energy
+      symerror: 2.2636e-06
+    - label: Others
+      symerror: 1.5407e-06
+    value: 0.00057801
+  - errors:
+    - label: Data stat.
+      symerror: 1.6817e-06
+    - label: Unfolding stat.
+      symerror: 6.0878e-07
+    - label: Unfolding model
+      symerror: 1.0253e-08
+    - label: Int. luminosity
+      symerror: 4.3891e-07
+    - label: Lepton energy
+      symerror: 8.2358e-07
+    - label: Efficiency
+      symerror: 4.5956e-07
+    - label: Backgrounds
+      symerror: 9.6731e-07
+    - label: Jet energy
+      symerror: 2.9718e-08
+    - label: Others
+      symerror: 1.0503e-07
+    value: 2.4683e-05
+independent_variables:
+- header:
+    name: $p_T(ll)$
+    units: GeV
+  values:
+  - high: 2.0
+    low: 0.0
+  - high: 4.0
+    low: 2.0
+  - high: 6.0
+    low: 4.0
+  - high: 8.0
+    low: 6.0
+  - high: 10.0
+    low: 8.0
+  - high: 12.0
+    low: 10.0
+  - high: 14.0
+    low: 12.0
+  - high: 18.0
+    low: 14.0
+  - high: 22.0
+    low: 18.0
+  - high: 28.0
+    low: 22.0
+  - high: 52.0
+    low: 28.0
+  - high: 160.0
+    low: 52.0
+  - high: 1000.0
+    low: 160.0

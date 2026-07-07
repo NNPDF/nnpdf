@@ -39,7 +39,7 @@ runs:
     - name: Install host requirements
       shell: bash -l {0}
       run: |
-        conda install lhapdf pandoc
+        conda install lhapdf pandoc pip
     - name: Install package with test extras
       shell: bash -l {0}
       run: |

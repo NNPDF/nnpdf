@@ -125,7 +125,6 @@ class FilterDefaults:
 class FilterRule:
     """
     Dataclass which carries the filter rule information.
-
     """
 
     dataset: str = None
@@ -172,6 +171,9 @@ def default_filter_rules_input():
     are unique, i.d. if there are no multiple rules for the same dataset of
     process with the same rule (`reason` and `local_variables` are not hashed).
     """
+    # TODO: This should be done using a more sophisticated comparison
+    # that checks if two rules are actually the same, regardless of the
+    # order in which the cuts are defined.
     list_rules = yaml_safe.load(read_text(validphys.cuts, "filters.yaml"))
     unique_rules = set(FilterRule(**rule) for rule in list_rules)
     if len(unique_rules) != len(list_rules):
@@ -482,9 +484,9 @@ def check_luxset(luxset):
 def check_luxset_exists(fiatlux):
     """Check that the Photon QED set for this theoryid and luxset exists"""
     if fiatlux is not None:
-      luxset = fiatlux['luxset']
-      luxset.load()
-      log.info(f'{luxset} Lux pdf checked.')
+        luxset = fiatlux['luxset']
+        luxset.load()
+        log.info(f'{luxset} Lux pdf checked.')
 
 
 def check_unpolarized_bc(unpolarized_bc):
