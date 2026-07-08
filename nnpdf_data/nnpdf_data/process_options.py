@@ -48,6 +48,7 @@ class _Vars:
     m_ll = "m_ll"
     m_ll2 = "m_ll2"
     abs_y = "abs_y"
+    charge = "charge"
 
 
 class _KinematicsInformation:
@@ -560,6 +561,9 @@ PROCESSES = {
     "DY_MLL": DY_MLL,
     "DY_W_ETA": dataclasses.replace(
         DY_2L, name="DY_W_ETA", description="DY W -> l nu pseudorapidity"
+    ),
+    "DY_W_MT": dataclasses.replace(
+        DY_2L, name="DY_W_MT", description="DY W -> l nu transverse mass"
     ),
     "DY_VB_ETA": dataclasses.replace(
         DY_2L, name="DY_VB_ETA", description="DY Z/W -> ll pseudorapidity"

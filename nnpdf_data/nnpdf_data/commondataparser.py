@@ -109,7 +109,7 @@ KINLABEL_LATEX = {
     "SINGLETOP": ("$y$", "$m_t^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_MLL": ("$M_{ll} (GeV)$", "$M_{ll}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_W_ETA": ("$abs_\\eta$", "$M_W^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
-    "DY_W_MT": ("$M_T (GeV)$", "$M_W^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
+    "DY_W_MT": ("$M_T (GeV)$", "$M_W^2 (GeV^2)$", ""),
 }
 
 PROCESS_DESCRIPTION_LABEL = {
