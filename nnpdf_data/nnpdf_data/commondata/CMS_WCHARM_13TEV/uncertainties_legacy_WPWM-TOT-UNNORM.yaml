@@ -55,14 +55,6 @@ definitions:
     description: 'Sys uncertainty idx: 13'
     treatment: MULT
     type: CORR
-  sys_corr_14:
-    description: 'Sys uncertainty idx: 14'
-    treatment: MULT
-    type: SKIP
-  sys_corr_15:
-    description: 'Sys uncertainty idx: 15'
-    treatment: MULT
-    type: SKIP
 bins:
 - stat: 37000.0
   sys_corr_1: 14225.0
@@ -78,8 +70,6 @@ bins:
   sys_corr_11: 6405.989911793
   sys_corr_12: 16133.93454803
   sys_corr_13: 46667.54018319
-  sys_corr_14: 25347.65678519
-  sys_corr_15: -32992.1881966
 - stat: 28000.0
   sys_corr_1: 11675.0
   sys_corr_2: 10741.0
@@ -94,8 +84,6 @@ bins:
   sys_corr_11: 4853.206362808
   sys_corr_12: 30304.66596087
   sys_corr_13: 49732.21115887
-  sys_corr_14: 20473.56974248
-  sys_corr_15: -27077.94707876
 - stat: 30000.0
   sys_corr_1: 11975.0
   sys_corr_2: 11017.0
@@ -110,8 +98,6 @@ bins:
   sys_corr_11: 6222.392526191
   sys_corr_12: 15122.67558172
   sys_corr_13: 35403.0905819
-  sys_corr_14: 20999.65718768
-  sys_corr_15: -27773.74015145
 - stat: 28000.0
   sys_corr_1: 9875.0
   sys_corr_2: 9085.0
@@ -126,8 +112,6 @@ bins:
   sys_corr_11: 9236.160931361
   sys_corr_12: 7272.721292611
   sys_corr_13: 48706.47922761
-  sys_corr_14: 17317.04507126
-  sys_corr_15: -22623.88146406
 - stat: 25000.0
   sys_corr_1: 7075.0
   sys_corr_2: 6509.0
@@ -142,5 +126,3 @@ bins:
   sys_corr_11: 6127.129731775
   sys_corr_12: 18846.07897548
   sys_corr_13: 26513.03741558
-  sys_corr_14: 12206.78436362
-  sys_corr_15: -16008.89752606
