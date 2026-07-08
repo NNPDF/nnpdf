@@ -472,6 +472,8 @@ DY_2L = _Process(
         _Vars.abs_eta,
         _Vars.m_ll2,
         _Vars.M2,
+        _Vars.charge,
+        _Vars.mt
     ),
     xq2map_function=_dyboson_xq2map,
 )
