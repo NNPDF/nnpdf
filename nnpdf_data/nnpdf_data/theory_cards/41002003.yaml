@@ -1,6 +1,6 @@
-ID: 41_002_001
-Comments: N3LO benchmark, NNPDF4.1 NLO QCD-only (ZM-VFNS)
-PTO: 1
+ID: 41_002_000
+Comments: N3LO benchmark, NNPDF4.1 N3LO QCD-only (ZM-VFNS)
+PTO: 3
 FNS: ZM-VFNS
 DAMP: 0
 IC: 1
