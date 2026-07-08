@@ -125,7 +125,7 @@ def get_data(observable=None):
             kin_label = "m_T^W"
             for kin_value in kin_values:
                 kin = {
-                    'mt': {
+                    'm_t': {
                         'min': kin_value['low'],
                         'mid': 0.5 * (kin_value['low'] + kin_value['high']),
                         'max': kin_value['high'],
@@ -145,7 +145,7 @@ def get_data(observable=None):
                         'mid': 0.5 * (kin_value['low'] + kin_value['high']),
                         'max': kin_value['high'],
                     },
-                    'mt': {'min': mt_low, 'mid': 0.5 * (mt_low + mt_high), 'max': mt_high},
+                    'm_t': {'min': mt_low, 'mid': 0.5 * (mt_low + mt_high), 'max': mt_high},
                     'charge': {'min': None, 'mid': charge, 'max': None},
                 }
                 kinematics.append(kin)

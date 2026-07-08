@@ -30,14 +30,14 @@ implemented_observables:
       normalize:
         figure_by:
           - charge
-      plot_x: mt
+      plot_x: m_t
     kinematic_coverage:
-      - mt
+      - m_t
       - M2
       - charge
     kinematics:
       variables:
-        mt:
+        m_t:
           description: Transverse mass of the W boson
           label: "$m_T^W$"
           units: "GeV"
@@ -77,14 +77,14 @@ implemented_observables:
       normalize:
         figure_by:
           - charge
-      plot_x: mt
+      plot_x: m_t
     kinematic_coverage:
-      - mt
+      - m_t
       - M2
       - charge
     kinematics:
       variables:
-        mt:
+        m_t:
           description: Transverse mass of the W boson
           label: "$m_T^W$"
           units: "GeV"
@@ -124,14 +124,14 @@ implemented_observables:
       normalize:
         figure_by:
           - charge
-      plot_x: mt
+      plot_x: m_t
     kinematic_coverage:
-      - mt
+      - m_t
       - M2
       - charge
     kinematics:
       variables:
-        mt:
+        m_t:
           description: Transverse mass of the W boson
           label: "$m_T^W$"
           units: "GeV"
@@ -167,16 +167,16 @@ implemented_observables:
       dataset_label: ATLAS $W$ 13 TeV Double-Differential
       y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
       line_by:
-        - mt
+        - m_t
       normalize:
         figure_by:
           - charge
         line_by:
-          - mt
+          - m_t
       plot_x: eta
     kinematic_coverage:
       - eta
-      - mt
+      - m_t
       - charge
     kinematics:
       variables:
@@ -184,7 +184,7 @@ implemented_observables:
           description: Absolute lepton pseudorapidity
           label: "$|eta|$"
           units: ""
-        mt:
+        m_t:
           description: Transverse mass of the W boson
           label: "$m_T^W$"
           units: "GeV"
@@ -224,16 +224,16 @@ implemented_observables:
       dataset_label: ATLAS $W$ 13 TeV Double-Differential
       y_label: $\frac{d^2 \sigma}{d m_T^W d \abs{\eta}}$ (pb/GeV)
       line_by:
-        - mt
+        - m_t
       normalize:
         figure_by:
           - charge
         line_by:
-          - mt
+          - m_t
       plot_x: eta
     kinematic_coverage:
       - eta
-      - mt
+      - m_t
       - charge
     kinematics:
       variables:
@@ -241,7 +241,7 @@ implemented_observables:
           description: Absolute lepton pseudorapidity
           label: "$|eta|$"
           units: ""
-        mt:
+        m_t:
           description: Transverse mass of the W boson
           label: "$m_T^W$"
           units: "GeV"
