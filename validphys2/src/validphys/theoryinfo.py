@@ -25,11 +25,11 @@ def all_theory_info_table(theory_database):
     >>> df = API.all_theory_info_table()
     >>> df['Comments'].iloc[:5]
     ID
-    1                 3.0 LO benchmark
-    2                3.0 NLO benchmark
-    3               3.0 NNLO benchmark
-    4     3.0 NLO - Q0=1.3 For IC Test
-    5    3.0 NNLO - Q0=1.3 For IC Test
+    162        *LOW PRECISION (10)* NNPDF3.1 NNLO central
+    200                        NNPDF4.0 NNLO alphas=0.118
+    208                         NNPDF4.0 NLO alphas=0.118
+    211    NNPDF4.0 NNLO perturbative charm, alphas=0.118
+    212     NNPDF4.0 NLO perturbative charm, alphas=0.118
     Name: Comments, dtype: object
     """
     return fetch_all(theory_database)
@@ -53,9 +53,9 @@ def theory_info_table(theory_database, theory_db_id):
     Example
     -------
     >>> from validphys.api import API
-    >>> df = API.theory_info_table(theory_db_id=53)
+    >>> df = API.theory_info_table(theory_db_id=40000000)
     >>> df.loc['Comments']
-    Info for theory 53    NNPDF3.1 NNLO central
+    Info for theory 40000000    NNLO QCD theory. Equivalent to 4.0 baseline, D...
     Name: Comments, dtype: object
     """
     res_dict = fetch_theory(theory_database, theory_db_id)
