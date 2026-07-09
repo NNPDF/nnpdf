@@ -171,12 +171,14 @@ class CompareFitApp(App):
         # look as much as possible as a runcard passed from the command line
         if args['lite']:
             log.info("using compare-lite template.")
-            args['config_yml'] = comparefittemplates.template_lite_path
+            args['template_yml'] = comparefittemplates.template_lite_path
         elif args['use_polarized']:
             log.info("do not include positivity in report.")
-            args['config_yml'] = comparefittemplates.template_pol_path
+            args['template_yml'] = comparefittemplates.template_pol_path
         else:
-            args['config_yml'] = comparefittemplates.template_path
+            args['template_yml'] = comparefittemplates.template_path
+        # Config file is created based on the template in the get_config method
+        args['config_yml'] = comparefittemplates.tmp_runcard
 
         return args
 
@@ -236,11 +238,12 @@ class CompareFitApp(App):
     def get_config(self):
         self.try_complete_args()
         # No error handling here because this is our internal file
-        with open(self.args['config_yml']) as f:
+        with open(self.args['template_yml']) as f:
             # TODO: Ideally this would load round trip but needs
             # to be fixed in reportengine.
             c = yaml_safe.load(f)
         c.update(self.complete_mapping())
+        yaml_safe.dump(c, self.args['config_yml'])
         return self.config_class(c, environment=self.environment)
     
     def check_identical_theory_cuts_covmat(self):
@@ -264,6 +267,7 @@ class CompareFitApp(App):
 def main():
     a = CompareFitApp()
     a.main()
+    os.remove(a.args['config_yml'])
 
 
 if __name__ == '__main__':
