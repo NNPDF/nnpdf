@@ -1,5 +1,5 @@
 ID: 41_042_029
-Comments: NNPDF4.1 N3LO QCD-only (as = 0.117)
+Comments: NNPDF4.1 N3LO QCD-only (as = 0.106)
 PTO: 3
 FNS: FONLL-E
 DAMP: 0
@@ -38,7 +38,7 @@ SIN2TW: 0.22348
 TMC: 1
 MP: 0.938
 Qref: 91.1880
-alphas: 0.117
+alphas: 0.106
 alphaqed: 0.0075700
 nfref: 5
 nf0: 4
