@@ -1,5 +1,5 @@
 ID: 41_042_003
-Comments: NNPDF4.1 N3LO QCD-only (Pgq 2)
+Comments: NNPDF4.1 N3LO QCD-only (Pgq 1)
 PTO: 3
 FNS: FONLL-E
 DAMP: 0
@@ -42,5 +42,5 @@ alphas: 0.118
 alphaqed: 0.0075700
 nfref: 5
 nf0: 4
-n3lo_ad_variation: [0, 2, 0, 0, 0, 0, 0]
+n3lo_ad_variation: [0, 1, 0, 0, 0, 0, 0]
 n3lo_cf_variation: 0
