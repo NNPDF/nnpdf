@@ -1,5 +1,5 @@
 ID: 41_042_024
-Comments: NNPDF4.1 N3LO QCD-only (xir, xif = 1, 2)
+Comments: NNPDF4.1 N3LO QCD-only (upper bound DIS coefficient functions variation)
 PTO: 3
 FNS: FONLL-E
 DAMP: 0
@@ -8,8 +8,7 @@ Q0: 1.65
 ModEv: EXA
 IterEv: 60
 XIR: 1.0
-XIF: 2.0
-ModSV: expanded
+XIF: 1.0
 NfFF: 5
 QED: 0
 HQ: POLE
@@ -44,4 +43,4 @@ alphaqed: 0.0075700
 nfref: 5
 nf0: 4
 n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]
-n3lo_cf_variation: 0
+n3lo_cf_variation: 1

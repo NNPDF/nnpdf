@@ -1,5 +1,5 @@
 ID: 41_042_028
-Comments: NNPDF4.1 N3LO QCD-only (as = 0.116)
+Comments: NNPDF4.1 N3LO QCD-only (xir, xif = 1, 2)
 PTO: 3
 FNS: FONLL-E
 DAMP: 0
@@ -8,7 +8,8 @@ Q0: 1.65
 ModEv: EXA
 IterEv: 60
 XIR: 1.0
-XIF: 1.0
+XIF: 2.0
+ModSV: expanded
 NfFF: 5
 QED: 0
 HQ: POLE
@@ -38,7 +39,7 @@ SIN2TW: 0.22348
 TMC: 1
 MP: 0.938
 Qref: 91.1880
-alphas: 0.116
+alphas: 0.118
 alphaqed: 0.0075700
 nfref: 5
 nf0: 4
