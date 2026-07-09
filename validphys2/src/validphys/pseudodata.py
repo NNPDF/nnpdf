@@ -97,6 +97,7 @@ def read_replica_pseudodata(fit, context_index, replica):
     Example
     -------
     >>> from validphys.api import API
+    #NOTE: Is there a newer fit we should use for this?
     >>> data_indices_list = API.read_fit_pseudodata(fit="pseudodata_test_fit_n3fit")
     >>> len(data_indices_list) # Same as nrep
     10
@@ -222,16 +223,20 @@ def make_replica(
     -------
     >>> from validphys.api import API
     >>> pseudodata = API.make_replica(
-                                    dataset_inputs=[{"dataset":"NMC"}, {"dataset": "NMCPD"}],
-                                    use_cuts="nocuts",
-                                    theoryid=53,
-                                    replica=1,
-                                    mcseed=123,
-                                    genrep=True,
-                                )
-    array([0.25640033, 0.25986534, 0.27165461, 0.29001009, 0.30863588,
-       0.30100351, 0.31781208, 0.30827054, 0.30258217, 0.32116842,
-       0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
+    ... dataset_inputs=[
+    ...   {"dataset": "NMC"},
+    ...   {"dataset": "NMCPD"},
+    ... ],
+    ... use_cuts="internal",
+    ... pdf="NNPDF40_nlo_as_01180",
+    ... theoryid=40000000,
+    ... replica=1,
+    ... genrep=True,
+    ... replica_mcseed=123,
+    ... use_t0_sampling=True,
+    ... use_t0=True,
+    ... t0pdfset="NNPDF40_nlo_as_01180",
+    ... )
     """
     if not genrep:
         return central_values_array
@@ -381,8 +386,7 @@ def level0_commondata_wc(data, fakepdf):
     -------
     >>> from validphys.api import API
     >>> API.level0_commondata_wc(dataset_inputs = [{"dataset":"NMC"}], use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
-
-    [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
+    [CommonData(setname='NMC_NC_NOTFIXED_P_EM-SIGMARED', ndata=204, commondataproc='DIS_NC', nkin=3, nsys=16, legacy=False, legacy_names=['NMC'], kin_variables=['x', 'Q2', 'sqrts'])]
     """
     from validphys.covmats import dataset_t0_predictions
 
@@ -456,11 +460,16 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     -------
 
     >>> from validphys.api import API
-    >>> dataset='NMC'
-    >>> l1_cd = API.make_level1_data(dataset_inputs = [{"dataset":dataset}],use_cuts="internal", theoryid=200,
-                             fakepdf = "NNPDF40_nnlo_as_01180",filterseed=1)
+    >>> dataset = "NMC"
+    >>> l1_cd = API.make_level1_data(
+    ...     dataset_inputs=[{"dataset": dataset}],
+    ...     use_cuts="internal",
+    ...     theoryid=200,
+    ...     fakepdf="NNPDF40_nnlo_as_01180",
+    ...     filterseed=1,
+    ... )
     >>> l1_cd
-    [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
+    [CommonData(setname='NMC_NC_NOTFIXED_P_EM-SIGMARED', ndata=204, commondataproc='DIS_NC', nkin=3, nsys=16, legacy=False, legacy_names=['NMC'], kin_variables=['x', 'Q2', 'sqrts'])]
     """
 
     dataset_input_list = list(data.dsinputs)

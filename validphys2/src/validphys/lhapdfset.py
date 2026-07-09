@@ -11,6 +11,7 @@
     >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", "replicas")
     >>> len(pdf.members)
     101
+    #NOTE: Getting different values for these
     >>> pdf.central_member.alphasQ(91.19)
     0.11800
     >>> pdf.members[0].xfxQ2(0.5, 15625)

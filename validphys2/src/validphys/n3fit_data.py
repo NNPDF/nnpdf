@@ -825,6 +825,7 @@ def _fitting_lagrange_dict(lambdadataset):
 
     Examples
     --------
+    #NOTE: Can't get this function to read the posdataset
     >>> from validphys.api import API
     >>> posdataset = {"dataset": "NNPDF_POS_2P24GEV_F2U", "maxlambda": 1e6}
     >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=40_000_000)
