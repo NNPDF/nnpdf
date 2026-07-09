@@ -16,7 +16,7 @@ release.
 PDF evolution
 -------------
 
-`APFEL <https://apfel.hepforge.org/>`_ ('A PDF Evolution Library') is the PDF evolution code currently
+`APFEL <https://github.com/scarrazza/apfel>`_ ('A PDF Evolution Library') is the PDF evolution code currently
 used by the NNPDF Collaboration. In addition to its PDF evolution capabilities, it also produces
 predictions of deep-inelastic scattering structure functions. In recent years it has been developed
 alongside NNPDF, and so it therefore contains the features and settings required in an NNPDF fit.
@@ -42,7 +42,7 @@ the subset that most truthfully reproduces the underlying probability distributi
 Other codes
 ~~~~~~~~~~~
 
-`Hoppet <https://hoppet.hepforge.org/>`_ ('Higher Order Perturbative Parton Evolution Toolkit') is an
+`Hoppet <https://github.com/hoppet-code/hoppet>`_ ('Higher Order Perturbative Parton Evolution Toolkit') is an
 alternative PDF evolution code which is capable of evolving unpolarised PDFs to NNLO and linearly
 polarised PDFs to NLO. The unpolarised evolution includes heavy-quark thresholds in the MSbar
 scheme.
