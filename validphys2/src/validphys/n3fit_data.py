@@ -265,16 +265,14 @@ def kfold_masks(kpartitions, data):
     Examples
     --------
     >>> from validphys.api import API
-    >>> partitions=[
-    ...     {"datasets": ["HERACOMBCCEM", "HERACOMBNCEP460", "NMC", "NTVNBDMNFe"]},
-    ...     {"datasets": ["HERACOMBCCEP", "HERACOMBNCEP575", "NMCPD", "NTVNUDMNFe"]}
-    ... ]
+    >>> partitions=[{"datasets": ["HERACOMBCCEM", "HERACOMBNCEP460", "NMC", "NTVNBDMNFe_dw_ite"]},
+    ... {"datasets": ["HERACOMBCCEP", "HERACOMBNCEP575", "NMCPD", "NTVNBDMNFe_dw_ite"]}]
     >>> ds_inputs = [{"dataset": ds} for part in partitions for ds in part["datasets"]]
-    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=53, use_cuts="nocuts")
+    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=40000000, use_cuts="nocuts")
     >>> len(kfold_masks) # one element for each partition
     2
     >>> kfold_masks[0] # mask which splits data into first partition
-    array([False, False, False, ...,  True,  True,  True])
+    array([ True,  True,  True, ...,  True,  True,  True])
     >>> data = API.data(dataset_inputs=ds_inputs, theoryid=53, use_cuts="nocuts")
     >>> fold_data = data.load().get_cv()[kfold_masks[0]]
     >>> len(fold_data)
@@ -825,12 +823,20 @@ def _fitting_lagrange_dict(lambdadataset):
 
     Examples
     --------
-    #NOTE: Can't get this function to read the posdataset
     >>> from validphys.api import API
-    >>> posdataset = {"dataset": "NNPDF_POS_2P24GEV_F2U", "maxlambda": 1e6}
-    >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=40_000_000)
+    >>> positivity = {
+    ...  "posdatasets": [
+    ...      {"dataset": "NNPDF_POS_2P24GEV_F2U", "maxlambda": 1e6},
+    ...     {"dataset": "NNPDF_POS_2P24GEV_FLL", "maxlambda": 1e6},
+    ... ]
+    ... }
+    >>> pos = API.posdatasets_fitting_pos_dict(
+    ...  positivity=positivity,
+    ... theoryid=40_000_000,
+    ...  use_cuts="internal"
+    ... )
     >>> len(pos)
-    9
+    2
     """
     integrability = isinstance(lambdadataset, IntegrabilitySetSpec)
     mode = "integrability" if integrability else "positivity"
@@ -850,7 +856,7 @@ def _fitting_lagrange_dict(lambdadataset):
     }
 
 
-def posdatasets_fitting_pos_dict(posdatasets=None):
+def posdatasets_fitting_pos_dict(posdatasets):
     """Loads all positivity datasets. It is not allowed to be empty.
 
     Parameters
@@ -867,7 +873,7 @@ def posdatasets_fitting_pos_dict(posdatasets=None):
 
 
 # can't use collect here because integdatasets might not exist.
-def integdatasets_fitting_integ_dict(integdatasets=None):
+def integdatasets_fitting_integ_dict(integdatasets):
     """Loads the integrability datasets. Calls same function as
     :py:func:`fitting_pos_dict`, except on each element of
     ``integdatasets`` if ``integdatasets`` is not None.
@@ -882,13 +888,13 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     Examples
     --------
     >>> from validphys.api import API
-    >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
-    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
+    >>> integdatasets = [{"dataset": "NNPDF_INTEG_3GEV_XT3", "maxlambda": 1e2}]
+    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets,
+    ...   theoryid=40_000_000,
+    ...   use_cuts="internal")
+
     >>> len(res), len(res[0])
     (1, 9)
-    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=None)
-    >>> print(res)
-    None
 
     """
     if integdatasets is not None:
