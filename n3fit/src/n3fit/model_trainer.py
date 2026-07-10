@@ -321,6 +321,20 @@ class ModelTrainer:
             self.training["expdata"].append(integ_dict["expdata"])
             self.training["integdatasets"].append(integ_dict["name"])
 
+    @staticmethod
+    def _repulsion_anchors(rep_params):
+        """Anchor x-grid for the repulsion: log up to x_mid, linear above.
+        Shape (1, Nx_a), matching the input_list convention."""
+        x_min = rep_params.get("x_min", 1e-6)
+        x_mid = rep_params.get("x_mid", 0.1)
+        n_log = rep_params.get("n_log", 150)
+        n_lin = rep_params.get("n_lin", 50)
+        grid = np.concatenate([
+            np.logspace(np.log10(x_min), np.log10(x_mid), n_log, endpoint=False),
+            np.linspace(x_mid, 1.0, n_lin),
+        ])
+        return grid.reshape(1, -1)
+
     def _xgrid_generation(self):
         """
         Generates the full x-grid pertaining to the complete set of observables to be fitted.
@@ -439,8 +453,11 @@ class ModelTrainer:
 
         split_pdf_unique = xinput.split(full_pdf)
 
-        # Now reorganize the uniques PDF so that each experiment receives its corresponding PDF
-        split_pdf = [split_pdf_unique[i] for i in xinput.idx]
+        anchor_i = getattr(self, "_anchor_input_idx", None)
+        obs_idx = xinput.idx if anchor_i is None else xinput.idx[:anchor_i]
+        split_pdf = [split_pdf_unique[i] for i in obs_idx]
+        pdf_at_anchors = None if anchor_i is None else split_pdf_unique[xinput.idx[anchor_i]]
+
         # If we are in a kfolding partition, select which datasets are out
         training_mask = validation_mask = experimental_mask = [None]
         if partition and partition["datasets"]:
@@ -456,20 +473,19 @@ class ModelTrainer:
         # experiment leaves out the negation
         output_tr = _pdf_injection(split_pdf, self.training["output"], training_mask)
 
+
         # Repulsive ensemble
-        # `full_pdf` is the full, normalised multi-replica PDF on the (unique)
-        # training x-grid: shape (1, R, Nx, 14). We use it directly as the anchor
-        # evaluation for the function-space kernel. Training-model only: it is
-        # excluded from validation/experimental, so early stopping stays on chi2.
-        rep_params = getattr(self, "_repulsion_params", None)
-        if rep_params and len(self.replicas) >= 2:
+        if pdf_at_anchors is not None:
+            rep_params = self._repulsion_params
             repulsion_layer = LossRepulsion(
                 beta=rep_params.get("beta", 1.0),
                 bandwidth=rep_params.get("bandwidth", None),
                 flavour_weights=rep_params.get("flavour_weights", None),
+                normalization=rep_params.get("normalization", "pointwise"),
+                scale_invariant_grad=rep_params.get("scale_invariant_grad", False),
                 name="repulsion",
             )
-            output_tr = output_tr + [repulsion_layer(full_pdf)]
+            output_tr = output_tr + [repulsion_layer(pdf_at_anchors)]
 
         training = MetaModel(full_model_input_dict, output_tr)
 
@@ -764,7 +780,7 @@ class ModelTrainer:
         # The self.input_list is still empty, and the output dictionaries are empty.
         # The next step will fill them.
 
-    def _generate_replica_losses(self, vb_layers, kl_beta):
+    def _generate_replica_losses(self):
         """
         Generates the model-specific observable layers and loss functions
         using the extracted vb_layers from the current replica's model.
@@ -856,10 +872,12 @@ class ModelTrainer:
             self.training["integmultipliers"].append(integ_multiplier)
             self.training["integinitials"].append(integ_initial)
 
-        # Add KL loss once for BNN fits
-        if vb_layers:
-            kl_layer = LossKL(vb_layers, kl_beta, name="kl_loss")
-            self.training["output"].append(kl_layer)
+        # Repulsion anchors: an extra x-grid with no observable attached
+        self._anchor_input_idx = None
+        rep_params = getattr(self, "_repulsion_params", None)
+        if rep_params and len(self.replicas) >= 2:
+            self._anchor_input_idx = len(self.input_list)
+            self.input_list.append(self._repulsion_anchors(rep_params))
         
         # Final Static Setup (Requires full input_list) 
         if hasattr(self, '_interpolation_points'):
@@ -1140,6 +1158,7 @@ class ModelTrainer:
                 regularizer_args=params.get("regularizer_args"),
                 # NEW: BNN-specific parameters
                 prior_prec=params.get('prior_prec'),
+                std_init=params.get('std_init', None),
                 dropout_rate_bayesian=params.get('bayes_dropout', 0.0),
                 bayesian_bias=params.get('bayesian_bias', False),
             )
@@ -1157,6 +1176,9 @@ class ModelTrainer:
                     rng = np.random.default_rng(seed=seed)
                     settings.seed = rng.integers(1, pow(2, 30)) * k
 
+            # Call the dynamic loss setup function for this replica
+            self._generate_replica_losses()
+
             # Generate the pdf model
             pdf_model = model_gen.generate_pdf_model(
                 replicas_settings=replicas_settings,
@@ -1168,16 +1190,15 @@ class ModelTrainer:
                 training=self.training_model,
                 bayesian_preproc=params.get("bayesian_preproc", False),
             )
-            
+
             vb_layers = get_vb_layers(pdf_model)
-            kl_beta = pdf_model.kl_beta            
+            kl_beta = pdf_model.kl_beta 
+            if vb_layers:
+                self.training["output"].append(LossKL(vb_layers, kl_beta, name="kl_loss"))           
 
             # NEW: BNN-specific hyperparameter explicit print statement (REMOVE THIS LATER)
             for i, vb in enumerate(vb_layers):
                 log.info(f"VBDense layer {i}: prior_prec={vb.prior_prec}, std_init={vb.std_init}")
-
-            # Call the dynamic loss setup function for this replica
-            self._generate_replica_losses(vb_layers=vb_layers, kl_beta=kl_beta)
 
             # Generate the grid in x, note this is the same for all partitions
             xinput = self._xgrid_generation()

@@ -104,7 +104,7 @@ theory:
 trvlseed: 591866982
 nnseed: 945709987
 mcseed: 519562661
-genrep: true
+genrep: false
 diagonal_basis: false
 
 ################################################################################
@@ -127,10 +127,16 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   layer_type: ['dense', 'dense', 'dense']
   dropout: 0.0
   threshold_chi2: 3.5
-  repulsion:               # needs to be here to do a repulsive ensemble;
-    beta: 1.0              # repulsion strength; 0 == plain joint ensemble
-    bandwidth:             # null -> median heuristic each step; or a fixed float
-    flavour_weights:       # null -> all 14 FK flavours equal; or a length-14 list
+  repulsion:
+    beta: 1.0                   # repulsion strength; 0 == plain joint ensemble
+    scale_invariant_grad: false # true -> beta has a grid/scale-independent meaning
+    normalization: pointwise    # pointwise | flavour | null
+    x_min: 1.0e-6               # smallest anchor x
+    x_mid: 0.1                  # log-spaced from x_min to x_mid, linear above
+    n_log: 150                  # anchors log-spaced in [x_min, x_mid)
+    n_lin: 50                   # anchors linearly spaced in [x_mid, 1.0]
+    bandwidth:                  # null -> median heuristic each step; or a fixed float
+    flavour_weights:            # null -> all 14 FK flavours equal; or a length-14 list
 
 fitting:
   fitbasis: EVOL

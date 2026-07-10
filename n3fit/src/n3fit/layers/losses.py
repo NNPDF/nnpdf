@@ -255,9 +255,12 @@ class LossRepulsion(MetaLayer):
         quark singlet. If None, all flavours contribute equally.
     """
 
-    def __init__(self, beta=1.0, bandwidth=None, flavour_weights=None, **kwargs):
+    def __init__(self, beta=1.0, bandwidth=None, flavour_weights=None,
+                 normalization=None, scale_invariant_grad=False, **kwargs):
         self.beta = float(beta)
         self.bandwidth = bandwidth
+        self.normalization = normalization
+        self.scale_invariant_grad = bool(scale_invariant_grad)
         if flavour_weights is not None:
             fw = np.array(flavour_weights, dtype=np.float64).reshape(1, 1, -1)
             self._flavour_weights = op.numpy_to_tensor(fw)
@@ -268,6 +271,16 @@ class LossRepulsion(MetaLayer):
     def call(self, pdf_anchors, **kwargs):
         # pdf_anchors: (1, R, Nx, Fl)  -> drop the batch axis -> (R, Nx, Fl)
         x = pdf_anchors[0]
+
+        if self.normalization == "pointwise":
+            # RMS across replicas, per (x, flavour): every point contributes equally
+            scale = Kops.sqrt(Kops.mean(Kops.square(x), axis=0, keepdims=True) + 1e-12)
+            x = x / Kops.stop_gradient(scale)
+        elif self.normalization == "flavour":
+            # RMS across replicas and x, per flavour: equalizes flavours, keeps x-shape
+            scale = Kops.sqrt(Kops.mean(Kops.square(x), axis=(0, 1), keepdims=True) + 1e-12)
+            x = x / Kops.stop_gradient(scale)
+
         if self._flavour_weights is not None:
             x = x * self._flavour_weights
 
@@ -280,19 +293,31 @@ class LossRepulsion(MetaLayer):
         diff = Kops.expand_dims(flat, 1) - Kops.expand_dims(flat_detached, 0)  # (R, R, D)
         dnorm2 = op.sum(Kops.square(diff), axis=2)                             # (R, R)
 
-        # Bandwidth (median estimator), detached so it is treated as a constant.
+        # Median pairwise squared distance. Needed for the bandwidth heuristic
+        # *and* (independently) for the scale-invariant gradient rescaling,
+        # so compute it unconditionally. Detached: it is a constant, not a target.
+        med = Kops.quantile(Kops.stop_gradient(dnorm2), 0.5)
+        med = Kops.maximum(med, Kops.cast(1e-12, dnorm2.dtype))
+
         if self.bandwidth is None:
-            med = Kops.quantile(Kops.stop_gradient(dnorm2), 0.5)
-            denom = 2.0 * op.op_log(Kops.cast(r, dnorm2.dtype) + 1.0)
-            sigma = med / denom
-            sigma = Kops.maximum(sigma, Kops.cast(1e-12, dnorm2.dtype))
+            denom = 2.0 * Kops.log(Kops.cast(r, dnorm2.dtype) + 1.0)
+            sigma = Kops.maximum(med / denom, Kops.cast(1e-12, dnorm2.dtype))
         else:
             sigma = Kops.cast(self.bandwidth ** 2, dnorm2.dtype)
 
-        kmat = Kops.exp(-dnorm2 / (2.0 * sigma))       # (R, R)
-        rowsum = op.sum(kmat, axis=1)                  # (R,)
+        kmat = Kops.exp(-dnorm2 / (2.0 * sigma))
+        rowsum = op.sum(kmat, axis=1)
 
-        # SVGD gradient-only trick: value == 0, gradient == repulsive force.
         rep = op.sum(rowsum / Kops.stop_gradient(rowsum) - 1.0)
         result = Kops.cast(self.beta, rep.dtype) * rep
+
+        if self.scale_invariant_grad:
+            # The repulsive force carries a factor sqrt(m)/sigma from
+            # d/df exp(-||f_k - f_j||^2 / 2 sigma). Multiplying the loss by a
+            # stop-gradiented sigma/sqrt(m) cancels it, so the gradient norm no
+            # longer depends on the distance scale, the anchor count or the PDF
+            # magnitudes.
+            factor = sigma / Kops.sqrt(med)
+            result = result * Kops.stop_gradient(Kops.cast(factor, result.dtype))
+
         return op.reshape(result, (1,))

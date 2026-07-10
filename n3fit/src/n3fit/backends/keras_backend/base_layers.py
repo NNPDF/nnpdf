@@ -97,6 +97,7 @@ class VBDense(Layer):
         out_features: int,
         in_features: int,
         prior_prec: float = 1.0,
+        std_init: float = None,
         map: bool = False,
         bayesian_bias: bool = False,
     ):
@@ -104,8 +105,11 @@ class VBDense(Layer):
         self.output_dim = out_features
         self.input_dim = in_features
         self.map = map
-        self.prior_prec = tf.cast(prior_prec, K.floatx())
-        self.std_init = -np.log(self.prior_prec)
+        self.prior_prec = float(prior_prec)
+        if std_init is None:
+            self.std_init = -math.log(self.prior_prec)
+        else:
+            self.std_init = float(std_init)
         self.bayesian_bias = bayesian_bias
         self.lbound = -30 if K.floatx() == 'float64' else -20
         self.ubound = 11
@@ -356,6 +360,7 @@ layers = {
             "in_features": None,
             "out_features": None,
             "prior_prec": None,
+            "std_init": None,
             "bayesian_bias": False,
             "map": False,
         },
