@@ -51,7 +51,7 @@
 
 - dataset: CMS_TTBAR_8TEV_LJ_DIF_YT-NORM
   reason: |
-   We remove the last bin of the LHCB_DY_8TEV_MUON_Ynormalised distribution because it is
+   We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
   rule: "y_t<2.01"
 
