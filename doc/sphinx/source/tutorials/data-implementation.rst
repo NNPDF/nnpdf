@@ -44,6 +44,10 @@ populate it with the :ref:`relevant information <metadata-spec>`.
 dataset with the same process and/or experiment and change all the entries
 to correspond to your dataset.
 
+You should try to be as consistent as possible in the choice of labels,
+especially for anything that is displayed in plots and tables generated
+by validphys (plot title, axis labels, observable names, etc.).
+
 
 Step 3: Filter the data
 -----------------------
@@ -67,7 +71,7 @@ and as a record.
 
 Things to watch out for:
 
-- Some data points may have asymmetric uncertainties. Your filter script should symmetrise these points by taking the average between the maximum and minimum uncertainties and shifting the central value accordingly.
+- Some data points may have asymmetric uncertainties. Your filter script should symmetrise these points by taking the average between the maximum and minimum uncertainties and shifting the central value accordingly. You can have a look at how other filter scripts do this or import the relevant functions from the scripts in ``nnpdf_data/nnpdf_data/filter_utils/``.
 - The units of implemented data should be *fb*. If your data is in a different unit, your filter script should convert it accordingly.
 
 Step 4: Classify the uncertainties
@@ -113,4 +117,13 @@ of thumb that may assist you, baring in mind that they don't always work and sho
 be applied on a case-by-case basis:
 
 - Statistical uncertainties are usually **uncorrelated**,
-- Uncertainties are most likely to be **multiplicative** and **uncorrelated**.
+- Systematic uncertainties are most likely to be **multiplicative** and **correlated**.
+
+Covariance matrix
+^^^^^^^^^^^^^^^^^
+
+In some cases, instead of a breakdown of uncertainties, experimentalists provide a covariance
+matrix. This must be decomposed into a set of correlated, additive artificial ''systematic''
+uncertainties, which can be done by importing the relevant functions from the scripts in
+``nnpdf_data/nnpdf_data/filter_utils/``. Again, you can have a look at other ``filter.py``
+scripts for examples of how this has been done in other datasets. 
