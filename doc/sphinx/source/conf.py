@@ -11,12 +11,23 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import sys
-#
-#
+import sys
+from datetime import datetime
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+PACKAGE_SOURCE_DIRS = [
+    REPO_ROOT / "validphys2" / "src",
+    REPO_ROOT / "n3fit" / "src",
+    REPO_ROOT / "nnpdf_data",
+]
+
+for source_dir in reversed(PACKAGE_SOURCE_DIRS):
+    sys.path.insert(0, str(source_dir))
+
+import validphys
 
 # -- Project information -----------------------------------------------------
-from datetime import datetime
 
 project = "NNPDF"
 copyright = f"{datetime.now().year}, NNPDF collaboration"
@@ -45,7 +56,7 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
-    "sphinx.ext.viewcode",
+    "sphinx.ext.linkcode",
     "sphinx.ext.napoleon",
     "sphinxcontrib.bibtex",
     "sphinx.ext.autosectionlabel",
@@ -200,6 +211,75 @@ epub_exclude_files = ["search.html"]
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"python": ("https://docs.python.org/", None)}
+
+
+# -- Source code links (analogous to numpy implementation) -------------------
+
+import inspect
+from os.path import relpath
+
+
+def linkcode_resolve(domain, info):
+    """
+    Determine the URL corresponding to Python object.
+    """
+    if domain != "py":
+        return None
+    modname = info["module"]
+    fullname = info["fullname"]
+    submod = sys.modules.get(modname)
+    if submod is None:
+        return None
+    obj = submod
+    for part in fullname.split("."):
+        try:
+            obj = getattr(obj, part)
+        except Exception:
+            return None
+
+    # strip decorators, which would resolve to the source of the decorator
+    # possibly an upstream bug in getsourcefile, bpo-1764286
+    try:
+        unwrap = inspect.unwrap
+    except AttributeError:
+        pass
+    else:
+        obj = unwrap(obj)
+
+    fn = None
+    lineno = None
+    if fn is None:
+        try:
+            fn = inspect.getsourcefile(obj)
+        except Exception:
+            fn = None
+    if not fn:
+        return None
+
+    # Ignore re-exports as their source files are external modules
+    module = inspect.getmodule(obj)
+    if module is not None and not module.__name__.startswith(
+        ("validphys", "n3fit", "evolven3fit", "nnpdf_data")
+    ):
+        return None
+
+    try:
+        source, lineno = inspect.getsourcelines(obj)
+    except Exception:
+        lineno = None
+    
+    fn = relpath(fn, start=REPO_ROOT)
+    
+    if lineno:
+        linespec = f"#L{lineno}-L{lineno + len(source) - 1}"
+    else:
+        linespec = ""
+    
+    # Now define the nnpdf version. If it's a dev version, it goes to the master branch,
+    # otherwise to the published tag of the version.
+    if "dev" in validphys.__version__:
+        return f"https://github.com/NNPDF/nnpdf/blob/master/{fn}{linespec}"
+    return f"https://github.com/NNPDF/nnpdf/blob/{validphys.__version__}/{fn}{linespec}"
 
 # -- Options for todo extension ----------------------------------------------
 
