@@ -38,3 +38,9 @@ Other codes
 
 `Hoppet <https://github.com/hoppet-code/hoppet>`_ ('Higher Order Perturbative Parton Evolution Toolkit') is an
 alternative PDF evolution code which is capable of evolving unpolarised PDFs.
+
+Pineline
+~~~~~~~~
+
+The full theory production pipeline used in the NNPDF framework is extensively described in the 
+`Pineline <https://nnpdf.github.io/pineline>`_ documentation.
