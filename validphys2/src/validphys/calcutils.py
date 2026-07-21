@@ -58,7 +58,6 @@ def calc_chi2(sqrtcov, diffs):
     >>> diff = diffs@la.inv(cov)@diffs
     >>> isinstance(diff, float)
     True
-    #TODO: Getting different values here
 
     """
     # handle empty data

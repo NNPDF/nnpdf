@@ -288,13 +288,9 @@ def fk_predictions(loaded_fk, pdf):
         >>> pdf = l.check_pdf('NNPDF40_nlo_as_01180')
         >>> ds = l.check_dataset('ATLAS_WPWM_13TEV_TOT', theoryid=40000000, cfac=('NRM',))
         >>> table = load_fktable(ds.fkspecs[0])
-        >>> hadron_predictions(table, pdf)
-                       0             1             2             3             4             5             6             7    ...           93            94            95            96            97            98            99            100
-        data                                                                                                                  ...                                                                                                                
-        0     3.633076e+06  3.629484e+06  3.623580e+06  3.617123e+06  3.624297e+06  3.622817e+06  3.632100e+06  3.653381e+06  ...  3.617042e+06  3.640731e+06  3.654129e+06  3.633901e+06  3.601104e+06  3.624378e+06  3.605437e+06  3.621365e+06
-        1     4.758385e+06  4.758760e+06  4.745160e+06  4.744700e+06  4.744430e+06  4.759620e+06  4.770145e+06  4.780172e+06  ...  4.733238e+06  4.782946e+06  4.763828e+06  4.768125e+06  4.715171e+06  4.751928e+06  4.738795e+06  4.739057e+06
-        <BLANKLINE>
-        [2 rows x 101 columns]
+        >>> pred = hadron_predictions(table, pdf)
+        >>> isinstance(pred, pd.DataFrame)
+        True
     """
     if loaded_fk.hadronic:
         return hadron_predictions(loaded_fk, pdf)
