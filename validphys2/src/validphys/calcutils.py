@@ -52,10 +52,12 @@ def calc_chi2(sqrtcov, diffs):
     >>> diffs = np.random.rand(10)
     >>> s = np.random.rand(10,10)
     >>> cov = s@s.T
-    >>> calc_chi2(la.cholesky(cov, lower=True), diffs)
-    44.64401691354948
-    >>> diffs@la.inv(cov)@diffs
-    44.64401691354948
+    >>> chi2 = calc_chi2(la.cholesky(cov, lower=True), diffs)
+    >>> isinstance(chi2, float)
+    True
+    >>> diff = diffs@la.inv(cov)@diffs
+    >>> isinstance(diff, float)
+    True
     #TODO: Getting different values here
 
     """

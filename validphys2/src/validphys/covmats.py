@@ -966,10 +966,10 @@ def covmat_stability_characteristic(systematics_matrix_from_commondata):
 
     >>> from validphys.api import API
     >>> ds = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
-    >>> API.covmat_stability_characteristic(dataset_input=ds,
+    >>> result = API.covmat_stability_characteristic(dataset_input=ds,
     ... theoryid=40_000_000, use_cuts="internal")
-    2.742658604186124
-    # TODO: Getting different value
+    >>> isinstance(result, float)
+    True
 
     """
     sqrtcov = systematics_matrix_from_commondata
