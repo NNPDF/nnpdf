@@ -65,7 +65,7 @@ implemented_observables:
       description: Combined Born-level single-differential cross-section in the $l^+$ and $l^-$ channels combined
       label: ATLAS $W$ 13 TeV Differential
       units: "pb/GeV"
-    process_type: EWK_RAP
+    process_type: DY_W_MT
     tables: [40]
     npoints: [12]
     ndata: 12
@@ -159,7 +159,7 @@ implemented_observables:
       description: Combined Born-level double-differential cross-section in the $l^+$ and $l^-$ channels in sequence
       label: ATLAS $W$ 13 TeV Double-Differential
       units: "pb/GeV"
-    process_type: DY_CC_PT
+    process_type: DY_W_MT_ETA
     tables: [44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
     npoints: []
     ndata: 80
@@ -216,7 +216,7 @@ implemented_observables:
       description: Combined Born-level double-differential cross-section in the $\mu^+$ and $\mu^-$ channels in sequence
       label: ATLAS $W$ 13 TeV Double-Differential
       units: "pb/GeV"
-    process_type: DY_CC_PT
+    process_type: DY_W_MT_ETA
     tables: [23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
     npoints: []
     ndata: 80

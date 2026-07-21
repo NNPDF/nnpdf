@@ -349,6 +349,27 @@ def _dymll_xq2map(kin_info):
 
     return x, m_ll2
 
+def _dyboson_mt_xq2map(kin_info):
+    """
+    Computes x and q2 mapping for DY W -> l nu transverse mass.
+    x is approximated as x = sqrt(x1*x2) with m_W^2 = x1*x2*s
+    """
+    m2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.M2)[0]
+    sqrts = kin_info.get_one_of(_Vars.sqrts)
+    x = np.sqrt(m2) / sqrts
+
+    return x, m2
+
+def _dyboson_mt_eta_xq2map(kin_info):
+    """
+    Computes x and q2 mapping for DY W -> l nu pseudorapidity.
+    x is approximated as x = sqrt(x1*x2) with m_W^2 = x1*x2*s
+    """
+    m = kin_info.get_one_of(_Vars.m_t)[0]
+    m2 = m**2
+    x = np.sqrt(m2) / kin_info.get_one_of(_Vars.sqrts)
+
+    return x, m2
 
 DIS = _Process(
     "DIS",
@@ -471,9 +492,7 @@ DY_2L = _Process(
         _Vars.sqrts,
         _Vars.abs_eta,
         _Vars.m_ll2,
-        _Vars.M2,
-        _Vars.charge,
-        _Vars.m_t
+        _Vars.M2
     ),
     xq2map_function=_dyboson_xq2map,
 )
@@ -536,7 +555,19 @@ SINGLETOP = _Process(
     xq2map_function=_singletop_xq2map,
 )
 
+DY_W_MT = _Process(
+    "DY_W_MT",
+    "DY W -> l nu transverse mass",
+    accepted_variables=(_Vars.m_W2, _Vars.sqrts, _Vars.eta, _Vars.y, _Vars.abs_eta, _Vars.charge, _Vars.M2, _Vars.m_t),
+    xq2map_function=_dyboson_mt_xq2map,
+)
 
+DY_W_MT_ETA = _Process(
+    "DY_W_MT_ETA",
+    "DY W -> l nu transverse mass pseudorapidity double diff",
+    accepted_variables=(_Vars.m_W2, _Vars.sqrts, _Vars.eta, _Vars.y, _Vars.abs_eta, _Vars.charge, _Vars.M2, _Vars.m_t),
+    xq2map_function=_dyboson_mt_eta_xq2map,
+)
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
@@ -561,11 +592,10 @@ PROCESSES = {
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
     "DYP_FT": dataclasses.replace(DY_2L, name="DYP_FT", description="DY Z -> ll (pseudo)rapidity"),
     "DY_MLL": DY_MLL,
+    "DY_W_MT": DY_W_MT,
+    "DY_W_MT_ETA": DY_W_MT_ETA,
     "DY_W_ETA": dataclasses.replace(
         DY_2L, name="DY_W_ETA", description="DY W -> l nu pseudorapidity"
-    ),
-    "DY_W_MT": dataclasses.replace(
-        DY_2L, name="DY_W_MT", description="DY W -> l nu transverse mass"
     ),
     "DY_VB_ETA": dataclasses.replace(
         DY_2L, name="DY_VB_ETA", description="DY Z/W -> ll pseudorapidity"

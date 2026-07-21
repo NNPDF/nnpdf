@@ -110,6 +110,7 @@ KINLABEL_LATEX = {
     "DY_MLL": ("$M_{ll} (GeV)$", "$M_{ll}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_W_ETA": ("$abs_\\eta$", "$M_W^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_W_MT": ("$M_T (GeV)$", "$M_W^2 (GeV^2)$", ""),
+    "DY_W_MT_ETA": ("$abs_\\eta$", "$M_T (GeV)$",  ""),
 }
 
 PROCESS_DESCRIPTION_LABEL = {
@@ -141,6 +142,7 @@ PROCESS_DESCRIPTION_LABEL = {
     "DY_MLL": "Drell-Yan Mass Distribution of Lepton Pairs",
     "DY_W_ETA": "Drell-Yan W boson rapidity distribution",
     "DY_W_MT": "Drell-Yan W boson transverse mass distribution",
+    "DY_W_MT_ETA": "Drell-Yan W boson double-differential transverse mass and rapidity distribution",
 }
 
 
