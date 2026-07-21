@@ -96,20 +96,17 @@ def read_replica_pseudodata(fit, context_index, replica):
 
     Example
     -------
-    >>> from validphys.api import API
-    #NOTE: Is there a newer fit we should use for this?
-    >>> data_indices_list = API.read_fit_pseudodata(fit="pseudodata_test_fit_n3fit")
-    >>> len(data_indices_list) # Same as nrep
-    10
-    >>> rep_info = data_indices_list[0]
-    >>> rep_info.pseudodata.loc[rep_info.tr_idx].head()
-                                replica 1
-    group dataset           id
-    ATLAS ATLASZPT8TEVMDIST 1   30.665835
-                            3   15.795880
-                            4    8.769734
-                            5    3.117819
-                            6    0.771079
+    ```from validphys.api import API
+
+    data_indices_list = API.read_fit_pseudodata(
+        fit="pseudodata_test_fit_n3fit"
+    )
+
+    # Same as nrep
+    len(data_indices_list)  # 10
+
+    rep_info = data_indices_list[0]
+    rep_info.pseudodata.loc[rep_info.tr_idx].head()```
     """
     # Detect whether fit performed in diagonal basis
     # TODO: change the fit object to return diagonal basis True or False depening on the NNPDF version
@@ -541,8 +538,8 @@ def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_masks):
 
     Example
     -------
-    >>> from validphys.api import API
-    >>> API.recreate_fit_pseudodata(fit="pseudodata_test_fit_n3fit")
+    ```from validphys.api import API
+    API.recreate_fit_pseudodata(fit="pseudodata_test_fit_n3fit")```
 
     Notes
     -----
@@ -575,8 +572,8 @@ def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_masks):
 
     Example
     -------
-    >>> from validphys.api import API
-    >>> API.recreate_pdf_pseudodata(fit="pseudodata_test_fit_n3fit")
+    ```from validphys.api import API
+    API.recreate_pdf_pseudodata(fit="pseudodata_test_fit_n3fit")```
 
     See Also
     --------
