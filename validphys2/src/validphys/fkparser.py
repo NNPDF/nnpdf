@@ -16,7 +16,6 @@ CFactors applied.
     l = Loader()
     fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=53, cfac=('QCD',))
     res = load_fktable(fk)
-    #TODO: Do we want this to be a doctest?
 """
 
 # TODO: this module is deprecated and support for older theories is not guaranteed
