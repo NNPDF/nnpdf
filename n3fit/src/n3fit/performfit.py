@@ -28,6 +28,7 @@ def performfit(
     basis,
     fitbasis,
     positivity_bound,
+    load_weights_dict,
     sum_rules=True,
     parameters,
     replica_path,
@@ -36,6 +37,7 @@ def performfit(
     load=None,
     hyperscanner=None,
     hyperopt=None,
+    trials,
     kfold_parameters,
     tensorboard=None,
     debug=False,
@@ -115,6 +117,8 @@ def performfit(
             dictionary containing the details of the hyperscanner
         hyperopt: int
             if given, number of hyperopt iterations to run
+        trials: dict
+            dictionary containing trials defining the methodology
         kfold_parameters: None, dict
             dictionary with kfold settings used in hyperopt.
         tensorboard: None, dict
@@ -197,6 +201,8 @@ def performfit(
             theoryid=theoryid,
             lux_params=fiatlux,
             replicas=replica_idxs,
+            trials=trials,
+            load_weights_dict=load_weights_dict,
         )
 
         # This is just to give a descriptive name to the fit function
@@ -261,7 +267,7 @@ def performfit(
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time
+            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time, trials
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 

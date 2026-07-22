@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.utils import matlist_to_matrix, prettify_float, symmetrize_errors
+from nnpdf_data.filter_utils.utils import matlist_to_matrix, prettify_float, symmetrize_errors, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -406,8 +406,8 @@ class Extractor:
 
         # Get statistical (artidicial uncertainties)
         stat_covmat = self.__build_abs_stat_covmat()
-        eigvals, eigvecs = np.linalg.eig(stat_covmat)
-        art_stat = np.sqrt(eigvals) * eigvecs
+        
+        art_stat = decompose_covmat(stat_covmat)
 
         sys_artificial = []  # Initialize vector of artificial uncertainties
 

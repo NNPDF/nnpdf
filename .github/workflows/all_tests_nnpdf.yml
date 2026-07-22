@@ -28,7 +28,7 @@ jobs:
       fail-fast: false # continue even if some jobs failed
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
         with:
           python-version: ${{ matrix.python-version }}
@@ -44,12 +44,34 @@ jobs:
           name: coverage-package-${{ matrix.os }}
           path: .coverage
 
+  # This check is potentially too strict
+  # if we find it fails too much, instead of changed files
+  # we'll need to look at the CSV with some tolerance
+  regression_setupfit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: "3.13"
+      - name: Run regression tests
+        shell: bash -l {0}
+        run: |
+          pytest --cov=${PWD} --cov-config=pyproject.toml extra_tests/regression_setupfit.py
+      - name: Keep coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          include-hidden-files: true
+          name: coverage-setupfit
+          path: .coverage
 
   regression_tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: "3.13"
       - name: Run regression tests
         shell: bash -l {0}
         run: |
@@ -68,7 +90,7 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with: # conda requires fetching the history of the repo to prepare the package name
           fetch-tags: true
           fetch-depth: 0
@@ -78,7 +100,7 @@ jobs:
       - name: Build recipe
         shell: bash -l {0}
         run: |
-          conda install conda-build --yes
+          conda install -n base conda-build --yes
           conda build -q conda-recipe --package-format=1
       - name: Keep conda package as artifact
         if: ${{ !cancelled() }}
@@ -93,7 +115,7 @@ jobs:
     env:
       KERAS_BACKEND: torch
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: actions/setup-python@v5
       with:
         python-version: "3.13"
@@ -103,13 +125,18 @@ jobs:
         sudo rm -rf /opt/hostedtoolcache/Python/{3.9*}
         sudo rm -rf /opt/hostedtoolcache/CodeQL
         sudo rm -rf /usr/local/lib/android/sdk
-        pip install .[nolha,torch]
+        # torch 2.12.0 pulls triton 3.7.0, whose libtriton C extension segfaults
+        # at import on CPU-only Linux + CPython 3.13. Pinning torch<2.12 also
+        # pins triton to 3.6.x. Remove this pin once the upstream issue is
+        # resolved (see https://github.com/nascheme/triton/issues/43).
+        pip install ".[nolha,torch]" "torch<2.12"
         # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
         lhapdf-management update --init
     - name: Test we can run one runcard
       shell: bash -l {0}
       run: |
         cd n3fit/runcards/examples
+        vp-setupfit Basic_runcard.yml
         n3fit Basic_runcard.yml 4
         cat Basic_runcard/nnfit/*/Basic_runcard.json
     - name: Test we can still run postfit
@@ -125,7 +152,7 @@ jobs:
     env:
       KERAS_BACKEND: jax
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: actions/setup-python@v5
       with:
         python-version: "3.13"
@@ -139,14 +166,15 @@ jobs:
       shell: bash -l {0}
       run: |
         cd n3fit/runcards/examples
+        vp-setupfit Basic_runcard.yml
         n3fit Basic_runcard.yml 42
         cat Basic_runcard/nnfit/*/Basic_runcard.json
 
   full_coverage:
-    needs: [run_package_tests, regression_tests]
+    needs: [run_package_tests, regression_tests, regression_setupfit]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: ./.github/actions/install_conda_pip
       with:
         nnpdf-extras: ""

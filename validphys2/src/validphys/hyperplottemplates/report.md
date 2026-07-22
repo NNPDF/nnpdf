@@ -18,5 +18,12 @@
 ## Activation function
 {@ plot_activation_per_layer @}
 
+## Loss (including penalty term)
+{@ plot_cumulative_loss @}
+
+## -logp and chi2
+{@ plot_cumulative_logp_chi2 @}
+
+
 ## Results Table
 [Detailed hyperopt results]({@ results_table report @})

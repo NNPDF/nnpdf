@@ -1,8 +1,8 @@
 """
-    Test all datafiles
+Test all datafiles
 
-    The checks in ``test_all_datasets`` are run for each dataset independently so that one gets one
-    failure per dataset in case of problems
+The checks in ``test_all_datasets`` are run for each dataset independently so that one gets one
+failure per dataset in case of problems
 """
 
 import pytest
@@ -24,7 +24,7 @@ def _load_main_and_variants(dataset_name):
 
 
 @pytest.mark.parametrize("dataset_name", all_datasets)
-def test_all_datasets(dataset_name, data_internal_cuts_new_theory_config):
+def test_all_datasets(dataset_name):
     """Checks that a dataset can be loaded (together with its variants),
     that the kinematics, uncertainties and data can be read.
 

@@ -41,8 +41,8 @@ definitions:
     type: CORR
 bins:
 - sys_corr_1: 5.28140740e+00
-  sys_corr_2: -5.48184643e-01
-  sys_corr_3: -4.82642618e-02
+  sys_corr_2: 4.82642618e-02
+  sys_corr_3: 5.48184643e-01
   sys_corr_4: 3.481
   sys_corr_5: 0.295
   sys_corr_6: 9.15451118e-03
@@ -51,8 +51,8 @@ bins:
   sys_corr_9: 5.55603348e-02
   sys_corr_10: 0.295
 - sys_corr_1: -6.21517163e-01
-  sys_corr_2: -1.82842573e+00
-  sys_corr_3: -3.09491192e+00
+  sys_corr_2: 3.09491192e+00
+  sys_corr_3: 1.82842573e+00
   sys_corr_4: 2.73600000e+00
   sys_corr_5: 0.285
   sys_corr_6: 1.07849061e-02
@@ -61,8 +61,8 @@ bins:
   sys_corr_9: 1.65496435e-02
   sys_corr_10: 0.285
 - sys_corr_1: -7.18475744e-01
-  sys_corr_2: -2.44794411e+00
-  sys_corr_3: 2.32246900e+00
+  sys_corr_2: -2.32246900e+00
+  sys_corr_3: 2.44794411e+00
   sys_corr_4: 2.25400000e+00
   sys_corr_5: 5.06000000e-01
   sys_corr_6: 6.67792632e-03

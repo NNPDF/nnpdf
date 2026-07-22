@@ -1,4 +1,5 @@
 """
+
 This module contains the CLI for evolven3fit
 """
 
@@ -177,11 +178,7 @@ def main():
 
         if args.actions == "produce_eko":
             tcard, opcard = eko_utils.construct_eko_cards(
-                nnpdf_theory,
-                x_grid,
-                op_card_info,
-                theory_card_info,
-                args.legacy40,
+                nnpdf_theory, x_grid, op_card_info, theory_card_info, args.legacy40
             )
         elif args.actions == "produce_eko_photon":
             tcard, opcard = eko_utils.construct_eko_photon_cards(
