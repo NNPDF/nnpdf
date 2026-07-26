@@ -134,6 +134,8 @@ implemented_observables:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR
     - - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-INTEGRATED
+    - - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTTRAP
+    - - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTOT
     operation: ratio
   variants:
     legacy:
