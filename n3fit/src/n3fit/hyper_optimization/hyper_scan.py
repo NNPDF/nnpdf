@@ -58,11 +58,10 @@ def _run_trial_in_subprocess(objective, params):
     """Running a hyperparameter scan leaks memory trial by trial.
     In order to ensure that the memory associated to one trial is eliminated once it has finished,
     run it as a separate (forked) process that will die at the end and its memories gone.
-    Parallel hyperopt will skip this.
+    It should only be used in Linux and sequential runs.
     """
     # Note: this strategy seems to work, but I haven't found the actual source of the leak
-
-    if not hasattr(os, "fork"):
+    if not hasattr(os, "fork") or os.uname().sysname == "Darwin":
         return objective(params)
 
     context = multiprocessing.get_context("fork")
