@@ -423,6 +423,37 @@ def print_different_cuts(fits, test_for_same_cuts):
 
     return res.getvalue()
 
+@_assert_two_fits
+def test_for_same_variants(fits, match_datasets_by_name):
+    """Given two fits, return a dictionary of where keys are names of datatets with
+    different variants and keys are tuples (var_1, var_2) where var_i is the variant
+    of the dataset used in fit i.
+    """
+    first, second = fits
+    c = match_datasets_by_name.common
+    first_variants = {d['dataset']: d.get('variant') for d in first.as_input()['dataset_inputs']}
+    second_variants = {d['dataset']: d.get('variant') for d in second.as_input()['dataset_inputs']}
+    different_variants = {}
+    for ds in c:
+        if first_variants[ds] != second_variants[ds]:
+            different_variants[ds] = (first_variants[ds], second_variants[ds])
+    return different_variants
+
+def print_different_variants(fits, test_for_same_variants):
+    """Print a summary of the datasets that are included in both fits but have 
+    different variants."""
+    res = StringIO()
+    first_fit, second_fit = fits
+    if test_for_same_variants:
+        res.write(
+            "The following datasets are both included but use different variants:\n\n"
+        )
+        for ds, (first, second) in test_for_same_variants.items():
+            res.write(f"{ds}: {first_fit} uses variant {first}, while {second_fit} uses variant {second}.")
+        res.write('\n')
+
+    return res.getvalue()
+
 
 def fit_theory_covmat_summary(fit, fitthcovmat):
     """returns a table with a single column for the `fit`, with three rows
