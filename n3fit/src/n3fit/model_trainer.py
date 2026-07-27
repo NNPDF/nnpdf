@@ -857,7 +857,6 @@ class ModelTrainer:
 
         All other parameters are passed to the corresponding functions
         """
-
         # Reset the internal state of the backend every time this function is called
         print("")
         clear_backend_state()

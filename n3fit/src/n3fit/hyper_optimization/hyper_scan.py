@@ -16,6 +16,9 @@ you can do so by simply modifying the wrappers to point somewhere else
 import contextlib
 import copy
 import logging
+import multiprocessing
+import os
+import traceback
 
 try:
     import hyperopt
@@ -47,7 +50,58 @@ log = logging.getLogger(__name__)
 HYPEROPT_STATUSES = {True: "ok", False: "fail"}
 
 
-HYPEROPT_SEED = 42
+HYPEROPT_SEED = int(os.environ.get("HYPEROPT_SEED", 42))
+print(f"Running with hyperopt seed: {HYPEROPT_SEED}")
+
+
+def _run_trial_in_subprocess(objective, params):
+    """Running a hyperparameter scan leaks memory trial by trial.
+    In order to ensure that the memory associated to one trial is eliminated once it has finished,
+    run it as a separate (forked) process that will die at the end and its memories gone.
+    Parallel hyperopt will skip this.
+    """
+    # Note: this strategy seems to work, but I haven't found the actual source of the leak
+
+    if not hasattr(os, "fork"):
+        return objective(params)
+
+    context = multiprocessing.get_context("fork")
+    receiver, sender = context.Pipe(duplex=False)
+
+    def _run_objective():
+        # The child will ever send info, close the receiver
+        receiver.close()
+        try:
+            sender.send((True, objective(params)))
+        except Exception:
+            # On any failure, propagate it back to the parent process
+            sender.send((False, traceback.format_exc()))
+        finally:
+            sender.close()
+
+    process = context.Process(target=_run_objective)
+    process.start()
+    # The parent only receives, close its sender
+    sender.close()
+    try:
+        # Wait for the child to finish running
+        success, ret = receiver.recv()
+    except EOFError as error:
+        process.join()
+        exitcode = process.exitcode
+        process.close()
+        raise RuntimeError(f"Hyperopt subprocess failed with error= {exitcode}") from error
+    finally:
+        receiver.close()
+    process.join()
+    exitcode = process.exitcode
+    log.debug(f"Hyperopt subprocess finished with {exitcode=}")
+    process.close()
+
+    if not success:
+        raise RuntimeError(f"Hyperopt trial subprocess failed:\n{ret}")
+
+    return ret
 
 
 # These are just wrapper around some hyperopt's sampling expresions defined in here
@@ -172,8 +226,14 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         # Initialize seed for hyperopt
         trials.rstate = np.random.default_rng(HYPEROPT_SEED)
         # And prepare the generic arguments to fmin
+        objective = model_trainer.hyperparametrizable
+        if not hyperscanner.parallel_hyperopt and hasattr(os, "fork"):
+            objective = lambda params: _run_trial_in_subprocess(
+                model_trainer.hyperparametrizable, params
+            )
+
         fmin_args = {
-            "fn": model_trainer.hyperparametrizable,
+            "fn": objective,
             "space": hyperscanner.as_dict(),
             "algo": hyperopt.tpe.suggest,
             "max_evals": max_evals,
