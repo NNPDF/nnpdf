@@ -49,6 +49,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - ATLAS_TTBAR_7TEV_TOT_X-SEC
+    - - ATLASTTBARTOT7TEV-TOPDIFF7TEVTOT
     operation: 'null'
   variants:
     legacy:

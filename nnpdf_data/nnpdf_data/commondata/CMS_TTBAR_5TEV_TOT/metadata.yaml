@@ -49,6 +49,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_5TEV_TOT_X-SEC
+    - - CMS_TTB_5TEV_TOT
     operation: 'null'
   variants:
     legacy:
