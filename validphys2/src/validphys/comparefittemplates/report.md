@@ -120,6 +120,7 @@ Dataset differences and cuts
 ----------------------------
 {@print_dataset_differences@}
 {@print_different_cuts@}
+{@print_different_variants@}
 
 Code versions
 -------------
