@@ -12,6 +12,7 @@ import pathlib
 import numpy as np
 import pandas as pd
 
+from nnpdf_data import legacy_to_new_map
 from reportengine import collect
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.floatformatting import ValueErrorTuple
@@ -423,20 +424,33 @@ def print_different_cuts(fits, test_for_same_cuts):
 
     return res.getvalue()
 
+def find_the_variant(dataset, sys=None, variant=None):
+    """Given the (legacy) dataset input, find the new name and the right variant.
+    """
+    new_name, new_variant = legacy_to_new_map(dataset_name=dataset, sys=sys)
+    if variant is None:
+        return new_name, new_variant
+    else:
+        return new_name, variant
+
 @_assert_two_fits
 def test_for_same_variants(fits, match_datasets_by_name):
     """Given two fits, return a dictionary of where keys are names of datatets with
     different variants and keys are tuples (var_1, var_2) where var_i is the variant
     of the dataset used in fit i.
     """
-    first, second = fits
     c = match_datasets_by_name.common
-    first_variants = {d['dataset']: d.get('variant') for d in first.as_input()['dataset_inputs']}
-    second_variants = {d['dataset']: d.get('variant') for d in second.as_input()['dataset_inputs']}
+    first, second = fits
+    variants = dict()
     different_variants = {}
+    for f in fits:
+        variants[f.name] = dict()
+        for ds in f.as_input()["dataset_inputs"]:
+            name, variant = find_the_variant(ds['dataset'], sys=ds.get("sys"), variant=ds.get("variant"))
+            variants[f.name][name] = variant
     for ds in c:
-        if first_variants[ds] != second_variants[ds]:
-            different_variants[ds] = (first_variants[ds], second_variants[ds])
+        if variants[first.name][ds] != variants[second.name][ds]:
+            different_variants[ds] = (variants[first.name][ds], variants[second.name][ds])
     return different_variants
 
 def print_different_variants(fits, test_for_same_variants):
@@ -453,7 +467,6 @@ def print_different_variants(fits, test_for_same_variants):
         res.write('\n')
 
     return res.getvalue()
-
 
 def fit_theory_covmat_summary(fit, fitthcovmat):
     """returns a table with a single column for the `fit`, with three rows
