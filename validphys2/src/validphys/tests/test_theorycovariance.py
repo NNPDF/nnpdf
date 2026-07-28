@@ -13,9 +13,7 @@ import pytest
 from reportengine.table import savetable
 from validphys.api import API
 
-# The user covmat is looked up with ``Loader.check_vp_output_file``, which
-# rejects absolute paths, so it has to be found relative to the cwd. The name is
-# made distinctive so that it cannot collide with anything in the vp cache.
+# Basename the fixture looks up when reading a user covmat from disk.
 USER_COVMAT_FILENAME = "test_user_covmat.csv"
 POINT_PRESCRIPTION = "3 point"
 
@@ -37,6 +35,8 @@ def user_covmat_on_disk(tmp_path_factory, thcovmat_config):
     covmat = API.theory_covmat_custom(
         point_prescriptions=[POINT_PRESCRIPTION], **thcovmat_config
     ).astype(np.float64)
+
+    # Path must be relative to cwd because ``Loader.check_vp_output_file`` rejects absolute paths.
     path = tmp_path_factory.mktemp("user_covmat")
     savetable(covmat, path / USER_COVMAT_FILENAME)
     return path, covmat
@@ -45,9 +45,7 @@ def user_covmat_on_disk(tmp_path_factory, thcovmat_config):
 @pytest.mark.parametrize(
     ("covmat_config", "expected_factor"),
     [
-        # Scale variations *and* a user covmat. This is the branch that used to
-        # fail during graph resolution with
-        # ``KeyError: 'group_dataset_inputs_by_metadata'``.
+        # Scale variations *and* a user covmat.
         (
             {"point_prescriptions": [POINT_PRESCRIPTION], "user_covmat_path": USER_COVMAT_FILENAME},
             2.0,
@@ -65,29 +63,17 @@ def test_nnfit_theory_covmat(
     monkeypatch, thcovmat_config, user_covmat_on_disk, covmat_config, expected_factor
 ):
     """Every branch of ``produce_nnfit_theory_covmat`` must resolve and return a
-    covmat indexed in runcard order on both axes.
-
-    The ``scalevar_and_user`` case is a regression test: combining
-    ``point_prescriptions`` with ``user_covmat_path`` used to raise
-    ``KeyError: 'group_dataset_inputs_by_metadata'`` while the reportengine graph
-    was being built, because ``total_theory_covmat`` carried a check whose
-    arguments are not resolvable in the ``theorycovmatconfig`` namespace.
+    covmat indexed in runcard order on both axes to match with the experimental
+    covariance matrix.
     """
     covmat_dir, scalevar_covmat = user_covmat_on_disk
     monkeypatch.chdir(covmat_dir)
-
-    # Resolving and executing this at all is the actual regression.
     covmat = API.nnfit_theory_covmat(**covmat_config, **thcovmat_config)
 
     runcard_index = API.data_index(**thcovmat_config).droplevel(0)
     process_index = API.procs_index(**thcovmat_config).droplevel(0)
 
-    # Guard against this test quietly becoming vacuous. It only has teeth as long
-    # as grouping DATA_THCOVMAT by process actually reorders it: LHCB_Z0_8TEV_MUON_Y
-    # is DY NC and so joins the group opened by CMS_Z0J_8TEV_PT-Y, overtaking
-    # ATLAS_WJ_8TEV_WP-PT, which is DY CC. If DATA_THCOVMAT is ever changed into an
-    # order that the grouping leaves alone, this test must be given its own
-    # dataset_inputs rather than being left silently trivial.
+    # This test only has an effect if process grouping actually reorders the runcard.
     assert not runcard_index.equals(process_index), (
         "Grouping DATA_THCOVMAT by process no longer reorders it, so the "
         "assertions below would hold even if the covmat were written out in "
