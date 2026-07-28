@@ -427,6 +427,15 @@ def print_different_cuts(fits, test_for_same_cuts):
 
     return res.getvalue()
 
+def find_the_variant(dataset, sys=None, variant=None):
+    """Given the (legacy) dataset input, find the new name and the right variant.
+    """
+    new_name, new_variant = legacy_to_new_map(dataset_name=dataset, sys=sys)
+    if variant is None:
+        return new_name, new_variant
+    else:
+        return new_name, variant
+
 @_assert_two_fits
 def test_for_same_variants(fits, match_datasets_by_name):
     """Given two fits, return a dictionary of where keys are names of datatets with
