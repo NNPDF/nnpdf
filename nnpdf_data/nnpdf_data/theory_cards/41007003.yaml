@@ -1,10 +1,10 @@
-ID: 41_002_002
-Comments: N3LO benchmark, NNPDF4.1 NNLO QCD-only (ZM-VFNS)
+ID: 41_007_003
+Comments: Theories used in the study of the Q0 dependence of the fit. Using 4.1 DIS grids and 4.0 hadronic grids. Q0 = 1.65
 PTO: 2
-FNS: ZM-VFNS
+FNS: FONLL-C
 DAMP: 0
-IC: 0
-Q0: 1.0
+IC: 1
+Q0: 1.65
 ModEv: EXA
 IterEv: 60
 XIR: 1.0
@@ -12,11 +12,11 @@ XIF: 1.0
 NfFF: 5
 QED: 0
 HQ: POLE
-mc: 1.45
-Qmc: 1.45
+mc: 1.502
+Qmc: 1.502
 kcThr: 1.0
-mb: 4.75
-Qmb: 4.75
+mb: 4.936
+Qmb: 4.936
 kbThr: 1.0
 mt: 172.5
 Qmt: 172.5
@@ -31,14 +31,12 @@ CKM:
 - 8.6e-3
 - 41.5e-3
 - 1.010
-MZ: 91.19
+MZ: 91.1880
 MW: 80.3692
 GF: 1.1663788e-5
 SIN2TW: 0.22348
-TMC: 0
+TMC: 1
 MP: 0.938
-Qref: 91.19
+Qref: 91.1880
 alphas: 0.118
 alphaqed: 0.0075700
-nf0: 3
-n3lo_cf_variation: 0

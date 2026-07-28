@@ -3,8 +3,8 @@ Comments: N3LO benchmark, NNPDF4.1 NLO QCD-only (FFNS)
 PTO: 1
 FNS: FFNS
 DAMP: 0
-IC: 1
-Q0: 1.65
+IC: 0
+Q0: 1.0
 ModEv: EXA
 IterEv: 60
 XIR: 1.0

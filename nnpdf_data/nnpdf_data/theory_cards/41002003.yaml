@@ -1,10 +1,10 @@
 ID: 41_002_003
-Comments: N3LO benchmark, NNPDF4.1 N3LO QCD-only (ZM-VFNS)
+Comments: N3LO benchmark, NNPDF4.1 aN3LO QCD-only (ZM-VFNS)
 PTO: 3
 FNS: ZM-VFNS
 DAMP: 0
-IC: 1
-Q0: 1.65
+IC: 0
+Q0: 1.0
 ModEv: EXA
 IterEv: 60
 XIR: 1.0
@@ -13,7 +13,7 @@ NfFF: 5
 QED: 0
 HQ: POLE
 mc: 1.45
-Qmc: 1.545
+Qmc: 1.45
 kcThr: 1.0
 mb: 4.75
 Qmb: 4.75
@@ -40,5 +40,5 @@ MP: 0.938
 Qref: 91.19
 alphas: 0.118
 alphaqed: 0.0075700
-nf0: 4
+nf0: 3
 n3lo_cf_variation: 0
