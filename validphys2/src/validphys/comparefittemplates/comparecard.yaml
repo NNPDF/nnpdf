@@ -42,6 +42,8 @@ Q: 1.651
 Scales:
   - Q: 1.651
     Scaletitle: "Q = 1.65 GeV"
+  - Q: 3.1
+    Scaletitle: "Q = 3.1 GeV"
   - Q: 100
     Scaletitle: "Q = 100 GeV"
 
