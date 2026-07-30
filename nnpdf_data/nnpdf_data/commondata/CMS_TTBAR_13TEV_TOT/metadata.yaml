@@ -49,7 +49,6 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_TOT_X-SEC
-    - - CMSTTBARTOT13TEV-TOPDIFF13TEVTOT
   variants:
     legacy:
       data_central: data_legacy_X-SEC.yaml

@@ -49,7 +49,6 @@ implemented_observables:
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_TOT_X-SEC
-    - - ATLASTTBARTOT8TEV-TOPDIFF8TEVTOT
   variants:
     legacy:
       theory: &id002

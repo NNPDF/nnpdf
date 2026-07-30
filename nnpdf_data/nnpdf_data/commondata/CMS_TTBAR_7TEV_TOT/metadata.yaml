@@ -49,7 +49,6 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_7TEV_TOT_X-SEC
-    - - CMSTTBARTOT7TEV-TOPDIFF7TEVTOT
     operation: 'null'
   variants:
     legacy:

@@ -49,7 +49,6 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_TOT_X-SEC
-    - - CMSTTBARTOT8TEV-TOPDIFF8TEVTOT
   variants:
     legacy:
       theory: &id002
