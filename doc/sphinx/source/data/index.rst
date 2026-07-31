@@ -1,3 +1,5 @@
+.. _data-storage-th-pred:
+
 Storage of data and theory predictions
 ======================================
 

@@ -18,6 +18,7 @@ env:
 
 jobs:
   run_package_tests:
+    if: github.event.commits[0] != null
     strategy:
       matrix:
         os: [ubuntu-latest, macos-14]
@@ -48,6 +49,7 @@ jobs:
   # if we find it fails too much, instead of changed files
   # we'll need to look at the CSV with some tolerance
   regression_setupfit:
+    if: github.event.commits[0] != null
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -66,6 +68,7 @@ jobs:
           path: .coverage
 
   regression_tests:
+    if: github.event.commits[0] != null
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -84,6 +87,7 @@ jobs:
           path: .coverage
 
   conda_tests:
+    if: github.event.commits[0] != null
     strategy:
       matrix:
         os: [ubuntu-latest, macos-14]
@@ -111,6 +115,7 @@ jobs:
           path: ${{ env.CONDA }}/envs/*/conda-bld/noarch/*.tar.bz2
 
   run_pytorch:
+    if: github.event.commits[0] != null
     runs-on: ubuntu-latest
     env:
       KERAS_BACKEND: torch
@@ -148,6 +153,7 @@ jobs:
         postfit 50 NNPDF40_nnlo_like_CI_testing_250616
 
   run_jax:
+    if: github.event.commits[0] != null
     runs-on: ubuntu-latest
     env:
       KERAS_BACKEND: jax
@@ -171,6 +177,7 @@ jobs:
         cat Basic_runcard/nnfit/*/Basic_runcard.json
 
   full_coverage:
+    if: github.event.commits[0] != null
     needs: [run_package_tests, regression_tests, regression_setupfit]
     runs-on: ubuntu-latest
     steps:
