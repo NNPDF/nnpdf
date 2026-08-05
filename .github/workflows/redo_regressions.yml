@@ -15,7 +15,7 @@ env:
 jobs:
   build:
     if: contains(github.event.pull_request.labels.*.name, 'redo-regressions')
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
       NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
@@ -34,7 +34,9 @@ jobs:
       run: |
         git config user.name "Redo regressions bot"
         git config user.email "<>"
-        git add extra_tests/regression_fits/*
+        git add extra_tests/regression_fits/*.json
+        git add extra_tests/regression_fits/*.exportgrid
+        git add extra_tests/regression_fits/setupfits
         git status
         git commit -m "Automatically regenerated regressions from PR ${{ github.event.number }}, branch ${{ github.event.pull_request.head.ref }}."
         git push origin "${{ github.event.pull_request.head.ref }}"

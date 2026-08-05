@@ -169,8 +169,8 @@ class ModelTrainer:
                 frequency (in epochs) at which to save checkpoints. Only relevant if `save_checkpoints` is True.
             dont_stop: bool
                 whether to disable the stopping mechanism, i.e. to run for all epochs regardless of the validation chi2
-            trials: str
-                name of the file containing the trials defining the methodology
+            trials: dict
+                dictionary containing the trials defining the methodology
         """
         # Save all input information
         self.exp_info = list(exp_info)
@@ -888,6 +888,7 @@ class ModelTrainer:
         Parameters used only here:
             - ``epochs``: maximum number of iterations for the fit to run
             - ``stopping_patience``: patience of the stopper after finding a new minimum
+            - ``stopping_delta``: minimum improvement to consider it a new minimum
 
         All other parameters are passed to the corresponding functions
         """
@@ -906,12 +907,12 @@ class ModelTrainer:
         if self.mode_hyperopt or (not self.trials):
             epochs = int(params["epochs"])
             stopping_patience = params["stopping_patience"]
-            stopping_epochs = int(epochs * stopping_patience)
         else:
             idx_hyperparamters = self.replicas[0] % self.trials["number_of_trials"]
             epochs = int(self.trials["epochs"][idx_hyperparamters])
             stopping_patience = self.trials["stopping_patience"][idx_hyperparamters]
-            stopping_epochs = int(epochs * stopping_patience)
+        stopping_delta = params.get("stopping_delta", 0.0)
+        stopping_epochs = int(epochs * stopping_patience)
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
@@ -1087,6 +1088,7 @@ class ModelTrainer:
                 pdf_model,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
+                stopping_delta=stopping_delta,
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
                 dont_stop=self.dont_stop,

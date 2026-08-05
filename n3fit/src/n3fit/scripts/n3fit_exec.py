@@ -278,26 +278,32 @@ class N3FitConfig(Config):
 
     def produce_trials(self, trial_specs={}):
         """Read the input hyperscan and produce a dictionary containing
-        the settings of the best trials"""
+        the settings of the best trials.
+
+        The trial specs can include overrides as a dict, e.g.,
+            epochs: 500
+        such that the value for the number of epochs will be 500 for all trials.
+        """
 
         if not trial_specs:
             return {}
-        else:
-            try:
-                hyperscan = loader.check_hyperscan(trial_specs['hyperscan'])
-            except HyperscanNotFound as e:
-                log.warning(e)
-            dict_trials = generate_dictionary(hyperscan.tries_files[1].parent, "average")
-            hyperopt_dataframe = pd.DataFrame(dict_trials)
-            n_termalization = trial_specs['thermalization']
-            n_best = trial_specs['number_of_trials']
-            best = (
-                hyperopt_dataframe[n_termalization:]
-                .sort_values('loss')[:n_best]
-                .to_dict(orient='list')
-            )
-            best['number_of_trials'] = n_best
-            return best
+
+        try:
+            hyperscan = loader.check_hyperscan(trial_specs['hyperscan'])
+        except HyperscanNotFound as e:
+            log.warning(e)
+        dict_trials = generate_dictionary(hyperscan.tries_files[1].parent, "average")
+        hyperopt_dataframe = pd.DataFrame(dict_trials)
+        n_termalization = trial_specs['thermalization']
+        n_best = trial_specs['number_of_trials']
+        best = (
+            hyperopt_dataframe[n_termalization:].sort_values('loss')[:n_best].to_dict(orient='list')
+        )
+        best['number_of_trials'] = n_best
+
+        for key, setting in trial_specs.get("override", {}).items():
+            best[key] = [setting] * n_best
+        return best
 
 
 class N3FitApp(App):
