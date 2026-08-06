@@ -306,6 +306,8 @@ class Stopping:
            total number of epochs
         stopping_patience: int
            how many epochs to wait for the validation loss to improve
+        stopping_delta: float
+           minium improvement of the validation loss to be considered an improvement
         threshold_chi2: float
             maximum value allowed for chi2
         dont_stop: bool
@@ -320,6 +322,7 @@ class Stopping:
         threshold_positivity=THRESHOLD_POS,
         total_epochs=0,
         stopping_patience=7000,
+        stopping_delta=0.0,
         threshold_chi2=10.0,
         dont_stop=False,
     ):
@@ -346,6 +349,7 @@ class Stopping:
         self._dont_stop = dont_stop
         self._stop_now = False
         self.stopping_patience = stopping_patience
+        self._stopping_delta = stopping_delta
         self.total_epochs = total_epochs
 
         self._stop_epochs = [total_epochs - 1] * self._n_replicas
@@ -446,6 +450,7 @@ class Stopping:
         # once we start counting, don't bother anymore
         passes = self._counts | (fitstate.vl_chi2 < self._threshold_chi2)
         passes &= fitstate.vl_loss < self._best_val_chi2s
+        passes &= fitstate.vl_loss < (np.asarray(self._best_val_chi2s) - self._stopping_delta)
         # And the ones that pass positivity
         passes &= self._positivity(fitstate)
         # Stop replicas that are ok being stopped (because they are finished or otherwise)

@@ -38,14 +38,15 @@ from ruamel.yaml import error
 from reportengine import colors
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
-from validphys.loader import FallbackLoader, PhotonQEDNotFound, TheoryNotFound
+from validphys.loader import PhotonQEDNotFound, TheoryNotFound
 from validphys.utils import yaml_safe
 
-
-loader = FallbackLoader()
-
 SETUPFIT_FIXED_CONFIG = dict(
-    actions_=['datacuts check_t0pdfset', 'theory evolven3fit_checks_action', 'theory fktable_hasher']
+    actions_=[
+        'datacuts check_t0pdfset',
+        'theory evolven3fit_checks_action',
+        'theory fktable_hasher',
+    ]
 )
 
 SETUPFIT_PROVIDERS = [
@@ -89,7 +90,18 @@ class SetupFitError(Exception):
 class SetupFitEnvironment(Environment):
     """Container for information to be filled at run time"""
 
+    def __init__(self, *args, no_eko_download=False, **kwargs):
+
+        if no_eko_download:
+            # Remove the eko download from the loader
+            from validphys.loader import FallbackLoader
+
+            FallbackLoader.download_eko = lambda *_: True
+
+        super().__init__(*args, **kwargs)
+
     def init_output(self):
+
         # check file exists, is a file, has extension.
         if not self.config_yml.exists():
             raise SetupFitError("Invalid runcard. File not found.")
@@ -146,6 +158,9 @@ class SetupFitConfig(Config):
     def from_yaml(cls, o, *args, **kwargs):
         # Create a fresh copy of the fixed config to avoid in-place modifications
         fixed_config = copy.deepcopy(SETUPFIT_FIXED_CONFIG)
+
+        # Take the loader from the environment
+        loader = kwargs["environment"].loader
 
         try:
             file_content = yaml_safe.load(o)
@@ -269,6 +284,7 @@ class SetupFitApp(App):
         parser.add_argument(
             '-o', '--output', help="Output folder and name of the fit", default=None
         )
+        parser.add_argument("--no-eko-download", action="store_true")
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
