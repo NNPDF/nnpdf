@@ -381,6 +381,14 @@ class ValidKinematics:
 ### Observable and dataset definitions
 @dataclasses.dataclass(frozen=True, eq=True)
 class ObservableMetaData:
+    """Class holding all the information at the level of the final observables.
+    This is the object referenced by the NNPDF names usually seen in a runcard.
+
+    Note that this class depends on having been instantiated out of a set of data
+    (i.e., using the SetMetaData.select_observable("<OBS>") method) since a lot
+    of the metadata can be applicable to more than one dataset.
+    """
+
     observable_name: str
     observable: dict
     ndata: int
@@ -642,6 +650,10 @@ class ObservableMetaData:
         return self._parent.nnpdf_metadata
 
     @property
+    def nnpdf31_process(self):
+        return self.nnpdf_metadata.get("nnpdf31_process")
+
+    @property
     def setname(self):
         return self._parent.setname
 
@@ -660,6 +672,14 @@ class ObservableMetaData:
     @property
     def name(self):
         return f"{self.setname}_{self.observable_name}"
+
+    @property
+    def description(self):
+        return self.observable.get("description", self.name)
+
+    @property
+    def inspire_url(self):
+        return self._parent.iNSPIRE.url
 
     @property
     def is_ported_dataset(self):
