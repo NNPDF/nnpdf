@@ -110,8 +110,11 @@ def generate_table(rows, group_by=None, group="unsorted"):
     row_lines = []
     bibtex_list = []
     for row in rows:
-        cite = f"\\cite{{{row.bib_key}}}"
-        bibtex_list.append(row.bibtex)
+        if row.bib_entry is not None:
+            cite = f"\\cite{{{row.bib_key}}}"
+            bibtex_list.append(row.bibtex)
+        else:
+            cite = "\\textit{Reference unavailable}"
         row_lines.append(" & ".join([row.dataset_label, row.observable_description, cite]))
 
     table_text = (

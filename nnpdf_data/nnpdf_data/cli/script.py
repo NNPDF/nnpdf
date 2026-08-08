@@ -40,7 +40,7 @@ def _cmd_list(entries, filter_pattern=None, sort_mode=None, runcard=False):
         entries = index.filter_index(entries, filter_pattern)
         if not entries:
             print(f"No entries found with filter: {filter_pattern}")
-            return -1
+            return
 
     if sort_mode is not None:
         entries = index.sort_index(entries, sort_mode)
@@ -156,6 +156,10 @@ def main():
     # and the rules to invalidate the cache makes the rest of the code unnecessarily complicated.
     entries = index.build_index()
 
+    if args.command is None:
+        parser.print_help()
+        return 0
+
     if args.command == "list":
         _cmd_list(entries, args.filter, args.sort_mode, args.yaml)
     elif args.command == "latex":
@@ -168,3 +172,5 @@ def main():
         _cmd_latex(
             entries, runcard_path, args.sort_mode, group_by=group_by, output_bib=args.output_bib
         )
+
+    return 0
