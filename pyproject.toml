@@ -38,6 +38,7 @@ include = [
 [tool.poetry.scripts]
 n3fit = "n3fit.scripts.n3fit_exec:main"
 validphys = "validphys.scripts.main:main"
+nnpdf-data = "nnpdf_data.cli.script:main"
 # Fitting scripts
 evolven3fit = "n3fit.scripts.evolven3fit:main"
 vp-setupfit = "n3fit.scripts.vp_setupfit:main"
