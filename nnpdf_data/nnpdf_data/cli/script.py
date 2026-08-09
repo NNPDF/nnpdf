@@ -3,10 +3,10 @@ Entry point for the nnpdf-data CLI with the following options:
 
 nnpdf-data latex <runcard.yml>
     Takes a NNPDF runcard and generate all biblatex entry in its ``dataset_inputs`` field
-    toghether with latex tables.
+    together with latex tables.
 
-nnpdf-data list <filter> [--runcard]
-    List of all datasets matching the glob fliter <filter>
+nnpdf-data list <filter> [--yaml]
+    List of all datasets matching the glob filter <filter>
 """
 
 import argparse
@@ -21,7 +21,7 @@ def _setup_logging(verbose=False):
     """Configure logging based on verbosity."""
     level = logging.DEBUG if verbose else logging.WARNING
     fmt = "%(levelname)s: %(name)s: %(message)s" if verbose else "%(levelname)s: %(message)s"
-    logging.basicConfig(level=level, format=fmt)
+    logging.basicConfig(level=level, format=fmt, force=True)
 
 
 def _print_table(entries) -> None:
@@ -74,10 +74,6 @@ def _cmd_latex(entries, runcard_path, sort_mode=None, group_by=None, output_bib=
     if sort_mode is not None:
         datasets = index.sort_index(datasets, sort_mode)
 
-    group_by_key = None
-    if group_by:
-        group_by_key = sort_mode
-
     # Latex rows is a dictionary of {group: [rows]}
     latex_rows = latex.build_latex_rows(datasets, group_by=group_by)
     latex_printout = []
@@ -99,6 +95,7 @@ def _cmd_latex(entries, runcard_path, sort_mode=None, group_by=None, output_bib=
 
 def main():
     parser = argparse.ArgumentParser(prog="nnpdf-data", description="NNPDF data utilities.")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output.")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     list_parser = subparsers.add_parser("list", help="List all available datasets.")
@@ -106,7 +103,7 @@ def main():
         "filter",
         nargs="?",
         default="*",
-        help="Glob pattern to filter dataset. Supports brace expansion (e.g., '{ATLAS,CMS}*')p",
+        help="Glob pattern to filter dataset. Supports brace expansion (e.g., '{ATLAS,CMS}*)'",
     )
     list_parser.add_argument(
         "--yaml",
@@ -149,26 +146,29 @@ def main():
             )
 
     args = parser.parse_args()
-    _setup_logging()
+    _setup_logging(args.verbose)
+
+    if args.command is None:
+        parser.print_help()
+        return 0
 
     # Now, regardless of the command, we need to build the whole index of dataset
     # NB: caching this would be nice but it doesn't seem to be too heavy anywhere
     # and the rules to invalidate the cache makes the rest of the code unnecessarily complicated.
     entries = index.build_index()
 
-    if args.command is None:
-        parser.print_help()
-        return 0
-
     if args.command == "list":
         _cmd_list(entries, args.filter, args.sort_mode, args.yaml)
     elif args.command == "latex":
         runcard_path = args.runcard
 
+        group_by = None
         if args.group_by:
+            if args.sort_mode is None:
+                parser.error(
+                    "--group-by requires one of --experiment, --process, or --nnpdf31-process"
+                )
             group_by = args.sort_mode
-        else:
-            group_by = None
         _cmd_latex(
             entries, runcard_path, args.sort_mode, group_by=group_by, output_bib=args.output_bib
         )

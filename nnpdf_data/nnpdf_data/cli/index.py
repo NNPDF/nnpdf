@@ -24,7 +24,7 @@ def _discover_metadata_files() -> list[Path]:
     ret = []
     for data_root in get_nnpdf_profile().get("data_path"):
         for metadata_file in data_root.glob("*/metadata.yaml"):
-            if (setname := metadata_file.parent) in seen:
+            if (setname := metadata_file.parent.name) in seen:
                 continue
             seen.append(setname)
             ret.append(metadata_file)
