@@ -679,7 +679,10 @@ class ObservableMetaData:
 
     @property
     def inspire_url(self):
-        return self._parent.iNSPIRE.url
+        """Return the iNSPIRE URL for this dataset, or None if not available."""
+        if self._parent.iNSPIRE is None:
+            return None
+        return self._parent.iNSPIRE.url or None
 
     @property
     def is_ported_dataset(self):

@@ -1,8 +1,11 @@
 from collections import defaultdict
 import dataclasses
+import logging
 import re
 
 from .inspire import BibliographyEntry, fetch_bibtex
+
+logger = logging.getLogger(__name__)
 
 LATEX_ESCAPE = {
     "\\": r"\textbackslash{}",
@@ -22,13 +25,7 @@ _ESCAPE_RE = re.compile(
     + r"|".join(re.escape(c) for c in LATEX_ESCAPE)  # Find strings to escape
 )
 _EXTRACT_ID_RE = re.compile(r"/literature/(\d+)")
-
-# Caption templates for grouped tables
-_CAPTION_TEMPLATES = {
-    "experiment": "from the {value} experiment",
-    "process": "matching the {value} process",
-    "nnpdf31_process": "in the {value} category (NNPDF 3.1)",
-}
+_SANITIZE_RE = re.compile(r"[^A-Za-z0-9:-]+")
 
 
 @dataclasses.dataclass
@@ -80,8 +77,21 @@ def build_latex_rows(datasets, group_by=None) -> dict:
     group_key = "unsorted"
     for dataset_name, dataset in datasets.items():
         inspire_url = dataset.inspire_url
-        inspire_id = _EXTRACT_ID_RE.search(inspire_url).group(1)
-        bib_entry = fetch_bibtex(inspire_id)
+        bib_entry = None
+
+        # Consider situations in which no inspire URL exists or it is malformed
+        if inspire_url:
+            match = _EXTRACT_ID_RE.search(inspire_url)
+            if match:
+                inspire_id = match.group(1)
+                bib_entry = fetch_bibtex(inspire_id)
+            else:
+                logger.warning(f"{dataset_name}: could not extract iNSPIRE ID ({inspire_url})")
+        else:
+            logger.warning(
+                f"{dataset_name} has no iNSPIRE URL, reference will be marked unavailable"
+            )
+
         row = LatexDatasetRow(
             dataset_name=dataset_name,
             dataset_label=dataset.plotting.dataset_label,
@@ -107,16 +117,22 @@ def generate_table(rows, group_by=None, group="unsorted"):
     else:
         caption = f"List of datasets matching {group_by}={group}"
 
+    caption = _escape_latex(caption)
+
     row_lines = []
     bibtex_list = []
+    seen = []
     for row in rows:
         if row.bib_entry is not None:
             cite = f"\\cite{{{row.bib_key}}}"
-            bibtex_list.append(row.bibtex)
+            if row.bib_key not in seen:
+                bibtex_list.append(row.bibtex)
+            seen.append(row.bib_key)
         else:
             cite = "\\textit{Reference unavailable}"
-        row_lines.append(" & ".join([row.dataset_label, row.observable_description, cite]))
+        row_lines.append(" & ".join([row.dataset_label, row.observable_description, cite]) + r" \\")
 
+    group_label = _SANITIZE_RE.sub("_", group)
     table_text = (
         "\n".join(
             [
@@ -130,7 +146,7 @@ def generate_table(rows, group_by=None, group="unsorted"):
                 "    \\bottomrule",
                 "  \\end{tabular}",
                 f"  \\caption{{{caption}}}",
-                "  \\label{tab:datasets}",
+                f"  \\label{{tab:datasets_{group_label}}}",
                 "\\end{table}",
             ]
         )
