@@ -217,7 +217,8 @@ implemented_observables:
     y_label: '$\frac{d\sigma}{dy_{t}}$ ($pb$)'
   theory:
     FK_tables:
-    - - CMS_TTBAR_13TEV_2L_DIF_YT
+    # - - CMS_TTBAR_13TEV_2L_DIF_YT
+    - - CMS_TTB_13TEV_2L_TRAP
     operation: 'null'
   variants:
     legacy:

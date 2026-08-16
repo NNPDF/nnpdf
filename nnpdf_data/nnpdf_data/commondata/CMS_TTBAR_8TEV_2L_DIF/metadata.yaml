@@ -101,8 +101,10 @@ implemented_observables:
     - m_ttBar
   theory:
     FK_tables:
-    - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT
-    - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-INTEGRATED
+    # - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT
+    # - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-INTEGRATED
+    - - CMS_TTB_8TEV_2D_TTM_TRAP
+    - - CMS_TTB_8TEV_2D_TTM_TRAP_TOT
     operation: ratio
   variants:
     legacy:

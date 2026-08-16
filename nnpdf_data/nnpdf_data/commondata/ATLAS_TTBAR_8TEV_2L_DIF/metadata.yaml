@@ -174,8 +174,10 @@ implemented_observables:
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
   theory:
     FK_tables:
-    - - ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR
-    - - ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-INTEGRATED
+    # - - ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR
+    # - - ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-INTEGRATED
+    - - ATLAS_TTB_8TEV_2L_TTRAP
+    - - CMSTTBARTOT8TEV-TOPDIFF8TEVTOT
     operation: ratio
   variants:
     legacy:
