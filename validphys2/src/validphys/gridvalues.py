@@ -98,7 +98,7 @@ def grid_values(pdf: PDF, flmat, xmat, qmat):
         >>> #Take the difference across the flavour dimension, the max
         >>> #across the replica dimension, and leave the Q dimension untouched.
         >>> np.diff(gv, axis=1).max(axis=0).ravel()
-        array([0.07904731, 0.04989902], dtype=float32)
+        array([0.07904731, 0.04989902])
     """
     return _grid_values(pdf.load(), flmat, xmat, qmat)
 
