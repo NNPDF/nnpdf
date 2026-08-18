@@ -157,6 +157,7 @@ Contents
    data/index
    theory/index
    figuresofmerit/index
+   api/index
    contributing/index
    releases
    ci/index
