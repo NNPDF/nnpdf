@@ -347,6 +347,13 @@ class ReplicaSettings:
             e.g. ``dense`` or ``dense_per_flavour``
         initializer: str
             initializer to be used for this replica
+        initializer_scale: float
+            width multiplier for the initializer distribution. Only affects ``glorot_normal``
+            (weight std scales as sqrt(scale)); 1.0 reproduces standard glorot_normal
+        initializer_gamma: float
+            exponent on the initializer variance: ``variance = (scale/fan)**gamma``
+            (``std = (scale/fan)**(gamma/2)``). Only affects ``glorot_normal``; 1.0
+            reproduces standard glorot_normal
         dropout: float
             rate of dropout for each layer
         regularizer: str
@@ -360,6 +367,8 @@ class ReplicaSettings:
     activations: list[str]
     architecture: str = "dense"
     initializer: str = "glorot_normal"
+    initializer_scale: float = 1.0
+    initializer_gamma: float = 1.0
     dropout_rate: float = 0.0
     regularizer: str = None
     regularizer_args: dict = field(default_factory=dict)
@@ -806,6 +815,8 @@ def _generate_nn(
     activations: list[str] = None,
     architecture: str = "dense",
     initializer: str = None,
+    initializer_scale: float = 1.0,
+    initializer_gamma: float = 1.0,
     dropout_rate: float = 0.0,
     regularizer: str = None,
     regularizer_args: dict = field(default_factory=dict),
@@ -848,7 +859,9 @@ def _generate_nn(
             """Generate the ``i_layer``-th dense_per_flavour layer for all replicas."""
             l_seed = int(seed + i_layer * n_flavours)
             initializers = [
-                MetaLayer.select_initializer(initializer, seed=l_seed + b)
+                MetaLayer.select_initializer(
+                    initializer, seed=l_seed + b, scale=initializer_scale, gamma=initializer_gamma
+                )
                 for b in range(n_flavours)
             ]
             layer = base_layer_selector(
@@ -863,7 +876,12 @@ def _generate_nn(
     elif architecture == "dense":
 
         def layer_generator(i_layer, nodes_out, activation):
-            kini = MetaLayer.select_initializer(initializer, seed=int(seed + i_layer))
+            kini = MetaLayer.select_initializer(
+                initializer,
+                seed=int(seed + i_layer),
+                scale=initializer_scale,
+                gamma=initializer_gamma,
+            )
             return base_layer_selector(
                 architecture,
                 kernel_initializer=kini,

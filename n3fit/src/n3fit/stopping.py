@@ -348,6 +348,7 @@ class Stopping:
 
         self._dont_stop = dont_stop
         self._stop_now = False
+        self._would_stop_epoch = None
         self.stopping_patience = stopping_patience
         self._stopping_delta = stopping_delta
         self.total_epochs = total_epochs
@@ -486,7 +487,20 @@ class Stopping:
         and reload the history to the point of the best model if any
         """
         self._stop_now = True
-        self._restore_best_weights()
+        if self._would_stop_epoch is None:
+            # final_epoch is the last registered epoch (0-indexed); +1 to match stop_epoch convention
+            self._would_stop_epoch = (
+                -1 if self._history.final_epoch is None else self._history.final_epoch + 1
+            )
+        if not self._dont_stop:
+            self._restore_best_weights()
+
+    @property
+    def would_stop_epoch(self):
+        """Epoch at which early stopping would have triggered.
+        Returns None if stopping never triggered (fit converged within total_epochs).
+        When dont_stop=False this equals stop_epoch."""
+        return self._would_stop_epoch
 
     def _restore_best_weights(self):
         for i_replica, weights in enumerate(self._best_weights):
