@@ -1,0 +1,42 @@
+dependent_variables:
+- header: {name: 'Explanation'}
+  qualifiers:
+  - {name: 'Systematics list', value: '(Normalized) Fiducial cross sections'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 27'}
+  - {name: 'M(ELECTRON,MUON)', units: 'GEV', value: '> 55'}
+  - {name: 'PT(ELECTRON,MUON)', units: 'GEV', value: '> 30'}
+  - {name: 'ETMISS', units: 'GEV', value: '> 20'}
+  - {name: 'ABS(ETARAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 35'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - {value: 'Data statistics'}
+  - {value: 'Jet energy resolution'}
+  - {value: 'Jet energy scale components, sensitive to pileup'}
+  - {value: 'Top-quark background'}
+  - {value: 'Jet energy scale effective components and other jet uncertainties'}
+  - {value: 'Pileup modelling in the simulation'}
+  - {value: 'Statistical component of background estimates and limited statistics in the signal simulation'}
+  - {value: 'Uncertainties in b-jet tagging and mistagging corrections in the simulation'}
+  - {value: 'Electron, muon, $E_{T}^{miss}$ soft term, unfolding, theory (PDF and scale) and luminosity components'}
+  - {value: 'Jet energy scale components, sensitive to quark- and gluon-initiated jets'}
+  - {value: 'Minor backgrounds'}
+  - {value: 'W+jets background'}
+independent_variables:
+- header: {name: 'Systematics label'}
+  values:
+  - {value: stat}
+  - {value: JetRes}
+  - {value: JetPileup}
+  - {value: Bkgtopsinglet}
+  - {value: JetScaleOther}
+  - {value: Pileup}
+  - {value: StatsBkgMC}
+  - {value: FTag}
+  - {value: ElMuMETUnfTheoLumi}
+  - {value: JetFlav}
+  - {value: BkgOther}
+  - {value: BkgWjets}

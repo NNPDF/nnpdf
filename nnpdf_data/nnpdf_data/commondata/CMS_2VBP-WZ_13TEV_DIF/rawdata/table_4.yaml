@@ -1,0 +1,34 @@
+independent_variables:
+- header: {name: A table}
+  values:
+    - {value: '\eee'}
+    - {value: '\eem'}
+    - {value: '\emm'}
+    - {value: '\mmm'}
+    - {value: 'Combined:'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '$\epsilon$'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 0.0003 (stat)}
+    - {label: scale+PDF, asymerror: {plus: +0.0017, minus: -0.0015} }
+    value: '0.1754'
+  - errors:
+    - {label: stat+syst, symerror: 0.0004 (stat)}
+    - {label: scale+PDF, asymerror: {plus: +0.0025, minus: -0.0021} }
+    value: '0.2618'
+  - errors:
+    - {label: stat+syst, symerror: 0.0006 (stat)}
+    - {label: scale+PDF, asymerror: {plus: +0.0035, minus: -0.0030} }
+    value: '0.3764'
+  - errors:
+    - {label: stat+syst, symerror: 0.0009 (stat)}
+    - {label: scale+PDF, asymerror: {plus: +0.0047, minus: -0.0040} }
+    value: '0.5625'
+  - errors:
+    - {label: stat+syst, symerror: 0.0005 (stat)}
+    - {label: scale+PDF, asymerror: {plus: +0.0031, minus: -0.0027} }
+    value: '0.3453'
