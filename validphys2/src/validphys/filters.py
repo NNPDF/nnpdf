@@ -843,7 +843,7 @@ def get_cuts_for_dataset(commondata, rules) -> list:
     ...     default_filter_settings, default_filter_rules_input)
     >>> from validphys.loader import Loader
     >>> l = Loader()
-    >>> cd = l.check_commondata("NMC")
+    >>> cd = l.check_commondata("NMC_NC_NOTFIXED_P_EM-SIGMARED", variant="legacy")
     >>> theory = l.check_theoryID(53)
     >>> filter_defaults = default_filter_settings()
     >>> params = theory.get_description()
