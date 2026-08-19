@@ -1,0 +1,28 @@
+definitions:
+  error:
+    definition: total uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys_norm:
+    definition: systematic uncertainty - normalisation
+    treatment: MULT
+    type: CORR
+bins:
+- error: 0.76
+  sys_norm: 3.64650000e-01
+- error: 0.58
+  sys_norm: 4.13950000e-01
+- error: 0.45
+  sys_norm: 0.34
+- error: 0.59
+  sys_norm: 3.45100000e-01
+- error: 0.4
+  sys_norm: 0.17595
+- error: 0.54
+  sys_norm: 0.21505
+- error: 0.47
+  sys_norm: 0.10795
+- error: 0.26
+  sys_norm: 0.1054
+- error: 0.04
+  sys_norm: 7.65000000e-03

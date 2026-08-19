@@ -1,0 +1,54 @@
+dependent_variables:
+- header: {name: D(SIG)/D(P), units: NB/GEV}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '14.0'}
+  - {name: SQRT(S), units: GeV, value: '14.0'}
+  values:
+  - errors:
+    - {symerror: 0.97}
+    value: 16.6
+  - errors:
+    - {symerror: 0.74}
+    value: 14.6
+  - errors:
+    - {symerror: 0.56}
+    value: 11.5
+  - errors:
+    - {symerror: 0.46}
+    value: 8.71
+  - errors:
+    - {symerror: 0.49}
+    value: 8.06
+  - errors:
+    - {symerror: 0.3}
+    value: 5.48
+  - errors:
+    - {symerror: 0.4}
+    value: 3.95
+  - errors:
+    - {symerror: 0.27}
+    value: 2.34
+  - errors:
+    - {symerror: 0.14}
+    value: 1.16
+  - errors:
+    - {symerror: 0.11}
+    value: 0.9
+  - errors:
+    - {symerror: 0.03}
+    value: 0.1
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {high: 0.4, low: 0.3}
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+  - {high: 0.7, low: 0.6}
+  - {high: 0.8, low: 0.7}
+  - {high: 1.0, low: 0.8}
+  - {high: 1.2, low: 1.0}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.0, low: 1.6}
+  - {high: 2.6, low: 2.0}
+  - {high: 4.6, low: 3.0}

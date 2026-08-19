@@ -1,0 +1,111 @@
+setname: 'SLD_SIA-KA_91P2GEV_EE-KASUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-KA"
+  experiment: "SLD"
+
+arXiv:
+  url: "https://arxiv.org/abs/hep-ex/0310017"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/630327"
+hepdata:
+  url: "https://www.hepdata.net/record/ins630327"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "normalized x-sec differential wrt $x_p", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$', units: '$$'}
+  observable_name: XP-INC
+  process_type: SIA_XP
+  ndata: 36
+  tables: [3]
+  kinematics:
+    variables:
+      xp: {description: "hadron 3-momentum scaled to beam 3-momentum", label: '$x_p$', units: ''}
+    file: kinematics_inc.yaml
+  data_central: data_inc.yaml
+  data_uncertainties:
+  - uncertainties_inc.yaml
+  kinematic_coverage: [xp]
+  plotting:
+    dataset_label: 'SLD SIA KA- + KA+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
+    x_scale: linear
+    plot_x: xp
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
+
+- observable: {description: "normalized x-sec differential wrt $x_p (UDS tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{uds}$', units: '$$'}
+  observable_name: XP-UDS
+  process_type: SIA_XP
+  ndata: 36
+  tables: [6]
+  kinematics:
+    variables:
+      xp: {description: "hadron 3-momentum scaled to beam 3-momentum", label: '$x_p$', units: ''}
+    file: kinematics_uds.yaml
+  data_central: data_uds.yaml
+  data_uncertainties:
+  - uncertainties_uds.yaml
+  kinematic_coverage: [xp]
+  plotting:
+    dataset_label: 'SLD SIA KA- + KA+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{uds}$'
+    x_scale: linear
+    plot_x: xp
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p\Big|_{uds}}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
+
+- observable: {description: "normalized x-sec differential wrt $x_p (C tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{c}$', units: '$$'}
+  observable_name: XP-C
+  process_type: SIA_XP
+  ndata: 36
+  tables: [6]
+  kinematics:
+    variables:
+      xp: {description: "hadron 3-momentum scaled to beam 3-momentum", label: '$x_p$', units: ''}
+    file: kinematics_c.yaml
+  data_central: data_c.yaml
+  data_uncertainties:
+  - uncertainties_c.yaml
+  kinematic_coverage: [xp]
+  plotting:
+    dataset_label: 'SLD SIA KA- + KA+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{c}$'
+    x_scale: linear
+    plot_x: xp
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p\Big|_{c}}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
+
+- observable: {description: "normalized x-sec differential wrt $x_p (B tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{b}$', units: '$$'}
+  observable_name: XP-B
+  process_type: SIA_XP
+  ndata: 36
+  tables: [6]
+  kinematics:
+    variables:
+      xp: {description: "hadron 3-momentum scaled to beam 3-momentum", label: '$x_p$', units: ''}
+    file: kinematics_b.yaml
+  data_central: data_b.yaml
+  data_uncertainties:
+  - uncertainties_b.yaml
+  kinematic_coverage: [xp]
+  plotting:
+    dataset_label: 'SLD SIA KA- + KA+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{b}$'
+    x_scale: linear
+    plot_x: xp
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p\Big|_{b}}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
+

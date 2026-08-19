@@ -1,0 +1,105 @@
+bins:
+- xp:
+    min: 0.01
+    mid: 1.05000000e-02
+    max: 0.011
+- xp:
+    min: 0.011
+    mid: 0.0115
+    max: 0.012
+- xp:
+    min: 0.012
+    mid: 0.0125
+    max: 0.013
+- xp:
+    min: 0.013
+    mid: 0.0135
+    max: 0.014
+- xp:
+    min: 0.014
+    mid: 0.0147
+    max: 0.016
+- xp:
+    min: 0.016
+    mid: 0.0167
+    max: 0.018
+- xp:
+    min: 0.024
+    mid: 0.0247
+    max: 0.026
+- xp:
+    min: 0.026
+    mid: 0.0268
+    max: 0.028
+- xp:
+    min: 0.07
+    mid: 0.0719
+    max: 0.075
+- xp:
+    min: 0.075
+    mid: 0.0769
+    max: 0.08
+- xp:
+    min: 0.08
+    mid: 0.0819
+    max: 0.085
+- xp:
+    min: 0.085
+    mid: 0.087
+    max: 0.09
+- xp:
+    min: 0.09
+    mid: 0.0942
+    max: 0.1
+- xp:
+    min: 0.1
+    mid: 0.104
+    max: 0.11
+- xp:
+    min: 0.11
+    mid: 0.114
+    max: 0.12
+- xp:
+    min: 0.12
+    mid: 0.124
+    max: 0.13
+- xp:
+    min: 0.13
+    mid: 0.134
+    max: 0.14
+- xp:
+    min: 0.14
+    mid: 0.144
+    max: 0.15
+- xp:
+    min: 0.15
+    mid: 0.154
+    max: 0.16
+- xp:
+    min: 0.16
+    mid: 0.169
+    max: 0.18
+- xp:
+    min: 0.18
+    mid: 0.189
+    max: 0.2
+- xp:
+    min: 0.2
+    mid: 0.222
+    max: 0.25
+- xp:
+    min: 0.25
+    mid: 0.272
+    max: 0.3
+- xp:
+    min: 0.3
+    mid: 0.342
+    max: 0.4
+- xp:
+    min: 0.4
+    mid: 0.476
+    max: 0.6
+- xp:
+    min: 0.6
+    mid: 0.674
+    max: 0.8
