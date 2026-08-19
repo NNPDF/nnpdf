@@ -158,5 +158,5 @@ def get_systematics(observable, version, figure):
     return uncertainties
 
 
-if __name__ == "__main__":
-    get_systematics(observable="W+", version=1, figure='17a')
+# if __name__ == "__main__":
+#     get_systematics(observable="W+", version=1, figure='17a')
