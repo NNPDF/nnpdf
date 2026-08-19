@@ -1,0 +1,67 @@
+independent_variables:
+- header: {name: Nbins}
+  values:
+  - value: 1
+  - value: 2
+  - value: 3  
+  - value: 4
+  - value: 5
+  - value: 6
+  - value: 7
+  - value: 8
+  - value: 9
+  - value: 10
+  - value: 11
+  - value: 12
+  - value: 13
+  - value: 14
+
+dependent_variables: 
+- header: {name: SF}
+  qualifiers:
+  - {name: RE, value: P P --> Z0 HEAVY-FLAVOR}
+  - {name: SQRT(S), units: GEV, value: 13000}
+  - {name: Distribution, value: Correction Factors}
+  values:
+  - value: 0.766263
+    errors:
+    - {symerror: 0.0588091}
+  - value: 0.805558
+    errors:
+    - {symerror: 0.0611066}
+  - value: 0.829328
+    errors:
+    - {symerror: 0.0741268}
+  - value: 0.835668
+    errors:
+    - {symerror: 0.067503}
+  - value: 0.818662
+    errors:
+    - {symerror: 0.0750341}
+  - value: 0.850147
+    errors:
+    - {symerror: 0.0778027}
+  - value: 0.7997
+    errors:
+    - {symerror: 0.0875704}
+  - value: 0.810403
+    errors:
+    - {symerror: 0.0792599}
+  - value: 0.767614
+    errors:
+    - {symerror: 0.0857012}
+  - value: 0.72573
+    errors:
+    - {symerror: 0.0823354}
+  - value: 0.662589
+    errors:
+    - {symerror: 0.0741857}
+  - value: 0.584975
+    errors:
+    - {symerror: 0.0724099}
+  - value: 0.486525
+    errors:
+    - {symerror: 0.0705387}
+  - value: 0.421155
+    errors:
+    - {symerror: 0.0884864}
