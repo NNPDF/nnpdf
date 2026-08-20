@@ -41,6 +41,7 @@ def performfit(
     kfold_parameters,
     tensorboard=None,
     debug=False,
+    debug_options=None,
     maxcores=None,
     double_precision=False,
     parallel_models=True,
@@ -126,6 +127,10 @@ def performfit(
             default it is None and tensorboard is not enabled.
         debug: bool
             activate some debug options
+        debug_options: None, DebugOptions
+            the parsed ``debug_options`` namespace of the runcard, as a
+            :class:`n3fit.scripts.n3fit_exec.DebugOptions` object (see there
+            for the meaning of each field)
         maxcores: int
             maximum number of (logical) cores that the backend should be aware of
         double_precision: bool
@@ -203,6 +208,7 @@ def performfit(
             replicas=replica_idxs,
             trials=trials,
             load_weights_dict=load_weights_dict,
+            debug_options=debug_options,
         )
 
         # This is just to give a descriptive name to the fit function

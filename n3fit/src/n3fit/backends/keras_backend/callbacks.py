@@ -66,7 +66,7 @@ class CallbackStep(callbacks.Callback):
 class TimerCallback(CallbackStep):
     """Callback to be used during debugging to time the fit"""
 
-    def __init__(self, count_range=100):
+    def __init__(self, count_range=100, print_logs=False):
         super().__init__()
 
         self.all_times = []
@@ -74,6 +74,14 @@ class TimerCallback(CallbackStep):
         self.x_count = count_range
         self.starting_time = None
         self.last_time = 0
+        self.print_logs = print_logs
+
+    def _log(self, msg):
+        """Print the message to stdout if ``print_logs``, else log it."""
+        if self.print_logs:
+            print(msg)
+        else:
+            log.info(msg)
 
     def on_step_end(self, epoch, logs=None):
         """At the end of every epoch it checks the time"""
@@ -85,8 +93,8 @@ class TimerCallback(CallbackStep):
             cur_dif = new_time - self.last_time
             self.all_times.append(cur_dif)
             if (epoch + 1) % self.x_count == 0:
-                ave = np.mean(self.all_times[-100:])
-                log.info(f" > Latest 100 average: {ave:.5} s")
+                ave = np.mean(self.all_times[-self.x_count :])
+                self._log(f" > Latest {self.x_count} average: {ave:.5} s")
                 self.every_x.append(ave)
         self.last_time = new_time
 
@@ -98,8 +106,8 @@ class TimerCallback(CallbackStep):
         # by epoch 100 all parts of the code have usually been called so it's a good compromise
         mean = np.mean(self.all_times[min(110, n_times - 1) :])
         std = np.std(self.all_times[min(110, n_times - 1) :])
-        log.info(f"> > Average time per epoch: {mean:.5} +- {std:.5} s")
-        log.info(f"> > > Total time: {total_time/60:.5} min")
+        self._log(f"> > Average time per epoch: {mean:.5} +- {std:.5} s")
+        self._log(f"> > > Total time: {total_time/60:.5} min")
 
 
 class StoppingCallback(CallbackStep):

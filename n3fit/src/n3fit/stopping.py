@@ -312,6 +312,9 @@ class Stopping:
             maximum value allowed for chi2
         dont_stop: bool
            dont care about early stopping
+        print_logs: bool
+           force the per-epoch stats to be printed to stdout even if the
+           logger filters out info messages (e.g. ``log_level=error``)
     """
 
     def __init__(
@@ -325,6 +328,7 @@ class Stopping:
         stopping_delta=0.0,
         threshold_chi2=10.0,
         dont_stop=False,
+        print_logs=False,
     ):
         self._pdf_model = pdf_model
 
@@ -351,6 +355,7 @@ class Stopping:
         self.stopping_patience = stopping_patience
         self._stopping_delta = stopping_delta
         self.total_epochs = total_epochs
+        self.print_logs = print_logs
 
         self._stop_epochs = [total_epochs - 1] * self._n_replicas
         self._best_epochs = [None] * self._n_replicas
@@ -512,7 +517,12 @@ class Stopping:
             for experiment, chi2 in partial_vl_chi2.items():
                 partials.append(f"{experiment}: {chi2:.3f}")
             total_str += ", ".join(partials)
-        log.info(total_str)
+        if self.print_logs:
+            # Force print to stdout to bypass a potentially restricted log_level
+            print(total_str)
+        else:
+            # Standard behaviour, subject to the logger level filter
+            log.info(total_str)
 
     def stop_here(self):
         """Returns the stopping status

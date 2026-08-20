@@ -4,6 +4,7 @@ n3fit - performs fit using ml external frameworks
 """
 
 import argparse
+from dataclasses import dataclass
 import logging
 import pathlib
 import re
@@ -26,6 +27,62 @@ from validphys.utils import yaml_safe
 
 loader = FallbackLoader()
 
+log = logging.getLogger(__name__)
+
+# Map the ``debug_options::log_level`` string from the runcard to python logging levels
+LOG_LEVELS = {
+    "debug": logging.DEBUG,
+    "info": logging.INFO,
+    "warning": logging.WARNING,
+    "error": logging.ERROR,
+}
+
+
+@dataclass(frozen=True)
+class DebugOptions:
+    """Parsed ``debug_options`` namespace of the n3fit runcard.
+
+    All debug-related options should live in this object, which
+    should be passed around to the internal fitting routines.
+
+    Attributes
+    ----------
+    log_level: str
+        level of the n3fit logger
+    printeach: int
+        print the training/validation stats every ``printeach`` epochs
+    timer: bool
+        enable the per-epoch timing callback independently of ``debug``
+    print_logs: bool
+        force the per-epoch stats to be printed to stdout
+    """
+
+    log_level: str = "info"
+    printeach: int = 100
+    timer: bool = False
+    print_logs: bool = False
+
+    @property
+    def print_summary(self) -> bool:
+        """Whether the network summaries should be printed. Print only for info and debug.
+        Note that hyperopt always supresses the network summaries.
+        """
+        return self.log_level in ("debug", "info")
+
+    def __post_init__(self):
+        """Check that the options are acceptable"""
+        _valid_log_levels = list(LOG_LEVELS.keys())
+        if self.log_level.lower() not in _valid_log_levels:
+            raise ConfigError(
+                f"Invalid debug_options::log_level '{self.log_level}'. "
+                f"Available values are {_valid_log_levels}."
+            )
+
+    @property
+    def logger_level(self):
+        return LOG_LEVELS[self.log_level.lower()]
+
+
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[], allow_legacy_names=False)
 
 FIT_NAMESPACE = "datacuts::theory::fitting "
@@ -41,7 +98,6 @@ N3FIT_PROVIDERS = [
     "validphys.commondata",
 ]
 
-log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
 INPUT_FOLDER = "input"
@@ -232,6 +288,33 @@ class N3FitConfig(Config):
         `closuretest` namespace
         """
         return fakedata
+
+    def parse_debug_options(self, debug_options=None):
+        """Parses the ``debug_options`` dictionary in the runcard,
+        and applies the logging level.
+
+        Note that any logging that occurs before reportengine uses the n3fit
+        parser will by necessity ignore these settings.
+
+        Parameters
+        ----------
+            debug_options: None, dict
+                the raw ``debug_options`` dictionary from the runcard
+
+        Returns
+        -------
+            debug_options: DebugOptions
+                parsed options with the ``log_level``, ``printeach``, ``timer``
+                and ``print_logs`` fields filled with defaults
+        """
+        if debug_options is None:
+            # The defaults are defined in the dataclass definition
+            doptions = DebugOptions()
+        else:
+            doptions = DebugOptions(**debug_options)
+
+        logging.getLogger().setLevel(doptions.logger_level)
+        return doptions
 
     def produce_kfold_parameters(self, kfold=None, hyperopt=None):
         """Return None even if there are kfolds in the runcard if the hyperopt flag is not active"""
