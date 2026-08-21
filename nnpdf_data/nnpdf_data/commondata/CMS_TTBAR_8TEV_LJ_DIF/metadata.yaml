@@ -132,10 +132,8 @@ implemented_observables:
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
   theory:
     FK_tables:
-    # - - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR
-    # - - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-INTEGRATED
-    - - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTTRAP
-    - - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTOT
+    - - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR
+    - - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-INTEGRATED
     operation: ratio
   variants:
     legacy:

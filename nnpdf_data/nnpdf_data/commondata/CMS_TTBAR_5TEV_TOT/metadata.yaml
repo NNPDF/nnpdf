@@ -48,8 +48,7 @@ implemented_observables:
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:
-    # - - CMS_TTBAR_5TEV_TOT_X-SEC
-    - - CMS_TTB_5TEV_TOT
+    - - CMS_TTBAR_5TEV_TOT_X-SEC
     operation: 'null'
   variants:
     legacy:

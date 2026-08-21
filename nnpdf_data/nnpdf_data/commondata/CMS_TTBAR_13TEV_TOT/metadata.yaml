@@ -48,8 +48,7 @@ implemented_observables:
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:
-    # - - CMS_TTBAR_13TEV_TOT_X-SEC
-    - - CMSTTBARTOT13TEV-TOPDIFF13TEVTOT
+    - - CMS_TTBAR_13TEV_TOT_X-SEC
   variants:
     legacy:
       data_central: data_legacy_X-SEC.yaml

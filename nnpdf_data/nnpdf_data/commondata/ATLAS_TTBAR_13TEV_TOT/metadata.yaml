@@ -48,8 +48,7 @@ implemented_observables:
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:
-    # - - ATLAS_TTBAR_13TEV_TOT_X-SEC
-    - - ATLAS_TTBARTOT_13TEV_FULLLUMI-TOPDIFF13TEVTOT
+    - - ATLAS_TTBAR_13TEV_TOT_X-SEC
   variants:
     legacy:
       theory: &id002
