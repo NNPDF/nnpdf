@@ -91,7 +91,7 @@ dataset_inputs:
 
 ################################################################################
 datacuts:
-  t0pdfset: 251013-jth-n3lo-mhou-tcm-alphas-0120_iter1
+  t0pdfset: NNPDF40_an3lo_as_01180_mhou_ADv2
   w2min: 12.5
 
 ################################################################################
@@ -103,7 +103,7 @@ theorycovmatconfig:
   point_prescriptions: ["7 point", "fhmruvv ihou", "dis ihou"]
   # theoryids:
   #   from_: scale_variation_theories
-  pdf: 251013-jth-n3lo-mhou-tcm-alphas-0120_iter1.tar.gz
+  pdf: NNPDF40_an3lo_as_01180_mhou_ADv2
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true
 
