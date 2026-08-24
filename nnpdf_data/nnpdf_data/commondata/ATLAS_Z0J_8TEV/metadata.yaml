@@ -89,19 +89,19 @@ implemented_observables:
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
     figure_by:
-    - m_ll2
+    - m_ll
     plot_x: pT
-  kinematic_coverage: [m_ll2, pT, y]
+  kinematic_coverage: [m_ll, pT, y]
   kinematics:
     variables:
       y:
         description: Absolute boson rapidity
         label: $|y|_{\ell \ell}$
         units: ''
-      m_ll2:
+      m_ll:
         description: Square of the invariant mass of the lepton pair
-        label: $m^2_{\ell \ell}$
-        units: 'GeV$^2$'
+        label: $m_{\ell \ell}$
+        units: 'GeV'
       pT:
         description: Transverse momentum of the boson
         label: $p_T^{\ell \ell}$

@@ -45,26 +45,26 @@ RAP_KINEMATICS_BINS = {
     "Table34": {'range': [2.0, 2.4], 'unc_file': 'ZcombPt_born_m66116_y2024/tab.dat'},
 }
 
-M2_KINEMTAICS_BINS = {
+M_KINEMATICS_BINS = {
     "Table35": {
-        'range': np.power([12.0, 20.0], 2).tolist(),
+        'range': [12.0, 20.0],
         'unc_file': 'ZcombPt_born_m1220_y0024/tab.dat',
     },
     "Table36": {
-        'range': np.power([20.0, 30.0], 2).tolist(),
+        'range': [20.0, 30.0],
         'unc_file': 'ZcombPt_born_m2030_y0024/tab.dat',
     },
     "Table37": {
-        'range': np.power([30.0, 46.0], 2).tolist(),
+        'range': [30.0, 46.0],
         'unc_file': 'ZcombPt_born_m3046_y0024/tab.dat',
     },
     "Table38": {
-        'range': np.power([46.0, 66.0], 2).tolist(),
+        'range': [46.0, 66.0],
         'unc_file': 'ZcombPt_born_m4666_y0024/tab.dat',
     },
     # "Table39": [66.0, 116.0],
     "Table40": {
-        'range': np.power([116.0, 150.0], 2).tolist(),
+        'range': [116.0, 150.0],
         'unc_file': 'ZcombPt_born_m116150_y0024/tab.dat',
     },
 }
@@ -115,7 +115,7 @@ class Extractor:
             self.kin2_dict = RAP_KINEMATICS_BINS
             self.kin_extra = np.power([66.0, 116.0], 2).tolist()
         elif observable == 'PT-M':
-            self.kin2_dict = M2_KINEMTAICS_BINS
+            self.kin2_dict = M_KINEMATICS_BINS
             self.kin_extra = [0.0, 2.4]
         else:
             raise Exception(f"Observable {observable} not listed in the metadata file.")
