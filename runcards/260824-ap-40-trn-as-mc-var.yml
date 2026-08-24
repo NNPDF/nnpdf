@@ -93,7 +93,7 @@ resample_negative_pseudodata: false
 
 ################################################################################
 datacuts:
-  t0pdfset: 260821-ap-n3lo-as-0120
+  t0pdfset: 260821-ap-40-trn-as-0120
   q2min: 3.49
   w2min: 12.5
 
@@ -106,7 +106,7 @@ theorycovmatconfig:
   point_prescriptions: ["7 point", "mcharm 1.5 1 2", "alphas 0120 0122 0118"]
   # theoryids:
   #   from_: scale_variation_theories
-  pdf: 260821-ap-n3lo-as-0120
+  pdf: 260821-ap-40-trn-as-0120
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true
 
