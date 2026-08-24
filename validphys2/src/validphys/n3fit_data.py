@@ -893,7 +893,7 @@ def posdatasets_fitting_pos_dict(posdatasets):
 
 
 # can't use collect here because integdatasets might not exist.
-def integdatasets_fitting_integ_dict(integdatasets):
+def integdatasets_fitting_integ_dict(integdatasets=None):
     """Loads the integrability datasets. Calls same function as
     :py:func:`fitting_pos_dict`, except on each element of
     ``integdatasets`` if ``integdatasets`` is not None.
