@@ -97,6 +97,13 @@ def combine_by_type(each_dataset_results_central_bytheory, groups_data_by_proces
     return process_info
 
 
+def covmat_2pt(deltas1, deltas2):
+    """Returns theory covariance sub-matrix for 2pt prescription related
+    to the charm matching scale variation"""
+    s = np.outer(deltas1[0], deltas2[0])
+    return s
+
+
 def covmat_3fpt(deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
     scale variation *only*, given two dataset names and collections
@@ -327,6 +334,8 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
     elif point_prescription == 'power corrections':
         # Shifts computed from power corrected predictions
         s = covmat_power_corrections(deltas1, deltas2)
+    elif point_prescription.startswith("MSU charm"):
+        s = covmat_2pt(deltas1, deltas2)
     return s
 
 

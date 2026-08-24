@@ -126,6 +126,9 @@ nnlo_exa_40: &nnlo_exa_40
   (2, 0.5): 710
   (2, 1): 711
   (2, 2): 712
+  # MSU charm
+  (Qc=1.5): 40_008_005
+  (Qc=3): 40_027_003
 
 
 n3lo_qed: &n3lo_qed
@@ -837,6 +840,8 @@ scale_variations_for:
       (0.118): 40_027_003
       (0.120): 40_027_005
       (0.116): 40_027_001
+      (Qc=1.5): 40_008_005
+      (Qc=3): 40_027_003
       # Scale combinations are listed according to (k_F, k_R)
 
   - theoryid: 40_030_000 # like 40027003 but with perturbative charm. 1.5 is 000, 1.0 is 001, 2.0 is 002
