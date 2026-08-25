@@ -24,102 +24,89 @@ from validphys.pdfbases import parse_flarr
 LIMS = [(1e-9, 1e-5), (1e-5, 1e-3), (1e-3, 1)]
 POL_LIMS = ((1e-4, 1e-3), (1e-3, 1))
 
+# Mellin moments x**n * f(x) are dominated by large-x. Small-x follows LIMS (one slice per
+# order of magnitude); the extra large-x slices are phenomenological, not numerical: they
+# show which large-x region drives the moment, as needed for lattice comparisons.
+MELLIN_LIMS = [
+    (1e-9, 1e-5),
+    (1e-5, 1e-3),
+    (1e-3, 1e-1),
+    (1e-1, 0.3),
+    (0.3, 0.6),
+    (0.6, 0.9),
+    (0.9, 1.0),
+]
+
 
 def _momentum_sum_rule_integrand(x, lpdf, Q):
     xqvals = lpdf.xfxQ(x, Q)
     return sum([xqvals[f] for f in lpdf.flavors()])
 
 
-def _make_momentum_fraction_integrand(fldict):
-    """Make a suitable integrand function, which takes x to be integrated over
-    and a PDF member and Q that computes the momentum fraction based on ``fldict``.
-
-    The keys of ``fldict`` are free form values corresponding to PDG parton ids
-    (that end up being passed by :py:func:`validphys.pdfbases.parse_flarr` and
-    then to LHAPDF) and the values are multipliers for each parton. The
-    integrand is the sum of ``x*flavour(x)*multiplier`` for all the given
-    entries.
-
-    Parameters
-    ----------
-    fldict : Mapping[int, int]
-        A map from PDG parton id to multipliers
-
-    Returns
-    -------
-    f : Callable
-        An integrand function.
+def _make_mellin_moment_integrand(fldict, n: int):
+    """Integrand for the n-th Mellin moment ``int x**n f(x) dx`` of the flavour combination
+    ``fldict`` (PDG parton ids -> multipliers, see :py:func:`validphys.pdfbases.parse_flarr`).
+    LHAPDF returns ``x*f(x)``, hence the ``x**(n-1)``. n=0 gives the PDF integral (valence
+    sum rules), n=1 the momentum fraction.
     """
     # Do this outside to aid integration time
     fldict = {parse_flarr([k])[0]: v for k, v in fldict.items()}
+    exponent = n - 1
 
     def f(x, lpdf, Q):
-        return sum(multiplier * lpdf.xfxQ(x, Q)[flavour] for flavour, multiplier in fldict.items())
-
-    return f
-
-
-def _make_pdf_integrand(fldict):
-    """Make a suitable integrand function, which takes x to be integrated over
-    and a PDF member and Q that computes the integrand of the PDFs based on ``fldict``.
-
-    The keys of ``fldict`` are free form values corresponfing to PDG parton ids
-    (that end up being passed :py:func:`validphys.pdfbases.parse_flarr` and
-    then to LHAPDF) and the values are multipliers for each parton. The
-    integrand is the sum of ``x*flavour(x)*multiplier`` for all the given
-    entries.
-
-    Parameters
-    ----------
-    fldict : Mapping[int, int]
-        A map from PDG parton id to multipliers
-
-    Returns
-    -------
-    f : Callable
-        An integrand function.
-    """
-    # Do this outsde to aid integration time
-    fldict = {parse_flarr([k])[0]: v for k, v in fldict.items()}
-
-    def f(x, lpdf, Q):
-        return (
-            sum(multiplier * lpdf.xfxQ(x, Q)[flavour] for flavour, multiplier in fldict.items()) / x
-        )
+        xfvals = lpdf.xfxQ(x, Q)
+        return x**exponent * sum(multiplier * xfvals[fl] for fl, multiplier in fldict.items())
 
     return f
 
 
 KNOWN_SUM_RULES = {
     "momentum": _momentum_sum_rule_integrand,
-    "uvalence": _make_pdf_integrand({"u": 1, "ubar": -1}),
-    "dvalence": _make_pdf_integrand({"d": 1, "dbar": -1}),
-    "svalence": _make_pdf_integrand({"s": 1, "sbar": -1}),
-    "cvalence": _make_pdf_integrand({"c": 1, "cbar": -1}),
+    "uvalence": _make_mellin_moment_integrand({"u": 1, "ubar": -1}, n=0),
+    "dvalence": _make_mellin_moment_integrand({"d": 1, "dbar": -1}, n=0),
+    "svalence": _make_mellin_moment_integrand({"s": 1, "sbar": -1}, n=0),
+    "cvalence": _make_mellin_moment_integrand({"c": 1, "cbar": -1}, n=0),
 }
 
 UNKNOWN_SUM_RULES = {
-    "u momentum fraction": _make_momentum_fraction_integrand({"u": 1}),
-    "ubar momentum fraction": _make_momentum_fraction_integrand({"ubar": 1}),
-    "d momentum fraction": _make_momentum_fraction_integrand({"d": 1}),
-    "dbar momentum fraction": _make_momentum_fraction_integrand({"dbar": 1}),
-    "s momentum fraction": _make_momentum_fraction_integrand({"s": 1}),
-    "sbar momentum fraction": _make_momentum_fraction_integrand({"sbar": 1}),
-    "c momentum fraction": _make_momentum_fraction_integrand({"c": 1}),
-    "cbar momentum fraction": _make_momentum_fraction_integrand({"cbar": 1}),
-    "g momentum fraction": _make_momentum_fraction_integrand({"g": 1}),
-    "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
-    "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
+    "u momentum fraction": _make_mellin_moment_integrand({"u": 1}, n=1),
+    "ubar momentum fraction": _make_mellin_moment_integrand({"ubar": 1}, n=1),
+    "d momentum fraction": _make_mellin_moment_integrand({"d": 1}, n=1),
+    "dbar momentum fraction": _make_mellin_moment_integrand({"dbar": 1}, n=1),
+    "s momentum fraction": _make_mellin_moment_integrand({"s": 1}, n=1),
+    "sbar momentum fraction": _make_mellin_moment_integrand({"sbar": 1}, n=1),
+    "c momentum fraction": _make_mellin_moment_integrand({"c": 1}, n=1),
+    "cbar momentum fraction": _make_mellin_moment_integrand({"cbar": 1}, n=1),
+    "g momentum fraction": _make_mellin_moment_integrand({"g": 1}, n=1),
+    "T3": _make_mellin_moment_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}, n=0),
+    "T8": _make_mellin_moment_integrand(
+        {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}, n=0
+    ),
 }
 
 POLARIZED_SUM_RULES = {
-    "singlet": _make_pdf_integrand({'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1}),
-    "g": _make_pdf_integrand({"g": 1}),
+    "singlet": _make_mellin_moment_integrand(
+        {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1}, n=0
+    ),
+    "g": _make_mellin_moment_integrand({"g": 1}, n=0),
     "momentum": _momentum_sum_rule_integrand,
-    "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
-    "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
-    "xV": _make_momentum_fraction_integrand({'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1}),
-    "xV3": _make_momentum_fraction_integrand({'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1}),
+    "T3": _make_mellin_moment_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}, n=0),
+    "T8": _make_mellin_moment_integrand(
+        {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}, n=0
+    ),
+    "xV": _make_mellin_moment_integrand({'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1}, n=1),
+    "xV3": _make_mellin_moment_integrand({'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1}, n=1),
+}
+
+MELLIN_MOMENTS = {
+    "m_5": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=4),
+    "m_4": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=3),
+    "m_3": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=2),
+    "m_2": _make_mellin_moment_integrand({"u": 1, "ubar": -1, "d": -1, "dbar": 1}, n=1),
+    "gluon m_2": _make_mellin_moment_integrand({"g": 1}, n=1),
+    "gluon m_3": _make_mellin_moment_integrand({"g": 1}, n=2),
+    "gluon m_4": _make_mellin_moment_integrand({"g": 1}, n=3),
+    "gluon m_5": _make_mellin_moment_integrand({"g": 1}, n=4),
 }
 
 
@@ -206,9 +193,25 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
     return _combine_limits(_sum_rules(UNKNOWN_SUM_RULES, lpdf, Q))
 
 
+@check_positive('Q')
+def partial_mellin_moments(pdf: PDF, Q: numbers.Real, lims: list = MELLIN_LIMS):
+    """Per-interval contributions to the Mellin moments defined in
+    ``MELLIN_MOMENTS``. Returns a list (one entry per element of ``lims``) of dicts
+    ``{moment_name: [value_per_member]}``, showing which x region drives each moment.
+    """
+    lpdf = pdf.load()
+    return _sum_rules(MELLIN_MOMENTS, lpdf, Q, lims=lims)
+
+
+@check_positive('Q')
+def mellin_moments(partial_mellin_moments):
+    """Sum the partial Mellin-moment integrals over all x sub-intervals."""
+    return _combine_limits(partial_mellin_moments)
+
+
 def _simple_description(data, pdf):
     """Return a table with simple descriptive statistics over the members of the PDF.
-     The statistics used depend on the type of PDF (MC or Hessian)."""
+    The statistics used depend on the type of PDF (MC or Hessian)."""
     res = {}
     stats_class = pdf.stats_class
     for k, arr in data.items():
@@ -216,7 +219,7 @@ def _simple_description(data, pdf):
         # Each entry in `data` is expected to be a vector with shape
         # (central_member + error_members,), hence we reshape to (-1, 1) before
         # passing to the stats class.
-        stats = stats_class(arr.reshape(-1,1))
+        stats = stats_class(arr.reshape(-1, 1))
         stats_dict["mean"] = stats.central_value().item()
         stats_dict["std"] = stats.std_error().item()
         stats_dict["min"] = np.min(arr)
@@ -263,6 +266,24 @@ def central_sum_rules_table(central_sum_rules):
 @table
 def unknown_sum_rules_table(unknown_sum_rules):
     return _err_mean_table(unknown_sum_rules)
+
+
+@table
+def mellin_moments_table(mellin_moments, pdf):
+    """Mean ± std (over PDF members) of the higher Mellin moments."""
+    return _simple_description(mellin_moments, pdf)
+
+
+@table
+def partial_mellin_moments_table(partial_mellin_moments, lims: list = MELLIN_LIMS):
+    """Per-interval Mellin-moment contributions, averaged over PDF members.
+    One row per moment, one column per ``lims`` interval.
+    """
+    rows = {}
+    for interval_dict, lim in zip(partial_mellin_moments, lims):
+        col = f"({lim[0]:.0e}, {lim[1]:.0e})"
+        rows[col] = {k: float(np.mean(v)) for k, v in interval_dict.items()}
+    return pd.DataFrame(rows)
 
 
 @table
