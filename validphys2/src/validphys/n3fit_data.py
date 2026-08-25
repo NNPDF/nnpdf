@@ -876,7 +876,7 @@ def _fitting_lagrange_dict(lambdadataset):
     }
 
 
-def posdatasets_fitting_pos_dict(posdatasets):
+def posdatasets_fitting_pos_dict(posdatasets=None):
     """Loads all positivity datasets. It is not allowed to be empty.
 
     Parameters
