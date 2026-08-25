@@ -106,6 +106,7 @@ def cormat_to_covmat(err_list, cormat_list):
         covmat_list.append(cormat_list[i] * err_list[a] * err_list[b])
     return covmat_list
 
+
 def sort_eigenvalues(evals, evecs):
     r"""Defines ordering of the eigenvalues and eigenvectors such
     that eigenvalues are given in decreasing order and the first
@@ -118,18 +119,19 @@ def sort_eigenvalues(evals, evecs):
     -------
     evacs_sorted, evecs_sorted : ordered eigen- values and vectors,
     as defined above
-    
+
     """
-    idx = evals.argsort()[::-1]   
+    idx = evals.argsort()[::-1]
     evals_sorted = evals[idx]
-    evecs_sorted = evecs[:,idx]
+    evecs_sorted = evecs[:, idx]
     for i in range(len(evecs_sorted)):
         j = 0
-        while evecs_sorted[j,i] == 0:
+        while evecs_sorted[j, i] == 0:
             j += 1
-        if evecs_sorted[j,i] < 0:
+        if evecs_sorted[j, i] < 0:
             evecs_sorted[:, i] *= -1
     return evals_sorted, evecs_sorted
+
 
 def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
     r"""Convert the covariance matrix to a matrix of
@@ -444,6 +446,9 @@ def prettify_float(dumper, value):
 
     must be called to use this function.
     """
+    # Ensure that both -0 and 0 are represented as just 0
+    if value == 0.0:
+        value = 0.0
 
     ret = dumper.represent_float(value)
     if len(ret.value) > 8:
