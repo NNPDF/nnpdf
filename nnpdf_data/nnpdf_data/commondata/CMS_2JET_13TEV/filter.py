@@ -71,7 +71,6 @@ def get_all(obs=None):
                     'mid': 0.5 * (kin_1_values[i]['low'] + kin_1_values[i]['high']),
                     'max': kin_1_values[i]['high'],
                 },
-                'sqrts': {'min': None, 'mid': 13000.0, 'max': None},
             }
         elif obs == "3d_mass_ak8":
             kin = {

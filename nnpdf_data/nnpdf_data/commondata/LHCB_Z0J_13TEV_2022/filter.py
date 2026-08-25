@@ -201,10 +201,8 @@ def processData():
                 kin1_max = data[obs]['independent_variables'][0]['values'][j]['high']
 
                 # Store value of Vs from LHCb tables
-                sqrt_s_index = return_index(data_kin2['qualifiers'], "SQRT(S)")
 
                 # From TeV to GeV
-                sqrt_s = data_kin2['qualifiers'][sqrt_s_index]['value'] * 1e3
 
                 # Check if single or double distribution.
                 # For single distributions, the table is made of
@@ -235,7 +233,6 @@ def processData():
                             'mid': 0.5 * (kin2_min + kin2_max),
                             'max': kin2_max,
                         },
-                        'sqrts': {'min': None, 'mid': sqrt_s, 'max': None},
                         'm_Z2': {'min': None, 'mid': 8317.44, 'max': None},
                     }
 
@@ -246,7 +243,6 @@ def processData():
                             'mid': 0.5 * (kin1_min + kin1_max),
                             'max': kin1_max,
                         },
-                        'sqrts': {'min': None, 'mid': sqrt_s, 'max': None},
                         'm_Z2': {'min': None, 'mid': 8317.44, 'max': None},
                     }
                 kin.append(kin_value)

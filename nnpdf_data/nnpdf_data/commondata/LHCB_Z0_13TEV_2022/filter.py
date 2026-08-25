@@ -182,17 +182,14 @@ def processData():
                 kin1_max = data[obs]['independent_variables'][0]['values'][j]['high']
 
                 # Store value of Vs from LHCb tables
-                sqrt_s_index = return_index(data_kin2['qualifiers'], "SQRT(S)")
 
                 # From TeV to GeV
-                sqrt_s = data_kin2['qualifiers'][sqrt_s_index]['value'] * 1e3
 
                 # Single distributions: the table is made of
                 # one single list, containing the bins for the single
                 # kinematic variable
                 kin_value = {
                     'y': {'min': kin1_min, 'mid': 0.5 * (kin1_min + kin1_max), 'max': kin1_max},
-                    'sqrts': {'min': None, 'mid': sqrt_s, 'max': None},
                     'm_Z2': {'min': None, 'mid': 8317.44, 'max': None},
                 }
                 kin.append(kin_value)

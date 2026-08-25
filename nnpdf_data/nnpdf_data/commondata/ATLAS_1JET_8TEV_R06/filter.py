@@ -32,7 +32,7 @@ def filter_ATLAS_1JET_8TEV_data_kinetic():
     data_central = get_data_values_ATLAS_1JET_8TEV_R06(tables, version)
 
     data_central_yaml = {"data_central": data_central}
-    kinematics_yaml = {"bins": kin}
+    kinematics_yaml = {"bins": [{key: value for key, value in bin.items() if key != "sqrts"} for bin in kin]}
 
     # write central values and kinematics to yaml file
     with open("data.yaml", "w") as file:

@@ -36,7 +36,6 @@ implemented_observables:
   kinematic_coverage:
   - eta
   - ET
-  - sqrts
   kinematics:
     variables:
       eta:
@@ -47,10 +46,6 @@ implemented_observables:
         description: "Transverse energy"
         label: "$E_T$"
         units: "$GeV$"
-      sqrts:
-        description: "Centre-of-mass energy"
-        label: r"\sqrt{s}"
-        units: "GeV"	
     file: kinematics_ET-ETA-R02.yaml
   data_uncertainties:
   - uncertainties_ET-ETA-R02.yaml
@@ -83,7 +78,6 @@ implemented_observables:
   kinematic_coverage:
   - eta
   - ET
-  - sqrts
   kinematics:
     variables:
       eta:
@@ -94,10 +88,6 @@ implemented_observables:
         description: "Transverse energy"
         label: "$E_T$"
         units: "$GeV$"
-      sqrts:
-        description: "Centre-of-mass energy"
-        label: r"\sqrt{s}"
-        units: "GeV"
     file: kinematics_ET-ETA-R04.yaml
   data_uncertainties:
   - uncertainties_ET-ETA-R04.yaml

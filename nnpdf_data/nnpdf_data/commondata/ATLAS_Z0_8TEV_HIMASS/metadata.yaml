@@ -32,7 +32,6 @@ implemented_observables:
   kinematic_coverage:
   - abs_y
   - m_ll
-  - sqrts
   kinematics:
     variables:
       abs_y:
@@ -43,10 +42,6 @@ implemented_observables:
         description: Invariant mass of the dilepton system
         label: '$m_{ll}$'
         units: '$GeV$'
-      sqrts:
-        description: Center of mass energy
-        label: sqrts
-        units: 'GeV'
     file: kinematics.yaml
   theory:
     conversion_factor: 1.0

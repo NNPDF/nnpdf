@@ -3,23 +3,11 @@ bins:
     min: null
     mid: 80.385
     max: null
-  sqrts:
-    min: null
-    mid: 13.0
-    max: null
 - m_ll:
     min: null
     mid: 80.385
     max: null
-  sqrts:
-    min: null
-    mid: 13.0
-    max: null
 - m_ll:
     min: null
     mid: 91.1876
-    max: null
-  sqrts:
-    min: null
-    mid: 13.0
     max: null

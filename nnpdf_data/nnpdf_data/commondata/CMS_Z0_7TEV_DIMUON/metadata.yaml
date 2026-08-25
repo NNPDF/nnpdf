@@ -32,12 +32,11 @@ implemented_observables:
     figure_by:
     - m_Z
     y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
-  kinematic_coverage: [y, m_Z, sqrts]
+  kinematic_coverage: [y, m_Z]
   kinematics:
     variables:
       y: {description: "Dimuon rapidity", label: '$y$', units: ""}
       m_Z: {description: "Z boson Mass", label: "$M_Z$", units: "$GeV$"}
-      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
