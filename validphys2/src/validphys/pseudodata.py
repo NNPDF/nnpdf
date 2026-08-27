@@ -97,18 +97,18 @@ def read_replica_pseudodata(fit, context_index, replica):
     Example
     -------
     >>> from validphys.api import API
-    >>> data_indices_list = API.read_fit_pseudodata(fit="pseudodata_test_fit_n3fit")
+    >>> data_indices_list = API.read_fit_pseudodata(fit="pseudodata_test_fit_n3fit_260518")
     >>> len(data_indices_list) # Same as nrep
-    10
+    15
     >>> rep_info = data_indices_list[0]
     >>> rep_info.pseudodata.loc[rep_info.tr_idx].head()
-                                replica 1
-    group dataset           id
-    ATLAS ATLAS_Z0J_8TEV_PT-M 1   30.665835
-                            3   15.795880
-                            4    8.769734
-                            5    3.117819
-                            6    0.771079
+                                    replica 1
+    group dataset                 id
+    ALL   ATLAS_Z0_7TEV_46FB_CC-Y 0   3447.745960
+                                  1   3466.377944
+                                  2   3348.772030
+                                  3   3364.227138
+                                  4   2850.502779
     """
     # Detect whether fit performed in diagonal basis
     # TODO: change the fit object to return diagonal basis True or False depening on the NNPDF version
