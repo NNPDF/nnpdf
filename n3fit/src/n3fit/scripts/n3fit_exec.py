@@ -13,6 +13,7 @@ import sys
 import pandas as pd
 from ruamel.yaml import error
 
+from n3fit.io.input_utils import parse_debug_options
 from n3fit.scripts.vp_setupfit import MD5_FILENAME, SetupFitError, _compute_fit_md5
 from reportengine import colors
 from reportengine.namespaces import NSList
@@ -25,6 +26,8 @@ from validphys.loader import FallbackLoader, HyperscanNotFound
 from validphys.utils import yaml_safe
 
 loader = FallbackLoader()
+
+log = logging.getLogger(__name__)
 
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[], allow_legacy_names=False)
 
@@ -41,7 +44,6 @@ N3FIT_PROVIDERS = [
     "validphys.commondata",
 ]
 
-log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
 INPUT_FOLDER = "input"
@@ -232,6 +234,27 @@ class N3FitConfig(Config):
         `closuretest` namespace
         """
         return fakedata
+
+    def parse_debug_options(self, debug_options=None):
+        """Parses the ``debug_options`` dictionary in the runcard, and applies the logging level.
+
+        Note that any logging that occurs before reportengine uses the n3fit
+        parser will by necessity ignore these settings.
+
+        Parameters
+        ----------
+            debug_options: None, dict
+                the raw ``debug_options`` dictionary from the runcard
+
+        Returns
+        -------
+            debug_options: :class:`n3fit.io.input_utils.DebugOptions`
+                parsed options with the ``log_level``, ``printeach``, ``timer``
+                and ``print_logs`` fields filled with defaults
+        """
+        doptions = parse_debug_options(debug_options)
+        logging.getLogger().setLevel(doptions.logger_level)
+        return doptions
 
     def produce_kfold_parameters(self, kfold=None, hyperopt=None):
         """Return None even if there are kfolds in the runcard if the hyperopt flag is not active"""

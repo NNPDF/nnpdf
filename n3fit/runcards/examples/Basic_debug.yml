@@ -1,0 +1,76 @@
+############################################################
+description: Basic runcard with just debug options as an extra
+
+############################################################
+dataset_inputs:
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: CMS_Z0_7TEV_DIMUON_2D, frac: 0.65 }
+
+# to use it without vp-setupfit
+diagonal_basis: False
+
+############################################################
+datacuts:
+  t0pdfset: NNPDF40MC_nnlo_as_01180
+  q2min   : 3.49
+  w2min   : 12.5
+
+############################################################
+theory:
+  theoryid: 40_000_000
+
+parameters:
+  nodes_per_layer: [15, 10, 8]
+  activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+    optimizer_name: 'RMSprop'
+    learning_rate: 0.01
+    clipnorm: 1.0
+  epochs: 250
+  positivity:
+    multiplier: 1.05
+  stopping_patience: 0.50
+  layer_type: 'dense'
+  dropout: 0.0
+  threshold_chi2: 5.0
+
+############################################################
+trvlseed: 1
+nnseed: 2
+mcseed: 3
+genrep: True
+
+fitting:
+  fitbasis: NN31IC
+  basis:
+      - { fl: sng, smallx: [1.05,1.19], largex: [1.47,2.70] }
+      - { fl: g,   smallx: [0.94,1.25], largex: [0.11,5.87] }
+      - { fl: v,   smallx: [0.54,0.75], largex: [1.15,2.76] }
+      - { fl: v3,  smallx: [0.21,0.57], largex: [1.35,3.08] }
+      - { fl: v8,  smallx: [0.52,0.76], largex: [0.77,3.56] }
+      - { fl: t3,  smallx: [-0.4,1.52], largex: [1.74,3.39] }
+      - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
+      - { fl: cp,  smallx: [0.12,1.19], largex: [1.83,6.70] }
+
+############################################################
+positivity:
+  posdatasets:
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
+
+############################################################
+integrability:
+  integdatasets:
+  - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
+
+############################################################
+maxcores: 8
+
+debug: True # enables reproducibility, transitional flag to be abosrbed into debug_options
+debug_options:
+  log_level: debug  # str: debug, info, warning, error (applied to the logger level)
+  printeach: 25     # int: print the per-epoch stats every printeach epochs
+  timer: True       # bool: enable the per-epoch timing callback
+  print_logs: False # bool: force the per-epoch stats to stdout (regardless of log_level)

@@ -81,8 +81,14 @@ added_filter_rules:
       rule: "x > 0.1"
 
 ############################################################
-debug: True
 maxcores: 8
+
+debug: True # enables reproducibility, transitional flag to be abosrbed into debug_options
+debug_options:
+  log_level: info    # str: debug, info, warning, error (applied to the logger level)
+  printeach: 100     # int: print the per-epoch stats every printeach epochs
+  timer: False       # bool: enable the per-epoch timing callback
+  print_logs: False  # bool: force the per-epoch stats to stdout (regardless of log_level)
 
 tensorboard:
   weight_freq: 100
