@@ -149,9 +149,9 @@ class LossPositivity(LossLagrange):
     >>> alpha = 1e-7
     >>> c = 1e8
     >>> loss_f = losses.LossPositivity(c=c, alpha=alpha)
-    >>> loss_f(pred) == -5*alpha
+    >>> np.isclose(loss_f(pred).numpy()[0], -5 * alpha)
     True
-    >>> loss_f(-pred) > c
+    >>> bool(loss_f(-pred).numpy()[0] > c)
     True
     """
 
@@ -175,7 +175,7 @@ class LossIntegrability(LossLagrange):
     >>> from n3fit.layers import losses
     >>> pred = np.random.rand(1, 1, 5)
     >>> loss_f = losses.LossIntegrability(c=1e2)
-    >>> loss_f(pred) > 0
+    >>> bool(loss_f(pred).numpy()[0] > 0)
     True
     """
 
@@ -184,11 +184,12 @@ class LossIntegrability(LossLagrange):
         # Sum over the batch and the datapoints
         return op.sum(y, axis=[0, -1])
 
+
 class LossHyperopt:
     """
     Returns L = \\lambda*elu(chi2-chi2ref)
 
-    The hyperotp loss is computed by taking the difference 
+    The hyperotp loss is computed by taking the difference
     between the input experimental chi2 and a chi2 reference value chi2ref,
     and then applying the elu function, defined by
         f(x) = x if x > 0
@@ -206,7 +207,7 @@ class LossHyperopt:
     >>> c = 1e2
     >>> chi2ref = np.asarray(1.25)
     >>> loss_h = losses.LossHyperopt(c=c, alpha=alpha, chi2ref=chi2ref)
-    >>> loss_h(chi2) == np.asarray(c * (chi2-chi2ref))
+    >>> bool(loss_h(chi2) == np.asarray(c * (chi2-chi2ref)))
     True
     """
 
@@ -216,7 +217,5 @@ class LossHyperopt:
         self.chi2ref = chi2ref
 
     def __call__(self, chi2):
-        loss = op.elu(chi2-self.chi2ref, alpha=self.alpha)
+        loss = op.elu(chi2 - self.chi2ref, alpha=self.alpha)
         return self.c * loss.numpy()
-
-    
