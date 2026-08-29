@@ -8,9 +8,8 @@ import pandas as pd
 import numpy as np
 import sys
 from pathlib import PosixPath
-plt.rcParams['text.usetex'] = True
-# rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
-# rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
+plt.rcParams["mathtext.fontset"] = "cm"
+plt.rcParams["font.family"] = "serif"
 
 def plot_ellipses(fitnames, fitlabels, save_directory: PosixPath):
     fig, axs = plt.subplots(nrows=1, ncols=len(fitnames), sharex=True, sharey=True, figsize=(10, 5))

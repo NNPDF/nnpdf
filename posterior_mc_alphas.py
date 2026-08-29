@@ -7,12 +7,10 @@ import sys
 import pathlib
 
 import matplotlib.pyplot as plt
-from matplotlib import patches, transforms, rc
+from matplotlib import patches, transforms
 from matplotlib.ticker import AutoMinorLocator
 from matplotlib.patches import Ellipse
 import scipy
-rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
-rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 
 
 def theory_cov_method(fitname):
