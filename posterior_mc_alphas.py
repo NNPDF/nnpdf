@@ -287,8 +287,8 @@ def theory_cov_method(fitname):
     central_theory = np.array([mcharm_central, alphas_central])
     pred = central_theory + delta_T_tilde
 
-    print_results(pred, P_tilde)
-    return pred, P_tilde
+    str_result = print_results(pred, P_tilde)
+    return pred, P_tilde, str_result
 
 
 
@@ -332,9 +332,9 @@ def print_results(central_value, cov):
     sigma_mcharm = np.sqrt(cov["mcharm"]["mcharm"])
     sigma_alphas = np.sqrt(cov["alphas"]["alphas"])
     rho = cov["mcharm"]["alphas"] / (sigma_mcharm * sigma_alphas)
-    print(f"mcharm (68%): {central_mcharm:.3f} +/- {sigma_mcharm:.3f}")
-    print(f"alphas (68%): {central_alphas:.6f} +/- {sigma_alphas:.6f}")
-    print(f"rho: {rho:.3f}\n")
+    str_result = f"mcharm (68%): {central_mcharm:.3f} +/- {sigma_mcharm:.3f} \n alphas (68%): {central_alphas:.6f} +/- {sigma_alphas:.6f} \n rho: {rho:.3f}"
+    print(str_result)
+    return str_result
 
 def confidence_ellipse(ax, cov, mean, facecolor=None, confidence_level=95, **kwargs):
     handles = []
