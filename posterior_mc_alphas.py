@@ -15,7 +15,6 @@ rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 
 
-fitname = "2026-05-07_ap_nnlo_thr3_mc_var_mhou_as_ic"
 def theory_cov_method(fitname):
     fit = API.fit(fit=fitname)
 
@@ -348,6 +347,8 @@ def confidence_ellipse(ax, cov, mean, facecolor=None, confidence_level=95, **kwa
     width, height = 2 * np.sqrt(chi2_qnt * eig_val)
     angle = np.degrees(np.arctan2(*eig_vec[:, 0][::-1]))
 
+    mean = np.asarray(mean, dtype=float).ravel()
+
     ellipse = Ellipse(
         xy=mean, width=width, height=height, angle=angle,
         facecolor=facecolor, edgecolor=kwargs.get("edgecolor", "black"), linewidth=kwargs.get("linewidth", 1.5),
@@ -364,12 +365,8 @@ def confidence_ellipse(ax, cov, mean, facecolor=None, confidence_level=95, **kwa
     if kwargs.get("marker", True):
         ax.scatter(mean[0], mean[1], marker="x", color="black")
     ax.grid(True, which='major', linestyle='-', linewidth=0.8)
-    # ax.minorticks_on()
-    # ax.xaxis.set_minor_locator(AutoMinorLocator(4))  # number of minor intervals per major tick
-    # ax.yaxis.set_minor_locator(AutoMinorLocator(4))
+    ax.minorticks_on()
+    ax.xaxis.set_minor_locator(AutoMinorLocator(4))  # number of minor intervals per major tick
+    ax.yaxis.set_minor_locator(AutoMinorLocator(4))
     ax.grid(which='minor', linestyle=':', linewidth=0.6, alpha=0.7)
     return width, height, handles
-
-if __name__ == "__main__":
-    tcm_fitname = sys.argv[1]
-    pred, P_tilde = theory_cov_method(fitname=tcm_fitname)

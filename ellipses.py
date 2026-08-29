@@ -16,7 +16,6 @@ def plot_ellipses(fitnames, fitlabels, save_directory: PosixPath):
     fig, axs = plt.subplots(nrows=1, ncols=len(fitnames), sharex=True, sharey=True, figsize=(10, 5))
     if len(fitnames)==1:
         axs = [axs]
-    #fitnames_and_axs = list(zip(fitnames, axs))
     for i, ax in enumerate(axs):
         fitname=fitnames[i]
         fitlabel=fitlabels[i]
