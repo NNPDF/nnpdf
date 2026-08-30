@@ -20,7 +20,7 @@ def theory_cov_method(fitname):
     # find point prescription names
     pps = fit.as_input()["theorycovmatconfig"]["point_prescriptions"]
     for i, pp in enumerate(pps):
-            if "charm" in pp:
+            if "mcharm" in pp:
                 mcharm_pp_id = i
                 mcharm_pp = pp
             elif "alphas" in pp:
