@@ -1009,3 +1009,5 @@ scale_variations_for:
       # IHOU + MHOU missing prescription
       (1, 0.5 hadronic): 40_005_017 # As 40_005_022 but DIS from 40_005_000
       (1, 2 hadronic): 40_005_018 # As 40_005_025 but DIS from 40_005_000
+      (Qc=3): 40_031_015
+      (Qc=1.5): 40_007_005
