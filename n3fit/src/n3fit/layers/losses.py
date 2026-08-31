@@ -149,7 +149,7 @@ class LossPositivity(LossLagrange):
     >>> alpha = 1e-7
     >>> c = 1e8
     >>> loss_f = losses.LossPositivity(c=c, alpha=alpha)
-    >>> np.isclose(loss_f(pred).numpy()[0], -5 * alpha)
+    >>> bool(np.isclose(loss_f(pred).numpy()[0], -5 * alpha))
     True
     >>> bool(loss_f(-pred).numpy()[0] > c)
     True
