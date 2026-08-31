@@ -301,7 +301,7 @@ def kfold_masks(kpartitions, data):
     >>> fold_data = central_values[kfold_masks[0]]  
     >>> len(fold_data)  
     559
-    >>> kfold_masks[0].sum()  
+    >>> int(kfold_masks[0].sum())
     559
 
     """

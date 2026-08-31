@@ -95,6 +95,7 @@ def grid_values(pdf: PDF, flmat, xmat, qmat):
         >>> from validphys.gridvalues import grid_values
         >>> import numpy as np
         >>> gv = grid_values(FallbackLoader().check_pdf('NNPDF31_nnlo_as_0118'), [-1, 1], [0.5], [10, 100])
+        <BLANKLINE>
         >>> #Take the difference across the flavour dimension, the max
         >>> #across the replica dimension, and leave the Q dimension untouched.
         >>> np.diff(gv, axis=1).max(axis=0).ravel()

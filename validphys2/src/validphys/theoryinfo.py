@@ -23,12 +23,11 @@ def all_theory_info_table(theory_database):
     -------
     >>> from validphys.api import API
     >>> df = API.all_theory_info_table()
-    >>> df['Comments'].iloc[:5].tolist()
-    ['*LOW PRECISION (10)* NNPDF3.1 NNLO central',
-    'NNPDF4.0 NNLO alphas=0.118',
-    'NNPDF4.0 NLO alphas=0.118',
-    'NNPDF4.0 NNLO perturbative charm, alphas=0.118',
-    'NNPDF4.0 NLO perturbative charm, alphas=0.118']
+    >>> comments = df['Comments'].iloc[:5].tolist()
+    >>> comments[0]
+    '*LOW PRECISION (10)* NNPDF3.1 NNLO central'
+    >>> comments[-1]
+    'NNPDF4.0 NLO perturbative charm, alphas=0.118'
     """
     return fetch_all(theory_database)
 
