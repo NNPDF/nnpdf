@@ -1,0 +1,31 @@
+name: Doctests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+concurrency:
+  group: doctests-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  doctests:
+    if: contains(github.event.pull_request.labels.*.name, 'doctest')
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: "3.13"
+
+      - name: Run n3fit doctests
+        shell: bash -l {0}
+        working-directory: n3fit/src/n3fit
+        run: pytest --doctest-modules --ignore=tests .
+
+      - name: Run validphys doctests
+        shell: bash -l {0}
+        working-directory: validphys2/src/validphys
+        run: pytest --doctest-modules --ignore=tests .
