@@ -145,7 +145,7 @@ class LossPositivity(LossLagrange):
     -------
     >>> import numpy as np
     >>> from n3fit.layers import losses
-    >>> pred = np.random.rand(1, 1, 5)
+    >>> pred = np.full((1, 1, 5), 0.5)
     >>> alpha = 1e-7
     >>> c = 1e8
     >>> loss_f = losses.LossPositivity(c=c, alpha=alpha)
