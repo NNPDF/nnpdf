@@ -23,9 +23,9 @@ jobs:
       - name: Run n3fit doctests
         shell: bash -l {0}
         working-directory: n3fit/src/n3fit
-        run: pytest --doctest-modules -p no:logging -W ignore --ignore=tests --ignore=hyper_optimization .
+        run: pytest --doctest-modules -W ignore --ignore=tests --ignore=hyper_optimization .
 
       - name: Run validphys doctests
         shell: bash -l {0}
         working-directory: validphys2/src/validphys
-        run: pytest --doctest-modules -p no:logging -W ignore --ignore=tests .
+        run: pytest --doctest-modules -W ignore --ignore=tests .
