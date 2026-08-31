@@ -237,8 +237,11 @@ def theory_cov_method(fitname):
     stored_mcharm_covmat = stored_mcharm_covmat.reindex(S.index).T.reindex(S.index)
     stored_theory_covmat_all = stored_theory_covmat_all.reindex(S.index).T.reindex(S.index)
 
-    if not np.allclose(S, stored_alphas_covmat + stored_mcharm_covmat):
+    alphas_mcharm_covmat = stored_alphas_covmat + stored_mcharm_covmat
+    if not np.allclose(S, alphas_mcharm_covmat):
         print("Reconstructed theory covmat, S, is not the same as the stored covmat!")
+    if np.allclose(S.to_numpy(), alphas_mcharm_covmat.to_numpy()):
+        print("values are close.")
     # aren't we forgetting about MHOUs? How do they work?
     data_theory_results = API.group_result_table_no_table(**inps_central_fit)
     theorypreds_fit = data_theory_results.iloc[:, 2:]
