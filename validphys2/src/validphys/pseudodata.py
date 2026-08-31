@@ -388,6 +388,7 @@ def level0_commondata_wc(data, fakepdf):
     ...     theoryid=200,
     ...     fakepdf="NNPDF40_nnlo_as_01180",
     ... )
+    <BLANKLINE>
     >>> result[0].setname
     'NMC_NC_NOTFIXED_P_EM-SIGMARED'
     >>> result[0].ndata
