@@ -204,8 +204,8 @@ def predictions(dataset, pdf):
     points in the ATLAS WPWM dataset:
 
 
-    >>> from validphys.loader import Loader
-    >>> l = Loader()
+    >>> from validphys.loader import FallbackLoader
+    >>> l = FallbackLoader()
     >>> ds = l.check_dataset('ATLAS_WPWM_13TEV_TOT', theoryid=40000000, cfac=('NRM',))
     >>> from validphys.convolution import predictions
     >>> pdf = l.check_pdf('NNPDF40_nlo_as_01180')
@@ -281,10 +281,10 @@ def fk_predictions(loaded_fk, pdf):
     Examples
     --------
 
-        >>> from validphys.loader import Loader
+        >>> from validphys.loader import FallbackLoader
         >>> from validphys.convolution import hadron_predictions
         >>> from validphys.fkparser import load_fktable
-        >>> l = Loader()
+        >>> l = FallbackLoader()
         >>> pdf = l.check_pdf('NNPDF40_nlo_as_01180')
         >>> ds = l.check_dataset('ATLAS_WPWM_13TEV_TOT', theoryid=40000000, cfac=('NRM',))
         >>> table = load_fktable(ds.fkspecs[0])
