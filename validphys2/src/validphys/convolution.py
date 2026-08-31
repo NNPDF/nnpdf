@@ -287,6 +287,7 @@ def fk_predictions(loaded_fk, pdf):
         >>> l = FallbackLoader()
         >>> pdf = l.check_pdf('NNPDF40_nlo_as_01180')
         >>> ds = l.check_dataset('ATLAS_WPWM_13TEV_TOT', theoryid=40000000, cfac=('NRM',))
+        <BLANKLINE>
         >>> table = load_fktable(ds.fkspecs[0])
         >>> pred = hadron_predictions(table, pdf)
         >>> isinstance(pred, pd.DataFrame)

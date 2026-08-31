@@ -291,8 +291,10 @@ def kfold_masks(kpartitions, data):
     >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=40000000, use_cuts="nocuts")  
     >>> len(kfold_masks) # one element for each partition  
     2
-    >>> kfold_masks[0] # mask which splits data into first partition  
-    array([False, False, False, ..., False, False, False])
+    >>> kfold_masks[0].shape # mask which splits data into first partition  
+    (1192,)
+    >>> kfold_masks[0].dtype
+    dtype('bool')
     >>> data = API.data(dataset_inputs=ds_inputs, theoryid=40000000, use_cuts="nocuts")  
     >>> import numpy as np  
     >>> central_values = np.concatenate([cd.get_cv() for cd in data.load_commondata()])  

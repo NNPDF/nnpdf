@@ -1152,6 +1152,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
     ...     "mark_threshold": 0.2,
     ... }
     >>> smpdf_gen = API.plot_smpdf(**data_input)
+    <BLANKLINE>
     """
     info = get_info(dataset)
 

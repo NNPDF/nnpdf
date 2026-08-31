@@ -9,6 +9,7 @@ Simple Usage:
 
 >>> from validphys.api import API
 >>> fig = API.plot_pdfs(pdfs=["NNPDF40_nlo_as_01180"], Q=100)
+<BLANKLINE>
 """
 import logging
 

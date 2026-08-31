@@ -844,7 +844,7 @@ def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
     ... }
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
     >>> b = API.pdferr_plus_covmat(**inp)
-    >>> (a == b).all()
+    >>> bool((a == b).all())
     True
     """
     _, th = results_without_covmat
