@@ -382,8 +382,16 @@ def level0_commondata_wc(data, fakepdf):
     Example
     -------
     >>> from validphys.api import API
-    >>> API.level0_commondata_wc(dataset_inputs = [{"dataset":"NMC"}], use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
-    [CommonData(setname='NMC_NC_NOTFIXED_P_EM-SIGMARED', ndata=204, commondataproc='DIS_NC', nkin=3, nsys=16, legacy=False, legacy_names=['NMC'], kin_variables=['x', 'Q2', 'sqrts'])]
+    >>> result = API.level0_commondata_wc(
+    ...     dataset_inputs=[{"dataset": "NMC"}],
+    ...     use_cuts="internal",
+    ...     theoryid=200,
+    ...     fakepdf="NNPDF40_nnlo_as_01180",
+    ... )
+    >>> result[0].setname
+    'NMC_NC_NOTFIXED_P_EM-SIGMARED'
+    >>> result[0].ndata
+    204
     """
     from validphys.covmats import dataset_t0_predictions
 
