@@ -240,8 +240,10 @@ def theory_cov_method(fitname):
     alphas_mcharm_covmat = stored_alphas_covmat + stored_mcharm_covmat
     if not np.allclose(S, alphas_mcharm_covmat):
         print("Reconstructed theory covmat, S, is not the same as the stored covmat!")
-    if np.allclose(S.to_numpy(), alphas_mcharm_covmat.to_numpy()):
-        print("values are close.")
+    # if np.allclose(S.to_numpy(), alphas_mcharm_covmat.to_numpy()):
+    #     print("values are close.")
+    rel = np.abs(alphas_mcharm_covmat.to_numpy() - S.to_numpy()) / np.maximum(np.abs(S.to_numpy()), eps)
+    print(f"the largest relative difference is {np.max(rel)}")
     # aren't we forgetting about MHOUs? How do they work?
     data_theory_results = API.group_result_table_no_table(**inps_central_fit)
     theorypreds_fit = data_theory_results.iloc[:, 2:]
