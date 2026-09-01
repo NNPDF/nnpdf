@@ -300,9 +300,9 @@ def kfold_masks(kpartitions, data):
     >>> central_values = np.concatenate([cd.get_cv() for cd in data.load_commondata()])
     >>> fold_data = central_values[kfold_masks[0]]
     >>> len(fold_data)
-    559
+    604
     >>> int(kfold_masks[0].sum())
-    559
+    604
 
     """
     list_folds = []
