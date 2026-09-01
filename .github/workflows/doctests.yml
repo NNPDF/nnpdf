@@ -1,6 +1,6 @@
 name: Doctests
 
-on: [push, pull_request]
+on: [push]
 
 concurrency:
   group: doctests-${{ github.ref }}
