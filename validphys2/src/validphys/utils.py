@@ -83,13 +83,16 @@ def experiments_to_dataset_inputs(experiments_list):
 
     Example
     -------
-    >>> from validphys.api import API
-    >>> fit = API.fit(fit='nnpdf40-like_t0_sampling')
-    >>> dataset_inputs = fit.as_input()['dataset_inputs']
-    >>> [{k: v for k, v in ds.items() if k != 'frac'} for ds in dataset_inputs[:3]]
-    [{'dataset': 'NMC_NC_NOTFIXED_EM-F2', 'variant': 'legacy_dw'},
-     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-     {'dataset': 'SLAC_NC_NOTFIXED_P_EM-F2', 'variant': 'legacy_dw'}]
+    ```python
+    from validphys.api import API
+    from validphys.utils import experiments_to_dataset_inputs
+
+    fit = API.fit(fit="NNPDF31_nnlo_as_0118_1000")
+    experiments = fit.as_input()["experiments"]
+    dataset_inputs = experiments_to_dataset_inputs(experiments)
+
+    dataset_inputs[:3]
+    ```
     """
     dataset_inputs = []
     for experiment in experiments_list:

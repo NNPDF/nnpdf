@@ -86,9 +86,10 @@ class PDF(TupleComp):
     >>> args = { "dataset_input": {"dataset": "CMS_WPWM_7TEV_MUON_ASY"}, "theoryid":40_000_000, "use_cuts":"internal"}
     >>> ds = API.dataset(**args)
     >>> pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
+    <BLANKLINE>
     >>> preds = predictions(ds, pdf)
     >>> preds.shape
-    (11, 100)
+    (11, 101)
     """
 
     def __init__(self, name, boundary=None):
