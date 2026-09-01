@@ -264,23 +264,45 @@ def kfold_masks(kpartitions, data):
 
     Examples
     --------
-    >>> from validphys.api import API
-    >>> partitions=[
-    ...     {"datasets": ["HERACOMBCCEM", "HERACOMBNCEP460", "NMC", "NTVNBDMNFe"]},
-    ...     {"datasets": ["HERACOMBCCEP", "HERACOMBNCEP575", "NMCPD", "NTVNUDMNFe"]}
+    >>> from validphys.api import API 
+    >>> partitions = [
+    ... {"datasets": [
+    ...    "HERA_CC_318GEV_EM-SIGMARED",
+    ...   "HERA_NC_225GEV_EP-SIGMARED",
+    ...    "NMC_NC_NOTFIXED_P_EM-SIGMARED",
+    ...    "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED",
+    ... ]},
+    ... {"datasets": [
+    ...    "HERA_CC_318GEV_EP-SIGMARED",
+    ...    "HERA_NC_251GEV_EP-SIGMARED",
+    ...    "NMC_NC_NOTFIXED_EM-F2",
+    ...    "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED",
+    ... ]},
     ... ]
-    >>> ds_inputs = [{"dataset": ds} for part in partitions for ds in part["datasets"]]
-    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=53, use_cuts="nocuts")
-    >>> len(kfold_masks) # one element for each partition
+    >>> ds_inputs = [
+    ...    {"dataset": "HERA_CC_318GEV_EM-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "HERA_NC_225GEV_EP-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED", "variant": "legacy_dw"},
+    ...    {"dataset": "HERA_CC_318GEV_EP-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "HERA_NC_251GEV_EP-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy"},
+    ...    {"dataset": "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED", "variant": "legacy_dw"},]
+    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=40000000, use_cuts="nocuts")  
+    >>> len(kfold_masks) # one element for each partition  
     2
-    >>> kfold_masks[0] # mask which splits data into first partition
-    array([False, False, False, ...,  True,  True,  True])
-    >>> data = API.data(dataset_inputs=ds_inputs, theoryid=53, use_cuts="nocuts")
-    >>> fold_data = data.load().get_cv()[kfold_masks[0]]
-    >>> len(fold_data)
-    604
-    >>> kfold_masks[0].sum()
-    604
+    >>> kfold_masks[0].shape # mask which splits data into first partition  
+    (1192,)
+    >>> kfold_masks[0].dtype
+    dtype('bool')
+    >>> data = API.data(dataset_inputs=ds_inputs, theoryid=40000000, use_cuts="nocuts")  
+    >>> import numpy as np  
+    >>> central_values = np.concatenate([cd.get_cv() for cd in data.load_commondata()])  
+    >>> fold_data = central_values[kfold_masks[0]]  
+    >>> len(fold_data)  
+    559
+    >>> int(kfold_masks[0].sum())
+    559
 
     """
     list_folds = []
@@ -777,22 +799,20 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=True):
     ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory', 'frac': 0.75},
     ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',), 'frac': 0.75},
     ... ]
-    >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=40_000_000, use_cuts="nocuts", mcseed=None, genrep=False)
-                                        replica 1
-    group dataset                       id
-    NMC   NMC_NC_NOTFIXED_P_EM-SIGMARED 0        True
-                                        1        True
-                                        2        True
-                                        3        True
-                                        4       False
-    ...                                           ...
-    CMS   CMS_Z0J_8TEV_PT-Y             45       True
-                                        46       True
-                                        47       True
-                                        48       True
-                                        49       True
-
-    [343 rows x 1 columns]
+    >>> training_mask, validation_mask = API.replica_mask(
+    ...     dataset_inputs=ds_inp,
+    ...     replica=1,
+    ...     trvlseed=123,
+    ...     theoryid=40_000_000,
+    ...     use_cuts="nocuts",
+    ...     mcseed=None,
+    ...     genrep=False,
+    ...     diagonal_basis=False,
+    ... )
+    >>> training_mask.shape
+    (343, 1)
+    >>> validation_mask.shape
+    (343, 1)
     """
 
     all_tr_masks = np.concatenate(
@@ -826,10 +846,19 @@ def _fitting_lagrange_dict(lambdadataset):
     Examples
     --------
     >>> from validphys.api import API
-    >>> posdataset = {"dataset": "NNPDF_POS_2P24GEV_F2U", "maxlambda": 1e6}
-    >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=40_000_000)
+    >>> positivity = {
+    ...  "posdatasets": [
+    ...      {"dataset": "NNPDF_POS_2P24GEV_F2U", "maxlambda": 1e6},
+    ...     {"dataset": "NNPDF_POS_2P24GEV_FLL", "maxlambda": 1e6},
+    ... ]
+    ... }
+    >>> pos = API.posdatasets_fitting_pos_dict(
+    ...  positivity=positivity,
+    ... theoryid=40_000_000,
+    ...  use_cuts="internal"
+    ... )
     >>> len(pos)
-    9
+    2
     """
     integrability = isinstance(lambdadataset, IntegrabilitySetSpec)
     mode = "integrability" if integrability else "positivity"
@@ -881,13 +910,13 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     Examples
     --------
     >>> from validphys.api import API
-    >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
-    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
+    >>> integdatasets = [{"dataset": "NNPDF_INTEG_3GEV_XT3", "maxlambda": 1e2}]
+    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets,
+    ...   theoryid=40_000_000,
+    ...   use_cuts="internal")
+
     >>> len(res), len(res[0])
     (1, 9)
-    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=None)
-    >>> print(res)
-    None
 
     """
     if integdatasets is not None:
