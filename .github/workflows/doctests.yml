@@ -1,16 +1,13 @@
 name: Doctests
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened, labeled]
+on: [push, pull_request]
 
 concurrency:
-  group: doctests-${{ github.event.pull_request.number }}
+  group: doctests-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   doctests:
-    if: contains(github.event.pull_request.labels.*.name, 'doctest')
     runs-on: ubuntu-latest
 
     steps:
