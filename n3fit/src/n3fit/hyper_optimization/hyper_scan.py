@@ -48,11 +48,7 @@ log = logging.getLogger(__name__)
 # Hyperopt uses these strings for a passed and failed run
 # it also has statuses "new", "running" and "suspended", but we don't use them
 HYPEROPT_STATUSES = {True: "ok", False: "fail"}
-
-
 HYPEROPT_SEED = int(os.environ.get("HYPEROPT_SEED", 42))
-print(f"Running with hyperopt seed: {HYPEROPT_SEED}")
-
 
 def _run_trial_in_subprocess(objective, params):
     """Running a hyperparameter scan leaks memory trial by trial.
