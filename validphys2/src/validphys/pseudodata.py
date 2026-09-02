@@ -220,19 +220,19 @@ def make_replica(
     -------
     >>> from validphys.api import API
     >>> pseudodata = API.make_replica(
-    ... dataset_inputs=[
-    ...   {"dataset": "NMC"},
-    ...   {"dataset": "NMCPD"},
-    ... ],
-    ... use_cuts="internal",
-    ... pdf="NNPDF40_nlo_as_01180",
-    ... theoryid=40000000,
-    ... replica=1,
-    ... genrep=True,
-    ... replica_mcseed=123,
-    ... use_t0_sampling=True,
-    ... use_t0=True,
-    ... t0pdfset="NNPDF40_nlo_as_01180",
+    ...     dataset_inputs=[
+    ...         {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
+    ...         {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy_dw"},
+    ...     ],
+    ...     use_cuts="internal",
+    ...     pdf="NNPDF40_nlo_as_01180",
+    ...     theoryid=40000000,
+    ...     replica=1,
+    ...     genrep=True,
+    ...     replica_mcseed=123,
+    ...     use_t0_sampling=True,
+    ...     use_t0=True,
+    ...     t0pdfset="NNPDF40_nlo_as_01180"
     ... )
     """
     if not genrep:
@@ -383,7 +383,7 @@ def level0_commondata_wc(data, fakepdf):
     -------
     >>> from validphys.api import API
     >>> result = API.level0_commondata_wc(
-    ...     dataset_inputs=[{"dataset": "NMC"}],
+    ...     dataset_inputs=[{"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"}],
     ...     use_cuts="internal",
     ...     theoryid=200,
     ...     fakepdf="NNPDF40_nnlo_as_01180",
@@ -466,11 +466,11 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     -------
 
     >>> from validphys.api import API
-    >>> dataset = "NMC"
+    >>> dataset = {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"}
     >>> l1_cd = API.make_level1_data(
-    ...     dataset_inputs=[{"dataset": dataset}],
+    ...     dataset_inputs=[dataset],
     ...     use_cuts="internal",
-    ...     theoryid=200,
+    ...     theoryid=40_000_000,
     ...     fakepdf="NNPDF40_nnlo_as_01180",
     ...     filterseed=1,
     ... )

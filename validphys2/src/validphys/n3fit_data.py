@@ -264,11 +264,11 @@ def kfold_masks(kpartitions, data):
 
     Examples
     --------
-    >>> from validphys.api import API 
+    >>> from validphys.api import API
     >>> partitions = [
     ... {"datasets": [
     ...    "HERA_CC_318GEV_EM-SIGMARED",
-    ...   "HERA_NC_225GEV_EP-SIGMARED",
+    ...    "HERA_NC_225GEV_EP-SIGMARED",
     ...    "NMC_NC_NOTFIXED_P_EM-SIGMARED",
     ...    "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED",
     ... ]},
@@ -276,7 +276,7 @@ def kfold_masks(kpartitions, data):
     ...    "HERA_CC_318GEV_EP-SIGMARED",
     ...    "HERA_NC_251GEV_EP-SIGMARED",
     ...    "NMC_NC_NOTFIXED_EM-F2",
-    ...    "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED",
+    ...    "NUTEV_CC_NOTFIXED_FE_NU-SIGMARED",
     ... ]},
     ... ]
     >>> ds_inputs = [
@@ -287,22 +287,22 @@ def kfold_masks(kpartitions, data):
     ...    {"dataset": "HERA_CC_318GEV_EP-SIGMARED", "variant": "legacy"},
     ...    {"dataset": "HERA_NC_251GEV_EP-SIGMARED", "variant": "legacy"},
     ...    {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy"},
-    ...    {"dataset": "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED", "variant": "legacy_dw"},]
-    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=40000000, use_cuts="nocuts")  
-    >>> len(kfold_masks) # one element for each partition  
+    ...    {"dataset": "NUTEV_CC_NOTFIXED_FE_NU-SIGMARED", "variant": "legacy_dw"},]
+    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=40000000, use_cuts="nocuts")
+    >>> len(kfold_masks) # one element for each partition
     2
-    >>> kfold_masks[0].shape # mask which splits data into first partition  
+    >>> kfold_masks[0].shape # mask which splits data into first partition
     (1192,)
     >>> kfold_masks[0].dtype
     dtype('bool')
-    >>> data = API.data(dataset_inputs=ds_inputs, theoryid=40000000, use_cuts="nocuts")  
-    >>> import numpy as np  
-    >>> central_values = np.concatenate([cd.get_cv() for cd in data.load_commondata()])  
-    >>> fold_data = central_values[kfold_masks[0]]  
-    >>> len(fold_data)  
-    559
+    >>> data = API.data(dataset_inputs=ds_inputs, theoryid=40000000, use_cuts="nocuts")
+    >>> import numpy as np
+    >>> central_values = np.concatenate([cd.get_cv() for cd in data.load_commondata()])
+    >>> fold_data = central_values[kfold_masks[0]]
+    >>> len(fold_data)
+    604
     >>> int(kfold_masks[0].sum())
-    559
+    604
 
     """
     list_folds = []
@@ -796,7 +796,7 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=True):
     >>> from validphys.api import API
     >>> ds_inp = [
     ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.75},
-    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory', 'frac': 0.75},
+    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'frac': 0.75},
     ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',), 'frac': 0.75},
     ... ]
     >>> training_mask, validation_mask = API.replica_mask(
@@ -914,7 +914,6 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets,
     ...   theoryid=40_000_000,
     ...   use_cuts="internal")
-
     >>> len(res), len(res[0])
     (1, 9)
 
