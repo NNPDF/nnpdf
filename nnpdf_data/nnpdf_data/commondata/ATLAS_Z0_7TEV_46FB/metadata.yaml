@@ -24,7 +24,7 @@ implemented_observables:
   ndata: 24
   plotting:
     dataset_label: ATLAS $Z$ 7 TeV 2011 Central selection
-    x_label: $\left\|y\right|$
+    x_label: $\left|y\right|$
     y_label: $d\sigma/dy$ (fb)
     line_by:
     - Boson

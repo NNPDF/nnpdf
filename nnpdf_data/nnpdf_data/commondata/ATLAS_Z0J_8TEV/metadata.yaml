@@ -31,6 +31,7 @@ implemented_observables:
     figure_by:
     - y
     plot_x: pT
+    x_scale: log
   kinematic_coverage: [y, pT, m_ll2]
   kinematics:
     variables:
@@ -91,6 +92,7 @@ implemented_observables:
     figure_by:
     - m_ll
     plot_x: pT
+    x_scale: log
   kinematic_coverage: [m_ll, pT, y]
   kinematics:
     variables:
