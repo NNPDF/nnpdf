@@ -473,3 +473,23 @@ It is however possible to disable them by setting to false the ``sum_rules`` fla
 
 It is also possible to impose just the valence or the momentum sum rules by using the
 ``VSR`` or ``MSR`` flags, respectively (``True`` is equal to ``All``).
+
+
+Debug options
+^^^^^^^^^^^^^
+
+All the debug-related options live in a single ``debug_options`` top-level
+namespace with the following defaults:
+
+.. code-block:: yaml
+
+    debug_options:
+        log_level: info
+        printeach: 100
+        timer: False
+        print_logs: False
+
+- ``log_level``: level of the (entire) logger when running ``n3fit``. One of ``debug``, ``info``, ``warning`` or ``error``.
+- ``printeach``: each how many epochs the training/validation stats are printed.
+- ``timer``: enable the per-epoch timing callback.
+- ``print_logs``: force the per-epoch stats to be printed irrespective of ``log_level``.
