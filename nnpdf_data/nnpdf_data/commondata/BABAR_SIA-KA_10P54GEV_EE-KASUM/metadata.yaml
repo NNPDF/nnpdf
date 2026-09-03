@@ -1,0 +1,64 @@
+setname: 'BABAR_SIA-KA_10P54GEV_EE-KASUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-KA"
+  experiment: "BABAR"
+
+arXiv:
+  url: "https://arxiv.org/abs/1306.2895"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1238276"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1238276"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "normalized x-sec differential wrt $p_h$ (prompt)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: ''}
+  observable_name: PH-PROMPT
+  process_type: SIA_PH
+  ndata: 45
+  tables: [1]
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics_prompt.yaml
+  data_central: data_prompt.yaml
+  data_uncertainties:
+  - uncertainties_prompt.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'BABAR SIA KA- + KA+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+    x_scale: log
+    plot_x: ph
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
+
+- observable: {description: "normalized x-sec differential wrt $p_h$ (conventional)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: ''}
+  observable_name: PH-CONVENTIONAL
+  process_type: SIA_PH
+  ndata: 45
+  tables: [2]
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics_conventional.yaml
+  data_central: data_conventional.yaml
+  data_uncertainties:
+  - uncertainties_conventional.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'BABAR SIA KA- + KA+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+    x_scale: log
+    plot_x: ph
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'

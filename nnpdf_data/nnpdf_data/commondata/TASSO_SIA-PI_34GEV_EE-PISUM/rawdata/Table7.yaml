@@ -1,0 +1,90 @@
+dependent_variables:
+- header: {name: (D(SIG)/D(X))/SIG(NAME=TOTAL)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '34.0'}
+  - {name: SQRT(S), units: GeV, value: '34.0'}
+  values:
+  - errors:
+    - {symerror: 3.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 162.0
+  - errors:
+    - {symerror: 3.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 151.0
+  - errors:
+    - {symerror: 3.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 129.0
+  - errors:
+    - {symerror: 3.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 116.0
+  - errors:
+    - {symerror: 2.5}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 98.9
+  - errors:
+    - {symerror: 1.6}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 79.8
+  - errors:
+    - {symerror: 4.2}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 59.1
+  - errors:
+    - {symerror: 2.8}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 43.1
+  - errors:
+    - {symerror: 1.7}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 30.3
+  - errors:
+    - {symerror: 1.1}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 19.3
+  - errors:
+    - {symerror: 1.0}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 9.1
+  - errors:
+    - {symerror: 0.7}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 7.7
+  - errors:
+    - {symerror: 0.4}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 5.0
+  - errors:
+    - {symerror: 0.19}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 2.85
+  - errors:
+    - {symerror: 0.052}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 0.91
+  - errors:
+    - {symerror: 0.02}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 0.11
+independent_variables:
+- header: {name: X(DEF=P(P=3)/P(P=1))}
+  values:
+  - {high: 0.0229, low: 0.0171}
+  - {high: 0.0286, low: 0.0229, value: 0.0257}
+  - {high: 0.0343, low: 0.0286, value: 0.0314}
+  - {high: 0.04, low: 0.0343, value: 0.0371}
+  - {high: 0.0457, low: 0.04, value: 0.0429}
+  - {high: 0.0571, low: 0.0457}
+  - {high: 0.0686, low: 0.0571, value: 0.0629}
+  - {high: 0.0914, low: 0.0686, value: 0.0789}
+  - {high: 0.114, low: 0.0914, value: 0.102}
+  - {high: 0.146, low: 0.114}
+  - {high: 0.194, low: 0.171, value: 0.182}
+  - {high: 0.217, low: 0.194, value: 0.204}
+  - {high: 0.263, low: 0.217, value: 0.237}
+  - {high: 0.343, low: 0.263, value: 0.297}
+  - {high: 0.571, low: 0.343, value: 0.434}
+  - {high: 0.971, low: 0.571, value: 0.73}
