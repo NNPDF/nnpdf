@@ -1,0 +1,104 @@
+---
+abstract:
+- {description: 'YES', location: 'HTTP://YES'}
+- {description: 'Maybe', location: 'http://Yes1'}
+comment: A search for direct top squark pair production resulting in events with either a same-flavour opposite-sign dilepton pair with invariant mass compatible with a $Z$ boson or a pair of jets compatible with a Standard Model (SM) Higgs boson ($h$) is presented. Requirements on additional leptons, jets, jets identified as originating from b-quarks, and missing transverse momentum are imposed to target the other decay products of the top squark pair. The analysis is performed using proton-proton collision data at sqrt{s} = 13 TeV collected with the ATLAS detector at the LHC in 2015-2016, corresponding to an integrated luminosity of 36.1 fb$^{−1}$. No excess is observed in the data with respect to the expected SM predictions. The results are interpreted in two sets of models. In the first set, direct production of pairs of lighter top squarks ($\tilde{t}_1$) with long decay chains involving $Z$ or Higgs bosons is considered. The second set includes direct pair production of the heavier top squark pairs ($\tilde{t}_2$) decaying via $\tilde{t}_2 \rightarrow Z \tilde{t}_1$ or $\tilde{t}_2 \rightarrow h \tilde{t}_1$. The results exclude at 95% confidence level $\tilde{t}_2$ and $\tilde{t}_1$ masses up to about 800 GeV, extending the exclusion region of supersymmetric parameter space covered by previous LHC searches.
+---
+data_file: table_7.txt
+description: 'Differential cross section in bins of pT(Z). Values are expressed as a fraction of the total cross section. The eee and eem final states are shown.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_7.txt"
+---
+data_file: table_14.txt
+description: 'Expected and observed one-dimensional confidence intervals (CI) at 95% confidence level for each of the considered EFT parameters, accounting only for the interference term between the SM amplitude and the BSM one. The one-dimensional intervals for each parameter are computed fixing the other two parameters to zero, the SM value.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_14.txt"
+---
+data_file: table_13.txt
+description: 'Expected and observed one-dimensional confidence intervals (CI) at 95% confidence level for each of the considered EFT parameters. Both the square matrix of the dimension-6 contribution and the interference term between the SM amplitude and the BSM one are accounted for. The one-dimensional intervals for each parameter are computed fixing the other two parametes to zero, the SM value.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_13.txt"
+---
+data_file: table_9.txt
+description: 'Differential cross section in bins of pT(Z). Values are expressed as a fraction of the total cross section. The inclusive final state is shown.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_9.txt"
+---
+data_file: table_8.txt
+description: 'Differential cross section in bins of pT(Z). Values are expressed as a fraction of the total cross section. The emm and mmm final states are shown.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_8.txt"
+---
+data_file: table_12.txt
+description: 'Differential cross section in bins of mass of the WZ system. Values are expressed as a fraction of the total cross section.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_12.txt"
+---
+data_file: table_6.txt
+description: 'Measured WZ production cross sections computed separately in each of the flavour categories.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_6.txt"
+---
+data_file: table_5.txt
+description: 'Measured fiducial cross sections and their corresponding uncertainties for each of the individual flavour categories, as well as for the combination of the four. The combined value is the result of a symultaneous fit to the four categories, therefore both the central value and its total uncertaintydiffer from the sum of the central values and the quadratic sum of the uncertainties respectively, because of correlations among sources of uncertainty in the categorized values.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_5.txt"
+---
+data_file: table_11.txt
+description: 'Differential cross section in bins of pT(leading jet). Values are expressed as a fraction of the total cross section. The inclusive final state is shown.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_11.txt"
+---
+data_file: table_2.txt
+description: 'Expected and observed yields for each of the relevant processes and flavour categories. Combined statistical and systematic uncertainties are shown for each case except for the observed data yields for which only statistical uncertainties are presented. All expected yields correspond to quantities estimated after the maximum likelihood fit. Uncertainties are computed taking into account the full correlation matrix between sources of uncertainty, processes, and flavour categories.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_2.txt"
+---
+data_file: table_10.txt
+description: 'Differential cross section in bins of pT(leading jet). Values are expressed as a fraction of the total cross section. The eee, eem, emm, and mmm final states are shown.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_10.txt"
+---
+data_file: table_3.txt
+description: 'Summary of the total postfit impact of each uncertainty source on the uncertainty in the signal strength measurement, for the four flavour categories and their combination. Theoretical uncertainties are only included in the signal acceptance during the extrapolation to the total phase space, so they are not included in the likelihood fit. The values are percentages and correspond to half the difference between the up and down variation of each systematic uncertainty component.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_3.txt"
+---
+data_file: table_4.txt
+description: 'Efficiencies estimated as transfer factors from the fiducial region to the signal region using generator-level information, for an integrated luminosity L of 35.9 inverse femtobarn. Statistical, scale, and PDF uncertainties are later propagated to the final cross section measurement.'
+keywords: 
+- name: cmenergies
+  values: [13000.0]
+name: "table_4.txt"
+---
+data_file: table_suppl.txt
+description: 'Measured WZ production cross section computed in the inclusive final state and split by W boson charge, and asymmetry ratio.'
+keywords:
+- name : cmenergies
+  values: [13000.0]
+name: "table_suppl.txt"
+

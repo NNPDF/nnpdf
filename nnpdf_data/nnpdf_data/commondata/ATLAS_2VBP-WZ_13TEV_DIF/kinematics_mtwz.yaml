@@ -1,0 +1,25 @@
+bins:
+- mtwZ:
+    min: 0.0
+    mid: null
+    max: 140.0
+- mtwZ:
+    min: 140.0
+    mid: null
+    max: 180.0
+- mtwZ:
+    min: 180.0
+    mid: null
+    max: 250.0
+- mtwZ:
+    min: 250.0
+    mid: null
+    max: 450.0
+- mtwZ:
+    min: 450.0
+    mid: null
+    max: 600.0
+- mtwZ:
+    min: 600.0
+    mid: null
+    max: 1000.0

@@ -1,0 +1,58 @@
+dependent_variables:
+- header: {name: Measured helicity fractions}
+  qualifiers:
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  - {name: ., value: $f_0$}
+  values:
+  - errors:
+    - {symerror: '0.08'}
+    value: '0.26'
+  - errors:
+    - {symerror: '0.09'}
+    value: '0.32'
+  - errors:
+    - {symerror: '0.06'}
+    value: '0.26'
+  - errors:
+    - {symerror: '0.05'}
+    value: '0.27'
+  - errors:
+    - {symerror: '0.06'}
+    value: '0.21'
+  - errors:
+    - {symerror: '0.04'}
+    value: '0.24'
+- header: {name: Measured helicity fractions}
+  qualifiers:
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  - {name: ., value: $f_L-f_R$}
+  values:
+  - errors:
+    - {symerror: '0.04'}
+    value: '-0.02'
+  - errors:
+    - {symerror: '0.05'}
+    value: '-0.05'
+  - errors:
+    - {symerror: '0.033'}
+    value: '-0.024'
+  - errors:
+    - {symerror: '0.21'}
+    value: '-0.32'
+  - errors:
+    - {symerror: '0.25'}
+    value: '-0.46'
+  - errors:
+    - {symerror: '0.16'}
+    value: '-0.39'
+independent_variables:
+- header: {name: RE}
+  values:
+  - {value: $W^+$ in $W^+Z$}
+  - {value: $W^-$ in $W^-Z$}
+  - {value: '$W^{\pm}$ in $W^{\pm}Z$'}
+  - {value: $Z$ in $W^+Z$}
+  - {value: $Z$ in $W^-Z$}
+  - {value: '$Z$ in $W^{\pm}Z$'}
