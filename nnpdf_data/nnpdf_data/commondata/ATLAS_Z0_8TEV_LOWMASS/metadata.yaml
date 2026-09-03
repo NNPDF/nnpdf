@@ -32,7 +32,6 @@ implemented_observables:
   kinematic_coverage:
   - abs_y
   - m_Z2
-  - sqrts
   kinematics:
     variables:
       abs_y:
@@ -43,10 +42,6 @@ implemented_observables:
         description: lepton pair mass
         label: '$m_{ll}^2$'
         units: '$GeV^2$'
-      sqrts:
-        description: Center of mass energy
-        label: sqrts
-        units: 'GeV'
     file: kinematics.yaml
   theory:
     normalization:

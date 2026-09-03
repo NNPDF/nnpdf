@@ -26,12 +26,11 @@ implemented_observables:
     variables:
       m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dmttBar.yaml
   data_central: data_dSig_dmttBar.yaml
   data_uncertainties:
   - uncertainties_dSig_dmttBar.yaml
-  kinematic_coverage: [m_ttBar, m_t2, sqrts]
+  kinematic_coverage: [m_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -59,12 +58,11 @@ implemented_observables:
     variables:
       m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dmttBar_norm.yaml
   data_central: data_dSig_dmttBar_norm.yaml
   data_uncertainties:
   - uncertainties_dSig_dmttBar_norm.yaml
-  kinematic_coverage: [m_ttBar, m_t2, sqrts]
+  kinematic_coverage: [m_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -85,12 +83,11 @@ implemented_observables:
     variables:
       pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dpTt.yaml
   data_central: data_dSig_dpTt.yaml
   data_uncertainties:
   - uncertainties_dSig_dpTt.yaml
-  kinematic_coverage: [pT_t, m_t2, sqrts]
+  kinematic_coverage: [pT_t, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dpT_t}$'
     x_scale: log
@@ -118,12 +115,11 @@ implemented_observables:
     variables:
       pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dpTt_norm.yaml
   data_central: data_dSig_dpTt_norm.yaml
   data_uncertainties:
   - uncertainties_dSig_dpTt_norm.yaml
-  kinematic_coverage: [pT_t, m_t2, sqrts]
+  kinematic_coverage: [pT_t, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
     x_scale: log
@@ -144,12 +140,11 @@ implemented_observables:
     variables:
       y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dyt.yaml
   data_central: data_dSig_dyt.yaml
   data_uncertainties:
   - uncertainties_dSig_dyt.yaml
-  kinematic_coverage: [y_t, m_t2, sqrts]
+  kinematic_coverage: [y_t, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t}|}$'
     x_scale: linear
@@ -177,12 +172,11 @@ implemented_observables:
     variables:
       y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dyt_norm.yaml
   data_central: data_dSig_dyt_norm.yaml
   data_uncertainties:
   - uncertainties_dSig_dyt_norm.yaml
-  kinematic_coverage: [y_t, m_t2, sqrts]
+  kinematic_coverage: [y_t, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
     x_scale: linear
@@ -203,12 +197,11 @@ implemented_observables:
     variables:
       y_ttBar: {description: "absolute rapidity of ttBar", label: '$|y_{t\bar{t}}|$', units: ""}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dyttBar.yaml
   data_central: data_dSig_dyttBar.yaml
   data_uncertainties:
   - uncertainties_dSig_dyttBar.yaml
-  kinematic_coverage: [y_ttBar, m_t2, sqrts]
+  kinematic_coverage: [y_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: linear
@@ -236,12 +229,11 @@ implemented_observables:
     variables:
       y_ttBar: {description: "absolute rapidity of ttBar", label: '$|y_{t\bar{t}}|$', units: ""}
       m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dSig_dyttBar_norm.yaml
   data_central: data_dSig_dyttBar_norm.yaml
   data_uncertainties:
   - uncertainties_dSig_dyttBar_norm.yaml
-  kinematic_coverage: [y_ttBar, m_t2, sqrts]
+  kinematic_coverage: [y_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: linear
@@ -263,7 +255,6 @@ implemented_observables:
       pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
       y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        # sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_d2Sig_dpTt_dyt.yaml
   data_central: data_d2Sig_dpTt_dyt.yaml
   data_uncertainties:
@@ -291,7 +282,6 @@ implemented_observables:
       pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
       y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        # sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_d2Sig_dpTt_dyt_norm.yaml
   data_central: data_d2Sig_dpTt_dyt_norm.yaml
   data_uncertainties:
@@ -320,7 +310,6 @@ implemented_observables:
       m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
       pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        # sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_d2Sig_dmttBar_dpTt.yaml
   data_central: data_d2Sig_dmttBar_dpTt.yaml
   data_uncertainties:
@@ -348,7 +337,6 @@ implemented_observables:
       m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
       pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        # sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_d2Sig_dmttBar_dpTt_norm.yaml
   data_central: data_d2Sig_dmttBar_dpTt_norm.yaml
   data_uncertainties:

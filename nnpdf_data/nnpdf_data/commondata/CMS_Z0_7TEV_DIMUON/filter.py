@@ -14,7 +14,6 @@ yaml.add_representer(float, prettify_float)
 #
 TABLES = {1: [0]}  # {table_id: [indexes]}
 NB_POINTS = [132]
-SQRT_S = 7_000.0  # GeV
 #
 # # MAP Boson string to M values
 # MAP_BOSON = {"Z": MZ_VALUE, "W": MW_VALUE}
@@ -77,8 +76,7 @@ def get_kinematics(hepdata: pd.DataFrame, bin_index: list, boson: str = "Z") -> 
     for bins in bin_index:
         kin_value = {
             "y": {"min": None, "mid": float(y[bins]), "max": None},
-            "m_Z2": {"min": None, "mid": float(M[bins]) ** 2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
+            "m_Z": {"min": None, "mid": float(M[bins]), "max": None},
         }
         kinematics.append(kin_value)
 

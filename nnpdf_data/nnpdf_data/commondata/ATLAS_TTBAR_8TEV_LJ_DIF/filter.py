@@ -48,7 +48,6 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    sqrts = 8000.0
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -94,7 +93,6 @@ def processData():
         error_value['lumi'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
         data_central_value = data_central_value + value_delta
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'm_ttBar': {'min': m_ttbar_min, 'mid': None, 'max': m_ttbar_max},
         }
@@ -141,7 +139,6 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    sqrts = 8000.0
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -186,7 +183,6 @@ def processData():
                 value_delta = value_delta + se_delta
         data_central_value = data_central_value + value_delta
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'm_ttBar': {'min': m_ttbar_min, 'mid': None, 'max': m_ttbar_max},
         }
@@ -228,7 +224,6 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    sqrts = 8000.0
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -274,7 +269,6 @@ def processData():
         error_value['lumi'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
         data_central_value = data_central_value + value_delta
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
         }
@@ -321,7 +315,6 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    sqrts = 8000.0
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -366,7 +359,6 @@ def processData():
                 value_delta = value_delta + se_delta
         data_central_value = data_central_value + value_delta
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
         }
@@ -408,7 +400,6 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    sqrts = 8000.0
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -454,7 +445,6 @@ def processData():
         error_value['lumi'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
         data_central_value = data_central_value + value_delta
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
         }
@@ -498,7 +488,6 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    sqrts = 8000.0
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -543,7 +532,6 @@ def processData():
                 value_delta = value_delta + se_delta
         data_central_value = data_central_value + value_delta
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
         }
@@ -585,7 +573,6 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    sqrts = 8000.0
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -631,7 +618,6 @@ def processData():
         error_value['lumi'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
         data_central_value = data_central_value + value_delta
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max},
         }
@@ -678,7 +664,6 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    sqrts = 8000.0
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -723,7 +708,6 @@ def processData():
                 value_delta = value_delta + se_delta
         data_central_value = data_central_value + value_delta
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max},
         }

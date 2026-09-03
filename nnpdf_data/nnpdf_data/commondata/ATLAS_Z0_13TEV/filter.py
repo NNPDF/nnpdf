@@ -21,7 +21,6 @@ def filter_ATLAS_Z0_13TEV_TOT_data_kinetic():
     kin = [
         {
             'm_Z2': {'min': None, 'mid': MZ2, 'max': None},
-            'sqrts': {'min': None, 'mid': 13000.0, 'max': None},
         }
     ]
 

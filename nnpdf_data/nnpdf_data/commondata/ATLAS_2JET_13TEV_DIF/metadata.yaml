@@ -26,13 +26,12 @@ implemented_observables:
     variables:
       ystar: {description: "half the absolute rapidity separation between the two jets", label: "$|y^*|$", units: ""}
       m_jj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "$GeV$"}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
   - uncertainties_wo-lumi.yaml
   - uncertainties_lumi.yaml
-  kinematic_coverage: [ystar, m_jj, sqrts]
+  kinematic_coverage: [ystar, m_jj]
   plotting:
     x_scale: log
     dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} d|y^*|}$'
