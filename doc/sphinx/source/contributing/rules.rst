@@ -53,7 +53,7 @@ LLM Usage Guideliens
 
 Our policy for LLM generated contributions is similar to that of the `Debian project <https://lwn.net/Articles/1091231/>`_ and can be summarized as:
 
-* The committer is solely responsible for the content of the commit. This includes not only the quality of the code, legibility and future maintainability but also that attribution is given when attribution is due (be careful with licenses!)
+* The committer is solely responsible for the content of the commit. This includes not only the quality of the code, legibility and future maintainability but also that attribution is given when attribution is due. Be careful with licenses and remember to add references and citations when needed!
 
 * The committer must be the **human**, not the model. This is important, we are an academic project where developers come and go as they finish their projects, so it is important to know **who** actually introduced the changes.
 
