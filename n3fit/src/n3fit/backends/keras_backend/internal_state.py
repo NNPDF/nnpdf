@@ -18,8 +18,6 @@ import keras
 from keras import backend as K
 import numpy as np
 
-from validphys.convolution import central_predictions, predictions
-
 log = logging.getLogger(__name__)
 
 
@@ -74,10 +72,16 @@ elif K.backend() == "tensorflow":
     def _internal_backend_clear():
         """TensorFlow saves the gradient of the custom models we create as custom gradients.
         These are not followed by keras and are thus not cleared during the clear_backend call."""
-        registry = ops.gradient_registry._registry
-        for name in tuple(registry):  # so python don't complain about the waning dictionary
-            if name.startswith("CustomGradient-"):
-                registry.pop(name)
+        try:
+            registry = ops.gradient_registry._registry
+            for name in tuple(registry):  # so python don't complain about the waning dictionary
+                if name.startswith("CustomGradient-"):
+                    registry.pop(name)
+        except Exception as e:
+            log.error(
+                "Error found when trying to use internal Tensorflow features to clean memory. Please report this issue."
+            )
+            raise e
 
 elif K.backend() == "jax":
 
@@ -137,9 +141,6 @@ def clear_backend_state():
     and unused memory.
     """
     log.info("Clearing session")
-    # The cache of validphys' predictions might be keeping a reference to the N3PDF model, remove
-    central_predictions.cache_clear()
-    predictions.cache_clear()
     # Then clear the backend
     _internal_backend_clear()
     # and finally Keras
