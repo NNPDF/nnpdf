@@ -59,7 +59,9 @@ Our policy for LLM generated contributions is similar to that of the `Debian pro
 
 * AI usage must be documented in the PR. Include for example the harness and models you used. This helps the reviewer understand the scope of certain changes (e.g., the tests were done automatically, while the documentation was written by hand) and allow us to keep a record, and also understand the evolution of the technology.
 
-* We are an academic collaboration, the goal of the documentation and code comments should be to teach and train current students and future researchers, and should be written with that goal in mind, not LLMs. More generally, anything that could be useful for LLMs' ``skills.md`` or ``agents.md`` file, would be better suited as an edit to our online documentation so that it is also useful for humans reading the code!
+* We are an academic collaboration, the goal of the documentation and code comments should primarily serve to teach and train current students and future researchers. They should be written with human readers in mind, rather than specifically for LLMs.
+
+* Following the above, any information that might be useful for LLM-specific files (like ``skills.md`` or ``agents.md``) should be added to the documentation. This makes the same guidance available to humans working with the code (while still having it available for LLM tools).
 
 .. _reviews:
 
