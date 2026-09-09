@@ -219,14 +219,14 @@ def performfit(
         # this block                                                           #
         ########################################################################
         if hyperopt:
-            from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
+            from n3fit.hyper_optimization.hyper_scan import get_scan_wrapper
+
+            scan_wrapper = get_scan_wrapper(hyperscanner.backend)
 
             # TODO: save everything to a hyperopt folder instead
             # Save everything to replica_1 regardless of which replicas are we running
             replica_path_set = replica_path / "replica_1"
-            hyper_scan_wrapper(
-                replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
-            )
+            scan_wrapper(replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt)
             log.info("The hyperparameter scan is successfully finished.")
             # In general after we do the hyperoptimization we do not care about the fit
             # so just let this die here

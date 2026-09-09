@@ -350,7 +350,10 @@ class MetaModel(Model):
 
     def get_layer_re(self, regex):
         """Get all layers matching the given regular expression"""
-        check = lambda x: re.match(regex, x.name)
+
+        def check(x):
+            return re.match(regex, x.name)
+
         return list(filter(check, self.layers))
 
     def get_replica_weights(self, i_replica):
@@ -534,7 +537,7 @@ def set_layer_replica_weights(layer, weights, i_replica: int):
         layer.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights)
         return
 
-    full_weights = [w.numpy() for w in layer.weights]
+    full_weights = [ops.variable_to_numpy(w) for w in layer.weights]
     for w_old, w_new in zip(full_weights, weights):
         w_old[i_replica : i_replica + 1] = w_new
 
