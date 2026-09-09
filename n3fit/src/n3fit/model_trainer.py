@@ -841,7 +841,7 @@ class ModelTrainer:
 
         return filtered_datagroupspec
 
-    def hyperparametrizable(self, params):
+    def hyperparametrizable(self, params, report_fn=None):
         """
         Wrapper around all the functions defining the fit.
 
@@ -857,6 +857,14 @@ class ModelTrainer:
             - ``stopping_delta``: minimum improvement to consider it a new minimum
 
         All other parameters are passed to the corresponding functions
+
+        Parameters
+        ----------
+            `report_fn`: Callable, optional
+                if given, called right after the loss for each k-fold is computed
+                (only in hyperopt mode). This is a pure reporting side-channel used
+                by external hyperoptimization backends (e.g. to feed early-stopping
+                schedulers such as ASHA).
         """
         # Reset the internal state of the backend every time this function is called
         print("")
@@ -1108,6 +1116,9 @@ class ModelTrainer:
                 trvl_logp_per_fold.append(hyper_metrics.logp)
                 pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
+
+                if report_fn is not None:
+                    report_fn(fold_idx=k, hyper_loss=hyper_loss)
 
                 if hyper_loss > self.hyper_threshold:
                     log.info(

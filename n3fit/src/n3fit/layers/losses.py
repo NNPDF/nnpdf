@@ -1,10 +1,10 @@
 """
-    Module containg the losses to be apply to the models as layers
+Module containg the losses to be apply to the models as layers
 
-    The layer take the input from the model and acts on it producing a score function.
-    For instance, in the case of the chi2 (``LossInvcovmat``) the function takes only
-    the prediction of the model and, during instantiation, took the real data to compare with
-    and the covmat.
+The layer take the input from the model and acts on it producing a score function.
+For instance, in the case of the chi2 (``LossInvcovmat``) the function takes only
+the prediction of the model and, during instantiation, took the real data to compare with
+and the covmat.
 
 """
 
@@ -218,4 +218,4 @@ class LossHyperopt:
 
     def __call__(self, chi2):
         loss = op.elu(chi2 - self.chi2ref, alpha=self.alpha)
-        return self.c * loss.numpy()
+        return self.c * op.tensor_to_numpy_or_python(loss)
