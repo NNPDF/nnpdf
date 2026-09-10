@@ -37,13 +37,12 @@ implemented_observables:
     x_scale: log
     plot_x: eta
 
-  kinematic_coverage: [eta, m_W2, sqrts]
+  kinematic_coverage: [eta, m_W2]
 
   kinematics:
     variables:
       eta: {description: "W+ > l+ v pseudorapidity", label: '$\eta$', units: ""}
       m_W2: {description: "W+ boson mass squared", label: '$M_W^2$', units: "GeV"}
-      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
     file: kinematics_WP.yaml
 
     # Data
@@ -74,13 +73,12 @@ implemented_observables:
     x_scale: log
     plot_x: eta
 
-  kinematic_coverage: [eta, m_W2, sqrts]
+  kinematic_coverage: [eta, m_W2]
 
   kinematics:
     variables:
       eta: {description: "W- > l- vb pseudorapidity", label: '$\eta$', units: ""}
       m_W2: {description: "W- boson mass squared", label: '$M_W^2$', units: "GeV"}
-      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
     file: kinematics_WM.yaml
 
     # Data

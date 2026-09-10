@@ -42,7 +42,6 @@ def processData():
             input = yaml.safe_load(file)
 
         values = input['dependent_variables'][0]['values']
-        sqrts = input['dependent_variables'][0]['qualifiers'][1]['value']
 
         for j in range(len(values)):
             m_jj_min = input['independent_variables'][0]['values'][j]['low']
@@ -61,7 +60,6 @@ def processData():
             data_central.append(data_central_value)
             error.append(error_value)
             kin_value = {
-                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
                 'm_jj': {'min': m_jj_min, 'mid': None, 'max': m_jj_max},
                 'ystar': {'min': y_min, 'mid': y_central, 'max': y_max},
             }

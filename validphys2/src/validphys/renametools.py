@@ -18,11 +18,13 @@ class Spinner:
 
     Example
     -------
-    >>> from validphys.renametools import Spinner
-    >>> with Spinner():
-    ...     import time
-    ...     time.sleep(5)
+    ```python
+    from validphys.renametools import Spinner
+    import time
 
+    with Spinner():
+        time.sleep(5)
+    ```
     """
 
     def __init__(self, delay=0.1):

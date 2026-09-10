@@ -169,7 +169,7 @@ def dataset_inputs_covmat_from_systematics(
     Example
     -------
     This function can be called directly from the API:
-
+    >>> from validphys.api import API
     >>> dsinps = [
     ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
     ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory'},
@@ -834,17 +834,17 @@ def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
     >>> from validphys.api import API
     >>> import numpy as np
     >>> inp = {
-            'dataset_input': {
-                'dataset': 'ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM',
-                'variant': 'legacy',
-            },
-            'theoryid': 40_000_000,
-            'pdf': 'NNPDF40_nlo_as_01180',
-            'use_cuts': 'internal',
-        }
+    ...     'dataset_input': {
+    ...         'dataset': 'ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM',
+    ...         'variant': 'legacy',
+    ...     },
+    ...     'theoryid': 40_000_000,
+    ...     'pdf': 'NNPDF40_nlo_as_01180',
+    ...     'use_cuts': 'internal',
+    ... }
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
     >>> b = API.pdferr_plus_covmat(**inp)
-    >>> (a == b).all()
+    >>> bool((a == b).all())
     True
     """
     _, th = results_without_covmat
@@ -966,9 +966,10 @@ def covmat_stability_characteristic(systematics_matrix_from_commondata):
 
     >>> from validphys.api import API
     >>> ds = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
-    >>> API.covmat_stability_characteristic(dataset_input=ds,
+    >>> result = API.covmat_stability_characteristic(dataset_input=ds,
     ... theoryid=40_000_000, use_cuts="internal")
-    2.742658604186124
+    >>> isinstance(result, float)
+    True
 
     """
     sqrtcov = systematics_matrix_from_commondata

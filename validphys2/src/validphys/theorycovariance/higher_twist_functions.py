@@ -90,7 +90,7 @@ def get_pc_type(
     Returns
     -------
     str or tuple of (str, str)
-        The PC type key(s). For the NMC ratio dataset
+        The PC type key(s). For the ratio dataset
         (``NMC_NC_NOTFIXED_EM-F2``), returns ``("f2p", "f2d")``.
         For all other datasets, returns a single string key.
 

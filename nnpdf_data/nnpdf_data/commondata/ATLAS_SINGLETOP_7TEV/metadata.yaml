@@ -26,12 +26,10 @@ implemented_observables:
     dataset_label: ATLAS single antitop $y$ (normalised)
     y_label: $(1/\sigma_{\bar t})d\sigma_{\bar t}/d|y_{\bar t}|$
     figure_by:
-    - sqrts
     plot_x: y_t
   kinematic_coverage:
   - y_t
   - m_t2
-  - sqrts
   kinematics:
     variables:
       y_t:
@@ -42,10 +40,6 @@ implemented_observables:
         description: "top mass squared"
         label: $M^2$
         units: $GeV^2$
-      sqrts:
-        description: "Center of mass energy"
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_TBAR-Y-NORM.yaml
   theory:
     normalization:
@@ -80,12 +74,10 @@ implemented_observables:
     dataset_label: ATLAS single top $y_t$ (normalised)
     y_label: $(1/\sigma_t)d\sigma_t/d|y_t|$
     figure_by:
-    - sqrts
     plot_x: y_t
   kinematic_coverage:
   - y_t
   - m_t2
-  - sqrts
   kinematics:
     variables:
       y_t:
@@ -96,10 +88,6 @@ implemented_observables:
         description: "top mass squared"
         label: $M^2$
         units: $GeV^2$
-      sqrts:
-        description: "Center of mass energy"
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_T-Y-NORM.yaml
   theory:
     normalization:
@@ -136,7 +124,6 @@ implemented_observables:
   kinematic_coverage:
   - zero
   - m_t2
-  - sqrts
   kinematics:
     variables:
       zero:
@@ -147,10 +134,6 @@ implemented_observables:
         description: "top mass squared"
         label: $M^2$
         units: $GeV^2$
-      sqrts:
-        description: "Center of mass energy"
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_TCHANNEL-XSEC.yaml
   theory:
     conversion_factor: 1.0

@@ -484,10 +484,13 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
     Alternatively, using the API, the yaml dump returned by this function can
     be written to a file e.g
 
-    >>> from validphys.api import API
-    >>> yaml_output = API.iterate_preprocessing_yaml(fit=<fit name>)
-    >>> with open("output.yml", "w+") as f:
-    ...     f.write(yaml_output)
+    .. code-block:: python
+
+        from validphys.api import API
+
+        yaml_output = API.iterate_preprocessing_yaml(fit=<fit name>)
+        with open("output.yml", "w+") as f:
+            f.write(yaml_output)
 
     Parameters
     ----------
@@ -597,14 +600,17 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
     alternatively, using the API, the yaml dump returned by this function can
     be written to a file e.g
 
-    >>> from validphys.api import API
-    >>> yaml_output = API.iterated_runcard_yaml(
-    ...     fit=<fit name>,
-    ...     _updated_description="My iterated fit"
-    ... )
-    >>> with open("output.yml", "w+") as f:
-    ...     f.write(yaml_output)
+    .. code-block:: python
 
+        from validphys.api import API
+
+        yaml_output = API.iterated_runcard_yaml(
+            fit=<fit name>,
+            _updated_description="My iterated fit",
+        )
+
+        with open("output.yml", "w+") as f:
+            f.write(yaml_output)
     """
     filtermap = yaml_rt.load(update_runcard_description_yaml)
     # iterate t0

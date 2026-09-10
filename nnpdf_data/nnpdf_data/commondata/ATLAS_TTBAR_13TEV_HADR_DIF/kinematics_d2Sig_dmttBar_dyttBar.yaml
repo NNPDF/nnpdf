@@ -1,9 +1,5 @@
 bins:
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 0.0
     mid: null
     max: 700.0
@@ -15,11 +11,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 0.0
     mid: null
     max: 700.0
@@ -31,11 +23,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 0.0
     mid: null
     max: 700.0
@@ -47,11 +35,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 0.0
     mid: null
     max: 700.0
@@ -63,11 +47,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 700.0
     mid: null
     max: 970.0
@@ -79,11 +59,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 700.0
     mid: null
     max: 970.0
@@ -95,11 +71,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 700.0
     mid: null
     max: 970.0
@@ -111,11 +83,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 700.0
     mid: null
     max: 970.0
@@ -127,11 +95,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 970.0
     mid: null
     max: 3000.0
@@ -143,11 +107,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 970.0
     mid: null
     max: 3000.0
@@ -159,11 +119,7 @@ bins:
     min: null
     mid: 29756.25
     max: null
-- sqrts:
-    min: null
-    mid: 13000.0
-    max: null
-  m_ttBar:
+- m_ttBar:
     min: 970.0
     mid: null
     max: 3000.0

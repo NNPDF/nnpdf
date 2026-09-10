@@ -9,7 +9,6 @@ from nnpdf_data.filter_utils.utils import covmat_to_artunc, percentage_to_absolu
 yaml.add_representer(float, prettify_float)
 
 MZ_VALUE = 91.1876  # GeV
-SQRT_S = 7_000.0  # GeV
 NORM_FACTOR = 1_000.0  # from pb -> fb
 
 
@@ -71,7 +70,6 @@ def get_kinematics(hepdata: dict) -> list:
                 "max": bins["high"],
             },
             "m_Z2": {"min": None, "mid": MZ_VALUE**2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 

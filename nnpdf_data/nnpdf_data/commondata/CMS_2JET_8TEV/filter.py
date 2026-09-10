@@ -24,7 +24,7 @@ def read_kinematics_and_centrals(tables: list) -> tuple:
     for table_num in tables[:6]: # select just the tables with kinematic data
         with open(f'rawdata/table_{table_num}.yaml', 'r') as file:
             kins = yaml.safe_load(file)
-        # get ystar, yboost, sqrts bins:
+        # get ystar and yboost bins:
         current_yy_bin = dict()
         for yy_dict in kins['dependent_variables'][0]['qualifiers']:
             for k, v in yy_dict.items():

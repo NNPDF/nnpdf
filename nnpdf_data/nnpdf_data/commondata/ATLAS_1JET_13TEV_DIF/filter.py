@@ -48,7 +48,6 @@ def processData():
             input = yaml.safe_load(file)
 
         values = input['dependent_variables'][0]['values']
-        sqrts = input['dependent_variables'][0]['qualifiers'][1]['value']
 
         for j in range(len(values)):
             pT_min = input['independent_variables'][0]['values'][j]['low']
@@ -67,7 +66,6 @@ def processData():
             data_central.append(data_central_value)
             error.append(error_value)
             kin_value = {
-                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
                 'pT': {'min': pT_min, 'mid': None, 'max': pT_max},
                 'y': {'min': y_min, 'mid': y_central, 'max': y_max},
             }
@@ -132,7 +130,6 @@ def processData():
             input = yaml.safe_load(file)
 
         values = input['dependent_variables'][0]['values']
-        sqrts = input['dependent_variables'][0]['qualifiers'][1]['value']
 
         for j in range(len(values)):
             pT_min = input['independent_variables'][0]['values'][j]['low']
@@ -151,7 +148,6 @@ def processData():
             data_central_altcorr1.append(data_central_value)
             error_altcorr1.append(error_value)
             kin_value = {
-                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
                 'pT': {'min': pT_min, 'mid': None, 'max': pT_max},
                 'y': {'min': y_min, 'mid': y_central, 'max': y_max},
             }

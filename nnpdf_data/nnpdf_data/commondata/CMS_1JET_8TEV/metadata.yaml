@@ -43,10 +43,6 @@ implemented_observables:
         description: jet transverse momentum
         label: $k_{T}$
         units: GeV
-      sqrts:
-        description: center of mass energy
-        label: r"$\sqrt(s)$"
-        units: GeV
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
@@ -83,4 +79,3 @@ implemented_observables:
   kinematic_coverage:
   - y
   - pT
-  - sqrts

@@ -27,13 +27,12 @@ implemented_observables:
     variables:
       y: {description: "jet absolute rapidity", label: "$|y|$", units: ""}
       pT: {description: "jet transverse momentum", label: "$p_T$", units: "$GeV$"}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
   - uncertainties_wo-lumi.yaml
   - uncertainties_lumi.yaml
-  kinematic_coverage: [y, pT, sqrts]
+  kinematic_coverage: [y, pT]
   plotting:
     x_scale: log
     dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T d|y|}$'
@@ -64,13 +63,12 @@ implemented_observables:
     variables:
       y: {description: "jet absolute rapidity", label: "$|y|$", units: ""}
       pT: {description: "jet transverse momentum", label: "$p_T$", units: "$GeV$"}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_altcorr1.yaml
   data_central: data_altcorr1.yaml
   data_uncertainties:
   - uncertainties_altcorr1_wo-lumi.yaml
   - uncertainties_altcorr1_lumi.yaml
-  kinematic_coverage: [y, pT, sqrts]
+  kinematic_coverage: [y, pT]
   plotting:
     x_scale: log
     dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T d|y|}$'
