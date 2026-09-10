@@ -3561,4 +3561,4 @@ dijet_sys = sys_breakdown(dijet_old_impl_list, False)
 
 covmat = ctc(jet_stat + dijet_stat, [a / 100 for a in corMatArray])
 
-artunc = cta(48, covmat)
+artunc = cta(48, covmat, full_precision=True)

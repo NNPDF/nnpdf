@@ -950,7 +950,7 @@ bins:
   art_sys_corr_2: 0.0
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
-  art_sys_corr_5: -7.86011425e-21
+  art_sys_corr_5: -7.86011471e-21
   art_sys_corr_6: 0.0
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
@@ -1032,16 +1032,16 @@ bins:
   JEC13+: 2.27688384e-05
   luminosity_uncertainty: 7.08400000e-05
   bin_by_bin_uncertainty: 3.22000000e-05
-- art_sys_corr_1: 7.29079575e-34
+- art_sys_corr_1: 7.29079141e-34
   art_sys_corr_2: 0.0
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
-  art_sys_corr_5: 2.33374665e-30
+  art_sys_corr_5: 2.33487141e-30
   art_sys_corr_6: 0.0
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
   art_sys_corr_9: 0.0
-  art_sys_corr_10: -1.28390990e-24
+  art_sys_corr_10: -1.28389301e-24
   art_sys_corr_11: 0.0
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
@@ -1118,16 +1118,16 @@ bins:
   JEC13+: 6.22253967e-06
   luminosity_uncertainty: 1.93600000e-05
   bin_by_bin_uncertainty: 8.8e-06
-- art_sys_corr_1: -3.56511816e-45
+- art_sys_corr_1: -3.34999692e-45
   art_sys_corr_2: 0.0
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
-  art_sys_corr_5: 4.15571845e-40
+  art_sys_corr_5: -1.41333442e-40
   art_sys_corr_6: 0.0
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
   art_sys_corr_9: 0.0
-  art_sys_corr_10: 2.46397755e-33
+  art_sys_corr_10: 2.36519870e-33
   art_sys_corr_11: 0.0
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
@@ -1146,7 +1146,7 @@ bins:
   art_sys_corr_26: 0.0
   art_sys_corr_27: 0.0
   art_sys_corr_28: 0.0
-  art_sys_corr_29: -9.35598402e-16
+  art_sys_corr_29: -9.35598236e-16
   art_sys_corr_30: 0.0
   art_sys_corr_31: 0.0
   art_sys_corr_32: 0.0
@@ -1204,16 +1204,16 @@ bins:
   JEC13+: 1.21622366e-06
   luminosity_uncertainty: 3.78400000e-06
   bin_by_bin_uncertainty: 1.72e-06
-- art_sys_corr_1: 1.97943657e-53
+- art_sys_corr_1: -3.99077813e-53
   art_sys_corr_2: 0.0
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
-  art_sys_corr_5: -5.28821181e-47
+  art_sys_corr_5: 1.58333947e-51
   art_sys_corr_6: 0.0
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
   art_sys_corr_9: 0.0
-  art_sys_corr_10: 4.22944840e-40
+  art_sys_corr_10: -8.07012490e-43
   art_sys_corr_11: 0.0
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
@@ -1224,15 +1224,15 @@ bins:
   art_sys_corr_18: 0.0
   art_sys_corr_19: 0.0
   art_sys_corr_20: 0.0
-  art_sys_corr_21: -1.76459806e-30
+  art_sys_corr_21: -1.76459808e-30
   art_sys_corr_22: 0.0
   art_sys_corr_23: 0.0
   art_sys_corr_24: 0.0
-  art_sys_corr_25: -3.39822131e-25
+  art_sys_corr_25: -3.39822072e-25
   art_sys_corr_26: 0.0
   art_sys_corr_27: 0.0
   art_sys_corr_28: 0.0
-  art_sys_corr_29: 1.10370236e-20
+  art_sys_corr_29: 1.10366348e-20
   art_sys_corr_30: 0.0
   art_sys_corr_31: 0.0
   art_sys_corr_32: 0.0
@@ -1290,16 +1290,16 @@ bins:
   JEC13+: 2.84256926e-07
   luminosity_uncertainty: 8.84400000e-07
   bin_by_bin_uncertainty: 4.02e-07
-- art_sys_corr_1: -3.15114282e-61
+- art_sys_corr_1: 2.54258955e-55
   art_sys_corr_2: 0.0
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
-  art_sys_corr_5: 8.41851207e-55
+  art_sys_corr_5: 6.12441676e-52
   art_sys_corr_6: 0.0
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
   art_sys_corr_9: 0.0
-  art_sys_corr_10: -6.73302501e-48
+  art_sys_corr_10: 4.80852106e-53
   art_sys_corr_11: 0.0
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
@@ -1310,15 +1310,15 @@ bins:
   art_sys_corr_18: 0.0
   art_sys_corr_19: 0.0
   art_sys_corr_20: 0.0
-  art_sys_corr_21: 2.80957807e-38
+  art_sys_corr_21: 2.80958027e-38
   art_sys_corr_22: 0.0
   art_sys_corr_23: 0.0
   art_sys_corr_24: 0.0
-  art_sys_corr_25: 1.01377892e-31
+  art_sys_corr_25: 1.01372250e-31
   art_sys_corr_26: 0.0
   art_sys_corr_27: 0.0
   art_sys_corr_28: 0.0
-  art_sys_corr_29: -2.27230772e-26
+  art_sys_corr_29: -2.25881112e-26
   art_sys_corr_30: 0.0
   art_sys_corr_31: 0.0
   art_sys_corr_32: 0.0
@@ -1376,16 +1376,16 @@ bins:
   JEC13+: 3.82544769e-08
   luminosity_uncertainty: 1.19020000e-07
   bin_by_bin_uncertainty: 5.41e-08
-- art_sys_corr_1: 1.09439304e-69
+- art_sys_corr_1: -2.17034501e-51
   art_sys_corr_2: 0.0
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
-  art_sys_corr_5: -2.92375228e-63
+  art_sys_corr_5: 9.68700943e-56
   art_sys_corr_6: 0.0
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
   art_sys_corr_9: 0.0
-  art_sys_corr_10: 2.33838202e-56
+  art_sys_corr_10: 1.86867886e-54
   art_sys_corr_11: 0.0
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
@@ -1396,24 +1396,24 @@ bins:
   art_sys_corr_18: 0.0
   art_sys_corr_19: 0.0
   art_sys_corr_20: 0.0
-  art_sys_corr_21: -9.75763697e-47
+  art_sys_corr_21: -9.75891968e-47
   art_sys_corr_22: 0.0
   art_sys_corr_23: 0.0
   art_sys_corr_24: 0.0
-  art_sys_corr_25: -6.70575103e-39
+  art_sys_corr_25: -6.59706687e-39
   art_sys_corr_26: 0.0
   art_sys_corr_27: 0.0
   art_sys_corr_28: 0.0
-  art_sys_corr_29: 1.31554007e-32
+  art_sys_corr_29: 1.00852138e-32
   art_sys_corr_30: 0.0
   art_sys_corr_31: 0.0
   art_sys_corr_32: 0.0
   art_sys_corr_33: 0.0
   art_sys_corr_34: 0.0
-  art_sys_corr_35: -2.70711746e-22
+  art_sys_corr_35: -2.70711729e-22
   art_sys_corr_36: 0.0
   art_sys_corr_37: 0.0
-  art_sys_corr_38: 5.66203656e-18
+  art_sys_corr_38: 5.66203655e-18
   art_sys_corr_39: 0.0
   art_sys_corr_40: 0.0
   art_sys_corr_41: 0.0
@@ -2241,12 +2241,12 @@ bins:
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
   art_sys_corr_5: 0.0
-  art_sys_corr_6: 8.79844208e-27
+  art_sys_corr_6: 8.79844155e-27
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
   art_sys_corr_9: 0.0
   art_sys_corr_10: 0.0
-  art_sys_corr_11: -5.84362375e-22
+  art_sys_corr_11: -5.84362184e-22
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
   art_sys_corr_14: 0.0
@@ -2323,16 +2323,16 @@ bins:
   luminosity_uncertainty: 3.89400000e-06
   bin_by_bin_uncertainty: 1.77e-06
 - art_sys_corr_1: 0.0
-  art_sys_corr_2: 1.26793699e-43
+  art_sys_corr_2: 1.26787653e-43
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
   art_sys_corr_5: 0.0
-  art_sys_corr_6: -1.01789359e-37
+  art_sys_corr_6: -1.01758617e-37
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
   art_sys_corr_9: 0.0
   art_sys_corr_10: 0.0
-  art_sys_corr_11: 1.54944875e-31
+  art_sys_corr_11: 1.54813079e-31
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
   art_sys_corr_14: 0.0
@@ -2345,7 +2345,7 @@ bins:
   art_sys_corr_21: 0.0
   art_sys_corr_22: 0.0
   art_sys_corr_23: 0.0
-  art_sys_corr_24: 4.13228537e-20
+  art_sys_corr_24: 4.13228520e-20
   art_sys_corr_25: 0.0
   art_sys_corr_26: 0.0
   art_sys_corr_27: -4.12165733e-17
@@ -2409,16 +2409,16 @@ bins:
   luminosity_uncertainty: 4.84000000e-07
   bin_by_bin_uncertainty: 2.2e-07
 - art_sys_corr_1: 0.0
-  art_sys_corr_2: 3.54667690e-45
+  art_sys_corr_2: 3.54650801e-45
   art_sys_corr_3: 0.0
   art_sys_corr_4: 0.0
   art_sys_corr_5: 0.0
-  art_sys_corr_6: -2.84725479e-39
+  art_sys_corr_6: -2.84639489e-39
   art_sys_corr_7: 0.0
   art_sys_corr_8: 0.0
   art_sys_corr_9: 0.0
   art_sys_corr_10: 0.0
-  art_sys_corr_11: 4.33412238e-33
+  art_sys_corr_11: 4.33043576e-33
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
   art_sys_corr_14: 0.0
@@ -2431,7 +2431,7 @@ bins:
   art_sys_corr_21: 0.0
   art_sys_corr_22: 0.0
   art_sys_corr_23: 0.0
-  art_sys_corr_24: 1.15587746e-21
+  art_sys_corr_24: 1.15587741e-21
   art_sys_corr_25: 0.0
   art_sys_corr_26: 0.0
   art_sys_corr_27: -1.15287531e-18
@@ -3196,7 +3196,7 @@ bins:
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
   art_sys_corr_14: 2.15290375e-13
-  art_sys_corr_15: 9.89337577e-14
+  art_sys_corr_15: 9.89337582e-14
   art_sys_corr_16: 0.0
   art_sys_corr_17: 0.0
   art_sys_corr_18: 0.0
@@ -3356,7 +3356,7 @@ bins:
   bin_by_bin_uncertainty: 2.23e-07
 - art_sys_corr_1: 0.0
   art_sys_corr_2: 0.0
-  art_sys_corr_3: -2.67350195e-33
+  art_sys_corr_3: -2.67350149e-33
   art_sys_corr_4: 0.0
   art_sys_corr_5: 0.0
   art_sys_corr_6: 0.0
@@ -3367,8 +3367,8 @@ bins:
   art_sys_corr_11: 0.0
   art_sys_corr_12: 0.0
   art_sys_corr_13: 0.0
-  art_sys_corr_14: -2.31204627e-24
-  art_sys_corr_15: 1.57375628e-24
+  art_sys_corr_14: -2.31204626e-24
+  art_sys_corr_15: 1.57366299e-24
   art_sys_corr_16: 0.0
   art_sys_corr_17: 0.0
   art_sys_corr_18: 0.0

@@ -276,7 +276,7 @@ def processData():
                 cov = ComputeCovariance(cormat, v)
 
                 # Single value decomposition
-                sigma = decompose_covmat(cov)
+                sigma = decompose_covmat(cov, full_precision=True)
 
                 # Loop over the bins
                 for k in range(len(error_diag)):
