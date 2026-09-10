@@ -17,9 +17,13 @@ from math import sqrt
 import os
 import shutil
 
+import mpmath as mp
 import numpy as np
 from numpy.linalg import eig
 import yaml
+
+# Arbitrary precision used by mpmath for certain operations
+ARBITRARY_PRECISION = 50
 
 
 def symmetrize_errors(delta_plus, delta_minus):
@@ -133,7 +137,7 @@ def sort_eigenvalues(evals, evecs):
     return evals_sorted, evecs_sorted
 
 
-def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
+def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0, full_precision=False):
     r"""Convert the covariance matrix to a matrix of
     artificial uncertainties.
 
@@ -158,6 +162,9 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
         distributions), the input would be 3. The default value is
         0 for when the covariance matrix pertains to an absolute
         distribution.
+    full_precision : bool
+        Use mpm to keep a larger number of decimals for numerical stability
+        when computing the eigenvalues/eigenvectors
 
     Returns
     -------
@@ -177,7 +184,19 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
         a = i // ndata
         b = i % ndata
         covmat[a][b] = covmat_list[i]
-    eigval, eigvec = eig(covmat)
+
+    if full_precision:
+        with mp.workdps(ARBITRARY_PRECISION):
+            covariance = mp.matrix([[mp.mpf(str(value)) for value in row] for row in covmat])
+            # We use str(value) to truncate the floats, in exchange we end up
+            # with something non-symmetrical that we need to correct for
+            covariance = (covariance + covariance.T) / 2
+            eigval, eigvec = mp.eigsy(covariance)
+            # And back to numpy
+            eigval = np.array(eigval.tolist(), dtype=float).reshape(-1)
+            eigvec = np.array(eigvec.tolist(), dtype=float)
+    else:
+        eigval, eigvec = eig(covmat)
     eigval, eigvec = sort_eigenvalues(eigval, eigvec)
     for j in range(len(eigval)):
         if eigval[j] < epsilon:

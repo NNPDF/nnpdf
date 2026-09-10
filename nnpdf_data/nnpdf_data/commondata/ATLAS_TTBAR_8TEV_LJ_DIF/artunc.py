@@ -117,7 +117,7 @@ def artunc():
     )
 
     covmatlist = ctc(statArr, cormatlist)
-    artunc = cta(25, covmatlist)
+    artunc = cta(25, covmatlist, full_precision=True)
     return artunc
 
 
@@ -229,5 +229,5 @@ def artunc_norm():
     )
 
     covmatlist = ctc(statArr, cormatlist)
-    artunc = cta(25, covmatlist, 4)
+    artunc = cta(25, covmatlist, 4, full_precision=True)
     return artunc

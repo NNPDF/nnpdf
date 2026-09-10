@@ -204,7 +204,7 @@ def generate_artificial_unc(**kwargs) -> np.ndarray:
     np.ndarray:
         a squared matrix with artificial uncertainties
     """
-    artunc = covmat_to_artunc(**kwargs)
+    artunc = covmat_to_artunc(**kwargs, full_precision=True)
     return np.array(artunc)
 
 
