@@ -38,13 +38,13 @@ validobj = "*"
 pandas = "*"
 numpy = "*"
 # Required to run filters: `filter_files_dependencies`
-scipy = {version = "*", optional = true}
-openpyxl = {version = "*", optional = true}
-uproot = {version = "*", optional = true}
 mpmath = {version = "*", optional = true}
+openpyxl = {version = "*", optional = true}
+scipy = {version = "*", optional = true}
+uproot = {version = "*", optional = true}
 
 [tool.poetry.extras]
-filter = ["openpyxl", "scipy", "uproot", "mpmath"]
+filter = ["mpmath", "openpyxl", "scipy", "uproot"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
