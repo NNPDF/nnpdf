@@ -5,7 +5,7 @@ import os
 import numpy as np
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
+from nnpdf_data.filter_utils.utils import decompose_covmat, prettify_float
 
 yaml.add_representer(float, prettify_float)
 
@@ -230,7 +230,7 @@ class Extractor:
         # The original covmat can be reconstruted as covat = art_stat.T @ art_stat
         covmat = self._build_covmat()
 
-        art_stat = decompose_covmat(covmat) * self.mult_factor
+        art_stat = decompose_covmat(covmat, full_precision=True) * self.mult_factor
 
         unc_vals = []  # Initialize vector of uncertainties
         for data_idx, data in enumerate(central_data):
