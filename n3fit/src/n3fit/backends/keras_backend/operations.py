@@ -76,7 +76,7 @@ elif K.backend() == "tensorflow":
     decorator_compiler = tf.function
 
 dict_to_numpy_or_python = lambda ret: {k: tensor_to_numpy_or_python(i) for k, i in ret.items()}
-variable_to_numpy = lambda x: x.numpy()
+variable_to_numpy = lambda x: tensor_to_numpy_or_python(x.value)
 
 
 def as_layer(operation, op_args=None, op_kwargs=None, **kwargs):

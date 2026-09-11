@@ -437,7 +437,7 @@ def _set_central_value(n3pdf, model):
     # Get the input x
     for key, grid in model.x_in.items():
         if key != "xgrid_integration":
-            input_x = grid.numpy()
+            input_x = op.tensor_to_numpy_or_python(grid)
             break
 
     # Compute the central value of the PDF

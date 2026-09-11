@@ -40,6 +40,13 @@ if (kback := K.backend()) == "torch":
         log.info("Setting max number of threads to: %d", threads)
         torch.set_num_threads(threads)
 
+    def enable_op_determinism():
+        torch.use_deterministic_algorithms(True)
+
+    def get_physical_gpus():
+        """Return one entry per CUDA device visible to PyTorch."""
+        return list(range(torch.cuda.device_count()))
+
 elif K.backend() == "tensorflow":
     import tensorflow as tf
     from tensorflow.python.framework import ops
@@ -69,7 +76,7 @@ elif K.backend() == "tensorflow":
                 "Could not set tensorflow parallelism settings from n3fit, maybe tensorflow is already initialized by a third program"
             )
 
-    def _internal_backend_clear():
+    def _internal_backend_clear():  # noqa: F811 (override of the top-level no-op default)
         """TensorFlow saves the gradient of the custom models we create as custom gradients.
         These are not followed by keras and are thus not cleared during the clear_backend call."""
         try:
@@ -83,6 +90,13 @@ elif K.backend() == "tensorflow":
             )
             raise e
 
+    def enable_op_determinism():
+        tf.config.experimental.enable_op_determinism()
+
+    def get_physical_gpus():
+        """Retrieve a list of all physical GPU devices available in the system."""
+        return tf.config.list_physical_devices('GPU')
+
 elif K.backend() == "jax":
 
     import jax
@@ -92,6 +106,13 @@ elif K.backend() == "jax":
 
     def set_threading(threads, core, double_precision=False):
         pass
+
+    def enable_op_determinism():
+        pass
+
+    def get_physical_gpus():
+        """Return the GPU devices JAX can see."""
+        return [d for d in jax.devices() if d.platform == "gpu"]
 
 else:
     # Keras should've failed by now, if it doesn't it could be a new backend that works ootb?
@@ -202,7 +223,7 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
     if debug and max_cores is None:
         keras.utils.set_random_seed(7331)
         threads = 1
-        tf.config.experimental.enable_op_determinism()
+        enable_op_determinism()
     set_number_of_cores(max_cores=max_cores, max_threads=threads, double_precision=double_precision)
 
     # Once again, if in debug mode or external_seed set, set also the TF seed
@@ -212,14 +233,3 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
             tf.random.set_seed(use_seed)
         else:
             keras.utils.set_random_seed(use_seed)
-
-
-def get_physical_gpus():
-    """
-    Retrieve a list of all physical GPU devices available in the system.
-
-    Returns
-    -------
-        list: A list of TensorFlow physical devices of type 'GPU'.
-    """
-    return tf.config.list_physical_devices('GPU')

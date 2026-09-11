@@ -255,10 +255,10 @@ class N3FitConfig(Config):
         # This needs to be imported here because it needs Tensorflow and n3fit
         from n3fit.hyper_optimization.hyper_scan import HyperScanner
 
-        extra_args = {}
-
         if hyperscan_config is None or hyperopt is None:
             return None
+
+        extra_args = {"backend": hyperscan_config.pop("backend", "hyperopt")}
 
         if self.environment.parallel_hyperopt:
             hyperscan_config.update({'parallel': 'true'})
@@ -266,11 +266,13 @@ class N3FitConfig(Config):
             db_path = (
                 self.environment.output_path / "nnfit" / "replica_1" / self.environment.db_name
             )
-            extra_args = {
-                "db_host": self.environment.db_host,
-                "db_port": self.environment.db_port,
-                "db_path": db_path,
-            }
+            extra_args.update(
+                {
+                    "db_host": self.environment.db_host,
+                    "db_port": self.environment.db_port,
+                    "db_path": db_path,
+                }
+            )
         return HyperScanner(parameters, hyperscan_config, **extra_args)
 
     def parse_trial_specs(self, trial_specs):
