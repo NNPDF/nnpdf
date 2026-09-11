@@ -13,7 +13,6 @@ variable which takes precedence over the profile.
 
 from functools import cached_property
 import os
-from pathlib import Path
 
 import numpy as np
 
@@ -168,43 +167,6 @@ class _NeoPDFPDF:
         return self.xfxQ(a, b, np.sqrt(c))
 
 
-def _neopdf_data_path():
-    """Return the directory NeoPDF reads PDF sets from.
-
-    Mirrors the fallback used by the NeoPDF Rust crate itself when
-    ``NEOPDF_DATA_PATH`` is unset.
-    """
-    path = os.environ.get("NEOPDF_DATA_PATH")
-    if path:
-        return Path(path)
-    return Path.home() / ".local" / "share" / "neopdf"
-
-
-def _ensure_neopdf_local(pdf_name):
-    """Expose a locally-available PDF set to NeoPDF, if needed.
-
-    Unlike LHAPDF, NeoPDF only looks for sets inside a single directory
-    (``NEOPDF_DATA_PATH``) instead of a list of search paths, so it is
-    unaware of sets that were only registered via ``lhaindex.paths_prepend``
-    (e.g. a fit that was just produced by ``postfit`` and is not installed
-    anywhere yet). If such a set is found, symlink it into NeoPDF's data
-    directory so that it does not try to (and fail to) download it.
-    """
-    target = _neopdf_data_path() / pdf_name
-    if target.exists() or target.is_symlink():
-        return
-
-    from validphys.lhaindex import finddir
-
-    try:
-        source = Path(finddir(pdf_name))
-    except FileNotFoundError:
-        return
-
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.symlink_to(source, target_is_directory=True)
-
-
 def make_pdf(pdf_name, member=None):
     """Load a single member if specified, otherwise load the entire set as a list.
 
@@ -231,6 +193,9 @@ def make_pdf(pdf_name, member=None):
     if backend not in _VALID_BACKENDS:
         raise InvalidPDFBackend(f"Unknown backend {backend!r}. Options are: {_VALID_BACKENDS}")
 
+    if backend == "lhapdf" and not USING_LHAPDF:
+        backend = "pdfflow"
+
     if backend == "lhapdf":
         if member is None:
             return lhapdf.mkPDFs(pdf_name)
@@ -239,14 +204,11 @@ def make_pdf(pdf_name, member=None):
     if backend == "neopdf":
         from neopdf.pdf import PDF as _NeoPDF
 
-        _ensure_neopdf_local(pdf_name)
-
         members = _NeoPDF.mkPDFs(pdf_name)
         if member is None:
             return [_NeoPDFPDF(m) for m in members]
         return [_NeoPDFPDF(members[member])]
 
-    # backend == "pdfflow"
     pdf_meta = lhapdf.load_pdf_meta(pdf_name)
     if member is None:
         return [_PDFFlowPDF(pdf_meta, m) for m in range(len(pdf_meta))]

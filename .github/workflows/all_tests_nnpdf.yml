@@ -119,7 +119,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       KERAS_BACKEND: torch
-      NNPDF_PDF_BACKEND: neopdf
     steps:
     - uses: actions/checkout@v6
     - uses: actions/setup-python@v5
@@ -141,6 +140,8 @@ jobs:
     - uses: ./.github/actions/set_neopdf_datapath
     - name: Test we can run one runcard
       shell: bash -l {0}
+      env:
+        NNPDF_PDF_BACKEND: neopdf
       run: |
         cd n3fit/runcards/examples
         vp-setupfit Basic_runcard.yml
