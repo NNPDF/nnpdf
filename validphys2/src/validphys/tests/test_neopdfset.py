@@ -31,11 +31,8 @@ QGRID = np.array([1.7, 5.0, 10.0, 100.0])  # GeV
 X_VALUE = 0.1
 Q_VALUE = 10.0
 
-# NeoPDF (Rust) and LHAPDF (C++) do not necessarily evaluate floating-point
-# operations in the same order (e.g. differing FMA contraction across
-# platforms), so cross-backend comparisons are only expected to agree up to
-# a few ULPs rather than bit-for-bit.
-CROSS_BACKEND_TOL = {"rtol": 1e-10, "atol": 1e-12}
+# Tolerance to compare LHAPDF vs. NeoPDF
+CROSS_BACKEND_TOL = {"rtol": 1e-12, "atol": 1e-16}
 
 
 @pytest.fixture(scope="module")
