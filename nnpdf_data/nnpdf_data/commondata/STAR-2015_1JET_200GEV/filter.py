@@ -301,7 +301,7 @@ if __name__ == "__main__":
     for a in TOPOPLOGY_LIST:
         correlated_unc.extend(np.sqrt(dfs[a]["syst"] ** 2 + dfs[a]["stat"] ** 2).values.tolist())
     ndata_points = np.sum((*ndata_dict.values(),))
-    art_sys = np.array(compute_covmat(correlation_df, correlated_unc, ndata_points))
+    art_sys = np.array(compute_covmat(correlation_df, correlated_unc, ndata_points, full_precision=True))
 
     # write data
     cnt = 0

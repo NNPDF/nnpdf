@@ -1,7 +1,10 @@
-import yaml
-import numpy as np
 import copy
+
+import numpy as np
+import yaml
+
 from nnpdf_data.filter_utils.utils import cormat_to_covmat, covmat_to_artunc
+
 
 def read_metadata() -> tuple:
     '''
@@ -21,7 +24,7 @@ def read_kinematics_and_centrals(tables: list) -> tuple:
     '''
     bins = list()
     centrals = list()
-    for table_num in tables[:6]: # select just the tables with kinematic data
+    for table_num in tables[:6]:  # select just the tables with kinematic data
         with open(f'rawdata/table_{table_num}.yaml', 'r') as file:
             kins = yaml.safe_load(file)
         # get ystar and yboost bins:
@@ -36,13 +39,13 @@ def read_kinematics_and_centrals(tables: list) -> tuple:
                     if type(v) == str:
                         lower = float(v[:3])
                         upper = float(v[-3:])
-                        middle = (lower+upper)/2
+                        middle = (lower + upper) / 2
                         current_yy_bin[bin_name] = {'min': lower, 'mid': middle, 'max': upper}
         # get the ptavg bins and combine them with yys bins
         for ptavg_dict in kins['independent_variables'][0]['values']:
             lower = ptavg_dict['low']
             upper = ptavg_dict['high']
-            middle = (lower + upper)/2
+            middle = (lower + upper) / 2
             current_p_bin = {'pTavg': {'min': lower, 'mid': middle, 'max': upper}}
             copy_yy = copy.deepcopy(current_yy_bin)
             current_pyys_bin = copy_yy | current_p_bin
@@ -98,30 +101,39 @@ def make_errors_absolute(errors: list, centrals: list):
         abs_errors = list()
         for i in range(len(errors)):
             c_val = centrals[i]
-            extracted_errors_at_dp = {small_dict['label']: c_val*float(small_dict['symerror'][:-1])/100 for small_dict in errors[i]}
+            extracted_errors_at_dp = {
+                small_dict['label']: c_val * float(small_dict['symerror'][:-1]) / 100
+                for small_dict in errors[i]
+            }
             abs_errors.append(extracted_errors_at_dp)
         return abs_errors
 
 
 def generate_stat_art_unc(abs_errors, kin_lengths):
     stat_errors = [item['stat'] for item in abs_errors]
-    split_indices = [kin_lengths[0]]+[0]*(len(kin_lengths)-1)
+    split_indices = [kin_lengths[0]] + [0] * (len(kin_lengths) - 1)
     for i in range(1, len(kin_lengths)):
-        split_indices[i] = split_indices[i-1]+kin_lengths[i]
-    split_indices = [0]+split_indices
+        split_indices[i] = split_indices[i - 1] + kin_lengths[i]
+    split_indices = [0] + split_indices
     art_unc = list()
     for i in range(1, len(split_indices)):
-        current_errors = stat_errors[split_indices[i-1]:split_indices[i]]
-        current_corr_mat = read_correlation_matrix(i+6)
-        current_ndata = kin_lengths[i-1]
+        current_errors = stat_errors[split_indices[i - 1] : split_indices[i]]
+        current_corr_mat = read_correlation_matrix(i + 6)
+        current_ndata = kin_lengths[i - 1]
         if not (len(current_errors) == current_ndata and len(current_corr_mat) == current_ndata**2):
             print('lengths not matching:')
         else:
-            current_cov_mat = cormat_to_covmat(err_list=current_errors, cormat_list=current_corr_mat)
-            current_art_unc = covmat_to_artunc(ndata = current_ndata, covmat_list = current_cov_mat)
+            current_cov_mat = cormat_to_covmat(
+                err_list=current_errors, cormat_list=current_corr_mat
+            )
+            current_art_unc = covmat_to_artunc(
+                ndata=current_ndata, covmat_list=current_cov_mat, full_precision=True
+            )
             big_art_unc = []
             for small_row in current_art_unc:
-                big_art_unc.append([0]*split_indices[i-1]+small_row+[0]*(122-split_indices[i]))
+                big_art_unc.append(
+                    [0] * split_indices[i - 1] + small_row + [0] * (122 - split_indices[i])
+                )
             art_unc += big_art_unc
     return art_unc
 
@@ -139,112 +151,144 @@ def aggregate_uncertainties(abs_errors, art_unc):
 
 
 def dump_uncertainties(all_unc):
-    singular_art_unc_desc = {'description': 'artificial uncertainty originating from correlated statistical uncertainties',
-                             'treatment': 'ADD',
-                             'type': 'CORR'}
+    singular_art_unc_desc = {
+        'description': 'artificial uncertainty originating from correlated statistical uncertainties',
+        'treatment': 'ADD',
+        'type': 'CORR',
+    }
     all_art_unc_desc = {f'art_unc_{i+1}': singular_art_unc_desc.copy() for i in range(122)}
     other_unc = {
-        'uncor': {'description': 'stems from residual effects of small inefficiencies in the jet identification',
-                             'treatment': 'ADD',
-                             'type': 'UNCORR'},
-        'jererr': {'description': 'jet energy resolution',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'lumi': {'description': 'luminosity uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CMSLUMI19P7'},
-        'nongaussiantails': {'description': 'non-Gaussian tails in detector response to jets',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'AbsoluteScale': {'description': 'absolute jet energy scale calibration',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'AbsoluteStat': {'description': 'statistical uncertainty of absolute JES',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'AbsoluteMPFBias': {'description': 'bias in MPF response method',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'Fragmentation': {'description': 'fragmentation uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'SinglePionECAL': {'description': 'e-calorimeter response to single pions',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'SinglePionHCAL': {'description': 'h-calorimeter response to single pions',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'FlavorQCD': {'description': 'jet flavour composition uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativeJEREC1': {'description': 'JER relative uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativeJEREC2': {'description': 'JER relative uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativeJERHF': {'description': 'JER relative uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativePtBB': {'description': 'Relative JES vs pT',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativePtEC1': {'description': 'Relative JES vs pT',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativePtEC2': {'description': 'Relative JES vs pT',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativePtHF': {'description': 'Relative JES vs pT',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativeFSR': {'description': 'Final-state radiation modeling',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativeStatEC2': {'description': 'Relative JES statistical uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativeStatHF': {'description': 'Relative JES statistical uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'RelativeStatFSR': {'description': 'Relative JES statistical uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'PileUpDataMC': {'description': 'Data–MC pileup mismatch',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'PileUpPtRef': {'description': 'Pileup pT reference uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'PileUpPtBB': {'description': 'Pileup pT uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'PileUpPtEC1': {'description': 'Pileup pT uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'PileUpPtEC2': {'description': 'Pileup pT uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'},
-        'PileUpPtHF': {'description': 'Pileup pT uncertainty',
-                             'treatment': 'MULT',
-                             'type': 'CORR'}
+        'uncor': {
+            'description': 'stems from residual effects of small inefficiencies in the jet identification',
+            'treatment': 'ADD',
+            'type': 'UNCORR',
+        },
+        'jererr': {'description': 'jet energy resolution', 'treatment': 'MULT', 'type': 'CORR'},
+        'lumi': {
+            'description': 'luminosity uncertainty',
+            'treatment': 'MULT',
+            'type': 'CMSLUMI19P7',
+        },
+        'nongaussiantails': {
+            'description': 'non-Gaussian tails in detector response to jets',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'AbsoluteScale': {
+            'description': 'absolute jet energy scale calibration',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'AbsoluteStat': {
+            'description': 'statistical uncertainty of absolute JES',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'AbsoluteMPFBias': {
+            'description': 'bias in MPF response method',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'Fragmentation': {
+            'description': 'fragmentation uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'SinglePionECAL': {
+            'description': 'e-calorimeter response to single pions',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'SinglePionHCAL': {
+            'description': 'h-calorimeter response to single pions',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'FlavorQCD': {
+            'description': 'jet flavour composition uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'RelativeJEREC1': {
+            'description': 'JER relative uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'RelativeJEREC2': {
+            'description': 'JER relative uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'RelativeJERHF': {
+            'description': 'JER relative uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'RelativePtBB': {'description': 'Relative JES vs pT', 'treatment': 'MULT', 'type': 'CORR'},
+        'RelativePtEC1': {'description': 'Relative JES vs pT', 'treatment': 'MULT', 'type': 'CORR'},
+        'RelativePtEC2': {'description': 'Relative JES vs pT', 'treatment': 'MULT', 'type': 'CORR'},
+        'RelativePtHF': {'description': 'Relative JES vs pT', 'treatment': 'MULT', 'type': 'CORR'},
+        'RelativeFSR': {
+            'description': 'Final-state radiation modeling',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'RelativeStatEC2': {
+            'description': 'Relative JES statistical uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'RelativeStatHF': {
+            'description': 'Relative JES statistical uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'RelativeStatFSR': {
+            'description': 'Relative JES statistical uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'PileUpDataMC': {
+            'description': 'Data–MC pileup mismatch',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'PileUpPtRef': {
+            'description': 'Pileup pT reference uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'PileUpPtBB': {'description': 'Pileup pT uncertainty', 'treatment': 'MULT', 'type': 'CORR'},
+        'PileUpPtEC1': {
+            'description': 'Pileup pT uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'PileUpPtEC2': {
+            'description': 'Pileup pT uncertainty',
+            'treatment': 'MULT',
+            'type': 'CORR',
+        },
+        'PileUpPtHF': {'description': 'Pileup pT uncertainty', 'treatment': 'MULT', 'type': 'CORR'},
     }
     definitions = {'definitions': other_unc | all_art_unc_desc}
     uncertainties_yaml = definitions | {'bins': all_unc}
     with open('uncertainties.yaml', 'w') as file:
-        yaml.safe_dump(uncertainties_yaml, file, sort_keys = False)
-    
+        yaml.safe_dump(uncertainties_yaml, file, sort_keys=False)
+
+
 def main_filter():
     tables = read_metadata()[0][:6]
     bins, centrals = read_kinematics_and_centrals(tables)
     kin_lengths = read_kinematics_lengths(tables)
-    errors = read_rel_errors([1,2,3,4,5,6])
+    errors = read_rel_errors([1, 2, 3, 4, 5, 6])
     abs_errors = make_errors_absolute(errors, centrals)
     art_unc = generate_stat_art_unc(abs_errors, kin_lengths)
     all_unc = aggregate_uncertainties(abs_errors, art_unc)
 
     dump_kinematics_and_centrals(bins, centrals)
     dump_uncertainties(all_unc)
+
 
 if __name__ == '__main__':
     main_filter()
