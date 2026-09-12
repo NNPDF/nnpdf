@@ -12,11 +12,20 @@ import os.path as osp
 from pathlib import Path
 import re
 
-from validphys.lhapdf_compatibility import lhapdf
+from validphys.lhapdf_compatibility import _active_backend, lhapdf
 from validphys.utils import yaml_safe
 
 _indexes_to_names = None
 _names_to_indexes = None
+
+
+def _paths():
+    """Return the data paths for the currently active PDF backend."""
+    if _active_backend() == "neopdf":
+        import neopdf
+
+        return neopdf.paths()
+    return lhapdf.paths()
 
 
 def expand_index_names(globstr):
@@ -24,7 +33,7 @@ def expand_index_names(globstr):
 
 
 def expand_local_names(globstr):
-    paths = lhapdf.paths()
+    paths = _paths()
     return [
         name
         for path in paths
@@ -43,14 +52,24 @@ def expand_names(globstr):
 
 
 def get_indexes_to_names():
+    """Return the mapping of LHAPDF SetIndex to PDF set name, as parsed from
+    ``pdfsets.index``. This file is LHAPDF's own remote-catalogue listing and
+    may simply not exist (e.g. no real LHAPDF/pdfsets.index has ever been
+    downloaded, or the active backend has no such catalogue at all, as is the
+    case for NeoPDF). In that case there is nothing known to be downloadable
+    by index/name lookup, so we return an empty mapping rather than raising.
+    """
     global _indexes_to_names
     if _indexes_to_names is None:
-        _indexes_to_names = parse_index(get_index_path())
+        try:
+            _indexes_to_names = parse_index(get_index_path())
+        except FileNotFoundError:
+            _indexes_to_names = {}
     return _indexes_to_names
 
 
 def finddir(name):
-    for path in lhapdf.paths():
+    for path in _paths():
         d = osp.join(path, name)
         if osp.isdir(d):
             return d
@@ -58,8 +77,7 @@ def finddir(name):
 
 
 def isinstalled(name):
-    """Check that name exists in LHAPDF dir"""
-    return name and any(osp.isdir(osp.join(path, name)) for path in lhapdf.paths())
+    return name and any(osp.isdir(osp.join(path, name)) for path in _paths())
 
 
 def get_names_to_indexes():
@@ -115,7 +133,7 @@ def as_from_name(name):
 
 
 def infofilename(name):
-    for path in lhapdf.paths():
+    for path in _paths():
         info = osp.join(path, name, name + '.info')
         if osp.exists(info):
             return info
@@ -140,10 +158,10 @@ def get_lha_datapath():
     We check whether the user is able to write to the path to skip situations in which the user
     cannot save grids to the LHAPDF folder but has its own data path (e.g., nix or a cluster).
     """
-    for lhapath in lhapdf.paths()[::-1]:
+    for lhapath in _paths()[::-1]:
         if Path(lhapath).exists() and os.access(lhapath, os.W_OK):
             return lhapath
-    return lhapdf.paths()[-1]
+    return _paths()[-1]
 
 
 def get_index_path(folder=None):
