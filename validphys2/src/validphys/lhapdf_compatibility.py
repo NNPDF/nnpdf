@@ -56,6 +56,18 @@ def _active_backend():
     return backend.lower()
 
 
+def active_pdf_module():
+    """Return the module providing the LHAPDF-like set-management API
+    (``paths()``, ``pathsPrepend()``, ...) for the currently active PDF
+    backend.
+    """
+    if _active_backend() == "neopdf":
+        import neopdf
+
+        return neopdf
+    return lhapdf
+
+
 class _PDFFlowPDF:
     """Wrapper around the PDFFlow PDF so that it can be used as an LHAPDF
     set by validphys

@@ -12,7 +12,7 @@ import os.path as osp
 from pathlib import Path
 import re
 
-from validphys.lhapdf_compatibility import _active_backend, lhapdf
+from validphys.lhapdf_compatibility import active_pdf_module
 from validphys.utils import yaml_safe
 
 _indexes_to_names = None
@@ -21,11 +21,7 @@ _names_to_indexes = None
 
 def _paths():
     """Return the data paths for the currently active PDF backend."""
-    if _active_backend() == "neopdf":
-        import neopdf
-
-        return neopdf.paths()
-    return lhapdf.paths()
+    return active_pdf_module().paths()
 
 
 def expand_index_names(globstr):
@@ -174,5 +170,5 @@ def get_index_path(folder=None):
 
 
 def paths_prepend(new_path):
-    """Prepend a path to the LHAPDF list of paths so that it takes precedence."""
-    lhapdf.pathsPrepend(new_path.as_posix())
+    """Prepend a path to the active backend's list of paths so that it takes precedence."""
+    active_pdf_module().pathsPrepend(new_path.as_posix())
