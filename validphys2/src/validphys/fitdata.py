@@ -12,6 +12,7 @@ import pathlib
 import numpy as np
 import pandas as pd
 
+from nnpdf_data import legacy_to_new_map
 from reportengine import collect
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.floatformatting import ValueErrorTuple
@@ -423,6 +424,49 @@ def print_different_cuts(fits, test_for_same_cuts):
 
     return res.getvalue()
 
+def find_the_variant(dataset, sys=None, variant=None):
+    """Given the (legacy) dataset input, find the new name and the right variant.
+    """
+    new_name, new_variant = legacy_to_new_map(dataset_name=dataset, sys=sys)
+    if variant is None:
+        return new_name, new_variant
+    else:
+        return new_name, variant
+
+@_assert_two_fits
+def test_for_same_variants(fits, match_datasets_by_name):
+    """Given two fits, return a dictionary of where keys are names of datatets with
+    different variants and keys are tuples (var_1, var_2) where var_i is the variant
+    of the dataset used in fit i.
+    """
+    c = match_datasets_by_name.common
+    first, second = fits
+    variants = dict()
+    different_variants = {}
+    for f in fits:
+        variants[f.name] = dict()
+        for ds in f.as_input()["dataset_inputs"]:
+            name, variant = find_the_variant(ds['dataset'], sys=ds.get("sys"), variant=ds.get("variant"))
+            variants[f.name][name] = variant
+    for ds in c:
+        if variants[first.name][ds] != variants[second.name][ds]:
+            different_variants[ds] = (variants[first.name][ds], variants[second.name][ds])
+    return different_variants
+
+def print_different_variants(fits, test_for_same_variants):
+    """Print a summary of the datasets that are included in both fits but have 
+    different variants."""
+    res = StringIO()
+    first_fit, second_fit = fits
+    if test_for_same_variants:
+        res.write(
+            "The following datasets are both included but use different variants:\n\n"
+        )
+        for ds, (first, second) in test_for_same_variants.items():
+            res.write(f"{ds}: {first_fit} uses variant {first}, while {second_fit} uses variant {second}.")
+        res.write('\n')
+
+    return res.getvalue()
 
 def fit_theory_covmat_summary(fit, fitthcovmat):
     """returns a table with a single column for the `fit`, with three rows
