@@ -46,6 +46,22 @@ implements new convolution methods:
 It demonstrates how to add a new feature, together with relevant tests and
 documentation, and refine it based on the discussion.
 
+.. _aiusage:
+
+LLM Usage Guideliens
+--------------------
+
+Our policy for LLM generated contributions is similar to that of the `Debian project <https://lwn.net/Articles/1091231/>`_ and can be summarized as:
+
+* The committer is solely responsible for the content of the commit. This includes not only the quality of the code, legibility and future maintainability but also that attribution is given when attribution is due. Be careful with licenses and remember to add references and citations when needed!
+
+* The committer must be the **human**, not the model. This is important, we are an academic project where developers come and go as they finish their projects, so it is important to know **who** actually introduced the changes.
+
+* AI usage must be documented in the PR. Include for example the harness and models you used. This helps the reviewer understand the scope of certain changes (e.g., the tests were done automatically, while the documentation was written by hand) and allow us to keep a record, and also understand the evolution of the technology.
+
+* We are an academic collaboration, the goal of the documentation and code comments should primarily serve to teach and train current students and future researchers. They should be written with human readers in mind, rather than specifically for LLMs.
+
+* Following the above, any information that might be useful for LLM-specific files (like ``skills.md`` or ``agents.md``) should be added to the documentation. This makes the same guidance available to humans working with the code (while still having it available for LLM tools).
 
 .. _reviews:
 
