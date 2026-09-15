@@ -463,7 +463,7 @@ def print_different_variants(fits, test_for_same_variants):
             "The following datasets are included in both fits but use different variants:\n\n"
         )
         for ds, (first, second) in test_for_same_variants.items():
-            res.write(f"    * {ds}: {first_fit} uses variant {first}, while {second_fit} uses variant {second}.\n")
+            res.write(f" - {ds}: {first_fit} uses variant {first}, while {second_fit} uses variant {second}.\n")
         res.write('\n')
 
     return res.getvalue()
