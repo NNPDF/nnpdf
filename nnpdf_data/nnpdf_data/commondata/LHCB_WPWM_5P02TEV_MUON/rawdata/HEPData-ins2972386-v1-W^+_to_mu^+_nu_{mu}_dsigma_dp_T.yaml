@@ -1,0 +1,106 @@
+independent_variables:
+- header:
+    name: $p_T$
+    units: GeV
+  values:
+  - low: 28.0
+    high: 30.0
+  - low: 30.0
+    high: 32.0
+  - low: 32.0
+    high: 34.0
+  - low: 34.0
+    high: 36.0
+  - low: 36.0
+    high: 38.0
+  - low: 38.0
+    high: 40.0
+  - low: 40.0
+    high: 42.0
+  - low: 42.0
+    high: 44.0
+  - low: 44.0
+    high: 46.0
+  - low: 46.0
+    high: 48.0
+  - low: 48.0
+    high: 50.0
+  - low: 50.0
+    high: 52.0
+dependent_variables:
+- header:
+    name: $d\sigma/dp_T$
+    units: pb/GeV
+  values:
+  - value: 11.927137859263889
+    errors:
+    - label: (Stat.)
+      symerror: 0.4394379490825129
+    - label: (Syst.)
+      symerror: 0.3551085433189915
+  - value: 14.36119742050456
+    errors:
+    - label: (Stat.)
+      symerror: 0.456210635300955
+    - label: (Syst.)
+      symerror: 0.2886613498976826
+  - value: 17.66481067531384
+    errors:
+    - label: (Stat.)
+      symerror: 0.48399673009093697
+    - label: (Syst.)
+      symerror: 0.30715388635540913
+  - value: 18.8674985376766
+    errors:
+    - label: (Stat.)
+      symerror: 0.5061251766815191
+    - label: (Syst.)
+      symerror: 0.3088299065501175
+  - value: 22.731787843969546
+    errors:
+    - label: (Stat.)
+      symerror: 0.5608823674172305
+    - label: (Syst.)
+      symerror: 0.35805732999565915
+  - value: 23.49510977873119
+    errors:
+    - label: (Stat.)
+      symerror: 0.5831118208108432
+    - label: (Syst.)
+      symerror: 0.3138550290908145
+  - value: 17.15606898734261
+    errors:
+    - label: (Stat.)
+      symerror: 0.5270528355555728
+    - label: (Syst.)
+      symerror: 0.31177721388204244
+  - value: 10.452362800044003
+    errors:
+    - label: (Stat.)
+      symerror: 0.43465596037806736
+    - label: (Syst.)
+      symerror: 0.2968374454778871
+  - value: 6.008037303380327
+    errors:
+    - label: (Stat.)
+      symerror: 0.3476947739988772
+    - label: (Syst.)
+      symerror: 0.16510624374546193
+  - value: 3.456286741993128
+    errors:
+    - label: (Stat.)
+      symerror: 0.2956486257461619
+    - label: (Syst.)
+      symerror: 0.14240628060757954
+  - value: 2.585190134956035
+    errors:
+    - label: (Stat.)
+      symerror: 0.26478620011784765
+    - label: (Syst.)
+      symerror: 0.12636833028105815
+  - value: 1.749550415305143
+    errors:
+    - label: (Stat.)
+      symerror: 0.2080552201842898
+    - label: (Syst.)
+      symerror: 0.1375261267725563
