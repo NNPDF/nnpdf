@@ -176,9 +176,10 @@ def performfit(
             replicas[0],
             replicas[0] + n_models - 1,
         )
-
+    # Every architecture string that produces a variational layer
+    BAYESIAN_LAYER_TYPES = {'VBDense', 'VBDense_correlated'}
     layer_type = parameters.get('layer_type')
-    is_bnn = any(layer == 'VBDense' for layer in layer_type)
+    is_bnn = any(layer in BAYESIAN_LAYER_TYPES for layer in layer_type)
     
     for replica_idxs, exp_info, nnseeds in replicas_info:
         log.info("Starting replica fit " + str(replica_idxs))

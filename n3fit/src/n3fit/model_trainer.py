@@ -1161,6 +1161,8 @@ class ModelTrainer:
                 std_init=params.get('std_init', None),
                 dropout_rate_bayesian=params.get('bayes_dropout', 0.0),
                 bayesian_bias=params.get('bayesian_bias', False),
+                rank=params.get('rank', 4),
+                u_init=params.get('u_init', 1e-4),
             )
             replicas_settings.append(tmp)
 

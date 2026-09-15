@@ -140,7 +140,7 @@ def check_layer_type_implemented(parameters):
         num_layer = len(parameters.get("nodes_per_layer"))
         layer_type = np.array([layer_type]*num_layer)
         parameters["layer_type"] = layer_type
-    implemented_types = ["dense", "dense_per_flavour", "VBDense"]
+    implemented_types = ["dense", "dense_per_flavour", "VBDense", "VBDense_correlated"]
     for idx, layer in enumerate(layer_type):
         if layer not in implemented_types:
             raise CheckError(
