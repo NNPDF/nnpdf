@@ -48,7 +48,7 @@ documentation, and refine it based on the discussion.
 
 .. _aiusage:
 
-LLM Usage Guideliens
+LLM Usage Guidelines
 --------------------
 
 Our policy for LLM generated contributions is similar to that of the `Debian project <https://lwn.net/Articles/1091231/>`_ and can be summarized as:
