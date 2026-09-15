@@ -1,0 +1,81 @@
+dependent_variables:
+- header: {name: '$d\sigma/dm_{e\mu}\text{ [fb/GeV]}$'}
+  qualifiers:
+  - {name: 'Cross section', value: 'WW production'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 25'}
+  - {name: 'ETMISS', units: 'GEV', value: '> 20'}
+  - {name: 'ABS(ETARAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 30'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - errors:
+    - {label: 'stat', symerror: 0.159}
+    - {label: 'syst', symerror: 0.309}
+    value: 4.978
+  - errors:
+    - {label: 'stat', symerror: 0.204}
+    - {label: 'syst', symerror: 0.347}
+    value: 5.581
+  - errors:
+    - {label: 'stat', symerror: 0.186}
+    - {label: 'syst', symerror: 0.323}
+    value: 5.029
+  - errors:
+    - {label: 'stat', symerror: 0.143}
+    - {label: 'syst', symerror: 0.260}
+    value: 4.256
+  - errors:
+    - {label: 'stat', symerror: 0.118}
+    - {label: 'syst', symerror: 0.234}
+    value: 2.998
+  - errors:
+    - {label: 'stat', symerror: 0.106}
+    - {label: 'syst', symerror: 0.204}
+    value: 2.509
+  - errors:
+    - {label: 'stat', symerror: 0.083}
+    - {label: 'syst', symerror: 0.154}
+    value: 2.049
+  - errors:
+    - {label: 'stat', symerror: 0.062}
+    - {label: 'syst', symerror: 0.120}
+    value: 1.461
+  - errors:
+    - {label: 'stat', symerror: 0.0414}
+    - {label: 'syst', symerror: 0.0832}
+    value: 0.845
+  - errors:
+    - {label: 'stat', symerror: 0.0224}
+    - {label: 'syst', symerror: 0.0375}
+    value: 0.4372
+  - errors:
+    - {label: 'stat', symerror: 0.0108}
+    - {label: 'syst', symerror: 0.0193}
+    value: 0.1685
+  - errors:
+    - {label: 'stat', symerror: 0.00321}
+    - {label: 'syst', symerror: 0.00399}
+    value: 0.03232
+  - errors:
+    - {label: 'stat', symerror: 0.000290}
+    - {label: 'syst', symerror: 0.000374}
+    value: 0.001383
+independent_variables:
+- header: {name: '$m_{e\mu}\text{ [GeV]}$'}
+  values:
+  - {low: 55.0, high: 75.0}
+  - {low: 75.0, high: 85.0}
+  - {low: 85.0, high: 95.0}
+  - {low: 95.0, high: 110.0}
+  - {low: 110.0, high: 125.0}
+  - {low: 125.0, high: 140.0}
+  - {low: 140.0, high: 160.0}
+  - {low: 160.0, high: 185.0}
+  - {low: 185.0, high: 220.0}
+  - {low: 220.0, high: 280.0}
+  - {low: 280.0, high: 380.0}
+  - {low: 380.0, high: 600.0}
+  - {low: 600.0, high: 1500.0}

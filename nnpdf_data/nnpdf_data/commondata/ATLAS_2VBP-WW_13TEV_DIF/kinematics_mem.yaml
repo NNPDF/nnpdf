@@ -1,0 +1,53 @@
+bins:
+- m_em:
+    min: 55.0
+    mid: null
+    max: 75.0
+- m_em:
+    min: 75.0
+    mid: null
+    max: 85.0
+- m_em:
+    min: 85.0
+    mid: null
+    max: 95.0
+- m_em:
+    min: 95.0
+    mid: null
+    max: 110.0
+- m_em:
+    min: 110.0
+    mid: null
+    max: 125.0
+- m_em:
+    min: 125.0
+    mid: null
+    max: 140.0
+- m_em:
+    min: 140.0
+    mid: null
+    max: 160.0
+- m_em:
+    min: 160.0
+    mid: null
+    max: 185.0
+- m_em:
+    min: 185.0
+    mid: null
+    max: 220.0
+- m_em:
+    min: 220.0
+    mid: null
+    max: 280.0
+- m_em:
+    min: 280.0
+    mid: null
+    max: 380.0
+- m_em:
+    min: 380.0
+    mid: null
+    max: 600.0
+- m_em:
+    min: 600.0
+    mid: null
+    max: 1500.0
