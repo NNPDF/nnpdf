@@ -1,0 +1,35 @@
+dependent_variables:
+- header: {name: N/Nevt}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '10.54'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.002}
+    - {label: sys, symerror: 0.08}
+    - {label: sys, symerror: 0.019}
+    value: 5.364
+- header: {name: N/Nevt}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '10.54'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.001}
+    - {label: sys, symerror: 0.012}
+    - {label: sys, symerror: 0.016}
+    value: 0.946
+- header: {name: N/Nevt}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PBAR + P) X}
+  - {name: SQRT(S), units: GeV, value: '10.54'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0003}
+    - {label: sys, symerror: 0.0058}
+    - {label: sys, symerror: 0.007}
+    value: 0.1819
+independent_variables:
+- header: {name: 'P(P=3,RF=CM)', units: GEV}
+  values:
+  - {high: 5.27, low: 0.2}

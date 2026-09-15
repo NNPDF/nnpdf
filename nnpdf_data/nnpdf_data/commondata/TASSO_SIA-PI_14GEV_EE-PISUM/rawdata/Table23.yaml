@@ -1,0 +1,55 @@
+dependent_variables:
+- header: {name: D(SIG)/DP(P=3), units: NB/GEV}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: '14.0'}
+  - {name: SQRT(S), units: GeV, value: '14.0'}
+  values:
+  - errors:
+    - {symerror: 0.07}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.21
+  - errors:
+    - {symerror: 0.07}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.21
+  - errors:
+    - {symerror: 0.09}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.35
+  - errors:
+    - {symerror: 0.12}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.5
+  - errors:
+    - {symerror: 0.1}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.47
+  - errors:
+    - {symerror: 0.16}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.54
+  - errors:
+    - {symerror: 0.12}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.35
+  - errors:
+    - {symerror: 0.09}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.16
+  - errors:
+    - {symerror: 0.033}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.073
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+  - {high: 0.7, low: 0.6}
+  - {high: 0.8, low: 0.7}
+  - {high: 1.0, low: 0.8}
+  - {high: 1.2, low: 1.0}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.0, low: 1.6}
+  - {high: 4.6, low: 3.0, value: 3.6}

@@ -1,0 +1,441 @@
+dependent_variables:
+- header: {name: (1/N(Q=ZL))*D(N(Q=PI+-))/DX}
+  qualifiers:
+  - {name: RE(Q=PI+-), value: E+ E- --> (PI+ + PI-) X}
+  - {name: RE(Q=ZB), value: E+ E- --> Z0 < BQUARK BQUARKBAR >}
+  - {name: RE(Q=ZC), value: E+ E- --> Z0 < CQUARK CQUARKBAR >}
+  - {name: RE(Q=ZL), value: E+ E- --> Z0 < LQUARK LQUARKBAR >}
+  - {name: SQRT(S), units: GeV, value: '91.28'}
+  - {name: SQRT(S), units: GeV, value: '91.28'}
+  values:
+  - errors:
+    - {symerror: 13.9}
+    value: 474.0
+  - errors:
+    - {symerror: 10.5}
+    value: 467.3
+  - errors:
+    - {symerror: 8.4}
+    value: 418.2
+  - errors:
+    - {symerror: 6.9}
+    value: 375.5
+  - errors:
+    - {symerror: 5.7}
+    value: 327.7
+  - errors:
+    - {symerror: 4.2}
+    value: 275.8
+  - errors:
+    - {symerror: 3.0}
+    value: 216.0
+  - errors:
+    - {symerror: 2.2}
+    value: 171.2
+  - errors:
+    - {symerror: 1.9}
+    value: 140.4
+  - errors:
+    - {symerror: 1.5}
+    value: 116.4
+  - errors:
+    - {symerror: 1.2}
+    value: 99.9
+  - errors:
+    - {symerror: 1.0}
+    value: 85.4
+  - errors:
+    - {symerror: 0.89}
+    value: 72.85
+  - errors:
+    - {symerror: 0.79}
+    value: 64.51
+  - errors:
+    - {symerror: 0.72}
+    value: 56.82
+  - errors:
+    - {symerror: 0.66}
+    value: 50.84
+  - errors:
+    - {symerror: 0.61}
+    value: 45.34
+  - errors:
+    - {symerror: 0.56}
+    value: 40.71
+  - errors:
+    - {symerror: 0.4}
+    value: 34.6
+  - errors:
+    - {symerror: 0.35}
+    value: 28.99
+  - errors:
+    - {symerror: 0.31}
+    value: 24.19
+  - errors:
+    - {symerror: 0.22}
+    value: 18.97
+  - errors:
+    - {symerror: 0.17}
+    value: 14.52
+  - errors:
+    - {symerror: 0.14}
+    value: 11.06
+  - errors:
+    - {symerror: 0.12}
+    value: 8.67
+  - errors:
+    - {symerror: 0.1}
+    value: 6.79
+  - errors:
+    - {symerror: 0.085}
+    value: 5.341
+  - errors:
+    - {symerror: 0.073}
+    value: 4.214
+  - errors:
+    - {symerror: 0.064}
+    value: 3.452
+  - errors:
+    - {symerror: 0.056}
+    value: 2.727
+  - errors:
+    - {symerror: 0.042}
+    value: 2.138
+  - errors:
+    - {symerror: 0.036}
+    value: 1.652
+  - errors:
+    - {symerror: 0.031}
+    value: 1.164
+  - errors:
+    - {symerror: 0.027}
+    value: 0.874
+  - errors:
+    - {symerror: 0.024}
+    value: 0.622
+  - errors:
+    - {symerror: 0.019}
+    value: 0.441
+  - errors:
+    - {symerror: 0.017}
+    value: 0.3
+  - errors:
+    - {symerror: 0.01}
+    value: 0.178
+  - errors:
+    - {symerror: 0.007}
+    value: 0.081
+  - errors:
+    - {symerror: 0.003}
+    value: 0.016
+  - errors:
+    - {symerror: 0.25}
+    value: 15.294
+- header: {name: (1/N(Q=ZC))*D(N(Q=PI+-))/DX}
+  qualifiers:
+  - {name: RE(Q=PI+-), value: E+ E- --> (PI+ + PI-) X}
+  - {name: RE(Q=ZB), value: E+ E- --> Z0 < BQUARK BQUARKBAR >}
+  - {name: RE(Q=ZC), value: E+ E- --> Z0 < CQUARK CQUARKBAR >}
+  - {name: RE(Q=ZL), value: E+ E- --> Z0 < LQUARK LQUARKBAR >}
+  - {name: SQRT(S), units: GeV, value: '91.28'}
+  - {name: SQRT(S), units: GeV, value: '91.28'}
+  values:
+  - errors:
+    - {symerror: 26.6}
+    value: 425.5
+  - errors:
+    - {symerror: 23.2}
+    value: 440.5
+  - errors:
+    - {symerror: 20.0}
+    value: 453.8
+  - errors:
+    - {symerror: 17.2}
+    value: 409.2
+  - errors:
+    - {symerror: 14.6}
+    value: 372.8
+  - errors:
+    - {symerror: 10.9}
+    value: 306.4
+  - errors:
+    - {symerror: 8.0}
+    value: 234.6
+  - errors:
+    - {symerror: 6.2}
+    value: 197.4
+  - errors:
+    - {symerror: 6.0}
+    value: 155.8
+  - errors:
+    - {symerror: 4.3}
+    value: 132.5
+  - errors:
+    - {symerror: 3.5}
+    value: 109.3
+  - errors:
+    - {symerror: 2.9}
+    value: 92.9
+  - errors:
+    - {symerror: 2.48}
+    value: 77.56
+  - errors:
+    - {symerror: 2.17}
+    value: 68.23
+  - errors:
+    - {symerror: 1.97}
+    value: 60.06
+  - errors:
+    - {symerror: 1.81}
+    value: 51.76
+  - errors:
+    - {symerror: 1.67}
+    value: 45.28
+  - errors:
+    - {symerror: 1.55}
+    value: 40.04
+  - errors:
+    - {symerror: 1.12}
+    value: 33.5
+  - errors:
+    - {symerror: 0.99}
+    value: 27.45
+  - errors:
+    - {symerror: 0.87}
+    value: 22.92
+  - errors:
+    - {symerror: 0.63}
+    value: 18.73
+  - errors:
+    - {symerror: 0.5}
+    value: 13.72
+  - errors:
+    - {symerror: 0.41}
+    value: 10.18
+  - errors:
+    - {symerror: 0.34}
+    value: 7.53
+  - errors:
+    - {symerror: 0.29}
+    value: 5.76
+  - errors:
+    - {symerror: 0.235}
+    value: 4.381
+  - errors:
+    - {symerror: 0.202}
+    value: 3.358
+  - errors:
+    - {symerror: 0.171}
+    value: 2.487
+  - errors:
+    - {symerror: 0.148}
+    value: 1.947
+  - errors:
+    - {symerror: 0.108}
+    value: 1.436
+  - errors:
+    - {symerror: 0.087}
+    value: 0.817
+  - errors:
+    - {symerror: 0.074}
+    value: 0.614
+  - errors:
+    - {symerror: 0.063}
+    value: 0.386
+  - errors:
+    - {symerror: 0.061}
+    value: 0.429
+  - errors:
+    - {symerror: 0.043}
+    value: 0.206
+  - errors:
+    - {symerror: 0.037}
+    value: 0.142
+  - errors:
+    - {symerror: 0.021}
+    value: 0.066
+  - errors:
+    - {symerror: 0.01}
+    value: 0.003
+  - errors:
+    - {symerror: 0.006}
+    value: 0.003
+  - errors:
+    - {symerror: 0.465}
+    value: 15.783
+- header: {name: (1/N(Q=ZB))*D(N(Q=PI+-))/DX}
+  qualifiers:
+  - {name: RE(Q=PI+-), value: E+ E- --> (PI+ + PI-) X}
+  - {name: RE(Q=ZB), value: E+ E- --> Z0 < BQUARK BQUARKBAR >}
+  - {name: RE(Q=ZC), value: E+ E- --> Z0 < CQUARK CQUARKBAR >}
+  - {name: RE(Q=ZL), value: E+ E- --> Z0 < LQUARK LQUARKBAR >}
+  - {name: SQRT(S), units: GeV, value: '91.28'}
+  - {name: SQRT(S), units: GeV, value: '91.28'}
+  values:
+  - errors:
+    - {symerror: 15.8}
+    value: 478.1
+  - errors:
+    - {symerror: 11.9}
+    value: 488.4
+  - errors:
+    - {symerror: 9.5}
+    value: 463.7
+  - errors:
+    - {symerror: 7.7}
+    value: 432.2
+  - errors:
+    - {symerror: 6.5}
+    value: 382.4
+  - errors:
+    - {symerror: 4.6}
+    value: 333.3
+  - errors:
+    - {symerror: 3.3}
+    value: 261.7
+  - errors:
+    - {symerror: 2.7}
+    value: 214.2
+  - errors:
+    - {symerror: 2.3}
+    value: 175.2
+  - errors:
+    - {symerror: 1.9}
+    value: 145.4
+  - errors:
+    - {symerror: 1.7}
+    value: 121.4
+  - errors:
+    - {symerror: 1.5}
+    value: 103.3
+  - errors:
+    - {symerror: 1.36}
+    value: 89.24
+  - errors:
+    - {symerror: 1.21}
+    value: 75.47
+  - errors:
+    - {symerror: 1.12}
+    value: 65.97
+  - errors:
+    - {symerror: 1.04}
+    value: 59.39
+  - errors:
+    - {symerror: 0.97}
+    value: 52.11
+  - errors:
+    - {symerror: 0.9}
+    value: 45.86
+  - errors:
+    - {symerror: 0.65}
+    value: 38.29
+  - errors:
+    - {symerror: 0.58}
+    value: 30.57
+  - errors:
+    - {symerror: 0.51}
+    value: 24.34
+  - errors:
+    - {symerror: 0.36}
+    value: 18.21
+  - errors:
+    - {symerror: 0.28}
+    value: 12.27
+  - errors:
+    - {symerror: 0.22}
+    value: 8.25
+  - errors:
+    - {symerror: 0.18}
+    value: 5.83
+  - errors:
+    - {symerror: 0.15}
+    value: 4.14
+  - errors:
+    - {symerror: 0.128}
+    value: 2.984
+  - errors:
+    - {symerror: 0.11}
+    value: 2.303
+  - errors:
+    - {symerror: 0.094}
+    value: 1.642
+  - errors:
+    - {symerror: 0.085}
+    value: 1.365
+  - errors:
+    - {symerror: 0.063}
+    value: 0.886
+  - errors:
+    - {symerror: 0.052}
+    value: 0.631
+  - errors:
+    - {symerror: 0.047}
+    value: 0.49
+  - errors:
+    - {symerror: 0.038}
+    value: 0.276
+  - errors:
+    - {symerror: 0.033}
+    value: 0.187
+  - errors:
+    - {symerror: 0.025}
+    value: 0.111
+  - errors:
+    - {symerror: 0.019}
+    value: 0.045
+  - errors:
+    - {symerror: 0.01}
+    value: 0.039
+  - errors:
+    - {symerror: 0.005}
+    value: 0.011
+  - errors:
+    - {symerror: 0.002}
+    value: 0.003
+  - errors:
+    - {symerror: 0.278}
+    value: 16.841
+independent_variables:
+- header: {name: X(DEF=2*P(P=3)/SQRT(S))}
+  values:
+  - {value: 0.0066}
+  - {value: 0.0088}
+  - {value: 0.0109}
+  - {value: 0.0131}
+  - {value: 0.0153}
+  - {value: 0.0191}
+  - {value: 0.0246}
+  - {value: 0.0301}
+  - {value: 0.0356}
+  - {value: 0.0411}
+  - {value: 0.0465}
+  - {value: 0.0521}
+  - {value: 0.0576}
+  - {value: 0.063}
+  - {value: 0.0685}
+  - {value: 0.074}
+  - {value: 0.0795}
+  - {value: 0.085}
+  - {value: 0.0931}
+  - {value: 0.104}
+  - {value: 0.115}
+  - {value: 0.131}
+  - {value: 0.153}
+  - {value: 0.175}
+  - {value: 0.197}
+  - {value: 0.2189}
+  - {value: 0.241}
+  - {value: 0.2629}
+  - {value: 0.2849}
+  - {value: 0.3068}
+  - {value: 0.3338}
+  - {value: 0.3666}
+  - {value: 0.3997}
+  - {value: 0.4325}
+  - {value: 0.4651}
+  - {value: 0.5035}
+  - {value: 0.547}
+  - {value: 0.6083}
+  - {value: 0.7047}
+  - {value: 0.8383}
+  - {value: '-'}

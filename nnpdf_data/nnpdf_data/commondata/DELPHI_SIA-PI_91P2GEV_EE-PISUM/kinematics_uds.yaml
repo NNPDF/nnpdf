@@ -1,0 +1,93 @@
+bins:
+- ph:
+    min: 0.7
+    mid: null
+    max: 0.91
+- ph:
+    min: 0.91
+    mid: null
+    max: 1.14
+- ph:
+    min: 1.14
+    mid: null
+    max: 1.37
+- ph:
+    min: 1.37
+    mid: null
+    max: 1.6
+- ph:
+    min: 1.6
+    mid: null
+    max: 1.82
+- ph:
+    min: 1.82
+    mid: null
+    max: 2.28
+- ph:
+    min: 2.28
+    mid: null
+    max: 2.74
+- ph:
+    min: 2.74
+    mid: null
+    max: 3.19
+- ph:
+    min: 3.19
+    mid: null
+    max: 3.65
+- ph:
+    min: 3.65
+    mid: null
+    max: 4.1
+- ph:
+    min: 4.1
+    mid: null
+    max: 4.56
+- ph:
+    min: 4.56
+    mid: null
+    max: 5.47
+- ph:
+    min: 5.47
+    mid: null
+    max: 6.38
+- ph:
+    min: 6.38
+    mid: null
+    max: 7.29
+- ph:
+    min: 7.29
+    mid: null
+    max: 8.21
+- ph:
+    min: 8.21
+    mid: null
+    max: 9.12
+- ph:
+    min: 9.12
+    mid: null
+    max: 11.9
+- ph:
+    min: 11.9
+    mid: null
+    max: 13.7
+- ph:
+    min: 13.7
+    mid: null
+    max: 18.2
+- ph:
+    min: 18.2
+    mid: null
+    max: 22.8
+- ph:
+    min: 22.8
+    mid: null
+    max: 27.4
+- ph:
+    min: 27.4
+    mid: null
+    max: 36.5
+- ph:
+    min: 36.5
+    mid: null
+    max: 45.6

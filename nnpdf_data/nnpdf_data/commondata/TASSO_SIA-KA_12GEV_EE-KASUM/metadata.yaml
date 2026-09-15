@@ -1,0 +1,41 @@
+setname: 'TASSO_SIA-KA_12GEV_EE-KASUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-KA"
+  experiment: "TASSO"
+
+arXiv:
+  url: "N/A"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/153656"
+hepdata:
+  url: "https://www.hepdata.net/record/ins153656"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "x-sec differential wrt $p_h$", label: '$\frac{d\sigma^h}{dp_h}$', units: '$$'}
+  observable_name: PH
+  process_type: SIA_PH
+  ndata: 3
+  tables: [3]
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'TASSO SIA 12 GeV KA- + KA+ : $\frac{d\sigma^h}{dp_h}$'
+    x_scale: linear
+    plot_x: ph
+    y_label: '$\frac{d\sigma^h}{dp_h}$'
+#   theory:
+#     FK_tables:
+#     - - 
+#     operation: 'null'

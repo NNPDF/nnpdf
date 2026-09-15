@@ -1,0 +1,84 @@
+---
+additional_resources:
+- {description: Rivet analysis, location: 'http://rivet.hepforge.org/analyses#BABAR_2013_I1238276'}
+comment: |
+  SLAC-PEP2. Measurement of the inclusive production of PI+-, K+- and PBAR/P in E+E- annihilations at a centre of mass energy of 10.54 GeV, below the threshold for BBAR-B pair production.
+dateupdated: 09/12/2013 17:16:16
+modifications:
+- {action: Encoded, date: 16 Sep 2013, who: Mike Whalley}
+record_ids:
+- {id: 1238276, type: inspire}
+- {id: 5288, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Differential cross section for prompt PI+-, K+- and PBAR/P production.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI+ X, E+ E- --> PI- X, E+ E- --> K+ X, E+ E- --> K+ X, E+ E-
+      --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Distribution, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [10.54]
+location: Data from T 1
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  Differential cross section for conventional PI+-, K+- and PBAR/P  production.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI+ X, E+ E- --> PI- X, E+ E- --> K+ X, E+ E- --> K+ X, E+ E-
+      --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Distribution, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [10.54]
+location: Data from T 2
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  Integrated cross sections for prompt PI+-, K+- and PBAR/P  production.  The second (sys) error is the uncertainty due to the model dependence of the extrapolation.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI+ X, E+ E- --> PI- X, E+ E- --> K+ X, E+ E- --> K+ X, E+ E-
+      --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Distribution, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [10.54]
+location: Data from T 1
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: |
+  Integrated cross sections for conventional PI+-, K+- and PBAR/P  production.  The second (sys) error is the uncertainty due to the model dependence of the extrapolation.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI+ X, E+ E- --> PI- X, E+ E- --> K+ X, E+ E- --> K+ X, E+ E-
+      --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Distribution, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [10.54]
+location: Data from T 2
+name: Table 4
+

@@ -1,0 +1,48 @@
+definitions:
+  stat:
+    definition: statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    definition: systematic uncertainty
+    treatment: ADD
+    type: UNCORR
+bins:
+- stat: 0.006
+  sys: 0.083
+- stat: 0.006
+  sys: 0.092
+- stat: 0.006
+  sys: 0.072
+- stat: 0.006
+  sys: 0.043
+- stat: 0.005
+  sys: 0.011
+- stat: 0.005
+  sys: 0.009
+- stat: 0.004
+  sys: 0.008
+- stat: 0.004
+  sys: 0.012
+- stat: 0.004
+  sys: 0.015
+- stat: 0.003
+  sys: 0.028
+- stat: 0.003
+  sys: 0.026
+- stat: 0.003
+  sys: 0.031
+- stat: 0.002
+  sys: 0.039
+- stat: 0.002
+  sys: 0.042
+- stat: 0.002
+  sys: 0.034
+- stat: 0.002
+  sys: 0.027
+- stat: 0.001
+  sys: 0.01
+- stat: 0.001
+  sys: 0.006
+- stat: 0.001
+  sys: 0.005

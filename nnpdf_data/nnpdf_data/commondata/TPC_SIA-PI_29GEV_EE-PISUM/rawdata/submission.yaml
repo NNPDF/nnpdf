@@ -1,0 +1,125 @@
+---
+comment: |
+  SLAC-PEP. TPC/2 GAMMA Collaboration. Measurement of the charged hadron inclusive cross sections and fractions in E+ E- annihilation at sqrt(s) = 29 GeV. Numerical values are from the thesis of D.Cowan.
+dateupdated: 30/09/1988 00:00:00
+modifications:
+- {action: Encoded, date: 30 SEP 1988, who: Mike Whalley}
+record_ids:
+- {id: 262143, type: inspire}
+- {id: 1495, type: red}
+
+---
+data_file: Table1.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHGD-HADRONS X, E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR
+      X, E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DZ]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [29.0]
+location: Data from T 6.1(C=THES)
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [29.0]
+location: Data from T 6.2(C=THES), F 3(C=JOUR)
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [29.0]
+location: Data from T 6.2(C=THES), F 3(C=JOUR)
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [29.0]
+location: Data from T 6.2(C=THES), F 3(C=JOUR)
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: |
+  Mean Z is mean for all particle types combined.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X, E+ E- --> PI- X, E+ E-
+      --> PI+ X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DZ]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [29.0]
+location: Data from T 6.4(C=THES)
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHGD-HADRONS X, E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR
+      X, E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> P X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [29.0]
+location: Data from T 6.5(C=THES),F 4(C=JOUR)
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X, E+ E- --> PI- X, E+ E-
+      --> PI+ X, E+ E- --> P X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [29.0]
+location: Data from T 6.6(C=THES)
+name: Table 7
+
