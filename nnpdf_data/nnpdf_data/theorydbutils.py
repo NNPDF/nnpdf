@@ -19,12 +19,15 @@ class TheoryNotFoundInDatabase(Exception):
 
 
 @lru_cache
-def _parse_theory_card(theory_card):
+def _parse_theory_card(theory_card, as_dict=True):
     """Read the theory card using validobj parsing
     Returns the theory as a dictionary
     """
     tcard = parse_yaml_inp(theory_card, TheoryCard)
-    return tcard.asdict()
+    if as_dict:
+        return tcard.asdict()
+    else:
+        return tcard
 
 
 @lru_cache
@@ -43,7 +46,7 @@ def _get_available_theory_cards(path):
     return available_theories
 
 
-def fetch_theory(theory_database: Path, theoryID: int):
+def fetch_theory(theory_database: Path, theoryID: int, as_dict=True):
     """Looks in the theory card folder and returns a dictionary of theory info for the
     theory number specified by `theoryID`.
 
@@ -73,8 +76,12 @@ def fetch_theory(theory_database: Path, theoryID: int):
     except KeyError as e:
         raise TheoryNotFoundInDatabase(f"Theorycard for theory not found: {e}")
 
-    tdict = _parse_theory_card(theoryfile)
-    if tdict["ID"] != theoryID:
+    tdict = _parse_theory_card(theoryfile, as_dict=as_dict)
+    if as_dict:
+        parsed_tid = tdict["ID"]
+    else:
+        parsed_tid = tdict.ID
+    if parsed_tid != theoryID:
         raise ValueError(f"The theory ID in {theoryfile} doesn't correspond with its ID entry")
     return tdict
 
