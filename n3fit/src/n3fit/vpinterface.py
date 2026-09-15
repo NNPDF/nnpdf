@@ -279,6 +279,7 @@ class N3PDF(PDF):
 
         # Keep the import here to avoid loading the backend when it is not necessary
         from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
+        from n3fit.backends import operations as op
 
         preprocessing_layer = self._models[replica - 1].get_layer(PREPROCESSING_LAYER_ALL_REPLICAS)
 
@@ -290,9 +291,9 @@ class N3PDF(PDF):
                 alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
                 beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
                 if alpha is not None:
-                    alpha = float(alpha.numpy().squeeze())
+                    alpha = float(op.variable_to_numpy(alpha).squeeze())
                 if beta is not None:
-                    beta = float(beta.numpy().squeeze())
+                    beta = float(op.variable_to_numpy(beta).squeeze())
                 output_dictionaries.append(
                     {
                         "fl": flavour,
@@ -527,7 +528,7 @@ def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
     # Compute the chi2
     total_covmat_chol = la.cholesky(total_covmat, lower=True)
     chi2 = calc_chi2(sqrtcov=total_covmat_chol, diffs=diffs)
-    
+
     # Compute the experimental chi2
     exp_covmat_chol = la.cholesky(exp_cov, lower=True)
     chi2exp = calc_chi2(sqrtcov=exp_covmat_chol, diffs=diffs)
