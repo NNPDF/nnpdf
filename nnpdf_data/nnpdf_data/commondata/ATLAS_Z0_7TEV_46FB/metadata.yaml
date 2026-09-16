@@ -24,7 +24,7 @@ implemented_observables:
   ndata: 24
   plotting:
     dataset_label: ATLAS $Z$ 7 TeV 2011 Central selection
-    x_label: $\left\|y\right|$
+    x_label: $\left|y\right|$
     y_label: $d\sigma/dy$ (fb)
     line_by:
     - Boson
@@ -62,7 +62,6 @@ implemented_observables:
   kinematic_coverage:
   - abs_eta
   - m_ll2
-  - sqrts
   kinematics:
     variables:
       abs_eta:
@@ -73,10 +72,6 @@ implemented_observables:
         description: Squared dilepton mass
         label: r"$m_{ll}^2$"
         units: 'GeV^2'
-      sqrts:
-        description: Square root of center of mass energy
-        label: r"\sqrt{s}"
-        units: 'GeV'
     file: kinematics_cc.yaml
   theory:
     conversion_factor: 1000.0
@@ -131,7 +126,6 @@ implemented_observables:
   kinematic_coverage:
   - abs_eta
   - m_ll2
-  - sqrts
   kinematics:
     variables:
       abs_eta:
@@ -142,10 +136,6 @@ implemented_observables:
         description: Squared dilepton mass
         label: r"$m_{ll}^2$"
         units: 'GeV^2'
-      sqrts:
-        description: Square root of center of mass energy
-        label: r"\sqrt{s}"
-        units: 'GeV'
     file: kinematics_cf.yaml
   theory:
     conversion_factor: 1000.0

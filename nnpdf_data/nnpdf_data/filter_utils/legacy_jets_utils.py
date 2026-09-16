@@ -117,7 +117,6 @@ def get_kinematics_CMS_2JET_7TEV(tables, version):
             kin_value = {
                 'ymax': {'min': ymax['min'], 'mid': ymax['mid'], 'max': ymax['max']},
                 'm_jj': {'min': m_jj['low'], 'mid': m_jj['mid'], 'max': m_jj['high']},
-                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }
 
             kin.append(kin_value)

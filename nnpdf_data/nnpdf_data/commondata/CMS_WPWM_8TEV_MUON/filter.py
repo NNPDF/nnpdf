@@ -9,7 +9,6 @@ from nnpdf_data.filter_utils.utils import covmat_to_artunc, prettify_float
 yaml.add_representer(float, prettify_float)
 
 MW_VALUE = 80.398  # GeV
-SQRT_S = 8_000.0  # GeV
 NORM_FACTOR = 1e3  # Convert pb -> fb
 
 # Correct tables to read values [[W+/W-]]
@@ -89,7 +88,6 @@ def get_kinematics(hepdata: dict, bin_index: list, boson: str = "W") -> list:
         kin_value = {
             "y": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
             "m_W2": {"min": None, "mid": MAP_BOSON[boson] ** 2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 

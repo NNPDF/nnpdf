@@ -7,10 +7,6 @@ bins:
     min: null
     mid: 29756.25
     max: null
-  sqrts:
-    min: null
-    mid: 7000.0
-    max: null
 - y_t:
     min: 0.2
     mid: 0.4
@@ -19,10 +15,6 @@ bins:
     min: null
     mid: 29756.25
     max: null
-  sqrts:
-    min: null
-    mid: 7000.0
-    max: null
 - y_t:
     min: 0.6
     mid: 8.50000000e-01
@@ -30,8 +22,4 @@ bins:
   m_t2:
     min: null
     mid: 29756.25
-    max: null
-  sqrts:
-    min: null
-    mid: 7000.0
     max: null

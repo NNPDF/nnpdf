@@ -26,11 +26,10 @@ implemented_observables:
     variables:
       pT: {description: "Z boson transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
       m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV$^2$"}
-      sqrts: {description: "Center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics_dimuon_pT.yaml
   data_central: data_dimuon_pT.yaml
   data_uncertainties: [uncertainties_dimuon_pT.yaml]
-  kinematic_coverage: [pT, m_Z2, sqrts]
+  kinematic_coverage: [pT, m_Z2]
   plotting:
     x_scale: log
     dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T^Z}$'

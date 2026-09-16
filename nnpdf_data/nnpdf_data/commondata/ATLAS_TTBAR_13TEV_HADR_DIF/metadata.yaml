@@ -26,12 +26,11 @@ implemented_observables:
     variables:
       m_ttBar: {description: "invariant mass of top pair", label: '$m_{t\bar{t}}$', units: '$GeV$'}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_dSig_dmttBar.yaml
   data_central: data_dSig_dmttBar.yaml
   data_uncertainties:
   - uncertainties_dSig_dmttBar.yaml
-  kinematic_coverage: [m_ttBar, m_t2, sqrts]
+  kinematic_coverage: [m_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -55,12 +54,11 @@ implemented_observables:
     variables:
       m_ttBar: {description: "invariant mass of top pair", label: '$m_{t\bar{t}}$', units: '$GeV$'}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_dSig_dmttBar_norm.yaml
   data_central: data_dSig_dmttBar_norm.yaml
   data_uncertainties:
   - uncertainties_dSig_dmttBar_norm.yaml
-  kinematic_coverage: [m_ttBar, m_t2, sqrts]
+  kinematic_coverage: [m_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -81,12 +79,11 @@ implemented_observables:
     variables:
       y_ttBar: {description: "absolute rapidity of top pair", label: '$|y_{t\bar{t}}|$', units: ''}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_dSig_dyttBar.yaml
   data_central: data_dSig_dyttBar.yaml
   data_uncertainties:
   - uncertainties_dSig_dyttBar.yaml
-  kinematic_coverage: [y_ttBar, m_t2, sqrts]
+  kinematic_coverage: [y_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: linear
@@ -110,12 +107,11 @@ implemented_observables:
     variables:
       y_ttBar: {description: "absolute rapidity of top pair", label: '$|y_{t\bar{t}}|$', units: ''}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_dSig_dyttBar_norm.yaml
   data_central: data_dSig_dyttBar_norm.yaml
   data_uncertainties:
   - uncertainties_dSig_dyttBar_norm.yaml
-  kinematic_coverage: [y_ttBar, m_t2, sqrts]
+  kinematic_coverage: [y_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: linear
@@ -137,7 +133,6 @@ implemented_observables:
       m_ttBar: {description: "invariant mass of top pair", label: '$m_{t\bar{t}}$', units: '$GeV$'}
       y_ttBar: {description: "absolute rapidity of top pair", label: '$|y_{t\bar{t}}|$', units: ''}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_d2Sig_dmttBar_dyttBar.yaml
   data_central: data_d2Sig_dmttBar_dyttBar.yaml
   data_uncertainties:
@@ -169,7 +164,6 @@ implemented_observables:
       m_ttBar: {description: "invariant mass of top pair", label: '$m_{t\bar{t}}$', units: '$GeV$'}
       y_ttBar: {description: "absolute rapidity of top pair", label: '$|y_{t\bar{t}}|$', units: ''}
       m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-      sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
     file: kinematics_d2Sig_dmttBar_dyttBar_norm.yaml
   data_central: data_d2Sig_dmttBar_dyttBar_norm.yaml
   data_uncertainties:

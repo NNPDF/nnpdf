@@ -20,6 +20,12 @@ import numpy as np
 
 log = logging.getLogger(__name__)
 
+
+def _internal_backend_clear():
+    """Keras might need extra help to clear some backends."""
+    pass
+
+
 # Prepare Keras-backend dependent functions
 if (kback := K.backend()) == "torch":
 
@@ -36,6 +42,7 @@ if (kback := K.backend()) == "torch":
 
 elif K.backend() == "tensorflow":
     import tensorflow as tf
+    from tensorflow.python.framework import ops
 
     def set_eager(flag=True):
         """Set eager mode on or off
@@ -61,6 +68,20 @@ elif K.backend() == "tensorflow":
             log.warning(
                 "Could not set tensorflow parallelism settings from n3fit, maybe tensorflow is already initialized by a third program"
             )
+
+    def _internal_backend_clear():
+        """TensorFlow saves the gradient of the custom models we create as custom gradients.
+        These are not followed by keras and are thus not cleared during the clear_backend call."""
+        try:
+            registry = ops.gradient_registry._registry
+            for name in tuple(registry):  # so python don't complain about the waning dictionary
+                if name.startswith("CustomGradient-"):
+                    registry.pop(name)
+        except Exception as e:
+            log.error(
+                "Error found when trying to use internal Tensorflow features to clean memory. Please report this issue."
+            )
+            raise e
 
 elif K.backend() == "jax":
 
@@ -120,6 +141,9 @@ def clear_backend_state():
     and unused memory.
     """
     log.info("Clearing session")
+    # Then clear the backend
+    _internal_backend_clear()
+    # and finally Keras
     K.clear_session()
 
 

@@ -28,16 +28,11 @@ implemented_observables:
     plot_x: m_ll
   kinematic_coverage:
   - m_ll
-  - sqrts
   kinematics:
     variables:
       m_ll:
         description: dilepton mass
         label: '$m_{ll}$'
-        units: 'GeV'
-      sqrts:
-        description: center of mass energy
-        label: sqrts
         units: 'GeV'
     file: kinematics.yaml
   theory:
