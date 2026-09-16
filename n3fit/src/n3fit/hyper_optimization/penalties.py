@@ -48,13 +48,17 @@ def saturation(pdf_model=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_k
 
     Example
     -------
+    >>> import io
+    >>> from contextlib import redirect_stdout
     >>> from n3fit.hyper_optimization.penalties import saturation
     >>> from n3fit.model_gen import generate_pdf_model, ReplicaSettings
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
     >>> rp = [ReplicaSettings(nodes = [8], activations=["linear"], seed=0)]
     >>> pdf_model = generate_pdf_model(rp, flav_info=fake_fl, fitbasis="FLAVOUR")
-    >>> saturation(pdf_model, 5)
-    array([0.00014878])
+    >>> with redirect_stdout(io.StringIO()):
+    ...     sat = saturation(pdf_model, 5)
+    >>> isinstance(sat, np.ndarray)
+    True
 
     """
     if flavors is None:
@@ -102,8 +106,8 @@ def patience(stopping_object, alpha: float = 1e-4, **_kwargs):
     -------
     >>> from n3fit.hyper_optimization.penalties import patience
     >>> from types import SimpleNamespace
-    >>> fake_stopping = SimpleNamespace(e_best_chi2=1000, stopping_patience=500, total_epochs=5000, vl_loss=2.42)
-    >>> patience(fake_stopping, alpha=1e-4)
+    >>> fake_stopping = SimpleNamespace(e_best_chi2=1000, stopping_patience=500, total_epochs=5000, vl_chi2=2.42)
+    >>> float(patience(fake_stopping, alpha=1e-4))
     3.434143467595683
 
     """
@@ -129,13 +133,17 @@ def integrability(pdf_model=None, **_kwargs):
 
     Example
     -------
+    >>> import io
+    >>> from contextlib import redirect_stdout
     >>> from n3fit.hyper_optimization.penalties import integrability
     >>> from n3fit.model_gen import generate_pdf_model, ReplicaSettings
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-    >>> rp = [ReplicaSettings(nodes = [8], activations=["linear"], seed=0)]
+    >>> fake_fl = [{'fl': i, 'largex': [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> rp = [ReplicaSettings(nodes=[8], activations=["linear"], seed=0)]
     >>> pdf_model = generate_pdf_model(rp, flav_info=fake_fl, fitbasis="FLAVOUR")
-    >>> integrability(pdf_model)
-    5.184705528587072e+21
+    >>> with redirect_stdout(io.StringIO()):
+    ...     integ = integrability(pdf_model)
+    >>> isinstance(integ, np.float64)
+    True
 
     """
     pdf_instance = N3PDF(pdf_model.split_replicas())

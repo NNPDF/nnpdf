@@ -13,6 +13,7 @@ import numpy as np
 from numpy.testing import assert_approx_equal
 import pytest
 
+from n3fit.hyper_optimization.hyper_scan import _run_trial_in_subprocess
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import ReplicaSettings, generate_pdf_model
 from n3fit.tests.helpers import run_n3fit, run_setupfit
@@ -291,3 +292,21 @@ def test_parallel_restart(tmp_path):
         assert initial_json[i]['state'] == final_json[i]['state']
         assert initial_json[i]['tid'] == final_json[i]['tid']
         assert initial_json[i]['result'] == final_json[i]['result']
+
+
+@pytest.mark.darwin
+def test_hyperopt_runs_normally_in_macos():
+    """Checks that hyperopt doesn't try to fork out in macos."""
+    current_pid = os.getpid()
+    not_forked_pid = _run_trial_in_subprocess(lambda _: os.getpid(), None)
+    assert current_pid == not_forked_pid
+
+
+@pytest.mark.linux
+def test_hyperopt_runs_in_subprocess():
+    """Check that, in linux, hyperopt is able to fork out.
+    In a linux system with no fork, this test will fail. Report this situation.
+    """
+    current_pid = os.getpid()
+    forked_pid = _run_trial_in_subprocess(lambda _: os.getpid(), None)
+    assert current_pid != forked_pid

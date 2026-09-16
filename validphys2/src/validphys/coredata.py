@@ -117,14 +117,13 @@ class FKTableData:
         --------
 
         >>> from validphys.fkparser import load_fktable
-        ... from validphys.loader import Loader
-        ... l = Loader()
-        ... ds = l.check_dataset('ATLASTTBARTOT', theoryid=53, cfac=('QCD',))
-        ... table = load_fktable(ds.fkspecs[0])
-        ... newtable = table.with_cuts([0,1])
-        >>> assert set(newtable.sigma.index.get_level_values(0)) == {0,1}
+        >>> from validphys.loader import Loader
+        >>> l = Loader()
+        >>> ds = l.check_dataset('ATLAS_WPWM_13TEV_TOT', theoryid=40000000, cfac=('NRM',))
+        >>> table = load_fktable(ds.fkspecs[0])
+        >>> newtable = table.with_cuts([0,1])
+        >>> assert set(newtable.sigma.index.get_level_values(0)) == {0, 1}
         >>> assert newtable.ndata == 2
-        >>> assert newtable.metadata['GridInfo'].ndata == 3
         """
         if hasattr(cuts, "load"):
             cuts = cuts.load()

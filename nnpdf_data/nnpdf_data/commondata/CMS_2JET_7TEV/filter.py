@@ -114,7 +114,7 @@ def filterCMS_2JET_7TEV_uncertainties():
     A_bin = df_uncertainties["Bin-by-bin-"].multiply(cv, axis=0).to_numpy()
 
     # generate artificial systematics
-    A_art_sys_corr = decompose_covmat(covmat=BD_stat)
+    A_art_sys_corr = decompose_covmat(covmat=BD_stat, full_precision=True)
 
     # error definition
     error_definition = {

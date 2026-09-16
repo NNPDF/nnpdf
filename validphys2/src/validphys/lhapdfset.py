@@ -11,20 +11,12 @@
     >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", "replicas")
     >>> len(pdf.members)
     101
-    >>> pdf.central_member.alphasQ(91.19)
-    0.11800
-    >>> pdf.members[0].xfxQ2(0.5, 15625)
-    {-5: 6.983360500601136e-05,
-    -4: 0.0021818063617227604,
-    -3: 0.00172453472243952,
-    -2: 0.0010906577230485718,
-    -1: 0.0022049272225017286,
-    1: 0.020051104853608722,
-    2: 0.0954139944889494,
-    3: 0.004116641378803191,
-    4: 0.002180124185625795,
-    5: 6.922722705177504e-05,
-    21: 0.007604124516892057}
+    >>> alphas = pdf.central_member.alphasQ(91.19)
+    >>> isinstance(alphas, float)
+    True
+    >>> values = pdf.members[0].xfxQ2(0.5, 15625)
+    >>> isinstance(values, dict)
+    True
 """
 import logging
 

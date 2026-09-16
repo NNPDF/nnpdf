@@ -83,7 +83,6 @@ implemented_observables:
   kinematic_coverage:
   - abs_eta
   - m_ll2
-  - sqrts
   kinematics:
     variables:
       abs_eta:
@@ -93,10 +92,6 @@ implemented_observables:
       m_ll2:
         description: Variable m_ll2
         label: m_ll2
-        units: ''
-      sqrts:
-        description: Variable k3
-        label: k3
         units: ''
     file: kinematics_CC.yaml
   theory:

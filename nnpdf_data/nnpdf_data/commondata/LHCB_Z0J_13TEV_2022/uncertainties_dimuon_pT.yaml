@@ -461,7 +461,7 @@ bins:
   Sys_corr_eff_8: 4.12690530e-05
   Sys_corr_eff_9: -5.08331221e-04
   Sys_corr_eff_10: -6.39452370e-05
-  Sys_corr_eff_11: 5.06949945e-05
+  Sys_corr_eff_11: 5.06949944e-05
   Sys_corr_eff_12: -1.93367970e-05
   Sys_corr_eff_13: -1.23356610e-05
   Sys_corr_eff_14: 4.00927033e-08
@@ -538,7 +538,7 @@ bins:
   Sys_corr_eff_9: 1.37381392e-04
   Sys_corr_eff_10: -1.69463132e-04
   Sys_corr_eff_11: -2.05359460e-04
-  Sys_corr_eff_12: -8.99846853e-06
+  Sys_corr_eff_12: -8.99846852e-06
   Sys_corr_eff_13: -1.30521350e-05
   Sys_corr_eff_14: 3.98812899e-08
   Sys_back_corr: 3.41956839e-03

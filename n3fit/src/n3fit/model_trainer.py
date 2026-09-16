@@ -26,6 +26,7 @@ from n3fit.layers import losses
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
+from validphys.convolution import central_predictions, predictions
 from validphys.core import DataGroupSpec
 from validphys.loader import Loader
 from validphys.photon.compute import Photon
@@ -857,10 +858,13 @@ class ModelTrainer:
 
         All other parameters are passed to the corresponding functions
         """
-
         # Reset the internal state of the backend every time this function is called
         print("")
         clear_backend_state()
+        # Clean also validphys' internal caches which keep references to n3fit models
+        central_predictions.cache_clear()
+        predictions.cache_clear()
+
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
         if self.mode_hyperopt:
