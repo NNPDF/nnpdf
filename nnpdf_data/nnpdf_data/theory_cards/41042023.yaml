@@ -1,5 +1,5 @@
 ID: 41_042_023
-Comments: NNPDF4.1 N3LO QCD-only (lower bound DIS coefficient functions variation)
+Comments: NNPDF4.1 N3LO QCD-only (DIS CF variations, C2g varied down)
 PTO: 3
 FNS: FONLL-E
 DAMP: 0
@@ -43,4 +43,4 @@ alphaqed: 0.0075700
 nfref: 5
 nf0: 4
 n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]
-n3lo_cf_variation: -1
+n3lo_cf_variation: [-1, 0, 0, 0]
