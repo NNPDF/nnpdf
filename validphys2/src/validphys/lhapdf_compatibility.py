@@ -43,29 +43,30 @@ def _active_backend():
 
     Resolution order (highest priority first):
     1. ``NNPDF_PDF_BACKEND`` environment variable
-    2. ``pdf_backend`` key in the NNPDF profile (``nnprofile.yaml``)
+    2. ``pdf_backend`` key in the NNPDF profile (``nnprofile.yaml``), which
+       defaults to ``lhapdf`` (see ``nnprofile_default.yaml``)
     """
     backend = os.environ.get(_BACKEND_ENV_VAR)
     if backend is None:
-        try:
-            from nnpdf_data.utils import get_nnpdf_profile
+        from nnpdf_data.utils import get_nnpdf_profile
 
-            backend = get_nnpdf_profile().get("pdf_backend", "lhapdf")
-        except Exception:
-            backend = "lhapdf"
-    return backend.lower()
+        backend = get_nnpdf_profile()["pdf_backend"]
+    backend = backend.lower()
+
+    if backend not in _VALID_BACKENDS:
+        raise InvalidPDFBackend(f"Unknown backend {backend!r}. Options are: {_VALID_BACKENDS}")
+
+    return backend
 
 
-def active_pdf_module():
-    """Return the module providing the LHAPDF-like set-management API
-    (``paths()``, ``pathsPrepend()``, ...) for the currently active PDF
-    backend.
-    """
-    if _active_backend() == "neopdf":
-        import neopdf
+def _ensure_neopdf_datapath():
+    """Point NeoPDF at the same data directory as ``lhapdf-management``."""
+    if os.environ.get("NEOPDF_DATA_PATH"):
+        return
 
-        return neopdf
-    return lhapdf
+    from lhapdf_management.configuration import environment
+
+    os.environ["NEOPDF_DATA_PATH"] = str(environment.possible_datapath)
 
 
 class _PDFFlowPDF:
@@ -154,15 +155,17 @@ class _NeoPDFPDF:
         scalar_input = np.ndim(x) == 0 and np.ndim(q) == 0
         x = np.atleast_1d(x)
         q = np.atleast_1d(q)
-        vals = np.array(
-            [
-                self._member.xfxQ2_allpids(self._pids, float(xi), float(qi) ** 2)
-                for xi, qi in zip(x, q)
-            ]
-        )  # (n_points, n_pids)
+
+        ux, x_idx = np.unique(x, return_inverse=True)
+        uq, q_idx = np.unique(q, return_inverse=True)
+
+        grid = np.asarray(self._member.xfxQ2s(self._pids, ux, uq**2))
+        grid = grid.reshape(len(self._pids), len(ux), len(uq))
+        vals = grid[:, x_idx, q_idx]  # (n_pids, n_points)
+
         if scalar_input:
-            return dict(zip(self._pids, vals[0]))
-        return dict(zip(self._pids, vals.T))
+            return dict(zip(self._pids, vals[:, 0]))
+        return dict(zip(self._pids, vals))
 
     def xfxQ(self, a, b, c=None):
         if c is None:
@@ -202,26 +205,20 @@ def make_pdf(pdf_name, member=None):
     """
     backend = _active_backend()
 
-    if backend not in _VALID_BACKENDS:
-        raise InvalidPDFBackend(f"Unknown backend {backend!r}. Options are: {_VALID_BACKENDS}")
-
-    if backend == "lhapdf" and not USING_LHAPDF:
-        backend = "pdfflow"
-
-    if backend == "lhapdf":
+    if backend == "lhapdf" and USING_LHAPDF:
         if member is None:
             return lhapdf.mkPDFs(pdf_name)
         return [lhapdf.mkPDF(pdf_name, member)]
-
-    if backend == "neopdf":
+    elif backend == "neopdf":
+        _ensure_neopdf_datapath()
         from neopdf.pdf import PDF as _NeoPDF
 
         members = _NeoPDF.mkPDFs(pdf_name)
         if member is None:
             return [_NeoPDFPDF(m) for m in members]
         return [_NeoPDFPDF(members[member])]
-
-    pdf_meta = lhapdf.load_pdf_meta(pdf_name)
-    if member is None:
-        return [_PDFFlowPDF(pdf_meta, m) for m in range(len(pdf_meta))]
-    return [_PDFFlowPDF(pdf_meta, member)]
+    else:
+        pdf_meta = lhapdf.load_pdf_meta(pdf_name)
+        if member is None:
+            return [_PDFFlowPDF(pdf_meta, m) for m in range(len(pdf_meta))]
+        return [_PDFFlowPDF(pdf_meta, member)]

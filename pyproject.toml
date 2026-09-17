@@ -100,7 +100,6 @@ pdfflow = {version = "^1.2.1", optional = true}
 lhapdf-management = {version = "^0.6", optional = true}
 # neopdf interpolation backend
 neopdf-hep = {version = "^0.4", optional = true}
-neopdf-cli = {version = "^0.4", optional = true}
 # torch
 torch = {version = "*", optional = true}
 # jax
@@ -114,8 +113,7 @@ tests = ["pytest", "pytest-mpl", "hypothesis", "pytest-cov"]
 docs = ["sphinxcontrib-bibtex", "sphinx-rtd-theme", "sphinx", "tabulate"]
 qed = ["fiatlux"]
 pdfflow = ["pdfflow", "lhapdf-management"]
-neopdf = ["neopdf-hep", "neopdf-cli", "lhapdf-management"]
-nolha = ["neopdf-hep", "lhapdf-management"]
+neopdf = ["neopdf-hep", "lhapdf-management"]
 torch = ["torch"]
 jax = ["jax"]
 hyperopt = ["hyperopt", "setuptools"]

@@ -7,23 +7,13 @@ import os
 import numpy as np
 import pytest
 
-# Skip the whole module if neopdf is not importable
+from validphys.tests.conftest import PDF, requires_lhapdf
+
+# Skip the whole module if neopdf is not installed
 neopdf = pytest.importorskip("neopdf", reason="neopdf not installed")
 
-# In view of making LHAPDF Optional in the future.
-try:
-    import lhapdf as _lhapdf
-
-    _lhapdf.setVerbosity(0)
-    HAS_LHAPDF = True
-except ModuleNotFoundError:
-    HAS_LHAPDF = False
-
-requires_lhapdf = pytest.mark.skipif(not HAS_LHAPDF, reason="lhapdf not installed")
-
-PDF_NAME = "NNPDF40_nnlo_as_01180"
-
 PIDS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 21]
+ABSENT_PIDS = [6, -6]
 
 XGRID = np.array([1e-5, 1e-3, 1e-2, 0.1, 0.3, 0.5, 0.7, 0.9])
 QGRID = np.array([1.7, 5.0, 10.0, 100.0])  # GeV
@@ -41,7 +31,7 @@ def neo_pdfset():
     from validphys.lhapdfset import LHAPDFSet
 
     os.environ["NNPDF_PDF_BACKEND"] = "neopdf"
-    pdfset = LHAPDFSet(PDF_NAME, "replicas")
+    pdfset = LHAPDFSet(PDF, "replicas")
     del os.environ["NNPDF_PDF_BACKEND"]
     return pdfset
 
@@ -52,7 +42,7 @@ def neo_pdfset_t0():
     from validphys.lhapdfset import LHAPDFSet
 
     os.environ["NNPDF_PDF_BACKEND"] = "neopdf"
-    pdfset = LHAPDFSet(PDF_NAME, "t0")
+    pdfset = LHAPDFSet(PDF, "t0")
     del os.environ["NNPDF_PDF_BACKEND"]
     return pdfset
 
@@ -61,14 +51,14 @@ def neo_pdfset_t0():
 def lha_pdfset():
     from validphys.lhapdfset import LHAPDFSet
 
-    return LHAPDFSet(PDF_NAME, "replicas")
+    return LHAPDFSet(PDF, "replicas")
 
 
 @pytest.fixture(scope="module")
 def lha_pdfset_t0():
     from validphys.lhapdfset import LHAPDFSet
 
-    return LHAPDFSet(PDF_NAME, "t0")
+    return LHAPDFSet(PDF, "t0")
 
 
 class TestT0Mode:
@@ -101,7 +91,7 @@ class TestT0Mode:
 
 
 class TestNeoPDFSetInterface:
-    """The following simpy checks that that ``NeoPDFSet`` exposes the same
+    """The following simply checks that ``NeoPDFSet`` exposes the same
     interface as ``LHAPDFSet``.
     """
 
@@ -178,7 +168,7 @@ class TestNumericalAgreement:
     floating-point rounding) for every call that both backends support.
     """
 
-    @pytest.mark.parametrize("fl", [21, 1, -1, 2, -2, 3])
+    @pytest.mark.parametrize("fl", PIDS)
     def test_xfxQ_member0(self, neo_pdfset, lha_pdfset, fl):
         if fl not in neo_pdfset.flavors:
             pytest.skip(f"pid {fl} not in set")
@@ -186,7 +176,7 @@ class TestNumericalAgreement:
         lha_val = lha_pdfset.xfxQ(X_VALUE, Q_VALUE, n=0, fl=fl)
         np.testing.assert_allclose(neo_val, lha_val, **CROSS_BACKEND_TOL)
 
-    @pytest.mark.parametrize("fl", [21, 2])
+    @pytest.mark.parametrize("fl", PIDS)
     def test_xfxQ_all_members(self, neo_pdfset, lha_pdfset, fl):
         if fl not in neo_pdfset.flavors:
             pytest.skip(f"pid {fl} not in set")
@@ -195,16 +185,16 @@ class TestNumericalAgreement:
             lha_val = lha_pdfset.xfxQ(X_VALUE, Q_VALUE, n=n, fl=fl)
             np.testing.assert_allclose(neo_val, lha_val, **CROSS_BACKEND_TOL)
 
-    @pytest.mark.parametrize("x", [1e-5, 1e-3, 0.1, 0.5, 0.9])
-    @pytest.mark.parametrize("Q", [1.7, 10.0, 100.0])
+    @pytest.mark.parametrize("x", XGRID)
+    @pytest.mark.parametrize("Q", QGRID)
     def test_xfxQ_gluon_phase_space(self, neo_pdfset, lha_pdfset, x, Q):
         neo_val = neo_pdfset.xfxQ(x, Q, n=0, fl=21)
         lha_val = lha_pdfset.xfxQ(x, Q, n=0, fl=21)
         np.testing.assert_allclose(neo_val, lha_val, **CROSS_BACKEND_TOL)
 
-    @pytest.mark.parametrize("x", [1e-5, 0.1, 0.9])
-    @pytest.mark.parametrize("Q", [1.7, 100.0])
-    @pytest.mark.parametrize("fl", [6, -6])
+    @pytest.mark.parametrize("x", XGRID)
+    @pytest.mark.parametrize("Q", QGRID)
+    @pytest.mark.parametrize("fl", ABSENT_PIDS)
     def test_xfxQ_absent_flavour_zero(self, neo_pdfset, fl, x, Q):
         """Absent flavours must return 0.0."""
         assert fl not in neo_pdfset.flavors
@@ -216,7 +206,7 @@ class TestNumericalAgreement:
         lha_result = lha_pdfset.grid_values(pids, XGRID, QGRID)
         assert neo_result.shape == lha_result.shape
 
-    @pytest.mark.parametrize("fl", [21, 1, 2])
+    @pytest.mark.parametrize("fl", PIDS)
     def test_grid_values_single_flavour(self, neo_pdfset, lha_pdfset, fl):
         if fl not in neo_pdfset.flavors:
             pytest.skip(f"pid {fl} not in set")
@@ -273,21 +263,21 @@ class TestBackendFactory:
         monkeypatch.delenv("NNPDF_PDF_BACKEND", raising=False)
         from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
 
-        members = make_pdf(PDF_NAME)
+        members = make_pdf(PDF)
         assert not isinstance(members[0], _NeoPDFPDF)
 
     def test_env_var_neopdf_returns_neopdf_members(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
         from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
 
-        members = make_pdf(PDF_NAME)
+        members = make_pdf(PDF)
         assert all(isinstance(m, _NeoPDFPDF) for m in members)
 
     def test_env_var_lhapdf_returns_non_neopdf_members(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "lhapdf")
         from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
 
-        members = make_pdf(PDF_NAME)
+        members = make_pdf(PDF)
         assert not isinstance(members[0], _NeoPDFPDF)
 
     def test_invalid_env_var_raises(self, monkeypatch):
@@ -295,13 +285,14 @@ class TestBackendFactory:
         from validphys.lhapdf_compatibility import InvalidPDFBackend, make_pdf
 
         with pytest.raises(InvalidPDFBackend, match="Unknown backend"):
-            make_pdf(PDF_NAME)
+            make_pdf(PDF)
 
-    def test_neopdf_single_member_returns_neopdf_member(self, monkeypatch):
+    @pytest.mark.parametrize("member", [0, 1])
+    def test_neopdf_single_member_returns_neopdf_member(self, monkeypatch, member):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
         from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
 
-        members = make_pdf(PDF_NAME, member=0)
+        members = make_pdf(PDF, member=member)
         assert len(members) == 1
         assert isinstance(members[0], _NeoPDFPDF)
 
@@ -310,9 +301,9 @@ class TestBackendFactory:
         from validphys.lhapdf_compatibility import make_pdf
 
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
-        neo_members = make_pdf(PDF_NAME)
+        neo_members = make_pdf(PDF)
 
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "lhapdf")
-        lha_members = make_pdf(PDF_NAME)
+        lha_members = make_pdf(PDF)
 
         assert len(neo_members) == len(lha_members)
