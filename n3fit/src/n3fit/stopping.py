@@ -4,28 +4,28 @@ Module containing the classes related to the stopping alogirthm
 In this module there are four Classes:
 
 - FitState: this class contains the information of the fit
-        for a given point in history
+  for a given point in history
 - FitHistory: this class contains the information necessary
-        in order to reset the state of the fit to the point
-        in which the history was saved.
-        i.e., a list of FitStates
+  in order to reset the state of the fit to the point
+  in which the history was saved.
+  i.e., a list of FitStates
 - Stopping: this class monitors the chi2 of the validation
-        and training sets and decides when to stop
+  and training sets and decides when to stop
 - Positivity: Decides whether a given point fullfills the positivity conditions
 - Validation: Controls the NNPDF cross-validation algorithm
 
 Note:
     There are situations in which the validation set is empty, in those cases
-the training set is used as validation set.
-This implies several changes in the behaviour of this class as the training chi2 will
-now be monitored for stability.
+    the training set is used as validation set.
+    This implies several changes in the behaviour of this class as the training chi2 will
+    now be monitored for stability.
     In order to parse the set of loss functions coming from the backend::MetaModel,
-the function `parse_losses` relies on the fact that they are all suffixed with `_loss`
-the validation case, instead, is suffixed with `val_loss`. In the particular casse in
-which both training and validation model correspond to the same backend::MetaModel only
-the `_loss` suffix can be found. This is taken into account by the class `Stopping`
-which will tell `Validation` that no validation set was found and that the training is to
-be used instead.
+    the function `parse_losses` relies on the fact that they are all suffixed with `_loss`
+    the validation case, instead, is suffixed with `val_loss`. In the particular casse in
+    which both training and validation model correspond to the same backend::MetaModel only
+    the `_loss` suffix can be found. This is taken into account by the class `Stopping`
+    which will tell `Validation` that no validation set was found and that the training is to
+    be used instead.
 """
 
 import logging
@@ -579,18 +579,18 @@ class Positivity:
 
     def check_positivity(self, history_object):
         """
-                This function receives a history objects and loops over the
-                positivity_sets to check the value of the positivity loss.
+        This function receives a history objects and loops over the
+        positivity_sets to check the value of the positivity loss.
 
-                If the positivity loss is above the threshold, the positivity fails
-                otherwise, it passes.
-                It returns an array booleans which are True if positivity passed
+        If the positivity loss is above the threshold, the positivity fails
+        otherwise, it passes.
+        It returns an array booleans which are True if positivity passed
         story_object[key_loss] < self.threshold
 
-                Parameters
-                ----------
-                    history_object: dict
-                        dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
+        Parameters
+        ----------
+        history_object: dict
+            dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
         """
         positivity_pass = True
         for key in self.positivity_sets:

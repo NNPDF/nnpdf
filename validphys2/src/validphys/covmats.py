@@ -45,10 +45,11 @@ def covmat_from_systematics(
     ADDitive or MULTiplicative systypes are handled by either multiplying
     the additive or multiplicative uncertainties respectively. We convert
     uncertainties so that they are all in the same units as the data:
+
         - Additive (ADD) systematics are left unchanged
         - multiplicative (MULT) systematics need to be converted from a
-        percentage by multiplying by the central value
-        and dividing by 100.
+          percentage by multiplying by the central value
+          and dividing by 100.
 
     Finally, the systematics are split into the five possible archetypes
     of systematic uncertainties: uncorrelated (UNCORR), correlated (CORR),
@@ -71,18 +72,17 @@ def covmat_from_systematics(
 
     Parameters
     ----------
-
     loaded_commondata_with_cuts : nnpdf_data.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
-    dataset_input: validphys.core.DataSetInput
+    dataset_input : validphys.core.DataSetInput
         Dataset settings, contains the weight for the current dataset.
         The returned covmat will be divided by the dataset weight if
         ``use_weights_in_covmat``. The default weight is 1, which means
         the returned covmat will be unmodified.
-    use_weights_in_covmat: bool
+    use_weights_in_covmat : bool
         Whether to weight the covmat, True by default.
-    norm_threshold: number
+    norm_threshold : number
         threshold used to regularize covariance matrix
     _central_values : None, np.array
         1-D array containing alternative central values to combine with the
@@ -93,7 +93,7 @@ def covmat_from_systematics(
 
     Returns
     -------
-    cov_mat: np.array
+    cov_mat : np.array
         Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
         containing uncertainty and correlation information.
 
@@ -147,7 +147,7 @@ def dataset_inputs_covmat_from_systematics(
     data_input: list[validphys.core.DataSetInput]
         Settings for each dataset, each element contains the weight for the
         current dataset. The elements of the returned covmat for dataset
-        i and j will be divided by sqrt(weight_i)*sqrt(weight_j), if
+        i and j will be divided by ``sqrt(weight_i)*sqrt(weight_j)``, if
         ``use_weights_in_covmat``. The default weight is 1, which means
         the returned covmat will be unmodified.
     use_weights_in_covmat: bool
@@ -169,6 +169,7 @@ def dataset_inputs_covmat_from_systematics(
     Example
     -------
     This function can be called directly from the API:
+
     >>> from validphys.api import API
     >>> dsinps = [
     ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
@@ -232,12 +233,13 @@ def dataset_inputs_covmat_from_systematics(
 def shifts_from_systematics(lcd_wc, theory_predictions):
     """Take the statistical uncertainty and systematics table from
     a :py:class:`validphys.coredata.CommonData` object and
-    the corresponding theoretical predictions from :py:funct:`results`
+    the corresponding theoretical predictions from :py:func:`results`
     to compute the shifts on experimental data due to correlated uncertainties
     according to Eqs.(7)-(9) of arXiv:hep-ph/0201195. Note that the shift is
     induced ONLY by the experimental covariance matrix constructed after cuts.
     The treatment of uncertainties is as in covmat_from_systematics.
     The shifts must be added to the central value of the unshifted data.
+
     Parameters
     ----------
     loaded_commondata_with_cuts : validphys.coredata.CommonData
@@ -245,9 +247,10 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
         their treatment and description.
     results_without_covmat : py:funct:
         A results object with a diagonal covmat
+
     Returns
     -------
-    shifts: np.array
+    shifts : np.array
         Numpy array of dimension N_dat (where N_dat is the number of data
         points) containing the numerical value of the systematic shifts
         due to correlated uncertainties
@@ -290,14 +293,15 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
 def unco_unc(lcd_wc):
     """Extract the uncorrelated part of the experimental uncertainty
     from a :py:class:`validphys.coredata.CommonData` object
-     Parameters
+
+    Parameters
     ----------
     loaded_commondata_with_cuts : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
     Returns
     -------
-    alpha: np.array
+    alpha : np.array
         Numpy array of dimension N_dat (where N_dat is the number of data
         points) containing the numerical value of the uncorrelated 
         part of the experimental uncertainty
@@ -317,14 +321,15 @@ def unco_unc(lcd_wc):
 def corr_unc(lcd_wc):
     """Extract the correlated part of the experimental uncertainty
     from a :py:class:`validphys.coredata.CommonData` object
-     Parameters
+
+    Parameters
     ----------
     loaded_commondata_with_cuts : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
     Returns
     -------
-    beta: np.array
+    beta : np.array
         Numpy array of dimension N_dat (where N_dat is the number of data
         points) containing the numerical value of the correlated 
         part of the experimental uncertainty
@@ -804,6 +809,7 @@ def groups_corrmat(groups_covmat):
 def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
     `covmat_t0_considered` and the PDF error:
+
     - If the PDF error_type is 'replicas', a covariance matrix is estimated from
       the replica theory predictions
     - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
