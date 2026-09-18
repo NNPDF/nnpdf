@@ -44,4 +44,3 @@ runs:
       shell: bash -l {0}
       run: |
         pip install -e .${{ inputs.nnpdf-extras }}
-    - uses: ./.github/actions/set_neopdf_datapath
