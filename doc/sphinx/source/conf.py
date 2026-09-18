@@ -63,6 +63,8 @@ extensions = [
     "sphinx.ext.autosectionlabel",
 ]
 
+napoleon_use_ivar = True
+
 
 bibtex_bibfiles = ["references.bib"]
 

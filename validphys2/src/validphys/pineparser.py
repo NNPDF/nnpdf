@@ -131,34 +131,40 @@ def pineappl_reader(fkspec):
     several FKTable files which get concatenated on the ndata (bin) axis.
 
     For more information on the reading of pineappl tables:
-        https://pineappl.readthedocs.io/en/latest/modules/pineappl/pineappl.html#pineappl.pineappl.PyFkTable
+
+    https://pineappl.readthedocs.io/en/latest/modules/pineappl/pineappl.html#pineappl.pineappl.PyFkTable
 
     About the reader:
-        Each pineappl table is a 4-dimensional grid with:
-            (ndata, active channels, x1, x2)
-        for DIS grids x2 will contain one single number.
-        The luminosity channels are given in a (flav1, flav2) format and thus need to be converted
-        to the 1-D index of a (14x14) luminosity tensor in order to put in the form of a dataframe.
 
-        All grids in pineappl are constructed with the exact same xgrid,
-        the active channels can vary and so when grids are concatenated for an observable
-        the gaps are filled with 0s.
+    Each pineappl table is a 4-dimensional grid with::
 
-        The pineappl grids are such that obs = sum_{bins} fk * f (*f) * bin_w
-        so in order to use them together with old-style grids (obs = sum_{bins} fk * xf (*xf))
-        it is necessary to remove the factor of x and the normalization of the bins.
+        (ndata, active channels, x1, x2)
+
+    for DIS grids x2 will contain one single number.
+    The luminosity channels are given in a (flav1, flav2) format and thus need to be converted
+    to the 1-D index of a (14x14) luminosity tensor in order to put in the form of a dataframe.
+
+    All grids in pineappl are constructed with the exact same xgrid,
+    the active channels can vary and so when grids are concatenated for an observable
+    the gaps are filled with 0s.
+
+    The pineappl grids are such that ``obs = sum_{bins} fk * f (*f) * bin_w``
+    so in order to use them together with old-style grids
+    (``obs = sum_{bins} fk * xf (*xf)``) it is necessary to remove the factor of x and
+    the normalization of the bins.
 
     About apfelcomb flags in yamldb files:
-        old commondata files and old grids have over time been through various iterations while remaining compatibility between each other,
-        and fixes and hacks have been incorporated in one or another
-        for the new theory to be compatible with old commpondata it is necessary
-        to keep track of said hacks (and to apply conversion factors when required)
+
+    old commondata files and old grids have over time been through various iterations while remaining compatibility between each other,
+    and fixes and hacks have been incorporated in one or another
+    for the new theory to be compatible with old commpondata it is necessary
+    to keep track of said hacks (and to apply conversion factors when required)
     NOTE: both conversion factors and apfelcomb flags will be eventually removed.
 
     Returns
     -------
-        validphys.coredata.FKTableData
-            an FKTableData object containing all necessary information to compute predictions
+    validphys.coredata.FKTableData
+        an FKTableData object containing all necessary information to compute predictions
     """
     from pineappl.fk_table import FkTable
 
