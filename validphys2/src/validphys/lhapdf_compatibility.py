@@ -152,7 +152,12 @@ class _NeoPDFPDF:
         return self._pids
 
     def _xfxQ_all_pid(self, x, q):
-        scalar_input = np.ndim(x) == 0 and np.ndim(q) == 0
+        if np.ndim(x) == 0 and np.ndim(q) == 0:
+            # Single-point fast path since going through the xfxQ2s path below for
+            # a single point yields overhead.
+            vals = self._member.xfxQ2_allpids(self._pids, float(x), float(q) ** 2)
+            return dict(zip(self._pids, vals))
+
         x = np.atleast_1d(x)
         q = np.atleast_1d(q)
 
@@ -163,8 +168,6 @@ class _NeoPDFPDF:
         grid = grid.reshape(len(self._pids), len(ux), len(uq))
         vals = grid[:, x_idx, q_idx]  # (n_pids, n_points)
 
-        if scalar_input:
-            return dict(zip(self._pids, vals[:, 0]))
         return dict(zip(self._pids, vals))
 
     def xfxQ(self, a, b, c=None):
