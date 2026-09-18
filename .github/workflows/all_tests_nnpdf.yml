@@ -148,6 +148,8 @@ jobs:
         cat Basic_runcard/nnfit/*/Basic_runcard.json
     - name: Test we can still run postfit
       shell: bash -l {0}
+      env:
+        NNPDF_PDF_BACKEND: pdfflow
       run: |
         output=$(vp-get fit NNPDF40_nnlo_like_CI_testing_250616)
         fit_path=$(echo $output | grep -o  "PosixPath('.*')" | cut -d"'" -f2)
