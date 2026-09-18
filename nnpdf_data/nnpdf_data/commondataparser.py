@@ -222,27 +222,28 @@ class TheoryMeta:
     in order to match the experimental data.
 
     In addition there are other flags that can affect how the fktables are read or used:
+    
     - operation: defines the operation to apply to the outer list
     - shifts: mapping with the single fktables and their respective shifts
-              useful to create "gaps" so that the fktables and the respective experimental data
-              are ordered in the same way (for instance, when some points are missing from a grid)
+        useful to create "gaps" so that the fktables and the respective experimental data
+        are ordered in the same way (for instance, when some points are missing from a grid)
 
     This class is inmutable, what is read from the commondata metadata should be considered final
 
     Example
     -------
     >>> from nnpdf_data.commondataparser import TheoryMeta
-    ... from validobj import parse_input
-    ... from ruamel.yaml import YAML
-    ... theory_raw = '''
+    >>> from validobj import parse_input
+    >>> from ruamel.yaml import YAML
+    >>> theory_raw = '''
     ... FK_tables:
     ...   - - fk1
     ...   - - fk2
     ...     - fk3
     ... operation: ratio
     ... '''
-    ... theory = YAML(typ='safe').load(theory_raw)
-    ... parse_input(theory, TheoryMeta)
+    >>> theory = YAML(typ='safe').load(theory_raw)
+    >>> parse_input(theory, TheoryMeta)
     TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, normalization=None))
     """
 
@@ -296,9 +297,10 @@ class TheoryMeta:
 class Variant:
     """The new commondata format allow the usage of variants
     A variant can overwrite a number of keys, as defined by this dataclass:
-        data_uncertainties
-        theory
-        data_central
+    
+    - data_uncertainties
+    - theory
+    - data_central
 
     This class may overwrite *some* other keys for the benefit of reproducibility
     of old NNPDF fits, but the usage of these features is undocumented and discouraged.
@@ -919,22 +921,24 @@ def load_commondata(metadata):
     (i.e., an observable from a data publication) correspond to one single observable
     inside a folder which is named as "<experiment>_<process>_<energy>_<extra>"
     The observable is defined by a last suffix of the form "_<obs>" so that the full name
-    of the dataset is always:
+    of the dataset is always::
 
         "<experiment>_<process>_<energy>{_<extra>}_<obs>"
 
     where <extra> is optional.
 
     This function right now works under the assumotion that the folder/observable
-    is separated in the last _ so that:
+    is separated in the last _ so that::
+
         folder_name = <experiment>_<process>_<energy>{_<extra>}
+
     but note that this convention is still not fully defined.
 
     This function returns a commondata object constructed by parsing the metadata.
 
     Once a variant is selected, it can no longer be changed
 
-    Note that this function reproduces `parse_commondata` below, which parses the
+    Note that this function reproduces ``parse_commondata`` below, which parses the
     _old_ file format
     """
     # Before loading, apply the checks

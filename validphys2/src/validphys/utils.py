@@ -83,16 +83,16 @@ def experiments_to_dataset_inputs(experiments_list):
 
     Example
     -------
-    ```python
-    from validphys.api import API
-    from validphys.utils import experiments_to_dataset_inputs
+    .. code-block:: python
 
-    fit = API.fit(fit="NNPDF31_nnlo_as_0118_1000")
-    experiments = fit.as_input()["experiments"]
-    dataset_inputs = experiments_to_dataset_inputs(experiments)
+        from validphys.api import API
+        from validphys.utils import experiments_to_dataset_inputs
 
-    dataset_inputs[:3]
-    ```
+        fit = API.fit(fit="NNPDF31_nnlo_as_0118_1000")
+        experiments = fit.as_input()["experiments"]
+        dataset_inputs = experiments_to_dataset_inputs(experiments)
+
+        dataset_inputs[:3]
     """
     dataset_inputs = []
     for experiment in experiments_list:

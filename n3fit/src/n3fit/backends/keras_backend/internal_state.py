@@ -152,12 +152,14 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
     This function sets the initial internal state for the different components of n3fit.
 
     In debug mode it seeds all seedable libraries, which include:
-        - numpy
-        - hyperopt
-        - python random
-        - tensorflow
+
+    - numpy
+    - hyperopt
+    - python random
+    - tensorflow
+
     The tensorflow/keras part is based on Keras' own
-    [guide](https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development)
+    <https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development>_.
     Note that you might also need PYTHONHASHSEED=0 (outside the program) for full reproducibility.
 
     To ensure reproducibility in debug mode, if the number of cores is not given,

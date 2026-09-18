@@ -280,8 +280,10 @@ class N3FitConfig(Config):
         """Read the input hyperscan and produce a dictionary containing
         the settings of the best trials.
 
-        The trial specs can include overrides as a dict, e.g.,
+        The trial specs can include overrides as a dict, e.g.::
+
             epochs: 500
+
         such that the value for the number of epochs will be 500 for all trials.
         """
 
