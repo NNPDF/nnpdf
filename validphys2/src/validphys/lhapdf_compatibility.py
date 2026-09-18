@@ -38,6 +38,10 @@ class InvalidPDFBackend(Exception):
     pass
 
 
+class NoAlternativeBackendSpecified(Exception):
+    pass
+
+
 def _active_backend():
     """Return the active PDF backend.
 
@@ -220,8 +224,15 @@ def make_pdf(pdf_name, member=None):
         if member is None:
             return [_NeoPDFPDF(m) for m in members]
         return [_NeoPDFPDF(members[member])]
-    else:
+    elif backend == "pdfflow":
         pdf_meta = lhapdf.load_pdf_meta(pdf_name)
         if member is None:
             return [_PDFFlowPDF(pdf_meta, m) for m in range(len(pdf_meta))]
         return [_PDFFlowPDF(pdf_meta, member)]
+    else:
+        raise NoAlternativeBackendSpecified(
+            "Please specify an alternative backend either by specifying the "
+            "backend in the NNPDF profile (``nnprofile.yaml``) or via the "
+            "environment variable ``NNPDF_PDF_BACKEND`` and make sure to install "
+            "the corresponding module."
+        )
