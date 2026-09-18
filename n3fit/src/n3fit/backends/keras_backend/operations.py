@@ -7,14 +7,18 @@ This includes an implementation of the NNPDF operations on fktable in the keras
 language (with the mapping ``c_to_py_fun``) into Keras ``Lambda`` layers.
 
 The rest of the operations in this module are divided into four categories:
+
 numpy to tensor:
     Operations that take a numpy array and return a tensorflow tensor
+
 layer to layer:
     Operations that take a layer and return another layer
+
 tensor to tensor:
     Operations that take a tensor and return a tensor
+
 layer generation:
-    Instanciate a layer to be applied by the calling function
+    Instantiate a layer to be applied by the calling function
 
 Most of the operations in this module are just aliases to the backend
 (Keras in this case) so that, when implementing new backends, it is clear
@@ -197,7 +201,7 @@ def flatten(x):
 
 def stack(tensor_list, axis=0, **kwargs):
     """Stack a list of tensors
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/stack>`_
+    see full `Stack docs <https://www.tensorflow.org/api_docs/python/tf/stack>`_
     """
     return Kops.stack(tensor_list, axis=axis)
 
@@ -217,7 +221,7 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
 def scatter_to_one(values, indices, output_shape):
     """
     Like scatter_nd initialized to one instead of zero
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
+    see full `Scatter docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
     """
     ones = Kops.ones(output_shape)
     return Kops.scatter_update(ones, indices, values)
@@ -226,7 +230,7 @@ def scatter_to_one(values, indices, output_shape):
 def swapaxes(tensor, source, destination):
     """
     Moves the axis of the tensor from source to destination, as in numpy.swapaxes.
-    see full `docs <https://numpy.org/doc/stable/reference/generated/numpy.swapaxes.html>`_
+    see full `Swapaxes docs <https://numpy.org/doc/stable/reference/generated/numpy.swapaxes.html>`_
     """
     rank = len(tensor.shape)
     indices = list(range(rank))
