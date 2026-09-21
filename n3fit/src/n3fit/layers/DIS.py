@@ -12,9 +12,9 @@
     Some timings done on snellius using tensorflow 2.15.0 and varying these 2 factors::
 
      CPU\GPU | einsum | tensordot |
-    | -- | -- | -- |
-    | mask pdf | -  | 92 \ 65 |
-    |mask fk | 330 \ 53 \  | 177 \ 53 |
+     | -- | -- | -- |
+     | mask pdf | -  | 92 \ 65 |
+     |mask fk | 330 \ 53 \  | 177 \ 53 |
 
     These timings are all for one replica.
 

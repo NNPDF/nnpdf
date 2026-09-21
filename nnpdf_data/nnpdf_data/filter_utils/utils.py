@@ -372,17 +372,21 @@ def trimat_to_fullmat(mode, tri_mat_list):
     mode : bool
         Enter 0 or 1 based on the following scenarios:
         Use mode 0 if matrix entries are given row by
-        row such as:
-        0 1 2 3
-          4 5 6
-            7 8
-              9
+        row such as::
+
+            0 1 2 3
+              4 5 6
+                7 8
+                  9
+
         Use mode 1 if the matrix entries are given column
-        by column such as:
-        0 1 3 6
-          2 4 7
-            5 8
-              9
+        by column such as::
+
+            0 1 3 6
+              2 4 7
+                5 8
+                  9
+
         Please note that the numbers above (0-9) are not
         entries of the matrix but rather the index of the
         entries of the list which contains the elements of
