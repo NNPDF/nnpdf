@@ -422,7 +422,7 @@ class HyperScanner:
         - learning_rate
         - clipnorm
 
-        but for hyperopt it will look as a list of dictionaries
+        but for hyperopt it will look as a list of dictionaries::
 
             [ { optimizer_name: optimizer_name, learning_rate: sampler },
               { optimizer_name: optimizer_name, learning_rate: sampler }, ...
