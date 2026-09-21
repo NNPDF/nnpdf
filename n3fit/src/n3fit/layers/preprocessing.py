@@ -21,18 +21,19 @@ class Preprocessing(MetaLayer):
 
     Parameters
     ----------
-        replica_seeds: List[int]
-            list of pre replica seeds for the initializer of the random alpha and beta values
-        flav_info: list
-            list of dicts containing the information about the fitting of the preprocessing factor
-            This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
-            The dicts can contain the following fields:
-                `smallx`: range of alpha
-                `largex`: range of beta
-                `trainable`: whether these alpha-beta should be trained during the fit
-                            (defaults to true)
-        large_x: bool
-            Whether large x preprocessing factor should be active
+    replica_seeds: List[int]
+        list of pre replica seeds for the initializer of the random alpha and beta values
+    flav_info: list
+        list of dicts containing the information about the fitting of the preprocessing factor
+        This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
+        The dicts can contain the following fields:
+
+        - `smallx`: range of alpha
+        - `largex`: range of beta
+        - `trainable`: whether these alpha-beta should be trained during the fit
+          (defaults to true)
+    large_x: bool
+        Whether large x preprocessing factor should be active
     """
 
     def __init__(

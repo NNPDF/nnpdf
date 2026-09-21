@@ -120,26 +120,26 @@ class HyperLoss:
 
     The ``compute_loss`` method saves intermediate metrics such as the
     chi2 of the folds or the phi regardless of the loss type that has been selected.
-    These metrics are saved in the properties
-        ``phi2_vector``: list of phi per fold
-        ``chi2_matrix``: list of chi2 per fold, per replica
+    These metrics are saved in the properties:
 
+    - ``phi2_vector``: list of phi per fold
+    - ``chi2_matrix``: list of chi2 per fold, per replica
 
     Parameters
     ----------
-        loss_type: str
-            the type of loss over the replicas to use.
-            Options are "chi2" and "phi2".
-        replica_statistic: str
-            the statistic over the replicas to use, for per replica losses.
-            Options are ``average``, ``best_worst`` and ``_std``.
-        fold_statistic: str
-            the statistic over the folds to use.
-            Options are ``average``, ``best_worst`` and ``_std``.
-        reduce_proportion: float (default 0.85)
-            Proportion of replicas to select when computing statistics.
-        penalties_in_loss: bool
-            whether the penalties should be included in the output of ``compute_loss``
+    loss_type: str
+        the type of loss over the replicas to use.
+        Options are "chi2" and "phi2".
+    replica_statistic: str
+        the statistic over the replicas to use, for per replica losses.
+        Options are ``average``, ``best_worst`` and ``_std``.
+    fold_statistic: str
+        the statistic over the folds to use.
+        Options are ``average``, ``best_worst`` and ``_std``.
+    reduce_proportion: float (default 0.85)
+        Proportion of replicas to select when computing statistics.
+    penalties_in_loss: bool
+        whether the penalties should be included in the output of ``compute_loss``
     """
 
     def __init__(

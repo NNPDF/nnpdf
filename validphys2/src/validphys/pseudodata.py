@@ -96,17 +96,19 @@ def read_replica_pseudodata(fit, context_index, replica):
 
     Example
     -------
-    ```from validphys.api import API
+    .. code-block:: python
 
-    data_indices_list = API.read_fit_pseudodata(
-        fit="pseudodata_test_fit_n3fit"
-    )
+        from validphys.api import API
 
-    # Same as nrep
-    len(data_indices_list)  # 10
+        data_indices_list = API.read_fit_pseudodata(
+            fit="pseudodata_test_fit_n3fit"
+        )
 
-    rep_info = data_indices_list[0]
-    rep_info.pseudodata.loc[rep_info.tr_idx].head()```
+        # Same as nrep
+        len(data_indices_list)  # 10
+
+        rep_info = data_indices_list[0]
+        rep_info.pseudodata.loc[rep_info.tr_idx].head()
     """
     # Detect whether fit performed in diagonal basis
     # TODO: change the fit object to return diagonal basis True or False depening on the NNPDF version
