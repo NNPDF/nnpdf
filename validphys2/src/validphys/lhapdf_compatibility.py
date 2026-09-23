@@ -1,14 +1,13 @@
 """
 Module for LHAPDF compatibility backends
 
-If LHAPDF is installed, the module will transparently hand over everything to LHAPDF.
-If LHAPDF is not available, it will try to use a combination of the packages
-    `lhapdf-management` and `pdfflow`
-which cover all the features of LHAPDF used during the fit (and likely most of validphys).
+If LHAPDF is installed and no alternative backend is specified, the module will
+transparently hand over everything to LHAPDF. Instead, if LHAPDF is not available
+and no alternative backend is specified, then the module will raise an error.
 
 The NeoPDF interpolation library can be selected by setting ``pdf_backend: neopdf``
-in the NNPDF profile (``nnprofile.yaml``), or via the ``NNPDF_PDF_BACKEND`` environment
-variable which takes precedence over the profile.
+in the NNPDF profile (``nnprofile.yaml``), or via the ``NNPDF_PDF_BACKEND``
+environment variable which takes precedence over the profile.
 """
 
 from functools import cached_property
@@ -229,10 +228,10 @@ def make_pdf(pdf_name, member=None):
         if member is None:
             return [_PDFFlowPDF(pdf_meta, m) for m in range(len(pdf_meta))]
         return [_PDFFlowPDF(pdf_meta, member)]
-    else:
-        raise NoAlternativeBackendSpecified(
-            "Please specify an alternative backend either by specifying the "
-            "backend in the NNPDF profile (``nnprofile.yaml``) or via the "
-            "environment variable ``NNPDF_PDF_BACKEND`` and make sure to install "
-            "the corresponding module."
-        )
+
+    raise NoAlternativeBackendSpecified(
+        "Please specify an alternative backend either by specifying it in"
+        "the NNPDF profile (``nnprofile.yaml``) or via the environment "
+        "variable ``NNPDF_PDF_BACKEND`` and make sure to install the "
+        "corresponding module."
+    )
