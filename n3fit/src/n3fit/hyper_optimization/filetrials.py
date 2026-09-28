@@ -8,9 +8,10 @@ Example
 -------
 >>> import json ; import glob
 >>> for jsonfile in glob.glob("*/nnfit/replica_1/tries.json"):
->>> name = jsonfile.split("/")[0]
->>> aa = json.load(open(jsonfile, 'r'))
->>> print(f"{len(aa)} trials for {name}")
+...     name = jsonfile.split("/")[0]
+...     with open(jsonfile) as stream:
+...         trials = json.load(stream)
+...     print(f"{len(trials)} trials for {name}")
 
 """
 

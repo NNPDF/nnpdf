@@ -10,7 +10,7 @@ individual tests don't have to.
 import subprocess as sp
 
 
-def run_setupfit(runcard, *, cwd, output=None):
+def run_setupfit(runcard, *, cwd, output=None, no_eko_download=False):
     """Run ``vp-setupfit <runcard> [-o <output>]`` before ``n3fit``.
 
     Exposed separately so tests that launch n3fit via ``sp.Popen`` (e.g. the
@@ -20,6 +20,8 @@ def run_setupfit(runcard, *, cwd, output=None):
     cmd = ["vp-setupfit", str(runcard)]
     if output is not None:
         cmd += ["-o", str(output)]
+    if no_eko_download:
+        cmd += ["--no-eko-download"]
     return sp.run(cmd, cwd=cwd, check=True)
 
 

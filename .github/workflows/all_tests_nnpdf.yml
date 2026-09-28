@@ -18,6 +18,7 @@ env:
 
 jobs:
   run_package_tests:
+    if: github.event.commits[0] != null
     strategy:
       matrix:
         os: [ubuntu-latest, macos-14]
@@ -44,12 +45,36 @@ jobs:
           name: coverage-package-${{ matrix.os }}
           path: .coverage
 
-
-  regression_tests:
+  # This check is potentially too strict
+  # if we find it fails too much, instead of changed files
+  # we'll need to look at the CSV with some tolerance
+  regression_setupfit:
+    if: github.event.commits[0] != null
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: "3.13"
+      - name: Run regression tests
+        shell: bash -l {0}
+        run: |
+          pytest --cov=${PWD} --cov-config=pyproject.toml extra_tests/regression_setupfit.py
+      - name: Keep coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          include-hidden-files: true
+          name: coverage-setupfit
+          path: .coverage
+
+  regression_tests:
+    if: github.event.commits[0] != null
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/install_conda_pip
+        with:
+          python-version: "3.13"
       - name: Run regression tests
         shell: bash -l {0}
         run: |
@@ -62,6 +87,7 @@ jobs:
           path: .coverage
 
   conda_tests:
+    if: github.event.commits[0] != null
     strategy:
       matrix:
         os: [ubuntu-latest, macos-14]
@@ -89,6 +115,7 @@ jobs:
           path: ${{ env.CONDA }}/envs/*/conda-bld/noarch/*.tar.bz2
 
   run_pytorch:
+    if: github.event.commits[0] != null
     runs-on: ubuntu-latest
     env:
       KERAS_BACKEND: torch
@@ -126,6 +153,7 @@ jobs:
         postfit 50 NNPDF40_nnlo_like_CI_testing_250616
 
   run_jax:
+    if: github.event.commits[0] != null
     runs-on: ubuntu-latest
     env:
       KERAS_BACKEND: jax
@@ -149,7 +177,8 @@ jobs:
         cat Basic_runcard/nnfit/*/Basic_runcard.json
 
   full_coverage:
-    needs: [run_package_tests, regression_tests]
+    if: github.event.commits[0] != null
+    needs: [run_package_tests, regression_tests, regression_setupfit]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6

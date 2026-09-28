@@ -53,7 +53,6 @@ def processData():
         covMatArray_dSig_dpTt.append(covMatEl)
     artUncMat_dSig_dpTt = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt, 1)
 
-    sqrts = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -72,7 +71,6 @@ def processData():
                 str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value
             )
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': pT_t_mid, 'max': pT_t_max},
         }
@@ -136,7 +134,6 @@ def processData():
         covMatArray_dSig_dyt.append(covMatEl)
     artUncMat_dSig_dyt = cta(ndata_dSig_dyt, covMatArray_dSig_dyt, 1)
 
-    sqrts = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -155,7 +152,6 @@ def processData():
                 str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value
             )
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_t': {'min': y_t_min, 'mid': y_t_mid, 'max': y_t_max},
         }
@@ -219,7 +215,6 @@ def processData():
         covMatArray_dSig_dyttBar.append(covMatEl)
     artUncMat_dSig_dyttBar = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar, 1)
 
-    sqrts = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -238,7 +233,6 @@ def processData():
                 str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value
             )
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_ttBar': {'min': y_ttBar_min, 'mid': y_ttBar_mid, 'max': y_ttBar_max},
         }
@@ -302,7 +296,6 @@ def processData():
         covMatArray_dSig_dmttBar.append(covMatEl)
     artUncMat_dSig_dmttBar = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar, 1)
 
-    sqrts = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -321,7 +314,6 @@ def processData():
                 str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value
             )
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'm_ttBar': {'min': m_ttBar_min, 'mid': m_ttBar_mid, 'max': m_ttBar_max},
         }

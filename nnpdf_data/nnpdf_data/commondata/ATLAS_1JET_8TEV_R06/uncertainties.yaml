@@ -2926,13 +2926,13 @@ bins:
   syst_JES_EtaIntercalibration_Stat213_minus: 0.0
   syst_JES_EtaIntercalibration_Stat214_plus: 0.0
   syst_JES_EtaIntercalibration_Stat214_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat215_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat215_plus: 0.0
   syst_JES_EtaIntercalibration_Stat215_minus: 0.0
   syst_JES_EtaIntercalibration_Stat216_plus: 3.05682262e-02
   syst_JES_EtaIntercalibration_Stat216_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat217_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat217_plus: 0.0
   syst_JES_EtaIntercalibration_Stat217_minus: 9.46674559e-02
-  syst_JES_EtaIntercalibration_Stat218_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat218_plus: 0.0
   syst_JES_EtaIntercalibration_Stat218_minus: 3.91383603e-02
   syst_JES_EtaIntercalibration_Stat219_plus: 0.0
   syst_JES_EtaIntercalibration_Stat219_minus: 0.0
@@ -2978,13 +2978,13 @@ bins:
   syst_JES_EtaIntercalibration_Stat237_minus: 0.0
   syst_JES_EtaIntercalibration_Stat238_plus: -6.54498037e-02
   syst_JES_EtaIntercalibration_Stat238_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat239_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat239_plus: 0.0
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
   syst_JES_EtaIntercalibration_Stat24_plus: 0.0
   syst_JES_EtaIntercalibration_Stat24_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat240_plus: -0.0
-  syst_JES_EtaIntercalibration_Stat240_minus: -0.0
-  syst_JES_EtaIntercalibration_Stat241_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat240_plus: 0.0
+  syst_JES_EtaIntercalibration_Stat240_minus: 0.0
+  syst_JES_EtaIntercalibration_Stat241_plus: 0.0
   syst_JES_EtaIntercalibration_Stat241_minus: 0.0
   syst_JES_EtaIntercalibration_Stat242_plus: 0.0
   syst_JES_EtaIntercalibration_Stat242_minus: 0.0
@@ -3236,7 +3236,7 @@ bins:
   syst_JES_MJB_Stat5_minus: -7.68766493e-02
   syst_JES_MJB_Stat6_plus: 4.08919852e-02
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: -3.61755829e-02
   syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -3.74837305e-02
@@ -3586,7 +3586,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat213_minus: 0.0
   syst_JES_EtaIntercalibration_Stat214_plus: 0.0
   syst_JES_EtaIntercalibration_Stat214_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat215_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat215_plus: 0.0
   syst_JES_EtaIntercalibration_Stat215_minus: 1.88656089e-33
   syst_JES_EtaIntercalibration_Stat216_plus: 1.27279221e-02
   syst_JES_EtaIntercalibration_Stat216_minus: 0.0
@@ -3638,13 +3638,13 @@ bins:
   syst_JES_EtaIntercalibration_Stat237_minus: 0.0
   syst_JES_EtaIntercalibration_Stat238_plus: -2.72561380e-02
   syst_JES_EtaIntercalibration_Stat238_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat239_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat239_plus: 0.0
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
   syst_JES_EtaIntercalibration_Stat24_plus: 0.0
   syst_JES_EtaIntercalibration_Stat24_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat240_plus: -0.0
-  syst_JES_EtaIntercalibration_Stat240_minus: -0.0
-  syst_JES_EtaIntercalibration_Stat241_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat240_plus: 0.0
+  syst_JES_EtaIntercalibration_Stat240_minus: 0.0
+  syst_JES_EtaIntercalibration_Stat241_plus: 0.0
   syst_JES_EtaIntercalibration_Stat241_minus: 0.0
   syst_JES_EtaIntercalibration_Stat242_plus: 0.0
   syst_JES_EtaIntercalibration_Stat242_minus: 0.0
@@ -3658,9 +3658,9 @@ bins:
   syst_JES_EtaIntercalibration_Stat246_minus: 1.19218203e-01
   syst_JES_EtaIntercalibration_Stat247_plus: 0.0
   syst_JES_EtaIntercalibration_Stat247_minus: 1.46795368e-02
-  syst_JES_EtaIntercalibration_Stat248_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat248_plus: 0.0
   syst_JES_EtaIntercalibration_Stat248_minus: 9.63503700e-02
-  syst_JES_EtaIntercalibration_Stat249_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat249_plus: 0.0
   syst_JES_EtaIntercalibration_Stat249_minus: 1.46936789e-01
   syst_JES_EtaIntercalibration_Stat25_plus: 0.0
   syst_JES_EtaIntercalibration_Stat25_minus: 0.0
@@ -3896,12 +3896,12 @@ bins:
   syst_JES_MJB_Stat5_minus: -3.20107240e-02
   syst_JES_MJB_Stat6_plus: 1.70271313e-02
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: -1.50613744e-02
-  syst_JES_MJB_Stat8_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -1.56058467e-02
   syst_JES_MJB_Stat9_plus: 0.0
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: 3.53341259e-03
   syst_JES_MJB_Threshold_minus: -3.87706648e-03
   syst_JES_Pileup_MuOffset_plus: -1.81655732e+01
@@ -4298,13 +4298,13 @@ bins:
   syst_JES_EtaIntercalibration_Stat237_minus: 0.0
   syst_JES_EtaIntercalibration_Stat238_plus: -1.24026529e-02
   syst_JES_EtaIntercalibration_Stat238_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat239_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat239_plus: 0.0
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
   syst_JES_EtaIntercalibration_Stat24_plus: 0.0
   syst_JES_EtaIntercalibration_Stat24_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat240_plus: -0.0
-  syst_JES_EtaIntercalibration_Stat240_minus: -0.0
-  syst_JES_EtaIntercalibration_Stat241_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat240_plus: 0.0
+  syst_JES_EtaIntercalibration_Stat240_minus: 0.0
+  syst_JES_EtaIntercalibration_Stat241_plus: 0.0
   syst_JES_EtaIntercalibration_Stat241_minus: 0.0
   syst_JES_EtaIntercalibration_Stat242_plus: 0.0
   syst_JES_EtaIntercalibration_Stat242_minus: 0.0
@@ -4316,11 +4316,11 @@ bins:
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: -2.98045508e-02
   syst_JES_EtaIntercalibration_Stat246_minus: 5.42421612e-02
-  syst_JES_EtaIntercalibration_Stat247_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat247_plus: 0.0
   syst_JES_EtaIntercalibration_Stat247_minus: 6.67862355e-03
-  syst_JES_EtaIntercalibration_Stat248_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat248_plus: 0.0
   syst_JES_EtaIntercalibration_Stat248_minus: 4.38406204e-02
-  syst_JES_EtaIntercalibration_Stat249_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat249_plus: 0.0
   syst_JES_EtaIntercalibration_Stat249_minus: 6.68710883e-02
   syst_JES_EtaIntercalibration_Stat25_plus: 0.0
   syst_JES_EtaIntercalibration_Stat25_minus: 0.0
@@ -4545,7 +4545,7 @@ bins:
   syst_JES_MJB_Stat1_plus: -2.78310158e-02
   syst_JES_MJB_Stat1_minus: 1.18016122e-04
   syst_JES_MJB_Stat10_plus: 0.0
-  syst_JES_MJB_Stat10_minus: -0.0
+  syst_JES_MJB_Stat10_minus: 0.0
   syst_JES_MJB_Stat2_plus: 8.83954187e-04
   syst_JES_MJB_Stat2_minus: -2.26415591e-02
   syst_JES_MJB_Stat3_plus: -5.23259018e-03
@@ -4556,12 +4556,12 @@ bins:
   syst_JES_MJB_Stat5_minus: -1.45663997e-02
   syst_JES_MJB_Stat6_plus: 7.74706189e-03
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: -6.85398603e-03
-  syst_JES_MJB_Stat8_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -7.10147340e-03
   syst_JES_MJB_Stat9_plus: 0.0
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: 1.65604408e-03
   syst_JES_MJB_Threshold_minus: -2.06758023e-03
   syst_JES_Pileup_MuOffset_plus: -7.18632622e+00
@@ -4958,13 +4958,13 @@ bins:
   syst_JES_EtaIntercalibration_Stat237_minus: 0.0
   syst_JES_EtaIntercalibration_Stat238_plus: -5.87322892e-03
   syst_JES_EtaIntercalibration_Stat238_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat239_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat239_plus: 0.0
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
   syst_JES_EtaIntercalibration_Stat24_plus: 0.0
   syst_JES_EtaIntercalibration_Stat24_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat240_plus: -0.0
-  syst_JES_EtaIntercalibration_Stat240_minus: -0.0
-  syst_JES_EtaIntercalibration_Stat241_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat240_plus: 0.0
+  syst_JES_EtaIntercalibration_Stat240_minus: 0.0
+  syst_JES_EtaIntercalibration_Stat241_plus: 0.0
   syst_JES_EtaIntercalibration_Stat241_minus: 0.0
   syst_JES_EtaIntercalibration_Stat242_plus: 0.0
   syst_JES_EtaIntercalibration_Stat242_minus: 0.0
@@ -4976,11 +4976,11 @@ bins:
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: -1.41138514e-02
   syst_JES_EtaIntercalibration_Stat246_minus: 2.56891894e-02
-  syst_JES_EtaIntercalibration_Stat247_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat247_plus: 0.0
   syst_JES_EtaIntercalibration_Stat247_minus: 3.16288863e-03
-  syst_JES_EtaIntercalibration_Stat248_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat248_plus: 0.0
   syst_JES_EtaIntercalibration_Stat248_minus: 2.07606551e-02
-  syst_JES_EtaIntercalibration_Stat249_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat249_plus: 0.0
   syst_JES_EtaIntercalibration_Stat249_minus: 3.16642417e-02
   syst_JES_EtaIntercalibration_Stat25_plus: 0.0
   syst_JES_EtaIntercalibration_Stat25_minus: 0.0
@@ -5205,7 +5205,7 @@ bins:
   syst_JES_MJB_Stat1_plus: -1.65533697e-02
   syst_JES_MJB_Stat1_minus: 3.34461508e-03
   syst_JES_MJB_Stat10_plus: 0.0
-  syst_JES_MJB_Stat10_minus: -0.0
+  syst_JES_MJB_Stat10_minus: 0.0
   syst_JES_MJB_Stat2_plus: 5.17885007e-03
   syst_JES_MJB_Stat2_minus: -1.22965869e-02
   syst_JES_MJB_Stat3_plus: -2.91893679e-03
@@ -5216,12 +5216,12 @@ bins:
   syst_JES_MJB_Stat5_minus: -6.89782665e-03
   syst_JES_MJB_Stat6_plus: 3.66917709e-03
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: -3.24632723e-03
-  syst_JES_MJB_Stat8_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -3.36299985e-03
   syst_JES_MJB_Stat9_plus: 0.0
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -1.46017550e-02
   syst_JES_MJB_Threshold_minus: 1.50189480e-02
   syst_JES_Pileup_MuOffset_plus: -3.37431356e+00
@@ -5636,11 +5636,11 @@ bins:
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: -6.92186828e-03
   syst_JES_EtaIntercalibration_Stat246_minus: 1.25935718e-02
-  syst_JES_EtaIntercalibration_Stat247_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat247_plus: 0.0
   syst_JES_EtaIntercalibration_Stat247_minus: 1.55068517e-03
-  syst_JES_EtaIntercalibration_Stat248_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat248_plus: 0.0
   syst_JES_EtaIntercalibration_Stat248_minus: 1.01823376e-02
-  syst_JES_EtaIntercalibration_Stat249_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat249_plus: 0.0
   syst_JES_EtaIntercalibration_Stat249_minus: 1.55280649e-02
   syst_JES_EtaIntercalibration_Stat25_plus: 0.0
   syst_JES_EtaIntercalibration_Stat25_minus: 0.0
@@ -5865,7 +5865,7 @@ bins:
   syst_JES_MJB_Stat1_plus: -2.16091832e-02
   syst_JES_MJB_Stat1_minus: 1.50896587e-02
   syst_JES_MJB_Stat10_plus: 0.0
-  syst_JES_MJB_Stat10_minus: -0.0
+  syst_JES_MJB_Stat10_minus: 0.0
   syst_JES_MJB_Stat2_plus: 1.00154604e-02
   syst_JES_MJB_Stat2_minus: -1.15187695e-02
   syst_JES_MJB_Stat3_plus: -2.83832662e-03
@@ -5876,12 +5876,12 @@ bins:
   syst_JES_MJB_Stat5_minus: -3.38209173e-03
   syst_JES_MJB_Stat6_plus: 1.79887965e-03
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: -1.59169736e-03
-  syst_JES_MJB_Stat8_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -1.64897301e-03
   syst_JES_MJB_Stat9_plus: 0.0
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -4.00363860e-02
   syst_JES_MJB_Threshold_minus: 4.42295292e-02
   syst_JES_Pileup_MuOffset_plus: -1.69705627e+00
@@ -6296,11 +6296,11 @@ bins:
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: -3.49735014e-03
   syst_JES_EtaIntercalibration_Stat246_minus: 6.36466814e-03
-  syst_JES_EtaIntercalibration_Stat247_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat247_plus: 0.0
   syst_JES_EtaIntercalibration_Stat247_minus: 7.83757156e-04
-  syst_JES_EtaIntercalibration_Stat248_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat248_plus: 0.0
   syst_JES_EtaIntercalibration_Stat248_minus: 5.14420183e-03
-  syst_JES_EtaIntercalibration_Stat249_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat249_plus: 0.0
   syst_JES_EtaIntercalibration_Stat249_minus: 7.84676395e-03
   syst_JES_EtaIntercalibration_Stat25_plus: 0.0
   syst_JES_EtaIntercalibration_Stat25_minus: 0.0
@@ -6525,7 +6525,7 @@ bins:
   syst_JES_MJB_Stat1_plus: -2.85953982e-02
   syst_JES_MJB_Stat1_minus: 2.69358186e-02
   syst_JES_MJB_Stat10_plus: 0.0
-  syst_JES_MJB_Stat10_minus: -0.0
+  syst_JES_MJB_Stat10_minus: 0.0
   syst_JES_MJB_Stat2_plus: 9.45118924e-03
   syst_JES_MJB_Stat2_minus: -1.10803633e-02
   syst_JES_MJB_Stat3_plus: -2.55972655e-03
@@ -6536,12 +6536,12 @@ bins:
   syst_JES_MJB_Stat5_minus: -1.70907709e-03
   syst_JES_MJB_Stat6_plus: 9.09127189e-04
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: -8.04333964e-04
-  syst_JES_MJB_Stat8_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -8.33325342e-04
   syst_JES_MJB_Stat9_plus: 0.0
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -5.46310699e-02
   syst_JES_MJB_Threshold_minus: 6.30244274e-02
   syst_JES_Pileup_MuOffset_plus: -8.66983624e-01
@@ -6956,11 +6956,11 @@ bins:
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: -1.79322280e-03
   syst_JES_EtaIntercalibration_Stat246_minus: 3.26259069e-03
-  syst_JES_EtaIntercalibration_Stat247_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat247_plus: 0.0
   syst_JES_EtaIntercalibration_Stat247_minus: 4.01778073e-04
-  syst_JES_EtaIntercalibration_Stat248_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat248_plus: 0.0
   syst_JES_EtaIntercalibration_Stat248_minus: 2.63750829e-03
-  syst_JES_EtaIntercalibration_Stat249_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat249_plus: 0.0
   syst_JES_EtaIntercalibration_Stat249_minus: 4.02273048e-03
   syst_JES_EtaIntercalibration_Stat25_plus: 0.0
   syst_JES_EtaIntercalibration_Stat25_minus: 0.0
@@ -7185,7 +7185,7 @@ bins:
   syst_JES_MJB_Stat1_plus: -2.49891536e-02
   syst_JES_MJB_Stat1_minus: 2.42325494e-02
   syst_JES_MJB_Stat10_plus: 0.0
-  syst_JES_MJB_Stat10_minus: -0.0
+  syst_JES_MJB_Stat10_minus: 0.0
   syst_JES_MJB_Stat2_plus: 3.08015714e-03
   syst_JES_MJB_Stat2_minus: -4.41376053e-03
   syst_JES_MJB_Stat3_plus: -1.57684812e-03
@@ -7198,10 +7198,10 @@ bins:
   syst_JES_MJB_Stat6_minus: 0.0
   syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: -4.12313964e-04
-  syst_JES_MJB_Stat8_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -4.27233917e-04
   syst_JES_MJB_Stat9_plus: 0.0
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -4.94338351e-02
   syst_JES_MJB_Threshold_minus: 5.35138412e-02
   syst_JES_Pileup_MuOffset_plus: -4.11536147e-01
@@ -7215,7 +7215,7 @@ bins:
   syst_JES_Punch_through_plus: 1.87171165e-01
   syst_JES_Punch_through_minus: -9.03753177e-02
   syst_JES_SingleParticle_HighPt_plus: 1.01399112e-03
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 2.56750472e-01
   syst_JES_Zjet_JVF_minus: -2.53922045e-01
   syst_JES_Zjet_MC_plus: 4.55447478e+00
@@ -7616,11 +7616,11 @@ bins:
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: -9.49432275e-04
   syst_JES_EtaIntercalibration_Stat246_minus: 1.72746187e-03
-  syst_JES_EtaIntercalibration_Stat247_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat247_plus: 0.0
   syst_JES_EtaIntercalibration_Stat247_minus: 2.12768430e-04
-  syst_JES_EtaIntercalibration_Stat248_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat248_plus: 0.0
   syst_JES_EtaIntercalibration_Stat248_minus: 1.39653589e-03
-  syst_JES_EtaIntercalibration_Stat249_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat249_plus: 0.0
   syst_JES_EtaIntercalibration_Stat249_minus: 2.12980562e-03
   syst_JES_EtaIntercalibration_Stat25_plus: 0.0
   syst_JES_EtaIntercalibration_Stat25_minus: 0.0
@@ -7845,7 +7845,7 @@ bins:
   syst_JES_MJB_Stat1_plus: -1.30461201e-02
   syst_JES_MJB_Stat1_minus: 5.91282690e-03
   syst_JES_MJB_Stat10_plus: 0.0
-  syst_JES_MJB_Stat10_minus: -0.0
+  syst_JES_MJB_Stat10_minus: 0.0
   syst_JES_MJB_Stat2_plus: -6.82145912e-03
   syst_JES_MJB_Stat2_minus: 7.40199379e-03
   syst_JES_MJB_Stat3_plus: -1.51674405e-04
@@ -7875,7 +7875,7 @@ bins:
   syst_JES_Punch_through_plus: 7.93868783e-02
   syst_JES_Punch_through_minus: -4.05879292e-02
   syst_JES_SingleParticle_HighPt_plus: 5.36835468e-04
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 1.33572471e-01
   syst_JES_Zjet_JVF_minus: -1.43047702e-01
   syst_JES_Zjet_MC_plus: 2.47628795e+00
@@ -8276,7 +8276,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: -5.26794552e-04
   syst_JES_EtaIntercalibration_Stat246_minus: 9.58624663e-04
-  syst_JES_EtaIntercalibration_Stat247_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat247_plus: 0.0
   syst_JES_EtaIntercalibration_Stat247_minus: 1.18016122e-04
   syst_JES_EtaIntercalibration_Stat248_plus: -1.22612316e-38
   syst_JES_EtaIntercalibration_Stat248_minus: 7.74776900e-04
@@ -8505,7 +8505,7 @@ bins:
   syst_JES_MJB_Stat1_plus: 0.0
   syst_JES_MJB_Stat1_minus: -6.52871691e-03
   syst_JES_MJB_Stat10_plus: 0.0
-  syst_JES_MJB_Stat10_minus: -0.0
+  syst_JES_MJB_Stat10_minus: 0.0
   syst_JES_MJB_Stat2_plus: -1.29754094e-02
   syst_JES_MJB_Stat2_minus: 1.45734708e-02
   syst_JES_MJB_Stat3_plus: 1.47361053e-03
@@ -8535,7 +8535,7 @@ bins:
   syst_JES_Punch_through_plus: 2.71656283e-02
   syst_JES_Punch_through_minus: -1.69917760e-02
   syst_JES_SingleParticle_HighPt_plus: 2.97833376e-04
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 6.68428040e-02
   syst_JES_Zjet_JVF_minus: -7.40765064e-02
   syst_JES_Zjet_MC_plus: 1.33572471e+00
@@ -9195,7 +9195,7 @@ bins:
   syst_JES_Punch_through_plus: 8.82964238e-03
   syst_JES_Punch_through_minus: -6.66023877e-03
   syst_JES_SingleParticle_HighPt_plus: 1.67160043e-04
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 3.24632723e-02
   syst_JES_Zjet_JVF_minus: -3.56381818e-02
   syst_JES_Zjet_MC_plus: 6.91479721e-01
@@ -9855,7 +9855,7 @@ bins:
   syst_JES_Punch_through_plus: 3.69675425e-03
   syst_JES_Punch_through_minus: -3.03207388e-03
   syst_JES_SingleParticle_HighPt_plus: 9.67887762e-05
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 1.74513954e-02
   syst_JES_Zjet_JVF_minus: -1.85261977e-02
   syst_JES_Zjet_MC_plus: 3.58220295e-01
@@ -10515,7 +10515,7 @@ bins:
   syst_JES_Punch_through_plus: 2.25284220e-03
   syst_JES_Punch_through_minus: -2.07182287e-03
   syst_JES_SingleParticle_HighPt_plus: 5.54513138e-05
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 1.02954747e-02
   syst_JES_Zjet_JVF_minus: -1.05641753e-02
   syst_JES_Zjet_MC_plus: 1.78968726e-01
@@ -11175,7 +11175,7 @@ bins:
   syst_JES_Punch_through_plus: 1.75716035e-03
   syst_JES_Punch_through_minus: -2.02939646e-03
   syst_JES_SingleParticle_HighPt_plus: 3.27602572e-05
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 6.12708026e-03
   syst_JES_Zjet_JVF_minus: -6.15890006e-03
   syst_JES_Zjet_MC_plus: 9.04177441e-02
@@ -11835,7 +11835,7 @@ bins:
   syst_JES_Punch_through_plus: 1.49482374e-03
   syst_JES_Punch_through_minus: -1.92262334e-03
   syst_JES_SingleParticle_HighPt_plus: 2.00464772e-05
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 3.62604357e-03
   syst_JES_Zjet_JVF_minus: -3.44431713e-03
   syst_JES_Zjet_MC_plus: 4.64922709e-02
@@ -12495,7 +12495,7 @@ bins:
   syst_JES_Punch_through_plus: 1.35905923e-03
   syst_JES_Punch_through_minus: -1.61856742e-03
   syst_JES_SingleParticle_HighPt_plus: 1.24026529e-05
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 2.14394776e-03
   syst_JES_Zjet_JVF_minus: -1.94100811e-03
   syst_JES_Zjet_MC_plus: 2.37375746e-02
@@ -25349,7 +25349,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat206_plus: 7.44583441e-02
   syst_JES_EtaIntercalibration_Stat206_minus: 0.0
   syst_JES_EtaIntercalibration_Stat207_plus: -2.16586807e-02
-  syst_JES_EtaIntercalibration_Stat207_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat207_minus: 0.0
   syst_JES_EtaIntercalibration_Stat208_plus: 0.0
   syst_JES_EtaIntercalibration_Stat208_minus: 0.0
   syst_JES_EtaIntercalibration_Stat209_plus: 0.0
@@ -25364,9 +25364,9 @@ bins:
   syst_JES_EtaIntercalibration_Stat212_minus: 0.0
   syst_JES_EtaIntercalibration_Stat213_plus: 0.0
   syst_JES_EtaIntercalibration_Stat213_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat214_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat214_plus: 0.0
   syst_JES_EtaIntercalibration_Stat214_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat215_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat215_plus: 0.0
   syst_JES_EtaIntercalibration_Stat215_minus: 5.67170349e-02
   syst_JES_EtaIntercalibration_Stat216_plus: 1.38097954e-02
   syst_JES_EtaIntercalibration_Stat216_minus: 0.0
@@ -25374,7 +25374,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat217_minus: 1.24380083e-02
   syst_JES_EtaIntercalibration_Stat218_plus: -8.23355136e-02
   syst_JES_EtaIntercalibration_Stat218_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat219_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat219_plus: 0.0
   syst_JES_EtaIntercalibration_Stat219_minus: 3.48532932e-02
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
@@ -25402,7 +25402,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat23_minus: 0.0
   syst_JES_EtaIntercalibration_Stat230_plus: -6.87590634e-02
   syst_JES_EtaIntercalibration_Stat230_minus: 8.39618592e-02
-  syst_JES_EtaIntercalibration_Stat231_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat231_plus: 0.0
   syst_JES_EtaIntercalibration_Stat231_minus: 0.0
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
   syst_JES_EtaIntercalibration_Stat232_minus: 0.0
@@ -25416,7 +25416,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 2.28536912e-02
   syst_JES_EtaIntercalibration_Stat237_minus: -2.50315801e-02
-  syst_JES_EtaIntercalibration_Stat238_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat238_plus: 0.0
   syst_JES_EtaIntercalibration_Stat238_minus: 0.0
   syst_JES_EtaIntercalibration_Stat239_plus: 4.28365288e-02
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
@@ -25670,7 +25670,7 @@ bins:
   syst_JES_MJB_Stat2_minus: -5.94464671e-02
   syst_JES_MJB_Stat3_plus: -6.61356972e-02
   syst_JES_MJB_Stat3_minus: 3.63382175e-13
-  syst_JES_MJB_Stat4_plus: -0.0
+  syst_JES_MJB_Stat4_plus: 0.0
   syst_JES_MJB_Stat4_minus: -2.99247590e-02
   syst_JES_MJB_Stat5_plus: 5.23753993e-02
   syst_JES_MJB_Stat5_minus: -4.15000970e-02
@@ -26009,7 +26009,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat206_plus: 3.00591093e-02
   syst_JES_EtaIntercalibration_Stat206_minus: 0.0
   syst_JES_EtaIntercalibration_Stat207_plus: -8.74337535e-03
-  syst_JES_EtaIntercalibration_Stat207_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat207_minus: 0.0
   syst_JES_EtaIntercalibration_Stat208_plus: 0.0
   syst_JES_EtaIntercalibration_Stat208_minus: 0.0
   syst_JES_EtaIntercalibration_Stat209_plus: 0.0
@@ -26026,7 +26026,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat213_minus: 0.0
   syst_JES_EtaIntercalibration_Stat214_plus: -3.41815418e-43
   syst_JES_EtaIntercalibration_Stat214_minus: 1.22895159e-43
-  syst_JES_EtaIntercalibration_Stat215_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat215_plus: 0.0
   syst_JES_EtaIntercalibration_Stat215_minus: 2.28961176e-02
   syst_JES_EtaIntercalibration_Stat216_plus: 5.57341565e-03
   syst_JES_EtaIntercalibration_Stat216_minus: 0.0
@@ -26062,7 +26062,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat23_minus: 0.0
   syst_JES_EtaIntercalibration_Stat230_plus: -2.77546483e-02
   syst_JES_EtaIntercalibration_Stat230_minus: 3.38916280e-02
-  syst_JES_EtaIntercalibration_Stat231_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat231_plus: 0.0
   syst_JES_EtaIntercalibration_Stat231_minus: 0.0
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
   syst_JES_EtaIntercalibration_Stat232_minus: 0.0
@@ -26076,7 +26076,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 9.22491507e-03
   syst_JES_EtaIntercalibration_Stat237_minus: -1.01045559e-02
-  syst_JES_EtaIntercalibration_Stat238_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat238_plus: 0.0
   syst_JES_EtaIntercalibration_Stat238_minus: 0.0
   syst_JES_EtaIntercalibration_Stat239_plus: 1.72887608e-02
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
@@ -26092,7 +26092,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat245_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat245_plus: 0.0
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: 1.90565278e-02
   syst_JES_EtaIntercalibration_Stat246_minus: 0.0
@@ -26330,7 +26330,7 @@ bins:
   syst_JES_MJB_Stat2_minus: -2.39921331e-02
   syst_JES_MJB_Stat3_plus: -2.66932810e-02
   syst_JES_MJB_Stat3_minus: 2.86590378e-08
-  syst_JES_MJB_Stat4_plus: -0.0
+  syst_JES_MJB_Stat4_plus: 0.0
   syst_JES_MJB_Stat4_minus: -1.20773838e-02
   syst_JES_MJB_Stat5_plus: 2.11424928e-02
   syst_JES_MJB_Stat5_minus: -1.67513596e-02
@@ -26669,7 +26669,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat206_plus: 1.37815112e-02
   syst_JES_EtaIntercalibration_Stat206_minus: 0.0
   syst_JES_EtaIntercalibration_Stat207_plus: -4.00858834e-03
-  syst_JES_EtaIntercalibration_Stat207_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat207_minus: 0.0
   syst_JES_EtaIntercalibration_Stat208_plus: 0.0
   syst_JES_EtaIntercalibration_Stat208_minus: 0.0
   syst_JES_EtaIntercalibration_Stat209_plus: 0.0
@@ -26722,7 +26722,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat23_minus: 0.0
   syst_JES_EtaIntercalibration_Stat230_plus: -1.27208510e-02
   syst_JES_EtaIntercalibration_Stat230_minus: 1.55351360e-02
-  syst_JES_EtaIntercalibration_Stat231_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat231_plus: 0.0
   syst_JES_EtaIntercalibration_Stat231_minus: 5.08480486e-40
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
   syst_JES_EtaIntercalibration_Stat232_minus: 0.0
@@ -26736,7 +26736,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 4.22920566e-03
   syst_JES_EtaIntercalibration_Stat237_minus: -4.63154942e-03
-  syst_JES_EtaIntercalibration_Stat238_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat238_plus: 0.0
   syst_JES_EtaIntercalibration_Stat238_minus: 0.0
   syst_JES_EtaIntercalibration_Stat239_plus: 7.92666702e-03
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
@@ -26752,7 +26752,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat245_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat245_plus: 0.0
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: 8.73630428e-03
   syst_JES_EtaIntercalibration_Stat246_minus: 0.0
@@ -26990,7 +26990,7 @@ bins:
   syst_JES_MJB_Stat2_minus: -1.10520790e-02
   syst_JES_MJB_Stat3_plus: -1.22400184e-02
   syst_JES_MJB_Stat3_minus: 1.45805418e-05
-  syst_JES_MJB_Stat4_plus: -0.0
+  syst_JES_MJB_Stat4_plus: 0.0
   syst_JES_MJB_Stat4_minus: -5.53735320e-03
   syst_JES_MJB_Stat5_plus: 9.69089844e-03
   syst_JES_MJB_Stat5_minus: -7.67917964e-03
@@ -27393,10 +27393,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
   syst_JES_EtaIntercalibration_Stat236_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat236_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 1.98909138e-03
   syst_JES_EtaIntercalibration_Stat237_minus: -2.17788889e-03
-  syst_JES_EtaIntercalibration_Stat238_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat238_plus: 0.0
   syst_JES_EtaIntercalibration_Stat238_minus: 0.0
   syst_JES_EtaIntercalibration_Stat239_plus: 3.72786695e-03
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
@@ -27412,7 +27412,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat245_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat245_plus: 0.0
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: 4.10829040e-03
   syst_JES_EtaIntercalibration_Stat246_minus: 0.0
@@ -28019,7 +28019,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat220_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
@@ -28045,7 +28045,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat231_plus: -3.14874650e-25
   syst_JES_EtaIntercalibration_Stat231_minus: 1.14551299e-19
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat232_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
@@ -28053,10 +28053,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
   syst_JES_EtaIntercalibration_Stat236_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat236_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 9.72413245e-04
   syst_JES_EtaIntercalibration_Stat237_minus: -1.06490281e-03
-  syst_JES_EtaIntercalibration_Stat238_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat238_plus: 0.0
   syst_JES_EtaIntercalibration_Stat238_minus: 5.63422683e-42
   syst_JES_EtaIntercalibration_Stat239_plus: 1.82292128e-03
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
@@ -28069,10 +28069,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat242_plus: -2.47840927e-03
   syst_JES_EtaIntercalibration_Stat242_minus: 8.66417939e-42
   syst_JES_EtaIntercalibration_Stat243_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat243_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat245_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat245_plus: 0.0
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: 2.00889037e-03
   syst_JES_EtaIntercalibration_Stat246_minus: 0.0
@@ -28679,7 +28679,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat220_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
@@ -28705,7 +28705,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat231_plus: -5.52533239e-18
   syst_JES_EtaIntercalibration_Stat231_minus: 4.35648488e-14
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat232_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
@@ -28713,10 +28713,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
   syst_JES_EtaIntercalibration_Stat236_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat236_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 4.91509924e-04
   syst_JES_EtaIntercalibration_Stat237_minus: -5.38320393e-04
-  syst_JES_EtaIntercalibration_Stat238_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat238_plus: 0.0
   syst_JES_EtaIntercalibration_Stat238_minus: 1.47148921e-30
   syst_JES_EtaIntercalibration_Stat239_plus: 9.21360136e-04
   syst_JES_EtaIntercalibration_Stat239_minus: 0.0
@@ -28729,10 +28729,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat242_plus: -1.25299322e-03
   syst_JES_EtaIntercalibration_Stat242_minus: 2.26344881e-30
   syst_JES_EtaIntercalibration_Stat243_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat243_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat245_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat245_plus: 0.0
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: 1.01540534e-03
   syst_JES_EtaIntercalibration_Stat246_minus: 0.0
@@ -29339,7 +29339,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat220_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
@@ -29365,7 +29365,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat231_plus: -8.03697567e-13
   syst_JES_EtaIntercalibration_Stat231_minus: 3.16783838e-10
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat232_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
@@ -29373,7 +29373,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
   syst_JES_EtaIntercalibration_Stat236_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat236_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 2.54699863e-04
   syst_JES_EtaIntercalibration_Stat237_minus: -2.78939483e-04
   syst_JES_EtaIntercalibration_Stat238_plus: -9.21501557e-44
@@ -29389,10 +29389,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat242_plus: -6.49194736e-04
   syst_JES_EtaIntercalibration_Stat242_minus: 6.30173563e-22
   syst_JES_EtaIntercalibration_Stat243_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat243_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat245_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat245_plus: 0.0
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: 5.26158156e-04
   syst_JES_EtaIntercalibration_Stat246_minus: 0.0
@@ -29999,7 +29999,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat220_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
@@ -30025,7 +30025,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat231_plus: -1.92403755e-09
   syst_JES_EtaIntercalibration_Stat231_minus: 8.20880262e-08
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat232_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
@@ -30033,7 +30033,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
   syst_JES_EtaIntercalibration_Stat236_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat236_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 1.34208867e-04
   syst_JES_EtaIntercalibration_Stat237_minus: -1.47007500e-04
   syst_JES_EtaIntercalibration_Stat238_plus: -2.27051987e-32
@@ -30049,10 +30049,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat242_plus: -3.42168971e-04
   syst_JES_EtaIntercalibration_Stat242_minus: 4.31688690e-16
   syst_JES_EtaIntercalibration_Stat243_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat243_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat245_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat245_plus: 0.0
   syst_JES_EtaIntercalibration_Stat245_minus: 0.0
   syst_JES_EtaIntercalibration_Stat246_plus: 2.77306066e-04
   syst_JES_EtaIntercalibration_Stat246_minus: 0.0
@@ -30659,7 +30659,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat220_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
@@ -30685,7 +30685,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat231_plus: -2.72632091e-07
   syst_JES_EtaIntercalibration_Stat231_minus: 2.23162900e-06
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat232_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
@@ -30693,7 +30693,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
   syst_JES_EtaIntercalibration_Stat236_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat236_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 7.43027806e-05
   syst_JES_EtaIntercalibration_Stat237_minus: -8.13809194e-05
   syst_JES_EtaIntercalibration_Stat238_plus: -3.99444621e-24
@@ -30709,7 +30709,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat242_plus: -1.89363196e-04
   syst_JES_EtaIntercalibration_Stat242_minus: 4.36497016e-12
   syst_JES_EtaIntercalibration_Stat243_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat243_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
   syst_JES_EtaIntercalibration_Stat245_plus: -1.12147135e-38
@@ -31319,7 +31319,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat220_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
@@ -31345,7 +31345,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat231_plus: -5.21208408e-06
   syst_JES_EtaIntercalibration_Stat231_minus: 1.27562063e-05
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat232_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
@@ -31353,7 +31353,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
   syst_JES_EtaIntercalibration_Stat236_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat236_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 4.10546197e-05
   syst_JES_EtaIntercalibration_Stat237_minus: -4.49578491e-05
   syst_JES_EtaIntercalibration_Stat238_plus: -3.51997756e-18
@@ -31369,7 +31369,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat242_plus: -1.04651804e-04
   syst_JES_EtaIntercalibration_Stat242_minus: 2.10434978e-09
   syst_JES_EtaIntercalibration_Stat243_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat243_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
   syst_JES_EtaIntercalibration_Stat245_plus: -1.43542677e-29
@@ -31979,7 +31979,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat220_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
@@ -32005,7 +32005,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat231_plus: -2.64175093e-05
   syst_JES_EtaIntercalibration_Stat231_minus: 2.79179899e-05
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat232_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
@@ -32013,7 +32013,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
   syst_JES_EtaIntercalibration_Stat236_plus: 9.48795879e-35
-  syst_JES_EtaIntercalibration_Stat236_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_minus: 0.0
   syst_JES_EtaIntercalibration_Stat237_plus: 2.35395847e-05
   syst_JES_EtaIntercalibration_Stat237_minus: -2.57669711e-05
   syst_JES_EtaIntercalibration_Stat238_plus: -6.62276211e-14
@@ -32029,7 +32029,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat242_plus: -5.99980104e-05
   syst_JES_EtaIntercalibration_Stat242_minus: 1.20349574e-07
   syst_JES_EtaIntercalibration_Stat243_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat243_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
   syst_JES_EtaIntercalibration_Stat245_plus: -8.02919750e-23
@@ -32294,7 +32294,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -4.37557676e-01
   syst_JES_Punch_through_plus: 4.12526096e-03
   syst_JES_Punch_through_minus: -3.50512831e-03
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 1.70483445e-02
   syst_JES_Zjet_JVF_minus: -1.83494210e-02
@@ -32639,7 +32639,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_plus: 0.0
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat220_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
@@ -32665,7 +32665,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat231_plus: -5.81524617e-05
   syst_JES_EtaIntercalibration_Stat231_minus: 4.01707362e-05
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat232_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
@@ -32689,7 +32689,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat242_plus: -3.45916637e-05
   syst_JES_EtaIntercalibration_Stat242_minus: 1.65180144e-06
   syst_JES_EtaIntercalibration_Stat243_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat243_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat243_minus: 0.0
   syst_JES_EtaIntercalibration_Stat244_plus: 0.0
   syst_JES_EtaIntercalibration_Stat244_minus: 0.0
   syst_JES_EtaIntercalibration_Stat245_plus: -1.11227897e-17
@@ -32954,7 +32954,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -2.32213867e-01
   syst_JES_Punch_through_plus: 2.09940003e-03
   syst_JES_Punch_through_minus: -2.20688026e-03
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 9.29421153e-03
   syst_JES_Zjet_JVF_minus: -9.97161983e-03
@@ -33614,7 +33614,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -1.28269170e-01
   syst_JES_Punch_through_plus: 1.29612673e-03
   syst_JES_Punch_through_minus: -1.53512882e-03
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 5.56634458e-03
   syst_JES_Zjet_JVF_minus: -5.51401868e-03
@@ -34274,7 +34274,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -7.29522066e-02
   syst_JES_Punch_through_plus: 1.12076425e-03
   syst_JES_Punch_through_minus: -1.24945768e-03
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 3.27531861e-03
   syst_JES_Zjet_JVF_minus: -3.06460079e-03
@@ -34934,7 +34934,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -4.05667160e-02
   syst_JES_Punch_through_plus: 1.04510382e-03
   syst_JES_Punch_through_minus: -1.16248355e-03
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 1.80453651e-03
   syst_JES_Zjet_JVF_minus: -1.66028672e-03
@@ -35594,7 +35594,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -2.28324780e-02
   syst_JES_Punch_through_plus: 9.26522015e-04
   syst_JES_Punch_through_minus: -1.06348860e-03
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 1.02176930e-03
   syst_JES_Zjet_JVF_minus: -9.59331770e-04
@@ -36254,7 +36254,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -1.29400541e-02
   syst_JES_Punch_through_plus: 7.90545381e-04
   syst_JES_Punch_through_minus: -8.52982910e-04
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 5.88242131e-04
   syst_JES_Zjet_JVF_minus: -5.87817867e-04
@@ -36914,7 +36914,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -7.43452070e-03
   syst_JES_Punch_through_plus: 6.38800266e-04
   syst_JES_Punch_through_minus: -6.27345136e-04
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 3.39128412e-04
   syst_JES_Zjet_JVF_minus: -3.55533290e-04
@@ -37574,7 +37574,7 @@ bins:
   syst_JES_Pileup_Rho_topology_minus: -4.30415898e-03
   syst_JES_Punch_through_plus: 4.77862763e-04
   syst_JES_Punch_through_minus: -4.45265140e-04
-  syst_JES_SingleParticle_HighPt_plus: -0.0
+  syst_JES_SingleParticle_HighPt_plus: 0.0
   syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 2.02798225e-04
   syst_JES_Zjet_JVF_minus: -2.03929596e-04
@@ -47142,9 +47142,9 @@ bins:
   syst_JES_EtaIntercalibration_Stat211_minus: 0.0
   syst_JES_EtaIntercalibration_Stat212_plus: 0.0
   syst_JES_EtaIntercalibration_Stat212_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat213_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat213_plus: 0.0
   syst_JES_EtaIntercalibration_Stat213_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat214_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat214_plus: 0.0
   syst_JES_EtaIntercalibration_Stat214_minus: 8.91166676e-02
   syst_JES_EtaIntercalibration_Stat215_plus: 0.0
   syst_JES_EtaIntercalibration_Stat215_minus: 0.0
@@ -47160,13 +47160,13 @@ bins:
   syst_JES_EtaIntercalibration_Stat22_minus: 0.0
   syst_JES_EtaIntercalibration_Stat220_plus: -5.60877099e-02
   syst_JES_EtaIntercalibration_Stat220_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat221_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat221_plus: 0.0
   syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 0.0
   syst_JES_EtaIntercalibration_Stat222_minus: 0.0
   syst_JES_EtaIntercalibration_Stat223_plus: 0.0
   syst_JES_EtaIntercalibration_Stat223_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat224_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat224_plus: 0.0
   syst_JES_EtaIntercalibration_Stat224_minus: 4.10616908e-02
   syst_JES_EtaIntercalibration_Stat225_plus: 0.0
   syst_JES_EtaIntercalibration_Stat225_minus: 0.0
@@ -47190,9 +47190,9 @@ bins:
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
   syst_JES_EtaIntercalibration_Stat234_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat235_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 3.72008878e-02
-  syst_JES_EtaIntercalibration_Stat236_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_plus: 0.0
   syst_JES_EtaIntercalibration_Stat236_minus: 7.57594205e-02
   syst_JES_EtaIntercalibration_Stat237_plus: -4.80196215e-02
   syst_JES_EtaIntercalibration_Stat237_minus: 2.06545891e-01
@@ -47826,7 +47826,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat222_minus: 0.0
   syst_JES_EtaIntercalibration_Stat223_plus: 0.0
   syst_JES_EtaIntercalibration_Stat223_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat224_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat224_plus: 0.0
   syst_JES_EtaIntercalibration_Stat224_minus: 1.67301464e-02
   syst_JES_EtaIntercalibration_Stat225_plus: 0.0
   syst_JES_EtaIntercalibration_Stat225_minus: 0.0
@@ -47850,9 +47850,9 @@ bins:
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
   syst_JES_EtaIntercalibration_Stat234_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat235_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 1.51603694e-02
-  syst_JES_EtaIntercalibration_Stat236_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_plus: 0.0
   syst_JES_EtaIntercalibration_Stat236_minus: 3.08722821e-02
   syst_JES_EtaIntercalibration_Stat237_plus: -1.95656446e-02
   syst_JES_EtaIntercalibration_Stat237_minus: 8.41669202e-02
@@ -48121,7 +48121,7 @@ bins:
   syst_JES_MJB_Stat8_plus: 1.15329116e-02
   syst_JES_MJB_Stat8_minus: -2.18990970e-02
   syst_JES_MJB_Stat9_plus: 2.88570277e-02
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: 4.58417326e-03
   syst_JES_MJB_Threshold_minus: -3.40189072e-03
   syst_JES_Pileup_MuOffset_plus: -1.86110505e+01
@@ -48486,7 +48486,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat222_minus: 0.0
   syst_JES_EtaIntercalibration_Stat223_plus: 0.0
   syst_JES_EtaIntercalibration_Stat223_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat224_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat224_plus: 0.0
   syst_JES_EtaIntercalibration_Stat224_minus: 7.71948473e-03
   syst_JES_EtaIntercalibration_Stat225_plus: 4.73195858e-31
   syst_JES_EtaIntercalibration_Stat225_minus: 0.0
@@ -48510,9 +48510,9 @@ bins:
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
   syst_JES_EtaIntercalibration_Stat234_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat235_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 6.99470028e-03
-  syst_JES_EtaIntercalibration_Stat236_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_plus: 0.0
   syst_JES_EtaIntercalibration_Stat236_minus: 1.42411306e-02
   syst_JES_EtaIntercalibration_Stat237_plus: -9.02833938e-03
   syst_JES_EtaIntercalibration_Stat237_minus: 3.88343044e-02
@@ -48781,7 +48781,7 @@ bins:
   syst_JES_MJB_Stat8_plus: 5.31956431e-03
   syst_JES_MJB_Stat8_minus: -1.01045559e-02
   syst_JES_MJB_Stat9_plus: 1.33148207e-02
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: 1.87241876e-03
   syst_JES_MJB_Threshold_minus: -3.99303199e-03
   syst_JES_Pileup_MuOffset_plus: -6.65741034e+00
@@ -49170,9 +49170,9 @@ bins:
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
   syst_JES_EtaIntercalibration_Stat234_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat235_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 3.20248661e-03
-  syst_JES_EtaIntercalibration_Stat236_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat236_plus: 0.0
   syst_JES_EtaIntercalibration_Stat236_minus: 6.52164584e-03
   syst_JES_EtaIntercalibration_Stat237_plus: -4.13374624e-03
   syst_JES_EtaIntercalibration_Stat237_minus: 1.77766645e-02
@@ -49441,7 +49441,7 @@ bins:
   syst_JES_MJB_Stat8_plus: 2.43527575e-03
   syst_JES_MJB_Stat8_minus: -4.62659967e-03
   syst_JES_MJB_Stat9_plus: 6.09667467e-03
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -1.47997449e-02
   syst_JES_MJB_Threshold_minus: 2.79491026e-03
   syst_JES_Pileup_MuOffset_plus: -3.11621958e+00
@@ -49830,7 +49830,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: 0.0
   syst_JES_EtaIntercalibration_Stat234_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat235_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 1.53866436e-03
   syst_JES_EtaIntercalibration_Stat236_plus: -5.87605735e-42
   syst_JES_EtaIntercalibration_Stat236_minus: 3.13319015e-03
@@ -50101,7 +50101,7 @@ bins:
   syst_JES_MJB_Stat8_plus: 1.17026172e-03
   syst_JES_MJB_Stat8_minus: -2.22243661e-03
   syst_JES_MJB_Stat9_plus: 2.92883629e-03
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -2.77504056e-02
   syst_JES_MJB_Threshold_minus: 2.25496353e-02
   syst_JES_Pileup_MuOffset_plus: -1.53866436e+00
@@ -50761,7 +50761,7 @@ bins:
   syst_JES_MJB_Stat8_plus: 5.91494822e-04
   syst_JES_MJB_Stat8_minus: -1.12359268e-03
   syst_JES_MJB_Stat9_plus: 1.48068160e-03
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -3.35380746e-02
   syst_JES_MJB_Threshold_minus: 4.08707720e-02
   syst_JES_Pileup_MuOffset_plus: -6.70973625e-01
@@ -51421,7 +51421,7 @@ bins:
   syst_JES_MJB_Stat8_plus: 2.95853477e-04
   syst_JES_MJB_Stat8_minus: -5.62008470e-04
   syst_JES_MJB_Stat9_plus: 7.40552932e-04
-  syst_JES_MJB_Stat9_minus: -0.0
+  syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -3.29723892e-02
   syst_JES_MJB_Threshold_minus: 3.96333351e-02
   syst_JES_Pileup_MuOffset_plus: -2.78861701e-01
@@ -52095,7 +52095,7 @@ bins:
   syst_JES_Punch_through_plus: 4.87974390e-02
   syst_JES_Punch_through_minus: -3.61472987e-02
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 9.14996175e-02
   syst_JES_Zjet_JVF_minus: -9.03611756e-02
   syst_JES_Zjet_MC_plus: 1.85615530e+00
@@ -52755,7 +52755,7 @@ bins:
   syst_JES_Punch_through_plus: 2.25142799e-02
   syst_JES_Punch_through_minus: -1.65533697e-02
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 4.77721341e-02
   syst_JES_Zjet_JVF_minus: -4.83943881e-02
   syst_JES_Zjet_MC_plus: 9.95323505e-01
@@ -53415,7 +53415,7 @@ bins:
   syst_JES_Punch_through_plus: 1.20985970e-02
   syst_JES_Punch_through_minus: -9.28714046e-03
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 2.57174736e-02
   syst_JES_Zjet_JVF_minus: -2.59932453e-02
   syst_JES_Zjet_MC_plus: 5.16187950e-01
@@ -54075,7 +54075,7 @@ bins:
   syst_JES_Punch_through_plus: 7.16016327e-03
   syst_JES_Punch_through_minus: -6.14758636e-03
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 1.46441814e-02
   syst_JES_Zjet_JVF_minus: -1.42552727e-02
   syst_JES_Zjet_MC_plus: 2.61700220e-01
@@ -54735,7 +54735,7 @@ bins:
   syst_JES_Punch_through_plus: 4.24759043e-03
   syst_JES_Punch_through_minus: -3.90181522e-03
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 7.80080201e-03
   syst_JES_Zjet_JVF_minus: -7.25562268e-03
   syst_JES_Zjet_MC_plus: 1.26713535e-01
@@ -55395,7 +55395,7 @@ bins:
   syst_JES_Punch_through_plus: 2.57033315e-03
   syst_JES_Punch_through_minus: -2.36951482e-03
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 4.03050865e-03
   syst_JES_Zjet_JVF_minus: -3.69816847e-03
   syst_JES_Zjet_MC_plus: 6.17092088e-02
@@ -56055,7 +56055,7 @@ bins:
   syst_JES_Punch_through_plus: 1.63341666e-03
   syst_JES_Punch_through_minus: -1.46371104e-03
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 2.22385083e-03
   syst_JES_Zjet_JVF_minus: -2.07747972e-03
   syst_JES_Zjet_MC_plus: 3.04480180e-02
@@ -56715,7 +56715,7 @@ bins:
   syst_JES_Punch_through_plus: 1.06278149e-03
   syst_JES_Punch_through_minus: -9.64140096e-04
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 1.29612673e-03
   syst_JES_Zjet_JVF_minus: -1.27420642e-03
   syst_JES_Zjet_MC_plus: 1.49906638e-02
@@ -57375,7 +57375,7 @@ bins:
   syst_JES_Punch_through_plus: 6.86388552e-04
   syst_JES_Punch_through_minus: -6.79812459e-04
   syst_JES_SingleParticle_HighPt_plus: 0.0
-  syst_JES_SingleParticle_HighPt_minus: -0.0
+  syst_JES_SingleParticle_HighPt_minus: 0.0
   syst_JES_Zjet_JVF_plus: 7.58796287e-04
   syst_JES_Zjet_JVF_minus: -7.66362329e-04
   syst_JES_Zjet_MC_plus: 7.50240295e-03
@@ -68258,9 +68258,9 @@ bins:
   syst_JES_EtaIntercalibration_Stat21_minus: 0.0
   syst_JES_EtaIntercalibration_Stat210_plus: -8.73913271e-37
   syst_JES_EtaIntercalibration_Stat210_minus: 2.17788889e-36
-  syst_JES_EtaIntercalibration_Stat211_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat211_plus: 0.0
   syst_JES_EtaIntercalibration_Stat211_minus: 1.69917760e-01
-  syst_JES_EtaIntercalibration_Stat212_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat212_plus: 0.0
   syst_JES_EtaIntercalibration_Stat212_minus: 2.15526147e-01
   syst_JES_EtaIntercalibration_Stat213_plus: -8.36578033e-02
   syst_JES_EtaIntercalibration_Stat213_minus: 0.0
@@ -68577,7 +68577,7 @@ bins:
   syst_JES_MJB_Stat6_plus: -1.43542677e-01
   syst_JES_MJB_Stat6_minus: 6.16950667e-02
   syst_JES_MJB_Stat7_plus: 2.27334830e-02
-  syst_JES_MJB_Stat7_minus: -0.0
+  syst_JES_MJB_Stat7_minus: 0.0
   syst_JES_MJB_Stat8_plus: 2.26344881e-02
   syst_JES_MJB_Stat8_minus: -2.10576399e-02
   syst_JES_MJB_Stat9_plus: 7.67140147e-02
@@ -69237,7 +69237,7 @@ bins:
   syst_JES_MJB_Stat6_plus: -5.70988726e-02
   syst_JES_MJB_Stat6_minus: 2.45436764e-02
   syst_JES_MJB_Stat7_plus: 9.04530994e-03
-  syst_JES_MJB_Stat7_minus: -0.0
+  syst_JES_MJB_Stat7_minus: 0.0
   syst_JES_MJB_Stat8_plus: 9.00571197e-03
   syst_JES_MJB_Stat8_minus: -8.37850825e-03
   syst_JES_MJB_Stat9_plus: 3.05187287e-02
@@ -69897,7 +69897,7 @@ bins:
   syst_JES_MJB_Stat6_plus: -2.45295342e-02
   syst_JES_MJB_Stat6_minus: 1.05429621e-02
   syst_JES_MJB_Stat7_plus: 3.88555176e-03
-  syst_JES_MJB_Stat7_minus: -0.0
+  syst_JES_MJB_Stat7_minus: 0.0
   syst_JES_MJB_Stat8_plus: 3.86858120e-03
   syst_JES_MJB_Stat8_minus: -3.59917352e-03
   syst_JES_MJB_Stat9_plus: 1.31097597e-02
@@ -70557,7 +70557,7 @@ bins:
   syst_JES_MJB_Stat6_plus: -1.14834141e-02
   syst_JES_MJB_Stat6_minus: 4.93701955e-03
   syst_JES_MJB_Stat7_plus: 1.81938575e-03
-  syst_JES_MJB_Stat7_minus: -0.0
+  syst_JES_MJB_Stat7_minus: 0.0
   syst_JES_MJB_Stat8_plus: 1.81160757e-03
   syst_JES_MJB_Stat8_minus: -1.68503546e-03
   syst_JES_MJB_Stat9_plus: 6.13910107e-03
@@ -71217,7 +71217,7 @@ bins:
   syst_JES_MJB_Stat6_plus: -5.53381767e-03
   syst_JES_MJB_Stat6_minus: 2.37870721e-03
   syst_JES_MJB_Stat7_plus: 8.76670987e-04
-  syst_JES_MJB_Stat7_minus: -0.0
+  syst_JES_MJB_Stat7_minus: 0.0
   syst_JES_MJB_Stat8_plus: 8.72852611e-04
   syst_JES_MJB_Stat8_minus: -8.12041428e-04
   syst_JES_MJB_Stat9_plus: 2.95782767e-03
@@ -87817,7 +87817,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat101_plus: 0.0
   syst_JES_EtaIntercalibration_Stat101_minus: 0.0
   syst_JES_EtaIntercalibration_Stat102_plus: 9.47240244e-13
-  syst_JES_EtaIntercalibration_Stat102_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat102_minus: 0.0
   syst_JES_EtaIntercalibration_Stat103_plus: 1.06843835e+00
   syst_JES_EtaIntercalibration_Stat103_minus: -4.11748279e+00
   syst_JES_EtaIntercalibration_Stat104_plus: 3.45421663e+00
@@ -87861,7 +87861,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat121_plus: 0.0
   syst_JES_EtaIntercalibration_Stat121_minus: 0.0
   syst_JES_EtaIntercalibration_Stat122_plus: 9.47310955e-13
-  syst_JES_EtaIntercalibration_Stat122_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat122_minus: 0.0
   syst_JES_EtaIntercalibration_Stat123_plus: -6.55770829e-01
   syst_JES_EtaIntercalibration_Stat123_minus: 4.38123362e-01
   syst_JES_EtaIntercalibration_Stat124_plus: -1.72887608e+00
@@ -87903,7 +87903,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat140_plus: 0.0
   syst_JES_EtaIntercalibration_Stat140_minus: 0.0
   syst_JES_EtaIntercalibration_Stat141_plus: 9.50987910e-13
-  syst_JES_EtaIntercalibration_Stat141_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat141_minus: 0.0
   syst_JES_EtaIntercalibration_Stat142_plus: -7.94010205e-02
   syst_JES_EtaIntercalibration_Stat142_minus: 4.15283813e-02
   syst_JES_EtaIntercalibration_Stat143_plus: -2.23021479e-01
@@ -87939,7 +87939,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat157_plus: 0.0
   syst_JES_EtaIntercalibration_Stat157_minus: 0.0
   syst_JES_EtaIntercalibration_Stat158_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat158_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat158_minus: 0.0
   syst_JES_EtaIntercalibration_Stat159_plus: -3.60907301e-02
   syst_JES_EtaIntercalibration_Stat159_minus: 3.03702363e-03
   syst_JES_EtaIntercalibration_Stat16_plus: 1.04156829e+01
@@ -87979,7 +87979,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat175_plus: 0.0
   syst_JES_EtaIntercalibration_Stat175_minus: 0.0
   syst_JES_EtaIntercalibration_Stat176_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat176_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat176_minus: 0.0
   syst_JES_EtaIntercalibration_Stat177_plus: 0.0
   syst_JES_EtaIntercalibration_Stat177_minus: -1.56694863e-01
   syst_JES_EtaIntercalibration_Stat178_plus: 0.0
@@ -88017,7 +88017,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat192_plus: 0.0
   syst_JES_EtaIntercalibration_Stat192_minus: 0.0
   syst_JES_EtaIntercalibration_Stat193_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat193_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat193_minus: 0.0
   syst_JES_EtaIntercalibration_Stat194_plus: -1.71049130e-18
   syst_JES_EtaIntercalibration_Stat194_minus: 1.02742615e-18
   syst_JES_EtaIntercalibration_Stat195_plus: -1.10308658e-01
@@ -88051,7 +88051,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat207_plus: 0.0
   syst_JES_EtaIntercalibration_Stat207_minus: 0.0
   syst_JES_EtaIntercalibration_Stat208_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat208_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat208_minus: 0.0
   syst_JES_EtaIntercalibration_Stat209_plus: 8.55669916e-03
   syst_JES_EtaIntercalibration_Stat209_minus: -3.18127341e-02
   syst_JES_EtaIntercalibration_Stat21_plus: 0.0
@@ -88081,10 +88081,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
   syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat221_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 3.38138463e-02
   syst_JES_EtaIntercalibration_Stat222_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat223_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat223_plus: 0.0
   syst_JES_EtaIntercalibration_Stat223_minus: 2.87651039e-01
   syst_JES_EtaIntercalibration_Stat224_plus: 0.0
   syst_JES_EtaIntercalibration_Stat224_minus: 0.0
@@ -88107,8 +88107,8 @@ bins:
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
   syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat233_minus: -0.0
-  syst_JES_EtaIntercalibration_Stat234_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat233_minus: 0.0
+  syst_JES_EtaIntercalibration_Stat234_plus: 0.0
   syst_JES_EtaIntercalibration_Stat234_minus: 1.59876843e-02
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
@@ -88267,7 +88267,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat80_plus: 0.0
   syst_JES_EtaIntercalibration_Stat80_minus: 0.0
   syst_JES_EtaIntercalibration_Stat81_plus: 9.46321005e-13
-  syst_JES_EtaIntercalibration_Stat81_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat81_minus: 0.0
   syst_JES_EtaIntercalibration_Stat82_plus: 5.75372788e+00
   syst_JES_EtaIntercalibration_Stat82_minus: -2.85671140e+00
   syst_JES_EtaIntercalibration_Stat83_plus: 2.19415234e+01
@@ -88373,7 +88373,7 @@ bins:
   syst_JES_MJB_Stat4_plus: -2.17223203e-01
   syst_JES_MJB_Stat4_minus: 2.14111933e-01
   syst_JES_MJB_Stat5_plus: 0.0
-  syst_JES_MJB_Stat5_minus: -0.0
+  syst_JES_MJB_Stat5_minus: 0.0
   syst_JES_MJB_Stat6_plus: -1.35976634e+00
   syst_JES_MJB_Stat6_minus: 0.0
   syst_JES_MJB_Stat7_plus: 0.0
@@ -88477,7 +88477,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat101_plus: 0.0
   syst_JES_EtaIntercalibration_Stat101_minus: 0.0
   syst_JES_EtaIntercalibration_Stat102_plus: 7.05904700e-08
-  syst_JES_EtaIntercalibration_Stat102_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat102_minus: 0.0
   syst_JES_EtaIntercalibration_Stat103_plus: 4.96671803e-01
   syst_JES_EtaIntercalibration_Stat103_minus: -1.62068874e+00
   syst_JES_EtaIntercalibration_Stat104_plus: 3.39976940e+00
@@ -88521,7 +88521,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat121_plus: 0.0
   syst_JES_EtaIntercalibration_Stat121_minus: 0.0
   syst_JES_EtaIntercalibration_Stat122_plus: 7.05975410e-08
-  syst_JES_EtaIntercalibration_Stat122_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat122_minus: 0.0
   syst_JES_EtaIntercalibration_Stat123_plus: 1.82716392e-01
   syst_JES_EtaIntercalibration_Stat123_minus: 0.0
   syst_JES_EtaIntercalibration_Stat124_plus: -5.04379267e-02
@@ -88563,7 +88563,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat140_plus: 0.0
   syst_JES_EtaIntercalibration_Stat140_minus: 0.0
   syst_JES_EtaIntercalibration_Stat141_plus: 7.08733127e-08
-  syst_JES_EtaIntercalibration_Stat141_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat141_minus: 0.0
   syst_JES_EtaIntercalibration_Stat142_plus: -1.43118413e-01
   syst_JES_EtaIntercalibration_Stat142_minus: 9.37623592e-02
   syst_JES_EtaIntercalibration_Stat143_plus: -4.46042958e-01
@@ -88599,7 +88599,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat157_plus: 0.0
   syst_JES_EtaIntercalibration_Stat157_minus: 0.0
   syst_JES_EtaIntercalibration_Stat158_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat158_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat158_minus: 0.0
   syst_JES_EtaIntercalibration_Stat159_plus: -1.37673690e-02
   syst_JES_EtaIntercalibration_Stat159_minus: 1.70271313e-02
   syst_JES_EtaIntercalibration_Stat16_plus: 2.81032519e+00
@@ -88639,7 +88639,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat175_plus: 0.0
   syst_JES_EtaIntercalibration_Stat175_minus: 0.0
   syst_JES_EtaIntercalibration_Stat176_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat176_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat176_minus: 0.0
   syst_JES_EtaIntercalibration_Stat177_plus: 0.0
   syst_JES_EtaIntercalibration_Stat177_minus: -5.97788073e-02
   syst_JES_EtaIntercalibration_Stat178_plus: 0.0
@@ -88677,7 +88677,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat192_plus: 0.0
   syst_JES_EtaIntercalibration_Stat192_minus: 0.0
   syst_JES_EtaIntercalibration_Stat193_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat193_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat193_minus: 0.0
   syst_JES_EtaIntercalibration_Stat194_plus: -1.90141013e-11
   syst_JES_EtaIntercalibration_Stat194_minus: 1.14197745e-11
   syst_JES_EtaIntercalibration_Stat195_plus: -4.20728535e-02
@@ -88711,7 +88711,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat207_plus: 0.0
   syst_JES_EtaIntercalibration_Stat207_minus: 0.0
   syst_JES_EtaIntercalibration_Stat208_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat208_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat208_minus: 0.0
   syst_JES_EtaIntercalibration_Stat209_plus: 3.26400490e-03
   syst_JES_EtaIntercalibration_Stat209_minus: -1.21339524e-02
   syst_JES_EtaIntercalibration_Stat21_plus: 0.0
@@ -88741,10 +88741,10 @@ bins:
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
   syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat221_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 1.28976277e-02
   syst_JES_EtaIntercalibration_Stat222_minus: 0.0
-  syst_JES_EtaIntercalibration_Stat223_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat223_plus: 0.0
   syst_JES_EtaIntercalibration_Stat223_minus: 1.09742972e-01
   syst_JES_EtaIntercalibration_Stat224_plus: 0.0
   syst_JES_EtaIntercalibration_Stat224_minus: 0.0
@@ -88767,8 +88767,8 @@ bins:
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
   syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat233_minus: -0.0
-  syst_JES_EtaIntercalibration_Stat234_plus: -0.0
+  syst_JES_EtaIntercalibration_Stat233_minus: 0.0
+  syst_JES_EtaIntercalibration_Stat234_plus: 0.0
   syst_JES_EtaIntercalibration_Stat234_minus: 6.09738177e-03
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
   syst_JES_EtaIntercalibration_Stat235_minus: 0.0
@@ -88927,7 +88927,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat80_plus: 0.0
   syst_JES_EtaIntercalibration_Stat80_minus: 0.0
   syst_JES_EtaIntercalibration_Stat81_plus: 7.05268304e-08
-  syst_JES_EtaIntercalibration_Stat81_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat81_minus: 0.0
   syst_JES_EtaIntercalibration_Stat82_plus: 3.01934596e+00
   syst_JES_EtaIntercalibration_Stat82_minus: -1.91838070e+00
   syst_JES_EtaIntercalibration_Stat83_plus: 1.10520790e+01
@@ -89033,13 +89033,13 @@ bins:
   syst_JES_MJB_Stat4_plus: -8.28658437e-02
   syst_JES_MJB_Stat4_minus: 8.16708332e-02
   syst_JES_MJB_Stat5_plus: 0.0
-  syst_JES_MJB_Stat5_minus: -0.0
+  syst_JES_MJB_Stat5_minus: 0.0
   syst_JES_MJB_Stat6_plus: -5.18521403e-01
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: 0.0
-  syst_JES_MJB_Stat8_plus: -0.0
-  syst_JES_MJB_Stat8_minus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
+  syst_JES_MJB_Stat8_minus: 0.0
   syst_JES_MJB_Stat9_plus: 0.0
   syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: 1.73736136e-03
@@ -89137,7 +89137,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat101_plus: 0.0
   syst_JES_EtaIntercalibration_Stat101_minus: 0.0
   syst_JES_EtaIntercalibration_Stat102_plus: 3.23572063e-05
-  syst_JES_EtaIntercalibration_Stat102_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat102_minus: 0.0
   syst_JES_EtaIntercalibration_Stat103_plus: 5.06359166e-01
   syst_JES_EtaIntercalibration_Stat103_minus: -6.86034999e-01
   syst_JES_EtaIntercalibration_Stat104_plus: 3.00237539e+00
@@ -89181,7 +89181,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat121_plus: 0.0
   syst_JES_EtaIntercalibration_Stat121_minus: 0.0
   syst_JES_EtaIntercalibration_Stat122_plus: 3.23642774e-05
-  syst_JES_EtaIntercalibration_Stat122_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat122_minus: 0.0
   syst_JES_EtaIntercalibration_Stat123_plus: 3.25410541e-01
   syst_JES_EtaIntercalibration_Stat123_minus: -6.41982247e-02
   syst_JES_EtaIntercalibration_Stat124_plus: 7.21178206e-01
@@ -89223,7 +89223,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat140_plus: 0.0
   syst_JES_EtaIntercalibration_Stat140_minus: 0.0
   syst_JES_EtaIntercalibration_Stat141_plus: 3.24844855e-05
-  syst_JES_EtaIntercalibration_Stat141_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat141_minus: 0.0
   syst_JES_EtaIntercalibration_Stat142_plus: -1.46583236e-02
   syst_JES_EtaIntercalibration_Stat142_minus: 9.17400338e-02
   syst_JES_EtaIntercalibration_Stat143_plus: -3.03348809e-01
@@ -89259,7 +89259,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat157_plus: 0.0
   syst_JES_EtaIntercalibration_Stat157_minus: 0.0
   syst_JES_EtaIntercalibration_Stat158_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat158_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat158_minus: 0.0
   syst_JES_EtaIntercalibration_Stat159_plus: -5.68655273e-03
   syst_JES_EtaIntercalibration_Stat159_minus: 1.87736850e-02
   syst_JES_EtaIntercalibration_Stat16_plus: 1.00090965e+00
@@ -89299,7 +89299,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat175_plus: 0.0
   syst_JES_EtaIntercalibration_Stat175_minus: 0.0
   syst_JES_EtaIntercalibration_Stat176_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat176_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat176_minus: 0.0
   syst_JES_EtaIntercalibration_Stat177_plus: -2.46921688e-02
   syst_JES_EtaIntercalibration_Stat177_minus: 3.40118362e-03
   syst_JES_EtaIntercalibration_Stat178_plus: -2.59649610e-02
@@ -89337,7 +89337,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat192_plus: 0.0
   syst_JES_EtaIntercalibration_Stat192_minus: 0.0
   syst_JES_EtaIntercalibration_Stat193_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat193_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat193_minus: 0.0
   syst_JES_EtaIntercalibration_Stat194_plus: -2.61417377e-07
   syst_JES_EtaIntercalibration_Stat194_minus: 1.57119127e-07
   syst_JES_EtaIntercalibration_Stat195_plus: -1.73806847e-02
@@ -89371,7 +89371,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat207_plus: 0.0
   syst_JES_EtaIntercalibration_Stat207_minus: 0.0
   syst_JES_EtaIntercalibration_Stat208_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat208_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat208_minus: 0.0
   syst_JES_EtaIntercalibration_Stat209_plus: 1.34774552e-03
   syst_JES_EtaIntercalibration_Stat209_minus: -5.01197287e-03
   syst_JES_EtaIntercalibration_Stat21_plus: 0.0
@@ -89401,7 +89401,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
   syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat221_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 5.32734249e-03
   syst_JES_EtaIntercalibration_Stat222_minus: 0.0
   syst_JES_EtaIntercalibration_Stat223_plus: -9.11955616e-40
@@ -89427,7 +89427,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
   syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat233_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: -1.00409163e-39
   syst_JES_EtaIntercalibration_Stat234_minus: 2.51871435e-03
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
@@ -89587,7 +89587,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat80_plus: 0.0
   syst_JES_EtaIntercalibration_Stat80_minus: 0.0
   syst_JES_EtaIntercalibration_Stat81_plus: 3.23289220e-05
-  syst_JES_EtaIntercalibration_Stat81_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat81_minus: 0.0
   syst_JES_EtaIntercalibration_Stat82_plus: 1.58038366e+00
   syst_JES_EtaIntercalibration_Stat82_minus: -1.31804704e+00
   syst_JES_EtaIntercalibration_Stat83_plus: 5.14773737e+00
@@ -89693,14 +89693,14 @@ bins:
   syst_JES_MJB_Stat4_plus: -3.42239682e-02
   syst_JES_MJB_Stat4_minus: 3.37360645e-02
   syst_JES_MJB_Stat5_plus: 0.0
-  syst_JES_MJB_Stat5_minus: -0.0
+  syst_JES_MJB_Stat5_minus: 0.0
   syst_JES_MJB_Stat6_plus: -2.14182644e-01
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: 0.0
-  syst_JES_MJB_Stat8_plus: -0.0
-  syst_JES_MJB_Stat8_minus: -0.0
-  syst_JES_MJB_Stat9_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
+  syst_JES_MJB_Stat8_minus: 0.0
+  syst_JES_MJB_Stat9_plus: 0.0
   syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: 2.01313301e-04
   syst_JES_MJB_Threshold_minus: 0.0
@@ -89797,7 +89797,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat101_plus: 0.0
   syst_JES_EtaIntercalibration_Stat101_minus: 0.0
   syst_JES_EtaIntercalibration_Stat102_plus: 8.21799501e-04
-  syst_JES_EtaIntercalibration_Stat102_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat102_minus: 0.0
   syst_JES_EtaIntercalibration_Stat103_plus: 4.74610072e-01
   syst_JES_EtaIntercalibration_Stat103_minus: -3.56381818e-01
   syst_JES_EtaIntercalibration_Stat104_plus: 1.79605122e+00
@@ -89841,7 +89841,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat121_plus: 0.0
   syst_JES_EtaIntercalibration_Stat121_minus: 0.0
   syst_JES_EtaIntercalibration_Stat122_plus: 8.21870212e-04
-  syst_JES_EtaIntercalibration_Stat122_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat122_minus: 0.0
   syst_JES_EtaIntercalibration_Stat123_plus: 3.20107240e-01
   syst_JES_EtaIntercalibration_Stat123_minus: -1.93040151e-01
   syst_JES_EtaIntercalibration_Stat124_plus: 8.65569411e-01
@@ -89883,7 +89883,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat140_plus: 0.0
   syst_JES_EtaIntercalibration_Stat140_minus: 0.0
   syst_JES_EtaIntercalibration_Stat141_plus: 8.25052192e-04
-  syst_JES_EtaIntercalibration_Stat141_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat141_minus: 0.0
   syst_JES_EtaIntercalibration_Stat142_plus: 9.25744198e-02
   syst_JES_EtaIntercalibration_Stat142_minus: 0.0
   syst_JES_EtaIntercalibration_Stat143_plus: 3.76392940e-02
@@ -89919,7 +89919,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat157_plus: 0.0
   syst_JES_EtaIntercalibration_Stat157_minus: 0.0
   syst_JES_EtaIntercalibration_Stat158_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat158_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat158_minus: 0.0
   syst_JES_EtaIntercalibration_Stat159_plus: -2.53851334e-03
   syst_JES_EtaIntercalibration_Stat159_minus: 1.13137085e-02
   syst_JES_EtaIntercalibration_Stat16_plus: 4.68811796e-01
@@ -89959,7 +89959,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat175_plus: 0.0
   syst_JES_EtaIntercalibration_Stat175_minus: 0.0
   syst_JES_EtaIntercalibration_Stat176_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat176_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat176_minus: 0.0
   syst_JES_EtaIntercalibration_Stat177_plus: -1.10237947e-02
   syst_JES_EtaIntercalibration_Stat177_minus: 7.82413653e-03
   syst_JES_EtaIntercalibration_Stat178_plus: -3.46906587e-02
@@ -89997,7 +89997,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat192_plus: 0.0
   syst_JES_EtaIntercalibration_Stat192_minus: 0.0
   syst_JES_EtaIntercalibration_Stat193_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat193_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat193_minus: 0.0
   syst_JES_EtaIntercalibration_Stat194_plus: -7.73999083e-05
   syst_JES_EtaIntercalibration_Stat194_minus: 4.75387889e-05
   syst_JES_EtaIntercalibration_Stat195_plus: -7.89626143e-03
@@ -90031,7 +90031,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat207_plus: 0.0
   syst_JES_EtaIntercalibration_Stat207_minus: 0.0
   syst_JES_EtaIntercalibration_Stat208_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat208_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat208_minus: 0.0
   syst_JES_EtaIntercalibration_Stat209_plus: 6.02030714e-04
   syst_JES_EtaIntercalibration_Stat209_minus: -2.23799296e-03
   syst_JES_EtaIntercalibration_Stat21_plus: 0.0
@@ -90061,7 +90061,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
   syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat221_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 2.37870721e-03
   syst_JES_EtaIntercalibration_Stat222_minus: 0.0
   syst_JES_EtaIntercalibration_Stat223_plus: -1.10025815e-27
@@ -90087,7 +90087,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
   syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat233_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: -1.21127392e-27
   syst_JES_EtaIntercalibration_Stat234_minus: 1.12500689e-03
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
@@ -90247,7 +90247,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat80_plus: 0.0
   syst_JES_EtaIntercalibration_Stat80_minus: 0.0
   syst_JES_EtaIntercalibration_Stat81_plus: 8.21092394e-04
-  syst_JES_EtaIntercalibration_Stat81_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat81_minus: 0.0
   syst_JES_EtaIntercalibration_Stat82_plus: 7.46068365e-01
   syst_JES_EtaIntercalibration_Stat82_minus: -6.16031428e-01
   syst_JES_EtaIntercalibration_Stat83_plus: 2.18495995e+00
@@ -90356,11 +90356,11 @@ bins:
   syst_JES_MJB_Stat5_minus: -1.82221418e-36
   syst_JES_MJB_Stat6_plus: -9.56503343e-02
   syst_JES_MJB_Stat6_minus: 0.0
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: 0.0
-  syst_JES_MJB_Stat8_plus: -0.0
-  syst_JES_MJB_Stat8_minus: -0.0
-  syst_JES_MJB_Stat9_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
+  syst_JES_MJB_Stat8_minus: 0.0
+  syst_JES_MJB_Stat9_plus: 0.0
   syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -6.43396460e-03
   syst_JES_MJB_Threshold_minus: 2.55265548e-03
@@ -90457,7 +90457,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat101_plus: 0.0
   syst_JES_EtaIntercalibration_Stat101_minus: 0.0
   syst_JES_EtaIntercalibration_Stat102_plus: 2.81082017e-03
-  syst_JES_EtaIntercalibration_Stat102_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat102_minus: 0.0
   syst_JES_EtaIntercalibration_Stat103_plus: 2.58730371e-01
   syst_JES_EtaIntercalibration_Stat103_minus: -1.86746901e-01
   syst_JES_EtaIntercalibration_Stat104_plus: 8.42305598e-01
@@ -90501,7 +90501,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat121_plus: 0.0
   syst_JES_EtaIntercalibration_Stat121_minus: 0.0
   syst_JES_EtaIntercalibration_Stat122_plus: 2.81110301e-03
-  syst_JES_EtaIntercalibration_Stat122_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat122_minus: 0.0
   syst_JES_EtaIntercalibration_Stat123_plus: 2.22950768e-01
   syst_JES_EtaIntercalibration_Stat123_minus: -1.86534769e-01
   syst_JES_EtaIntercalibration_Stat124_plus: 7.39845825e-01
@@ -90543,7 +90543,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat140_plus: 0.0
   syst_JES_EtaIntercalibration_Stat140_minus: 0.0
   syst_JES_EtaIntercalibration_Stat141_plus: 2.82192174e-03
-  syst_JES_EtaIntercalibration_Stat141_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat141_minus: 0.0
   syst_JES_EtaIntercalibration_Stat142_plus: 1.13702770e-01
   syst_JES_EtaIntercalibration_Stat142_minus: -4.21294220e-02
   syst_JES_EtaIntercalibration_Stat143_plus: 1.97919188e-01
@@ -90579,7 +90579,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat157_plus: 0.0
   syst_JES_EtaIntercalibration_Stat157_minus: 0.0
   syst_JES_EtaIntercalibration_Stat158_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat158_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat158_minus: 0.0
   syst_JES_EtaIntercalibration_Stat159_plus: -9.94404266e-04
   syst_JES_EtaIntercalibration_Stat159_minus: 5.38886078e-03
   syst_JES_EtaIntercalibration_Stat16_plus: 1.88514668e-01
@@ -90619,7 +90619,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat175_plus: 0.0
   syst_JES_EtaIntercalibration_Stat175_minus: 0.0
   syst_JES_EtaIntercalibration_Stat176_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat176_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat176_minus: 0.0
   syst_JES_EtaIntercalibration_Stat177_plus: -4.95399011e-03
   syst_JES_EtaIntercalibration_Stat177_minus: 7.09864498e-03
   syst_JES_EtaIntercalibration_Stat178_plus: -3.41744707e-04
@@ -90657,7 +90657,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat192_plus: 0.0
   syst_JES_EtaIntercalibration_Stat192_minus: 0.0
   syst_JES_EtaIntercalibration_Stat193_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat193_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat193_minus: 0.0
   syst_JES_EtaIntercalibration_Stat194_plus: -1.26147850e-03
   syst_JES_EtaIntercalibration_Stat194_minus: 9.18885262e-04
   syst_JES_EtaIntercalibration_Stat195_plus: -6.03657059e-03
@@ -90691,7 +90691,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat207_plus: 0.0
   syst_JES_EtaIntercalibration_Stat207_minus: 0.0
   syst_JES_EtaIntercalibration_Stat208_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat208_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat208_minus: 0.0
   syst_JES_EtaIntercalibration_Stat209_plus: 2.78175808e-04
   syst_JES_EtaIntercalibration_Stat209_minus: -1.03379011e-03
   syst_JES_EtaIntercalibration_Stat21_plus: 0.0
@@ -90721,7 +90721,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat220_plus: 0.0
   syst_JES_EtaIntercalibration_Stat220_minus: 0.0
   syst_JES_EtaIntercalibration_Stat221_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat221_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat221_minus: 0.0
   syst_JES_EtaIntercalibration_Stat222_plus: 1.09955104e-03
   syst_JES_EtaIntercalibration_Stat222_minus: 0.0
   syst_JES_EtaIntercalibration_Stat223_plus: -1.84413449e-19
@@ -90747,7 +90747,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat232_plus: 0.0
   syst_JES_EtaIntercalibration_Stat232_minus: 0.0
   syst_JES_EtaIntercalibration_Stat233_plus: 0.0
-  syst_JES_EtaIntercalibration_Stat233_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat233_minus: 0.0
   syst_JES_EtaIntercalibration_Stat234_plus: -2.03081068e-19
   syst_JES_EtaIntercalibration_Stat234_minus: 5.19652773e-04
   syst_JES_EtaIntercalibration_Stat235_plus: 0.0
@@ -90907,7 +90907,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat80_plus: 0.0
   syst_JES_EtaIntercalibration_Stat80_minus: 0.0
   syst_JES_EtaIntercalibration_Stat81_plus: 2.80827458e-03
-  syst_JES_EtaIntercalibration_Stat81_minus: -0.0
+  syst_JES_EtaIntercalibration_Stat81_minus: 0.0
   syst_JES_EtaIntercalibration_Stat82_plus: 2.88923831e-01
   syst_JES_EtaIntercalibration_Stat82_minus: -2.29880415e-01
   syst_JES_EtaIntercalibration_Stat83_plus: 8.20173155e-01
@@ -91016,11 +91016,11 @@ bins:
   syst_JES_MJB_Stat5_minus: -5.28350187e-26
   syst_JES_MJB_Stat6_plus: -4.41941738e-02
   syst_JES_MJB_Stat6_minus: 7.54341514e-33
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: 0.0
-  syst_JES_MJB_Stat8_plus: -0.0
-  syst_JES_MJB_Stat8_minus: -0.0
-  syst_JES_MJB_Stat9_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
+  syst_JES_MJB_Stat8_minus: 0.0
+  syst_JES_MJB_Stat9_plus: 0.0
   syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -1.25652875e-02
   syst_JES_MJB_Threshold_minus: 1.07268099e-02
@@ -91676,11 +91676,11 @@ bins:
   syst_JES_MJB_Stat5_minus: -8.72994032e-19
   syst_JES_MJB_Stat6_plus: -2.10364267e-02
   syst_JES_MJB_Stat6_minus: 1.02106219e-23
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: 0.0
-  syst_JES_MJB_Stat8_plus: -0.0
-  syst_JES_MJB_Stat8_minus: -0.0
-  syst_JES_MJB_Stat9_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
+  syst_JES_MJB_Stat8_minus: 0.0
+  syst_JES_MJB_Stat9_plus: 0.0
   syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -1.98414163e-02
   syst_JES_MJB_Threshold_minus: 1.89009643e-02
@@ -92336,11 +92336,11 @@ bins:
   syst_JES_MJB_Stat5_minus: -1.14622009e-13
   syst_JES_MJB_Stat6_plus: -9.83939086e-03
   syst_JES_MJB_Stat6_minus: 4.26385389e-17
-  syst_JES_MJB_Stat7_plus: -0.0
+  syst_JES_MJB_Stat7_plus: 0.0
   syst_JES_MJB_Stat7_minus: 5.25168206e-44
-  syst_JES_MJB_Stat8_plus: -0.0
-  syst_JES_MJB_Stat8_minus: -0.0
-  syst_JES_MJB_Stat9_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
+  syst_JES_MJB_Stat8_minus: 0.0
+  syst_JES_MJB_Stat9_plus: 0.0
   syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -1.90423856e-02
   syst_JES_MJB_Threshold_minus: 1.73948268e-02
@@ -92998,9 +92998,9 @@ bins:
   syst_JES_MJB_Stat6_minus: 1.22470895e-12
   syst_JES_MJB_Stat7_plus: -5.48573441e-41
   syst_JES_MJB_Stat7_minus: 1.17309015e-32
-  syst_JES_MJB_Stat8_plus: -0.0
+  syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -1.19076782e-41
-  syst_JES_MJB_Stat9_plus: -0.0
+  syst_JES_MJB_Stat9_plus: 0.0
   syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: -1.11722871e-02
   syst_JES_MJB_Threshold_minus: 4.34092853e-03
@@ -93660,7 +93660,7 @@ bins:
   syst_JES_MJB_Stat7_minus: 1.86110505e-24
   syst_JES_MJB_Stat8_plus: 0.0
   syst_JES_MJB_Stat8_minus: -1.48845977e-31
-  syst_JES_MJB_Stat9_plus: -0.0
+  syst_JES_MJB_Stat9_plus: 0.0
   syst_JES_MJB_Stat9_minus: 0.0
   syst_JES_MJB_Threshold_plus: 0.0
   syst_JES_MJB_Threshold_minus: -4.28365288e-03

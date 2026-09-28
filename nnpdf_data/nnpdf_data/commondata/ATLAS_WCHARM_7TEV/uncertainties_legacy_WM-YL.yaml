@@ -463,14 +463,6 @@ definitions:
     description: 'Sys uncertainty idx: 115'
     treatment: MULT
     type: ATLASLUMI11
-  sys_corr_116:
-    description: 'Sys uncertainty idx: 116'
-    treatment: MULT
-    type: SKIP
-  sys_corr_117:
-    description: 'Sys uncertainty idx: 117'
-    treatment: MULT
-    type: SKIP
 bins:
 - stat: 1290.0
   sys_corr_1: 634.4
@@ -588,8 +580,6 @@ bins:
   sys_corr_113: 119.072
   sys_corr_114: -181.536
   sys_corr_115: 351.36
-  sys_corr_116: 695.6573081856
-  sys_corr_117: -797.7974685144
 - stat: 1190.0
   sys_corr_1: 595.056
   sys_corr_2: 192.28
@@ -706,8 +696,6 @@ bins:
   sys_corr_113: 281.336
   sys_corr_114: -172.04
   sys_corr_115: 364.32
-  sys_corr_116: 722.7479831864
-  sys_corr_117: -828.6556084454
 - stat: 1140.0
   sys_corr_1: 657.27
   sys_corr_2: -389.94
@@ -824,8 +812,6 @@ bins:
   sys_corr_113: 102.51
   sys_corr_114: -130.65
   sys_corr_115: 361.8
-  sys_corr_116: 719.1700228736
-  sys_corr_117: -824.3450855073
 - stat: 1290.0
   sys_corr_1: 608.872
   sys_corr_2: 287.98
@@ -942,8 +928,6 @@ bins:
   sys_corr_113: -104.907
   sys_corr_114: -117.249
   sys_corr_115: 370.26
-  sys_corr_116: 741.8045109394
-  sys_corr_117: -853.8024469047
 - stat: 1240.0
   sys_corr_1: 683.2
   sys_corr_2: -856.928
@@ -1060,8 +1044,6 @@ bins:
   sys_corr_113: 109.312
   sys_corr_114: -146.4
   sys_corr_115: 351.36
-  sys_corr_116: 713.600849865
-  sys_corr_117: -825.4029172519
 - stat: 910.0
   sys_corr_1: 475.116
   sys_corr_2: 318.936
@@ -1178,8 +1160,6 @@ bins:
   sys_corr_113: 258.108
   sys_corr_114: -124.944
   sys_corr_115: 295.92
-  sys_corr_116: 598.6790273594
-  sys_corr_117: -694.0026783176
 - stat: 1670.0
   sys_corr_1: 679.8
   sys_corr_2: 871.2
@@ -1296,8 +1276,6 @@ bins:
   sys_corr_113: 80.52
   sys_corr_114: 69.96
   sys_corr_115: 237.6
-  sys_corr_116: 491.8917612646
-  sys_corr_117: -575.8960468696
 - stat: 1050.0
   sys_corr_1: 489.636
   sys_corr_2: 79.17
@@ -1414,8 +1392,6 @@ bins:
   sys_corr_113: 235.074
   sys_corr_114: -152.25
   sys_corr_115: 219.24
-  sys_corr_116: 465.9395281815
-  sys_corr_117: -549.4813659516
 - stat: 1000.0
   sys_corr_1: 453.888
   sys_corr_2: 26.496
@@ -1532,8 +1508,6 @@ bins:
   sys_corr_113: 157.824
   sys_corr_114: -107.136
   sys_corr_115: 207.36
-  sys_corr_116: 443.9499215002
-  sys_corr_117: -526.2232097048
 - stat: 910.0
   sys_corr_1: 349.58
   sys_corr_2: -207.9
@@ -1650,8 +1624,6 @@ bins:
   sys_corr_113: 170.94
   sys_corr_114: -108.57
   sys_corr_115: 138.6
-  sys_corr_116: 306.5378607122
-  sys_corr_117: -366.9742773002
 - stat: 810.0
   sys_corr_1: 415.275
   sys_corr_2: 215.943
@@ -1768,5 +1740,3 @@ bins:
   sys_corr_113: 221.48
   sys_corr_114: -147.917
   sys_corr_115: 142.38
-  sys_corr_116: 324.9657705367
-  sys_corr_117: -392.6436676708

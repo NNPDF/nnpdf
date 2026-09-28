@@ -36,7 +36,6 @@ def processData():
     #    with open(systematics_breakdown, 'r') as file:
     #        input3 = yaml.safe_load(file)
 
-    sqrts = 8000
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     statlist1 = []
@@ -64,7 +63,6 @@ def processData():
         for j in range(len(values)):
             error_value['ArtUnc_' + str(j + 1)] = artunc1[i][j]
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
@@ -114,7 +112,6 @@ def processData():
     #    with open(systematics_breakdown, 'r') as file:
     #        input3 = yaml.safe_load(file)
 
-    sqrts = 8000
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     statlist2 = []
@@ -142,7 +139,6 @@ def processData():
         for j in range(len(values)):
             error_value['ArtUnc_' + str(j + 1)] = artunc2[i][j]
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
@@ -192,7 +188,6 @@ def processData():
     #    with open(systematics_breakdown, 'r') as file:
     #        input3 = yaml.safe_load(file)
 
-    sqrts = 8000
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     statlist3 = []
@@ -220,7 +215,6 @@ def processData():
         for j in range(len(values)):
             error_value['ArtUnc_' + str(j + 1)] = artunc3[i][j]
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},

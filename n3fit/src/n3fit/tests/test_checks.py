@@ -1,5 +1,5 @@
 """
-    Test for the n3fit checks
+Test for the n3fit checks
 """
 
 import pytest
@@ -38,7 +38,11 @@ def test_check_stopping():
     with pytest.raises(CheckError):
         checks.check_stopping(params)
     params["epochs"] = 4
+    params["stopping_delta"] = 42
     checks.check_stopping(params)
+    params["stopping_delta"] = -42
+    with pytest.raises(CheckError):
+        checks.check_stopping(params)
 
 
 def test_check_basis_with_layer():

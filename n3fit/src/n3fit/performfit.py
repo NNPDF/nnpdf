@@ -117,8 +117,8 @@ def performfit(
             dictionary containing the details of the hyperscanner
         hyperopt: int
             if given, number of hyperopt iterations to run
-        trials: str 
-            file containing trials defining the methodology
+        trials: dict
+            dictionary containing trials defining the methodology
         kfold_parameters: None, dict
             dictionary with kfold settings used in hyperopt.
         tensorboard: None, dict
@@ -202,7 +202,7 @@ def performfit(
             lux_params=fiatlux,
             replicas=replica_idxs,
             trials=trials,
-            load_weights_dict=load_weights_dict
+            load_weights_dict=load_weights_dict,
         )
 
         # This is just to give a descriptive name to the fit function

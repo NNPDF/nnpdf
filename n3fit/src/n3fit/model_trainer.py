@@ -26,6 +26,7 @@ from n3fit.layers import losses
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
+from validphys.convolution import central_predictions, predictions
 from validphys.core import DataGroupSpec
 from validphys.loader import Loader
 from validphys.photon.compute import Photon
@@ -155,8 +156,8 @@ class ModelTrainer:
                 if not give, the photon is not generated
             replicas: list
                 list with the replicas ids to be fitted
-            trials: str
-                name of the file containing the trials defining the methodology
+            trials: dict
+                dictionary containing the trials defining the methodology
         """
         # Save all input information
         self.exp_info = list(exp_info)
@@ -853,13 +854,17 @@ class ModelTrainer:
         Parameters used only here:
             - ``epochs``: maximum number of iterations for the fit to run
             - ``stopping_patience``: patience of the stopper after finding a new minimum
+            - ``stopping_delta``: minimum improvement to consider it a new minimum
 
         All other parameters are passed to the corresponding functions
         """
-
         # Reset the internal state of the backend every time this function is called
         print("")
         clear_backend_state()
+        # Clean also validphys' internal caches which keep references to n3fit models
+        central_predictions.cache_clear()
+        predictions.cache_clear()
+
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
         if self.mode_hyperopt:
@@ -871,12 +876,12 @@ class ModelTrainer:
         if self.mode_hyperopt or (not self.trials):
             epochs = int(params["epochs"])
             stopping_patience = params["stopping_patience"]
-            stopping_epochs = int(epochs * stopping_patience)
         else:
             idx_hyperparamters = self.replicas[0] % self.trials["number_of_trials"]
             epochs = int(self.trials["epochs"][idx_hyperparamters])
             stopping_patience = self.trials["stopping_patience"][idx_hyperparamters]
-            stopping_epochs = int(epochs * stopping_patience)
+        stopping_delta = params.get("stopping_delta", 0.0)
+        stopping_epochs = int(epochs * stopping_patience)
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
@@ -1028,6 +1033,7 @@ class ModelTrainer:
                 pdf_model,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
+                stopping_delta=stopping_delta,
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
             )

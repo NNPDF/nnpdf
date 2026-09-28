@@ -389,6 +389,27 @@ Threshold :math:`\chi2`
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
 
+Stopping patience and delta
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After each training step, the stopping algorithm checks the validation loss.
+If no improvement is found after ``stopping_patience * epochs``, then the fit is considered final.
+The check is, by default, exact, any improvement in the validation loss would reset the counter,
+but it is possible to change this behaviour with ``stopping_delta``. E.g.,
+
+.. code-block:: yaml
+
+    parameters:
+        epochs: 10000
+        stopping_patience: 0.3
+        stopping_delta: 0.05
+
+With these parameters, the fit will run until the validation loss doesn't improve by more than
+0.05 for 3000 epochs.
+In pratcice the ``stopping_delta`` can be left to the default value of 0.0, it is currently used
+mostly for regression tests in which small differences can change the final results.
+
+
 Save and load weights of the model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

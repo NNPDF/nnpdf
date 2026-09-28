@@ -3,12 +3,34 @@ import matplotlib
 # This is to fix a weird bug in LHAPDF
 matplotlib.use('agg')
 
+from io import BytesIO
+
+from PIL import Image, ImageFilter
+import matplotlib.pyplot as plt
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import DATA, PDF, SINGLE_DATASET, THEORYID
+from validphys.tests.conftest import DATA, PDF, THEORYID
 
-TOLERANCE_VALUE = 18
+BLUR_RADIUS = 1.5
+
+
+def _blurred_figure(fig, blur_radius=BLUR_RADIUS):
+    """Return a blurred raster copy of a figure for less pixel-sensitive mpl comparisons."""
+    buffer = BytesIO()
+    try:
+        fig.savefig(buffer, format='png')
+    finally:
+        plt.close(fig)
+
+    buffer.seek(0)
+    image = Image.open(buffer).convert('RGB').filter(ImageFilter.GaussianBlur(blur_radius))
+
+    blurred_fig = plt.figure(figsize=(image.width / 100, image.height / 100), dpi=100)
+    ax = blurred_fig.add_axes([0, 0, 1, 1])
+    ax.imshow(image)
+    ax.set_axis_off()
+    return blurred_fig
 
 
 @pytest.mark.linux
@@ -33,22 +55,23 @@ def test_dataspecschi2():
         {'pdf': PDF, 'theoryid': THEORYID, 'speclabel': 'no t0'},
         {'pdf': PDF, 'theoryid': THEORYID, 'use_t0': False, 'speclabel': 'with t0'},
     ]
-    return API.plot_dataspecs_datasets_chi2(
+    fig = API.plot_dataspecs_datasets_chi2(
         dataset_inputs=dsinpts,
         dataspecs=dataspecs,
         use_cuts='internal',
         metadata_group='experiment',
     )
+    return _blurred_figure(fig)
 
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare()
 def test_plotfancy():
-    fig = API.plot_fancy(dataset_input=DATA[2], theoryid=THEORYID, pdfs=[PDF], use_cuts='internal', with_shift=True)[
-        0
-    ]
+    fig = API.plot_fancy(
+        dataset_input=DATA[2], theoryid=THEORYID, pdfs=[PDF], use_cuts='internal', with_shift=True
+    )[0]
     fig.tight_layout()
-    return fig
+    return _blurred_figure(fig)
 
 
 @pytest.mark.linux

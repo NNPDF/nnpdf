@@ -71,7 +71,6 @@ def get_kinematics(hepdata: dict, bin_index: list = [], indx: int = 0, min_rap=N
         kin_value = {
             "eta": {"min": min_rap, "mid": ((min_rap + max_rap) / 2) , "max": max_rap},
             "ET": {"min": min_et, "mid": ((min_et + max_et) / 2), "max": max_et},
-            "sqrts": {"min": None, "mid": 13000, "max": None},
         }
         kinematics.append(kin_value)
 

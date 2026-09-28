@@ -32,10 +32,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dmttBar.yaml
   data_central: data_dSig_dmttBar.yaml
   data_uncertainties:
@@ -43,7 +39,6 @@ implemented_observables:
   kinematic_coverage:
   - m_ttBar
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -73,10 +68,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dmttBar_norm.yaml
   data_central: data_dSig_dmttBar_norm.yaml
   data_uncertainties:
@@ -84,7 +75,6 @@ implemented_observables:
   kinematic_coverage:
   - m_ttBar
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -115,10 +105,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dpTt.yaml
   data_central: data_dSig_dpTt.yaml
   data_uncertainties:
@@ -126,7 +112,6 @@ implemented_observables:
   kinematic_coverage:
   - pT_t
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{d\sigma}{dpT_t}$'
     x_scale: log
@@ -156,10 +141,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dpTt_norm.yaml
   data_central: data_dSig_dpTt_norm.yaml
   data_uncertainties:
@@ -167,7 +148,6 @@ implemented_observables:
   kinematic_coverage:
   - pT_t
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
     x_scale: log
@@ -198,10 +178,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dyt.yaml
   data_central: data_dSig_dyt.yaml
   data_uncertainties:
@@ -209,7 +185,6 @@ implemented_observables:
   kinematic_coverage:
   - y_t
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t}|}$'
     x_scale: log
@@ -239,10 +214,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dyt_norm.yaml
   data_central: data_dSig_dyt_norm.yaml
   data_uncertainties:
@@ -250,7 +221,6 @@ implemented_observables:
   kinematic_coverage:
   - y_t
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
     x_scale: log
@@ -297,10 +267,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dyttBar.yaml
   data_central: data_dSig_dyttBar.yaml
   data_uncertainties:
@@ -308,7 +274,6 @@ implemented_observables:
   kinematic_coverage:
   - y_ttBar
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: log
@@ -338,10 +303,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dyttBar_norm.yaml
   data_central: data_dSig_dyttBar_norm.yaml
   data_uncertainties:
@@ -349,7 +310,6 @@ implemented_observables:
   kinematic_coverage:
   - y_ttBar
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: log

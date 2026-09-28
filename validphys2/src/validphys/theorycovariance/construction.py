@@ -17,7 +17,6 @@ from validphys.results import results, results_central
 from validphys.theorycovariance.higher_twist_functions import compute_deltas_pc
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination,
-    check_fit_dataset_order_matches_grouped,
     process_lookup,
 )
 
@@ -543,7 +542,6 @@ def user_covmat(
 
 
 @table
-@check_fit_dataset_order_matches_grouped
 def total_theory_covmat(theory_covmat_custom, user_covmat):
     """
     Sum of scale variation and user covmat, where both are used.
@@ -593,21 +591,6 @@ def user_covmat_fitting(user_covmat, data_input_matched_procs_index):
     """user_covmat reindexed to data_input (runcard) order so it aligns with
     loaded_theory_covmat in n3fit."""
     return _reindex_covmat_to_fitting_order(user_covmat, data_input_matched_procs_index)
-
-
-def procs_index_matched(groups_index, procs_index):
-    """procs_index but matched to the dataset order given
-    by groups_index."""
-    # Making list with exps ordered like in groups_index
-    groups_ds_order = groups_index.get_level_values(level=1).unique().tolist()
-    # Tuples to make multiindex, ordered like in groups_index
-    tups = []
-    for ds in groups_ds_order:
-        for orig in procs_index:
-            if orig[1] == ds:
-                tups.append(orig)
-
-    return pd.MultiIndex.from_tuples(tups, names=("process", "dataset", "id"))
 
 
 @table

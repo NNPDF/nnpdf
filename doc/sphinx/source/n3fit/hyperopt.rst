@@ -509,3 +509,24 @@ Make sure the second job is submitted with some delay with respect to the first.
 By default, the ``port`` and ``host`` arguments are set to ``27017`` and the hostname of the first job respectively.
 The database is named ``hyperopt-db`` and store in the ``replica_1`` folder of the current run.
 Note that the database is not uploaded to the server when using ``vp-upload`` unless ``--upload-db`` is explicitly specified.
+
+Using the results of a scan in an n3fit runcard
+-----------------------------------------------
+
+After a scan has finished, it is possible to use it as the source for the parameters of the fit.
+It is necessary to add a ``trial_specs`` key to the runcard as follows:
+
+
+.. code-block:: yaml
+
+  trial_specs:
+    hyperscan: 260204-jcm-hyperopt
+    thermalization: 400
+    number_of_trials: 10
+    override:
+      epochs: 500
+
+
+The fitting code will use the trials from ``260204-jcm-hyperopt``, ignore the ``thermalization`` first ones (in this example, the 400 first trials are thus ignored) and will only sample methodologies from the first ``number_of_trials`` best, in this case 10.
+When a ``hyperscan`` is provided, these parameters will define the run, however, it is possible to override any of the parameters with the ``override`` key.
+In this example, regardless of the values of ``epochs`` in the scan, a limit of 500 epochs will be applied.

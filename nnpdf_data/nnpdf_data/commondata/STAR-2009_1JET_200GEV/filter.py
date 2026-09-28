@@ -322,7 +322,9 @@ if __name__ == "__main__":
         correlated_unc.extend(np.sqrt(dfs[a]["sys"] ** 2 + dfs[a]["stat"] ** 2).values.tolist())
     ndata_points = np.sum((*ndata_dict.values(),))
     # decompose uncertainties
-    art_sys = np.array(compute_covmat(correlation_df, correlated_unc, ndata_points))
+    art_sys = np.array(
+        compute_covmat(correlation_df, correlated_unc, ndata_points, full_precision=True)
+    )
 
     # write data
     cnt = 0

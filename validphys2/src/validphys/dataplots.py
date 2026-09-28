@@ -25,9 +25,9 @@ from validphys import plotutils
 from validphys.checks import check_not_using_pdferr
 from validphys.commondata import loaded_commondata_with_cuts
 from validphys.core import CutsPolicy, MCStats, cut_mask, load_commondata
-from validphys.covmats import shifts_from_systematics
+from validphys.covmats import shifts_from_systematics, unco_unc
 from validphys.plotoptions.core import get_info, kitable, transform_result
-from validphys.results import chi2_stat_labels, chi2_stats
+from validphys.results import DataResult, chi2_stat_labels, chi2_stats
 from validphys.sumrules import POL_LIMS
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 
@@ -263,10 +263,6 @@ def _plot_fancy_impl(
     nkinlabels = len(table.columns)
     ndata = len(table)
 
-    # Compute shifts due to the correlated part of the exp cov matrix
-    lcd_wc = loaded_commondata_with_cuts(commondata, cutlist[0])
-    theory_predictions = results[1].central_value
-
     # This is easier than cheking every time
     if labellist is None:
         labellist = [None] * len(results)
@@ -283,34 +279,41 @@ def _plot_fancy_impl(
 
     cvcols = []
 
-    # Compute systematic shifts
-    # For unknown reasons, `shifts_from_systematics` may
-    # randomly fails. If a LinAlgError is raised, shifts are not included in
-    # the final plot.
-    if with_shift:
-        try:
-            shifts, alpha = shifts_from_systematics(lcd_wc, theory_predictions)
-        except np.linalg.LinAlgError:
-            log.warning(
-                "Error occurred in computing systematic shifts for "
-                f"{info.ds_metadata.name}. These will be disregarded in the plots."
-            )
-            with_shift = False
-
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
-        # We modify the table, so we pass only the label columns
+
         mask = cut_mask(cuts)
         cv = np.full(ndata, np.nan)
         err = np.full(ndata, np.nan)
-        # Shift the theory when with_shift option is True
-        if i == 1 and with_shift:
-            cv[mask] = result.central_value - shifts
+
+        # w/ shifts
+        '''
+        N.B. If this fails, e.g. triggering an error due to a division by zero,
+        it is very likely that the data set implementation is bugged. For
+        instance, the uncorrelated part of the uncertainty may be present,
+        but set to zero. If so, that must be simply removed.
+        '''
+        if with_shift:
+            shifts = 0.0
+            lcd_wc = loaded_commondata_with_cuts(commondata, cuts)
+            # Determine data uncertainty
+            if isinstance(result, DataResult):
+                cv[mask] = result.central_value
+                alpha = unco_unc(lcd_wc)
+                if alpha.all() == 0.0:
+                    err[mask] = result.std_error
+                    with_shift = False
+                else:
+                    err[mask] = alpha
+            # Determine shift
+            else:
+                theory_predictions = result.central_value
+                shifts = shifts_from_systematics(lcd_wc, theory_predictions)
+                cv[mask] = result.central_value - shifts
+                err[mask] = result.std_error
+
+        # w/o shifts
         else:
             cv[mask] = result.central_value
-        # Retain only the uncorrelated part of the error if shifting the data
-        if i == 0 and with_shift:
-            err[mask] = alpha
-        else:
             err[mask] = result.std_error
 
         cv, err = transform_result(cv, err, table.iloc[:, :nkinlabels], info)
@@ -1141,16 +1144,14 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
     --------
     >>> from validphys.api import API
     >>> data_input = {
-    >>>    "dataset_input" : {"dataset": "HERACOMBNCEP920"},
-    >>>    "theoryid": 200,
-    >>>     "use_cuts": "internal",
-    >>>     "pdf": "NNPDF40_nnlo_as_01180",
-    >>>     "Q": 1.6,
-    >>>     "mark_threshold": 0.2
-    >>> }
+    ...     "dataset_input": {"dataset": "HERA_NC_318GEV_EP-SIGMARED"},
+    ...     "theoryid": 40000000,
+    ...     "use_cuts": "internal",
+    ...     "pdf": "NNPDF40_nnlo_as_01180",
+    ...     "Q": 1.6,
+    ...     "mark_threshold": 0.2,
+    ... }
     >>> smpdf_gen = API.plot_smpdf(**data_input)
-    >>> fig = next(smpdf_gen)
-    >>> fig.show()
     """
     info = get_info(dataset)
 
