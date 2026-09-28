@@ -176,9 +176,10 @@ def performfit(
             replicas[0],
             replicas[0] + n_models - 1,
         )
-
+    # Every architecture string that produces a variational layer
+    BAYESIAN_LAYER_TYPES = {'VBDense', 'VBDense_correlated'}
     layer_type = parameters.get('layer_type')
-    is_bnn = any(layer == 'VBDense' for layer in layer_type)
+    is_bnn = any(layer in BAYESIAN_LAYER_TYPES for layer in layer_type)
     
     for replica_idxs, exp_info, nnseeds in replicas_info:
         log.info("Starting replica fit " + str(replica_idxs))
@@ -263,14 +264,22 @@ def performfit(
         pdf_model = result["pdf_model"]
         
         if is_bnn:
-            # For BNN: Generate pseudo-replicas using BNNPredictor
-            from n3fit.bnn_wrapper import BNNPredictor
+            # For BNN: Generate pseudo-replicas using BNNPredictor's weight-space sampler
+            # (BNNPredictor(sampler="weight"), the default). The function-space/Laplace
+            # path (linearized_laplace_samples) needs xgrid_per_dataset and
+            # obs_wrappers_per_dataset attached to pdf_model during training; nothing in
+            # ModelTrainer currently does that (only invcovmat_per_dataset is computed,
+            # and even that stays a local variable -- it never reaches pdf_model), so the
+            # Laplace path is not wired up yet. BNNPredictor.__init__ also does not accept
+            # an invcovmat_per_dataset kwarg -- it reads it via getattr(pdf_model, ...)
+            # instead, which is always None until that wiring exists.
+            from n3fit.bnn_wrapper_copy import BNNPredictor
 
-            n_bnn_samples = parameters.get('n_bnn_samples', 1)
+            n_bnn_samples = parameters.get('n_bnn_samples', 3)
             log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN")
-            
-            bnn_predictor = BNNPredictor(pdf_model, n_samples=n_bnn_samples)
-            pdf_models = bnn_predictor.generate_bnn_replica() # prints [<MetaModel name=PDFs, built=True>, <MetaModel name=PDFs, built=True>] for 2 bnn replica
+
+            bnn_predictor = BNNPredictor(pdf_model=pdf_model, n_bnn_samples=n_bnn_samples)
+            pdf_models = bnn_predictor.generate_bnn_replica_from_weights()
 
             class BNNStoppingProxy:
                 """

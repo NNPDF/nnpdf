@@ -106,7 +106,6 @@ nnseed: 945709987
 mcseed: 519562661
 genrep: false
 diagonal_basis: false
-parallel_models: false
 
 ################################################################################
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
@@ -117,7 +116,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 6.073e-6
     learning_rate: 2.621e-3
     optimizer_name: Nadam
-  epochs: 17000
+  epochs: 40000
   positivity:
     initial: 184.8
     multiplier:
@@ -125,21 +124,18 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     initial: 10
     multiplier:
   stopping_patience: 0.1
-  layer_type: ['dense', 'VBDense', 'VBDense'] # ['dense', 'VBDense_correlated', 'VBDense_correlated']
-  bayesian_bias: [false, true, true]   # per layer (ignored on non-VBDense layers)
-  bayesian_flow: [false, false, true]  # per layer; NF-enriched posterior on the true last VBDense layer only
-  flow_n_couplings: 3                  # RealNVP coupling layers (flow granularity: whole flattened weight matrix)
-  flow_hidden_units: 24                # hidden units per coupling MLP
+  layer_type: ['dense', 'dense', 'VBDense']
+  bayesian_bias: [false, false, true]
   dropout: 0.0
+  bayes_dropout: 0.0
   threshold_chi2: 3.5
   prior_prec: 1.0
-  std_init: -5         #  None -> init at prior.
-  rank: 4              #  correlated directions; 0 reproduces VBDense exactly
-  u_init: 1.0e-4       #  low-rank factors start near mean-field
-  n_bnn_samples: 100
+  n_bnn_models: 120
+  n_bnn_samples: 10
+  sampling_space: function
 
 fitting:
-  bayesian_preproc: True
+  bayesian_preproc: False
   fitbasis: EVOL
   savepseudodata: True
   basis:
@@ -201,3 +197,5 @@ integrability:
 ################################################################################
 debug: false
 maxcores: 8
+parallel_models: false
+save: 'weights.weights.h5'

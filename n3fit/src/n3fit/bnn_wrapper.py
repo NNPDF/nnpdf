@@ -6,9 +6,10 @@ This module provides utilities for:
 2. Generating pseudo-replicas from BNN weight samples for plotting/analysis
 """
 
-from n3fit.backends.keras_backend.base_layers import VBDense
+from n3fit.backends.keras_backend.base_layers import CorrelatedLowRankVBDense, VBDense
 from n3fit.layers.preprocessing import BayesianPreprocessing
 
+VB_LAYER_CLASSES = (VBDense, CorrelatedLowRankVBDense)
 
 def is_bayesian_model(pdf_model):
     """
@@ -52,7 +53,7 @@ def get_vb_layers(pdf_model):
 
     # Check each layer using isinstance
     for layer in all_layers:
-        if isinstance(layer, VBDense):
+        if isinstance(layer, VB_LAYER_CLASSES):
             vb_layers.append(layer)
 
     return vb_layers
@@ -73,6 +74,27 @@ def set_model_eval(replica_model):
     preproc = get_bayesian_preprocessing(replica_model)
     if preproc is not None:
         preproc.eval()
+
+
+def copy_vb_posterior(parent_vb, child_vb):
+    """
+    Copy every trained VBDense posterior weight from parent to child, generically
+    (positional match over `.weights`, which is deterministic since both layers were
+    built by the same code path), EXCLUDING the frozen per-replica noise buffers
+    (`random`/`random_b`) so each child replica keeps its own independently-drawn
+    posterior sample instead of duplicating the parent's.
+
+    Copying by hand (``mu_w``/``logsig2_w``/``bias`` only) previously silently dropped
+    ``bias_logsig2`` (when ``bayesian_bias=True``) and would just as silently drop a
+    trained flow's parameters (when ``use_flow=True``); this covers all of them
+    generically.
+    """
+    for parent_w, child_w in zip(parent_vb.weights, child_vb.weights):
+        if parent_w is parent_vb.random or (
+            parent_vb.bayesian_bias and parent_w is parent_vb.random_b
+        ):
+            continue
+        child_w.assign(parent_w)
 
 
 class BNNPredictor:
@@ -105,12 +127,14 @@ class BNNPredictor:
         for _ in range(self.n_samples):
             replica = self.pdf_model.single_replica_generator(0)
 
-            # Transfer VBDense posterior params
+            # Transfer the variational posterior parameters. Copy every
+            # trainable weight by name, so correlated layers (u_w, u_b) and
+            # Bayesian biases (bias_logsig2) come along automatically.
             new_vb_layers = get_vb_layers(replica)
             for parent_vb, child_vb in zip(self.vb_layers, new_vb_layers):
-                child_vb.mu_w.assign(parent_vb.mu_w)
-                child_vb.logsig2_w.assign(parent_vb.logsig2_w)
-                child_vb.bias.assign(parent_vb.bias)
+                parent_weights = {w.name: w for w in parent_vb.trainable_weights}
+                for child_weight in child_vb.trainable_weights:
+                    child_weight.assign(parent_weights[child_weight.name])
 
             # Transfer preprocessing alpha/beta
             replica.set_replica_weights(self.pdf_model.get_replica_weights(0), i_replica=0)

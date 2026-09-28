@@ -374,6 +374,11 @@ class ReplicaSettings:
     std_init: float = None
     dropout_rate_bayesian: float = None
     bayesian_bias: Union[bool, list] = False
+    bayesian_flow: Union[bool, list] = False
+    flow_n_couplings: int = 3
+    flow_hidden_units: int = 24
+    rank: int = 4
+    u_init: float = 1e-4
 
     def __post_init__(self):
         """Apply checks to the input, and expand hyperopt callables"""
@@ -392,6 +397,15 @@ class ReplicaSettings:
         elif len(self.bayesian_bias) != len(self.nodes):
             raise ValueError(
                 f"bayesian_bias ({self.bayesian_bias}) must match the number of layers "
+                f"({len(self.nodes)})"
+            )
+
+        # Normalize bayesian_flow to one entry per layer, same convention as bayesian_bias
+        if self.bayesian_flow is None or isinstance(self.bayesian_flow, bool):
+            self.bayesian_flow = [bool(self.bayesian_flow)] * len(self.nodes)
+        elif len(self.bayesian_flow) != len(self.nodes):
+            raise ValueError(
+                f"bayesian_flow ({self.bayesian_flow}) must match the number of layers "
                 f"({len(self.nodes)})"
             )
 
@@ -840,6 +854,11 @@ def _generate_nn(
     std_init: float = None,
     dropout_rate_bayesian: float = None,
     bayesian_bias: list = None,
+    bayesian_flow: list = None,
+    flow_n_couplings: int = 3,
+    flow_hidden_units: int = 24,
+    rank: int = 4,
+    u_init: float = 1e-4,
     training: bool = True
 ) -> MetaModel:
     """
@@ -904,15 +923,31 @@ def _generate_nn(
             )
     
         elif architecture_type == "VBDense":
-            
+
             return base_layer_selector(
                 architecture_type,
                 prior_prec=prior_prec,
                 std_init=std_init,
                 in_features=nodes_in,
                 out_features=nodes_out,
-                bayesian_bias=bool(bayesian_bias[i_layer]), 
-            )            
+                bayesian_bias=bool(bayesian_bias[i_layer]),
+                use_flow=bool(bayesian_flow[i_layer]) if bayesian_flow is not None else False,
+                n_flows=flow_n_couplings,
+                flow_hidden=flow_hidden_units,
+            )
+
+        elif architecture_type == "VBDense_correlated":
+
+            return base_layer_selector(
+                architecture_type,
+                prior_prec=prior_prec,
+                std_init=std_init,
+                in_features=nodes_in,
+                out_features=nodes_out,
+                rank=int(rank),
+                u_init=float(u_init),
+                bayesian_bias=bool(bayesian_bias[i_layer]),
+            )
 
         else:
             raise ValueError(f"{architecture_type} not recognized during model generation")
@@ -936,7 +971,11 @@ def _generate_nn(
             previous_layer = dropout_l(previous_layer)
 
         # Add dropout to bayesian layer specifically
-        if dropout_rate_bayesian is not None and dropout_rate_bayesian > 0 and architecture_type == 'VBDense':
+        if (
+            dropout_rate_bayesian is not None
+            and dropout_rate_bayesian > 0
+            and architecture_type in ('VBDense', 'VBDense_correlated')
+        ):
             log = logging.getLogger(__name__)
             log.info(f"Dropout implemented for {layer_idx}-th layer")
             dropout_l = base_layer_selector("dropout", rate=dropout_rate_bayesian)

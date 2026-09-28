@@ -312,8 +312,7 @@ class HyperScanner:
         # Call the method if bayesian_nn is defined
         if bayesian_nn_dict:
             self.bayesian_nn(
-                prior_prec=bayesian_nn_dict.get("prior_prec"),
-                std_init=bayesian_nn_dict.get("std_init")
+                prior_prec=bayesian_nn_dict.get("prior_prec")
             )
 
 
@@ -559,16 +558,14 @@ class HyperScanner:
         """Evaluate a trial using the original parameters dictionary"""
         return hyperopt.space_eval(self._original_parameters, trial)
     
-    def bayesian_nn(self, prior_prec=None, std_init=None):
+    def bayesian_nn(self, prior_prec=None):
         """
         Modifies the following entries of the `parameters` dictionary:
             - prior_prec
-            - std_init
         
         Parameters
         ----------
             prior_prec: dict with 'min' and 'max' keys for loguniform sampling
-            std_init: dict with 'min' and 'max' keys for uniform sampling
         """
         if prior_prec is not None:
             prior_prec_val = hp_loguniform(
@@ -577,8 +574,4 @@ class HyperScanner:
                 prior_prec['max']
             )
             self._update_param('prior_prec', prior_prec_val)
-        
-        if std_init is not None:
-            std_init_val = hp_uniform('std_init', std_init['min'], std_init['max'])
-            self._update_param('std_init', std_init_val)
 

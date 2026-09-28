@@ -106,7 +106,6 @@ nnseed: 945709987
 mcseed: 519562661
 genrep: false
 diagonal_basis: false
-parallel_models: false
 
 ################################################################################
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
@@ -125,21 +124,21 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     initial: 10
     multiplier:
   stopping_patience: 0.1
-  layer_type: ['dense', 'VBDense', 'VBDense'] # ['dense', 'VBDense_correlated', 'VBDense_correlated']
-  bayesian_bias: [false, true, true]   # per layer (ignored on non-VBDense layers)
-  bayesian_flow: [false, false, true]  # per layer; NF-enriched posterior on the true last VBDense layer only
-  flow_n_couplings: 3                  # RealNVP coupling layers (flow granularity: whole flattened weight matrix)
-  flow_hidden_units: 24                # hidden units per coupling MLP
+  layer_type: ['dense', 'dense', 'dense']
   dropout: 0.0
   threshold_chi2: 3.5
-  prior_prec: 1.0
-  std_init: -5         #  None -> init at prior.
-  rank: 4              #  correlated directions; 0 reproduces VBDense exactly
-  u_init: 1.0e-4       #  low-rank factors start near mean-field
-  n_bnn_samples: 100
+  repulsion:
+    beta: 2.0                   # repulsion strength; 0 == plain joint ensemble
+    scale_invariant_grad: false # true -> beta has a grid/scale-independent meaning
+    normalization: pointwise    # pointwise | flavour | null
+    x_min: 1.0e-6               # smallest anchor x
+    x_mid: 0.1                  # log-spaced from x_min to x_mid, linear above
+    n_log: 150                  # anchors log-spaced in [x_min, x_mid)
+    n_lin: 50                   # anchors linearly spaced in [x_mid, 1.0]
+    bandwidth:                  # null -> median heuristic each step; or a fixed float
+    flavour_weights:            # null -> all 14 FK flavours equal; or a length-14 list
 
 fitting:
-  bayesian_preproc: True
   fitbasis: EVOL
   savepseudodata: True
   basis:
@@ -201,3 +200,4 @@ integrability:
 ################################################################################
 debug: false
 maxcores: 8
+parallel_models: true

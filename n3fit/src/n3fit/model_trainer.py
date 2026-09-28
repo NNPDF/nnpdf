@@ -49,6 +49,8 @@ FLAVOURS = 14
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
 
+invcovmat_per_dataset = None
+
 
 def _pdf_injection(pdf_layers, observables, masks):
     """
@@ -60,7 +62,13 @@ def _pdf_injection(pdf_layers, observables, masks):
     results = []
     for f, x, m in zip_longest(observables, pdf_layers, masks):
         if isinstance(f, LossKL):
-            # KL layer doesn't need pdf input — call with dummy zero tensor
+            # KL layer doesn't need pdf input — call with dummy zero tensor.
+            # NOTE: pdf_layers[0] must stay causally downstream of the VBDense forward
+            # pass (i.e. derived from pdf_model's output, not e.g. xinput.input). For
+            # flow-enabled VBDense layers, kl_loss() reads back z/w/logdet cached on the
+            # layer during that forward pass; Keras only guarantees this cache is fresh
+            # (not stale from a throwaway earlier trace) if this call is topologically
+            # ordered after it.
             results.append(f(pdf_layers[0]))
         else:
             results.append(f(x, mask=m))
@@ -791,7 +799,16 @@ class ModelTrainer:
         self.validation["output"].clear()
         self.experimental["output"].clear()
         self.input_list.clear()
-    
+
+        # Per-dataset x-grid and training ObservableWrapper, in the same order as
+        # self._experiment_data["invcovmat"] (real experimental datasets only, i.e. not
+        # positivity/integrability/repulsion-anchor entries). Attached onto pdf_model
+        # right after it is built (see hyperparametrizable) for the linearized-Laplace
+        # sampler in bnn_wrapper_copy.py, which needs to differentiate training
+        # predictions (FK convolution + training mask) w.r.t. the MAP weights per dataset.
+        self._xgrid_per_dataset = []
+        self._obs_wrappers_per_dataset = []
+
         # Experimental Data Loss Setup
         for i, exp_dict in enumerate(self.exp_info[0]):
             if not self.mode_hyperopt:
@@ -813,6 +830,9 @@ class ModelTrainer:
             self.training["output"].append(exp_layer["output_tr"])
             self.validation["output"].append(exp_layer["output_vl"])
             self.experimental["output"].append(exp_layer["output"])
+
+            self._xgrid_per_dataset.append(exp_layer["inputs"])
+            self._obs_wrappers_per_dataset.append(exp_layer["output_tr"])
 
         # Positivity Penalty Setup 
         self.training["posmultipliers"].clear()
@@ -954,8 +974,8 @@ class ModelTrainer:
         )
         if kl_beta is None:
             kl_beta = train_model.kl_beta  # fallback
-        callback_kl = callbacks.KLAnnealingCallback(kl_beta, warmup_steps=epochs//2, replica_path=self.replica_path)
-        log.info(f"KLAnnealing init: warmup_steps={epochs//2}, kl_beta initial={float(train_model.kl_beta.numpy())}")
+        callback_kl = callbacks.KLAnnealingCallback(kl_beta, warmup_steps=epochs//4, replica_path=self.replica_path)
+        log.info(f"KLAnnealing init: warmup_steps={epochs//4}, kl_beta initial={float(train_model.kl_beta.numpy())}")
 
 
         train_model.perform_fit(
@@ -1120,6 +1140,9 @@ class ModelTrainer:
             params.get("interpolation_points"),
         )
 
+        # store invcovmat per dataset for laplace based inference later
+        invcovmat_per_dataset = self._experiment_data["invcovmat"]
+
         threshold_pos = positivity_dict.get("threshold", 1e-6)
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
 
@@ -1161,6 +1184,11 @@ class ModelTrainer:
                 std_init=params.get('std_init', None),
                 dropout_rate_bayesian=params.get('bayes_dropout', 0.0),
                 bayesian_bias=params.get('bayesian_bias', False),
+                bayesian_flow=params.get('bayesian_flow', False),
+                flow_n_couplings=params.get('flow_n_couplings', 3),
+                flow_hidden_units=params.get('flow_hidden_units', 24),
+                rank=params.get('rank', 4),
+                u_init=params.get('u_init', 1e-4),
             )
             replicas_settings.append(tmp)
 
@@ -1192,9 +1220,17 @@ class ModelTrainer:
             )
 
             vb_layers = get_vb_layers(pdf_model)
-            kl_beta = pdf_model.kl_beta 
+            kl_beta = pdf_model.kl_beta
             if vb_layers:
-                self.training["output"].append(LossKL(vb_layers, kl_beta, name="kl_loss"))           
+                self.training["output"].append(LossKL(vb_layers, kl_beta, name="kl_loss"))
+
+                # Attach per-dataset info needed by the linearized-Laplace (function-space)
+                # BNN sampler in bnn_wrapper_copy.py::BNNPredictor.compute_sigma_theta.
+                # These read back via getattr(pdf_model, ..., None), so BNNPredictor also
+                # works when instantiated from a reloaded model where they're absent.
+                pdf_model.invcovmat_per_dataset = self._experiment_data["invcovmat"]
+                pdf_model.xgrid_per_dataset = self._xgrid_per_dataset
+                pdf_model.obs_wrappers_per_dataset = self._obs_wrappers_per_dataset
 
             # NEW: BNN-specific hyperparameter explicit print statement (REMOVE THIS LATER)
             for i, vb in enumerate(vb_layers):

@@ -85,8 +85,7 @@ def _load_architecture(runcard_path):
         initializer    = params["initializer"],            
         architecture   = params["layer_type"],             
         dropout_rate   = params.get("dropout", 0.0), 
-        prior_prec     = params.get("prior_prec", 0.1),
-        std_init       = params.get("std_init", -9.0),     
+        prior_prec     = params.get("prior_prec", 0.1),     
         flav_info      = basis,
         fitbasis       = fitbasis,                         
     )
@@ -121,8 +120,7 @@ def build_pdf_model(arch, seed=0):
         architecture = arch["architecture"],
         initializer  = arch["initializer"],
         dropout_rate = arch["dropout_rate"],
-        prior_prec   = arch["prior_prec"],
-        std_init     = arch["std_init"]
+        prior_prec   = arch["prior_prec"]
     )
 
     pdf_model = generate_pdf_model(

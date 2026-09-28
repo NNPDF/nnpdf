@@ -25,7 +25,7 @@ FIT_NAMESPACE = "datacuts::theory::fitting "
 CLOSURE_NAMESPACE = "datacuts::theory::closuretest::fitting "
 
 N3FIT_PROVIDERS = [
-    "n3fit.performfit",
+    "n3fit.performfit_copy",
     "n3fit.n3fit_checks_provider",
     "validphys.results",
     "validphys.n3fit_data",
