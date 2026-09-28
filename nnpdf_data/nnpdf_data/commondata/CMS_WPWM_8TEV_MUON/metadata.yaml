@@ -31,7 +31,6 @@ implemented_observables:
   kinematic_coverage:
   - y
   - m_W2
-  - sqrts
   kinematics:
     variables:
       y:
@@ -42,10 +41,6 @@ implemented_observables:
         description: W boson Mass squared
         label: $M^2$
         units: $GeV^2$
-      sqrts:
-        description: Center of Mass Energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:

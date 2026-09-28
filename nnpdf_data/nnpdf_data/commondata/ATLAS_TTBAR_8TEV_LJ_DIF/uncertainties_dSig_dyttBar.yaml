@@ -337,18 +337,18 @@ bins:
   ArtUnc_11: 7.04905407e-07
   ArtUnc_12: 6.67759845e-06
   ArtUnc_13: 2.01130578e-06
-  ArtUnc_14: 1.83400123e-06
+  ArtUnc_14: 1.83400124e-06
   ArtUnc_15: -2.48063887e-06
-  ArtUnc_16: -9.82748097e-07
+  ArtUnc_16: -9.82748095e-07
   ArtUnc_17: 1.31752320e-06
-  ArtUnc_18: 5.71877913e-07
-  ArtUnc_19: -8.72722166e-07
-  ArtUnc_20: -1.26243966e-07
-  ArtUnc_21: 5.65859286e-07
-  ArtUnc_22: -6.28087615e-07
+  ArtUnc_18: 5.71877934e-07
+  ArtUnc_19: -8.72722165e-07
+  ArtUnc_20: -1.26243983e-07
+  ArtUnc_21: 5.65859284e-07
+  ArtUnc_22: -6.28087684e-07
   ArtUnc_23: 7.89749819e-05
-  ArtUnc_24: -3.43633760e-07
-  ArtUnc_25: 5.82943872e-08
+  ArtUnc_24: -3.43633762e-07
+  ArtUnc_25: 5.82943869e-08
   syst_singletop-xsec: 6.46520165e-01
   syst_wjet-scale: 9.20266650e-01
   syst_laltrealcr-mujet-fake: 8.20478700e-02
@@ -419,17 +419,17 @@ bins:
   ArtUnc_12: 6.02299279e-06
   ArtUnc_13: 2.32253000e-06
   ArtUnc_14: 1.83702498e-06
-  ArtUnc_15: -2.13851877e-06
+  ArtUnc_15: -2.13851876e-06
   ArtUnc_16: -1.09934872e-06
-  ArtUnc_17: 1.22894996e-06
-  ArtUnc_18: 5.54871433e-07
-  ArtUnc_19: -8.18809045e-07
-  ArtUnc_20: -1.26768003e-07
-  ArtUnc_21: 5.38506101e-07
-  ArtUnc_22: -5.96126642e-07
+  ArtUnc_17: 1.22894997e-06
+  ArtUnc_18: 5.54871453e-07
+  ArtUnc_19: -8.18809043e-07
+  ArtUnc_20: -1.26768019e-07
+  ArtUnc_21: 5.38506099e-07
+  ArtUnc_22: -5.96126707e-07
   ArtUnc_23: 7.51394147e-05
-  ArtUnc_24: -3.26963980e-07
-  ArtUnc_25: 5.55800303e-08
+  ArtUnc_24: -3.26963982e-07
+  ArtUnc_25: 5.55800300e-08
   syst_singletop-xsec: 5.64344686e-01
   syst_wjet-scale: 0.874534
   syst_laltrealcr-mujet-fake: 1.05757600e-01
@@ -503,14 +503,14 @@ bins:
   ArtUnc_15: -1.99569786e-06
   ArtUnc_16: -1.09414116e-06
   ArtUnc_17: 1.10114301e-06
-  ArtUnc_18: 5.49225277e-07
-  ArtUnc_19: -7.70524135e-07
-  ArtUnc_20: -1.14001771e-07
-  ArtUnc_21: 5.09474646e-07
-  ArtUnc_22: -5.63121525e-07
+  ArtUnc_18: 5.49225297e-07
+  ArtUnc_19: -7.70524134e-07
+  ArtUnc_20: -1.14001786e-07
+  ArtUnc_21: 5.09474644e-07
+  ArtUnc_22: -5.63121587e-07
   ArtUnc_23: 7.13248558e-05
-  ArtUnc_24: -3.10238316e-07
-  ArtUnc_25: 5.30159449e-08
+  ArtUnc_24: -3.10238318e-07
+  ArtUnc_25: 5.30159446e-08
   syst_singletop-xsec: 4.48391456e-01
   syst_wjet-scale: 6.52127700e-01
   syst_laltrealcr-mujet-fake: 2.21317950e-01
@@ -580,18 +580,18 @@ bins:
   ArtUnc_11: -2.97143989e-06
   ArtUnc_12: 5.89215928e-06
   ArtUnc_13: 2.48990033e-06
-  ArtUnc_14: 3.07334195e-06
+  ArtUnc_14: 3.07334196e-06
   ArtUnc_15: -1.96970440e-06
   ArtUnc_16: -1.48522694e-06
   ArtUnc_17: 1.21677052e-06
-  ArtUnc_18: 6.61493104e-07
-  ArtUnc_19: -8.44282380e-07
-  ArtUnc_20: -1.37559180e-07
-  ArtUnc_21: 5.70236190e-07
-  ArtUnc_22: -6.24113583e-07
+  ArtUnc_18: 6.61493125e-07
+  ArtUnc_19: -8.44282378e-07
+  ArtUnc_20: -1.37559197e-07
+  ArtUnc_21: 5.70236188e-07
+  ArtUnc_22: -6.24113652e-07
   ArtUnc_23: 7.97130059e-05
-  ArtUnc_24: -3.46619328e-07
-  ArtUnc_25: 5.95857823e-08
+  ArtUnc_24: -3.46619330e-07
+  ArtUnc_25: 5.95857820e-08
   syst_singletop-xsec: 2.96883567e-01
   syst_wjet-scale: 4.20467420e-01
   syst_laltrealcr-mujet-fake: 6.09560310e-01
@@ -660,19 +660,19 @@ bins:
   ArtUnc_10: -2.88088493e-05
   ArtUnc_11: -1.35229631e-05
   ArtUnc_12: 8.03162822e-06
-  ArtUnc_13: 4.22479936e-06
+  ArtUnc_13: 4.22479937e-06
   ArtUnc_14: 6.06057022e-06
-  ArtUnc_15: -2.68485468e-06
-  ArtUnc_16: -2.78772118e-06
-  ArtUnc_17: 1.78828702e-06
-  ArtUnc_18: 1.16082074e-06
-  ArtUnc_19: -1.33990329e-06
-  ArtUnc_20: -1.79175115e-07
-  ArtUnc_21: 9.42524385e-07
-  ArtUnc_22: -1.00773904e-06
+  ArtUnc_15: -2.68485467e-06
+  ArtUnc_16: -2.78772117e-06
+  ArtUnc_17: 1.78828703e-06
+  ArtUnc_18: 1.16082078e-06
+  ArtUnc_19: -1.33990328e-06
+  ArtUnc_20: -1.79175144e-07
+  ArtUnc_21: 9.42524382e-07
+  ArtUnc_22: -1.00773915e-06
   ArtUnc_23: 1.31584628e-04
-  ArtUnc_24: -5.71663750e-07
-  ArtUnc_25: 9.95216086e-08
+  ArtUnc_24: -5.71663753e-07
+  ArtUnc_25: 9.95216081e-08
   syst_singletop-xsec: 6.79267651e-02
   syst_wjet-scale: 1.22245272e-01
   syst_laltrealcr-mujet-fake: 4.23717352e-01

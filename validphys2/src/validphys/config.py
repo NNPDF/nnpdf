@@ -1886,7 +1886,12 @@ class CoreConfig(configparser.Config):
     def produce_group_dataset_inputs_by_metadata(self, data_input, processed_metadata_group):
         """Take the data and the processed_metadata_group key and attempt
         to group the data, returns a list where each element specifies the data_input
-        for a single group and the group_name
+        for a single group and the group_name.
+
+        Ordering
+        --------
+        Not runcard order. Groups appear in order of first appearance of a member dataset.
+        Wihtin each group, datasets follow runcard order.
         """
         res = defaultdict(list)
         for dsinput in data_input:

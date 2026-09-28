@@ -91,14 +91,15 @@ def grid_values(pdf: PDF, flmat, xmat, qmat):
     Compute the maximum difference across replicas between the u and ubar PDFs
     (times x) for x=0.05 and both Q=10 and Q=100::
 
-        >>> from validphys.loader import Loader
+        >>> from validphys.loader import FallbackLoader 
         >>> from validphys.gridvalues import grid_values
         >>> import numpy as np
-        >>> gv = grid_values(Loader().check_pdf('NNPDF31_nnlo_as_0118'), [-1, 1], [0.5], [10, 100])
+        >>> gv = grid_values(FallbackLoader().check_pdf('NNPDF31_nnlo_as_0118'), [-1, 1], [0.5], [10, 100])
+        <BLANKLINE>
         >>> #Take the difference across the flavour dimension, the max
         >>> #across the replica dimension, and leave the Q dimension untouched.
         >>> np.diff(gv, axis=1).max(axis=0).ravel()
-        array([0.07904731, 0.04989902], dtype=float32)
+        array([0.07904731, 0.04989902])
     """
     return _grid_values(pdf.load(), flmat, xmat, qmat)
 

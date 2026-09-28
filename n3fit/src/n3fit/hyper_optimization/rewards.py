@@ -24,10 +24,10 @@ Example
 >>> loss_best_worst = HyperLoss(fold_statistic="best_worst")
 >>> loss_std = HyperLoss(fold_statistic="std")
 >>> print(f"{loss_average.reduce_over_folds.__name__} {loss_average.reduce_over_folds(losses)}")
->>> print(f"{loss_best_worst.reduce_over_folds.__name__} {loss_best_worst.reduce_over_folds(losses)}")
->>> print(f"{loss_std.reduce_over_folds.__name__} {loss_std.reduce_over_folds(losses)}")
 _average 2.0
+>>> print(f"{loss_best_worst.reduce_over_folds.__name__} {loss_best_worst.reduce_over_folds(losses)}")
 _best_worst 3.0
+>>> print(f"{loss_std.reduce_over_folds.__name__} {loss_std.reduce_over_folds(losses)}")
 _std 0.816496580927726
 """
 
@@ -203,19 +203,23 @@ class HyperLoss:
         Example
         -------
         >>> import numpy as np
+        >>> import io
+        >>> from contextlib import redirect_stdout
         >>> from n3fit.hyper_optimization.rewards import HyperLoss
-        >>> from n3fit.model_gen import generate_pdf_model
+        >>> from n3fit.model_gen import ReplicaSettings, generate_pdf_model
         >>> from n3fit.vpinterface import N3PDF
         >>> from validphys.loader import Loader
         >>> hyper = HyperLoss(loss_type="chi2", replica_statistic="average", fold_statistic="average")
         >>> penalties = {'saturation': np.array([1.0, 2.0]), 'patience': np.array([3.0, 4.0]), 'integrability': np.array([5.0, 6.0]),}
         >>> experimental_loss = np.array([0.1, 0.2])
-        >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", variant="legacy", theoryid=399, cuts="internal")
+        >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", variant="legacy", theoryid=40000000, cuts="internal")
         >>> experimental_data = [Loader().check_experiment("My DataGroupSpec", [ds])]
         >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-        >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=[0,2], flav_info=fake_fl, fitbasis="FLAVOUR")
+        >>> settings = [ReplicaSettings(nodes=[8], activations=['linear'], seed=seed) for seed in [0, 2]]
+        >>> pdf_model = generate_pdf_model(settings, flav_info=fake_fl, fitbasis="FLAVOUR")
         >>> pdf = N3PDF(pdf_model.split_replicas())
-        >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf, experimental_data)
+        >>> with redirect_stdout(io.StringIO()):
+        ...     loss = hyper.compute_loss(penalties, validation_loss=experimental_loss, experimental_loss=experimental_loss, pdf_object=pdf, experimental_data=experimental_data)
         """
         if np.isnan(validation_loss).any():
             log.warning(f"{np.isnan(validation_loss).sum()} replicas have NaNs losses")

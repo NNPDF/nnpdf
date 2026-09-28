@@ -87,7 +87,7 @@ def get_all():
         correlations.append(corr_coeff["value"])
 
     covmat = cormat_to_covmat(uncertainties, correlations)
-    art_uncertainties = covmat_to_artunc(len(uncertainties), covmat, 1)
+    art_uncertainties = covmat_to_artunc(len(uncertainties), covmat, 1, full_precision=True)
 
     # Remap uncertainties
     for uncertainties in art_uncertainties:

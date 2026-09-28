@@ -39,7 +39,6 @@ def filter_ATLAS_2JET_7TEV_R06_data_kinetic():
         # half of rapidity separation, index 8 of qualifiers list
         ystar = range_str_to_floats(input['dependent_variables'][0]['qualifiers'][8]['value'])
         # center of mass energy, index 7 of qualifiers list
-        sqrts = float(input['dependent_variables'][0]['qualifiers'][7]['value'])
 
         # measurements of several dijet mass values
         values = input['dependent_variables'][0]['values']
@@ -59,7 +58,6 @@ def filter_ATLAS_2JET_7TEV_R06_data_kinetic():
             kin_value = {
                 'ystar': {'min': ystar['min'], 'mid': ystar['mid'], 'max': ystar['max']},
                 'm_jj': {'min': m_jj['low'], 'mid': m_jj['mid'], 'max': m_jj['high']},
-                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }
 
             kin.append(kin_value)

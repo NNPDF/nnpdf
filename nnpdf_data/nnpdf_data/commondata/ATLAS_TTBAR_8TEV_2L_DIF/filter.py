@@ -38,7 +38,6 @@ def processData():
     with open(covariance_matrix, 'r') as file:
         input2 = yaml.safe_load(file)
 
-    sqrts = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -56,7 +55,6 @@ def processData():
         data_central_dSig_dmttBar.append(data_central_value)
         error_dSig_dmttBar.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
         }
@@ -96,7 +94,6 @@ def processData():
     with open(covariance_matrix, 'r') as file:
         input2 = yaml.safe_load(file)
 
-    sqrts = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -116,7 +113,6 @@ def processData():
         data_central_dSig_dmttBar_norm.append(data_central_value)
         error_dSig_dmttBar_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
         }
@@ -156,7 +152,6 @@ def processData():
     with open(covariance_matrix, 'r') as file:
         input2 = yaml.safe_load(file)
 
-    sqrts = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -174,7 +169,6 @@ def processData():
         data_central_dSig_dyttBar.append(data_central_value)
         error_dSig_dyttBar.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max},
         }
@@ -214,7 +208,6 @@ def processData():
     with open(covariance_matrix, 'r') as file:
         input2 = yaml.safe_load(file)
 
-    sqrts = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
     m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
@@ -232,7 +225,6 @@ def processData():
         data_central_dSig_dyttBar_norm.append(data_central_value)
         error_dSig_dyttBar_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max},
         }

@@ -37,13 +37,12 @@ implemented_observables:
     x_scale: linear
     plot_x: y
 
-  kinematic_coverage: [y, m_Z2, sqrts]
+  kinematic_coverage: [y, m_Z2]
 
   kinematics:
     variables:
       y: {description: "Z > l+ l- absolute rapidity", label: '$|y_{ll}|$', units: ""}
       m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
-      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
     file: kinematics.yaml
 
     # Data

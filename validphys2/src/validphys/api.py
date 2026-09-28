@@ -1,18 +1,15 @@
 """
 api.py
-
 This module contains the `reportengine` programmatic API, initialized with the
 validphys providers, Config and Environment.
 
-Example:
---------
-
+Example
+-------
 Simple Usage:
 
->> from validphys.api import API
->> fig = API.plot_pdfs(pdf="NNPDF_nlo_as_0118", Q=100)
->> fig.show()
-
+>>> from validphys.api import API
+>>> fig = API.plot_pdfs(pdfs=["NNPDF40_nlo_as_01180"], Q=100)
+<BLANKLINE>
 """
 import logging
 

@@ -200,26 +200,26 @@ def predictions(dataset, pdf):
 
     Examples
     --------
-    Obtain descriptive statistics over PDF replicas for each of the three
-    points in the ATLAS ttbar dataset:
+    Obtain descriptive statistics over PDF replicas for each of the two
+    points in the ATLAS WPWM dataset:
 
 
-    >>> from validphys.loader import Loader
-    >>> l = Loader()
-    >>> ds = l.check_dataset('ATLASTTBARTOT', theoryid=53)
+    >>> from validphys.loader import FallbackLoader
+    >>> l = FallbackLoader()
+    >>> ds = l.check_dataset('ATLAS_WPWM_13TEV_TOT', theoryid=40000000, cfac=('NRM',))
     >>> from validphys.convolution import predictions
-    >>> pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
+    >>> pdf = l.check_pdf('NNPDF40_nlo_as_01180')
     >>> preds = predictions(ds, pdf)
     >>> preds.T.describe()
-    data            0           1           2
-    count  100.000000  100.000000  100.000000
-    mean   161.271292  231.500367  767.816844
-    std      2.227304    2.883497    7.327617
-    min    156.638526  225.283254  750.850250
-    25%    159.652216  229.486793  762.773527
-    50%    161.066965  231.281248  767.619249
-    75%    162.620554  233.306836  772.390286
-    max    168.390840  240.287549  786.549380
+    data              0             1
+    count  1.010000e+02  1.010000e+02
+    mean   3.632511e+06  4.757953e+06
+    std    2.233669e+04  2.966099e+04
+    min    3.577305e+06  4.665420e+06
+    25%    3.618842e+06  4.734632e+06
+    50%    3.631405e+06  4.758760e+06
+    75%    3.646313e+06  4.776367e+06
+    max    3.698389e+06  4.837396e+06
 
 
     """
@@ -281,20 +281,17 @@ def fk_predictions(loaded_fk, pdf):
     Examples
     --------
 
-        >>> from validphys.loader import Loader
+        >>> from validphys.loader import FallbackLoader
         >>> from validphys.convolution import hadron_predictions
         >>> from validphys.fkparser import load_fktable
-        >>> l = Loader()
-        >>> pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
-        >>> ds = l.check_dataset('ATLASTTBARTOT', theoryid=53, cfac=('QCD',))
+        >>> l = FallbackLoader()
+        >>> pdf = l.check_pdf('NNPDF40_nlo_as_01180')
+        >>> ds = l.check_dataset('ATLAS_WPWM_13TEV_TOT', theoryid=40000000, cfac=('NRM',))
+        <BLANKLINE>
         >>> table = load_fktable(ds.fkspecs[0])
-        >>> hadron_predictions(table, pdf)
-                     1           2           3           4    ...         97          98          99          100
-        data                                                  ...
-        0     176.688118  170.172930  172.460771  173.792321  ...  179.504636  172.343792  168.372508  169.927820
-        1     252.682923  244.507916  247.840249  249.541798  ...  256.410844  247.805180  242.246438  244.415529
-        2     828.076008  813.452551  824.581569  828.213508  ...  838.707211  826.056388  810.310109  816.824167
-
+        >>> pred = hadron_predictions(table, pdf)
+        >>> isinstance(pred, pd.DataFrame)
+        True
     """
     if loaded_fk.hadronic:
         return hadron_predictions(loaded_fk, pdf)

@@ -46,7 +46,6 @@ def processData():
     with open(hepdata_tables1, 'r') as file1:
         input1 = yaml.safe_load(file1)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input1['dependent_variables'][0]['values']
 
@@ -60,7 +59,6 @@ def processData():
             error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_mtt_lumiless[i][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
         }
@@ -106,7 +104,6 @@ def processData():
     with open(hepdata_tables2, 'r') as file2:
         input2 = yaml.safe_load(file2)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input2['dependent_variables'][0]['values']
 
@@ -118,7 +115,6 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = artunc_mtt_norm[i][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
         }
@@ -156,7 +152,6 @@ def processData():
     with open(hepdata_tables3, 'r') as file3:
         input3 = yaml.safe_load(file3)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input3['dependent_variables'][0]['values']
 
@@ -170,7 +165,6 @@ def processData():
             error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_ytt_lumiless[i][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
         }
@@ -216,7 +210,6 @@ def processData():
     with open(hepdata_tables4, 'r') as file4:
         input4 = yaml.safe_load(file4)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input4['dependent_variables'][0]['values']
 
@@ -228,7 +221,6 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = artunc_ytt_norm[i][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
         }
@@ -266,7 +258,6 @@ def processData():
     with open(hepdata_tables5, 'r') as file5:
         input5 = yaml.safe_load(file5)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input5['dependent_variables'][0]['values']
 
@@ -282,7 +273,6 @@ def processData():
             error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_lumiless[i][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max},
             'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -296,7 +286,6 @@ def processData():
     with open(hepdata_tables6, 'r') as file6:
         input6 = yaml.safe_load(file6)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input6['dependent_variables'][0]['values']
 
@@ -312,7 +301,6 @@ def processData():
             error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_lumiless[i + 4][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max},
             'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -326,7 +314,6 @@ def processData():
     with open(hepdata_tables7, 'r') as file7:
         input7 = yaml.safe_load(file7)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input7['dependent_variables'][0]['values']
 
@@ -342,7 +329,6 @@ def processData():
             error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_lumiless[i + 8][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max},
             'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -389,7 +375,6 @@ def processData():
     with open(hepdata_tables8, 'r') as file8:
         input8 = yaml.safe_load(file8)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input8['dependent_variables'][0]['values']
 
@@ -403,7 +388,6 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_norm[i][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max},
             'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -416,7 +400,6 @@ def processData():
     with open(hepdata_tables9, 'r') as file9:
         input9 = yaml.safe_load(file9)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input9['dependent_variables'][0]['values']
 
@@ -430,7 +413,6 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_norm[i + 4][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max},
             'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -443,7 +425,6 @@ def processData():
     with open(hepdata_tables10, 'r') as file10:
         input10 = yaml.safe_load(file10)
 
-    sqrts = 13000.0
     m_t2 = 29756.25
     values = input10['dependent_variables'][0]['values']
 
@@ -457,7 +438,6 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_norm[i + 8][j]
         data_central_value = values[i]['value']
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max},
             'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
