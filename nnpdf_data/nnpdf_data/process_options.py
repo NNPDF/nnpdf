@@ -196,8 +196,12 @@ def _pht_xq2map(kin_info):
 def _dijets_xq2map(kin_info):
     # Here we can have either ystar or ymax or ydiff, but in either case we need to do the same
     if _Vars.m_jj in kin_info._kins:
-        ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_1, _Vars.abs_eta_1)
-        ylab_2 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_2, _Vars.abs_eta_2)
+        ylab_1 = kin_info.get_one_of(
+            _Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_1, _Vars.abs_eta_1
+        )
+        ylab_2 = kin_info.get_one_of(
+            _Vars.ystar, _Vars.ydiff, _Vars.ymax, _Vars.eta_2, _Vars.abs_eta_2
+        )
         ratio = kin_info[_Vars.m_jj] / kin_info[_Vars.sqrts]
         x1 = ratio * np.exp(ylab_1)
         x2 = ratio * np.exp(-ylab_2)
@@ -211,7 +215,7 @@ def _dijets_xq2map(kin_info):
         q2 = m_jjlab * m_jjlab
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
-   
+
 
 def _hqp_yq_xq2map(kin_info):
     # Compute x, Q2
@@ -255,6 +259,7 @@ def _inc_xq2map(kin_info):
     return np.sqrt(mass2) / kin_info[_Vars.sqrts], mass2
 
 
+'''
 def _displusjet_xq2map(kin_info):
     """Computes x and q2 mapping for a DIS + J (J) process
     Uses Q2 as provided by the dictionary of kinematics variables
@@ -265,6 +270,19 @@ def _displusjet_xq2map(kin_info):
     pt = kin_info.get_one_of(_Vars.ET, _Vars.pT)
     s = kin_info[_Vars.sqrts] ** 2
     x = q2 * q2 / s / (pt**2 - q2)
+    return x, q2'''
+
+
+def _displusjet_xq2map(kin_info):
+    """Computes x and q2 mapping for a DIS + J (J) process
+    Uses Q2 as provided by the dictionary of kinematics variables
+    and x = (Q**2 + 4*pt**2) / s (approximation of )
+    """
+    q2 = kin_info[_Vars.Q2]
+    # Consider ET and pT as equivalent for the purposes of the xq2 plot
+    pt = kin_info.get_one_of(_Vars.ET, _Vars.pT)
+    s = kin_info[_Vars.sqrts] ** 2
+    x = (q2 + 4 * pt**2) / s
     return x, q2
 
 
@@ -274,9 +292,7 @@ def _dyboson_xq2map(kin_info):
     originating from a W boson DY process.
     """
     try:
-        mass2 = kin_info.get_one_of(
-            _Vars.m_W2, _Vars.m_Z2, _Vars.m_V2, _Vars.m_ll2, _Vars.M2
-        )
+        mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_V2, _Vars.m_ll2, _Vars.M2)
     except KeyError:
         mass = kin_info.get_one_of(_Vars.m_W, _Vars.m_Z, _Vars.m_ll, _Vars.m_Z)
         mass2 = mass**2
@@ -318,7 +334,7 @@ def _dybosonptrap_xq2map(kin_info):
         m_ll2 = kin_info.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
     except KeyError:
         m_ll2 = kin_info.get_one_of(_Vars.m_ll) ** 2
-        
+
     sqrts = kin_info[_Vars.sqrts]
     ET2 = m_ll2 + pT * pT
     x1 = (np.sqrt(ET2) + pT) / sqrts * np.exp(-eta)
@@ -386,7 +402,15 @@ DIJET = _Process(
 DIJET_3D = _Process(
     "DIJET_3D",
     "DiJets production where the measured quantity is triple differential cross section",
-    accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff, _Vars.ymax, _Vars.yb, _Vars.pTavg),
+    accepted_variables=(
+        _Vars.ystar,
+        _Vars.m_jj,
+        _Vars.sqrts,
+        _Vars.ydiff,
+        _Vars.ymax,
+        _Vars.yb,
+        _Vars.pTavg,
+    ),
     xq2map_function=_dijets_xq2map,
 )
 
@@ -477,7 +501,7 @@ DY_2L = _Process(
         _Vars.abs_eta,
         _Vars.m_ll2,
         _Vars.M2,
-        _Vars.m_Z
+        _Vars.m_Z,
     ),
     xq2map_function=_dyboson_xq2map,
 )
@@ -492,7 +516,15 @@ DY_MLL = _Process(
 DY_PT = _Process(
     "DY_PT",
     "DY W or Z (2 leptons) + j boson transverse momentum",
-    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.m_ll2, _Vars.m_ll),
+    accepted_variables=(
+        _Vars.pT,
+        _Vars.m_W2,
+        _Vars.m_Z2,
+        _Vars.sqrts,
+        _Vars.y,
+        _Vars.m_ll2,
+        _Vars.m_ll,
+    ),
     xq2map_function=_dybosonpt_xq2map,
 )
 
