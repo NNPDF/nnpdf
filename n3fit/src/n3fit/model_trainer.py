@@ -804,7 +804,7 @@ class ModelTrainer:
         # self._experiment_data["invcovmat"] (real experimental datasets only, i.e. not
         # positivity/integrability/repulsion-anchor entries). Attached onto pdf_model
         # right after it is built (see hyperparametrizable) for the linearized-Laplace
-        # sampler in bnn_wrapper_copy.py, which needs to differentiate training
+        # sampler in bnn_wrapper.py, which needs to differentiate training
         # predictions (FK convolution + training mask) w.r.t. the MAP weights per dataset.
         self._xgrid_per_dataset = []
         self._obs_wrappers_per_dataset = []
@@ -1225,7 +1225,7 @@ class ModelTrainer:
                 self.training["output"].append(LossKL(vb_layers, kl_beta, name="kl_loss"))
 
                 # Attach per-dataset info needed by the linearized-Laplace (function-space)
-                # BNN sampler in bnn_wrapper_copy.py::BNNPredictor.compute_sigma_theta.
+                # BNN sampler in bnn_wrapper.py::BNNPredictor.compute_sigma_theta.
                 # These read back via getattr(pdf_model, ..., None), so BNNPredictor also
                 # works when instantiated from a reloaded model where they're absent.
                 pdf_model.invcovmat_per_dataset = self._experiment_data["invcovmat"]

@@ -377,7 +377,7 @@ def sample_bnn(
 
     bnn_idx_list = [bnn_replica - 1] if bnn_replica is not None else list(range(n_bnn_models))
 
-    from n3fit.bnn_wrapper_copy import BNNPredictor
+    from n3fit.bnn_wrapper import BNNPredictor
     from n3fit.io.writer import storefit
     from n3fit.vpinterface import N3PDF
 

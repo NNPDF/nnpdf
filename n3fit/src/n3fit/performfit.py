@@ -7,8 +7,6 @@ import logging
 
 import n3fit.checks
 from n3fit.vpinterface import N3PDF
-import n3fit.bnn_wrapper
-from keras import ops
 
 log = logging.getLogger(__name__)
 
@@ -145,185 +143,236 @@ def performfit(
     from n3fit.io.writer import WriterWrapper
     from n3fit.model_trainer import ModelTrainer
 
-    # Note that this can be run in sequence or in parallel
-    # To do both cases in the same loop, we uniformize the replica information as:
-    # - sequential: a list over replicas, each entry containing tuples of length 1
-    # - parallel: a list of length 1, containing tuples over replicas
-    #
-    # Add inner tuples
-    replicas_info = [
-        ((replica,), (experiment,), (nnseed,))
-        for replica, experiment, nnseed in replicas_nnseed_fitting_data_dict
-    ]
+    def performfit_exec():
+        # Note that this can be run in sequence or in parallel
+        # To do both cases in the same loop, we uniformize the replica information as:
+        # - sequential: a list over replicas, each entry containing tuples of length 1
+        # - parallel: a list of length 1, containing tuples over replicas
+        #
+        # Add inner tuples
+        #replicas_info = [
+        #    ((replica,), (experiment,), (nnseed,))
+        #    for replica, experiment, nnseed in replicas_nnseed_fitting_data_dict
+        #]
 
-    n_models = len(replicas_info)
-    if parallel_models:
-        # Move replicas from outer list to inner tuples
-        replicas, experiments, nnseeds = [], [], []
+        n_models = len(replicas_info)
+        if parallel_models:
+            # Move replicas from outer list to inner tuples
+            replicas, experiments, nnseeds = [], [], []
 
-        for replica, experiment, nnseed in replicas_info:
-            replicas.extend(replica)
-            experiments.extend(experiment)
-            nnseeds.extend(nnseed)
+            for replica, experiment, nnseed in replicas_info:
+                replicas.extend(replica)
+                experiments.extend(experiment)
+                nnseeds.extend(nnseed)
 
-        replicas_info = [(tuple(replicas), tuple(experiments), tuple(nnseeds))]
-        log.info(
-            "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
-        )
-    else:
-        log.info(
-            "Starting sequential fits from replica %d to %d",
-            replicas[0],
-            replicas[0] + n_models - 1,
-        )
+            replicas_info_loop = [(tuple(replicas), tuple(experiments), tuple(nnseeds))]
+            log.info(
+                "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
+            )
+        else:
+            replicas_info_loop = replicas_info
+            first_replica = replicas_info[0][0][0]
+            log.info(
+                "Starting sequential fits from replica %d to %d",
+                first_replica,
+                first_replica + n_models - 1,
+            )
+        
+        for replica_idxs, exp_info, nnseeds in replicas_info_loop:
+            log.info("Starting replica fit " + str(replica_idxs))
+
+            # Generate a ModelTrainer object
+            # this object holds all necessary information to train a PDF (up to the NN definition)
+            the_model_trainer = ModelTrainer(
+                experiments_data,
+                exp_info,
+                posdatasets_fitting_pos_dict,
+                integdatasets_fitting_integ_dict,
+                basis,
+                fitbasis,
+                nnseeds,
+                positivity_bound,
+                debug=debug,
+                kfold_parameters=kfold_parameters,
+                max_cores=maxcores,
+                model_file=load,
+                sum_rules=sum_rules,
+                theoryid=theoryid,
+                lux_params=fiatlux,
+                replicas=replica_idxs,
+                replica_path=replica_path / f"replica_{replica_idxs[0]}"
+            )
+
+            # This is just to give a descriptive name to the fit function
+            pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
+
+            # Read up the parameters of the NN from the runcard
+            stopwatch.register_times("replica_set")
+
+            ########################################################################
+            # ### Hyperopt                                                         #
+            # If hyperopt is active the parameters of NN will be substituted by the#
+            # hyoperoptimizable variables.                                         #
+            # Hyperopt will run for --hyperopt number of iterations before leaving #
+            # this block                                                           #
+            ########################################################################
+            if hyperopt:
+                from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
+
+                replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
+                hyper_scan_wrapper(
+                    replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
+                )
+                log.info("The hyperparameter scan is successfully finished.")
+                # In general after we do the hyperoptimization we do not care about the fit
+                # so just let this die here
+                break
+            ####################################################################### end of hyperopt
+
+            # Ensure hyperopt is off
+            the_model_trainer.set_hyperopt(False)
+            log_path = None
+
+            # Enable the tensorboard callback
+            if tensorboard is not None:
+                profiling = tensorboard.get("profiling", False)
+                weight_freq = tensorboard.get("weight_freq", 0)
+                if parallel_models and n_models != 1:
+                    # If using tensorboard when running in parallel
+                    # dump the debugging data to the nnfit folder
+                    replica_path_set = replica_path
+                else:
+                    replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
+                log_path = replica_path_set / "tboard"
+                the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
+
+            #############################################################################
+            # ### Fit                                                                   #
+            # This function performs the actual fit, it reads all the parameters in the #
+            # "parameters" dictionary, uses them to generate the NN and trains the net  #
+            #############################################################################
+            result = pdf_gen_and_train_function(parameters)
+            stopwatch.register_ref("replica_fitted", "replica_set")
+
+            stopping_object = result["stopping_object"]
+            log.info("Stopped at epoch=%d", stopping_object.stop_epoch)
+
+            final_time = stopwatch.stop()
+            
+            all_chi2s = the_model_trainer.evaluate(stopping_object)        
+            pdf_model = result["pdf_model"]
+            
+            if is_bnn:
+                # For BNN: Generate pseudo-replicas using BNNPredictor
+                sampler = parameters.get('sampling_space', str('weight'))
+                from n3fit.bnn_wrapper import BNNPredictor
+
+                log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN {bnn_idx+1}")
+                
+                #bnn_predictor = BNNPredictor(pdf_model=pdf_model, n_bnn_samples=n_bnn_samples)
+                #pdf_models = bnn_predictor.generate_bnn_replica() # prints [<MetaModel name=PDFs, built=True>, <MetaModel name=PDFs, built=True>] for 2 bnn replica
+                bnn_predictor = BNNPredictor(
+                    pdf_model=pdf_model, 
+                    n_bnn_samples=n_bnn_samples,
+                    sampler=sampler
+                    )
+                pdf_models = bnn_predictor.pdf_sampler()
+
+                class BNNStoppingProxy:
+                    """
+                    Proxy for the Stopping object to handle BNN
+
+                    In a standard fit, one training run produces one replica (1-to-1).
+                    In a BNN fit, one training run produces N "pseudo-replicas" (1-to-N).
+                    
+                    The WriterWrapper expects metadata (e.g., e_best_chi2, positivity_statuses) to 
+                    be a list of length N. Since the Stopping object only contains data for the 
+                    single training run (length 1), indexing it for BNN samples > 1 causes an IndexError.
+
+                    This proxy "stretches" the single-run metadata by replicating it N times, 
+                    allowing the existing WriterWrapper to process BNN samples as if they were 
+                    independent replicas without modifying the immutable Stopping object.
+
+                    Parameters
+                    ----------
+                    original_stopping : n3fit.stopping.Stopping
+                        The original stopping object containing metadata from the BNN training.
+                    n_samples : int
+                        The number of Bayesian pseudo-replicas generated from the model.
+                    """
+                    def __init__(self, original_stopping, n_samples):
+                        self._obj = original_stopping
+                        # Replicate the specific lists indexed by [i] in writer.py
+                        self.e_best_chi2 = original_stopping.e_best_chi2 * n_samples
+                        self.positivity_statuses = original_stopping.positivity_statuses * n_samples
+                        
+                    def __getattr__(self, name):
+                        # Forward everything else (stop_epoch, chi2exps_json) to the original object
+                        return getattr(self._obj, name)
+                    
+                #replica_idxs = tuple(range(replica_idxs[0] * bnn_idx, (replica_idxs[0] * bnn_idx) + n_bnn_samples))
+                replica_idxs = tuple(range(bnn_idx * n_bnn_samples, (bnn_idx + 1) * n_bnn_samples))
+
+                # Expand the inner lists, keeping the outer length at 3
+                # all_chi2s is [tr_list, vl_list, true_list]
+                all_chi2s = [list(chi2_list) * n_bnn_samples for chi2_list in all_chi2s]
+
+                stopping_object = BNNStoppingProxy(stopping_object, n_bnn_samples)
+                
+            else:
+                pdf_models = pdf_model.split_replicas() # prints [<MetaModel name=PDFs, built=True>] then trians, then prints and trains again for 2nd replica
+            
+            return replica_idxs, pdf_models, stopping_object, all_chi2s, final_time, log_path
+
+    n_bnn_models = parameters.get('n_bnn_models', 1)
+    n_bnn_samples = parameters.get('n_bnn_samples', 3)
     # Every architecture string that produces a variational layer
     BAYESIAN_LAYER_TYPES = {'VBDense', 'VBDense_correlated'}
     layer_type = parameters.get('layer_type')
+
     is_bnn = any(layer in BAYESIAN_LAYER_TYPES for layer in layer_type)
-    
-    for replica_idxs, exp_info, nnseeds in replicas_info:
-        log.info("Starting replica fit " + str(replica_idxs))
+    # save original
+    replicas_info = [
+            ((replica,), (experiment,), (nnseed,))
+            for replica, experiment, nnseed in replicas_nnseed_fitting_data_dict
+        ]
+    nnseed0 = replicas_info[0][2]
 
-        # Generate a ModelTrainer object
-        # this object holds all necessary information to train a PDF (up to the NN definition)
-        the_model_trainer = ModelTrainer(
-            experiments_data,
-            exp_info,
-            posdatasets_fitting_pos_dict,
-            integdatasets_fitting_integ_dict,
-            basis,
-            fitbasis,
-            nnseeds,
-            positivity_bound,
-            debug=debug,
-            kfold_parameters=kfold_parameters,
-            max_cores=maxcores,
-            model_file=load,
-            sum_rules=sum_rules,
-            theoryid=theoryid,
-            lux_params=fiatlux,
-            replicas=replica_idxs,
-            replica_path=replica_path / f"replica_{replica_idxs[0]}"
-        )
-
-        # This is just to give a descriptive name to the fit function
-        pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
-
-        # Read up the parameters of the NN from the runcard
-        stopwatch.register_times("replica_set")
-
-        ########################################################################
-        # ### Hyperopt                                                         #
-        # If hyperopt is active the parameters of NN will be substituted by the#
-        # hyoperoptimizable variables.                                         #
-        # Hyperopt will run for --hyperopt number of iterations before leaving #
-        # this block                                                           #
-        ########################################################################
-        if hyperopt:
-            from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
-
-            replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
-            hyper_scan_wrapper(
-                replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
+    if is_bnn:
+        # Each SLURM array task (1-indexed) trains one BNN model (0-indexed).
+        # Task R trains BNN model R-1 and writes pseudo-replicas
+        # [(R-1)*n_bnn_samples .. R*n_bnn_samples - 1].
+        bnn_idx = replicas[0] - 1
+        if bnn_idx >= n_bnn_models:
+            raise ValueError(
+                f"Replica {replicas[0]} is out of range: only {n_bnn_models} BNN model(s) "
+                f"configured (max SLURM task ID is {n_bnn_models})"
             )
-            log.info("The hyperparameter scan is successfully finished.")
-            # In general after we do the hyperoptimization we do not care about the fit
-            # so just let this die here
-            break
-        ####################################################################### end of hyperopt
 
-        # Ensure hyperopt is off
-        the_model_trainer.set_hyperopt(False)
+        current_replica, current_experiment, _ = replicas_info[0]
+        new_nnseed = tuple(seed + bnn_idx for seed in nnseed0)
+        replicas_info = [(current_replica, current_experiment, new_nnseed)]
 
-        # Enable the tensorboard callback
+        replica_idxs, pdf_models, stopping_object, all_chi2s, final_time, log_path = performfit_exec()
+
+        q0 = theoryid.get_description().get("Q0")
+        all_pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
+        writer_wrapper = WriterWrapper(
+            replica_idxs,
+            all_pdf_instances,
+            stopping_object,
+            all_chi2s,
+            theoryid,
+            final_time,
+        )
+        writer_wrapper.write_data(replica_path, output_path.name, save)
+
         if tensorboard is not None:
-            profiling = tensorboard.get("profiling", False)
-            weight_freq = tensorboard.get("weight_freq", 0)
-            if parallel_models and n_models != 1:
-                # If using tensorboard when running in parallel
-                # dump the debugging data to the nnfit folder
-                replica_path_set = replica_path
-            else:
-                replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
-            log_path = replica_path_set / "tboard"
-            the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
-
-        #############################################################################
-        # ### Fit                                                                   #
-        # This function performs the actual fit, it reads all the parameters in the #
-        # "parameters" dictionary, uses them to generate the NN and trains the net  #
-        #############################################################################
-        result = pdf_gen_and_train_function(parameters)
-        stopwatch.register_ref("replica_fitted", "replica_set")
-
-        stopping_object = result["stopping_object"]
-        log.info("Stopped at epoch=%d", stopping_object.stop_epoch)
-
-        final_time = stopwatch.stop()
-        all_chi2s = the_model_trainer.evaluate(stopping_object)        
-        pdf_model = result["pdf_model"]
-        
-        if is_bnn:
-            # For BNN: Generate pseudo-replicas using BNNPredictor's weight-space sampler
-            # (BNNPredictor(sampler="weight"), the default). The function-space/Laplace
-            # path (linearized_laplace_samples) needs xgrid_per_dataset and
-            # obs_wrappers_per_dataset attached to pdf_model during training; nothing in
-            # ModelTrainer currently does that (only invcovmat_per_dataset is computed,
-            # and even that stays a local variable -- it never reaches pdf_model), so the
-            # Laplace path is not wired up yet. BNNPredictor.__init__ also does not accept
-            # an invcovmat_per_dataset kwarg -- it reads it via getattr(pdf_model, ...)
-            # instead, which is always None until that wiring exists.
-            from n3fit.bnn_wrapper_copy import BNNPredictor
-
-            n_bnn_samples = parameters.get('n_bnn_samples', 3)
-            log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN")
-
-            bnn_predictor = BNNPredictor(pdf_model=pdf_model, n_bnn_samples=n_bnn_samples)
-            pdf_models = bnn_predictor.generate_bnn_replica_from_weights()
-
-            class BNNStoppingProxy:
-                """
-                Proxy for the Stopping object to handle BNN
-
-                In a standard fit, one training run produces one replica (1-to-1).
-                In a BNN fit, one training run produces N "pseudo-replicas" (1-to-N).
-                
-                The WriterWrapper expects metadata (e.g., e_best_chi2, positivity_statuses) to 
-                be a list of length N. Since the Stopping object only contains data for the 
-                single training run (length 1), indexing it for BNN samples > 1 causes an IndexError.
-
-                This proxy "stretches" the single-run metadata by replicating it N times, 
-                allowing the existing WriterWrapper to process BNN samples as if they were 
-                independent replicas without modifying the immutable Stopping object.
-
-                Parameters
-                ----------
-                original_stopping : n3fit.stopping.Stopping
-                    The original stopping object containing metadata from the BNN training.
-                n_samples : int
-                    The number of Bayesian pseudo-replicas generated from the model.
-                """
-                def __init__(self, original_stopping, n_samples):
-                    self._obj = original_stopping
-                    # Replicate the specific lists indexed by [i] in writer.py
-                    self.e_best_chi2 = original_stopping.e_best_chi2 * n_samples
-                    self.positivity_statuses = original_stopping.positivity_statuses * n_samples
-                    
-                def __getattr__(self, name):
-                    # Forward everything else (stop_epoch, chi2exps_json) to the original object
-                    return getattr(self._obj, name)
-                
-            replica_idxs = tuple(range(replica_idxs[0], replica_idxs[0] + n_bnn_samples))
-
-            # Expand the inner lists, keeping the outer length at 3
-            # all_chi2s is [tr_list, vl_list, true_list]
-            all_chi2s = [list(chi2_list) * n_bnn_samples for chi2_list in all_chi2s]
-
-            stopping_object = BNNStoppingProxy(stopping_object, n_bnn_samples)
+            log.info("Tensorboard logging information is stored at %s", log_path)
             
-        else:
-            pdf_models = pdf_model.split_replicas() # prints [<MetaModel name=PDFs, built=True>] then trians, then prints and trains again for 2nd replica
-        
+    else:
+        replica_idxs, pdf_models, stopping_object, all_chi2s, final_time, log_path = performfit_exec()   
+
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
@@ -337,6 +386,6 @@ def performfit(
         writer_wrapper.write_data(replica_path, output_path.name, save)
 
         if tensorboard is not None:
-            log.info("Tensorboard logging information is stored at %s", log_path)
+            log.info("Tensorboard logging information is stored at %s", log_path)  
 
     
