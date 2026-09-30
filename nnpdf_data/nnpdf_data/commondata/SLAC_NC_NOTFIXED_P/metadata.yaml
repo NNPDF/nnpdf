@@ -30,6 +30,8 @@ implemented_observables:
     y_scale: symlog
     line_by:
     - x
+    figure_by:
+    - x
     plot_x: Q2
   kinematic_coverage:
   - x
