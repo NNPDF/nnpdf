@@ -1,7 +1,5 @@
 """
 Weight-correlation comparison across n3fit fits (Bayesian vs standard NNPDF).
-(DOOB-ed [Documented-Optimized-Organized-Beautified] by Claude Code (Sonnet 5))
-
 
 For each runcard, loads ``<results>/<runcard>/nnfit/replica_<i>/weights.weights.h5``
 for every replica, flattens the network weights into one vector per replica, and
@@ -48,8 +46,8 @@ import numpy as np
 DEFAULT_RESULTS = os.path.join(
     os.path.expanduser("~"), "miniconda3/envs/environment_nnpdf/share/NNPDF/results"
 )
-LAYER_RE = re.compile(r"(?P<layer>(?:vb_)?dense(?:_(?P<idx>\d+))?)/vars/(?P<var>\d+)$")
-LOGSIG_MIN, LOGSIG_MAX = -20.0, 11.0  # float32 clip bounds used by VBDense.s2_w/s2_b
+LAYER_RE = re.compile(r"(?P<layer>(?:correlated_low_rank_)?(?:vb_)?dense(?:_(?P<idx>\d+))?)/vars/(?P<var>\d+)$")
+LOGSIG_MIN, LOGSIG_MAX = -20.0, 11.0  # float32 clip bounds used by VBDense.s2_w/s2_b (and CorrelatedLowRankVBDense.s2_w/s2_b)
 COLORS = ["#1f77b4", "#d62728", "#2ca02c", "#ff7f0e", "#9467bd", "#8c564b"]
 
 
@@ -72,9 +70,44 @@ def _layer_vars(h5):
         found.setdefault(key, {})[int(m.group("var"))] = name
 
     h5.visititems(visit)
-    # dense layers first (by suffix), then VB layers
-    ordered = sorted(found, key=lambda k: (k[1].startswith("vb_"), k[2]))
+    # dense layers first (by suffix), then VB layers (plain or correlated-low-rank)
+    ordered = sorted(found, key=lambda k: (k[1].endswith("vb_dense"), k[2]))
     return [(k[1], found[k], k[1] in has_flow) for k in ordered]
+
+
+def _correlated_weight(get, n, which):
+    """CorrelatedLowRankVBDense eval-time frozen draw: w = mu + sqrt(D)*random [+ U^T @ random_eps],
+    b = bias [+ sqrt(D_b)*random_b] [+ U_b^T @ random_eps]. Variable order follows build() in
+    base_layers.py exactly (bias, mu_w, logsig2_w, [u_w], [bias_logsig2], [u_b], random,
+    [random_eps], [random_b]); n=4/6/6/9 correspond to the 4 (rank, bayesian_bias) combinations,
+    the two n=6 cases disambiguated by the ndim of var 3 (u_w is rank-3, bias_logsig2 is rank-1)."""
+    bias, mu, logsig2 = get(0), get(1), get(2)
+    u_w = u_b = bias_logsig2 = random_eps = random_b = None
+    if n == 4:
+        random = get(3)
+    elif n == 6 and get(3).ndim == 3:  # rank > 0, bayesian_bias=False
+        u_w, random, random_eps = get(3), get(4), get(5)
+    elif n == 6:  # rank == 0, bayesian_bias=True
+        bias_logsig2, random, random_b = get(3), get(4), get(5)
+    elif n == 9:  # rank > 0, bayesian_bias=True
+        u_w, bias_logsig2, u_b = get(3), get(4), get(5)
+        random, random_eps, random_b = get(6), get(7), get(8)
+    else:
+        raise ValueError(f"unexpected CorrelatedLowRankVBDense variable count {n}")
+
+    if which == "mean":
+        return mu.T, bias
+
+    w = mu + np.sqrt(np.exp(np.clip(logsig2, LOGSIG_MIN, LOGSIG_MAX))) * random
+    b = bias
+    if bias_logsig2 is not None:
+        s2b = np.exp(np.clip(bias_logsig2, LOGSIG_MIN, LOGSIG_MAX))
+        b = bias + np.sqrt(s2b) * random_b
+    if u_w is not None:
+        w = w + np.einsum("r,roi->oi", random_eps, u_w)
+        if u_b is not None:
+            b = b + np.einsum("r,ro->o", random_eps, u_b)
+    return w.T, b
 
 
 def _flatten_replica(path, which, include_preproc):
@@ -83,7 +116,9 @@ def _flatten_replica(path, which, include_preproc):
     with h5py.File(path, "r") as h5:
         for k, (name, v, flow) in enumerate(_layer_vars(h5)):
             get = lambda i: h5[v[i]][()].astype(np.float64)
-            if not name.startswith("vb_"):
+            if name == "correlated_low_rank_vb_dense":
+                w, b = _correlated_weight(get, len(v), which)
+            elif not name.endswith("vb_dense"):
                 w, b = get(0), get(1)  # kernel (in, out), bias (out,)
             else:
                 n = len(v)
@@ -101,8 +136,9 @@ def _flatten_replica(path, which, include_preproc):
                         b = bias + np.sqrt(s2b) * get(5)
                 if flow:
                     print(f"  warning: {name} has a normalizing flow; using the Gaussian part only")
+            label = "corrVB" if name == "correlated_low_rank_vb_dense" else ("VB" if name.endswith("vb_dense") else "dense")
             parts += [w.ravel(), b.ravel()]
-            blocks.append((f"L{k + 1} {'VB' if name.startswith('vb_') else 'dense'}", w.size + b.size))
+            blocks.append((f"L{k + 1} {label}", w.size + b.size))
             biases.append(b.size)
         if include_preproc:
             pre = [h5[n][()].ravel() for n in sorted(_preproc_names(h5), key=_natural)]
