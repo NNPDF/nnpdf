@@ -43,9 +43,18 @@ def expand_names(globstr):
 
 
 def get_indexes_to_names():
+    """Return the mapping of LHAPDF SetIndex to PDF set name, as parsed from
+    ``pdfsets.index``. This file is LHAPDF's own remote-catalogue listing and
+    may simply not exist (e.g. no real LHAPDF/pdfsets.index has ever been
+    downloaded). In that case there is nothing known to be downloadable by
+    index/name lookup, so we return an empty mapping rather than raising.
+    """
     global _indexes_to_names
     if _indexes_to_names is None:
-        _indexes_to_names = parse_index(get_index_path())
+        try:
+            _indexes_to_names = parse_index(get_index_path())
+        except FileNotFoundError:
+            _indexes_to_names = {}
     return _indexes_to_names
 
 
