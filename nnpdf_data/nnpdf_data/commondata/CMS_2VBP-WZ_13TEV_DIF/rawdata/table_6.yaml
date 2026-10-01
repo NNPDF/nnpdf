@@ -1,0 +1,41 @@
+independent_variables:
+- header: {name: Final states}
+  values:
+    - {value: 'eee'}
+    - {value: 'eem'}
+    - {value: 'emm'}
+    - {value: 'mmm'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '$\sigma_{tot}(pp \to WZ)$ [pb]'}
+  values:
+  - value: 47.11
+    errors:
+    - {asymerror: {plus: +5.01, minus: -4.63}, label: 'total'}
+    - {asymerror: {plus: +2.88, minus: -2.79}, label: stat}
+    - {asymerror: {plus: +0.46, minus: -0.41}, label: 'sys,theo'}
+    - {asymerror: {plus: +3.89, minus: -3.47}, label: 'sys,syst'}
+    - {symerror: 1.41, label: 'lumi'}             
+  - value: 47.16
+    errors:
+    - {asymerror: {plus: +3.87, minus: -3.61}, label: 'total'}
+    - {asymerror: {plus: +2.31, minus: -2.29}, label: stat}
+    - {asymerror: {plus: +0.45, minus: -0.38}, label: 'sys,theo'}
+    - {asymerror: {plus: +2.83, minus: -2.52}, label: 'sys,syst'}
+    - {symerror: 1.33, label: 'lumi'}             
+  - value: 47.70
+    errors:
+    - {asymerror: {plus: +3.58, minus: -3.55}, label: 'total'} 
+    - {asymerror: {plus: +2.00, minus: -1.96}, label: stat}
+    - {asymerror: {plus: +0.45, minus: -0.39}, label: 'sys,theo'}
+    - {asymerror: {plus: +2.66, minus: -2.61}, label: 'sys,syst'}
+    - {symerror: 1.42, label: 'lumi'}             
+  - value: 49.00
+    errors:
+    - {asymerror: {plus: +3.18, minus: -3.03}, label: 'total'}
+    - {asymerror: {plus: +1.57, minus: -1.53}, label: stat}
+    - {asymerror: {plus: +0.41, minus: -0.35}, label: 'sys,theo'}
+    - {asymerror: {plus: +2.42, minus: -2.22}, label: 'sys,syst'}
+    - {symerror: 1.30, label: 'lumi'}             
