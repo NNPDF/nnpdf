@@ -78,3 +78,8 @@ integrability:
 
 ############################################################
 debug: true
+debug_options:
+  timer: true
+  printeach: 130
+  log_level: warning
+  print_logs: true
