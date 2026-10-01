@@ -16,11 +16,6 @@ help:
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile MakeTheoryCSV
-	@if test $@ != "clean"; then \
-		sphinx-apidoc -f -o ./$(SOURCEDIR)/modules/validphys ../../validphys2/src/validphys/ ; \
-		sphinx-apidoc -f -o ./$(SOURCEDIR)/modules/n3fit-code ../../n3fit/src/n3fit/ ; \
-		sphinx-apidoc -f -o ./$(SOURCEDIR)/modules/n3fit-code ../../n3fit/src/evolven3fit/ ; \
-	fi
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 .PHONY: rsync

@@ -346,6 +346,7 @@ def integrability_numbers(n3pdf, q0=1.65, flavours=None):
     Example
     -------
     .. code-block:: python
+
         from n3fit.vpinterface import N3PDF, integrability_numbers
         from n3fit.model_gen import generate_pdf_model, ReplicaSettings
 
@@ -441,6 +442,7 @@ def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
     Example
     -------
     .. code-block:: python
+
         from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
         from n3fit.model_gen import generate_pdf_model, ReplicaSettings
         from validphys.loader import Loader

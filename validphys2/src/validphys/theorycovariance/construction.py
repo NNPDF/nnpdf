@@ -225,14 +225,17 @@ def covmat_power_corrections(deltas1, deltas2):
     corrections. The two arguments ``deltas1`` and ``deltas2`` contain the
     shifts for the first and second experiment, respectively.
 
-    The shifts are given in this form: ``` deltas1 = [array1_of_shifts1,
-               array1_of_shifts2, array1_of_shifts3, ...]
-    deltas2 = [array2_of_shifts1,
-               array2_of_shifts2, array2_of_shifts3, ...]
-    ``` The sub-matrix is computed as
+    The shifts are given in this form::
 
-      s = array1_of_shifts1 X array2_of_shifts1 + array1_of_shifts2 X
-      array2_of_shifts2 + ...
+        deltas1 = [array1_of_shifts1,
+                   array1_of_shifts2, array1_of_shifts3, ...]
+        deltas2 = [array2_of_shifts1,
+                   array2_of_shifts2, array2_of_shifts3, ...]
+
+    The sub-matrix is computed as::
+
+        s = array1_of_shifts1 X array2_of_shifts1 + array1_of_shifts2 X
+        array2_of_shifts2 + ...
 
     where ``X`` is the outer product. This is equivalent to a generalised 5
     point prescription. Since corrections are linearised, plus and minus
@@ -431,9 +434,11 @@ def theory_covmat_custom_per_prescription(covs_pt_prescrip, procs_index, combine
 @table
 def fromfile_covmat(covmatpath, groups_data_by_process, procs_index):
     """Reads a general theory covariance matrix from file. Then
-    1: Applies cuts to match experiment covariance matrix
-    2: Expands dimensions to match experiment covariance matrix
-       by filling additional entries with 0."""
+
+    1. Applies cuts to match experiment covariance matrix
+    2. Expands dimensions to match experiment covariance matrix
+       by filling additional entries with 0.
+    """
     # Load covmat as pandas DataFrame
     filecovmat = pd.read_csv(
         covmatpath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python"

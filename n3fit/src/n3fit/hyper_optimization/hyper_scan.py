@@ -1,14 +1,16 @@
 """
 The HyperScanner class is basically a dictionary containing all parameters,
-the functions defined as hp_ (from hyperspace)
+the functions defined as ``hp_`` (from hyperspace)
 
-The goal of this module is to read all parameters in the `hyperopt` section of the runcard
-and modify the parameter dictionary so that now it is filled with the `hyperop` sampler objects
+The goal of this module is to read all parameters in the ``hyperopt`` section of the runcard
+and modify the parameter dictionary so that now it is filled with the ``hyperopt`` sampler objects
 
 The idea behind the wrappers if that if you ever want to use
 another hyperoptimization library, assuming that it also takes just
-    - a function
-    - a dictionary of spaces of parameters
+
+- a function
+- a dictionary of spaces of parameters
+
 you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the minimization).
 """
@@ -416,13 +418,17 @@ class HyperScanner:
         implemented in `n3fit`) and the options to modify.
 
         The accepted options are:
-            - learning_rate
-            - clipnorm
-        but for hyperopt it will look as a list of dictionaries
+
+        - learning_rate
+        - clipnorm
+
+        but for hyperopt it will look as a list of dictionaries::
+
             [ { optimizer_name: optimizer_name, learning_rate: sampler },
               { optimizer_name: optimizer_name, learning_rate: sampler }, ...
             ]
-        and will sample one from this list.
+
+        and it will sample one from this list.
 
         Note that the keys within the dictionary (`optimizer_name` and `learning_rate`)
         should be named as the keys used by the compiler of the model.
@@ -473,8 +479,10 @@ class HyperScanner:
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
-            - pos_multiplier
-            - pos_initial
+
+        - pos_multiplier
+        - pos_initial
+
         Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
         mul_key = "multiplier"

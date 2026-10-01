@@ -359,7 +359,7 @@ class MetaModel(Model):
 
         This assumes that the only weights are in the
         layer types defined as the constants
-            NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
+        NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
 
         Parameters
         ----------
@@ -445,8 +445,10 @@ class MetaModel(Model):
     def save_weights(self, file):
         """
         Compatibility function for:
-            - tf < 2.16, keras < 3: argument save format needed for h5
-            - tf >= 2.16, keras >= 3: save format is deduced from the file extension
+
+        - tf < 2.16, keras < 3: argument save format needed for h5
+        - tf >= 2.16, keras >= 3: save format is deduced from the file extension
+        
         In both cases, the final weights are finally copied to the ``file`` path.
         """
         try:

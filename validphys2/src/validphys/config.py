@@ -1027,16 +1027,17 @@ class CoreConfig(configparser.Config):
         Compute the intersection of the dataset names, and for each element in
         the intersection construct a mapping with the follwing keys:
 
-            - process : A string with the common process name.
-            - experiment_name : A string with the common experiment name.
-            - dataset_name : A string with the common dataset name.
-            - dataspecs : A list of mappinngs matching the original
-              "dataspecs". Each mapping contains:
-                * dataset: A dataset with the name data_set name and the
-                properties (cuts, theory, etc) corresponding to the original
-                dataspec.
-                * dataset_input: The input line used to build dataset.
-                * All the other keys in the original dataspec.
+        - process : A string with the common process name.
+        - experiment_name : A string with the common experiment name.
+        - dataset_name : A string with the common dataset name.
+        - dataspecs : A list of mappinngs matching the original
+          "dataspecs". Each mapping contains:
+
+          * dataset: A dataset with the name data_set name and the
+            properties (cuts, theory, etc) corresponding to the original
+            dataspec.
+          * dataset_input: The input line used to build dataset.
+          * All the other keys in the original dataspec.
         """
         self._check_dataspecs_type(dataspecs)
         all_names = []

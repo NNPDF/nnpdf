@@ -1395,15 +1395,15 @@ def plot_xq2(
     The representation of the filtered data depends on the `display_cuts` and
     `use_cuts` options:
 
-     - If cuts are disabled (`use_cuts` is CutsPolicy.NOCUTS), all the data
-    will be plotted (and setting `display_cuts` to True is an error).
+    - If cuts are disabled (`use_cuts` is CutsPolicy.NOCUTS), all the data
+      will be plotted (and setting `display_cuts` to True is an error).
 
-     - If cuts are enabled (`use_cuts` is either CutsPolicy.FROMFIT or
-    CutsPolicy.INTERNAL) and `display_cuts` is False, the masked points will
-    be ignored.
+    - If cuts are enabled (`use_cuts` is either CutsPolicy.FROMFIT or
+      CutsPolicy.INTERNAL) and `display_cuts` is False, the masked points
+      will be ignored.
 
-     - If cuts are enabled and `display_cuts` is True, the filtered points
-    will be displaed and marked.
+    - If cuts are enabled and `display_cuts` is True, the filtered points
+      will be displaed and marked.
 
     The points are grouped according to the `marker_by` option. The possible
     values are: "process type", "experiment", "group" or "dataset" for discrete
@@ -1417,7 +1417,7 @@ def plot_xq2(
     Example
     -------
 
-    Obtain a plot with some reasonable defaults::
+    Obtain a plot with some reasonable defaults:
 
     >>> from validphys.api import API
     >>> inp = {

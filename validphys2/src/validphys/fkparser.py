@@ -290,7 +290,7 @@ def parse_fktable(f):
     Parameters
     ----------
     f : file
-        Open file-like object. See :func:`open_fkpath`to obtain it.
+        Open file-like object. See :func:`open_fkpath` to obtain it.
 
     Returns
     -------
