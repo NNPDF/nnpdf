@@ -1,0 +1,41 @@
+setname: 'OPAL_SIA-PI_91P2GEV_EE-PISUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-PI"
+  experiment: "OPAL"
+
+arXiv:
+  url: "N/A"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/372772"
+hepdata:
+  url: "https://www.hepdata.net/record/ins372772"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "normalized x-sec differential wrt $p_h$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: '$$'}
+  observable_name: PH
+  process_type: SIA_PH
+  ndata: 51
+  tables: [1]
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'OPAL SIA PI- + PI+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+    x_scale: log
+    plot_x: ph
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'

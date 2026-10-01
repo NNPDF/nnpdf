@@ -1,0 +1,41 @@
+setname: 'TPC_SIA-KA_29GEV_EE-KASUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-KA"
+  experiment: "TPC"
+
+arXiv:
+  url: "N/A"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/262143"
+hepdata:
+  url: "https://www.hepdata.net/record/ins262143"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "normalized differential x-sec wrt z", label: '$\frac{1}{\beta\sigma_{tot}}\frac{d\sigma}{dz}$', units: '$$'}
+  observable_name: Z
+  process_type: SIA_Z
+  ndata: 21
+  tables: [1]
+  kinematics:
+    variables:
+      z: {description: "fractional hadron momentum", label: '$z$', units: ''}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage: [z]
+  plotting:
+    dataset_label: 'TPC SIA 29 GeV KA- + KA+ production: $\frac{1}{\beta\sigma_{tot}}\frac{d\sigma}{dz}$'
+    x_scale: linear
+    plot_x: z
+    y_label: '$\frac{1}{\beta\sigma_{tot}}\frac{d\sigma}{dz}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
