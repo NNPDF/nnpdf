@@ -112,7 +112,9 @@ class LossKL(MetaLayer):
         kl = Kops.convert_to_tensor(0.0, dtype=K.floatx())
         for layer in self.vb_layers:
             kl += Kops.cast(layer.kl_loss(), K.floatx())
-        result = kl * Kops.cast(self.kl_beta.read_value(), K.floatx())
+        # chi2 enters the total loss as 2 * NLL; scale the KL by the same factor
+        # so that kl_beta = 1 is exactly the ELBO.
+        result = 2.0 * kl * Kops.cast(self.kl_beta.read_value(), K.floatx())
         return op.reshape(result, (1,))
 
 
@@ -309,7 +311,9 @@ class LossRepulsion(MetaLayer):
         rowsum = op.sum(kmat, axis=1)
 
         rep = op.sum(rowsum / Kops.stop_gradient(rowsum) - 1.0)
-        result = Kops.cast(self.beta, rep.dtype) * rep
+        # chi2 = 2 * NLL: with the same factor, beta = 1 is the SVGD particle
+        # approximation of D'Angelo & Fortuin.
+        result = Kops.cast(2.0 * self.beta, rep.dtype) * rep
 
         if self.scale_invariant_grad:
             # The repulsive force carries a factor sqrt(m)/sigma from
