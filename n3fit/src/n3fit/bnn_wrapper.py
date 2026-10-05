@@ -132,10 +132,6 @@ def eval_map_model(pdf_model):
     """Evaluate the pdf model at MAP point estimate"""
     vb_layers = get_vb_layers(pdf_model)
 
-    # Enable map mode
-    for layer in vb_layers:
-        layer.enable_map()
-
     map_model = pdf_model.single_replica_generator(0)
     # Transfer preprocessing alpha / beta. MUST run BEFORE copy_vb_posterior/reset_random
     map_model.set_replica_weights(
@@ -146,13 +142,9 @@ def eval_map_model(pdf_model):
     new_vb_layers = get_vb_layers(map_model)
     for parent_vb, child_vb in zip(vb_layers, new_vb_layers):
         copy_vb_posterior(parent_vb, child_vb)
-        child_vb.reset_random()
+        child_vb.enable_map()        # was: child_vb.reset_random(), which sets map=False
 
     set_model_eval(map_model)
-
-    # Disable map mode 
-    for layer in vb_layers:
-        layer.disable_map()
 
     return map_model
 
