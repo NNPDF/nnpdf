@@ -65,6 +65,10 @@ class XPlottingGrid:
         if not isinstance(self.grid_values, Stats):
             raise ValueError("`XPlottingGrid` grid_values can only be instances of `Stats`")
 
+        # Ensure that flavours is a list or tuple and not numpy array
+        if isinstance(self.flavours, np.ndarray):
+            self.flavours = self.flavours.tolist()
+
     def select_flavour(self, flindex):
         """Return a new grid for one single flavour"""
         if isinstance(flindex, str):

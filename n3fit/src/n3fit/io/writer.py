@@ -220,7 +220,9 @@ XGRID = np.array(
 
 
 class WriterWrapper:
-    def __init__(self, replica_numbers, pdf_objects, stopping_object, all_chi2s, theory, timings, trials):
+    def __init__(
+        self, replica_numbers, pdf_objects, stopping_object, all_chi2s, theory, timings, trials
+    ):
         """
         Initializes the writer for all replicas.
 
@@ -298,18 +300,18 @@ class WriterWrapper:
             trials_number = self.trials["number_of_trials"]
             idx_trial = replica_number % trials_number
             hyperparam_info = {}
-            hyperparam_info["optimizer"]=self.trials["optimizer"][idx_trial]
-            hyperparam_info["learning_rate"]=self.trials["learning_rate"][idx_trial]
-            hyperparam_info["clipnorm"]=self.trials["clipnorm"][idx_trial]
-            hyperparam_info["epochs"]=self.trials["epochs"][idx_trial]
-            hyperparam_info["stopping_patience"]=self.trials["stopping_patience"][idx_trial]
-            hyperparam_info["initial"]=self.trials["initial"][idx_trial]
-            hyperparam_info["nodes_per_layer"]=self.trials["nodes_per_layer"][idx_trial]
-            hyperparam_info["number_of_layers"]=self.trials["number_of_layers"][idx_trial]
-            hyperparam_info["activation"]=self.trials["activation_per_layer"][idx_trial]
-            hyperparam_info["layer_type"]=self.trials["layer_type"][idx_trial]
-            hyperparam_info["initializer"]=self.trials["initializer"][idx_trial]
-            hyperparam_info["dropout"]=self.trials["dropout"][idx_trial]
+            hyperparam_info["optimizer"] = self.trials["optimizer"][idx_trial]
+            hyperparam_info["learning_rate"] = self.trials["learning_rate"][idx_trial]
+            hyperparam_info["clipnorm"] = self.trials["clipnorm"][idx_trial]
+            hyperparam_info["epochs"] = self.trials["epochs"][idx_trial]
+            hyperparam_info["stopping_patience"] = self.trials["stopping_patience"][idx_trial]
+            hyperparam_info["initial"] = self.trials["initial"][idx_trial]
+            hyperparam_info["nodes_per_layer"] = self.trials["nodes_per_layer"][idx_trial]
+            hyperparam_info["number_of_layers"] = self.trials["number_of_layers"][idx_trial]
+            hyperparam_info["activation"] = self.trials["activation_per_layer"][idx_trial]
+            hyperparam_info["layer_type"] = self.trials["layer_type"][idx_trial]
+            hyperparam_info["initializer"] = self.trials["initializer"][idx_trial]
+            hyperparam_info["dropout"] = self.trials["dropout"][idx_trial]
             return hyperparam_info
         else:
             hyperparam_info = "from runcard"
@@ -329,6 +331,11 @@ class WriterWrapper:
             # Note: the 2 arguments below are the same for all replicas, unless run separately
             timing=self.timings,
             stop_epoch=self.stopping_object.stop_epoch,
+            would_stop_epoch=(
+                self.stopping_object.would_stop_epoch
+                if self.stopping_object._dont_stop
+                else self.stopping_object.stop_epoch
+            ),
         )
 
         with open(out_path, "w", encoding="utf-8") as fs:
@@ -373,6 +380,7 @@ def jsonfit(
     true_chi2,
     stop_epoch,
     timing,
+    would_stop_epoch,
     hyperparam_info,
 ):
     """Generates a dictionary containing all relevant metadata for the fit
@@ -399,7 +407,9 @@ def jsonfit(
             epoch at which the stopping stopped (not the one for the best fit!)
         timing: dict
             dictionary of the timing of the different events that happened
-        hyperparam_info: dict 
+        would_stop_epoch: int
+            epoch at which the stopping would have stopped if it were not set to "dont_stop"
+        hyperparam_info: dict
             dictionary of hyperparameter settings
     """
     all_info = {}
@@ -415,6 +425,7 @@ def jsonfit(
     all_info["arc_lengths"] = arc_lengths
     all_info["integrability"] = integrability_numbers
     all_info["timing"] = timing
+    all_info["would_stop_epoch"] = would_stop_epoch
     all_info["hyperparameters"] = hyperparam_info
     # Versioning info
     all_info["version"] = version()
