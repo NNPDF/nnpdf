@@ -1,0 +1,155 @@
+independent_variables:
+- header: {name: 'pT(leading jet) [GeV]'}
+  values:
+    - {value: '$[25, 35]$'}
+    - {value: '$[35, 50]$'}
+    - {value: '$[50, 70]$'}
+    - {value: '$[70, 90]$'}
+    - {value: '$[90, 110]$'}
+    - {value: '$[110, 130]$'}
+    - {value: '$[130, 160]$'}
+    - {value: '$[160, 200]$'}
+    - {value: '$[200, 300]$'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: 'Central value [fraction of the total cross section]'}
+  values:
+  - {value: '0.040'}
+  - {value: '0.162'}
+  - {value: '0.315'}
+  - {value: '0.188'}
+  - {value: '0.126'}
+  - {value: '0.073'}
+  - {value: '0.057'}
+  - {value: '0.020'}
+  - {value: '0.020'}
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(stat)'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.013}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.014}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.012}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.010}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.009}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(bgr)'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(other syst)'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(total)'}
+  values:
+  - errors:
+    - {label: stat+syst, symerror: 0.007)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.014)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.015)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.013)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.011)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.010)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.007)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.004)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.005)}
+    value: '('

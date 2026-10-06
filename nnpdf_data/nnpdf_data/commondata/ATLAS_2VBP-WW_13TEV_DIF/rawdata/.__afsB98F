@@ -1,0 +1,32 @@
+additional_resources: 
+- {description: web page with auxiliary material, location: "https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/STDM-2017-24/"}
+comment: "CERN-LHC.
+
+This paper presents measurements of fiducial and differential cross sections for W+W- production in proton-proton collisions at sqrt(s) = 13 TeV with the ATLAS experiment at the Large Hadron Collider using an integrated luminosity of 36.1fb-1. The candidate events are selected using one electron and one muon, corresponding to the decay of the diboson system as WW-> e nu mu nu. In order to suppress top quark background, events containing jets with a transverse momentum exceeding 35 GeV are not included in the measurement phase space. The fiducial cross section, six differential distributions and the cross section as a function of the jet-veto transverse momentum threshold are measured and compared to several theoretical predictios. Constraints on anomalous week boson self-interactions are also presented in the framework of a dimension-six effective field theory."
+hepdata_doi: XXX
+record_ids:
+- {id: XXX, type: inspire}
+---
+additional_resources:
+- {description: Image file, location: fig_07a.png}
+- {description: Thumbnail image file, location: thumb_fig_07a.png}
+data_file: data1.yaml
+description: |
+  Measured fiducial cross section of $WW\rightarrow e\mu$ production for the observable $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Single Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 07a
+name: Table 1
+---
+data_file: data2.yaml
+description: |
+  Total correlation between bins in data for the measured fiducial cross section of $WW\rightarrow e\mu$ production for the observable $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Single Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 2

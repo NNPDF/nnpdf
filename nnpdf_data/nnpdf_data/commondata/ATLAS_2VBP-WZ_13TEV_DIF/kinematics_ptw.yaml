@@ -1,0 +1,25 @@
+bins:
+- ptW:
+    min: 0.0
+    mid: null
+    max: 30.0
+- ptW:
+    min: 30.0
+    mid: null
+    max: 60.0
+- ptW:
+    min: 60.0
+    mid: null
+    max: 100.0
+- ptW:
+    min: 100.0
+    mid: null
+    max: 150.0
+- ptW:
+    min: 150.0
+    mid: null
+    max: 220.0
+- ptW:
+    min: 220.0
+    mid: null
+    max: 1000.0

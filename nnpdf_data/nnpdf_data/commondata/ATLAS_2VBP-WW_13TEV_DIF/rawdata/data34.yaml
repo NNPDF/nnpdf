@@ -1,0 +1,243 @@
+dependent_variables:
+- header: {name: '$1/\sigma_\text{fid.}\cdot d\sigma/d\Delta\phi_{e\mu} $'}
+  qualifiers:
+  - {name: 'Cross section', value: 'WW production'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 27'}
+  - {name: 'M(ELECTRON,MUON)', units: 'GEV', value: '> 55'}
+  - {name: 'PT(ELECTRON,MUON)', units: 'GEV', value: '> 30'}
+  - {name: 'ETMISS', units: 'GEV', value: '> 20'}
+  - {name: 'ABS(ETARAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 35'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - errors:
+    - {label: 'stat', symerror: 0.00340}
+    - {label: 'JetRes', symerror: 0.00027}
+    - {label: 'JetPileup', symerror: 0.00025}
+    - {label: 'Bkgtopsinglet', symerror: 0.00288}
+    - {label: 'JetScaleOther', symerror: 0.00056}
+    - {label: 'Pileup', symerror: 0.00067}
+    - {label: 'StatsBkgMC', symerror: 0.00129}
+    - {label: 'FTag', symerror: 0.00088}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.00085}
+    - {label: 'JetFlav', symerror: 0.00025}
+    - {label: 'BkgOther', symerror: 0.00062}
+    - {label: 'BkgWjets', symerror: 0.00122}
+    value: 0.05831
+  - errors:
+    - {label: 'stat', symerror: 0.0090}
+    - {label: 'JetRes', symerror: 0.0007}
+    - {label: 'JetPileup', symerror: 0.0018}
+    - {label: 'Bkgtopsinglet', symerror: 0.0047}
+    - {label: 'JetScaleOther', symerror: 0.0018}
+    - {label: 'Pileup', symerror: 0.0031}
+    - {label: 'StatsBkgMC', symerror: 0.0039}
+    - {label: 'FTag', symerror: 0.0011}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0024}
+    - {label: 'JetFlav', symerror: 0.0016}
+    - {label: 'BkgOther', symerror: 0.0007}
+    - {label: 'BkgWjets', symerror: 0.0035}
+    value: 0.1723
+  - errors:
+    - {label: 'stat', symerror: 0.0170}
+    - {label: 'JetRes', symerror: 0.0021}
+    - {label: 'JetPileup', symerror: 0.0010}
+    - {label: 'Bkgtopsinglet', symerror: 0.0067}
+    - {label: 'JetScaleOther', symerror: 0.0009}
+    - {label: 'Pileup', symerror: 0.000001}
+    - {label: 'StatsBkgMC', symerror: 0.0063}
+    - {label: 'FTag', symerror: 0.0009}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0040}
+    - {label: 'JetFlav', symerror: 0.0005}
+    - {label: 'BkgOther', symerror: 0.0039}
+    - {label: 'BkgWjets', symerror: 0.0066}
+    value: 0.3283
+  - errors:
+    - {label: 'stat', symerror: 0.0192}
+    - {label: 'JetRes', symerror: 0.0024}
+    - {label: 'JetPileup', symerror: 0.0007}
+    - {label: 'Bkgtopsinglet', symerror: 0.0057}
+    - {label: 'JetScaleOther', symerror: 0.0011}
+    - {label: 'Pileup', symerror: 0.0038}
+    - {label: 'StatsBkgMC', symerror: 0.0078}
+    - {label: 'FTag', symerror: 0.0013}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0181}
+    - {label: 'JetFlav', symerror: 0.0003}
+    - {label: 'BkgOther', symerror: 0.0017}
+    - {label: 'BkgWjets', symerror: 0.0084}
+    value: 0.4405
+  - errors:
+    - {label: 'stat', symerror: 0.0236}
+    - {label: 'JetRes', symerror: 0.0017}
+    - {label: 'JetPileup', symerror: 0.0015}
+    - {label: 'Bkgtopsinglet', symerror: 0.0039}
+    - {label: 'JetScaleOther', symerror: 0.0022}
+    - {label: 'Pileup', symerror: 0.0001}
+    - {label: 'StatsBkgMC', symerror: 0.0091}
+    - {label: 'FTag', symerror: 0.0030}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0055}
+    - {label: 'JetFlav', symerror: 0.0011}
+    - {label: 'BkgOther', symerror: 0.0008}
+    - {label: 'BkgWjets', symerror: 0.0069}
+    value: 0.5121
+  - errors:
+    - {label: 'stat', symerror: 0.0259}
+    - {label: 'JetRes', symerror: 0.0024}
+    - {label: 'JetPileup', symerror: 0.0012}
+    - {label: 'Bkgtopsinglet', symerror: 0.0088}
+    - {label: 'JetScaleOther', symerror: 0.0027}
+    - {label: 'Pileup', symerror: 0.0023}
+    - {label: 'StatsBkgMC', symerror: 0.0103}
+    - {label: 'FTag', symerror: 0.0042}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0088}
+    - {label: 'JetFlav', symerror: 0.0009}
+    - {label: 'BkgOther', symerror: 0.0092}
+    - {label: 'BkgWjets', symerror: 0.0088}
+    value: 0.6273
+  - errors:
+    - {label: 'stat', symerror: 0.0355}
+    - {label: 'JetRes', symerror: 0.0045}
+    - {label: 'JetPileup', symerror: 0.0020}
+    - {label: 'Bkgtopsinglet', symerror: 0.0120}
+    - {label: 'JetScaleOther', symerror: 0.0031}
+    - {label: 'Pileup', symerror: 0.0029}
+    - {label: 'StatsBkgMC', symerror: 0.0137}
+    - {label: 'FTag', symerror: 0.0042}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0104}
+    - {label: 'JetFlav', symerror: 0.0021}
+    - {label: 'BkgOther', symerror: 0.0144}
+    - {label: 'BkgWjets', symerror: 0.0102}
+    value: 0.7542
+  - errors:
+    - {label: 'stat', symerror: 0.0343}
+    - {label: 'JetRes', symerror: 0.0073}
+    - {label: 'JetPileup', symerror: 0.0038}
+    - {label: 'Bkgtopsinglet', symerror: 0.0114}
+    - {label: 'JetScaleOther', symerror: 0.0044}
+    - {label: 'Pileup', symerror: 0.0023}
+    - {label: 'StatsBkgMC', symerror: 0.0137}
+    - {label: 'FTag', symerror: 0.0051}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0122}
+    - {label: 'JetFlav', symerror: 0.0031}
+    - {label: 'BkgOther', symerror: 0.0088}
+    - {label: 'BkgWjets', symerror: 0.0103}
+    value: 0.7556
+  - errors:
+    - {label: 'stat', symerror: 0.0350}
+    - {label: 'JetRes', symerror: 0.0055}
+    - {label: 'JetPileup', symerror: 0.0028}
+    - {label: 'Bkgtopsinglet', symerror: 0.0124}
+    - {label: 'JetScaleOther', symerror: 0.0050}
+    - {label: 'Pileup', symerror: 0.0018}
+    - {label: 'StatsBkgMC', symerror: 0.0133}
+    - {label: 'FTag', symerror: 0.0049}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0178}
+    - {label: 'JetFlav', symerror: 0.0051}
+    - {label: 'BkgOther', symerror: 0.0027}
+    - {label: 'BkgWjets', symerror: 0.0109}
+    value: 0.796
+  - errors:
+    - {label: 'stat', symerror: 0.0329}
+    - {label: 'JetRes', symerror: 0.0032}
+    - {label: 'JetPileup', symerror: 0.0024}
+    - {label: 'Bkgtopsinglet', symerror: 0.0088}
+    - {label: 'JetScaleOther', symerror: 0.0052}
+    - {label: 'Pileup', symerror: 0.0081}
+    - {label: 'StatsBkgMC', symerror: 0.0198}
+    - {label: 'FTag', symerror: 0.0045}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0187}
+    - {label: 'JetFlav', symerror: 0.0010}
+    - {label: 'BkgOther', symerror: 0.0130}
+    - {label: 'BkgWjets', symerror: 0.0104}
+    value: 0.6686
+  - errors:
+    - {label: 'stat', symerror: 0.0308}
+    - {label: 'JetRes', symerror: 0.0030}
+    - {label: 'JetPileup', symerror: 0.0025}
+    - {label: 'Bkgtopsinglet', symerror: 0.0080}
+    - {label: 'JetScaleOther', symerror: 0.0015}
+    - {label: 'Pileup', symerror: 0.0008}
+    - {label: 'StatsBkgMC', symerror: 0.0152}
+    - {label: 'FTag', symerror: 0.0015}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0068}
+    - {label: 'JetFlav', symerror: 0.0008}
+    - {label: 'BkgOther', symerror: 0.0038}
+    - {label: 'BkgWjets', symerror: 0.0104}
+    value: 0.6212
+  - errors:
+    - {label: 'stat', symerror: 0.0290}
+    - {label: 'JetRes', symerror: 0.0030}
+    - {label: 'JetPileup', symerror: 0.0016}
+    - {label: 'Bkgtopsinglet', symerror: 0.0062}
+    - {label: 'JetScaleOther', symerror: 0.0009}
+    - {label: 'Pileup', symerror: 0.0019}
+    - {label: 'StatsBkgMC', symerror: 0.0164}
+    - {label: 'FTag', symerror: 0.0013}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0055}
+    - {label: 'JetFlav', symerror: 0.0014}
+    - {label: 'BkgOther', symerror: 0.0063}
+    - {label: 'BkgWjets', symerror: 0.0119}
+    value: 0.5329
+  - errors:
+    - {label: 'stat', symerror: 0.0270}
+    - {label: 'JetRes', symerror: 0.0035}
+    - {label: 'JetPileup', symerror: 0.0011}
+    - {label: 'Bkgtopsinglet', symerror: 0.0103}
+    - {label: 'JetScaleOther', symerror: 0.0025}
+    - {label: 'Pileup', symerror: 0.0012}
+    - {label: 'StatsBkgMC', symerror: 0.0151}
+    - {label: 'FTag', symerror: 0.0030}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0074}
+    - {label: 'JetFlav', symerror: 0.0005}
+    - {label: 'BkgOther', symerror: 0.0012}
+    - {label: 'BkgWjets', symerror: 0.0077}
+    value: 0.4553
+  - errors:
+    - {label: 'stat', symerror: 0.0154}
+    - {label: 'JetRes', symerror: 0.0020}
+    - {label: 'JetPileup', symerror: 0.0027}
+    - {label: 'Bkgtopsinglet', symerror: 0.0075}
+    - {label: 'JetScaleOther', symerror: 0.0028}
+    - {label: 'Pileup', symerror: 0.0020}
+    - {label: 'StatsBkgMC', symerror: 0.0093}
+    - {label: 'FTag', symerror: 0.0033}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0099}
+    - {label: 'JetFlav', symerror: 0.0003}
+    - {label: 'BkgOther', symerror: 0.0123}
+    - {label: 'BkgWjets', symerror: 0.0155}
+    value: 0.3198
+  - errors:
+    - {label: 'stat', symerror: 0.0168}
+    - {label: 'JetRes', symerror: 0.0022}
+    - {label: 'JetPileup', symerror: 0.0015}
+    - {label: 'Bkgtopsinglet', symerror: 0.0136}
+    - {label: 'JetScaleOther', symerror: 0.0018}
+    - {label: 'Pileup', symerror: 0.0039}
+    - {label: 'StatsBkgMC', symerror: 0.0120}
+    - {label: 'FTag', symerror: 0.0052}
+    - {label: 'ElMuMETUnfTheoLumi', symerror: 0.0043}
+    - {label: 'JetFlav', symerror: 0.0022}
+    - {label: 'BkgOther', symerror: 0.0140}
+    - {label: 'BkgWjets', symerror: 0.0295}
+    value: 0.1841
+independent_variables:
+- header: {name: '$\Delta\phi_{e\mu}$'}
+  values:
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.95}
+  - {low: 1.95, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.14}

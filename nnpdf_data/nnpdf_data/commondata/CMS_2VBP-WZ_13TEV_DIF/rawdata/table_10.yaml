@@ -1,0 +1,557 @@
+independent_variables:
+- header: {name: 'pT(leading jet) [GeV]'}
+  values:
+    - {value: 'eee'}
+    - {value: '$[25, 35]$'}
+    - {value: '$[35, 50]$'}
+    - {value: '$[50, 70]$'}
+    - {value: '$[70, 90]$'}
+    - {value: '$[90, 110]$'}
+    - {value: '$[110, 130]$'}
+    - {value: '$[130, 160]$'}
+    - {value: '$[160, 200]$'}
+    - {value: '$[200, 300]$'}
+    - {value: 'eee'}
+    - {value: '$[25, 35]$'}
+    - {value: '$[35, 50]$'}
+    - {value: '$[50, 70]$'}
+    - {value: '$[70, 90]$'}
+    - {value: '$[90, 110]$'}
+    - {value: '$[110, 130]$'}
+    - {value: '$[130, 160]$'}
+    - {value: '$[160, 200]$'}
+    - {value: '$[200, 300]$'}
+    - {value: 'emm'}
+    - {value: '$[25, 35]$'}
+    - {value: '$[35, 50]$'}
+    - {value: '$[50, 70]$'}
+    - {value: '$[70, 90]$'}
+    - {value: '$[90, 110]$'}
+    - {value: '$[110, 130]$'}
+    - {value: '$[130, 160]$'}
+    - {value: '$[160, 200]$'}
+    - {value: '$[200, 300]$'}
+    - {value: 'mmm'}
+    - {value: '$[25, 35]$'}
+    - {value: '$[35, 50]$'}
+    - {value: '$[50, 70]$'}
+    - {value: '$[70, 90]$'}
+    - {value: '$[90, 110]$'}
+    - {value: '$[110, 130]$'}
+    - {value: '$[130, 160]$'}
+    - {value: '$[160, 200]$'}
+    - {value: '$[200, 300]$'}
+dependent_variables:
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: 'Central value [fraction of total cross section]'}
+  values:
+  - {value: 'eee'}
+  - {value: '0.022'}
+  - {value: '0.189'}
+  - {value: '0.257'}
+  - {value: '0.194'}
+  - {value: '0.140'}
+  - {value: '0.109'}
+  - {value: '0.031'}
+  - {value: '0.035'}
+  - {value: '0.023'}
+  - {value: 'eee'}
+  - {value: '0.059'}
+  - {value: '0.146'}
+  - {value: '0.286'}
+  - {value: '0.224'}
+  - {value: '0.111'}
+  - {value: '0.083'}
+  - {value: '0.055'}
+  - {value: '0.017'}
+  - {value: '0.019'}
+  - {value: 'emm'}
+  - {value: '0.037'}
+  - {value: '0.166'}
+  - {value: '0.329'}
+  - {value: '0.181'}
+  - {value: '0.121'}
+  - {value: '0.067'}
+  - {value: '0.060'}
+  - {value: '0.015'}
+  - {value: '0.023'}
+  - {value: 'mmm'}
+  - {value: '0.042'}
+  - {value: '0.155'}
+  - {value: '0.333'}
+  - {value: '0.176'}
+  - {value: '0.132'}
+  - {value: '0.062'}
+  - {value: '0.062'}
+  - {value: '0.020'}
+  - {value: '0.018'}
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(stat)'}
+  values:
+  - {value: 'eee'}
+  - errors:
+    - {label: stat+syst, symerror: 0.015}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.038}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.039}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.035}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.033}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.030}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.016}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.013}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - {value: 'eee'}
+  - errors:
+    - {label: stat+syst, symerror: 0.025}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.031}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.032}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.028}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.023}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.022}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.013}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.009}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - {value: 'emm'}
+  - errors:
+    - {label: stat+syst, symerror: 0.013}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.026}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.029}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.024}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.021}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.019}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.012}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.008}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - {value: 'mmm'}
+  - errors:
+    - {label: stat+syst, symerror: 0.011}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.019}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.021}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.017}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.015}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.013}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.009}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(bgr)'}
+  values:
+  - {value: 'eee'}
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.008}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.012}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.010}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - {value: 'eee'}
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - {value: 'emm'}
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - {value: 'mmm'}
+  - errors:
+    - {label: stat+syst, symerror: 0.00025}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.001}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(other syst)'}
+  values:
+  - {value: 'eee'}
+  - errors:
+    - {label: stat+syst, symerror: 0.008}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.011}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.008}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.006}
+    value: ''
+  - {value: 'eee'}
+  - errors:
+    - {label: stat+syst, symerror: 0.008}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.011}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.002}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - {value: 'emm'}
+  - errors:
+    - {label: stat+syst, symerror: 0.007}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.009}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.010}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.009}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+  - {value: 'mmm'}
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.008}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.006}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.004}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.003}
+    value: ''
+  - errors:
+    - {label: stat+syst, symerror: 0.005}
+    value: ''
+- header: {name: .}
+  qualifiers:
+  - {name: '$\sqrt{s}$', units: GeV, value: 13000}
+  - {name: ., value: '(total)'}
+  values:
+  - {value: 'eee'}
+  - errors:
+    - {label: stat+syst, symerror: 0.017)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.039)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.041)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.038)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.034)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.031)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.017)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.013)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.007)}
+    value: '('
+  - {value: 'eee'}
+  - errors:
+    - {label: stat+syst, symerror: 0.026)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.033)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.033)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.029)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.024)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.024)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.014)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.010)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.006)}
+    value: '('
+  - {value: 'emm'}
+  - errors:
+    - {label: stat+syst, symerror: 0.015)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.028)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.030)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.026)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.024)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.022)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.013)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.009)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.006)}
+    value: '('
+  - {value: 'mmm'}
+  - errors:
+    - {label: stat+syst, symerror: 0.011)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.021)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.022)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.019)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.016)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.014)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.010)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.007)}
+    value: '('
+  - errors:
+    - {label: stat+syst, symerror: 0.006)}
+    value: '('
