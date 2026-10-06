@@ -167,7 +167,14 @@ def check_fit_results(
             assert_equal(value, reference, err_msg=err_msg)
 
 
-def _auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, rel_error=2e-3):
+def _auxiliary_performfit(
+    tmp_path,
+    runcard=QUICKNAME,
+    replica=1,
+    timing=True,
+    rel_error=2e-3,
+    capture_output=False,
+):
     """Fits quickcard and checks the json file to ensure the results have not changed."""
     quickcard = f"{runcard}.yml"
     # Prepare the runcard
@@ -180,23 +187,53 @@ def _auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, r
     shutil.copy(quickpath, tmp_path)
     shutil.copy(weightpath, tmp_path / f"{weight_name}.weights.h5")
     # run the fit
-    run_n3fit(quickcard, str(replica), cwd=tmp_path, check=True)
+    result = run_n3fit(
+        quickcard,
+        str(replica),
+        cwd=tmp_path,
+        check=True,
+        capture_output=capture_output,
+        text=capture_output,
+    )
 
     # And compare
     check_fit_results(tmp_path, runcard, replica, old_json_file, timing=timing, rel_error=rel_error)
+    return result
 
 
 @pytest.mark.darwin
 @pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED, QUICKNAME_POL])
 def test_performfit(tmp_path, runcard):
-    _auxiliary_performfit(tmp_path, runcard=runcard, replica=3, timing=False, rel_error=1e-1)
+    _auxiliary_performfit(
+        tmp_path,
+        runcard=runcard,
+        replica=3,
+        timing=False,
+        rel_error=1e-1,
+    )
 
 
 @pytest.mark.linux
 @pytest.mark.parametrize("replica", [1, 3])
 @pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED, QUICKNAME_POL])
 def test_performfit_and_timing(tmp_path, runcard, replica):
-    _auxiliary_performfit(tmp_path, runcard=runcard, replica=replica, timing=True)
+    result = _auxiliary_performfit(
+        tmp_path,
+        runcard=runcard,
+        replica=replica,
+        timing=True,
+        capture_output=runcard == QUICKNAME,
+    )
+    if runcard == QUICKNAME:
+        output = result.stdout + result.stderr
+        # timer=True is active and prints its periodic and final timing summaries.
+        assert "Latest 130 average" in output
+        assert "Average time per epoch" in output
+        # printeach=130 replaces the default 100-epoch reporting interval.
+        assert "Epoch 130/1100" in output
+        assert "Epoch 100/1100" not in output
+        # INFO-level logger messages are filtered by log_level=warning.
+        assert "Starting replica fit" not in output
 
 
 @pytest.mark.linux
