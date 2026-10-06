@@ -35,7 +35,7 @@ def ValidLogLevel(log_level: str) -> str:
 @Parser
 def ValidPrintEach(printeach: int) -> int:
     """Check whether the print_each value is an integer and greater than 1."""
-    if printeach < 1 or not isinstance(printeach, int):
+    if printeach < 1 or not type(printeach) is int:
         raise ValidationError(f"Print each must be an integer > 0, received {printeach}")
     return printeach
 
@@ -59,10 +59,10 @@ class DebugOptions:
         force the per-epoch stats to be printed to stdout
     """
 
-    log_level: Optional[ValidLogLevel] = "info"
-    printeach: Optional[ValidPrintEach] = 100
-    timer: Optional[bool] = False
-    print_logs: Optional[bool] = False
+    log_level: ValidLogLevel = "info"
+    printeach: ValidPrintEach = 100
+    timer: bool = False
+    print_logs: bool = False
 
     @property
     def print_summary(self) -> bool:
@@ -79,4 +79,10 @@ class DebugOptions:
 def parse_debug_options(debug_options=None):
     if debug_options is None:
         return DebugOptions()
-    return parse_input(debug_options, DebugOptions)
+    try:
+        return parse_input(debug_options, DebugOptions)
+    except ValidationError as e:
+        if e.__cause__ is not None:
+            # The parent error is much more informative
+            raise e.__cause__ from e
+        raise

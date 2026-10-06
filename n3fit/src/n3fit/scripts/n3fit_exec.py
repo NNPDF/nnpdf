@@ -240,6 +240,8 @@ class N3FitConfig(Config):
 
         Note that any logging that occurs before reportengine uses the n3fit
         parser will by necessity ignore these settings.
+        It is understood that, when ``debug_options`` is present, the user wants those options
+        to override any other options (including reportengine CLI options)
 
         Parameters
         ----------
@@ -253,7 +255,9 @@ class N3FitConfig(Config):
                 and ``print_logs`` fields filled with defaults
         """
         doptions = parse_debug_options(debug_options)
-        logging.getLogger().setLevel(doptions.logger_level)
+        if "log_level" in debug_options:
+            # If log level is not explicitly found in the dictionary, keep whatever status we have
+            logging.getLogger().setLevel(doptions.logger_level)
         return doptions
 
     def produce_kfold_parameters(self, kfold=None, hyperopt=None):
