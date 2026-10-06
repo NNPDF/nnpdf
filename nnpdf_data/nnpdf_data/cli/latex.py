@@ -45,7 +45,7 @@ class LatexDatasetRow:
         return self.bib_entry.key
 
     @property
-    def bibtex(self):
+    def bibtex_text(self):
         return self.bib_entry.raw_bibtex
 
     def __post_init__(self):
@@ -121,13 +121,10 @@ def generate_table(rows, group_by=None, group="unsorted"):
 
     row_lines = []
     bibtex_list = []
-    seen = []
     for row in rows:
         if row.bib_entry is not None:
             cite = f"\\cite{{{row.bib_key}}}"
-            if row.bib_key not in seen:
-                bibtex_list.append(row.bibtex)
-            seen.append(row.bib_key)
+            bibtex_list.append(row.bib_entry)
         else:
             cite = "\\textit{Reference unavailable}"
         row_lines.append(" & ".join([row.dataset_label, row.observable_description, cite]) + r" \\")
