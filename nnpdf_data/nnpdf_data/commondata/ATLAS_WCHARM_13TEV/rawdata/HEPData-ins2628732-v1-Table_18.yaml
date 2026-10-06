@@ -1,0 +1,317 @@
+dependent_variables:
+  - header: {name: COV, units: 'pb$^{2}$'}
+    qualifiers:
+      - name: SQRT(s)
+        units: GeV
+        value: 13000
+      - name: LUMINOSITY
+        units: fb$^{-1}$
+        value: 139
+    values:
+      - value: 2.73e-01
+      - value: 1.45e-01
+      - value: 9.92e-02
+      - value: 1.16e-01
+      - value: 7.78e-02
+      - value: 1.97e-01
+      - value: 1.54e-01
+      - value: 8.98e-02
+      - value: 1.09e-01
+      - value: 7.33e-02
+      - value: 1.45e-01
+      - value: 3.23e-01
+      - value: 2.68e-01
+      - value: 1.72e-01
+      - value: 1.39e-01
+      - value: 1.61e-01
+      - value: 2.61e-01
+      - value: 2.55e-01
+      - value: 1.56e-01
+      - value: 1.29e-01
+      - value: 9.92e-02
+      - value: 2.68e-01
+      - value: 4.58e-01
+      - value: 1.87e-01
+      - value: 1.79e-01
+      - value: 1.07e-01
+      - value: 2.81e-01
+      - value: 3.59e-01
+      - value: 1.74e-01
+      - value: 1.66e-01
+      - value: 1.16e-01
+      - value: 1.72e-01
+      - value: 1.87e-01
+      - value: 2.12e-01
+      - value: 1.00e-01
+      - value: 1.31e-01
+      - value: 1.76e-01
+      - value: 1.80e-01
+      - value: 1.29e-01
+      - value: 9.41e-02
+      - value: 7.78e-02
+      - value: 1.39e-01
+      - value: 1.79e-01
+      - value: 1.00e-01
+      - value: 1.77e-01
+      - value: 8.05e-02
+      - value: 1.46e-01
+      - value: 1.69e-01
+      - value: 9.51e-02
+      - value: 8.54e-02
+      - value: 1.97e-01
+      - value: 1.61e-01
+      - value: 1.07e-01
+      - value: 1.31e-01
+      - value: 8.05e-02
+      - value: 2.96e-01
+      - value: 1.70e-01
+      - value: 1.05e-01
+      - value: 1.18e-01
+      - value: 7.82e-02
+      - value: 1.54e-01
+      - value: 2.61e-01
+      - value: 2.81e-01
+      - value: 1.76e-01
+      - value: 1.46e-01
+      - value: 1.70e-01
+      - value: 3.52e-01
+      - value: 2.67e-01
+      - value: 1.64e-01
+      - value: 1.38e-01
+      - value: 8.98e-02
+      - value: 2.55e-01
+      - value: 3.59e-01
+      - value: 1.80e-01
+      - value: 1.69e-01
+      - value: 1.05e-01
+      - value: 2.67e-01
+      - value: 4.23e-01
+      - value: 1.67e-01
+      - value: 1.56e-01
+      - value: 1.09e-01
+      - value: 1.56e-01
+      - value: 1.74e-01
+      - value: 1.29e-01
+      - value: 9.51e-02
+      - value: 1.18e-01
+      - value: 1.64e-01
+      - value: 1.67e-01
+      - value: 1.92e-01
+      - value: 8.75e-02
+      - value: 7.33e-02
+      - value: 1.29e-01
+      - value: 1.66e-01
+      - value: 9.41e-02
+      - value: 8.54e-02
+      - value: 7.82e-02
+      - value: 1.38e-01
+      - value: 1.56e-01
+      - value: 8.75e-02
+      - value: 1.68e-01
+independent_variables:
+  - header:
+      name: bin1
+    values:
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+      - value: W^{+} bin 5
+  - header:
+      name: bin2
+    values:
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
+      - value: W^{-} bin 1
+      - value: W^{-} bin 2
+      - value: W^{-} bin 3
+      - value: W^{-} bin 4
+      - value: W^{-} bin 5
+      - value: W^{+} bin 1
+      - value: W^{+} bin 2
+      - value: W^{+} bin 3
+      - value: W^{+} bin 4
+      - value: W^{+} bin 5
