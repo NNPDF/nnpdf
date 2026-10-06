@@ -1,0 +1,76 @@
+setname: "LHCB_WPWM_5P02TEV_MUON"
+
+version: 1
+version_comment: "First implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/2509.18817"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/2972386"
+hepdata:
+  url: "https://www.hepdata.net/record/ins2972386"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY CC"
+  experiment: "LHCb"
+
+implemented_observables:
+- observable_name: "DIF_WP"
+  process_type: "DY_CC_PT"
+  tables: ["+"] 
+  ndata: 12 
+  observable:
+    description: r"differential cross section $d\sigma/dp_T$ for $W^+$"
+    label: r"$d\sigma / dp_T$"
+    units: "[pb/GeV]"
+  kinematics:
+    file: kinematics_wp.yaml
+    variables:
+      pT: {description: "Muon transverse momentum", label: "$p_T$", units: "GeV"}
+      m_W2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+  kinematic_coverage: [pT, m_W2, sqrts]
+  data_central: data_wp.yaml
+  data_uncertainties:
+    - uncertainties_wp.yaml
+
+  theory:
+    FK_tables: 
+    - - LHCB_WPWM_5P02TEV_WP # placeholder names
+      - LHCB_WPWM_5P02TEV_WM
+
+  plotting:
+    dataset_label: r"LHCb $W^+ \to \mu^+\nu$ 5.02 TeV"
+    plot_x: pT
+    y_label: r'$d\sigma/dp_T$ (pb/GeV)'
+
+- observable_name: "DIF_WM" 
+  process_type: "DY_CC_PT" 
+  tables: ["-"] 
+  ndata: 12 
+  observable:
+    description: r"differential cross section $d\sigma/dp_T$ for $W^-$"
+    label: r"$d\sigma / dp_T$"
+    units: "[pb/GeV]" 
+  kinematics:
+    file: kinematics_wm.yaml
+    variables:
+      pT: {description: "Muon transverse momentum", label: "$p_T$", units: "GeV"}
+      m_W2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+  kinematic_coverage: [pT, m_W2, sqrts]
+  data_central: data_wm.yaml
+  data_uncertainties:
+    - uncertainties_wm.yaml
+  
+  theory:
+    FK_tables: 
+    - - LHCB_WPWM_5P02TEV_WP # placeholder names
+      - LHCB_WPWM_5P02TEV_WM
+
+  plotting:
+    dataset_label: r"LHCb $W^- \to \mu^-\nu$ 5.02 TeV"
+    plot_x: pT
+    y_label: r'$d\sigma/dp_T$ (pb/GeV)'
