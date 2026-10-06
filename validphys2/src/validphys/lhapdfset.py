@@ -1,23 +1,24 @@
 """
-    Module containing an LHAPDF class compatible with validphys
-    using the official lhapdf python interface.
+Module containing an LHAPDF class compatible with validphys
+using the official lhapdf python interface.
 
-    The ``.members`` and ``.central_member`` of the ``LHAPDFSet`` are
-    LHAPDF objects (the typical output from ``mkPDFs``) and can be used normally.
+The ``.members`` and ``.central_member`` of the ``LHAPDFSet`` are
+LHAPDF objects (the typical output from ``mkPDFs``) and can be used normally.
 
-    Examples
-    --------
-    >>> from validphys.lhapdfset import LHAPDFSet
-    >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", "replicas")
-    >>> len(pdf.members)
-    101
-    >>> alphas = pdf.central_member.alphasQ(91.19)
-    >>> isinstance(alphas, float)
-    True
-    >>> values = pdf.members[0].xfxQ2(0.5, 15625)
-    >>> isinstance(values, dict)
-    True
+Examples
+--------
+>>> from validphys.lhapdfset import LHAPDFSet
+>>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", "replicas")
+>>> len(pdf.members)
+101
+>>> alphas = pdf.central_member.alphasQ(91.19)
+>>> isinstance(alphas, float)
+True
+>>> values = pdf.members[0].xfxQ2(0.5, 15625)
+>>> isinstance(values, dict)
+True
 """
+
 import logging
 
 import numpy as np
@@ -102,8 +103,7 @@ class LHAPDFSet:
         >>> flavs[4] = 21
         >>> results = pdf.grid_values(flavs, xgrid, qgrid)
         """
-        # Create an array of x and q of equal length for LHAPDF
-        xarr, qarr = (g.ravel() for g in np.meshgrid(xgrid, qgrid))
+        xarr, qarr = (g.ravel() for g in np.meshgrid(xgrid, qgrid, indexing="ij"))
         # Ask LHAPDF for the values and swap the flavours and xgrid-qgrid axes
         raw = np.array([member.xfxQ(flavors, xarr, qarr) for member in self.members]).swapaxes(1, 2)
         # Unroll the xgrid-qgrid axes
