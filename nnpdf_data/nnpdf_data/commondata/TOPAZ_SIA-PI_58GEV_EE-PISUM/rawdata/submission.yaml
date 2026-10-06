@@ -1,0 +1,61 @@
+---
+comment: |
+  KEK-TRISTAN. TOPAZ Collaboration. Measurement of inclusive production spectra of the stable particles.
+dateupdated: 25/03/1993 00:00:00
+modifications:
+- {action: Encoded, date: 25 MAR 1993, who: VVE}
+record_ids:
+- {id: 381900, type: inspire}
+- {id: 1746, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Errors include both statistical and systematic errors.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X]
+- name: observables
+  values: [D2SIG/DLN1/X]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [58.0]
+location: Data from T 1
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  Errors include both statistical and systematic errors.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X, E+ E- --> PI- X, E+ E-
+      --> PI+ X, E+ E- --> P X]
+- name: observables
+  values: [D2SIG/DLN1/X]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [58.0]
+location: Data from T 3
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  Statistical errors only.
+keywords:
+- name: reactions
+  values: [E+ E- --> K0 X, E+ E- --> KBAR0 X]
+- name: observables
+  values: [D2SIG/DLN1/X]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [58.0]
+location: Data from T 3
+name: Table 3
+

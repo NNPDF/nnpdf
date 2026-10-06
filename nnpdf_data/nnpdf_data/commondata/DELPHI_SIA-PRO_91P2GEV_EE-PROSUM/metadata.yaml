@@ -1,0 +1,87 @@
+setname: 'DELPHI_SIA-PRO_91P2GEV_EE-PROSUM'
+
+nnpdf_metadata:
+  nnpdf31_process: "SIA-PRO"
+  experiment: "DELPHI"
+
+arXiv:
+  url: "N/A"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/473409"
+hepdata:
+  url: "https://www.hepdata.net/record/ins473409"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+
+- observable: {description: "normalized x-sec differential wrt $p_h$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: '$$'}
+  observable_name: PH-INC
+  process_type: SIA_PH
+  ndata: 23
+  tables: [22]
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics_q.yaml
+  data_central: data_q.yaml
+  data_uncertainties:
+  - uncertainties_q.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'DELPHI SIA PRO- + PRO+ : $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+    x_scale: log
+    plot_x: ph
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
+
+- observable: {description: "normalized x-sec differential wrt $p_h$ (UDS tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}\Big|_{uds}$', units: '$$'}
+  observable_name: PH-UDS
+  process_type: SIA_PH
+  ndata: 23
+  tables: [38]
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics_uds.yaml
+  data_central: data_uds.yaml
+  data_uncertainties:
+  - uncertainties_uds.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'DELPHI SIA PRO- + PRO+ (UDS tagged): $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}\Big|_{uds}$'
+    x_scale: log
+    plot_x: ph
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}\Big|_{uds}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'
+
+- observable: {description: "normalized x-sec differential wrt $p_h$ (B tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}\Big|_{b}$', units: '$$'}
+  observable_name: PH-B
+  process_type: SIA_PH
+  ndata: 23
+  tables: [30]
+  kinematics:
+    variables:
+      ph: {description: "hadron momentum", label: '$p_h$', units: ''}
+    file: kinematics_b.yaml
+  data_central: data_b.yaml
+  data_uncertainties:
+  - uncertainties_b.yaml
+  kinematic_coverage: [ph]
+  plotting:
+    dataset_label: 'DELPHI SIA PRO- + PRO+ (B tagged): $\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}\Big|_{b}$'
+    x_scale: log
+    plot_x: ph
+    y_label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}\Big|_{b}$'
+  # theory:
+  #   FK_tables:
+  #   - - 
+  #   operation: 'null'

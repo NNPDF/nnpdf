@@ -1,0 +1,75 @@
+dependent_variables:
+- header: {name: D(SIG)/DP(P=3), units: NB/GEV}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '22.0'}
+  - {name: SQRT(S), units: GeV, value: '22.0'}
+  values:
+  - errors:
+    - {symerror: 0.44}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 6.85
+  - errors:
+    - {symerror: 0.35}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 5.83
+  - errors:
+    - {symerror: 0.28}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 4.74
+  - errors:
+    - {symerror: 0.26}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 4.15
+  - errors:
+    - {symerror: 0.22}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 3.26
+  - errors:
+    - {symerror: 0.19}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 2.62
+  - errors:
+    - {symerror: 0.25}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 2.01
+  - errors:
+    - {symerror: 0.15}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 1.1
+  - errors:
+    - {symerror: 0.09}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 0.83
+  - errors:
+    - {symerror: 0.07}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 0.53
+  - errors:
+    - {symerror: 0.04}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 0.18
+  - errors:
+    - {symerror: 0.018}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 0.065
+  - errors:
+    - {symerror: 0.006}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 6.3%}
+    value: 0.02
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {high: 0.4, low: 0.3}
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+  - {high: 0.7, low: 0.6}
+  - {high: 0.8, low: 0.7}
+  - {high: 1.0, low: 0.8}
+  - {high: 1.2, low: 1.0}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.0, low: 1.6}
+  - {high: 2.6, low: 2.0}
+  - {high: 3.8, low: 3.0}
+  - {high: 4.6, low: 3.8, value: 4.1}
+  - {high: 10.0, low: 4.6, value: 6.0}

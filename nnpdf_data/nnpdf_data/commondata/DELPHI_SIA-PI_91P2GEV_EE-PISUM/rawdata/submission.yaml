@@ -1,0 +1,652 @@
+---
+comment: |
+  CERN-LEP. Measurement of the multiplicities and differential production cross sections for charged pions and kaons, and proton/antiprotons in Z0--& gt;Q-QBAR, Z0--& gt;B-BBAR and Z0--& gt;(U-UBAR,-DDBAR AND S-SBAR) events separately. The experiment uses a RICH detector for particle identification. The data come from a sample of 1.4 million hadronic Z0 decay events taken during the 1994 LEP running period. B-tagging uses a topological lifetime method. Data are given separately for identified kaons and protons and also combined as & apos;Heavy Particles& apos;.
+dateupdated: 26/11/1998 00:00:00
+modifications:
+- {action: Encoded, date: 26 Nov 1998, who: Mike Whalley}
+record_ids:
+- {id: 473409, type: inspire}
+- {id: 1958, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Mean particle multiplicities for Z0-->Q-QBAR events. The second systematic (DSYS) error is due to the extrapolation of the differential distributions to the full kinematic range.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X,
+    E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Exclusive, E+ E- Scattering, Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 3
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  Mean particle multiplicities for Z0-->B-BBAR events. The second systematic (DSYS) error is due to the extrapolation of the differential distributions to the full kinematic range.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X,
+    E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Exclusive, E+ E- Scattering, Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 3
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  Mean particle multiplicities for Z0-->(U-UBAR,D-DBAR,S-SBAR) events. The second systematic (DSYS) error is due to the extrapolation of the differential distributions to the full kinematic range.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X,
+    E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Exclusive, E+ E- Scattering, Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 3
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: |
+  Normalised PI+- production rates in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 10,F 7
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: |
+  Normalised K+- production rates in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 11,F 7
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: |
+  Normalised P PBAR production rates in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 12,F 7
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: |
+  Normalised Heavy Particle (P and K) production rates in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X, E+ E- --> P X, E+ E-
+      --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 13,F 8
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: |
+  Normalised PI+- production rates in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 14,F 7
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: |
+  Normalised K+- production rates in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 15,F 7
+name: Table 9
+
+---
+data_file: Table10.yaml
+description: |
+  Normalised P PBAR production rates in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 16,F 7
+name: Table 10
+
+---
+data_file: Table11.yaml
+description: |
+  Normalised Heavy Particle (P and K) production rates in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X, E+ E- --> P X, E+ E-
+      --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 17,F 8
+name: Table 11
+
+---
+data_file: Table12.yaml
+description: |
+  Normalised PI+- production rates in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 18,F 7
+name: Table 12
+
+---
+data_file: Table13.yaml
+description: |
+  Normalised K+- production rates in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 19,F 7
+name: Table 13
+
+---
+data_file: Table14.yaml
+description: |
+  Normalised P PBAR production rates in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 20,F 7
+name: Table 14
+
+---
+data_file: Table15.yaml
+description: |
+  Normalised Heavy Particle (K and P) production rates in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> PBAR X, E+ E- --> P X, E+ E-
+      --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 21,F 8
+name: Table 15
+
+---
+data_file: Table16.yaml
+description: |
+  Differential cross section for charged particles in Z0 -->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 22,F 9
+name: Table 16
+
+---
+data_file: Table17.yaml
+description: |
+  Differential cross section for charged particles in Z0 -->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 22,F 10
+name: Table 17
+
+---
+data_file: Table18.yaml
+description: |
+  Differential cross section for PI+- in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 23,F 9
+name: Table 18
+
+---
+data_file: Table19.yaml
+description: |
+  Differential cross section for PI+- in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 23,F 10
+name: Table 19
+
+---
+data_file: Table20.yaml
+description: |
+  Differential cross section for K+- in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 24,F 9
+name: Table 20
+
+---
+data_file: Table21.yaml
+description: |
+  Differential cross section for K+- in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 24,F 10
+name: Table 21
+
+---
+data_file: Table22.yaml
+description: |
+  Differential cross section for P PBAR in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 25,F 9
+name: Table 22
+
+---
+data_file: Table23.yaml
+description: |
+  Differential cross section for P PBAR in Z0-->Q-QBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 25
+name: Table 23
+
+---
+data_file: Table24.yaml
+description: |
+  Differential cross section for charged particles in Z0 -->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 26,F 11
+name: Table 24
+
+---
+data_file: Table25.yaml
+description: |
+  Differential cross section for charged particles in Z0 -->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 26,F 10
+name: Table 25
+
+---
+data_file: Table26.yaml
+description: |
+  Differential cross section for PI+- in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 27,F 9
+name: Table 26
+
+---
+data_file: Table27.yaml
+description: |
+  Differential cross section for PI+- in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 27,F 10
+name: Table 27
+
+---
+data_file: Table28.yaml
+description: |
+  Differential cross section for K+- in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 28,F 9
+name: Table 28
+
+---
+data_file: Table29.yaml
+description: |
+  Differential cross section for K+- in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 28,F 10
+name: Table 29
+
+---
+data_file: Table30.yaml
+description: |
+  Differential cross section for P PBAR in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 29,F 9
+name: Table 30
+
+---
+data_file: Table31.yaml
+description: |
+  Differential cross section for P PBAR in Z0-->B-BBAR events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 29,F 10
+name: Table 31
+
+---
+data_file: Table32.yaml
+description: |
+  Differential cross section for charged particles in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 30,F 9
+name: Table 32
+
+---
+data_file: Table33.yaml
+description: |
+  Differential cross section for charged particles in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> CHARGED X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 30,F 10
+name: Table 33
+
+---
+data_file: Table34.yaml
+description: |
+  Differential cross section for PI+- in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 31,F 9
+name: Table 34
+
+---
+data_file: Table35.yaml
+description: |
+  Differential cross section for PI+- in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 31,F 10
+name: Table 35
+
+---
+data_file: Table36.yaml
+description: |
+  Differential cross section for K+- in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 32,F 9
+name: Table 36
+
+---
+data_file: Table37.yaml
+description: |
+  Differential cross section for K+- in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 32,F 10
+name: Table 37
+
+---
+data_file: Table38.yaml
+description: |
+  Differential cross section for P PBAR in Z0-->(U-UBAR,D-DBAR,S-SBAR) events.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DP]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 33,F 9
+name: Table 38
+
+---
+data_file: Table39.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X, E+ E- --> Z0]
+- name: observables
+  values: [DN/DLN1/X]
+- name: phrases
+  values: [Inclusive, Exclusive, Single Differential Distribution, E+ E- Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 33,F 10 CT = Differential cross section for P PBAR in Z0->(U-UBAR,D-DBAR,S-SBAR)
+  events
+name: Table 39
+

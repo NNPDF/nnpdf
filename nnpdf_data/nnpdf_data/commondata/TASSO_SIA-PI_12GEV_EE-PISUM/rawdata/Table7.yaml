@@ -1,0 +1,61 @@
+dependent_variables:
+- header: {name: D(SIG)/DP(P=3), units: NB/GEV}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  values:
+  - errors:
+    - {symerror: 0.031}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.097
+  - errors:
+    - {symerror: 0.039}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.129
+  - errors:
+    - {symerror: 0.027}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.07
+- header: {name: (S/BETA)*D(SIG)/DX, units: MUB/GEV**2}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  values:
+  - errors:
+    - {symerror: 1.5}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 4.6
+  - errors:
+    - {symerror: 1.2}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 3.9
+  - errors:
+    - {symerror: 0.5}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 1.31
+- header: {name: (E(P=3)/(4*PI*P(P=3)**2))*D(SIG)/DP(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  values:
+  - errors:
+    - {symerror: 0.008}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.023
+  - errors:
+    - {symerror: 0.005}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.018
+  - errors:
+    - {symerror: 0.0019}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.0049
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {value: 0.6}
+  - {value: 0.8}
+  - {value: 1.665}
