@@ -173,7 +173,7 @@ def base_layer_selector(layer_name, **kwargs):
 
     Parameters
     ----------
-        `layer_name
+        `layer_name`
             str with the name of the layer
         `**kwargs`
             extra optional arguments to pass to the layer (beyond their defaults)

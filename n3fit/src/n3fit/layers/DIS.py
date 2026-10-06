@@ -6,20 +6,22 @@
     such that is easier to optimize or modify.
 
     Comment on the branching based on the number of replicas:
-        This is purely for performance, masking the PDF is more efficient than padding the fk table
-        for one replica, and so is tensordot over einsum.
+    This is purely for performance, masking the PDF is more efficient than padding the fk table
+    for one replica, and so is tensordot over einsum.
 
-        Some timings done on snellius using tensorflow 2.15.0 and varying these 2 factors:
-            | CPU\GPU | einsum | tensordot |
-            | -- | -- | -- |
-            | mask pdf | -  | 92 \ 65 |
-            |mask fk | 330 \ 53 \  | 177 \ 53 |
+    Some timings done on snellius using tensorflow 2.15.0 and varying these 2 factors::
 
-            These timings are all for one replica.
+     CPU\GPU | einsum | tensordot |
+     | -- | -- | -- |
+     | mask pdf | -  | 92 \ 65 |
+     |mask fk | 330 \ 53 \  | 177 \ 53 |
 
-            Crucially, `einsum` is a requirement of the multireplica case, while `tensordot` gives a benefit of a factor of 2x for the single replica case.
-            Since this branching is required anyhow,
-             by masking the PDF for 1 replica instead of padding the fktable we get an extra factor of x2
+    These timings are all for one replica.
+
+    Crucially, ``einsum`` is a requirement of the multireplica case, while ``tensordot`` gives a benefit of a factor of 2x for the single replica case.
+    Since this branching is required anyhow,
+    by masking the PDF for 1 replica instead of padding the fktable we get an extra factor of x2
+
 """
 
 import numpy as np

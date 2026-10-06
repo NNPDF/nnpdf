@@ -86,11 +86,14 @@ class LHAPDFSet:
     def grid_values(self, flavors: np.ndarray, xgrid: np.ndarray, qgrid: np.ndarray):
         """Returns the PDF values for every member for the required
         flavours, points in x and pointx in q
-        The return shape is
+        The return shape is::
+
             (members, flavors, xgrid, qgrid)
+
         Return
         ------
-            ndarray of shape (members, flavors, xgrid, qgrid)
+        ndarray of shape (members, flavors, xgrid, qgrid)
+
         Examples
         --------
         >>> import numpy as np

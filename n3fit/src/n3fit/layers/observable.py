@@ -60,24 +60,25 @@ class Observable(MetaLayer, ABC):
     """
     This class is the parent of the DIS and DY convolutions.
     All backend-dependent code necessary for the convolutions
-                                is (must be) concentrated here
+    is (and must be) concentrated here
 
     The methods gen_mask and call must be overriden by the observables
     where
-        - gen_mask: it is called by the initializer and generates the mask between
+
+    - gen_mask: it is called by the initializer and generates the mask between
                     fktables and pdfs
-        - call: this is what does the actual operation
+    - call: this is what does the actual operation
 
     Parameters
     ----------
-        fktable_data: list[validphys.coredata.FKTableData]
-            list of FK which define basis and xgrid for the fktables in the list
-        fktable_arr: list
-            list of fktables for this observable
-        operation_name: str
-            string defining the name of the operation to be applied to the fktables
-        nfl: int
-            number of flavours in the pdf (default:14)
+    fktable_data: list[validphys.coredata.FKTableData]
+        list of FK which define basis and xgrid for the fktables in the list
+    fktable_arr: list
+        list of fktables for this observable
+    operation_name: str
+        string defining the name of the operation to be applied to the fktables
+    nfl: int
+        number of flavours in the pdf (default:14)
     """
 
     def __init__(

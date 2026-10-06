@@ -112,13 +112,14 @@ def replica_luxseed(replica, luxseed):
 
 def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cuts, genrep=True):
     """Generates the ``mcseed`` for a group of datasets. This is done by hashing the names
-      of the datasets in the group and adding it to the ``replica_mcseed`
+    of the datasets in the group and adding it to the ``replica_mcseed``
+
     Parameters
-    ---------
-    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`nnpdf_data.coredata.CommonData`]
+    ----------
+    groups_dataset_inputs_loaded_cd_with_cuts : list[:py:class:`nnpdf_data.coredata.CommonData`]
         List of CommonData objects which stores information about systematic errors,
         their treatment and description, for each dataset.
-    replica_mcseed: int
+    replica_mcseed : int
     """
     if not genrep:
         return None

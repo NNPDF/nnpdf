@@ -158,6 +158,7 @@ Contents
    data/index
    theory/index
    figuresofmerit/index
+   api/index
    releases
    ci/index
    serverconf/index
