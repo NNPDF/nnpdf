@@ -17,6 +17,7 @@ import numpy as np
 import tensorflow as tf
 
 from n3fit import model_gen
+from n3fit.bayesian_settings import bayesian_parameters
 from n3fit.backends.keras_backend import callbacks
 from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, clear_backend_state
 from n3fit.backends import operations as op
@@ -1126,6 +1127,8 @@ class ModelTrainer:
         # when k-folding, these are the same for all folds
         positivity_dict = params.get("positivity", {})
         integrability_dict = params.get("integrability", {})
+        # Bayesian options: parameters::bayesian (or, for older runcards, directly under parameters)
+        bayes = bayesian_parameters(params)
         # Function-space repulsion across replicas (repulsive ensemble).
         # None / missing  -> ordinary (jointly trained) deep ensemble.
         self._repulsion_params = params.get("repulsion", None)
@@ -1179,16 +1182,16 @@ class ModelTrainer:
                 dropout_rate=params["dropout"],
                 regularizer=params.get("regularizer"),
                 regularizer_args=params.get("regularizer_args"),
-                # NEW: BNN-specific parameters
-                prior_prec=params.get('prior_prec'),
-                std_init=params.get('std_init', None),
-                dropout_rate_bayesian=params.get('bayes_dropout', 0.0),
-                bayesian_bias=params.get('bayesian_bias', False),
-                bayesian_flow=params.get('bayesian_flow', False),
-                flow_n_couplings=params.get('flow_n_couplings', 3),
-                flow_hidden_units=params.get('flow_hidden_units', 24),
-                rank=params.get('rank', 4),
-                u_init=params.get('u_init', 1e-4),
+                # BNN-specific parameters (parameters::bayesian, see n3fit.bayesian_settings)
+                prior_prec=bayes.get('prior_prec'),
+                std_init=bayes.get('std_init', None),
+                dropout_rate_bayesian=bayes.get('bayes_dropout', 0.0),
+                bayesian_bias=bayes.get('bayesian_bias', False),
+                bayesian_flow=bayes.get('bayesian_flow', False),
+                flow_n_couplings=bayes.get('flow_n_couplings', 3),
+                flow_hidden_units=bayes.get('flow_hidden_units', 24),
+                rank=bayes.get('rank', 4),
+                u_init=bayes.get('u_init', 1e-4),
             )
             replicas_settings.append(tmp)
 
@@ -1216,7 +1219,7 @@ class ModelTrainer:
                 scaler=self._scaler,
                 photons=photons,
                 training=self.training_model,
-                bayesian_preproc=params.get("bayesian_preproc", False),
+                bayesian_preproc=bayes.get("bayesian_preproc", False),
             )
 
             vb_layers = get_vb_layers(pdf_model)
@@ -1283,6 +1286,7 @@ class ModelTrainer:
                 stopping_patience=stopping_epochs,
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
+                posterior_positivity_samples=bayes["per_replica"]["posterior_stopping_samples"],
             )
 
             # Compile each of the models with the right parameters

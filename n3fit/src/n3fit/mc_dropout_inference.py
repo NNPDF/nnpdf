@@ -78,6 +78,7 @@ def _load_architecture(runcard_path):
     params = rc["parameters"]
     basis  = rc["fitting"]["basis"]
     fitbasis = rc["fitting"]["fitbasis"]
+    from n3fit.bayesian_settings import bayesian_parameters
 
     return dict(
         nodes          = params["nodes_per_layer"],        
@@ -85,7 +86,7 @@ def _load_architecture(runcard_path):
         initializer    = params["initializer"],            
         architecture   = params["layer_type"],             
         dropout_rate   = params.get("dropout", 0.0), 
-        prior_prec     = params.get("prior_prec", 0.1),     
+        prior_prec     = bayesian_parameters(params).get("prior_prec", 0.1),
         flav_info      = basis,
         fitbasis       = fitbasis,                         
     )

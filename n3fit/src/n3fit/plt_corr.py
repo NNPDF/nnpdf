@@ -221,13 +221,13 @@ def single_replica_matrix(w):
     return M
 
 
-def fig_single_replica(mats, blocks, replica, out):
+def fig_single_replica(mats, blocks, replica, out, ncols=None):
     n = len(mats)
-    fig, axs = plt.subplots(1, n, figsize=(5.2 * n + 0.8, 5.2), squeeze=False)
+    fig, axs = _panel_grid(n, ncols, 5.2, 5.2)
     cmap = plt.get_cmap("RdBu_r").copy()
     cmap.set_bad("#d9d9d9")
     vmax = np.nanpercentile(np.concatenate([np.abs(m[np.isfinite(m)]) for m in mats.values()]), 99)
-    for ax, (name, M) in zip(axs[0], mats.items()):
+    for ax, (name, M) in zip(axs, mats.items()):
         b = blocks[name]
         edges = np.cumsum([0] + [k for _, k in b])
         im = ax.imshow(M, cmap=cmap, vmin=-vmax, vmax=vmax, interpolation="nearest")
@@ -240,10 +240,21 @@ def fig_single_replica(mats, blocks, replica, out):
         ax.set_title(f"{name}\nreplica {replica}, p={M.shape[0]}", fontsize=9)
     fig.suptitle(r"single-replica structure map $z_i z_j$, $z=(w-\bar{w})/\sigma_w$ "
                  "(NOT an across-replica correlation -- see docstring)", fontsize=8.5, y=1.02)
-    fig.colorbar(im, ax=axs.ravel().tolist(), label=r"$z_i z_j$ (diagonal omitted; colour clipped at 99th pct)",
+    fig.colorbar(im, ax=[a for a in axs if a.get_visible()], label=r"$z_i z_j$ (diagonal omitted; colour clipped at 99th pct)",
                 shrink=0.8)
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
+
+
+def _panel_grid(n, ncols, width, height):
+    """n panels in rows of ncols (default: one row); unused axes are hidden"""
+    ncols = min(ncols or n, n)
+    nrows = -(-n // ncols)
+    fig, axs = plt.subplots(nrows, ncols, figsize=(width * ncols + 0.8, height * nrows), squeeze=False)
+    flat = axs.ravel()
+    for ax in flat[n:]:
+        ax.set_visible(False)
+    return fig, flat
 
 
 # ------------------------------------------------------------------------ statistics
@@ -266,7 +277,9 @@ def chain_size(name, results):
         return 1
     with open(path) as f:
         cfg = yaml.safe_load(f)
-    return int((cfg.get("parameters") or {}).get("n_bnn_samples", cfg.get("n_bnn_samples", 1)))
+    params = cfg.get("parameters") or {}
+    bayes = params.get("bayesian") or {}  # parameters::bayesian, or older flat runcards
+    return int(bayes.get("n_bnn_samples", params.get("n_bnn_samples", cfg.get("n_bnn_samples", 1))))
 
 
 def effective_n(W, blocks):
@@ -326,12 +339,12 @@ def block_matrix(rho, blocks):
 
 
 # --------------------------------------------------------------------------- plotting
-def fig_heatmaps(data, out):
+def fig_heatmaps(data, out, ncols=None):
     n = len(data)
-    fig, axs = plt.subplots(1, n, figsize=(5.2 * n + 0.8, 5.2), squeeze=False)
+    fig, axs = _panel_grid(n, ncols, 5.2, 5.2)
     cmap = plt.get_cmap("RdBu_r").copy()
     cmap.set_bad("#d9d9d9")
-    for ax, (name, d) in zip(axs[0], data.items()):
+    for ax, (name, d) in zip(axs, data.items()):
         im = ax.imshow(d["rho"], cmap=cmap, vmin=-1, vmax=1, interpolation="nearest")
         for e in d["edges"][1:-1]:
             ax.axhline(e - 0.5, c="k", lw=0.5)
@@ -340,7 +353,7 @@ def fig_heatmaps(data, out):
         ax.set_xticks(mid, [b for b, _ in d["blocks"]], rotation=45, ha="right", fontsize=7)
         ax.set_yticks(mid, [b for b, _ in d["blocks"]], fontsize=7)
         ax.set_title(f"{name}\nN={d['N']}, p_var={d['stats']['p_var']}/{d['rho'].shape[0]}, min N_eff={d['neff_min']}", fontsize=9)
-    fig.colorbar(im, ax=axs.ravel().tolist(), label=r"$\rho$ (grey = constant across replicas)", shrink=0.8)
+    fig.colorbar(im, ax=[a for a in axs if a.get_visible()], label=r"$\rho$ (grey = constant across replicas)", shrink=0.8)
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
@@ -385,13 +398,13 @@ def fig_spectrum(data, out):
     plt.close(fig)
 
 
-def fig_blocks(data, out):
+def fig_blocks(data, out, ncols=None):
     n = len(data)
-    fig, axs = plt.subplots(1, n, figsize=(3.6 * n + 0.8, 3.6), squeeze=False)
+    fig, axs = _panel_grid(n, ncols, 3.6, 3.6)
     cmap = plt.get_cmap("viridis").copy()
     cmap.set_bad("#d9d9d9")
     vmax = max(np.nanmax(d["blockM"]) if np.isfinite(d["blockM"]).any() else 0 for d in data.values())
-    for ax, (name, d) in zip(axs[0], data.items()):
+    for ax, (name, d) in zip(axs, data.items()):
         M = d["blockM"]
         im = ax.imshow(M, cmap=cmap, vmin=0, vmax=vmax)
         labels = [b for b, _ in d["blocks"]]
@@ -402,7 +415,7 @@ def fig_blocks(data, out):
                 if np.isfinite(M[i, j]):
                     ax.text(j, i, f"{M[i, j]:.2f}", ha="center", va="center", fontsize=7, color="w")
         ax.set_title(name, fontsize=9)
-    fig.colorbar(im, ax=axs.ravel().tolist(), label=r"mean $|\rho|$", shrink=0.8)
+    fig.colorbar(im, ax=[a for a in axs if a.get_visible()], label=r"mean $|\rho|$", shrink=0.8)
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
@@ -454,6 +467,9 @@ def main(argv=None):
                          "skipped. Needs all replicas (no --n-replicas)")
     ap.add_argument("--reference", default=None, help="runcard to subtract in the difference heatmaps")
     ap.add_argument("--reload", action="store_true", help="ignore cached weight matrices")
+    ap.add_argument("--ncols", type=int, default=None,
+                    help="panels per row in the per-fit figures (heatmaps, blocks, single replica); "
+                         "default: all in one row. E.g. 6 fits with --ncols 3 give two rows of three")
     args = ap.parse_args(argv)
 
     os.makedirs(args.out_dir, exist_ok=True)
@@ -516,17 +532,18 @@ def main(argv=None):
                 mats[name], blk[name] = single_replica_matrix(w), b
         if mats:
             fig_single_replica(mats, blk, args.single_replica,
-                               os.path.join(args.out_dir, f"fig_single_replica_{args.single_replica}.png"))
+                               os.path.join(args.out_dir, f"fig_single_replica_{args.single_replica}.png"),
+                               args.ncols)
         else:
             print("--single-replica: no runcard had that replica; figure skipped")
 
     if not data:
         sys.exit("no runcard had saved weights; nothing to do")
 
-    fig_heatmaps(data, os.path.join(args.out_dir, "fig_heatmaps.png"))
+    fig_heatmaps(data, os.path.join(args.out_dir, "fig_heatmaps.png"), args.ncols)
     fig_hist(data, os.path.join(args.out_dir, "fig_offdiag_hist.png"))
     fig_spectrum(data, os.path.join(args.out_dir, "fig_spectrum.png"))
-    fig_blocks(data, os.path.join(args.out_dir, "fig_layer_blocks.png"))
+    fig_blocks(data, os.path.join(args.out_dir, "fig_layer_blocks.png"), args.ncols)
 
     ref = args.reference
     if ref is not None and ref not in data:

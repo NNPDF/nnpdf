@@ -48,8 +48,13 @@ from n3fit.backends.keras_backend.base_layers import CorrelatedLowRankVBDense, V
 from n3fit.layers.preprocessing import BayesianPreprocessing
 from n3fit.io.writer import XGRID
 from n3fit.backends import MetaModel
+import contextlib
+import logging
+
 import tensorflow as tf
 import numpy as np
+
+log = logging.getLogger(__name__)
 
 VB_LAYER_CLASSES = (VBDense, CorrelatedLowRankVBDense)
 
@@ -127,6 +132,202 @@ def copy_vb_posterior(parent_vb, child_vb):
         ):
             continue
         child_w.assign(parent_w)
+
+def noise_variables(vb_layer):
+    """The frozen per-sample noise buffers of a variational layer (what makes two
+    pseudo-replicas of the same trained BNN different)."""
+    out = [vb_layer.random]
+    if getattr(vb_layer, "random_eps", None) is not None:
+        out.append(vb_layer.random_eps)
+    if vb_layer.bayesian_bias:
+        out.append(vb_layer.random_b)
+    return out
+
+
+def draw_noise(vb_layers, rng):
+    """One posterior draw: standard-normal values for every noise buffer"""
+    return [[rng.standard_normal(v.shape) for v in noise_variables(l)] for l in vb_layers]
+
+
+def zero_noise(vb_layers):
+    """Noise of the posterior mean (MAP for Gaussian layers; flow layers map it through
+    the flow): every weight at its mean."""
+    return [[np.zeros(v.shape) for v in noise_variables(l)] for l in vb_layers]
+
+
+def set_noise(vb_layers, noise):
+    for layer, values in zip(vb_layers, noise):
+        for var, value in zip(noise_variables(layer), values):
+            var.assign(tf.cast(value, var.dtype))
+
+
+def get_noise(vb_layers):
+    return [[v.numpy() for v in noise_variables(l)] for l in vb_layers]
+
+
+@contextlib.contextmanager
+def frozen_noise_mode(pdf_model, models):
+    """
+    Evaluate ``models`` (built on ``pdf_model``, e.g. the validation model) with the VB
+    layers in eval mode, i.e. with the weights fixed by the frozen noise buffers, instead
+    of LRT. Yields the VB layers so that the caller can ``set_noise`` before each
+    ``compute_losses``. Restores weights, training mode and the training graphs on exit.
+
+    ``MetaModel.compute_losses`` caches a compiled graph and the VB layers pick LRT vs
+    frozen weights at trace time, so an eval-mode graph is kept per model (as
+    ``_eval_compute_losses_function``) and swapped in, to avoid retracing every time.
+    """
+    layers = get_vb_layers(pdf_model)
+    saved = [[w.numpy() for w in layer.weights] for layer in layers]
+    train_fns = [model.compute_losses_function for model in models]
+    preproc = get_bayesian_preprocessing(pdf_model)
+    try:
+        for layer in layers:
+            layer.eval()
+        if preproc is not None:
+            # the eval graph reads the exponents from variables (see set_preproc_exponents)
+            preproc.eval()
+            preproc._fixed_sample = _preproc_exponent_variables(preproc)
+        for model in models:
+            model.compute_losses_function = getattr(model, "_eval_compute_losses_function", None)
+        yield layers
+    finally:
+        for model, train_fn in zip(models, train_fns):
+            model._eval_compute_losses_function = model.compute_losses_function
+            model.compute_losses_function = train_fn
+        for layer, weights in zip(layers, saved):
+            for w, value in zip(layer.weights, weights):
+                w.assign(value)
+            layer.train()
+        if preproc is not None:
+            preproc._fixed_sample = None
+            preproc.train()
+
+
+def _preproc_exponent_variables(preproc):
+    """Variables holding the inference-mode exponents of a ``BayesianPreprocessing`` layer,
+    created once per layer, so that a compiled eval graph follows ``set_preproc_exponents``."""
+    if getattr(preproc, "_exponent_variables", None) is None:
+        alphas, betas = preproc._sample_exponents("float32")
+        preproc._exponent_variables = (
+            tf.Variable(alphas, trainable=False, name="frozen_alphas"),
+            tf.Variable(betas, trainable=False, name="frozen_betas"),
+        )
+    return preproc._exponent_variables
+
+
+def set_preproc_exponents(pdf_model, sample):
+    """Inside ``frozen_noise_mode``: use the frozen preprocessing exponents of ``sample``
+    (drawn now if the sample has not been evaluated yet; its exportgrid then uses the same draw)."""
+    preproc = get_bayesian_preprocessing(pdf_model)
+    if preproc is None:
+        return
+    exponents = get_bayesian_preprocessing(sample).fixed_exponents()
+    for var, value in zip(_preproc_exponent_variables(preproc), exponents):
+        var.assign(tf.cast(value, var.dtype))
+
+
+def _check_no_bayesian_preprocessing(pdf_model):
+    if get_bayesian_preprocessing(pdf_model) is not None:
+        raise NotImplementedError(
+            "Posterior positivity and rejection sampling draw only the VB weights, not the "
+            "Bayesian preprocessing exponents"
+        )
+
+
+def evaluate_samples(model_trainer, stopping_object, pdf_model, sample_models, chi2=True, positivity=True):
+    """
+    Per-sample quantities of the posterior samples, computed with the trainer's own models
+    by loading each sample's frozen noise into ``pdf_model`` in eval mode (``frozen_noise_mode``):
+
+    chi2:       training, validation and experimental chi2 (same data, tr/vl masks and
+                covariance matrices as ``ModelTrainer.evaluate`` for the trained model),
+                returned as ``[tr_chi2s, vl_chi2s, exp_chi2s]``, one entry per sample
+    positivity: the positivity losses from the validation model, i.e. the quantity n3fit's
+                stopping checks against the positivity threshold, as ``{set_name: [loss per sample]}``
+
+    With Bayesian preprocessing, each sample's own frozen exponents are loaded as well.
+
+    Returns ``(chi2s, positivity_losses)``, with None for what was not requested.
+    """
+    validation = stopping_object._validation
+    models = [validation]
+    if chi2:
+        models += [model_trainer.training["model"], model_trainer.experimental["model"]]
+    pos_sets = list(stopping_object._positivity.positivity_sets)
+    pos_losses = {name: [] for name in pos_sets}
+    tr_chi2s, vl_chi2s, exp_chi2s = [], [], []
+    with frozen_noise_mode(pdf_model, models) as layers:
+        for sample in sample_models:
+            set_noise(layers, get_noise(get_vb_layers(sample)))
+            set_preproc_exponents(pdf_model, sample)
+            if chi2:
+                tr_chi2, vl_chi2, exp_chi2 = model_trainer.evaluate(stopping_object)
+                tr_chi2s.append(float(np.atleast_1d(tr_chi2)[0]))
+                vl_chi2s.append(float(np.atleast_1d(vl_chi2)[0]))
+                exp_chi2s.append(float(np.atleast_1d(exp_chi2)[0]))
+            if positivity:
+                vl_losses = validation.compute_losses()
+                for name in pos_sets:
+                    pos_losses[name].append(float(np.atleast_1d(vl_losses[f"{name}_loss"])[0]))
+    return (
+        [tr_chi2s, vl_chi2s, exp_chi2s] if chi2 else None,
+        pos_losses if positivity else None,
+    )
+
+
+def posterior_passes_positivity(stopping_object, noises):
+    """True if n3fit's stopping positivity check (validation model, see
+    ``n3fit.stopping.Positivity``) passes for the trained posterior evaluated at every
+    noise in ``noises`` (e.g. the posterior mean plus fixed draws)."""
+    validation = stopping_object._validation
+    _check_no_bayesian_preprocessing(validation)
+    with frozen_noise_mode(validation, [validation]) as layers:
+        for noise in noises:
+            set_noise(layers, noise)
+            if not np.all(stopping_object._positivity.check_positivity(validation.compute_losses())):
+                return False
+    return True
+
+
+def rejection_sample_noises(stopping_object, pdf_model, n_accept, max_draws, seed=0):
+    """
+    Draw posterior samples and keep those passing n3fit's stopping positivity check, until
+    ``n_accept`` are accepted or ``max_draws`` are drawn. Keeping only the draws that satisfy
+    positivity samples the variational posterior conditioned on the positivity constraint
+    (a prior requirement in NNPDF). Returns the accepted noises and the number of draws.
+    """
+    _check_no_bayesian_preprocessing(pdf_model)
+    rng = np.random.default_rng(seed)
+    validation = stopping_object._validation
+    accepted, draws = [], 0
+    with frozen_noise_mode(pdf_model, [validation]) as layers:
+        while len(accepted) < n_accept and draws < max_draws:
+            noise = draw_noise(layers, rng)
+            set_noise(layers, noise)
+            draws += 1
+            if np.all(stopping_object._positivity.check_positivity(validation.compute_losses())):
+                accepted.append(noise)
+    return accepted, draws
+
+
+def models_from_noises(pdf_model, noises):
+    """Pseudo-replica models at given noise draws, built exactly as
+    ``BNNPredictor.generate_bnn_replica_from_weights`` (noise set last)."""
+    parent_layers = get_vb_layers(pdf_model)
+    replica_models = []
+    for noise in noises:
+        replica = pdf_model.single_replica_generator(0)
+        replica.set_replica_weights(pdf_model.get_replica_weights(0), i_replica=0)
+        child_layers = get_vb_layers(replica)
+        for parent_vb, child_vb in zip(parent_layers, child_layers):
+            copy_vb_posterior(parent_vb, child_vb)
+            child_vb.disable_map()
+        set_noise(child_layers, noise)
+        set_model_eval(replica)
+        replica_models.append(replica)
+    return replica_models
+
 
 def eval_map_model(pdf_model):
     """Evaluate the pdf model at MAP point estimate"""

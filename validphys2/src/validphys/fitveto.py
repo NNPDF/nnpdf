@@ -8,6 +8,8 @@ Current active vetoes:
    ChiSquared - Replicas with ChiSquared > nsigma_discard_chi2*StandardDev + Average
    ArclengthX - Replicas with ArcLengthX > nsigma_discard_arclength*StandardDev + Average
    Integrability - Replicas with IntegrabilityNumbers < integ_threshold
+   Positivity - (optional) Replicas failing a per-replica positivity check, see
+                :py:mod:`validphys.replica_checks`
 """
 
 import json
@@ -58,10 +60,15 @@ def determine_vetoes(
     nsigma_discard_chi2: float,
     nsigma_discard_arclength: float,
     integ_threshold: float,
+    positivity_mask=None,
 ):
     """Assesses whether replica fitinfo passes standard NNPDF vetoes
     Returns a dictionary of vetoes and their passing boolean masks.
     Included in the dictionary is a 'Total' veto.
+
+    If ``positivity_mask`` (one boolean per replica) is given, it is added as a
+    'Positivity' veto before the distribution vetoes, so that the chi2 and arclength
+    averages are computed over replicas passing positivity only.
     """
 
     # Setup distributions to veto upon: Make a dictionary {name: (values, threshold)}, where
@@ -78,6 +85,11 @@ def determine_vetoes(
     convergence_mask = np.array([replica.has_converged for replica in fitinfos], dtype=bool)
     vetoes = {"Convergence check": convergence_mask}
     total_mask = convergence_mask.copy()
+
+    if positivity_mask is not None:
+        positivity_mask = np.asarray(positivity_mask, dtype=bool)
+        vetoes["Positivity"] = positivity_mask
+        total_mask &= positivity_mask
 
     # Integrability veto
     if len(fitinfos[0].integnumbers) == 0:

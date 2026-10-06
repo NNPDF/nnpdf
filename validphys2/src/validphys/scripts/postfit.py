@@ -15,6 +15,7 @@ __authors__ = 'Nathan Hartland, Zahari Kassabov'
 import argparse
 from glob import glob
 import itertools
+import json
 import logging
 import os.path
 import pathlib
@@ -22,14 +23,16 @@ import re
 import shutil
 import sys
 
+import numpy as np
+
 from reportengine import colors
-from validphys import fitdata, fitveto, lhio
+from validphys import fitdata, fitveto, lhio, replica_checks
 from validphys.core import PDF
 from validphys.fitveto import INTEG_THRESHOLD, NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2
 from validphys.lhaindex import paths_prepend
 from validphys.lhapdf_compatibility import make_pdf
 from validphys.loader import Loader
-from validphys.utils import tempfile_cleaner
+from validphys.utils import tempfile_cleaner, yaml_safe
 
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
@@ -74,11 +77,50 @@ class FatalPostfitError(Exception):
     pass
 
 
+def per_replica_positivity(valid_paths, fitname, runcard, postfit_path):
+    """Per-replica positivity mask (see :py:mod:`validphys.replica_checks`).
+
+    Replicas whose ``.json`` was written with a per-replica ``pos_state`` (n3fit run with
+    ``parameters::bayesian::per_replica::positivity: true``) use it directly; for the others
+    the positivity is recomputed from their ``.exportgrid``."""
+    mask = np.zeros(len(valid_paths), dtype=bool)
+    to_compute = []
+    for i, path in enumerate(valid_paths):
+        info = json.loads((pathlib.Path(path) / f"{fitname}.json").read_text(encoding="utf-8"))
+        if info.get(replica_checks.PER_REPLICA_JSON_KEY, False):
+            mask[i] = info["pos_state"] == "POS_PASS"
+        else:
+            to_compute.append(i)
+    log.info(
+        f"Per-replica positivity: {len(valid_paths) - len(to_compute)} replicas checked by n3fit, "
+        f"{len(to_compute)} recomputed from their exportgrid"
+    )
+    if to_compute:
+        passing, losses = replica_checks.replicas_positivity(
+            [valid_paths[i] for i in to_compute], fitname, runcard
+        )
+        mask[to_compute] = passing
+        worst = losses.max(axis=0).sort_values(ascending=False)
+        log.info("Largest positivity loss per set over recomputed replicas:\n%s", worst.to_string())
+        losses.index = [pathlib.Path(valid_paths[i]).name for i in to_compute]
+        losses.insert(0, "passes", passing)
+        losses.to_csv(postfit_path / "positivity_losses.csv")
+    return mask
+
+
 def filter_replicas(
-    postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold
+    postfit_path,
+    nnfit_path,
+    fitname,
+    chi2_threshold,
+    arclength_threshold,
+    integ_threshold,
+    per_replica_checks=False,
+    runcard=None,
 ):
     """Find the paths of all replicas passing the standard NNPDF fit vetoes
-    as defined in fitveto.py. Returns a list of the replica directories that pass."""
+    as defined in fitveto.py. Returns a list of the replica directories that pass.
+    If ``per_replica_checks`` is True, a per-replica positivity veto is added."""
     # This glob defines what is considered a valid replica
     # all the following code uses paths from this glob
     # We sort the paths so that the selection of replicas is deterministic
@@ -100,8 +142,11 @@ def filter_replicas(
                 f"Corrupted replica replica at {path}. "
                 f"Error when loading replica information:\n {e}"
             ) from e
+    positivity_mask = None
+    if per_replica_checks:
+        positivity_mask = per_replica_positivity(valid_paths, fitname, runcard, postfit_path)
     fit_vetoes = fitveto.determine_vetoes(
-        fitinfo, chi2_threshold, arclength_threshold, integ_threshold
+        fitinfo, chi2_threshold, arclength_threshold, integ_threshold, positivity_mask
     )
     fitveto.save_vetoes_info(
         fit_vetoes,
@@ -138,9 +183,18 @@ def _postfit(
     arclength_threshold: float,
     integ_threshold: float,
     at_least_nrep: bool,
+    per_replica_checks: bool = False,
 ):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
+
+    # Per-replica checks: on if requested on the command line or in the fit runcard
+    runcard_path = result_path / "filter.yml"
+    runcard = yaml_safe.load(runcard_path.read_text(encoding="utf-8")) if runcard_path.exists() else {}
+    if replica_checks.postfit_veto_requested(runcard):
+        per_replica_checks = True
+    if per_replica_checks and not runcard:
+        raise PostfitError(f"Per-replica checks need the fit runcard, not found at {runcard_path}")
 
     # Paths
     nnfit_path = result_path / 'nnfit'  # Path of nnfit replica output
@@ -183,8 +237,17 @@ def _postfit(
         log.addHandler(postfitlog)
 
         # Perform postfit selection
+        if per_replica_checks:
+            log.warning("Per-replica positivity checks are on")
         passing_paths = filter_replicas(
-            postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold
+            postfit_path,
+            nnfit_path,
+            fitname,
+            chi2_threshold,
+            arclength_threshold,
+            integ_threshold,
+            per_replica_checks=per_replica_checks,
+            runcard=runcard,
         )
         if len(passing_paths) < nrep:
             raise PostfitError("Number of requested replicas is too large")
@@ -287,6 +350,14 @@ def main():
         help="nrep becomes the minimum number of required replicas. If there are more than nrep "
         "good replicas, all good replicas are written to the postfit folder.",
     )
+    parser.add_argument(
+        '--per-replica-checks',
+        action='store_true',
+        help="Veto replicas failing positivity individually (see validphys.replica_checks). "
+        "Switched on automatically if the fit runcard sets "
+        "parameters::bayesian::per_replica::postfit_veto. "
+        "Use this flag for fits that were run without it.",
+    )
     parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
     args = parser.parse_args()
     if args.debug:
@@ -301,6 +372,7 @@ def main():
             args.arclength_threshold,
             args.integrability_threshold,
             args.at_least_nrep,
+            args.per_replica_checks,
         )
     except PostfitError as e:
         log.error(f"Error in postfit:\n{e}")

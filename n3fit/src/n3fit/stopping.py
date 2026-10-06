@@ -310,6 +310,13 @@ class Stopping:
             maximum value allowed for chi2
         dont_stop: bool
            dont care about early stopping
+        posterior_positivity_samples: int
+           BNN only (``parameters::bayesian::per_replica::posterior_stopping_samples``): if > 0, an epoch can
+           only become the best epoch if the positivity check also passes for the posterior,
+           i.e. with the weights at their posterior mean and at this many fixed posterior
+           draws (see ``n3fit.bnn_wrapper.posterior_passes_positivity``). By default the
+           check sees a single stochastic (LRT) pass of the validation model, so a BNN's
+           POS_PASS only means that one random evaluation passed.
     """
 
     def __init__(
@@ -322,8 +329,17 @@ class Stopping:
         stopping_patience=7000,
         threshold_chi2=10.0,
         dont_stop=False,
+        posterior_positivity_samples=0,
     ):
         self._pdf_model = pdf_model
+        self._posterior_positivity_samples = posterior_positivity_samples
+        self._posterior_noises = None
+        if posterior_positivity_samples:
+            log.info(
+                "Stopping: positivity must also hold at the posterior mean and at %d fixed "
+                "posterior draws for an epoch to become the best one",
+                posterior_positivity_samples,
+            )
 
         # Save the validation object
         self._validation = validation_model
@@ -380,6 +396,23 @@ class Stopping:
         """Returns POS_PASS if positivity passes or veto if it doesn't
         for each replica"""
         return self.positivity_statuses
+
+    def _posterior_positivity(self):
+        """Positivity check at the posterior mean and at fixed posterior draws (BNN only)"""
+        from n3fit.bnn_wrapper import (
+            draw_noise,
+            get_vb_layers,
+            posterior_passes_positivity,
+            zero_noise,
+        )
+
+        if self._posterior_noises is None:
+            layers = get_vb_layers(self._validation)
+            rng = np.random.default_rng(0)
+            self._posterior_noises = [zero_noise(layers)] + [
+                draw_noise(layers, rng) for _ in range(self._posterior_positivity_samples)
+            ]
+        return posterior_passes_positivity(self, self._posterior_noises)
 
     def evaluate_training(self, training_model):
         """Given the training model, evaluates the
@@ -450,6 +483,9 @@ class Stopping:
         passes &= self._positivity(fitstate)
         # Stop replicas that are ok being stopped (because they are finished or otherwise)
         passes &= self._dont_stop_me_now
+        # BNN: positivity must also hold for the posterior, not only for this epoch's draw
+        if self._posterior_positivity_samples and passes.any():
+            passes &= self._posterior_positivity()
 
         self._stopping_degrees += self._counts
 

@@ -264,19 +264,49 @@ def performfit(
             
             if is_bnn:
                 # For BNN: Generate pseudo-replicas using BNNPredictor
-                sampler = parameters.get('sampling_space', str('weight'))
+                sampler = bayes.get('sampling_space', 'weight')
                 from n3fit.bnn_wrapper import BNNPredictor
 
                 log.info(f"Generating {n_bnn_samples} Bayesian pseudo-replicas from BNN {bnn_idx+1}")
                 
                 #bnn_predictor = BNNPredictor(pdf_model=pdf_model, n_bnn_samples=n_bnn_samples)
                 #pdf_models = bnn_predictor.generate_bnn_replica() # prints [<MetaModel name=PDFs, built=True>, <MetaModel name=PDFs, built=True>] for 2 bnn replica
-                bnn_predictor = BNNPredictor(
-                    pdf_model=pdf_model, 
-                    n_bnn_samples=n_bnn_samples,
-                    sampler=sampler
+                use_rejection = per_replica["rejection_sampling"]
+                if use_rejection and sampler != "weight":
+                    log.warning("per_replica::rejection_sampling only supports sampling_space: weight; ignored")
+                    use_rejection = False
+                if use_rejection and stopping_object.positivity_statuses[0] != "POS_PASS":
+                    log.warning("The trained BNN never passed positivity: no rejection sampling")
+                    use_rejection = False
+
+                if use_rejection:
+                    # Keep only posterior draws passing n3fit's positivity check: samples of
+                    # the variational posterior conditioned on the positivity constraint
+                    from n3fit.bnn_wrapper import models_from_noises, rejection_sample_noises
+
+                    max_draws = per_replica["rejection_max_draws"] or 50 * n_bnn_samples
+                    noises, n_draws = rejection_sample_noises(
+                        stopping_object, pdf_model, n_bnn_samples, max_draws, seed=nnseeds[0]
                     )
-                pdf_models = bnn_predictor.pdf_sampler()
+                    log.info(
+                        "Rejection sampling: %d/%d posterior draws pass positivity (acceptance %.4f)",
+                        len(noises), n_draws, len(noises) / max(n_draws, 1),
+                    )
+                    if len(noises) < n_bnn_samples:
+                        log.warning(
+                            "Only %d of %d requested samples accepted within %d draws "
+                            "(per_replica::rejection_max_draws); writing only the accepted ones",
+                            len(noises), n_bnn_samples, max_draws,
+                        )
+                    pdf_models = models_from_noises(pdf_model, noises)
+                else:
+                    bnn_predictor = BNNPredictor(
+                        pdf_model=pdf_model,
+                        n_bnn_samples=n_bnn_samples,
+                        sampler=sampler
+                        )
+                    pdf_models = bnn_predictor.pdf_sampler()
+                n_written = len(pdf_models)
 
                 class BNNStoppingProxy:
                     """
@@ -300,32 +330,102 @@ def performfit(
                     n_samples : int
                         The number of Bayesian pseudo-replicas generated from the model.
                     """
-                    def __init__(self, original_stopping, n_samples):
+                    def __init__(self, original_stopping, n_samples, positivity_statuses=None):
                         self._obj = original_stopping
                         # Replicate the specific lists indexed by [i] in writer.py
                         self.e_best_chi2 = original_stopping.e_best_chi2 * n_samples
-                        self.positivity_statuses = original_stopping.positivity_statuses * n_samples
+                        if positivity_statuses is None:
+                            # status of the trained model, copied to every sample
+                            positivity_statuses = original_stopping.positivity_statuses * n_samples
+                        self.positivity_statuses = positivity_statuses
                         
                     def __getattr__(self, name):
                         # Forward everything else (stop_epoch, chi2exps_json) to the original object
                         return getattr(self._obj, name)
                     
                 #replica_idxs = tuple(range(replica_idxs[0] * bnn_idx, (replica_idxs[0] * bnn_idx) + n_bnn_samples))
-                replica_idxs = tuple(range(bnn_idx * n_bnn_samples, (bnn_idx + 1) * n_bnn_samples))
+                replica_idxs = tuple(range(bnn_idx * n_bnn_samples, bnn_idx * n_bnn_samples + n_written))
 
-                # Expand the inner lists, keeping the outer length at 3
-                # all_chi2s is [tr_list, vl_list, true_list]
-                all_chi2s = [list(chi2_list) * n_bnn_samples for chi2_list in all_chi2s]
+                # all_chi2s is [tr_list, vl_list, true_list]: per sample if requested
+                # (per_replica::chi2), otherwise the trained model's values copied to every sample
+                sample_chi2s = sample_pos_losses = None
+                if per_replica["chi2"] or per_replica["positivity"]:
+                    import numpy as np
 
-                stopping_object = BNNStoppingProxy(stopping_object, n_bnn_samples)
+                    from n3fit.bnn_wrapper import evaluate_samples
+
+                    sample_chi2s, sample_pos_losses = evaluate_samples(
+                        the_model_trainer,
+                        stopping_object,
+                        pdf_model,
+                        pdf_models,
+                        chi2=per_replica["chi2"],
+                        positivity=per_replica["positivity"],
+                    )
+                    if sample_chi2s is not None and n_written:
+                        log.info(
+                            "Per-sample experimental chi2: median %.3f, max %.3f",
+                            np.median(sample_chi2s[2]),
+                            np.max(sample_chi2s[2]),
+                        )
+                if sample_chi2s is None:
+                    sample_chi2s = [list(chi2_list) * n_written for chi2_list in all_chi2s]
+                all_chi2s = sample_chi2s
+
+                positivity_statuses = None
+                if per_replica["positivity"]:
+                    positivity_statuses = per_sample_positivity(
+                        pdf_models, stopping_object.positivity_statuses[0], sample_pos_losses
+                    )
+
+                stopping_object = BNNStoppingProxy(
+                    stopping_object, n_written, positivity_statuses
+                )
                 
             else:
                 pdf_models = pdf_model.split_replicas() # prints [<MetaModel name=PDFs, built=True>] then trians, then prints and trains again for 2nd replica
             
             return replica_idxs, pdf_models, stopping_object, all_chi2s, final_time, log_path
 
-    n_bnn_models = parameters.get('n_bnn_models', 1)
-    n_bnn_samples = parameters.get('n_bnn_samples', 3)
+    # Bayesian options: parameters::bayesian (or, for older runcards, directly under parameters)
+    from n3fit.bayesian_settings import bayesian_parameters
+
+    bayes = bayesian_parameters(parameters)
+    per_replica = bayes["per_replica"]
+    n_bnn_models = bayes.get('n_bnn_models', 1)
+    n_bnn_samples = bayes.get('n_bnn_samples', 3)
+    per_sample_positivity_losses = []
+
+    def per_sample_positivity(pdf_models, parent_status, model_losses=None):
+        """POS_PASS only if the trained model passed (postfit reads pos_state as its
+        convergence flag, see validphys.fitdata.FitInfo.has_converged) and the sample passes
+        n3fit's stopping positivity check. ``model_losses`` are the sample's positivity
+        losses from the validation model (``bnn_wrapper.evaluate_samples``), i.e.
+        exactly what stopping checks; without them they are recomputed with validphys and
+        the same multipliers (``replica_checks.stopping_multipliers``)."""
+        import pandas as pd
+
+        from validphys.replica_checks import (
+            positivity_losses,
+            positivity_states,
+            stopping_multipliers,
+        )
+
+        threshold = parameters.get("positivity", {}).get("threshold") or 1e-6
+        if model_losses is not None:
+            losses = pd.DataFrame(model_losses)
+        else:
+            losses = positivity_losses(
+                N3PDF(pdf_models, fit_basis=basis, Q=theoryid.get_description().get("Q0")),
+                posdatasets_fitting_pos_dict,
+                stopping_multipliers(posdatasets_fitting_pos_dict, parameters),
+            )
+        passing = positivity_states(losses, threshold) & (parent_status == "POS_PASS")
+        log.info(
+            "Per-sample positivity: %d/%d BNN samples pass", passing.sum(), len(passing)
+        )
+        per_sample_positivity_losses.extend(losses.to_dict(orient="records"))
+        return ["POS_PASS" if p else "POS_VETO" for p in passing]
     # Every architecture string that produces a variational layer
     BAYESIAN_LAYER_TYPES = {'VBDense', 'VBDense_correlated'}
     layer_type = parameters.get('layer_type')
@@ -366,6 +466,19 @@ def performfit(
             final_time,
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
+
+        if per_replica["positivity"]:
+            # Mark the pos_state as per-sample, so that postfit uses it as it is
+            import json
+
+            from validphys.replica_checks import PER_REPLICA_JSON_KEY
+
+            for idx, losses in zip(replica_idxs, per_sample_positivity_losses):
+                json_path = replica_path / f"replica_{idx}" / f"{output_path.name}.json"
+                info = json.loads(json_path.read_text(encoding="utf-8"))
+                info[PER_REPLICA_JSON_KEY] = True
+                info["positivity_losses"] = {k: float(v) for k, v in losses.items()}
+                json_path.write_text(json.dumps(info, indent=2) + "\n", encoding="utf-8")
 
         if tensorboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)

@@ -164,6 +164,13 @@ class BayesianPreprocessing(Preprocessing):
     def reset_random(self):
         self._fixed_sample = None
 
+    def fixed_exponents(self, dtype="float32"):
+        """The frozen (alphas, betas) of this replica, drawn now if not drawn yet; later
+        forward passes in inference mode use the same draw."""
+        if self._fixed_sample is None:
+            self._fixed_sample = self._sample_exponents(dtype)
+        return self._fixed_sample
+
     def _sample_exponents(self, dtype):
         alphas = op.stack(
             [
@@ -198,5 +205,5 @@ class BayesianPreprocessing(Preprocessing):
         else:
             if self._fixed_sample is None:
                 self._fixed_sample = self._sample_exponents(x.dtype)
-            alphas, betas = self._fixed_sample
+            alphas, betas = (tf.cast(e, x.dtype) for e in self._fixed_sample)
         return x ** (1 - alphas) * (1 - x) ** betas

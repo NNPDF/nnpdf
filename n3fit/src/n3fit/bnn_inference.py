@@ -74,25 +74,29 @@ def _load_runcard(runcard_path: Path) -> dict:
         rc = yaml.safe_load(fh)
 
     params = rc["parameters"]
+    # Bayesian options: parameters::bayesian (or, for older runcards, directly under parameters)
+    from n3fit.bayesian_settings import bayesian_parameters
+
+    bayes = bayesian_parameters(params)
     return dict(
         nodes=params["nodes_per_layer"],
         activations=params["activation_per_layer"],
         initializer=params["initializer"],
         architecture=params["layer_type"],
         dropout_rate=params.get("dropout", 0.0),
-        prior_prec=params.get("prior_prec", 0.1),
-        std_init=params.get("std_init", None),
-        dropout_rate_bayesian=params.get("bayes_dropout", 0.0),
-        bayesian_bias=params.get("bayesian_bias", False),
-        bayesian_flow=params.get("bayesian_flow", False),
-        flow_n_couplings=params.get("flow_n_couplings", 3),
-        flow_hidden_units=params.get("flow_hidden_units", 24),
+        prior_prec=bayes.get("prior_prec", 0.1),
+        std_init=bayes.get("std_init", None),
+        dropout_rate_bayesian=bayes.get("bayes_dropout", 0.0),
+        bayesian_bias=bayes.get("bayesian_bias", False),
+        bayesian_flow=bayes.get("bayesian_flow", False),
+        flow_n_couplings=bayes.get("flow_n_couplings", 3),
+        flow_hidden_units=bayes.get("flow_hidden_units", 24),
         flav_info=rc["fitting"]["basis"],
         fitbasis=rc["fitting"]["fitbasis"],
         theoryid=rc["theory"]["theoryid"],
-        n_bnn_models=params.get("n_bnn_models", 1),
-        n_bnn_samples=params.get("n_bnn_samples", 1),
-        sampling_space=params.get("sampling_space", "weight"),
+        n_bnn_models=bayes.get("n_bnn_models", 1),
+        n_bnn_samples=bayes.get("n_bnn_samples", 1),
+        sampling_space=bayes.get("sampling_space", "weight"),
     )
 
 

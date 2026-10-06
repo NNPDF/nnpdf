@@ -215,12 +215,23 @@ def check_model_file(save, load):
             raise CheckError(f"Model file {load} seems to be empty")
 
 
+def check_bayesian_block(parameters):
+    """Checks parameters::bayesian (see n3fit.bayesian_settings)"""
+    from n3fit.bayesian_settings import BayesianSettingsError, check_bayesian_parameters
+
+    try:
+        check_bayesian_parameters(parameters)
+    except BayesianSettingsError as e:
+        raise CheckError(str(e)) from e
+
+
 @make_argcheck
 def wrapper_check_NN(tensorboard, save, load, parameters):
     """Wrapper function for all NN-related checks"""
     check_tensorboard(tensorboard)
     check_model_file(save, load)
     check_existing_parameters(parameters)
+    check_bayesian_block(parameters)
     check_consistent_layers(parameters)
     check_stopping(parameters)
     check_layer_type_implemented(parameters)
@@ -460,6 +471,16 @@ def check_deprecated_options(fitting):
     for option in nnfit_options:
         if option in fitting:
             log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
+    # bayesian_preproc is read from parameters::bayesian (n3fit.bayesian_settings); in
+    # 'fitting' it has never had any effect
+    if fitting.get("bayesian_preproc"):
+        raise CheckError(
+            "'fitting::bayesian_preproc' is ignored: set it as parameters::bayesian::bayesian_preproc"
+        )
+    if "bayesian_preproc" in fitting:
+        log.warning(
+            "'fitting::bayesian_preproc' is ignored (it is read from parameters::bayesian::bayesian_preproc)"
+        )
 
 
 @make_argcheck
