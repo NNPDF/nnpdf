@@ -32,6 +32,15 @@ consists of an `LHAPDF <https://lhapdf.hepforge.org/>`_ grid corresponding to
 the best fit PDF as well as metadata on the fit performance.
 
 
+The :ref:`nnpdf-data <nnpdf-data-cli>` data utilities
+--------------------------------------------------------------------------------
+The ``nnpdf_data`` package contains all :ref:`CommonData <commondata>` (our format for experimental files)
+used by the NNPDF framework. The ``nnpdf-data`` Command Line Interface provide some handy
+utilities like listing available datasets, printing runcard-ready ``dataset_inputs``
+entries, and generating LaTeX dataset tables with BibTeX references from fit
+runcards. It is intended as a lightweight interface for dataset bookkeeping.
+
+
 The :ref:`validphys <vp-index>` analysis framework
 --------------------------------------------------------------------------------
 As an implementation of the
