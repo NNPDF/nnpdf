@@ -85,12 +85,19 @@ def _cmd_latex(entries, runcard_path, sort_mode=None, group_by=None, output_bib=
 
     print("\n\n".join(latex_printout))
 
-    bibtex_text = "\n".join(bibtex_entries)
+    # Clean up the bibtex entries to ensure there are no duplicates
+    bib_file = ""
+    seen = []
+    for bibtex in bibtex_entries:
+        if bibtex.key not in seen:
+            bib_file += bibtex.raw_bibtex + "\n"
+            seen.append(bibtex.key)
+    bib_file = bib_file.strip()
 
     if output_bib is None:
-        print(bibtex_text)
+        print(bib_file)
     else:
-        output_bib.write_text("\n".join(bibtex_entries))
+        output_bib.write_text(bib_file)
 
 
 def main():
