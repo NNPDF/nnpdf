@@ -314,7 +314,7 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
         s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
     elif point_prescription == "dis ihou":
         # n3lo ihou prescriprion
-        s = covmat_n3lo_dis(name1, name2, deltas1, deltas2)
+        s = covmat_n3lo_cf(name1, name2, deltas1, deltas2)
     elif point_prescription == "3pt missing":
         # 3 point renormalization scale variations for subset of data
         s = covmat_3pt(name1, name2, deltas1, deltas2)
