@@ -184,6 +184,19 @@ class VBDense(Layer):
                 dtype=K.floatx(),
             )
 
+        # Training noise: one standard-normal draw per training step, shared by all calls of
+        # the layer within the step (all FK x-grids, x=1, sum-rule grid), so that every call
+        # sees the same weights. Redrawn by callbacks.ResampleTrainNoise. Plain tf.Variables:
+        # not trainable and not part of layer.weights, so the saved weights are unchanged.
+        self.train_noise = tf.Variable(
+            tf.zeros(weight_shape, dtype=K.floatx()), trainable=False, name='train_noise_w'
+        )
+        self.train_noise_eps = None
+        if self.bayesian_bias:
+            self.train_noise_b = tf.Variable(
+                tf.zeros((self.output_dim,), dtype=K.floatx()), trainable=False, name='train_noise_b'
+            )
+
         if self.use_flow:
             dim = self.output_dim * self.input_dim
             self.flow = RealNVPFlow(
@@ -234,6 +247,19 @@ class VBDense(Layer):
         if self.bayesian_bias:
             self.random_b.assign(krandom.normal(self.random_b.shape, dtype=K.floatx()))
         self.map = False
+
+    def resample_train_noise(self, rng):
+        """New training-noise draw from the numpy Generator rng (once per training step)."""
+        for var in self.train_noise_variables():
+            var.assign(rng.standard_normal(var.shape).astype(var.dtype.as_numpy_dtype))
+
+    def train_noise_variables(self):
+        out = [self.train_noise]
+        if self.train_noise_eps is not None:
+            out.append(self.train_noise_eps)
+        if self.bayesian_bias:
+            out.append(self.train_noise_b)
+        return out
 
     def train(self):
         self.training = True
@@ -313,21 +339,20 @@ class VBDense(Layer):
         weight = self.mu_w
         return Kops.matmul(input, Kops.transpose(weight)) + self.bias
 
-    def _forward_sample_activations(self, input):
+    def _forward_sample_weights_train(self, input):
         """
-        Local reparameterization trick (training). Sample the pre-activation
-        directly from its implied Gaussian. The bias variance (if Bayesian) is
-        added straight into the activation variance. LRT is more efficient
-        and leads to an estimate of the gradient with smaller variance.
-        https://arxiv.org/pdf/1506.02557.pdf
+        Training path. One weight sample per training step, w = mu + sigma * train_noise,
+        shared by all x points and all calls of the layer within the step. The local
+        reparameterization trick is not used: it draws independent noise per x point,
+        whereas the FK convolutions and the chi2 couple all x points, so the expected chi2
+        depends on the covariance of the PDF between different x points.
         """
-        act_mu = Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
-        act_var = Kops.matmul(Kops.square(input), Kops.transpose(self.s2_w))
+        weight = self.mu_w + Kops.sqrt(self.s2_w) * self.train_noise
+        bias = self.bias
         if self.bayesian_bias:
-            act_var = act_var + self.s2_b
-        act_var = act_var + self.eps
-        noise = krandom.normal(Kops.shape(act_mu), dtype=input.dtype)
-        return act_mu + Kops.sqrt(act_var) * noise
+            bias = self.bias + Kops.sqrt(self.s2_b) * self.train_noise_b
+        return Kops.matmul(input, Kops.transpose(weight)) + bias
+
 
     def _forward_sample_weights(self, input):
         """
@@ -355,14 +380,12 @@ class VBDense(Layer):
         independent MC draw of the reverse-KL objective, and cache z/w/logdet
         for kl_loss() to reuse (see _mc_kl_flow).
         """
-        eps = krandom.normal(self.mu_w.shape, dtype=input.dtype)
-        z = self.mu_w + Kops.sqrt(self.s2_w) * eps
+        z = self.mu_w + Kops.sqrt(self.s2_w) * self.train_noise
         w, logdet = self._sample_weight_and_logq(z)
 
         bias = self.bias
         if self.bayesian_bias:
-            eps_b = krandom.normal(self.bias.shape, dtype=input.dtype)
-            bias = self.bias + Kops.sqrt(self.s2_b) * eps_b
+            bias = self.bias + Kops.sqrt(self.s2_b) * self.train_noise_b
 
         self._last_z, self._last_w, self._last_logdet = z, w, logdet
 
@@ -372,7 +395,7 @@ class VBDense(Layer):
         if self.training:
             if self.use_flow:
                 return self._forward_sample_weights_stochastic(input)
-            return self._forward_sample_activations(input)
+            return self._forward_sample_weights_train(input)
         if self.map:
             return self._forward_map_inference(input)
         return self._forward_sample_weights(input)
@@ -500,277 +523,20 @@ class CorrelatedLowRankVBDense(Layer):
                 dtype=K.floatx(),
             )
 
-        self.reset_parameters()
-        self.reset_random()
-
-    def reset_parameters(self):
-        stdv = 1.0 / math.sqrt(self.input_dim)
-        self.bias.assign(Kops.zeros_like(self.bias))
-        self.mu_w.assign(krandom.normal(self.mu_w.shape, mean=0.0, stddev=stdv, dtype=K.floatx()))
-        self.logsig2_w.assign(
-            krandom.normal(self.logsig2_w.shape, mean=self.std_init, stddev=0.001, dtype=K.floatx())
-        )
-        if self.rank > 0:
-            # Start essentially mean-field; the ELBO has to grow the
-            # correlated directions.
-            self.u_w.assign(
-                krandom.normal(self.u_w.shape, mean=0.0, stddev=self.u_init, dtype=K.floatx())
-            )
-        if self.bayesian_bias:
-            self.bias_logsig2.assign(
-                krandom.normal(
-                    self.bias_logsig2.shape, mean=self.std_init, stddev=0.001, dtype=K.floatx()
-                )
-            )
-            if self.rank > 0:
-                self.u_b.assign(
-                    krandom.normal(self.u_b.shape, mean=0.0, stddev=self.u_init, dtype=K.floatx())
-                )
-
-    @property
-    def s2_w(self):
-        """Diagonal weight variance, exp(logsig2_w)."""
-        return Kops.exp(Kops.clip(self.logsig2_w, self.lbound, self.ubound))
-
-    @property
-    def s2_b(self):
-        """Diagonal bias variance, exp(bias_logsig2)."""
-        return Kops.exp(Kops.clip(self.bias_logsig2, self.lbound, self.ubound))
-
-    def enable_map(self):
-        self.map = True
-
-    def disable_map(self):
-        self.map = False
-
-    def reset_random(self):
-        """Redraw the frozen eval sample (diagonal and low-rank parts)."""
-        self.random.assign(krandom.normal(self.random.shape, dtype=K.floatx()))
-        if self.rank > 0:
-            self.random_eps.assign(krandom.normal(self.random_eps.shape, dtype=K.floatx()))
-        if self.bayesian_bias:
-            self.random_b.assign(krandom.normal(self.random_b.shape, dtype=K.floatx()))
-        self.map = False
-
-    def train(self):
-        self.training = True
-
-    def eval(self):
-        self.training = False
-
-    def _flat_posterior(self):
-        """Flattened (mu, d, U) with layout [weights, (bias)]."""
-        mu = Kops.reshape(self.mu_w, (-1,))
-        d = Kops.reshape(self.s2_w, (-1,))
-        u = None
-        if self.rank > 0:
-            u = Kops.transpose(Kops.reshape(self.u_w, (self.rank, -1)))
-        if self.bayesian_bias:
-            mu = Kops.concatenate([mu, Kops.reshape(self.bias, (-1,))], axis=0)
-            d = Kops.concatenate([d, Kops.reshape(self.s2_b, (-1,))], axis=0)
-            if self.rank > 0:
-                u_b = Kops.transpose(Kops.reshape(self.u_b, (self.rank, -1)))
-                u = Kops.concatenate([u, u_b], axis=0)
-        return mu, d, u
-
-    def kl_loss(self):
-        """Analytic KL[ N(mu, D + U U^T) || N(0, 1/prior_prec) ]."""
-        mu, d, u = self._flat_posterior()
-        n = self.output_dim * self.input_dim
-        if self.bayesian_bias:
-            n += self.output_dim
-
-        trace = Kops.sum(d)
-        logdet = Kops.sum(Kops.log(d))
-
-        if self.rank > 0:
-            trace = trace + Kops.sum(Kops.square(u))
-            # log|Sigma| = log|D| + log|I_R + U^T D^-1 U|
-            g = u / Kops.expand_dims(Kops.sqrt(d), axis=-1)
-            cap = Kops.eye(self.rank, dtype=K.floatx()) + Kops.matmul(Kops.transpose(g), g)
-            chol = Kops.cholesky(cap)
-            logdet = logdet + 2.0 * Kops.sum(Kops.log(Kops.diagonal(chol)))
-
-        return 0.5 * (
-            self.prior_prec * (trace + Kops.sum(Kops.square(mu)))
-            - logdet
-            - n
-            - n * math.log(self.prior_prec)
-        )
-
-    def _forward_map_inference(self, input):
-        """Deterministic: posterior means for both weights and bias."""
-        return Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
-
-    def _forward_sample_activations(self, input):
-        """
-        Training path. The diagonal part uses the local reparameterization
-        trick (https://arxiv.org/pdf/1506.02557.pdf); the low-rank part is
-        added exactly, with one shared eps_r per sample and factor, which is
-        equivalent to an independent weight draw per data point.
-        """
-        act_mu = Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
-        act_var = Kops.matmul(Kops.square(input), Kops.transpose(self.s2_w))
-        if self.bayesian_bias:
-            act_var = act_var + self.s2_b
-        act_var = act_var + self.eps
-        noise = krandom.normal(Kops.shape(act_mu), dtype=input.dtype)
-        out = act_mu + Kops.sqrt(act_var) * noise
-
-        if self.rank == 0:
-            return out
-
-        # proj[..., r, o] = sum_i u_w[r, o, i] * input[..., i]
-        proj = Kops.einsum("...i,roi->...ro", input, self.u_w)
-        if self.bayesian_bias:
-            proj = proj + self.u_b
-        eps = krandom.normal(Kops.shape(proj)[:-1], dtype=input.dtype)
-        return out + Kops.einsum("...r,...ro->...o", eps, proj)
-
-    def _forward_sample_weights(self, input):
-        """
-        Eval path. One frozen weight draw, w = mu + D^(1/2) eta + U eps, with
-        the standard normals held in non-trainable weights so the replica
-        stays fixed until reset_random().
-        """
-        weight = self.mu_w + Kops.sqrt(self.s2_w) * self.random
-        bias = self.bias
-        if self.bayesian_bias:
-            bias = bias + Kops.sqrt(self.s2_b) * self.random_b
-        if self.rank > 0:
-            weight = weight + Kops.einsum("r,roi->oi", self.random_eps, self.u_w)
-            if self.bayesian_bias:
-                bias = bias + Kops.einsum("r,ro->o", self.random_eps, self.u_b)
-        return Kops.matmul(input, Kops.transpose(weight)) + bias
-
-    def call(self, input):
-        if self.training:
-            return self._forward_sample_activations(input)
-        if self.map:
-            return self._forward_map_inference(input)
-        return self._forward_sample_weights(input)
-
-class CorrelatedLowRankVBDense(Layer):
-    """
-    Variational Bayesian dense layer with a correlated weight posterior.
-
-        q(w) = N(mu, Sigma),   Sigma = D + U U^T,
-        D = diag(exp(logsig2)) > 0,   U in R^{N x rank},
-
-    where N = out_features * in_features (+ out_features if the bias is
-    Bayesian). Sigma is positive definite and invertible by construction,
-    costs O(N * rank) parameters instead of O(N^2), and its log-determinant
-    follows from the rank x rank capacitance matrix (matrix determinant
-    lemma). Setting rank=0 reproduces `VBDense` exactly.
-
-    Backend-agnostic: written with `keras.ops` / `keras.random`.
-    """
-
-    def __init__(
-        self,
-        out_features: int,
-        in_features: int,
-        rank: int = 4,
-        prior_prec: float = 1.0,
-        std_init: float = None,
-        u_init: float = 1e-4,
-        map: bool = False,
-        bayesian_bias: bool = False,
-    ):
-        super().__init__()
-        if rank < 0:
-            raise ValueError("rank must be non-negative")
-        self.output_dim = out_features
-        self.input_dim = in_features
-        self.rank = int(rank)
-        self.map = map
-        self.prior_prec = float(prior_prec)
-        if std_init is None:
-            self.std_init = -math.log(self.prior_prec)
-        else:
-            self.std_init = float(std_init)
-        self.u_init = float(u_init)
-        self.bayesian_bias = bayesian_bias
-        self.lbound = -30 if K.floatx() == 'float64' else -20
-        self.ubound = 11
-        self.eps = 1e-12 if K.floatx() == 'float64' else 1e-8
-        self.training = True
-        # Frozen eval draws, assigned in build().
-        self.random = None
-        self.random_b = None
-        self.random_eps = None
-
-    def build(self, input_shape):
-        self.bias = self.add_weight(
-            name='bias',
-            shape=(self.output_dim,),
-            initializer='glorot_normal',
-            trainable=True,
-            dtype=K.floatx(),
-        )
-        self.mu_w = self.add_weight(
-            name='mu_w',
-            shape=(self.output_dim, self.input_dim),
-            initializer='glorot_normal',
-            trainable=True,
-            dtype=K.floatx(),
-        )
-        self.logsig2_w = self.add_weight(
-            name='logsig2_w',
-            shape=(self.output_dim, self.input_dim),
-            initializer='glorot_normal',
-            trainable=True,
-            dtype=K.floatx(),
-        )
-        if self.rank > 0:
-            self.u_w = self.add_weight(
-                name='u_w',
-                shape=(self.rank, self.output_dim, self.input_dim),
-                initializer='zeros',
-                trainable=True,
-                dtype=K.floatx(),
-            )
-        if self.bayesian_bias:
-            self.bias_logsig2 = self.add_weight(
-                name='bias_logsig2',
-                shape=(self.output_dim,),
-                initializer='glorot_normal',
-                trainable=True,
-                dtype=K.floatx(),
-            )
-            if self.rank > 0:
-                self.u_b = self.add_weight(
-                    name='u_b',
-                    shape=(self.rank, self.output_dim),
-                    initializer='zeros',
-                    trainable=True,
-                    dtype=K.floatx(),
-                )
-
-        # Frozen eval draws (non-trainable), so the replica is ready to eval
-        # immediately after building.
-        self.random = self.add_weight(
-            name='random_w',
-            shape=(self.output_dim, self.input_dim),
-            initializer='zeros',
+        # Training noise, one draw per training step (see VBDense.build)
+        self.train_noise = tf.Variable(
+            tf.zeros((self.output_dim, self.input_dim), dtype=K.floatx()),
             trainable=False,
-            dtype=K.floatx(),
+            name='train_noise_w',
         )
+        self.train_noise_eps = None
         if self.rank > 0:
-            self.random_eps = self.add_weight(
-                name='random_eps',
-                shape=(self.rank,),
-                initializer='zeros',
-                trainable=False,
-                dtype=K.floatx(),
+            self.train_noise_eps = tf.Variable(
+                tf.zeros((self.rank,), dtype=K.floatx()), trainable=False, name='train_noise_eps'
             )
         if self.bayesian_bias:
-            self.random_b = self.add_weight(
-                name='random_b',
-                shape=(self.output_dim,),
-                initializer='zeros',
-                trainable=False,
-                dtype=K.floatx(),
+            self.train_noise_b = tf.Variable(
+                tf.zeros((self.output_dim,), dtype=K.floatx()), trainable=False, name='train_noise_b'
             )
 
         self.reset_parameters()
@@ -825,6 +591,19 @@ class CorrelatedLowRankVBDense(Layer):
             self.random_b.assign(krandom.normal(self.random_b.shape, dtype=K.floatx()))
         self.map = False
 
+    def resample_train_noise(self, rng):
+        """New training-noise draw from the numpy Generator rng (once per training step)."""
+        for var in self.train_noise_variables():
+            var.assign(rng.standard_normal(var.shape).astype(var.dtype.as_numpy_dtype))
+
+    def train_noise_variables(self):
+        out = [self.train_noise]
+        if self.train_noise_eps is not None:
+            out.append(self.train_noise_eps)
+        if self.bayesian_bias:
+            out.append(self.train_noise_b)
+        return out
+
     def train(self):
         self.training = True
 
@@ -875,30 +654,22 @@ class CorrelatedLowRankVBDense(Layer):
         """Deterministic: posterior means for both weights and bias."""
         return Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
 
-    def _forward_sample_activations(self, input):
+    def _forward_sample_weights_train(self, input):
         """
-        Training path. The diagonal part uses the local reparameterization
-        trick (https://arxiv.org/pdf/1506.02557.pdf); the low-rank part is
-        added exactly, with one shared eps_r per sample and factor, which is
-        equivalent to an independent weight draw per data point.
+        Training path. One weight sample per training step, w = mu + D^(1/2) eta + U eps,
+        with the standard normals of the current step (train_noise, train_noise_eps,
+        train_noise_b), shared by all x points and all calls of the layer within the step.
         """
-        act_mu = Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
-        act_var = Kops.matmul(Kops.square(input), Kops.transpose(self.s2_w))
+        weight = self.mu_w + Kops.sqrt(self.s2_w) * self.train_noise
+        bias = self.bias
         if self.bayesian_bias:
-            act_var = act_var + self.s2_b
-        act_var = act_var + self.eps
-        noise = krandom.normal(Kops.shape(act_mu), dtype=input.dtype)
-        out = act_mu + Kops.sqrt(act_var) * noise
+            bias = bias + Kops.sqrt(self.s2_b) * self.train_noise_b
+        if self.rank > 0:
+            weight = weight + Kops.einsum("r,roi->oi", self.train_noise_eps, self.u_w)
+            if self.bayesian_bias:
+                bias = bias + Kops.einsum("r,ro->o", self.train_noise_eps, self.u_b)
+        return Kops.matmul(input, Kops.transpose(weight)) + bias
 
-        if self.rank == 0:
-            return out
-
-        # proj[..., r, o] = sum_i u_w[r, o, i] * input[..., i]
-        proj = Kops.einsum("...i,roi->...ro", input, self.u_w)
-        if self.bayesian_bias:
-            proj = proj + self.u_b
-        eps = krandom.normal(Kops.shape(proj)[:-1], dtype=input.dtype)
-        return out + Kops.einsum("...r,...ro->...o", eps, proj)
 
     def _forward_sample_weights(self, input):
         """
@@ -918,7 +689,7 @@ class CorrelatedLowRankVBDense(Layer):
 
     def call(self, input):
         if self.training:
-            return self._forward_sample_activations(input)
+            return self._forward_sample_weights_train(input)
         if self.map:
             return self._forward_map_inference(input)
         return self._forward_sample_weights(input)
@@ -1017,19 +788,6 @@ layers = {
             "use_flow": False,
             "n_flows": 3,
             "flow_hidden": 24,
-        },
-    ),
-    "VBDense_correlated": (
-        CorrelatedLowRankVBDense,
-        {
-            "in_features": None,
-            "out_features": None,
-            "rank": 4,
-            "prior_prec": None,
-            "std_init": None,
-            "u_init": 1e-4,
-            "bayesian_bias": False,
-            "map": False,
         },
     ),
     "VBDense_correlated": (

@@ -201,6 +201,32 @@ class LagrangeCallback(CallbackStep):
         if (epoch + 1) % self.update_freq == 0:
             self._update_weights()
 
+class ResampleTrainNoise(Callback):
+    """
+    Draws one coherent sample of the variational weights per training step: before every
+    step (one batch = one step, see ``MetaModel.perform_fit``), the training noise of all
+    variational layers is redrawn, and all calls of a layer within the step use it.
+
+    Parameters
+    ----------
+    vb_layers: list
+        ``VBDense`` and ``CorrelatedLowRankVBDense`` layers of the model
+    seed: int or sequence of int
+        seed of the noise, e.g. the nnseeds of the replicas, for reproducible fits
+    """
+
+    def __init__(self, vb_layers, seed=None):
+        super().__init__()
+        self.vb_layers = vb_layers
+        self.rng = np.random.default_rng(seed)
+
+    def on_train_batch_begin(self, batch, logs=None):
+        for layer in self.vb_layers:
+            layer.resample_train_noise(self.rng)
+
+
+
+
 class KLAnnealingCallback(CallbackStep):
     """
     Updates the tensorflow variable "kl_beta" to increase 

@@ -952,7 +952,9 @@ class ModelTrainer:
 
         return reporting_list
 
-    def _train_and_fit(self, train_model, stopping_object, epochs=100, kl_beta=None) -> bool:
+    def _train_and_fit(
+        self, train_model, stopping_object, epochs=100, kl_beta=None, vb_layers=None, noise_seed=None
+    ) -> bool:
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -979,10 +981,16 @@ class ModelTrainer:
         log.info(f"KLAnnealing init: warmup_steps={epochs//4}, kl_beta initial={float(train_model.kl_beta.numpy())}")
 
 
+        # One coherent weight sample per step for the variational layers; first in the list,
+        # so that the noise is drawn before the step
+        callback_noise = [callbacks.ResampleTrainNoise(vb_layers, seed=noise_seed)] if vb_layers else []
+
         train_model.perform_fit(
             epochs=epochs,
             verbose=False,
-            callbacks=self.callbacks + [callback_st, callback_pos, callback_integ, callback_kl],
+            callbacks=callback_noise
+            + self.callbacks
+            + [callback_st, callback_pos, callback_integ, callback_kl],
         )
 
     def _hyperopt_override(self, params):
@@ -1293,7 +1301,15 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            self._train_and_fit(models["training"], stopping_object, epochs=epochs, kl_beta=pdf_model.kl_beta)
+            self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=epochs,
+                kl_beta=pdf_model.kl_beta,
+                vb_layers=vb_layers,
+                noise_seed=[int(seed) for seed in self._nn_seeds] + [k],
+            )
+
 
             if self.mode_hyperopt:
                 validation_loss = stopping_object.vl_chi2
