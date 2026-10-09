@@ -94,7 +94,7 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
                                 xgrid, mode='additive', xspace='linear',
                                 random_sign=False, rng=None,
                                 flavor_signs=None, calibration_gv=None,
-                                calibration_stats=None):
+                                calibration_stats=None, calibration_at_mu=None):
     """Perturb selected flavour channels with a Gaussian bump.
 
     Parameters
@@ -113,7 +113,8 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
         'calibrated':    f_j -> f_j + delta_j^(sign) * G(x)
             where delta_j^(+)  = A * (q84_j - c_j),
                   delta_j^(-)  = A * (c_j - q16_j),
-            at x closest to mu, with c_j the calibrated replica mean.
+            at mu when calibration_at_mu is supplied, otherwise at the
+            closest grid point, with c_j the calibrated central value.
             This builds distinct calibrated up/down templates and does not
             assume delta_j^- = -delta_j^+.
         'ablation':      f_j -> 0 for all x.
@@ -144,6 +145,11 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
         up/down amplitudes come from ``stats.central_value()`` and
         ``stats.errorbar68()`` instead of raw mean/percentiles. When None, the
         legacy mean + 16/84 percentile envelope is used (Monte-Carlo only).
+    calibration_at_mu : np.ndarray or None, shape (ncalib, nfl)
+        Calibration members evaluated at the actual bump centre. Overrides
+        calibration_gv for the amplitude calculation, so the same bump can
+        be evaluated on different FK and sum-rule grids. The flavour axis
+        must match gv; member conventions are those of calibration_stats.
 
     Returns
     -------
@@ -198,13 +204,16 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
 
     if mode == 'calibrated':
         # Per-flavor amplitudes from calibrated +1sigma / -1sigma envelopes
-        # at x closest to mu, allowing asymmetric up/down shifts.
+        # at the supplied centre (or legacy nearest grid point).
         xgrid_arr = np.asarray(xgrid)
         idx_mu = int(np.argmin(np.abs(xgrid_arr - mu)))
         gv_sigma = gv if calibration_gv is None else np.asarray(calibration_gv, dtype=float)
         for col, fi in enumerate(local_flavor_idx):
             signs = sign_matrix[:, col][:, np.newaxis]
-            calib_vals = np.asarray(gv_sigma[:, fi, idx_mu], dtype=float)
+            calib_vals = np.asarray(
+                gv_sigma[:, fi, idx_mu] if calibration_at_mu is None
+                else np.asarray(calibration_at_mu)[:, fi], dtype=float,
+            )
             amp_plus, amp_minus = _calibrated_amplitudes(
                 calib_vals, amplitude, calibration_stats=calibration_stats
             )
@@ -237,7 +246,7 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
 def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
                                       xgrid, mode='calibrated', xspace='logx',
                                       flavor_signs=None, calibration_gv=None,
-                                      calibration_stats=None):
+                                      calibration_stats=None, calibration_at_mu=None):
     """Perturb flavours with a superposition of per-player Gaussian bumps.
 
     Each entry in *specs* describes one (flavor, x) player in a coalition.
@@ -272,6 +281,10 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
         is given.
     calibration_stats : callable or None
         Optional ``pdf.stats_class`` callable; see apply_gaussian_perturbation.
+    calibration_at_mu : mapping or None
+        Maps each bump centre to a (ncalib, nfl) member array evaluated at
+        that centre, with the same flavour ordering as gv. Overrides the
+        nearest-grid-point calibration for every spec when supplied.
 
     Returns
     -------
@@ -321,7 +334,10 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
 
             if mode == 'calibrated':
                 idx_mu = int(np.argmin(np.abs(xgrid_arr - mu_k)))
-                calib_vals = gv_sigma[:, fi, idx_mu].astype(float)
+                calib_vals = np.asarray(
+                    gv_sigma[:, fi, idx_mu] if calibration_at_mu is None
+                    else np.asarray(calibration_at_mu[mu_k])[:, fi], dtype=float,
+                )
                 amp_plus, amp_minus = _calibrated_amplitudes(
                     calib_vals, amplitude, calibration_stats=calibration_stats
                 )

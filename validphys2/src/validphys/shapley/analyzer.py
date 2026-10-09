@@ -196,7 +196,11 @@ class NNPDFShapleyAnalyzer:
 
     def _compute_sumrule_norm(self, flavor_subset, mu, sigma, amplitude,
                               mode, xspace, random_sign_matrix=None):
-        """Compute normalization constants for a perturbed coalition."""
+        """Apply one normalization prescription, independent of membership.
+
+        Only the input bump mask depends on the coalition. The normalizer
+        also acts on selected flavours and on the empty-coalition baseline.
+        """
         ready = (
             self._sr_xgrid is not None
             and self._sr_weights is not None
@@ -239,6 +243,10 @@ class NNPDFShapleyAnalyzer:
                 flavor_signs=perturb_signs,
                 calibration_gv=self._sr_calib_gv_evol,
                 calibration_stats=self.calibration_stats_class,
+                calibration_at_mu=(
+                    self._get_calibration_at_mu(mu, self.observables[0].Q0)
+                    if mode == 'calibrated' else None
+                ),
             )
         else:
             gv_flav = self._sr_gv_flav.copy()
@@ -253,6 +261,10 @@ class NNPDFShapleyAnalyzer:
                 flavor_signs=perturb_signs,
                 calibration_gv=self._sr_calib_gv_flav,
                 calibration_stats=self.calibration_stats_class,
+                calibration_at_mu=(
+                    self._get_calibration_at_mu(mu, self.observables[0].Q0)
+                    if mode == 'calibrated' else None
+                ),
             )
             gv_pert = np.einsum(
                 'ef,rfx->rex', self._sr_rotation, gv_flav_pert
@@ -274,6 +286,38 @@ class NNPDFShapleyAnalyzer:
         """Drop cached grid values."""
         self._gv_cache.clear()
         self._gv_calib_cache.clear()
+
+    def _get_calibration_at_mu(self, mu, Q0, flavor_indices=None):
+        """Cache calibration members at the actual centre, independent of FK grid.
+
+        The cache contains all 14 flavours in the perturbation basis. A DIS
+        evolution-basis entry can request its local subset in FK order.
+        """
+        key = ('calibration_at_mu', self.basis, float(Q0), float(mu))
+        if key not in self._gv_calib_cache:
+            with self._gv_cache_lock:
+                if key not in self._gv_calib_cache:
+                    target = type('CalibrationTarget', (), {
+                        'Q0': Q0, 'xgrid': np.array([mu], dtype=float),
+                    })()
+                    getter = (
+                        get_pdf_flavor_grid_values if self.basis == 'flavor'
+                        else get_pdf_grid_values_all14
+                    )
+                    self._gv_calib_cache[key] = getter(
+                        self.calibration_pdf, target, member_mode='all'
+                    )[:, :, 0]
+        values = self._gv_calib_cache[key]
+        if flavor_indices is not None:
+            return values[:, flavor_indices]
+        return values
+
+    def _get_calibration_for_specs(self, specs, Q0, flavor_indices=None):
+        """Return centre evaluations for a collection of (flavour, x) players."""
+        return {
+            mu: self._get_calibration_at_mu(mu, Q0, flavor_indices)
+            for mu in dict.fromkeys(mu for _, mu, _ in specs)
+        }
 
     def _get_gv_for_entry(self, obs, entry_idx):
         """Cached evolution-basis grid values (FK-subset flavours)."""
@@ -548,6 +592,10 @@ class NNPDFShapleyAnalyzer:
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_flav_calib,
                         calibration_stats=self.calibration_stats_class,
+                        calibration_at_mu=(
+                            self._get_calibration_at_mu(mu, entry.Q0)
+                            if mode == 'calibrated' else None
+                        ),
                     )
                     gv_pert_list.append(gv_pert)
 
@@ -597,6 +645,12 @@ class NNPDFShapleyAnalyzer:
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_calib,
                         calibration_stats=self.calibration_stats_class,
+                        calibration_at_mu=(
+                            self._get_calibration_at_mu(
+                                mu, entry.Q0,
+                                None if entry.hadronic else entry.flavor_indices,
+                            ) if mode == 'calibrated' else None
+                        ),
                     )
                     if sr_norm is not None:
                         fi = (range(14) if entry.hadronic else entry.flavor_indices)
@@ -1942,6 +1996,10 @@ class NNPDFShapleyAnalyzer:
             xspace=xspace,
             calibration_gv=gv_calib,
             calibration_stats=self.calibration_stats_class,
+            calibration_at_mu=(
+                self._get_calibration_at_mu(mu, plot_target.Q0, plot_sel)
+                if mode == 'calibrated' else None
+            ),
         )
 
         n = len(plot_panel_labels)
@@ -2205,30 +2263,34 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                 else:
                     specs.append((base_entry, mu_k, p))
 
-            perturb_signs = (
-                random_sign_matrix[:, [sc for _, _, sc in specs]]
-                if random_sign_matrix is not None else None
-            )
+            # Specs retain global player indices; do not reindex the sign table.
+            perturb_signs = random_sign_matrix
             gv_pert = apply_multi_gaussian_perturbation(
                 self._sr_gv_evol, specs, self._vec_sigma, self._vec_amplitude,
                 self._sr_xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
                 flavor_signs=perturb_signs,
                 calibration_gv=self._sr_calib_gv_evol,
                 calibration_stats=self.calibration_stats_class,
+                calibration_at_mu=(
+                    self._get_calibration_for_specs(specs, self.observables[0].Q0)
+                    if self._vec_mode == 'calibrated' else None
+                ),
             )
         else:  # flavor basis
             # No outer .copy() -- apply_multi_gaussian_perturbation copies internally.
             specs = self._build_vec_x_specs_flavor_basis(player_subset)
-            perturb_signs = (
-                random_sign_matrix[:, [sc for _, _, sc in specs]]
-                if random_sign_matrix is not None else None
-            )
+            # Specs retain global player indices; do not reindex the sign table.
+            perturb_signs = random_sign_matrix
             gv_flav_pert = apply_multi_gaussian_perturbation(
                 self._sr_gv_flav, specs, self._vec_sigma, self._vec_amplitude,
                 self._sr_xgrid, mode=self._vec_mode, xspace=self._vec_xspace,
                 flavor_signs=perturb_signs,
                 calibration_gv=self._sr_calib_gv_flav,
                 calibration_stats=self.calibration_stats_class,
+                calibration_at_mu=(
+                    self._get_calibration_for_specs(specs, self.observables[0].Q0)
+                    if self._vec_mode == 'calibrated' else None
+                ),
             )
             gv_pert = np.einsum('ef,rfx->rex', self._sr_rotation, gv_flav_pert)
 
@@ -2264,10 +2326,8 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
         for obs in self.observables:
             if self.basis == 'flavor':
                 specs = self._build_vec_x_specs_flavor_basis(player_subset)
-                perturb_signs = (
-                    random_sign_matrix[:, [sc for _, _, sc in specs]]
-                    if random_sign_matrix is not None and specs else None
-                )
+                # Specs retain global player indices; do not reindex the sign table.
+                perturb_signs = random_sign_matrix
                 gv_pert_list = []
                 for idx, entry in enumerate(obs.fk_entries):
                     gv_flav = self._get_flavor_gv_for_entry(obs, idx)
@@ -2279,6 +2339,10 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_flav_calib,
                         calibration_stats=self.calibration_stats_class,
+                        calibration_at_mu=(
+                            self._get_calibration_for_specs(specs, entry.Q0)
+                            if self._vec_mode == 'calibrated' else None
+                        ),
                     )
                     gv_pert_list.append(gv_pert)
 
@@ -2325,10 +2389,8 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                         gv_calib = self._get_calibration_gv_for_entry(obs, idx)
                         specs = self._build_vec_x_specs_for_entry(entry, player_subset)
 
-                    perturb_signs = (
-                        random_sign_matrix[:, [sc for _, _, sc in specs]]
-                        if random_sign_matrix is not None and specs else None
-                    )
+                    # Specs retain global player indices; do not reindex the sign table.
+                    perturb_signs = random_sign_matrix
                     gv_pert = apply_multi_gaussian_perturbation(
                         gv, specs,
                         self._vec_sigma, self._vec_amplitude,
@@ -2336,6 +2398,12 @@ class NNPDFShapleyAnalyzerVecX(NNPDFShapleyAnalyzer):
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_calib,
                         calibration_stats=self.calibration_stats_class,
+                        calibration_at_mu=(
+                            self._get_calibration_for_specs(
+                                specs, entry.Q0,
+                                None if entry.hadronic else entry.flavor_indices,
+                            ) if self._vec_mode == 'calibrated' else None
+                        ),
                     )
                     if sr_norm is not None:
                         fi_range = range(14) if entry.hadronic else entry.flavor_indices

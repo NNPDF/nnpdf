@@ -1003,6 +1003,11 @@ def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=No
                         xspace=xspace,
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_flav_calib,
+                        calibration_stats=analyzer.calibration_stats_class,
+                        calibration_at_mu=(
+                            analyzer._get_calibration_at_mu(mu, entry.Q0)
+                            if mode == 'calibrated' else None
+                        ),
                     )
                     gv_pert_list.append(gv_pert)
 
@@ -1050,6 +1055,13 @@ def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=No
                         xspace=xspace,
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_calib,
+                        calibration_stats=analyzer.calibration_stats_class,
+                        calibration_at_mu=(
+                            analyzer._get_calibration_at_mu(
+                                mu, entry.Q0,
+                                None if entry.hadronic else entry.flavor_indices,
+                            ) if mode == 'calibrated' else None
+                        ),
                     )
                     if sr_norm is not None:
                         fi = range(14) if entry.hadronic else entry.flavor_indices
