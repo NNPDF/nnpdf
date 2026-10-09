@@ -1,0 +1,116 @@
+dependent_variables:
+- header:
+    name: Absolute uncertainty due to statistical uncertainty in data
+  values:
+  - value: 0.00065
+  - value: 0.00108
+  - value: 0.00116
+  - value: 0.00123
+  - value: 0.00129
+  - value: 0.0015
+  - value: 0.00213
+  - value: 0.00399
+  - value: 0.00649
+  - value: 0.00746
+- header:
+    name: Absolute uncertainty due to statistical uncertainty on lepton efficiency
+  values:
+  - value: 0.0013
+  - value: 0.00174
+  - value: 0.00182
+  - value: 0.00192
+  - value: 0.00177
+  - value: 0.00202
+  - value: 0.00204
+  - value: 0.00321
+  - value: 0.00696
+  - value: 0.0124
+- header:
+    name: Absolute uncertainty due to total uncertainty
+  values:
+  - value: 0.00484
+  - value: 0.00559
+  - value: 0.00567
+  - value: 0.00564
+  - value: 0.00561
+  - value: 0.00619
+  - value: 0.00734
+  - value: 0.0125
+  - value: 0.023
+  - value: 0.0352
+- header:
+    name: Absolute uncertainty due to statistical uncertainty in simulation
+  values:
+  - value: 0.00411
+  - value: 0.00478
+  - value: 0.00488
+  - value: 0.00485
+  - value: 0.00481
+  - value: 0.00537
+  - value: 0.00645
+  - value: 0.0111
+  - value: 0.0204
+  - value: 0.0307
+- header:
+    name: Absolute uncertainty due to QCD background
+  values:
+  - value: 0.000692
+  - value: 0.000648
+  - value: 0.000711
+  - value: 0.000734
+  - value: 0.00076
+  - value: 0.000788
+  - value: 0.00109
+  - value: 0.00108
+  - value: 0.00228
+  - value: 0.0038
+- header:
+    name: Absolute uncertainty due to QCD factorization and normalization scales
+  values:
+  - value: 0.00383
+  - value: 0.00402
+  - value: 0.00395
+  - value: 0.00376
+  - value: 0.00361
+  - value: 0.00381
+  - value: 0.00394
+  - value: 0.00419
+  - value: 0.00527
+  - value: 0.00902
+- header:
+    name: Absolute uncertainty due to PDFs and $\alpha_{S}$
+  values:
+  - value: 0.000794
+  - value: 0.000785
+  - value: 0.000728
+  - value: 0.000694
+  - value: 0.000563
+  - value: 0.000693
+  - value: 0.000767
+  - value: 0.00125
+  - value: 0.00219
+  - value: 0.00239
+independent_variables:
+- header:
+    name: $|y_{W}|$
+  values:
+  - high: 0.25
+    low: 0.0
+  - high: 0.5
+    low: 0.25
+  - high: 0.75
+    low: 0.5
+  - high: 1.0
+    low: 0.75
+  - high: 1.25
+    low: 1.0
+  - high: 1.5
+    low: 1.25
+  - high: 1.75
+    low: 1.5
+  - high: 2.0
+    low: 1.75
+  - high: 2.25
+    low: 2.0
+  - high: 2.5
+    low: 2.25
