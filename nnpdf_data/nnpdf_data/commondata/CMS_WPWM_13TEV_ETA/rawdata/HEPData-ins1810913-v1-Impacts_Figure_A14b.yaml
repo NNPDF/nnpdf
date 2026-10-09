@@ -1,0 +1,137 @@
+dependent_variables:
+- header:
+    name: Relative uncertainty due to statistical uncertainty in data
+    units: '%'
+  values:
+  - value: 0.0919
+  - value: 0.152
+  - value: 0.162
+  - value: 0.173
+  - value: 0.179
+  - value: 0.207
+  - value: 0.3
+  - value: 0.539
+  - value: 1.07
+  - value: 1.08
+- header:
+    name: Relative uncertainty due to statistical uncertainty on lepton efficiency
+    units: '%'
+  values:
+  - value: 0.485
+  - value: 0.502
+  - value: 0.494
+  - value: 0.499
+  - value: 0.491
+  - value: 0.499
+  - value: 0.549
+  - value: 0.609
+  - value: 1.16
+  - value: 1.56
+- header:
+    name: Relative uncertainty due to luminosity
+    units: '%'
+  values:
+  - value: 2.04
+  - value: 2.03
+  - value: 2.04
+  - value: 2.02
+  - value: 2.03
+  - value: 2.04
+  - value: 2.06
+  - value: 2.05
+  - value: 2.15
+  - value: 2.11
+- header:
+    name: Relative uncertainty due to total uncertainty
+    units: '%'
+  values:
+  - value: 2.18
+  - value: 2.2
+  - value: 2.2
+  - value: 2.19
+  - value: 2.19
+  - value: 2.23
+  - value: 2.33
+  - value: 2.65
+  - value: 4.25
+  - value: 5.41
+- header:
+    name: Relative uncertainty due to statistical uncertainty in simulation
+    units: '%'
+  values:
+  - value: 1.25
+  - value: 1.27
+  - value: 1.28
+  - value: 1.27
+  - value: 1.27
+  - value: 1.32
+  - value: 1.43
+  - value: 1.81
+  - value: 3.44
+  - value: 4.49
+- header:
+    name: Relative uncertainty due to QCD background
+    units: '%'
+  values:
+  - value: 0.5
+  - value: 0.496
+  - value: 0.51
+  - value: 0.526
+  - value: 0.532
+  - value: 0.53
+  - value: 0.599
+  - value: 0.652
+  - value: 0.864
+  - value: 0.815
+- header:
+    name: Relative uncertainty due to QCD factorization and normalization scales
+    units: '%'
+  values:
+  - value: 1.04
+  - value: 1.05
+  - value: 1.06
+  - value: 1.02
+  - value: 1.03
+  - value: 1.06
+  - value: 1.08
+  - value: 1.05
+  - value: 1.14
+  - value: 1.29
+- header:
+    name: Relative uncertainty due to PDFs and $\alpha_{S}$
+    units: '%'
+  values:
+  - value: 0.565
+  - value: 0.562
+  - value: 0.539
+  - value: 0.525
+  - value: 0.505
+  - value: 0.472
+  - value: 0.461
+  - value: 0.474
+  - value: 0.527
+  - value: 0.603
+independent_variables:
+- header:
+    name: $|y_{W}|$
+  values:
+  - high: 0.25
+    low: 0.0
+  - high: 0.5
+    low: 0.25
+  - high: 0.75
+    low: 0.5
+  - high: 1.0
+    low: 0.75
+  - high: 1.25
+    low: 1.0
+  - high: 1.5
+    low: 1.25
+  - high: 1.75
+    low: 1.5
+  - high: 2.0
+    low: 1.75
+  - high: 2.25
+    low: 2.0
+  - high: 2.5
+    low: 2.25
