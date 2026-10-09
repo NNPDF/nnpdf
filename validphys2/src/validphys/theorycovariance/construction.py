@@ -185,6 +185,15 @@ def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
         cnt += n_var
     return s_singlet_ad
 
+def covmat_n3lo_cf(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for all the
+    coefficient function variations.
+    """
+    s_cf = 0
+    # loop over the 4 coefficient function variations
+    for cf in range(4):
+        s_cf += covmat_n3lo_ad(name1, name2, [deltas1[cf], deltas1[cf + 4]], [deltas2[cf], deltas2[cf+4]])
+    return s_cf
 
 def covmat_n3lo_fhmruvv(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for all the
@@ -305,7 +314,7 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
         s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
     elif point_prescription == "dis ihou":
         # n3lo ihou prescriprion
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
+        s = covmat_n3lo_cf(name1, name2, deltas1, deltas2)
     elif point_prescription == "3pt missing":
         # 3 point renormalization scale variations for subset of data
         s = covmat_3pt(name1, name2, deltas1, deltas2)
