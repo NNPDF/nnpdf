@@ -132,7 +132,7 @@ def pineappl_reader(fkspec):
 
     For more information on the reading of pineappl tables:
 
-    https://pineappl.readthedocs.io/en/latest/modules/pineappl/pineappl.html#pineappl.pineappl.PyFkTable
+    https://pineappl.readthedocs.io/en/latest/modules/pineappl.html#pineappl.fk_table.FkTable
 
     About the reader:
 
