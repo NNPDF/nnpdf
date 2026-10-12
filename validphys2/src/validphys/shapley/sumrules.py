@@ -1,6 +1,9 @@
 """MSR + VSR sum rule enforcement for perturbed PDFs.
 
-Reproduces the normalization logic of n3fit.layers.msr_normalization in pure numpy for applying to perturbated PDF sets. Sum rules are always applied in the evolution basis.
+Applies the n3fit-style multiplicative normalization to perturbed PDF sets.
+Sum rules are always applied in the evolution basis. Unlike an n3fit network,
+the perturbed grids need not obey V = V24 = V35 before normalization, so each
+valence channel uses its own integral.
 
 FK_FLAVOURS ordering:
   0=photon, 1=Sigma, 2=g, 3=V, 4=V3, 5=V8, 6=V15, 7=V24, 8=V35, 9=T3, 10=T8, 11=T15, 12=T24, 13=T35
@@ -63,6 +66,18 @@ def compute_sumrule_normalization(gv_evol14, xgrid, weights):
     norm : np.ndarray, shape (nrep, 14)
         Multiplicative normalization constant per replica per flavour.
         Non-constrained channels get 1.0.
+
+    Raises
+    ------
+    ValueError
+        If a required integral is non-finite or numerically zero. A finite
+        multiplicative correction cannot restore a nonzero target then.
+
+    Notes
+    -----
+    The same channels are normalized for every coalition, including the
+    empty coalition. Coalition membership does not select compensators.
+    Negative integrals require signed normalization factors.
     """
     nrep = gv_evol14.shape[0]
     norm = np.ones((nrep, 14))
@@ -78,17 +93,18 @@ def compute_sumrule_normalization(gv_evol14, xgrid, weights):
     sigma_mom = mom[:, 1]   # Sigma
     photon_mom = mom[:, 0]  # photon
     gluon_mom = mom[:, 2]   # g
-    norm[:, 2] = (1.0 - sigma_mom - photon_mom) / np.clip(
-        np.abs(gluon_mom), 1e-30, None
+    denominators = np.column_stack((gluon_mom, num[:, 3:9]))
+    targets = np.empty_like(denominators)
+    targets[:, 0] = 1.0 - sigma_mom - photon_mom
+    targets[:, 1:] = [3.0, 1.0, 3.0, 3.0, 3.0, 3.0]
+    if not np.all(np.isfinite(denominators)) or not np.all(np.isfinite(targets)):
+        raise ValueError("Non-finite integral in sum-rule normalization.")
+    zero = np.abs(denominators) < 1e-30
+    if np.any(zero & (targets != 0.0)):
+        raise ValueError("Cannot restore a nonzero sum-rule target from a zero integral.")
+    # If both the integral and its target vanish, leave that channel alone.
+    norm[:, 2:9] = np.divide(
+        targets, denominators, out=np.ones_like(targets), where=~zero
     )
-
-    # VSR: valence channels normalised to quark number targets
-    v_num = num[:, 3]   # V integral
-    norm[:, 3] = 3.0 / np.clip(np.abs(v_num), 1e-30, None)    # V
-    norm[:, 4] = 1.0 / np.clip(np.abs(num[:, 4]), 1e-30, None) # V3
-    norm[:, 5] = 3.0 / np.clip(np.abs(num[:, 5]), 1e-30, None) # V8
-    norm[:, 6] = 3.0 / np.clip(np.abs(num[:, 6]), 1e-30, None) # V15
-    norm[:, 7] = 3.0 / np.clip(np.abs(v_num), 1e-30, None)    # V24 (same as V)
-    norm[:, 8] = 3.0 / np.clip(np.abs(v_num), 1e-30, None)    # V35 (same as V)
 
     return norm
