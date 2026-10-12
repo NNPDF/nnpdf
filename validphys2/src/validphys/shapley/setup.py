@@ -548,6 +548,55 @@ def build_full_covmat_for_observables(observables):
 # Grid-value evaluation
 # ---------------------------------------------------------------------------
 
+class _LHAPDFUncertaintyStats:
+    """Stats adapter for LHAPDF error types validphys has no Stats class for.
+
+    Compound types such as ``hessian+q2min+$mc+...`` (e.g. ATLASpdf21) combine
+    eigenvectors with model/parametrisation variations; LHAPDF's own
+    ``PDFSet.uncertainty`` is the authors' prescription for that, so it is used
+    here, rescaled to 68% CL. ``data`` has shape (members, nbins) in LHAPDF
+    member order (central at row 0), exactly as for validphys Stats classes.
+    """
+
+    def __init__(self, data, set_name):
+        import lhapdf
+
+        data = np.atleast_2d(np.asarray(data, dtype=float))
+        pdfset = lhapdf.getPDFSet(set_name)
+        if data.shape[0] != pdfset.size:
+            raise ValueError(
+                f"{set_name}: expected {pdfset.size} members, got {data.shape[0]}"
+            )
+        unc = [pdfset.uncertainty(list(col), 68.0) for col in data.T]
+        self._central = np.array([u.central for u in unc])
+        self._plus = np.array([u.errplus for u in unc])
+        self._minus = np.array([u.errminus for u in unc])
+        self._symm = np.array([u.errsymm for u in unc])
+
+    def central_value(self):
+        return self._central
+
+    def errorbar68(self):
+        return self._central - self._minus, self._central + self._plus
+
+    def std_error(self):
+        return self._symm
+
+
+def pdf_stats_class(pdf):
+    """validphys ``pdf.stats_class``, or an LHAPDF-uncertainty adapter for sets
+    whose error type validphys does not support (e.g. ATLASpdf21)."""
+    try:
+        return pdf.stats_class
+    except NotImplementedError:
+        print(
+            f"Stats for {pdf.name}: error type '{pdf.error_type}' via "
+            "LHAPDF PDFSet.uncertainty (68% CL)",
+            flush=True,
+        )
+        return functools.partial(_LHAPDFUncertaintyStats, set_name=pdf.name)
+
+
 def _select_pdf_members(gv, n_replicas=None, member_mode="replicas"):
     """Select members from a PDF grid.
 

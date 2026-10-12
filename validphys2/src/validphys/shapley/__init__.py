@@ -42,7 +42,11 @@ from .sumrules import (
     gen_integration_input,
     compute_sumrule_normalization,
 )
-from .analyzer import NNPDFShapleyAnalyzer, NNPDFShapleyAnalyzerVecX
+from .analyzer import (
+    NNPDFShapleyAnalyzer,
+    NNPDFShapleyAnalyzerMultiPlayer,
+    NNPDFShapleyAnalyzerVecX,
+)
 
 __all__ = [
     # Setup
@@ -64,5 +68,6 @@ __all__ = [
     "compute_sumrule_normalization",
     # Analyzers
     "NNPDFShapleyAnalyzer",
+    "NNPDFShapleyAnalyzerMultiPlayer",
     "NNPDFShapleyAnalyzerVecX",
 ]

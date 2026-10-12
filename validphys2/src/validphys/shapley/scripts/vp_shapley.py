@@ -5,6 +5,37 @@ Usage
 -----
     vp-shapley runcards/sv_dis_hera.yaml
     vp-shapley runcards/sv_global.yaml --output results/sv
+
+Multi-player flavour games
+--------------------------
+An experiment may list explicit ``players`` instead of a single ``mu``; each
+player is one flavour perturbed at its own x, so the same flavour can appear
+at several x values (bumps of one flavour are superimposed)::
+
+    - name: g_smallx_vs_quarks
+      basis: [flavor]
+      perturbation: {sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
+      players:
+        - {flavour: g, mu: 1.0e-3}
+        - {flavour: [sbar, ubar, dbar, g, d, u, s, c+], mu: 0.1}
+
+Performance options (both off by default = original behaviour)
+---------------------------------------------------------------
+Top-level runcard keys, overridable on the command line::
+
+    cache_calibration: true       # --cache-calibration / --no-cache-calibration
+    parallel_backend: processes   # --parallel-backend {threads,processes}
+
+``cache_calibration`` memoises the calibrated up/down amplitudes (they do not
+depend on the coalition, so results are bit-identical). ``processes`` runs
+coalitions in forked worker processes instead of GIL-bound threads.
+``--experiment-indices 0-9`` runs several experiments in one process, paying
+the dataset setup once.
+
+A list under ``flavour`` expands to one player per flavour at that ``mu``;
+``flavour: all`` means every base flavour of the experiment's basis.
+Cross-experiment comparison plots are skipped for multi-player runcards; the
+aggregation step writes ``multiplayer_summary_<basis>.csv`` instead.
 """
 
 import argparse
@@ -26,7 +57,11 @@ from validphys.shapley.setup import (
     setup_observables,
     build_full_covmat_for_observables,
 )
-from validphys.shapley.analyzer import NNPDFShapleyAnalyzer
+from validphys.shapley.analyzer import (
+    PARALLEL_BACKENDS,
+    NNPDFShapleyAnalyzer,
+    NNPDFShapleyAnalyzerMultiPlayer,
+)
 from validphys.shapley.perturbation import apply_gaussian_perturbation
 import matplotlib.lines as mlines
 import matplotlib.patches as mpatches
@@ -167,6 +202,54 @@ def _resolve_output_dir(cfg, runcard_path, cli_output):
     return output_root / f"{ts}_{label}"
 
 
+def _expand_players(players_cfg, exp_name):
+    """Expand a runcard ``players`` list into ``[(flavour, mu), ...]``.
+
+    Returns None when the experiment is a standard single-x game.
+    """
+    if players_cfg is None:
+        return None
+    if not isinstance(players_cfg, list) or not players_cfg:
+        raise TypeError(f"'players' in experiment '{exp_name}' must be a non-empty list")
+    players = []
+    for entry in players_cfg:
+        if not isinstance(entry, dict) or "flavour" not in entry or "mu" not in entry:
+            raise KeyError(
+                f"Each player in experiment '{exp_name}' needs 'flavour' and 'mu', got {entry}"
+            )
+        flavours = entry["flavour"]
+        flavours = flavours if isinstance(flavours, list) else [flavours]
+        players.extend((flavour, float(entry["mu"])) for flavour in flavours)
+    return players
+
+
+def _is_multiplayer(experiments):
+    return any(exp_cfg.get("players") is not None for _, exp_cfg in experiments)
+
+
+def _save_multiplayer_summary(all_experiment_results, output_dir):
+    """One CSV per basis: experiment, player, flavour, mu, phi_even, phi_odd."""
+    bases = sorted({b for res in all_experiment_results.values() for b in res})
+    for basis in bases:
+        path = output_dir / f"multiplayer_summary_{basis}.csv"
+        with open(path, "w") as f:
+            f.write("experiment,player,flavour,mu,phi_even,phi_odd,n_excluded_datasets\n")
+            for exp_name, res_by_basis in all_experiment_results.items():
+                res = res_by_basis.get(basis)
+                if res is None:
+                    continue
+                phi_odd = res.get("phi_odd") or {}
+                n_excl = (res.get("stabilization") or {}).get("n_excluded_datasets", 0)
+                for player in res.get("players") or []:
+                    label = player["label"]
+                    f.write(
+                        f"{exp_name},{label},{player['flavour']},{player['mu']:g},"
+                        f"{res['phi_even'][label]:.8f},"
+                        f"{phi_odd.get(label, float('nan')):.8f},{n_excl}\n"
+                    )
+        print(f"Saved: {path}")
+
+
 def _normalize_experiments(cfg):
     """Normalize experiments into a list of (name, config) tuples."""
     experiments = cfg["experiments"]
@@ -188,12 +271,20 @@ def _normalize_experiments(cfg):
         pert = exp.get("perturbation")
         if pert is None:
             raise KeyError(f"Missing 'perturbation' in experiment '{exp_name}'")
-        for key in ["mu", "sigma", "amplitude"]:
+        players = _expand_players(exp.get("players"), exp_name)
+        required = ["sigma", "amplitude"] if players is not None else ["mu", "sigma", "amplitude"]
+        for key in required:
             if key not in pert:
                 raise KeyError(f"Missing {key} in perturbation for experiment '{exp_name}'")
+        if players is not None and "mu" in pert:
+            raise KeyError(
+                f"Experiment '{exp_name}' sets both 'players' and perturbation.mu; "
+                "give each player its own mu instead."
+            )
 
         exp_cfg = dict(cfg)
         exp_cfg["perturbation"] = pert
+        exp_cfg["players"] = players
         for key in [
             "basis",
             "n_jobs",
@@ -221,12 +312,22 @@ def _build_setup_context(cfg):
         use_cuts=cfg.get("use_cuts", "internal"),
         variant=cfg.get("variant", None),
     )
+    # Optional calibration PDF: when set, the calibrated-mode +/-1sigma envelope
+    # is taken from this set (e.g. transpose NNPDF40's band onto another set)
+    # instead of the evaluated PDF's own uncertainty (the default).
+    calibration_pdf = None
+    calibration_pdf_name = cfg.get("calibration_pdf")
+    if calibration_pdf_name:
+        from validphys.loader import Loader
+        calibration_pdf = Loader().check_pdf(calibration_pdf_name)
+        print(f"Calibration PDF : {calibration_pdf_name}", flush=True)
     return {
         "pdf": pdf,
         "observables": observables,
         "flavor_info": flavor_info,
         "full_L_inv": full_L_inv,
         "full_data_central": full_data_central,
+        "calibration_pdf": calibration_pdf,
     }
 
 
@@ -963,6 +1064,8 @@ def _resolve_stabilization_cfg(cfg):
 
 def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=None):
     """Compute per-dataset mean chi2 for a single coalition."""
+    if isinstance(analyzer, NNPDFShapleyAnalyzerMultiPlayer):
+        return analyzer.dataset_mean_chi2_rows(coalition, sign_matrices=sign_matrices)
     mu = pert["mu"]
     sigma = pert["sigma"]
     amplitude = pert["amplitude"]
@@ -1003,6 +1106,7 @@ def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=No
                         xspace=xspace,
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_flav_calib,
+                        calibration_stats=analyzer.calibration_stats_class,
                     )
                     gv_pert_list.append(gv_pert)
 
@@ -1050,6 +1154,7 @@ def _dataset_mean_chi2_for_coalition(analyzer, coalition, pert, sign_matrices=No
                         xspace=xspace,
                         flavor_signs=perturb_signs,
                         calibration_gv=gv_calib,
+                        calibration_stats=analyzer.calibration_stats_class,
                     )
                     if sr_norm is not None:
                         fi = range(14) if entry.hadronic else entry.flavor_indices
@@ -1210,12 +1315,47 @@ def _save_stabilization_files(report, output_dir, basis):
     return json_path, csv_path
 
 
+def _resolve_performance_cfg(cfg, cache_calibration=None, parallel_backend=None):
+    """Performance switches: CLI override > runcard key > original behaviour."""
+    if cache_calibration is None:
+        cache_calibration = bool(cfg.get("cache_calibration", False))
+    if parallel_backend is None:
+        parallel_backend = str(cfg.get("parallel_backend", "threads"))
+    parallel_backend = str(parallel_backend).strip().lower()
+    if parallel_backend not in PARALLEL_BACKENDS:
+        raise ValueError(
+            f"parallel_backend must be one of {PARALLEL_BACKENDS}, got '{parallel_backend}'"
+        )
+    return bool(cache_calibration), parallel_backend
+
+
+def _parse_index_selection(text, n):
+    """Parse '3', '0-9', '0,4,7' or '0-4,10-14' into sorted unique indices."""
+    out = set()
+    for part in str(text).split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if "-" in part:
+            lo, hi = (int(v) for v in part.split("-", 1))
+            out.update(range(lo, hi + 1))
+        else:
+            out.add(int(part))
+    bad = [i for i in out if i < 0 or i >= n]
+    if bad or not out:
+        raise IndexError(f"--experiment-indices '{text}' invalid for n={n} experiments")
+    return sorted(out)
+
+
 def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
-                 diagnostic=None, outlier_n_sigma=3.0):
+                 diagnostic=None, outlier_n_sigma=3.0,
+                 cache_calibration=None, parallel_backend=None):
     """Execute the full Shapley value pipeline from one experiment config.
 
     Parameters
     ----------
+    cache_calibration, parallel_backend
+        Performance switches; None reads the runcard keys (default off/threads).
     diagnostic : bool or None
         When True, record chi2 for every coalition and write diagnostic files.
         None (default) reads the ``diagnostic`` key from *cfg*.
@@ -1232,7 +1372,8 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
         bases = [bases]
 
     pert = cfg["perturbation"]
-    mu = pert["mu"]
+    players = cfg.get("players")
+    mu = pert.get("mu")  # None for multi-player games (each player has its own)
     sigma = pert["sigma"]
     amplitude = pert["amplitude"]
     mode = pert.get("mode", "additive")
@@ -1312,6 +1453,14 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
     else:
         print("Stabilization     : OFF")
 
+    cache_calibration, parallel_backend = _resolve_performance_cfg(
+        cfg, cache_calibration, parallel_backend
+    )
+    print(
+        f"Performance       : cache_calibration={cache_calibration}, "
+        f"parallel_backend={parallel_backend}"
+    )
+
     output_dir.mkdir(parents=True, exist_ok=True)
     all_results = {}
 
@@ -1334,15 +1483,28 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
         else:
             fi = flavor_info
 
-        analyzer = NNPDFShapleyAnalyzer(
-            pdf, observables, fi,
-            n_replicas=n_replicas,
-            basis=basis,
-            enforce_sumrules=enforce_sumrules,
-            member_mode=member_mode,
-            full_L_inv=full_L_inv,
-            full_data_central=full_data_central,
-        )
+        def _make_analyzer(obs_list, L_inv, data_central):
+            common = dict(
+                n_replicas=n_replicas,
+                basis=basis,
+                enforce_sumrules=enforce_sumrules,
+                member_mode=member_mode,
+                full_L_inv=L_inv,
+                full_data_central=data_central,
+                cache_calibration=cache_calibration,
+                parallel_backend=parallel_backend,
+                calibration_pdf=setup_context.get("calibration_pdf"),
+            )
+            if players is None:
+                return NNPDFShapleyAnalyzer(pdf, obs_list, fi, **common)
+            return NNPDFShapleyAnalyzerMultiPlayer(
+                pdf, obs_list, fi, players,
+                sigma, amplitude, mode, xspace, **common,
+            )
+
+        analyzer = _make_analyzer(observables, full_L_inv, full_data_central)
+        if players is not None:
+            print(f"Players ({analyzer.n_flavors}): {', '.join(analyzer.flavor_short)}")
 
         t0 = time.time()
         # Stabilization requires full coalition diagnostics from the raw run.
@@ -1405,16 +1567,8 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
                     else:
                         kept_L_inv = None
                         kept_data_central = None
-                    stable_analyzer = NNPDFShapleyAnalyzer(
-                        pdf,
-                        kept,
-                        fi,
-                        n_replicas=n_replicas,
-                        basis=basis,
-                        enforce_sumrules=enforce_sumrules,
-                        member_mode=member_mode,
-                        full_L_inv=kept_L_inv,
-                        full_data_central=kept_data_central,
+                    stable_analyzer = _make_analyzer(
+                        kept, kept_L_inv, kept_data_central
                     )
                     results_final = stable_analyzer.exact_shap(
                         mu=mu, sigma=sigma, amplitude=amplitude,
@@ -1624,6 +1778,17 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             "elapsed_seconds": round(elapsed, 1),
             "n_jobs": int(results_final.get("n_jobs", n_jobs)),
             "n_datasets_used": len(observables_used),
+            "players": (
+                [
+                    {"label": lbl, "flavour": flav, "mu": float(p_mu)}
+                    for lbl, flav, p_mu in zip(
+                        analyzer.flavor_short,
+                        analyzer.player_flavours,
+                        analyzer.player_mus,
+                    )
+                ]
+                if players is not None else None
+            ),
             "stabilization": {
                 "enabled": bool(stabilization["enabled"]),
                 "action": stabilization["action"],
@@ -1655,9 +1820,16 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
             "deterministic_sign_symmetrized": bool(deterministic_sign_symmetrized),
             "random_seed": random_seed,
         },
+        "players": (
+            [{"flavour": str(f), "mu": float(m)} for f, m in players]
+            if players is not None else None
+        ),
+        "calibration_pdf": cfg.get("calibration_pdf") or cfg["pdf_name"],
         "enforce_sumrules": enforce_sumrules,
         "use_full_covmat": use_full_covmat,
         "n_jobs": int(n_jobs),
+        "cache_calibration": cache_calibration,
+        "parallel_backend": parallel_backend,
         "stabilization": {
             "enabled": bool(stabilization["enabled"]),
             "action": stabilization["action"],
@@ -1748,6 +1920,22 @@ def main():
         ),
     )
 
+    perf = parser.add_argument_group("performance (default: original behaviour)")
+    cache_group = perf.add_mutually_exclusive_group()
+    cache_group.add_argument(
+        "--cache-calibration", dest="cache_calibration", action="store_true",
+        default=None,
+        help="Memoise calibrated bump amplitudes (bit-identical results, faster).",
+    )
+    cache_group.add_argument(
+        "--no-cache-calibration", dest="cache_calibration", action="store_false",
+        help="Recompute calibrated amplitudes on every evaluation (original).",
+    )
+    perf.add_argument(
+        "--parallel-backend", choices=PARALLEL_BACKENDS, default=None,
+        help="'threads' (original) or 'processes' (forked workers, no GIL).",
+    )
+
     exp_sel = parser.add_argument_group("experiment selection")
     exp_sel.add_argument(
         "--list-experiments",
@@ -1770,6 +1958,15 @@ def main():
         help=(
             "Run only the experiment at this 0-based index in the normalized list. "
             "Useful for SLURM array tasks (SLURM_ARRAY_TASK_ID)."
+        ),
+    )
+    exp_sel.add_argument(
+        "--experiment-indices",
+        type=str,
+        default=None,
+        help=(
+            "Run several experiments (0-based indices: '0-9', '0,4,7', "
+            "'0-4,10-14') in one process, so the dataset setup is paid once."
         ),
     )
     exp_sel.add_argument(
@@ -1804,9 +2001,13 @@ def main():
             pert = exp_cfg.get("perturbation", {})
             mu = pert.get("mu")
             sigma = pert.get("sigma")
+            players = exp_cfg.get("players")
+            where = (
+                f"players={len(players)}" if players is not None else f"mu={mu}"
+            )
             print(
                 f"  [{i}] name={exp_name} token={exp_token} "
-                f"mu={mu} sigma={sigma}"
+                f"{where} sigma={sigma}"
             )
         return
 
@@ -1815,8 +2016,19 @@ def main():
     # Resolve experiment selection (if any).
     selected = experiments
     selected_name = None
-    if args.experiment_index is not None and args.experiment is not None:
-        raise ValueError("Use only one of --experiment or --experiment-index")
+    n_selectors = sum(
+        v is not None
+        for v in (args.experiment, args.experiment_index, args.experiment_indices)
+    )
+    if n_selectors > 1:
+        raise ValueError(
+            "Use only one of --experiment, --experiment-index, --experiment-indices"
+        )
+    if args.experiment_indices is not None:
+        selected = [
+            experiments[i]
+            for i in _parse_index_selection(args.experiment_indices, len(experiments))
+        ]
     if args.experiment_index is not None:
         idx = int(args.experiment_index)
         if idx < 0 or idx >= len(experiments):
@@ -1881,7 +2093,9 @@ def main():
             for p in missing:
                 print(f"  - {p}")
 
-        if compare_enabled:
+        if compare_enabled and _is_multiplayer(experiments):
+            _save_multiplayer_summary(all_experiment_results, output_dir)
+        elif compare_enabled:
             _save_comparison_plots(all_experiment_results, output_dir, summary)
 
             summary_path = output_dir / "experiments_summary.json"
@@ -1908,6 +2122,8 @@ def main():
             n_jobs_override=args.n_jobs,
             diagnostic=args.diagnostic,
             outlier_n_sigma=args.outlier_n_sigma,
+            cache_calibration=args.cache_calibration,
+            parallel_backend=args.parallel_backend,
         )
         all_experiment_results[exp_name] = experiment_results
         summary[exp_name] = {
@@ -1915,7 +2131,9 @@ def main():
             "perturbation": exp_cfg["perturbation"],
         }
 
-    if compare_enabled and len(all_experiment_results) > 0:
+    if compare_enabled and len(all_experiment_results) > 0 and _is_multiplayer(experiments):
+        _save_multiplayer_summary(all_experiment_results, output_dir)
+    elif compare_enabled and len(all_experiment_results) > 0:
         _save_comparison_plots(all_experiment_results, output_dir, summary)
 
         summary_path = output_dir / "experiments_summary.json"

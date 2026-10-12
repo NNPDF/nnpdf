@@ -11,15 +11,35 @@ set -euo pipefail
 # Optional modes
 #  - --split (or SPLIT_EXPERIMENTS=1): submit an array job, one task per experiment,
 #    plus a dependent aggregation job.
+#  - --chunks K (or N_CHUNKS=K): like --split, but K array tasks that each run a
+#    contiguous block of experiments in ONE process, so the ~100 s dataset setup
+#    is paid K times instead of once per experiment. --chunks 1 = a single job.
 #  - --aggregate-only (or AGGREGATE_ONLY=1): only rebuild cross-experiment outputs
 #    from per-experiment results already on disk.
+#
+# Performance flags go after the runcard and are forwarded to every task, e.g.
+#   N_JOBS=16 ./run_vp_shapley.slurm --chunks 5 runcard.yaml \
+#       --cache-calibration --parallel-backend processes
 SPLIT_EXPERIMENTS="${SPLIT_EXPERIMENTS:-0}"
 SPLIT_MODE="${SPLIT_MODE:-0}"
+CHUNK_MODE="${CHUNK_MODE:-0}"
+N_CHUNKS="${N_CHUNKS:-}"
 AGGREGATE_ONLY="${AGGREGATE_ONLY:-0}"
 
 if [[ "${1:-}" == "--split" ]]; then
   SPLIT_EXPERIMENTS=1
   shift
+fi
+if [[ "${1:-}" == "--chunks" ]]; then
+  N_CHUNKS="${2:-}"
+  shift 2
+fi
+if [[ -n "${N_CHUNKS}" && -z "${SLURM_JOB_ID:-}" ]]; then
+  if ! [[ "${N_CHUNKS}" =~ ^[1-9][0-9]*$ ]]; then
+    echo "ERROR: --chunks needs a positive integer, got '${N_CHUNKS}'" >&2
+    exit 1
+  fi
+  SPLIT_EXPERIMENTS=1
 fi
 if [[ "${1:-}" == "--aggregate-only" ]]; then
   AGGREGATE_ONLY=1
@@ -196,13 +216,19 @@ if [[ -z "${SLURM_JOB_ID:-}" && "${SPLIT_EXPERIMENTS}" == "1" ]]; then
   fi
 
   ARRAY_MAX=$((N_EXP - 1))
+  TASK_EXPORT="SPLIT_MODE=1"
+  if [[ -n "${N_CHUNKS}" ]]; then
+    if (( N_CHUNKS > N_EXP )); then N_CHUNKS="${N_EXP}"; fi
+    ARRAY_MAX=$((N_CHUNKS - 1))
+    TASK_EXPORT="CHUNK_MODE=1,N_CHUNKS=${N_CHUNKS},N_EXP=${N_EXP}"
+  fi
   CPUS_PER_TASK="${CPUS_PER_TASK:-${N_JOBS:-1}}"
   if [[ -z "${CPUS_PER_TASK}" || "${CPUS_PER_TASK}" -lt 1 ]]; then
     CPUS_PER_TASK=1
   fi
   echo "Submitting split Shapley run" >&2
   echo "  Runcard    : ${RUNCARD_PATH}" >&2
-  echo "  Experiments: ${N_EXP} (array 0-${ARRAY_MAX})" >&2
+  echo "  Experiments: ${N_EXP} (array 0-${ARRAY_MAX}${N_CHUNKS:+, ${N_CHUNKS} chunks})" >&2
   echo "  Output dir : ${EFFECTIVE_OUTPUT_DIR}" >&2
   echo "  CPUs/task  : ${CPUS_PER_TASK} (set CPUS_PER_TASK or N_JOBS)" >&2
 
@@ -211,7 +237,7 @@ if [[ -z "${SLURM_JOB_ID:-}" && "${SPLIT_EXPERIMENTS}" == "1" ]]; then
       --job-name="vp_shapley_${RUN_TOKEN}" \
       --array="0-${ARRAY_MAX}" \
       --cpus-per-task="${CPUS_PER_TASK}" \
-      --export=ALL,RUNCARD="${RUNCARD_PATH}",OUTPUT_DIR="${EFFECTIVE_OUTPUT_DIR}",SPLIT_MODE=1 \
+      --export=ALL,RUNCARD="${RUNCARD_PATH}",OUTPUT_DIR="${EFFECTIVE_OUTPUT_DIR}",${TASK_EXPORT} \
       "${SCRIPT_PATH}" "${RUNCARD_PATH}" "${EXTRA_ARGS[@]}"
   )"
   echo "${array_submit_out}" >&2
@@ -275,6 +301,21 @@ if [[ "${SPLIT_MODE}" == "1" ]]; then
     exit 1
   fi
   CMD+=(--experiment-index "${SLURM_ARRAY_TASK_ID}" --no-compare)
+fi
+if [[ "${CHUNK_MODE}" == "1" ]]; then
+  if [[ -z "${SLURM_ARRAY_TASK_ID:-}" || -z "${N_EXP:-}" || -z "${N_CHUNKS:-}" ]]; then
+    echo "ERROR: CHUNK_MODE=1 requires SLURM_ARRAY_TASK_ID, N_EXP and N_CHUNKS" >&2
+    exit 1
+  fi
+  CHUNK_SIZE=$(( (N_EXP + N_CHUNKS - 1) / N_CHUNKS ))
+  CHUNK_START=$(( SLURM_ARRAY_TASK_ID * CHUNK_SIZE ))
+  CHUNK_END=$(( CHUNK_START + CHUNK_SIZE - 1 ))
+  if (( CHUNK_END > N_EXP - 1 )); then CHUNK_END=$(( N_EXP - 1 )); fi
+  if (( CHUNK_START > N_EXP - 1 )); then
+    echo "Chunk ${SLURM_ARRAY_TASK_ID} is empty; nothing to do."
+    exit 0
+  fi
+  CMD+=(--experiment-indices "${CHUNK_START}-${CHUNK_END}" --no-compare)
 fi
 if [[ "${AGGREGATE_ONLY}" == "1" ]]; then
   CMD+=(--aggregate-only)

@@ -1,7 +1,8 @@
 """Gaussian perturbation of PDF grid values.
 
 Provides tools for perturbing selected flavour channels with a Gaussian bump. Two independent parameters control the perturbation:
-  - mode: 'additive', 'multiplicative', 'calibrated', or 'ablation'
+  - mode: 'additive', 'multiplicative', 'calibrated', 'calibrated_symmetric',
+    or 'ablation'
   - xspace: 'linear' or 'logx'
 
 Calibrated mode
@@ -18,6 +19,17 @@ the 84th/16th percentiles over replicas. The Gaussian shape is preserved; only
 its peak height varies by flavor and by sign. This avoids assuming a symmetric
 down-shift equal to the negative of the up-shift.
 
+Calibrated-symmetric mode
+-------------------------
+'calibrated_symmetric' restores the pre-March-2026 definition: one amplitude
+per flavour, used for both signs,
+
+    amplitude_j_plus = amplitude_j_minus = alpha * std_j(x_mu)
+
+where std_j is the 1-sigma uncertainty of the calibration set at x ~ mu
+(replica standard deviation for Monte-Carlo sets, rescaled quadrature for
+Hessian sets, via validphys' Stats.std_error).
+
 Ablation mode
 -------------
 In 'ablation' mode the selected flavour channels are set to zero over the
@@ -30,7 +42,10 @@ entire x grid:
 import numpy as np
 
 # Valid perturbation parameter choices
-PERTURBATION_MODES = ('additive', 'multiplicative', 'calibrated', 'ablation')
+PERTURBATION_MODES = (
+    'additive', 'multiplicative', 'calibrated', 'calibrated_symmetric', 'ablation'
+)
+CALIBRATED_MODES = ('calibrated', 'calibrated_symmetric')
 PERTURBATION_XSPACES = ('linear', 'logx')
 
 
@@ -62,11 +77,16 @@ def gaussian_profile(xgrid, mu, sigma, amplitude, xspace='linear'):
         return amplitude * np.exp(-0.5 * ((x - mu) / sigma) ** 2)
 
 
-def _calibrated_amplitudes(calib_vals, amplitude, calibration_stats=None):
+def _calibrated_amplitudes(calib_vals, amplitude, calibration_stats=None,
+                           symmetric=False):
     """Per-flavour up/down calibrated amplitudes from a member ensemble.
 
     ``calib_vals`` is a 1-D array of the calibration members evaluated at a
     single (flavour, x) point. Returns ``(amp_plus, amp_minus)``.
+
+    With ``symmetric=True`` both amplitudes equal ``amplitude * std``, the
+    1-sigma uncertainty (``stats.std_error()``, or the replica standard
+    deviation without ``calibration_stats``).
 
     When ``calibration_stats`` (a ``pdf.stats_class`` callable) is given, the
     central value and 68% band come from validphys' Stats classes, which are
@@ -75,6 +95,14 @@ def _calibrated_amplitudes(calib_vals, amplitude, calibration_stats=None):
     Otherwise mean + 16/84 percentile envelope is used.
     """
     calib_vals = np.asarray(calib_vals, dtype=float)
+    if symmetric:
+        if calibration_stats is not None:
+            std = calibration_stats(calib_vals[:, np.newaxis]).std_error()
+            std = float(np.asarray(std).ravel()[0])
+        else:
+            std = float(np.std(calib_vals))
+        amp = float(amplitude) * max(std, 0.0)
+        return amp, amp
     if calibration_stats is not None:
         stats = calibration_stats(calib_vals[:, np.newaxis])
         central = float(np.asarray(stats.central_value()).ravel()[0])
@@ -90,11 +118,36 @@ def _calibrated_amplitudes(calib_vals, amplitude, calibration_stats=None):
     return amp_plus, amp_minus
 
 
+def _cached_calibrated_amplitudes(gv_sigma, fi, idx_mu, amplitude,
+                                  calibration_stats, amplitude_cache,
+                                  symmetric=False):
+    """``_calibrated_amplitudes`` for ``gv_sigma[:, fi, idx_mu]``, optionally memoised.
+
+    ``amplitude_cache`` is a dict owned by the caller and tied to ONE
+    calibration array (one FK grid). The amplitudes depend only on that
+    array's column, the amplitude multiplier and the stats class, so caching
+    returns bit-identical values without recomputing percentiles.
+    """
+    key = (int(fi), int(idx_mu), float(amplitude), bool(symmetric))
+    if amplitude_cache is not None:
+        cached = amplitude_cache.get(key)
+        if cached is not None:
+            return cached
+    calib_vals = np.asarray(gv_sigma[:, fi, idx_mu], dtype=float)
+    amps = _calibrated_amplitudes(
+        calib_vals, amplitude, calibration_stats=calibration_stats,
+        symmetric=symmetric,
+    )
+    if amplitude_cache is not None:
+        amplitude_cache[key] = amps
+    return amps
+
+
 def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
                                 xgrid, mode='additive', xspace='linear',
                                 random_sign=False, rng=None,
                                 flavor_signs=None, calibration_gv=None,
-                                calibration_stats=None):
+                                calibration_stats=None, amplitude_cache=None):
     """Perturb selected flavour channels with a Gaussian bump.
 
     Parameters
@@ -144,6 +197,9 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
         up/down amplitudes come from ``stats.central_value()`` and
         ``stats.errorbar68()`` instead of raw mean/percentiles. When None, the
         legacy mean + 16/84 percentile envelope is used (Monte-Carlo only).
+    amplitude_cache : dict or None
+        Optional memo for calibrated amplitudes, owned by the caller and tied
+        to this ``calibration_gv`` (or ``gv``). None recomputes every call.
 
     Returns
     -------
@@ -196,7 +252,7 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
     else:
         sign_matrix = np.ones((nrep, len(local_flavor_idx)), dtype=float)
 
-    if mode == 'calibrated':
+    if mode in CALIBRATED_MODES:
         # Per-flavor amplitudes from calibrated +1sigma / -1sigma envelopes
         # at x closest to mu, allowing asymmetric up/down shifts.
         xgrid_arr = np.asarray(xgrid)
@@ -204,9 +260,9 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
         gv_sigma = gv if calibration_gv is None else np.asarray(calibration_gv, dtype=float)
         for col, fi in enumerate(local_flavor_idx):
             signs = sign_matrix[:, col][:, np.newaxis]
-            calib_vals = np.asarray(gv_sigma[:, fi, idx_mu], dtype=float)
-            amp_plus, amp_minus = _calibrated_amplitudes(
-                calib_vals, amplitude, calibration_stats=calibration_stats
+            amp_plus, amp_minus = _cached_calibrated_amplitudes(
+                gv_sigma, fi, idx_mu, amplitude, calibration_stats, amplitude_cache,
+                symmetric=(mode == 'calibrated_symmetric'),
             )
 
             gauss_plus = gaussian_profile(xgrid, mu, sigma, amp_plus, xspace)
@@ -237,7 +293,7 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
 def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
                                       xgrid, mode='calibrated', xspace='logx',
                                       flavor_signs=None, calibration_gv=None,
-                                      calibration_stats=None):
+                                      calibration_stats=None, amplitude_cache=None):
     """Perturb flavours with a superposition of per-player Gaussian bumps.
 
     Each entry in *specs* describes one (flavor, x) player in a coalition.
@@ -272,6 +328,8 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
         is given.
     calibration_stats : callable or None
         Optional ``pdf.stats_class`` callable; see apply_gaussian_perturbation.
+    amplitude_cache : dict or None
+        Optional calibrated-amplitude memo; see apply_gaussian_perturbation.
 
     Returns
     -------
@@ -319,11 +377,11 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
                 else np.ones((nrep, 1), dtype=float)
             )
 
-            if mode == 'calibrated':
+            if mode in CALIBRATED_MODES:
                 idx_mu = int(np.argmin(np.abs(xgrid_arr - mu_k)))
-                calib_vals = gv_sigma[:, fi, idx_mu].astype(float)
-                amp_plus, amp_minus = _calibrated_amplitudes(
-                    calib_vals, amplitude, calibration_stats=calibration_stats
+                amp_plus, amp_minus = _cached_calibrated_amplitudes(
+                    gv_sigma, fi, idx_mu, amplitude, calibration_stats, amplitude_cache,
+                    symmetric=(mode == 'calibrated_symmetric'),
                 )
                 gauss_plus = gaussian_profile(xgrid_arr, mu_k, sigma, amp_plus, xspace)
                 gauss_minus = gaussian_profile(xgrid_arr, mu_k, sigma, amp_minus, xspace)
@@ -341,7 +399,7 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
 
             delta += d
 
-        if mode in ('additive', 'calibrated'):
+        if mode in ('additive',) + CALIBRATED_MODES:
             gv_pert[:, fi, :] += delta
         else:  # multiplicative: apply compound factor (1 + sum_k G_k)
             gv_pert[:, fi, :] *= (1.0 + delta)
