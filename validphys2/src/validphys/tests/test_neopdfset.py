@@ -2,15 +2,20 @@
 Tests for the NeoPDF interpolation backend.
 """
 
-import os
-
 import numpy as np
 import pytest
 
+from validphys import lhapdf_compatibility
+from validphys.lhapdf_compatibility import (
+    InvalidPDFBackend,
+    NoAlternativeBackendSpecified,
+    _NeoPDFPDF,
+    make_pdf,
+)
 from validphys.tests.conftest import PDF, requires_lhapdf
 
-# Skip the whole module if neopdf is not installed
-neopdf = pytest.importorskip("neopdf", reason="neopdf not installed")
+# Skip the whole module if `neopdf` is not installed
+neopdf = pytest.importorskip("neopdf.pdf", reason="neopdf-hep not installed")
 
 PIDS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 21]
 ABSENT_PIDS = [6, -6]
@@ -25,40 +30,40 @@ Q_VALUE = 10.0
 CROSS_BACKEND_TOL = {"rtol": 1e-12, "atol": 1e-16}
 
 
+def _load_pdfset(backend, error_type):
+    """Load ``PDF`` as an ``LHAPDFSet`` with an explicitly selected ``backend``,
+    so that the result does not depend on the ``pdf_backend`` set in the user's
+    NNPDF profile nor on a pre-existing ``NNPDF_PDF_BACKEND`` variable.
+    """
+    from validphys.lhapdfset import LHAPDFSet
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setenv("NNPDF_PDF_BACKEND", backend)
+        return LHAPDFSet(PDF, error_type)
+
+
 @pytest.fixture(scope="module")
 def neo_pdfset():
     """LHAPDFSet loaded with the NeoPDF backend."""
-    from validphys.lhapdfset import LHAPDFSet
-
-    os.environ["NNPDF_PDF_BACKEND"] = "neopdf"
-    pdfset = LHAPDFSet(PDF, "replicas")
-    del os.environ["NNPDF_PDF_BACKEND"]
-    return pdfset
+    return _load_pdfset("neopdf", "replicas")
 
 
 @pytest.fixture(scope="module")
 def neo_pdfset_t0():
     """LHAPDFSet in t0 mode loaded with the NeoPDF backend."""
-    from validphys.lhapdfset import LHAPDFSet
-
-    os.environ["NNPDF_PDF_BACKEND"] = "neopdf"
-    pdfset = LHAPDFSet(PDF, "t0")
-    del os.environ["NNPDF_PDF_BACKEND"]
-    return pdfset
+    return _load_pdfset("neopdf", "t0")
 
 
 @pytest.fixture(scope="module")
 def lha_pdfset():
-    from validphys.lhapdfset import LHAPDFSet
-
-    return LHAPDFSet(PDF, "replicas")
+    """LHAPDFSet loaded with the LHAPDF backend."""
+    return _load_pdfset("lhapdf", "replicas")
 
 
 @pytest.fixture(scope="module")
 def lha_pdfset_t0():
-    from validphys.lhapdfset import LHAPDFSet
-
-    return LHAPDFSet(PDF, "t0")
+    """LHAPDFSet in t0 mode loaded with the LHAPDF backend."""
+    return _load_pdfset("lhapdf", "t0")
 
 
 class TestT0Mode:
@@ -254,52 +259,82 @@ class TestNumericalAgreement:
         assert neo_pdfset.n_members == lha_pdfset.n_members
 
 
+@pytest.fixture
+def nnprofile(monkeypatch, tmp_path):
+    """Isolate the tests from the user's NNPDF profile (which may set
+    ``pdf_backend``) and from ``NNPDF_PDF_BACKEND``.
+    """
+    from nnpdf_data.utils import get_nnpdf_profile
+
+    profile = tmp_path / "nnprofile.yaml"
+    monkeypatch.setenv("NNPDF_PROFILE_PATH", str(profile))
+    monkeypatch.delenv("NNPDF_PDF_BACKEND", raising=False)
+
+    def write_profile(content=""):
+        profile.write_text(content)
+        # The profile is cached, clear it so that the new one is read
+        get_nnpdf_profile.cache_clear()
+
+    write_profile()
+    yield write_profile
+    get_nnpdf_profile.cache_clear()
+
+
 class TestBackendFactory:
     """Verify that ``make_pdf`` in ``lhapdf_compatibility`` selects the correct
-    backend based on the ``NNPDF_PDF_BACKEND`` environment variable.
+    backend based on the ``NNPDF_PDF_BACKEND`` environment variable and on the
+    ``pdf_backend`` key of the NNPDF profile.
     """
 
-    def test_default_returns_lhapdf_members(self, monkeypatch):
-        monkeypatch.delenv("NNPDF_PDF_BACKEND", raising=False)
-        from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
+    @requires_lhapdf
+    def test_default_returns_lhapdf_members(self, nnprofile):
+        members = make_pdf(PDF)
+        assert not isinstance(members[0], _NeoPDFPDF)
 
+    def test_default_without_lhapdf_raises(self, nnprofile, monkeypatch):
+        monkeypatch.setattr(lhapdf_compatibility, "USING_LHAPDF", False)
+        with pytest.raises(
+            NoAlternativeBackendSpecified, match="Please specify an alternative backend"
+        ):
+            make_pdf(PDF)
+
+    def test_profile_neopdf_returns_neopdf_members(self, nnprofile):
+        nnprofile("pdf_backend: neopdf\n")
+        members = make_pdf(PDF)
+        assert all(isinstance(m, _NeoPDFPDF) for m in members)
+
+    @requires_lhapdf
+    def test_env_var_takes_precedence_over_profile(self, nnprofile, monkeypatch):
+        nnprofile("pdf_backend: neopdf\n")
+        monkeypatch.setenv("NNPDF_PDF_BACKEND", "lhapdf")
         members = make_pdf(PDF)
         assert not isinstance(members[0], _NeoPDFPDF)
 
     def test_env_var_neopdf_returns_neopdf_members(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
-        from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
-
         members = make_pdf(PDF)
         assert all(isinstance(m, _NeoPDFPDF) for m in members)
 
+    @requires_lhapdf
     def test_env_var_lhapdf_returns_non_neopdf_members(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "lhapdf")
-        from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
-
         members = make_pdf(PDF)
         assert not isinstance(members[0], _NeoPDFPDF)
 
     def test_invalid_env_var_raises(self, monkeypatch):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "pdfflow_is_not_valid_here")
-        from validphys.lhapdf_compatibility import InvalidPDFBackend, make_pdf
-
         with pytest.raises(InvalidPDFBackend, match="Unknown backend"):
             make_pdf(PDF)
 
     @pytest.mark.parametrize("member", [0, 1])
     def test_neopdf_single_member_returns_neopdf_member(self, monkeypatch, member):
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
-        from validphys.lhapdf_compatibility import _NeoPDFPDF, make_pdf
-
         members = make_pdf(PDF, member=member)
         assert len(members) == 1
         assert isinstance(members[0], _NeoPDFPDF)
 
     @requires_lhapdf
     def test_both_backends_return_same_member_count(self, monkeypatch):
-        from validphys.lhapdf_compatibility import make_pdf
-
         monkeypatch.setenv("NNPDF_PDF_BACKEND", "neopdf")
         neo_members = make_pdf(PDF)
 
