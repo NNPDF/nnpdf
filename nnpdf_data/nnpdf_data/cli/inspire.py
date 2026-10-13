@@ -1,6 +1,7 @@
 """INSPIRE API client to fetch bibtex entries."""
 
 import dataclasses
+from functools import lru_cache
 import logging
 import re
 import time
@@ -19,6 +20,10 @@ HEADERS = {"User-Agent": "nnpdf-data-cli/1.0"}
 _EXTRACTOR = re.compile(r"@\w+\{([^,]+),")
 
 
+class InspireError(Exception):
+    pass
+
+
 @dataclasses.dataclass(frozen=True)
 class BibliographyEntry:
     """A parsed BibTeX bibliography entry."""
@@ -33,7 +38,8 @@ def _extract_key(raw: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
-def fetch_bibtex(record_id: int):
+@lru_cache
+def _fetch_bibtex(record_id: int):
     """Fetch bibtex using the inspire API given a record id."""
     url = f"{INSPIRE_API}/{record_id}?format=bibtex"
     for attempt in range(MAX_RETRIES + 1):
@@ -46,8 +52,20 @@ def fetch_bibtex(record_id: int):
                 return BibliographyEntry(key, raw)
         except URLError as e:
             code = getattr(e, "code", None)
-            if code is not None and code < 500:
-                # We got a bona-fide error, probably something's wrong
-                return None
+            if code is not None:
+                if code == 429:
+                    # We got rate-limited, wait for 5 seconds before retrying
+                    time.sleep(5)
+                elif code < 500:
+                    # We got a bona-fide error, probably something's wrong
+                    raise InspireError
         time.sleep(RETRY_DELAY * (attempt + 1))
-    return None
+    raise InspireError
+
+
+def fetch_bibtex(record_int: int):
+    """Wrapper around _fetch_bibtex to convert known exceptions into Nones"""
+    try:
+        return _fetch_bibtex(record_int)
+    except InspireError:
+        return None
