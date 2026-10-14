@@ -5,7 +5,7 @@ from functools import lru_cache
 import logging
 import re
 import time
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 logger = logging.getLogger(__name__)
@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 INSPIRE_API = "https://inspirehep.net/api/literature"
 TIMEOUT = 10
 MAX_RETRIES = 2
-RETRY_DELAY = 1.0
+# Delay set to 5s to ensure it resets the inspire API limit
+RETRY_DELAY = 5.0
 
 HEADERS = {"User-Agent": "nnpdf-data-cli/1.0"}
 
@@ -50,16 +51,16 @@ def _fetch_bibtex(record_id: int):
             if key is not None:
                 logger.info(f"Received data for {key}: {record_id}")
                 return BibliographyEntry(key, raw)
+        except HTTPError as e:
+            if e.code != 429 and e.code < 500:
+                # We got a bona-fide error, probably something's wrong
+                # unless it is 429, then we simply got rate-limited, just waiting should reset it
+                logger.warning("iNSPIRE API returned HTTP %s for record %s", e.code, record_id)
+                raise InspireError
         except URLError as e:
-            code = getattr(e, "code", None)
-            if code is not None:
-                if code == 429:
-                    # We got rate-limited, wait for 5 seconds before retrying
-                    time.sleep(5)
-                elif code < 500:
-                    # We got a bona-fide error, probably something's wrong
-                    raise InspireError
-        time.sleep(RETRY_DELAY * (attempt + 1))
+            # Most likely our fault, wait for a bit then retry
+            pass
+        time.sleep(RETRY_DELAY)
     raise InspireError
 
 
