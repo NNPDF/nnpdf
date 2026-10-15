@@ -1,0 +1,208 @@
+% Notation and admissible contractions of the weight correlations computed by plt_corr.py
+% (functions cross_weight_over_replicas, cross_weight_over_samples, cross_weight_over_trainings,
+%  cross_replica_over_weights, cross_sample_over_weights, cross_training_over_weights, mode_separation).
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\avg}[2]{\left\langle #1 \right\rangle_{#2}}
+
+\title{Weight correlations of Bayesian-NN PDF fits:\\ notation, admissible contractions and what they measure}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Index labels and the data}
+A BNN fit consists of $N_t$ independently trained models (\emph{trainings}), each providing $K$ posterior
+samples. We use four index labels:
+\begin{center}
+\begin{tabular}{cl}
+\toprule
+$m$ & training (one BNN model), $m = 1,\dots,N_t$\\
+$n$ & sample (extraction) of a training, $n = 1,\dots,K$\\
+$k$ & weight, $k = 1,\dots,p$\\
+$r = (m,n)$ & replica, $r = 1,\dots,N = N_t K$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The data is the array $w_k^{(m,n)}$. Sample labels $n$ are arbitrary: sample $n$ of training $m$ has no
+relation to sample $n$ of training $m' \neq m$.
+
+\section{The generic correlation}
+Every correlation considered here has the form
+\begin{equation}
+  \rho_{ab} \;=\; \sum_c \frac{\bigl(w_a^{d} - \mu_a^{e}\bigr)\bigl(w_b^{d} - \mu_b^{e}\bigr)}{\sigma_a^{f}\,\sigma_b^{f}},
+  \qquad
+  \mu_a^{e} = \avg{w_a^{d}}{e},\qquad
+  \sigma_a^{f} = \sqrt{\avg{\bigl(w_a^{d}-\mu_a^{e}\bigr)^2}{f}},
+  \label{eq:generic}
+\end{equation}
+with $a,b,c,d,e,f \in \{m,n,k,r\}$:
+\begin{itemize}
+  \item $a,b$: the pair that is correlated (two weights, two replicas, two samples or two trainings);
+  \item $c$: the summed index, i.e.\ the observations over which the pair is compared;
+  \item $d$: the label along which $w$ is resolved;
+  \item $e$, $f$: the sets over which the mean and the standard deviation are taken.
+\end{itemize}
+$\mu$ and $\sigma$ carry the lower index of $w$. All standard deviations are population ones
+($1/N$). A sum normalised by $1/|c|$ and with $f=e$ is a Pearson correlation, $\rho_{aa}=1$.
+
+\paragraph{Naming.} Every quantity here is a \emph{weight correlation}, since $w$ is what enters $\rho$. It is named
+by its pair index and its summed index: \emph{cross-$a$ correlation over $c$}, written $\rho^{c}_{ab}$ (the
+summed index as a superscript). For example $\rho^{r}_{kk'}$ is the cross-weight correlation over replicas and
+$\rho^{k}_{mm'}$ the cross-training correlation over weights. The set numbers are only short tags.
+
+\section{Admissible combinations: from 1024 to 6}
+Without restrictions each of $a, c, d, e, f$ takes one of four labels: $4^5 = 1024$ combinations. Five
+conditions remove the meaningless and the redundant ones. The count after each is exact (it was checked
+by enumerating all 1024 tuples).
+
+\begin{description}
+\item[R1: $c \cap a = \emptyset$.] A label cannot be both paired and summed; $r = (m,n)$ overlaps $m$ and $n$.
+  Of the $16$ pairs $(a,c)$ eight are disjoint: $(k,m), (k,n), (k,r), (r,k), (m,n), (m,k), (n,m), (n,k)$.
+  $1024 \to 8 \times 4^3 = 512$.
+\item[R2: $d = c$.] $w$ must be resolved along exactly the summed label, otherwise the sum runs over a constant
+  or over something that is not an observation. A third (spectator) label is held fixed if it is $m$
+  (one correlation per training, then averaged over $m$) and averaged out first if it is $n$ (training means).
+  $512 \to 8 \times 4^2 = 128$.
+\item[R3: no comparison of samples across trainings.] Since $n$ is an arbitrary label, pairing samples over
+  trainings, $(a,c)=(n,m)$, and pairing trainings over sample labels, $(a,c)=(m,n)$, are meaningless.
+  $128 \to 6 \times 4^2 = 96$.
+\item[R4: $e = c$.] Subtract the mean of exactly the summed set. A coarser mean (e.g.\ over $r$ while summing over
+  $n$) leaves the training offset $(m_k^{m}-\mu_k)^2$ in the sum, i.e.\ it mixes a distance between modes
+  into a correlation; a finer mean varies inside the sum and centres nothing. $96 \to 6 \times 4 = 24$.
+\item[R5: $f = e$.] For a correlation the spread must be taken over the same set as the mean ($\rho_{aa}=1$).
+  $24 \to 6$. Of the 18 combinations removed, one is meaningful as a \emph{variance ratio}:
+  $(a,c,d,e,f) = (k,m,m,m,n)$, the mode separation $T_k$: the spread of the training means in units of the spread within a training
+  (Sec.~\ref{sec:ratio}).
+\end{description}
+
+\subsection*{Explicit combinatorics}
+$b$ is always a label of the same type as $a$, so it adds no factor. The number of combinations is a
+product of four factors,
+\begin{equation}
+  \#\text{combinations} = \#(a,c) \times \#d \times \#e \times \#f ,
+  \qquad 1024 = 16 \times 4 \times 4 \times 4 \quad\text{at the start},
+\end{equation}
+and each rule reduces exactly one factor.
+
+\paragraph{R1 acts on the $(a,c)$ pairs.} Read each label as the set of indices it contains, $m=\{m\}$,
+$n=\{n\}$, $k=\{k\}$, $r=\{m,n\}$; a pair is kept if $a$ and $c$ share no index. Two kinds of pair fail:
+$a=c$ (the same label cannot be both the free pair index and the summed dummy index), and pairs that
+overlap through $r=(m,n)$:
+\begin{center}
+\begin{tabular}{c|cccc}
+$a \backslash c$ & $m$ & $n$ & $k$ & $r$\\
+\hline
+$m$ & $\times$ (same) & \checkmark & \checkmark & $\times$ ($r \ni m$)\\
+$n$ & \checkmark & $\times$ (same) & \checkmark & $\times$ ($r \ni n$)\\
+$k$ & \checkmark & \checkmark & $\times$ (same) & \checkmark\\
+$r$ & $\times$ ($r \ni m$) & $\times$ ($r \ni n$) & \checkmark & $\times$ (same)\\
+\end{tabular}
+\end{center}
+$8$ of the $16$ pairs survive: $(m,n),(m,k),(n,m),(n,k),(k,m),(k,n),(k,r),(r,k)$, so
+$1024 \to 8 \times 4^3 = 512$.
+
+\paragraph{The full chain.}
+\begin{center}
+\begin{tabular}{lccccr}
+\toprule
+after & $\#(a,c)$ & $\#d$ & $\#e$ & $\#f$ & total\\
+\midrule
+start & 16 & 4 & 4 & 4 & $16\cdot 4\cdot 4\cdot 4 = 1024$\\
+R1 $c\cap a=\emptyset$ & \textbf{8} & 4 & 4 & 4 & $8\cdot 4\cdot 4\cdot 4 = 512$\\
+R2 $d=c$ & 8 & \textbf{1} & 4 & 4 & $8\cdot 1\cdot 4\cdot 4 = 128$\\
+R3 no $n$ across $m$ & \textbf{6} & 1 & 4 & 4 & $6\cdot 1\cdot 4\cdot 4 = 96$\\
+R4 $e=c$ & 6 & 1 & \textbf{1} & 4 & $6\cdot 1\cdot 1\cdot 4 = 24$\\
+R5 $f=e$ & 6 & 1 & 1 & \textbf{1} & $6\cdot 1\cdot 1\cdot 1 = 6$\\
+\bottomrule
+\end{tabular}
+\end{center}
+R2 fixes $d$ to the single value $c$ in each surviving case; R3 removes $(m,n)$ and $(n,m)$ from the
+eight pairs; R4 and R5 fix $e=c$ and $f=e$. The six survivors are the sets of Sec.~\ref{sec:sets}:
+$(a,c) = (k,r)\to\rho^{r}_{kk'}$ (set 1), $(k,n)\to\rho^{n}_{kk'}$ (2), $(k,m)\to\rho^{m}_{kk'}$ (3),
+$(r,k)\to\rho^{k}_{rr'}$ (4), $(n,k)\to\rho^{k}_{nn'}$ (5), $(m,k)\to\rho^{k}_{mm'}$ (6), each with $d=e=f=c$. Of the $18$ combinations removed by R5, $(a,c,d,e,f) = (k,m,m,m,n)$ is the mode-separation
+ratio.
+
+\section{Within and between trainings}
+Writing each weight as the mode of its training plus a posterior fluctuation,
+\begin{equation}
+  w_k^{(m,n)} = m_k^{m} + \varepsilon_k^{(m,n)},\qquad m_k^{m} = \avg{w_k^{(m,n)}}{n},\qquad
+  s_k^{m} = \sqrt{\avg{(\varepsilon_k^{(m,n)})^2}{n}},
+\end{equation}
+the total covariance over replicas splits exactly into a between-training and a within-training part,
+\begin{equation}
+  \Sigma^{\rm tot}_{kk'} = \underbrace{\mathrm{Cov}_m\bigl(m_k^{m}, m_{k'}^{m}\bigr)}_{\Sigma^{B}_{kk'}}
+  + \underbrace{\avg{\mathrm{Cov}_n\bigl(\varepsilon_k, \varepsilon_{k'}\bigr)}{m}}_{\Sigma^{W}_{kk'}} .
+\end{equation}
+Each admissible correlation looks at one of the two parts, at their ratio, or at their mixture.
+
+\section{The six correlations and the ratio}\label{sec:sets}
+In the table, ``m fixed'' means one correlation per training, averaged over the trainings, and ``n avg.''
+means the training means are used. $\mu_k$ is the mean over the trainings of $m_k^m$ (equal to the mean
+over all replicas when every training has $K$ samples).
+
+\begin{center}
+\small
+\begin{tabular}{c p{3.6cm} c c c c c p{4.6cm}}
+\toprule
+set & name & symbol & $a,b$ & $c$ & $d$ & $e=f$ & isolates\\
+\midrule
+1 & cross-weight over replicas & $\rho^{r}_{kk'}$ & $k$ & $r$ & $r$ & $r$ & total: $\Sigma^{B}+\Sigma^{W}$ normalised; what the PDF ensemble sees\\
+2 & cross-weight over samples (within a training) & $\rho^{n}_{kk'}$ & $k$ & $n$ ($m$ fixed) & $n$ & $n$ & one model's posterior, $\Sigma^{W}$\\
+3 & cross-weight over trainings & $\rho^{m}_{kk'}$ & $k$ & $m$ ($n$ avg.) & $m$ & $m$ & mode locations across trainings, $\Sigma^{B}$\\
+4 & cross-replica over weights & $\rho^{k}_{rr'}$ & $r$ & $k$ & $k$ & $k$ & similarity of two replicas' weights\\
+5 & cross-sample over weights (within a training) & $\rho^{k}_{nn'}$ & $n$ & $k$ ($m$ fixed) & $k$ & $k$ & similarity of two samples of a training (blocks of $\rho^{k}_{rr'}$)\\
+6 & cross-training over weights & $\rho^{k}_{mm'}$ & $m$ & $k$ ($n$ avg.) & $k$ & $k$ & similarity of two trainings' modes\\
+ratio & mode separation & $T_k$ & $k$ & $m$ & $m$ & $e=m$, $f=n$ & distance of the modes in own widths\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Cross-weight correlation over replicas, $\rho^{r}_{kk'}$ (set 1).} $\rho^{\rm tot}_{kk'} = \Sigma^{\rm tot}_{kk'}/\sqrt{\Sigma^{\rm tot}_{kk}\Sigma^{\rm tot}_{k'k'}}$. With one training it is $\rho^{n}_{kk'}$;
+when the modes are far apart compared with their widths it is $\rho^{m}_{kk'}$, \emph{including its sampling noise of
+order $1/\sqrt{N_t}$}, because the ensemble then contains only $N_t$ effectively independent values per weight.
+
+\paragraph{Cross-weight correlation over samples, $\rho^{n}_{kk'}$ (set 2).} $\rho^{W}_{kk'} = \avg{\mathrm{corr}_n(\varepsilon_k, \varepsilon_{k'})}{m}$. For a
+mean-field variational posterior the weights of a Bayesian layer are independent in $q$ by construction:
+expected at the null $\sqrt{2/(\pi K N_t)}$ for $\avg{|\rho|}{}$. A significant excess would mean a correlated
+posterior (low rank) or a bug. Only weights that vary within every training enter (the Bayesian layer).
+
+\paragraph{Cross-weight correlation over trainings, $\rho^{m}_{kk'}$ (set 3).} $\rho^{B}_{kk'} = \mathrm{corr}_m(m_k^{m}, m_{k'}^{m})$. Structure here
+reflects degenerate directions of the loss landscape (e.g.\ hidden-unit symmetries). Null:
+$\avg{|\rho|}{} = \sqrt{2/(\pi N_t)}$.
+
+\paragraph{Cross-replica, cross-sample and cross-training correlations over weights, $\rho^{k}_{rr'}, \rho^{k}_{nn'}, \rho^{k}_{mm'}$ (sets 4--6), and pre-standardisation.} With $a\in\{r,n,m\}$, $\mu$ and $\sigma$ in
+Eq.~\eqref{eq:generic} are averages over the weights of one network ($e=f=k$), so raw weight vectors are
+compared and large-spread weights dominate. They are therefore also given after a per-weight
+pre-standardisation $z_k = (w_k - \mu_k^{e'})/\sigma_k^{f'}$:
+\begin{itemize}
+  \item $e'=f'=r$ (ensemble): what two replicas share relative to the ensemble, \emph{including} their training's
+    offset. Within a training $\rho \approx T/(T+1) \approx 1$ when the modes are far apart: it repeats the ratio.
+  \item $e'=f'=n$ (training mean and width): the posterior fluctuations $\varepsilon/s$ only. For independent
+    draws, $K$ residuals around their own mean sum to zero, so the expected within-training correlation is
+    $-1/(K-1)$, plus noise $\sqrt{2/(\pi p)}$ in $\avg{|\rho|}{}$.
+  \item $e'=m$, $f'=n$ ($\rho^{k}_{mm'}$): the training offsets in units of their own width,
+    $u_k^{m} = (m_k^{m}-\mu_k)/s_k^{m}$, then normalised over $k$. For independent trainings the offsets sum to
+    zero over $m$, so $\avg{\rho_{mm'}}{} \approx -1/(N_t-1) \to 0$.
+\end{itemize}
+
+\paragraph{Mode separation $T_k$ (the ratio).}\label{sec:ratio}
+\begin{equation}
+  T_k = \avg{\left(\frac{m_k^{m} - \mu_k}{s_k^{m}}\right)^2}{m},
+\end{equation}
+the spread of the training means in units of each training's own posterior width (cf.\ Gelman--Rubin).
+$T_k \approx 1$ if all trainings sample one shared mode; $T_k \gg 1$ if they sit in different modes. It is an
+average over trainings and does not drift with $N_t$.
+
+\section{Sums of the off-diagonal entries}
+For each correlation, the signed sum $\sum\rho$ and the modulus sum $\sum|\rho|$ over the unordered pairs
+($i<j$) of off-diagonal entries. Expected signed sums are not always zero: for the pre-standardised
+cross-replica correlation over weights every weight's $z$ sums to zero over the replicas, which gives
+$\sum_{r<r'}\rho^{k}_{rr'} = -N/2$; for $e'=n$, $K$ residuals per training give $-1/(K-1)$ per pair
+($-N_t K/2$ in total); for $\rho^{k}_{mm'}$ the training offsets give $-1/(N_t-1)$ per pair. The noise of a
+signed sum is about $\sqrt{\#\text{pairs}/L}$ and the uncorrelated value of $\sum|\rho|$ is
+$\#\text{pairs}\,\sqrt{2/(\pi L)}$, with $L$ the number of observations per pair. 
+\end{document}
