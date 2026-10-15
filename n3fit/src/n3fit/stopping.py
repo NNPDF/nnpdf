@@ -317,6 +317,8 @@ class Stopping:
            draws (see ``n3fit.bnn_wrapper.posterior_passes_positivity``). By default the
            check sees a single stochastic (LRT) pass of the validation model, so a BNN's
            POS_PASS only means that one random evaluation passed.
+        min_best_epoch: int
+           epochs before this one can not become the best epoch (BNN: end of the KL warm-up)
     """
 
     def __init__(
@@ -330,8 +332,14 @@ class Stopping:
         threshold_chi2=10.0,
         dont_stop=False,
         posterior_positivity_samples=0,
+        min_best_epoch=0,
     ):
         self._pdf_model = pdf_model
+        # BNN: epochs trained with kl_beta < 1 (KL warm-up) optimise a tempered ELBO, not the
+        # posterior, so they can not become the best epoch
+        self._min_best_epoch = min_best_epoch
+        if min_best_epoch:
+            log.info("Stopping: no best epoch before epoch %d (end of the KL warm-up)", min_best_epoch)
         self._posterior_positivity_samples = posterior_positivity_samples
         self._posterior_noises = None
         if posterior_positivity_samples:
@@ -479,6 +487,7 @@ class Stopping:
         # once we start counting, don't bother anymore
         passes = self._counts | (fitstate.vl_chi2 < self._threshold_chi2)
         passes &= fitstate.vl_loss < self._best_val_chi2s
+        passes &= epoch >= self._min_best_epoch
         # And the ones that pass positivity
         passes &= self._positivity(fitstate)
         # Stop replicas that are ok being stopped (because they are finished or otherwise)

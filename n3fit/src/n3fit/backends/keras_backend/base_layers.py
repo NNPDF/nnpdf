@@ -119,6 +119,9 @@ class VBDense(Layer):
         self.ubound = 11
         self.eps = 1e-12 if K.floatx() == 'float64' else 1e-8
         self.training = True
+        # parameters::bayesian::train_sampling: lrt -> training path with the local
+        # reparameterization trick instead of one coherent weight draw per step
+        self.lrt_training = False
         # Frozen eval draws (plain attributes, NOT tracked weights).
         self.random = None
         self.random_b = None
@@ -339,6 +342,25 @@ class VBDense(Layer):
         weight = self.mu_w
         return Kops.matmul(input, Kops.transpose(weight)) + self.bias
 
+    def _forward_sample_activations(self, input):
+        """
+        Training path for train_sampling: lrt (the default before 1ee4b2551).
+        Local reparameterization trick: independent noise for every x point and every call of
+        the layer, so the samples seen by the FK convolutions, positivity and sum rules within
+        a step are not one coherent function (see _forward_sample_weights_train). Sample the pre-activation
+        directly from its implied Gaussian. The bias variance (if Bayesian) is
+        added straight into the activation variance. LRT is more efficient
+        and leads to an estimate of the gradient with smaller variance.
+        https://arxiv.org/pdf/1506.02557.pdf
+        """
+        act_mu = Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
+        act_var = Kops.matmul(Kops.square(input), Kops.transpose(self.s2_w))
+        if self.bayesian_bias:
+            act_var = act_var + self.s2_b
+        act_var = act_var + self.eps
+        noise = krandom.normal(Kops.shape(act_mu), dtype=input.dtype)
+        return act_mu + Kops.sqrt(act_var) * noise
+
     def _forward_sample_weights_train(self, input):
         """
         Training path. One weight sample per training step, w = mu + sigma * train_noise,
@@ -395,6 +417,8 @@ class VBDense(Layer):
         if self.training:
             if self.use_flow:
                 return self._forward_sample_weights_stochastic(input)
+            if self.lrt_training:
+                return self._forward_sample_activations(input)
             return self._forward_sample_weights_train(input)
         if self.map:
             return self._forward_map_inference(input)
@@ -445,6 +469,9 @@ class CorrelatedLowRankVBDense(Layer):
         self.ubound = 11
         self.eps = 1e-12 if K.floatx() == 'float64' else 1e-8
         self.training = True
+        # parameters::bayesian::train_sampling: lrt -> training path with the local
+        # reparameterization trick instead of one coherent weight draw per step
+        self.lrt_training = False
         # Frozen eval draws, assigned in build().
         self.random = None
         self.random_b = None
@@ -654,6 +681,31 @@ class CorrelatedLowRankVBDense(Layer):
         """Deterministic: posterior means for both weights and bias."""
         return Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
 
+    def _forward_sample_activations(self, input):
+        """
+        Training path for train_sampling: lrt (the default before 1ee4b2551). The diagonal part uses the local reparameterization
+        trick (https://arxiv.org/pdf/1506.02557.pdf); the low-rank part is
+        added exactly, with one shared eps_r per sample and factor, which is
+        equivalent to an independent weight draw per data point.
+        """
+        act_mu = Kops.matmul(input, Kops.transpose(self.mu_w)) + self.bias
+        act_var = Kops.matmul(Kops.square(input), Kops.transpose(self.s2_w))
+        if self.bayesian_bias:
+            act_var = act_var + self.s2_b
+        act_var = act_var + self.eps
+        noise = krandom.normal(Kops.shape(act_mu), dtype=input.dtype)
+        out = act_mu + Kops.sqrt(act_var) * noise
+
+        if self.rank == 0:
+            return out
+
+        # proj[..., r, o] = sum_i u_w[r, o, i] * input[..., i]
+        proj = Kops.einsum("...i,roi->...ro", input, self.u_w)
+        if self.bayesian_bias:
+            proj = proj + self.u_b
+        eps = krandom.normal(Kops.shape(proj)[:-1], dtype=input.dtype)
+        return out + Kops.einsum("...r,...ro->...o", eps, proj)
+
     def _forward_sample_weights_train(self, input):
         """
         Training path. One weight sample per training step, w = mu + D^(1/2) eta + U eps,
@@ -689,6 +741,8 @@ class CorrelatedLowRankVBDense(Layer):
 
     def call(self, input):
         if self.training:
+            if self.lrt_training:
+                return self._forward_sample_activations(input)
             return self._forward_sample_weights_train(input)
         if self.map:
             return self._forward_map_inference(input)

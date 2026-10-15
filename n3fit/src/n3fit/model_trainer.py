@@ -953,7 +953,15 @@ class ModelTrainer:
         return reporting_list
 
     def _train_and_fit(
-        self, train_model, stopping_object, epochs=100, kl_beta=None, vb_layers=None, noise_seed=None
+        self,
+        train_model,
+        stopping_object,
+        epochs=100,
+        kl_beta=None,
+        vb_layers=None,
+        noise_seed=None,
+        kl_annealing="linear",
+        kl_warmup=None,
     ) -> bool:
         """
         Trains the NN for the number of epochs given using
@@ -977,13 +985,18 @@ class ModelTrainer:
         )
         if kl_beta is None:
             kl_beta = train_model.kl_beta  # fallback
-        callback_kl = callbacks.KLAnnealingCallback(kl_beta, warmup_steps=epochs//4, replica_path=self.replica_path)
-        log.info(f"KLAnnealing init: warmup_steps={epochs//4}, kl_beta initial={float(train_model.kl_beta.numpy())}")
+        if kl_warmup is None:
+            kl_warmup = epochs // 4
+        callback_kl = callbacks.KLAnnealingCallback(
+            kl_beta, warmup_steps=kl_warmup, replica_path=self.replica_path, schedule=kl_annealing
+        )
+        log.info(f"KLAnnealing init: {kl_annealing}, warmup_steps={kl_warmup}, kl_beta initial={float(train_model.kl_beta.numpy())}")
 
 
         # One coherent weight sample per step for the variational layers; first in the list,
-        # so that the noise is drawn before the step
-        callback_noise = [callbacks.ResampleTrainNoise(vb_layers, seed=noise_seed)] if vb_layers else []
+        # so that the noise is drawn before the step (not used with train_sampling: lrt)
+        coherent = vb_layers and not any(layer.lrt_training for layer in vb_layers)
+        callback_noise = [callbacks.ResampleTrainNoise(vb_layers, seed=noise_seed)] if coherent else []
 
         train_model.perform_fit(
             epochs=epochs,
@@ -1232,6 +1245,10 @@ class ModelTrainer:
 
             vb_layers = get_vb_layers(pdf_model)
             kl_beta = pdf_model.kl_beta
+            if bayes.get("train_sampling", "coherent") == "lrt":
+                log.info("BNN training with the local reparameterization trick (train_sampling: lrt)")
+                for layer in vb_layers:
+                    layer.lrt_training = True
             if vb_layers:
                 self.training["output"].append(LossKL(vb_layers, kl_beta, name="kl_loss"))
 
@@ -1286,6 +1303,8 @@ class ModelTrainer:
 
             # Generate the stopping_object this object holds statistical information about the fit
             # it is used to perform stopping
+            # Length of the KL warm-up (parameters::bayesian::kl_warmup_epochs, default epochs // 4)
+            kl_warmup = bayes.get("kl_warmup_epochs") or epochs // 4
             stopping_object = Stopping(
                 validation_model,
                 reporting,
@@ -1295,6 +1314,13 @@ class ModelTrainer:
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2,
                 posterior_positivity_samples=bayes["per_replica"]["posterior_stopping_samples"],
+                min_best_epoch=(
+                    callbacks.KLAnnealingCallback.first_full_kl_epoch(
+                        kl_warmup, bayes.get("kl_annealing", "linear")
+                    )
+                    if vb_layers
+                    else 0
+                ),
             )
 
             # Compile each of the models with the right parameters
@@ -1308,6 +1334,8 @@ class ModelTrainer:
                 kl_beta=pdf_model.kl_beta,
                 vb_layers=vb_layers,
                 noise_seed=[int(seed) for seed in self._nn_seeds] + [k],
+                kl_annealing=bayes.get("kl_annealing", "linear"),
+                kl_warmup=kl_warmup,
             )
 
 

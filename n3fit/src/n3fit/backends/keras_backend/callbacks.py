@@ -230,7 +230,7 @@ class ResampleTrainNoise(Callback):
 class KLAnnealingCallback(CallbackStep):
     """
     Updates the tensorflow variable "kl_beta" to increase 
-    from 0 to 1 over a specified number of warmup steps.
+    to 1 over a specified number of warmup steps, after which it stays at 1.
 
     Parameters
     ----------
@@ -238,16 +238,33 @@ class KLAnnealingCallback(CallbackStep):
         The variable used in the loss function to scale the KL term.
     warmup_steps: int
         The number of steps (epochs/batches) until kl_beta reaches 1.0.
+    schedule: str
+        ``linear`` (default): linear ramp from 0 to 1; ``cosine``: single cosine ramp from 0.1 to 1
+        (``parameters::bayesian::kl_annealing``)
     """
 
-    def __init__(self, kl_beta, warmup_steps=2000, replica_path=None):
+    SCHEDULES = ("linear", "cosine")
+
+    def __init__(self, kl_beta, warmup_steps=2000, replica_path=None, schedule="linear"):
         super().__init__()
+        if schedule not in self.SCHEDULES:
+            raise ValueError(f"Unknown KL annealing schedule {schedule}, allowed: {self.SCHEDULES}")
         self.kl_beta = kl_beta
         self.warmup_steps = max(1, warmup_steps)
+        self.schedule = {"cosine": self.cosine_annealing, "linear": self.linear_annealing}[schedule]
         self.total_steps = tf.Variable(0, trainable=False, dtype=tf.float32)
         self.klarray = []
         self.replica_path = replica_path
 
+    @staticmethod
+    def first_full_kl_epoch(warmup_steps, schedule="linear"):
+        """
+        First epoch whose training step uses kl_beta = 1. on_step_end of epoch e sets the beta
+        used in epoch e + 1: cosine_annealing gives 1 for step = e >= warmup_steps,
+        linear_annealing for total_steps = e + 1 >= warmup_steps.
+        """
+        warmup_steps = max(1, warmup_steps)
+        return warmup_steps + 1 if schedule == "cosine" else warmup_steps
 
     def linear_annealing(self, step, logs=None):
         """
@@ -279,44 +296,24 @@ class KLAnnealingCallback(CallbackStep):
         if self.total_steps % 100 == 0:  # debug log every 500 steps
             tf.print("[INFO]: Cyclical KLAnnealing: step=", self.total_steps, " beta=", self.new_beta)
     
-    def old_cosine_annealing(self, step, logs=None):
-        beta_min = tf.cast(0.1, tf.float32)
-        beta_max = tf.cast(1.0, tf.float32)
-        ratio = tf.cast(0.5, tf.float32)
-        cycle_len = tf.cast(self.warmup_steps // 4, tf.float32)
-        
-        t_mod = tf.cast(self.total_steps % cycle_len, tf.float32)
-        ramp_end = ratio * cycle_len
-        
-        phi = t_mod / ramp_end
-        ramped = beta_min + 0.5 * (beta_max - beta_min) * (1 - tf.math.cos(np.pi * phi))
-        
-        self.new_beta = tf.cond(t_mod < ramp_end, lambda: ramped, lambda: beta_max)   
-
     def cosine_annealing(self, step, logs=None):
-        beta_min = tf.cast(0.1, tf.float32)
-        beta_max = tf.cast(1.0, tf.float32)
-        ratio = tf.cast(0.5, tf.float32)
-        cycle_len = tf.cast(self.warmup_steps // 4, tf.float32)
-        
-        t_mod = tf.cast(self.total_steps % cycle_len, tf.float32)
-        ramp_end = ratio * cycle_len
-        
-        phi = t_mod / ramp_end
-        ramped = beta_min + 0.5 * (beta_max - beta_min) * (1 - tf.math.cos(np.pi * phi))
-        
-        cyclical_beta = tf.cond(t_mod < ramp_end, lambda: ramped, lambda: beta_max)
+        """
+        Single cosine ramp from beta_min = 0.1 (the initial value of kl_beta) to 1 over
+        warmup_steps, then 1.
+        """
+        beta_min = 0.1
+        beta_max = 1.0
+        phi = min(1.0, step / self.warmup_steps)
+        self.new_beta = beta_min + 0.5 * (beta_max - beta_min) * (1 - np.cos(np.pi * phi))
 
-        self.new_beta = tf.cond(step > self.warmup_steps, lambda: beta_max, lambda: cyclical_beta)
-        
     def on_step_end(self, step, logs=None):
         self.total_steps.assign_add(1)
         #tf.print("KL.on_step_end: total_steps=", self.total_steps, " model=", self.model is not None)
-        self.cosine_annealing(step)
+        self.schedule(step)
         old_beta = self.kl_beta.read_value()
         self.kl_beta.assign(tf.cast(self.new_beta, self.kl_beta.dtype))
         new_beta = self.kl_beta.read_value()
-        self.klarray.append(new_beta)
+        self.klarray.append(float(new_beta))
     
     def on_train_end(self, logs=None):
         path = self.replica_path / "kl.csv" if self.replica_path is not None else "kl.csv"

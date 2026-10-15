@@ -16,6 +16,11 @@ All options of a Bayesian-NN fit live in one block of the runcard, ``parameters:
         bayes_dropout: 0.0
         bayesian_flow: false        # plus flow_n_couplings, flow_hidden_units
         rank: 4                     # VBDense_correlated only, plus u_init
+        kl_annealing: linear        # KL warm-up: linear (0 -> 1) | cosine (0.1 -> 1)
+        kl_warmup_epochs: null      # length of the KL warm-up; default epochs // 4
+        train_sampling: coherent    # coherent: one weight draw per training step, shared by all x
+                                    #   points and all calls of the layer | lrt: local
+                                    #   reparameterization trick (independent noise per x point)
         per_replica:                # per-sample quantities instead of copies of the trained model's
           chi2: false               # chi2, erf_tr, erf_vl of each sample (postfit's chi2 veto then acts per sample)
           positivity: false         # pos_state of each sample, with n3fit's own stopping positivity check
@@ -47,7 +52,12 @@ BAYESIAN_KEYS = (
     "flow_hidden_units",
     "rank",
     "u_init",
+    "kl_annealing",
+    "kl_warmup_epochs",
+    "train_sampling",
 )
+KL_ANNEALING_SCHEDULES = ("linear", "cosine")
+TRAIN_SAMPLING_MODES = ("coherent", "lrt")
 PER_REPLICA_DEFAULTS = {
     "chi2": False,
     "positivity": False,
@@ -82,6 +92,19 @@ def check_bayesian_parameters(parameters):
                 f"'{key}' is set both in parameters ({parameters[key]}) and in "
                 f"parameters::bayesian ({block[key]}); keep only the one in parameters::bayesian"
             )
+    if block.get("kl_annealing", "linear") not in KL_ANNEALING_SCHEDULES:
+        raise BayesianSettingsError(
+            f"parameters::bayesian::kl_annealing must be one of {KL_ANNEALING_SCHEDULES}"
+        )
+    warmup = block.get("kl_warmup_epochs")
+    if warmup is not None and (isinstance(warmup, bool) or not isinstance(warmup, int) or warmup < 1):
+        raise BayesianSettingsError("parameters::bayesian::kl_warmup_epochs must be a positive integer")
+    if block.get("train_sampling", "coherent") not in TRAIN_SAMPLING_MODES:
+        raise BayesianSettingsError(
+            f"parameters::bayesian::train_sampling must be one of {TRAIN_SAMPLING_MODES}"
+        )
+    if block.get("train_sampling") == "lrt" and block.get("bayesian_flow"):
+        raise BayesianSettingsError("train_sampling: lrt is not implemented for bayesian_flow")
     per_replica = block.get("per_replica") or {}
     if not isinstance(per_replica, dict):
         raise BayesianSettingsError("parameters::bayesian::per_replica must be a mapping")
