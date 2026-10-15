@@ -3,8 +3,8 @@
 
 Usage
 -----
-    vp-shapley runcards/sv_dis_hera.yaml
-    vp-shapley runcards/sv_global.yaml --output results/sv
+    vp-shapley validphys2/examples/shapley_dense_flavour.yaml
+    vp-shapley validphys2/examples/shapley_dense_flavour.yaml --output results/sv
 """
 
 import argparse
@@ -217,7 +217,7 @@ def _build_setup_context(cfg):
     pdf, observables, flavor_info, _, full_L_inv, full_data_central = setup_observables(
         pdf_name=cfg["pdf_name"],
         datasets=cfg["datasets"],
-        theory_id=cfg.get("theory_id", 708),
+        theory_id=cfg.get("theory_id", 40000000),
         use_cuts=cfg.get("use_cuts", "internal"),
         variant=cfg.get("variant", None),
     )
@@ -1653,7 +1653,7 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
     meta = {
         "runcard": str(cfg.get("_source", "unknown")),
         "pdf_name": cfg["pdf_name"],
-        "theory_id": cfg.get("theory_id", 708),
+        "theory_id": cfg.get("theory_id", 40000000),
         "n_datasets": len(cfg["datasets"]),
         "n_replicas": n_replicas,
         "perturbation": {

@@ -10,15 +10,13 @@ Requires the external `shapley-values` package:
 
 ## Quick Start
 
-Local run (single machine):
+A commented example runcard, a dense x-scan of the NNPDF4.0 global fit in
+the flavour basis, is provided in `validphys2/examples`:
 
-    vp-shapley runcards/DIS/HERA.yaml --output results/my_analysis
+    vp-shapley validphys2/examples/shapley_dense_flavour.yaml --output results/my_analysis
 
-Cluster run with parallelization:
-
-    sbatch --cpus-per-task=64 --export=ALL,N_JOBS=64 \
-      /path/to/slurm/run_vp_shapley.slurm \
-      /path/to/runcards/DIS/HERA.yaml
+Coalitions are evaluated in parallel with `--n-jobs N`. On a cluster, request
+N cores for the job and pass the same N.
 
 ## Usage
 
@@ -43,7 +41,7 @@ Cluster run with parallelization:
         amplitude    Perturbation amplitude
         mode         additive (default) | multiplicative
         xspace       linear (default) | logx
-    theory_id        NNPDF theory ID                       [default: 708]
+    theory_id        NNPDF theory ID                       [default: 40000000]
     basis            evolution (default) | flavor | list of both
     n_replicas       Number of PDF replicas                [default: 100]
     n_jobs           Worker threads (overridden by --n-jobs)

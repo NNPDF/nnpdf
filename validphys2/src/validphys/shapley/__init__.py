@@ -12,7 +12,7 @@ Shapley computation, and wraps NNPDF-specific components:
 
 Typical usage via CLI::
 
-    vp-shapley runcards/sv_dis_hera.yaml
+    vp-shapley validphys2/examples/shapley_dense_flavour.yaml
 
 Or from Python::
 

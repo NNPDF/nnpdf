@@ -311,7 +311,7 @@ def _parse_dataset_entry(entry):
 def setup_observables(
     pdf_name: str,
     datasets: list,
-    theory_id: int = 708,
+    theory_id: int = 40000000,
     use_cuts: str = "internal",
     variant: Optional[str] = None,
 ):
@@ -325,7 +325,7 @@ def setup_observables(
         Dataset entries. Each can be a plain string (dataset name) or a dict
         with keys 'dataset', 'variant' (optional), 'cfac' (optional).
     theory_id : int
-        NNPDF theory ID (default 708).
+        NNPDF theory ID (default 40000000).
     use_cuts : str
         Cut policy: 'internal', 'nocuts', or 'fromfit'.
     variant : str or None

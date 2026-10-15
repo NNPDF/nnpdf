@@ -1,36 +1,72 @@
+# Shapley-value x-scan of the NNPDF4.0 global fit in the flavour basis.
 #
-# Experiment layout
-# -----------------
-#   dense x-scan : 50 log-spaced mu values covering [1e-4, 0.9]
-#                  -> produces phi_j(x) heatmap inputs on the full global fit
+# Run with:   vp-shapley validphys2/examples/shapley_dense_flavour.yaml
 #
-# sigma is fixed in log10(x) units (xspace: logx) so the bump width is
-# constant in decades across the full x range.
+# Each experiment below is one Shapley game. The players are the eight
+# flavour channels (sbar, ubar, dbar, g, d, u, s, c+). For every coalition of
+# players, the PDF is deformed by a Gaussian bump centred at x = mu in the
+# coalition's channels, and the value of the coalition is the resulting
+# change in the global chi2 per data point. The Shapley value of a flavour
+# is its average marginal contribution over all coalitions, so the values of
+# one game add up to the chi2 change with every channel perturbed.
+# Scanning mu over 50 log-spaced points in [1e-4, 0.9] gives, for each
+# flavour, its contribution to the fit quality as a function of x.
 
+# PDF set whose central member is perturbed. Its 68% band also sets the
+# height of the bumps in calibrated mode.
 pdf_name: NNPDF40_nnlo_as_01180
-theory_id: 41_000_000
+
+# Theory providing the FK tables (40000000: NNLO QCD, NNPDF4.0 baseline).
+theory_id: 40000000
+
+# Kinematic cuts: 'internal' applies the cuts defined with each dataset.
 use_cuts: internal
+
+# Number of replicas used when per_replica is true. With per_replica: false
+# only the central member is perturbed (the band is still used for
+# calibration).
 n_replicas: 100
-output_root: ./fold_1/
-log_root: ./fold_1/logs/
-run_name: dense_fold_1
 per_replica: false
 
+# Label of the output directory. Results are written to
+# <validphys>/shapley/sv_results/<timestamp>_<run_name>/ unless --output is
+# given on the command line.
+run_name: dense_flavour_xscan
+
+# Evaluate every coalition with the bump pointing up and down and average
+# the two, so the first-order (sign-dependent) term cancels.
 deterministic_sign_symmetrized: true
 random_sign: false
 
+# Restore the momentum and valence sum rules after each deformation by a
+# multiplicative normalisation of the gluon and valence channels.
 enforce_sumrules: true
+
+# Compute chi2 with the full experimental covariance matrix, including
+# correlations between datasets, rather than dataset by dataset.
 use_full_covmat: true
+
+# Datasets whose chi2 explodes for some coalitions (numerical outliers) are
+# detected, excluded, and the game is rerun without them. The report is
+# written to stabilization_report_<basis>.json in each experiment directory.
 stabilization:
   enabled: true
-  action: exclude_dataset
-  dataset_delta_chi2_threshold: 1e5
-  max_outlier_coalitions: 5
-  rerun_stable: true
+  action: exclude_dataset            # or report_only
+  dataset_delta_chi2_threshold: 1e5  # per-dataset chi2 change flagging an outlier
+  max_outlier_coalitions: 5          # outlier coalitions inspected per game
+  rerun_stable: true                 # recompute the game after exclusion
+
+# One entry per game.
+#   basis        [flavor] or [evolution] (or both)
+#   mu           bump centre in x
+#   sigma        bump width; in log10(x) units with xspace: logx, so the
+#                bump spans the same number of decades at every mu
+#   amplitude    bump height in units of the 68% band (calibrated mode)
+#   mode         calibrated: height = amplitude * (q84 - central) upwards and
+#                amplitude * (central - q16) downwards, evaluated at mu.
+#                Also: additive, multiplicative, ablation.
+#   xspace       logx or linear
 experiments:
-
-  # --- Dense x-scan at alpha=1.0 (calibrated flavour basis) ---------------
-
   - name: mu_01
     basis: [flavor]
     perturbation: {mu: 0.0001, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
@@ -182,37 +218,99 @@ experiments:
     basis: [flavor]
     perturbation: {mu: 0.9, sigma: 0.25, amplitude: 1.0, mode: calibrated, xspace: logx}
 
+# Global NNPDF4.0 dataset selection (variants and cfactors as in the fit).
 datasets:
+  # DIS: Fixed-target
+  - {dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
+  - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
   - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+  - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
   - {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+  - {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
   - {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, variant: legacy_dw}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], variant: legacy_dw}
+  # DIS: HERA combined
   - {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_251GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_300GEV_EP-SIGMARED, variant: legacy}
   - {dataset: HERA_NC_318GEV_EP-SIGMARED, variant: legacy}
-  - H1_1JET_319GEV_290PB-1_DIF_PTQ2
-  - {dataset: DYE906_Z0_120GEV_DW_PDXSECRATIO, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EM-SIGMARED, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, variant: legacy}
+  # DY: Fixed-target
+  - {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, variant: legacy}
+  - {dataset: DYE866_Z0_800GEV_PXSEC, variant: legacy}
+  - {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy}
+  - {dataset: DYE906_Z0_120GEV_DW_PDXSECRATIO, cfac: [ACC], variant: legacy}
+  # DY: Tevatron
+  - {dataset: CDF_Z0_1P96TEV_ZRAP, variant: legacy}
+  - {dataset: D0_Z0_1P96TEV_ZRAP, variant: legacy}
+  - {dataset: D0_WPWM_1P96TEV_ASY, variant: legacy}
+  # DY: ATLAS
   - {dataset: ATLAS_WPWM_7TEV_36PB_ETA, variant: legacy}
   - {dataset: ATLAS_Z0_7TEV_36PB_ETA, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_LOMASS_M, variant: legacy}
+  - {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_46FB_CC-Y, variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, variant: legacy}
   - {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y, variant: legacy}
+  - {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, variant: legacy}
   - {dataset: ATLAS_Z0_13TEV_TOT, cfac: [NRM], variant: legacy}
   - {dataset: ATLAS_WPWM_13TEV_TOT, cfac: [NRM], variant: legacy}
-  - ATLAS_TTBAR_13TEV_2L_TOT_X-SEC
-  - ATLAS_TTBAR_13P6TEV_TOT_X-SEC
-  - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR
-  - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR-NORM
-  - ATLAS_TTBAR_13TEV_HADR_DIF_YTTBAR
-  - ATLAS_TTBAR_13TEV_HADR_DIF_YTTBAR-NORM
-  - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR-YTTBAR
-  - {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, variant: legacy}
-  - {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, variant: legacy}
+  - {dataset: ATLAS_WJ_8TEV_WP-PT, variant: legacy}
+  - {dataset: ATLAS_WJ_8TEV_WM-PT, variant: legacy}
+  - {dataset: ATLAS_Z0J_8TEV_PT-M, variant: legacy_10}
+  - {dataset: ATLAS_Z0J_8TEV_PT-Y, variant: legacy_10}
+  # DY: CMS
+  - CMS_WPWM_7TEV_ELECTRON_ASY
+  - {dataset: CMS_WPWM_7TEV_MUON_ASY, variant: legacy}
   - CMS_Z0_7TEV_DIMUON_2D
+  - {dataset: CMS_WPWM_8TEV_MUON_Y, variant: legacy}
   - {dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy_10}
-  - CMS_1JET_7TEV_R07-PTY
-  - CMS_1JET_8TEV_PTY
-  - CMS_TTBAR_13TEV_2L_DIF_PTT
-  - CMS_TTBAR_13TEV_2L_DIF_YT
-  - CMS_TTBAR_13TEV_2L_DIF_YT-NORM
-  - CMS_TTBAR_13TEV_2L_DIF_YTTBAR
-  - CMS_TTBAR_13TEV_2L_DIF_YTTBAR-NORM
-  - CMS_TTBAR_13TEV_2L_DIF_MTTBAR
-  - {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, variant: legacy}
+  # DY: LHCb
   - LHCB_Z0_7TEV_DIELECTRON_Y
+  - LHCB_Z0_8TEV_DIELECTRON_Y
+  - {dataset: LHCB_WPWM_7TEV_MUON_Y, cfac: [NRM]}
+  - {dataset: LHCB_Z0_7TEV_MUON_Y, cfac: [NRM]}
+  - {dataset: LHCB_WPWM_8TEV_MUON_Y, cfac: [NRM]}
+  - {dataset: LHCB_Z0_8TEV_MUON_Y, cfac: [NRM]}
+  - LHCB_Z0_13TEV_DIMUON-Y
+  - LHCB_Z0_13TEV_DIELECTRON-Y
+  # Top: ttbar total cross-sections
+  - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_TOT_X-SEC, variant: legacy}
+  - {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, variant: legacy}
+  # Top: ttbar differential
+  - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_2L_DIF_YT, variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YT, variant: legacy}
+  # Jets
+  - {dataset: ATLAS_1JET_8TEV_R06_PTY, variant: legacy_decorrelated}
+  - {dataset: ATLAS_2JET_7TEV_R06_M12Y, variant: legacy}
+  - {dataset: CMS_2JET_7TEV_M12-Y, variant: legacy}
+  - {dataset: CMS_1JET_8TEV_PTY, variant: legacy}
+  # Prompt photon
+  - {dataset: ATLAS_PH_13TEV_XSEC, cfac: [EWK], variant: legacy}
+  # Single top
+  - {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM, variant: legacy}
+  - {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC, variant: legacy}
+  - {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, variant: legacy}
+  - {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, variant: legacy}
