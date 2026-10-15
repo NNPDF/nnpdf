@@ -96,6 +96,9 @@ exclude_patterns = ["modules/n3fit-code/**", "modules/**/*.tests*"]
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
 
+# Mock import of packages
+autodoc_mock_imports = ["mpmath"]
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
