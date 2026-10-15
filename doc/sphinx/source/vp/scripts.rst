@@ -29,14 +29,11 @@ replicas in the fit that pass the selection criteria, then the script will fail 
 either request fewer replicas or run more replicas such that there will eventually be enough that
 satisfy the criteria.
 
-If the user wishes to include *all* replicas that satisfy the criteria in the LHAPDF set, and not
-just the amount specified in their command, they can use the :code:`--at-least-nrep` flag, as in::
-
-    $ postfit 100 NNPDF40_nnlo_as_01180 --at-least-nrep
-
-Note that the command will still fail if fewer than the requested amount meet the criteria. This
-flag can be useful when, for example, processing many fits simultaneously, where a specific number
-of replicas is not required, but instead at least a certain amount.
+With per-replica positivity checks (``--per-replica-checks``, or
+``parameters::bayesian::per_replica::postfit_veto`` in the fit runcard), if fewer than the requested
+amount pass all criteria, the set is completed with other valid replicas whose chi2 is at most
+twice the mean chi2 of the passing ones, listed in ``postfit/replicas_added.txt``. If there are not
+enough of them, postfit continues with all of them and says so in its log.
 
 .. _postfit-selection-criteria:
 

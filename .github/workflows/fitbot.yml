@@ -9,7 +9,7 @@ on:
 # some general variables
 env:
   N3FIT_MAXNREP: 30 # total number of replicas to fit
-  POSTFIT_NREP: 15 # requested minimum replicas for postfit
+  POSTFIT_NREP: 15 # replicas kept by postfit (exactly this many; postfit has no --at-least-nrep)
   # IMPORTANT
   # WHEN CHANGING THE REFERENCE SET, THE NEW REFERENCE MUST BE MANUALLY UPLOADED TO THE SERVER
   REFERENCE_SET: NNNBOT-1a81255f3-2026-01-27 # reference set for exact results
@@ -81,7 +81,7 @@ jobs:
       run: |
         conda activate nnpdfenv
         cd $RUNFOLDER
-        postfit $POSTFIT_NREP $RUNCARD --at-least-nrep
+        postfit $POSTFIT_NREP $RUNCARD
         ln -s ${PWD}/${RUNCARD} ${CONDA_PREFIX}/share/NNPDF/results
         tar -czf ${RUNCARD}.tar.gz ${RUNCARD}
         echo "PATH_TO_SAVE=${PWD}/${RUNCARD}.tar.gz" >> ${GITHUB_ENV}

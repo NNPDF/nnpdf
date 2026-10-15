@@ -29,6 +29,10 @@ from reportengine import colors
 from validphys import fitdata, fitveto, lhio, replica_checks
 from validphys.core import PDF
 from validphys.fitveto import INTEG_THRESHOLD, NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2
+
+# With per-replica checks, replicas failing a veto can complete the set only if their chi2 is at
+# most this factor times the mean chi2 of the replicas passing all vetoes
+FILL_CHI2_FACTOR = 2.0
 from validphys.lhaindex import paths_prepend
 from validphys.lhapdf_compatibility import make_pdf
 from validphys.loader import Loader
@@ -105,7 +109,57 @@ def per_replica_positivity(valid_paths, fitname, runcard, postfit_path):
         losses.index = [pathlib.Path(valid_paths[i]).name for i in to_compute]
         losses.insert(0, "passes", passing)
         losses.to_csv(postfit_path / "positivity_losses.csv")
+    log_positivity_counts(valid_paths, mask, runcard)
     return mask
+
+
+def bnn_samples_per_model(runcard):
+    """n_bnn_samples of a BNN fit runcard (``parameters::bayesian`` or directly under
+    ``parameters``), None otherwise"""
+    parameters = (runcard or {}).get("parameters", {})
+    return (parameters.get("bayesian") or {}).get("n_bnn_samples", parameters.get("n_bnn_samples"))
+
+
+def spread_over_models(paths, nrep, runcard):
+    """The first ``nrep`` of ``paths``; for a BNN fit with several trained models
+    (replicas ``[m*n_bnn_samples, (m+1)*n_bnn_samples)`` of model m), the replicas are taken
+    in turn from every model (in replica order within a model), so that every model is
+    represented instead of only the first ones."""
+    n_samples = bnn_samples_per_model(runcard)
+    if not n_samples:
+        return paths[:nrep]
+    by_model = {}
+    for path in paths:
+        by_model.setdefault(int(pathlib.Path(path).name.split("_")[-1]) // n_samples, []).append(path)
+    if len(by_model) == 1:
+        return paths[:nrep]
+    selected = [p for group in itertools.zip_longest(*by_model.values()) for p in group if p]
+    log.info(
+        f"Selecting {nrep} of {len(paths)} passing replicas in turn from the {len(by_model)} "
+        f"trained models"
+    )
+    return selected[:nrep]
+
+
+def log_positivity_counts(valid_paths, mask, runcard):
+    """Log how many replicas fully respect positivity and, for a BNN fit with several trained
+    models (n_bnn_samples replicas each), how the passes are spread over the models."""
+    n_pass = int(mask.sum())
+    log.info(
+        f"Per-replica positivity: {n_pass} of {len(mask)} replicas fully respect positivity, "
+        f"{len(mask) - n_pass} violate it"
+    )
+    n_samples = bnn_samples_per_model(runcard)
+    if not n_samples or n_samples >= len(mask):
+        return
+    model = np.array([int(pathlib.Path(path).name.split("_")[-1]) // n_samples for path in valid_paths])
+    passes = np.array([mask[model == m].mean() for m in np.unique(model)])
+    log.info(
+        f"Per-replica positivity per trained model ({len(passes)} models x {n_samples} samples): "
+        f"pass fraction min {passes.min():.2f}, median {np.median(passes):.2f}, max {passes.max():.2f}; "
+        f"{int(np.sum(passes == 0))} models with no passing sample, "
+        f"{int(np.sum(passes == 1))} models with all samples passing"
+    )
 
 
 def filter_replicas(
@@ -159,7 +213,20 @@ def filter_replicas(
     for key in fit_vetoes:
         log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
     passing_paths = list(itertools.compress(valid_paths, fit_vetoes["Total"]))
-    return passing_paths
+
+    # With per-replica checks: the other valid replicas with chi2 <= FILL_CHI2_FACTOR times the
+    # mean chi2 of the passing ones, to complete the set if too few pass
+    fill_paths = []
+    if positivity_mask is not None:
+        chi2 = np.array([info.chi2 for info in fitinfo])
+        max_chi2 = FILL_CHI2_FACTOR * chi2[fit_vetoes["Total"]].mean()
+        eligible = ~fit_vetoes["Total"] & (chi2 <= max_chi2)
+        fill_paths = list(itertools.compress(valid_paths, eligible))
+        log.info(
+            f"{len(fill_paths)} of the {int(np.sum(~fit_vetoes['Total']))} other valid replicas have "
+            f"chi2 <= {FILL_CHI2_FACTOR:g} x the passing mean ({max_chi2:.3f}) and can complete the set"
+        )
+    return passing_paths, fill_paths
 
 
 def type_fitname(fitname: str):
@@ -182,7 +249,6 @@ def _postfit(
     chi2_threshold: float,
     arclength_threshold: float,
     integ_threshold: float,
-    at_least_nrep: bool,
     per_replica_checks: bool = False,
 ):
     result_path = pathlib.Path(results).resolve()
@@ -221,10 +287,7 @@ def _postfit(
             )
 
         nrep = int(nrep)
-        if at_least_nrep:
-            log.warning(f"Postfit aiming for at least {nrep} replicas")
-        else:
-            log.warning(f"Postfit aiming for {nrep} replicas")
+        log.warning(f"Postfit aiming for {nrep} replicas")
 
         # Generate postfit and LHAPDF directory
         if final_postfit_path.is_dir():
@@ -239,7 +302,7 @@ def _postfit(
         # Perform postfit selection
         if per_replica_checks:
             log.warning("Per-replica positivity checks are on")
-        passing_paths = filter_replicas(
+        passing_paths, fill_paths = filter_replicas(
             postfit_path,
             nnfit_path,
             fitname,
@@ -249,13 +312,35 @@ def _postfit(
             per_replica_checks=per_replica_checks,
             runcard=runcard,
         )
-        if len(passing_paths) < nrep:
-            raise PostfitError("Number of requested replicas is too large")
-        # Select the first nrep passing replicas
-        if at_least_nrep:
-            selected_paths = passing_paths
+        if len(passing_paths) >= nrep:
+            # Select nrep passing replicas: the first ones, or for a BNN fit with several
+            # trained models taken in turn from every model
+            selected_paths = spread_over_models(passing_paths, nrep, runcard)
         else:
-            selected_paths = passing_paths[:nrep]
+            # With per-replica checks: complete the set with other valid replicas of acceptable
+            # chi2; if there are not enough, continue with all of them
+            n_missing = nrep - len(passing_paths)
+            if per_replica_checks and len(fill_paths) < n_missing:
+                log.warning(
+                    f"Postfit requested {nrep} replicas, but only {len(passing_paths)} pass all vetoes "
+                    f"and {len(fill_paths)} more have chi2 <= {FILL_CHI2_FACTOR:g} x the passing mean: "
+                    f"continuing with {len(passing_paths) + len(fill_paths)} replicas"
+                )
+                n_missing = len(fill_paths)
+            if len(fill_paths) < n_missing:
+                raise PostfitError(
+                    f"Number of requested replicas is too large: {len(passing_paths)} pass all "
+                    f"vetoes and {len(fill_paths)} other valid replicas"
+                )
+            added = fill_paths[:n_missing]
+            log.warning(
+                f"Only {len(passing_paths)} replicas pass all vetoes: adding {n_missing} other "
+                f"valid replicas (listed in replicas_added.txt)"
+            )
+            (postfit_path / "replicas_added.txt").write_text(
+                "\n".join(pathlib.Path(path).name for path in added) + "\n", encoding="utf-8"
+            )
+            selected_paths = passing_paths + added
 
         # Copy info file
         info_source_path = nnfit_path.joinpath(f'{fitname}.info')
@@ -345,18 +430,14 @@ def main():
         type=float,
     )
     parser.add_argument(
-        '--at-least-nrep',
-        action='store_true',
-        help="nrep becomes the minimum number of required replicas. If there are more than nrep "
-        "good replicas, all good replicas are written to the postfit folder.",
-    )
-    parser.add_argument(
         '--per-replica-checks',
         action='store_true',
         help="Veto replicas failing positivity individually (see validphys.replica_checks). "
         "Switched on automatically if the fit runcard sets "
         "parameters::bayesian::per_replica::postfit_veto. "
-        "Use this flag for fits that were run without it.",
+        "Use this flag for fits that were run without it. If fewer than nrep replicas pass, "
+        f"the set is completed with other valid replicas of chi2 <= {FILL_CHI2_FACTOR:g} x the "
+        "passing mean; if there are not enough, postfit continues with all of those.",
     )
     parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
     args = parser.parse_args()
@@ -371,7 +452,6 @@ def main():
             args.chi2_threshold,
             args.arclength_threshold,
             args.integrability_threshold,
-            args.at_least_nrep,
             args.per_replica_checks,
         )
     except PostfitError as e:
