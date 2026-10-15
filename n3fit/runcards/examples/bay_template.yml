@@ -4,7 +4,7 @@
 # (read by n3fit/src/n3fit/bayesian_settings.py, which documents every key)
 #
 ######################################################################################
-description: "BNN template (1 model x 1200 samples): positivity::initial 4e5, per-sample chi2/positivity checks, NNPDF4.0 dataset"
+description: "BNN template (1 model x 1200 samples): positivity::initial 4e5, coherent weight sampling, std_init -7, linear KL warm-up of 3000 epochs, per-sample chi2/positivity checks, NNPDF4.0 dataset"
 
 ######################################################################################
 dataset_inputs:
@@ -118,7 +118,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 6.073e-6
     learning_rate: 2.621e-3
     optimizer_name: Nadam
-  epochs: 17000
+  epochs: 30000
   positivity:
     initial: 400000.0   # NNPDF4.0: 184.8; stronger ramp so positivity competes with the KL term
     multiplier:
@@ -135,6 +135,10 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     prior_prec: 1.0
     n_bnn_models: 1             # trained BNN models, one per SLURM array task (n3fit runcard.yml <task>)
     n_bnn_samples: 1200         # posterior samples written per model
+    train_sampling: coherent    # coherent: one weight draw per step shared by all x points (default) | lrt
+    std_init: -7.0              # initial log-variance of the Bayesian weights (default -log(prior_prec) = 0)
+    kl_annealing: linear        # KL warm-up: linear (0 -> 1, default) | cosine (0.1 -> 1)
+    kl_warmup_epochs: 3000      # length of the KL warm-up (default epochs // 4); no best epoch before its end
     per_replica:                # per-sample quantities instead of copies of the trained model's
       chi2: true                # chi2, erf_tr, erf_vl of each sample
       positivity: true          # pos_state of each sample (n3fit's stopping positivity check)
