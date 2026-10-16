@@ -1,8 +1,11 @@
 #
-# Configuration file for n3fit: nnpdf40-like.yml
+# Configuration file for n3fit: Basic_runcard_bayesian.yml
+# Template for Bayesian-NN fits. Every Bayesian option lives in parameters::bayesian and is read by
+# n3fit/src/n3fit/bayesian_settings.py; the values below are the defaults of a BNN fit, written out.
+# Run: vp-setupfit Basic_runcard_bayesian.yml, then n3fit Basic_runcard_bayesian.yml <model> for
+# model = 1 .. n_bnn_models (one SLURM array task each), evolven3fit, postfit.
 #
-######################################################################################
-description: NNLO baseline fit, NNPDF4.0 dataset, compare to NNPDF40_nnlo_as_01180_qcd
+description: "BNN template, NNPDF4.0 dataset: 100 BNN models x 12 samples, coherent weight sampling, std_init -7, linear KL warm-up of 3000 epochs, positivity::initial 4e5, per-sample checks"
 
 ######################################################################################
 dataset_inputs:
@@ -106,7 +109,6 @@ nnseed: 945709987
 mcseed: 519562661
 genrep: false
 diagonal_basis: false
-parallel_models: false
 
 ################################################################################
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
@@ -117,29 +119,60 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 6.073e-6
     learning_rate: 2.621e-3
     optimizer_name: Nadam
-  epochs: 17000
+  epochs: 30000
   positivity:
-    initial: 184.8
+    initial: 400000.0   # NNPDF4.0: 184.8; stronger ramp so positivity competes with the KL term
     multiplier:
   integrability:
     initial: 10
     multiplier:
   stopping_patience: 0.1
-  layer_type: ['dense', 'VBDense', 'VBDense'] # ['dense', 'VBDense_correlated', 'VBDense_correlated']
-  bayesian_bias: [false, true, true]   # per layer (ignored on non-VBDense layers)
-  bayesian_flow: [false, false, true]  # per layer; NF-enriched posterior on the true last VBDense layer only
-  flow_n_couplings: 3                  # RealNVP coupling layers (flow granularity: whole flattened weight matrix)
-  flow_hidden_units: 24                # hidden units per coupling MLP
+  layer_type: ['dense', 'dense', 'VBDense']
   dropout: 0.0
   threshold_chi2: 3.5
-  prior_prec: 1.0
-  std_init: -5         #  None -> init at prior.
-  rank: 4              #  correlated directions; 0 reproduces VBDense exactly
-  u_init: 1.0e-4       #  low-rank factors start near mean-field
-  n_bnn_samples: 100
-
+  bayesian:
+    n_bnn_models: 100           # trained BNN models, one per n3fit task (n3fit runcard.yml <model>)
+    n_bnn_samples: 12           # posterior samples written per model (replicas model*N .. model*N + N-1)
+    sampling_space: weight      # weight | function (linearized Laplace)
+    prior_prec: 1.0             # precision of the Gaussian prior on the Bayesian weights
+    std_init: -7.0              # initial log-variance of the Bayesian weights
+    bayesian_bias: [false, false, true]   # per layer: Bayesian bias (default: true on VBDense layers)
+    bayesian_preproc: false     # true: preprocessing exponents drawn per sample
+    bayes_dropout: 0.0
+    train_sampling: coherent    # coherent: one weight draw per training step, shared by all x points
+                                #   and all calls of the layer | lrt (see below)
+    kl_annealing: linear        # KL warm-up: linear (0 -> 1) | cosine (0.1 -> 1)
+    kl_warmup_epochs: 3000      # warm-up length (default 3000, at most epochs // 4); no best epoch before its end
+    per_replica:                # per-sample quantities instead of copies of the trained model's
+      chi2: true                # chi2, erf_tr, erf_vl of each sample
+      positivity: true          # pos_state of each sample (n3fit's stopping positivity check)
+      postfit_veto: true        # postfit: per-sample positivity veto, and filling up to the requested
+                                #   number with replicas of chi2 <= 2x the passing mean
+      posterior_stopping_samples: 0   # > 0: stopping also needs positivity at the posterior mean and
+                                      #   at this many fixed draws
+      rejection_sampling: false       # keep only posterior draws passing positivity
+      rejection_max_draws: null       # default 50 * n_bnn_samples
+    #
+    # Other posteriors -- set explicitly:
+    # LRT training (as before 1ee4b2551; trains from the prior width):
+    #   train_sampling: lrt
+    #   std_init: 0.0               # = -log(prior_prec)
+    #   kl_annealing: cosine
+    #   kl_warmup_epochs: <epochs // 4>   # the old repeating cosine warm-up no longer exists
+    #   (not available with bayesian_flow)
+    # Normalizing flow on the Bayesian layer:
+    #   bayesian_flow: [false, false, true]   # per layer, like bayesian_bias
+    #   flow_n_couplings: 3
+    #   flow_hidden_units: 24
+    #   train_sampling: coherent    # lrt is not implemented for flows
+    #   std_init: -7.0
+    # Correlated low-rank posterior N(mu, D + U U^T):
+    #   layer_type: ['dense', 'dense', 'VBDense_correlated']   (under parameters)
+    #   rank: 4
+    #   u_init: 1e-4
+    #   train_sampling: coherent
+    #   std_init: -7.0
 fitting:
-  bayesian_preproc: True
   fitbasis: EVOL
   savepseudodata: True
   basis:
@@ -201,3 +234,5 @@ integrability:
 ################################################################################
 debug: false
 maxcores: 8
+parallel_models: false
+save: 'weights.weights.h5'

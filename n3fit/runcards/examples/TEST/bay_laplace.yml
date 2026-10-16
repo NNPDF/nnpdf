@@ -42,13 +42,50 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     threshold: 1e-5
   stopping_patience: 0.30 # percentage of the number of epochs
   layer_type: ['dense','dense','VBDense']
-  bayesian_bias: [false, false, true]
   dropout: 0.0
   threshold_chi2: 5.0
-  prior_prec: 1.0
-  sampling_space: 'function'
-  n_bnn_models: 2
-  n_bnn_samples: 5
+  bayesian:
+    n_bnn_models: 2             # trained BNN models, one per n3fit task (n3fit runcard.yml <model>)
+    n_bnn_samples: 5            # posterior samples written per model (replicas model*N .. model*N + N-1)
+    sampling_space: 'function'  # weight | function (linearized Laplace)
+    prior_prec: 1.0             # precision of the Gaussian prior on the Bayesian weights
+    std_init: -7.0              # not set originally (code default then: -log(prior_prec)); initial log-variance of the Bayesian weights
+    bayesian_bias: [false, false, true]   # per layer: Bayesian bias (default: true on VBDense layers)
+    bayesian_preproc: false     # true: preprocessing exponents drawn per sample
+    bayes_dropout: 0.0
+    train_sampling: coherent    # not set originally (code default then: lrt); coherent: one weight draw per training step, shared by all x points
+                                #   and all calls of the layer | lrt (see below)
+    kl_annealing: linear        # not set originally (the code default of that time); KL warm-up: linear (0 -> 1) | cosine (0.1 -> 1)
+    kl_warmup_epochs: 3000      # not set originally (the code default of that time); warm-up length (default 3000, at most epochs // 4); no best epoch before its end
+    per_replica:                # per-sample quantities instead of copies of the trained model's
+      chi2: true                # not set originally (code default then: false); chi2, erf_tr, erf_vl of each sample
+      positivity: true          # not set originally (code default then: false); pos_state of each sample (n3fit's stopping positivity check)
+      postfit_veto: true        # not set originally (code default then: false); postfit: per-sample positivity veto, and filling up to the requested
+                                #   number with replicas of chi2 <= 2x the passing mean
+      posterior_stopping_samples: 0   # > 0: stopping also needs positivity at the posterior mean and
+                                      #   at this many fixed draws
+      rejection_sampling: false       # keep only posterior draws passing positivity
+      rejection_max_draws: null       # default 50 * n_bnn_samples
+    #
+    # Other posteriors -- set explicitly:
+    # LRT training (as before 1ee4b2551; trains from the prior width):
+    #   train_sampling: lrt
+    #   std_init: 0.0               # = -log(prior_prec)
+    #   kl_annealing: cosine
+    #   kl_warmup_epochs: <epochs // 4>   # the old repeating cosine warm-up no longer exists
+    #   (not available with bayesian_flow)
+    # Normalizing flow on the Bayesian layer:
+    #   bayesian_flow: [false, false, true]   # per layer, like bayesian_bias
+    #   flow_n_couplings: 3
+    #   flow_hidden_units: 24
+    #   train_sampling: coherent    # lrt is not implemented for flows
+    #   std_init: -7.0
+    # Correlated low-rank posterior N(mu, D + U U^T):
+    #   layer_type: ['dense', 'dense', 'VBDense_correlated']   (under parameters)
+    #   rank: 4
+    #   u_init: 1e-4
+    #   train_sampling: coherent
+    #   std_init: -7.0
 ############################################################
 trvlseed: 1
 nnseed: 2
@@ -56,7 +93,6 @@ mcseed: 3
 genrep: false     # true = generate MC replicas, false = use real data
 
 fitting:
-  bayesian_preproc: False
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)

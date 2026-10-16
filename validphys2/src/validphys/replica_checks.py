@@ -58,10 +58,13 @@ PER_REPLICA_JSON_KEY = "per_replica_positivity"
 
 
 def postfit_veto_requested(runcard):
-    """True if the fit runcard asks postfit for the per-replica positivity veto"""
+    """True if the fit runcard asks postfit for the per-replica positivity veto
+    (parameters::bayesian::per_replica::postfit_veto; on by default for BNN fits, i.e. with a
+    VBDense / VBDense_correlated layer, as in n3fit.bayesian_settings)"""
     params = runcard.get("parameters") or {}
+    bnn = any(layer in ("VBDense", "VBDense_correlated") for layer in params.get("layer_type") or [])
     per_replica = (params.get("bayesian") or {}).get("per_replica") or {}
-    return bool(per_replica.get("postfit_veto", False))
+    return bool(per_replica.get("postfit_veto", bnn))
 
 EXPORTGRID_PDG = {
     "TBAR": -6,

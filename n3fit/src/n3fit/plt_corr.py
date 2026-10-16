@@ -41,6 +41,7 @@ Examples:
 
 import argparse
 import glob
+import math
 import os
 import re
 import sys
@@ -479,8 +480,18 @@ def _offdiag(M):
 
 
 def _null(L):
-    """Mean |rho| of uncorrelated variables from L observations: sqrt(2 / (pi L))"""
-    return np.sqrt(2 / (np.pi * L)) if L > 0 else np.nan
+    """Mean |rho| of the Pearson correlation of two independent Gaussian variables from L observations,
+    exactly: Gamma((L-1)/2) / (sqrt(pi) Gamma(L/2)) (-> sqrt(2 / (pi L)) for large L; 0.273 vs 0.252
+    at L = 10)"""
+    if L < 3:
+        return np.nan
+    return math.exp(math.lgamma((L - 1) / 2) - math.lgamma(L / 2)) / math.sqrt(math.pi)
+
+
+def _null_avg(L, n):
+    """Mean |rho| of the average of n independent such correlations (each of variance 1/(L-1)):
+    sqrt(2 / (pi n (L-1)))"""
+    return np.sqrt(2 / (np.pi * n * (L - 1))) if L > 1 and n > 0 else np.nan
 
 
 def _trainings(W, K):
@@ -498,24 +509,28 @@ def cross_weight_over_replicas(W):
     return _pearson_cols(W)
 
 
-def cross_weight_over_samples(W, K):
-    """rho^n_kk': correlation of every pair of weights over the samples of one training (m fixed),
-    averaged over the trainings: the correlation inside one model's posterior. Only weights that
-    vary within every training (the Bayesian layer); NaN elsewhere."""
-    Wt, _, _, within = _trainings(W, K)
+def cross_weight_over_samples(W, K, training=0, average=False):
+    """rho^n_kk': correlation of every pair of weights over the K samples of one training (m fixed;
+    default the first): the correlation inside one model's posterior. average=True: the correlation of
+    every training, averaged over the trainings (the weights themselves are not averaged). Only weights
+    that vary within the training(s) used (the Bayesian layer); NaN elsewhere."""
+    Wt, _, _, within_all = _trainings(W, K)
     p = W.shape[1]
     out = np.full((p, p), np.nan)
+    within = within_all if average else Wt[training].std(0) > _tol(W)
     if within.any():
         idx = np.flatnonzero(within)
-        out[np.ix_(idx, idx)] = np.nanmean([_pearson_cols(w[:, within]) for w in Wt], axis=0)
+        ms = range(Wt.shape[0]) if average else [training]
+        out[np.ix_(idx, idx)] = np.mean([_pearson_cols(Wt[m][:, within]) for m in ms], axis=0)
     return out
 
 
-def cross_weight_over_trainings(W, K):
+def cross_weight_over_trainings(W, K, sample=None):
     """rho^m_kk': correlation of every pair of weights over the training means (n averaged first):
-    how the mode locations of different weights move together across trainings."""
-    _, m, _, _ = _trainings(W, K)
-    return _pearson_cols(m)
+    how the mode locations of different weights move together across trainings. With sample=n, one
+    sample per training (w_k^{m,n}) instead of the mean, i.e. with the posterior sampling noise."""
+    Wt, m, _, _ = _trainings(W, K)
+    return _pearson_cols(m if sample is None else Wt[:, sample])
 
 
 def cross_replica_over_weights(W, K=None):
@@ -534,24 +549,31 @@ def cross_replica_over_weights(W, K=None):
     return out
 
 
-def cross_sample_over_weights(R, K):
-    """rho^k_nn': correlation of every pair of samples of one training (m fixed) over the weights, i.e.
-    the within-training blocks of cross_replica_over_weights. Returns, per variant, the block of the
-    first training and the mean |rho| over the within-training pairs of all trainings."""
-    N = next(iter(R.values())).shape[0]
-    same = (np.arange(N)[:, None] // K) == (np.arange(N)[None, :] // K)
-    off = ~np.eye(N, dtype=bool)
-    return {v: (M[:K, :K], np.mean(np.abs(M[same & off]))) for v, M in R.items()}
+def cross_sample_over_weights(R, K, training=0, average=False):
+    """rho^k_nn': correlation of every pair of samples of one training (m fixed; default the first)
+    over the weights, i.e. that training's diagonal block of cross_replica_over_weights. average=True:
+    the blocks of all trainings averaged entry by entry (sample labels are arbitrary, so only the level
+    of the off-diagonal entries is meaningful). Returns, per variant, the block, its mean |off-diagonal|
+    and its mean off-diagonal (signed)."""
+    out = {}
+    for v, M in R.items():
+        ms = range(M.shape[0] // K) if average else [training]
+        B = np.mean([M[m * K:(m + 1) * K, m * K:(m + 1) * K] for m in ms], axis=0)
+        off = B[~np.eye(K, dtype=bool)]
+        out[v] = (B, np.mean(np.abs(off)), np.mean(off))
+    return out
 
 
-def cross_training_over_weights(W, K):
+def cross_training_over_weights(W, K, sample=None):
     """rho^k_mm': correlation of every pair of trainings over the weights, using the training means
-    (n averaged first). Returns a dict: 'raw (e=f=k)', and "pre-std e'=m, f'=n" with
-    u_k^m = (m_k^m - mu_k) / s_k^m (offset from the consensus in units of the training's own width)."""
-    _, m, s, within = _trainings(W, K)
-    out = {"raw (e=f=k)": _pearson_rows(m[:, m.std(0) > _tol(W)])}
+    (n averaged first), or with sample=n one sample per training (w_k^{m,n}, sampling noise kept).
+    Returns a dict: 'raw (e=f=k)', and "pre-std e'=m, f'=n" with u_k^m = (x_k^m - <x_k>_m) / s_k^m
+    (offset from the consensus in units of the training's own width; x = mean or the sample)."""
+    Wt, m, s, within = _trainings(W, K)
+    x = m if sample is None else Wt[:, sample]
+    out = {"raw (e=f=k)": _pearson_rows(x[:, x.std(0) > _tol(W)])}
     if within.any():
-        u = (m[:, within] - m[:, within].mean(0)) / s[:, within]
+        u = (x[:, within] - x[:, within].mean(0)) / s[:, within]
         B = u @ u.T / u.shape[1]
         d = np.sqrt(np.diag(B))
         out["pre-std e'=m, f'=n"] = B / np.outer(d, d)
@@ -571,24 +593,35 @@ def mode_separation(W, K):
 
 def correlation_set(W, K, trainings_ok):
     """All weight correlations of one fit. W: (N, p) weights, K samples per training (replica r ->
-    training r // K). Training-based quantities need trainings_ok (all replicas, in order) and K >= 2."""
+    training r // K). Training-based quantities need trainings_ok (all replicas, in order). A standard
+    fit (K = 1) is a set of trainings with one sample each: sets 2 and 5 and the mode separation are
+    then undefined, set 3 equals set 1 and set 6 (raw) equals set 4 (raw)."""
     N, p = W.shape
     n_t = N // K
     out = dict(K=K, N=N, p=p, n_t=n_t, set1=cross_weight_over_replicas(W), set1_null=_null(N))
-    if not trainings_ok or K < 2 or n_t * K != N:
+    if not trainings_ok or n_t * K != N:
         return out
     _, _, _, within = _trainings(W, K)
     out.update(within=within, p_within=int(within.sum()))
-    out["set2"], out["set2_null"] = cross_weight_over_samples(W, K), _null(K) / np.sqrt(n_t)
+    if K > 1:
+        out["set2"], out["set2_null"] = cross_weight_over_samples(W, K), _null(K)
+        out["set2_avg"], out["set2_avg_null"] = cross_weight_over_samples(W, K, average=True), _null_avg(K, n_t)
     if n_t >= 3:
         out["set3"], out["set3_null"] = cross_weight_over_trainings(W, K), _null(n_t)
+        # the same with one sample per training (the first): sampling noise kept (= set 3 for K = 1)
+        out["set3_sample"], out["set3_sample_null"] = cross_weight_over_trainings(W, K, sample=0), _null(n_t)
     out["set4"] = cross_replica_over_weights(W, K)
     out["set4_null"] = _null(int((W.std(0) > _tol(W)).sum()))
-    out["set5"] = cross_sample_over_weights(out["set4"], K)
     same = (np.arange(N)[:, None] // K) == (np.arange(N)[None, :] // K)
+    off = ~np.eye(N, dtype=bool)
+    if K > 1:
+        out["set5"] = cross_sample_over_weights(out["set4"], K)
+        out["set5_avg"] = cross_sample_over_weights(out["set4"], K, average=True)
+    out["set4_within"] = {v: np.mean(np.abs(M[same & off])) if (same & off).any() else np.nan for v, M in out["set4"].items()}
     out["set4_between"] = {v: np.mean(np.abs(M[~same])) if (~same).any() else np.nan for v, M in out["set4"].items()}
     if n_t >= 2:
         out["set6"] = cross_training_over_weights(W, K)
+        out["set6_sample"] = cross_training_over_weights(W, K, sample=0)
         _, m, _, _ = _trainings(W, K)
         out["set6_null"] = _null(int((m.std(0) > _tol(W)).sum()))
         if within.any():
@@ -603,15 +636,24 @@ def correlation_set_summary(st):
         row.update(set2_mean_abs=np.mean(np.abs(_offdiag(st["set2"]))), set2_null=st["set2_null"])
     if "set3" in st:
         row.update(set3_mean_abs=np.mean(np.abs(_offdiag(st["set3"]))), set3_null=st["set3_null"])
-    for key in st.get("set5", {}):
+    if "set2_avg" in st:
+        row.update(set2_avg_mean_abs=np.mean(np.abs(_offdiag(st["set2_avg"]))), set2_avg_null=st["set2_avg_null"])
+    if "set3_sample" in st:
+        row.update(set3_sample_mean_abs=np.mean(np.abs(_offdiag(st["set3_sample"]))))
+    for key in st.get("set4", {}):
         tag = key.split()[0] if key.startswith("raw") else key.split()[1]
-        row[f"set5_within_{tag}"] = st["set5"][key][1]
+        row[f"set4_within_{tag}"] = st["set4_within"][key]
+        if key in st.get("set5", {}):
+            row[f"set5_first_training_{tag}"] = st["set5"][key][1]
+            row[f"set5_avg_trainings_{tag}"] = st["set5_avg"][key][1]
         row[f"set4_between_{tag}"] = st["set4_between"][key]
     if "set4_null" in st:
         row["set4_null"] = st["set4_null"]
     for key, M in st.get("set6", {}).items():
         tag = key.split()[0] if key.startswith("raw") else "pre"
         row[f"set6_mean_{tag}"] = np.mean(_offdiag(M))
+        if key in st.get("set6_sample", {}):
+            row[f"set6_sample_mean_{tag}"] = np.mean(_offdiag(st["set6_sample"][key]))
     if "set6" in st:
         row["set6_independent"] = -1 / (st["n_t"] - 1)
     if "ratio_T" in st:
@@ -654,11 +696,28 @@ def _lines(ax, K, N):
             ax.axvline(e - 0.5, c="k", lw=0.3)
 
 
+def _why(st, key):
+    """why a correlation is missing for a fit"""
+    if "within" not in st:
+        return "not computed\n(replicas incomplete or out of order)"
+    if st["K"] == 1 and key.split("_")[0] in ("set2", "set5", "ratio"):
+        return "not defined:\none network per training (K = 1)"
+    if st["n_t"] < 3:
+        return "not defined:\none training (N_t = 1)" if st["n_t"] == 1 else f"not defined:\n{st['n_t']} trainings"
+    return "not defined for this fit"
+
+
+def _undefined(ax, name=None, reason=None):
+    """a cell of a figure grid for which the correlation does not exist: left blank"""
+    ax.set_axis_off()
+
+
 def fig_weight_set(data, key, out, notation, isolates, expect, title):
-    items = {n: d for n, d in data.items() if key in d["set"]}
-    if not items:
+    """sets 1-3 and their variants: one weight-weight heatmap per fit (all fits; undefined ones say why)"""
+    if not any(key in d["set"] for d in data.values()):
         print(f"{os.path.basename(out)}: no fit qualifies; skipped")
         return
+    items = {n: d for n, d in data.items() if key in d["set"]}
     fig, axs = _grid(1, len(items))
     for ax, (name, d) in zip(axs[0], items.items()):
         st = d["set"]
@@ -672,7 +731,9 @@ def fig_weight_set(data, key, out, notation, isolates, expect, title):
     plt.close(fig)
 
 
-def fig_set4(data, out):
+def fig_set4(data, out, shuffle_seed=None):
+    """shuffle_seed: show the replicas in a random order (the same permutation for rows and columns; the
+    statistics in the titles do not depend on it), so that the training blocks are not lined up"""
     items = {n: d for n, d in data.items() if "set4" in d["set"]}
     if not items:
         print(f"{os.path.basename(out)}: no BNN fit with trainings; skipped")
@@ -684,86 +745,112 @@ def fig_set4(data, out):
         for i, v in enumerate(variants):
             ax = axs[i, j]
             if v not in st["set4"]:
-                ax.set_axis_off()
+                _undefined(ax, f"{name}  [{v}]", "not defined:\none network per training (K = 1)")
                 continue
-            im = ax.imshow(st["set4"][v], cmap=CMAP, vmin=-1, vmax=1, interpolation="nearest")
-            _lines(ax, st["K"], st["N"])
-            w, b = st["set5"][v][1], st["set4_between"][v]
-            ax.set_title(f"{name}  [{v}]\nmean |R| within training {w:.3f}"
-                         + (f", between {b:.3f}" if np.isfinite(b) else ""), fontsize=8.5)
-            ax.set_xlabel("replica r'")
-            ax.set_ylabel("replica r")
+            M = st["set4"][v]
+            if shuffle_seed is None:
+                im = ax.imshow(M, cmap=CMAP, vmin=-1, vmax=1, interpolation="nearest")
+                _lines(ax, st["K"], st["N"])
+            else:
+                order = np.random.default_rng(shuffle_seed).permutation(st["N"])
+                im = ax.imshow(M[np.ix_(order, order)], cmap=CMAP, vmin=-1, vmax=1, interpolation="nearest")
+            w, b = st["set4_within"][v], st["set4_between"][v]
+            parts = ([f"within training {w:.3f}"] if np.isfinite(w) else []) + ([f"between {b:.3f}"] if np.isfinite(b) else [])
+            ax.set_title(f"{name}  [{v}]\nmean |R| " + ", ".join(parts), fontsize=8.5)
+            order_txt = "" if shuffle_seed is None else " (random order)"
+            ax.set_xlabel(f"replica r'{order_txt}")
+            ax.set_ylabel(f"replica r{order_txt}")
     fig.colorbar(im, ax=list(axs.ravel()), shrink=0.6, label=r"$\rho_{rr'}$")
-    fig.suptitle(r"cross-replica correlation over weights, $\rho^{k}_{rr'}$", fontsize=10, y=1.0)
+    shuffled = "" if shuffle_seed is None else f", replicas in a random order (seed {shuffle_seed})"
+    fig.suptitle(r"cross-replica correlation over weights, $\rho^{k}_{rr'}$" + shuffled, fontsize=10, y=1.0)
     _caption(fig, "a,b = r;  c = k;  d = k;  e = f = k (raw).  Pre-standardised rows: z_k = (w_k - mu_k^e')/sigma_k^f' first.",
              "raw: similarity of two networks' weight vectors (large-spread weights dominate); e'=r: what two replicas "
-             "share relative to the ensemble, incl. their training's offset (within ~ T/(T+1)); e'=n: the posterior "
-             "fluctuations only",
+             "share relative to the ensemble, incl. their training's offset; e'=n: the posterior fluctuations only",
              "e'=n: -1/(K-1) within a training (K residuals around their own mean sum to 0), ~0 between trainings; "
              "|.| at the null sqrt(2/(pi p)) once that is larger", y=-0.01)
     fig.savefig(out, dpi=130, bbox_inches="tight")
     plt.close(fig)
 
 
-def fig_set5(data, out):
-    items = {n: d for n, d in data.items() if "set5" in d["set"]}
+def fig_set5(data, out, key="set5"):
+    """set 5: the K x K sample-sample block of the first training (key 'set5') or the blocks of all
+    trainings averaged entry by entry ('set5_avg'); all fits, undefined ones say why"""
+    avg = key.endswith("_avg")
+    items = {n: d for n, d in data.items() if key in d["set"]}
     if not items:
         print(f"{os.path.basename(out)}: no BNN fit with trainings; skipped")
         return
-    variants = max((list(d["set"]["set5"]) for d in items.values()), key=len)
+    variants = max((list(d["set"][key]) for d in items.values()), key=len)
     fig, axs = _grid(len(variants), len(items), 5.0, 4.6)
     for j, (name, d) in enumerate(items.items()):
         st = d["set"]
         for i, v in enumerate(variants):
             ax = axs[i, j]
-            if v not in st["set5"]:
-                ax.set_axis_off()
+            if key not in st or v not in st[key]:
+                _undefined(ax, f"{name}\n[{v}]", _why(st, key))
                 continue
-            block, mean_abs = st["set5"][v]
+            block, mean_abs, mean = st[key][v]
             im = ax.imshow(block, cmap=CMAP, vmin=-1, vmax=1, interpolation="nearest")
-            ax.set_title(f"{name}\n[{v}] training 0 ({st['K']} samples)\nmean |rho|, all trainings: {mean_abs:.3f}",
-                         fontsize=8)
+            which = ("the only training" if st["n_t"] == 1 else f"average of the {st['n_t']} trainings") if avg else "first training"
+            ax.set_title(f"{name}\n[{v}] {which} ({st['K']} samples)\n"
+                         f"mean |off-diag| {mean_abs:.3f}, mean off-diag {mean:.3f}", fontsize=8)
             ax.set_xlabel("sample n'")
             ax.set_ylabel("sample n")
     fig.colorbar(im, ax=list(axs.ravel()), shrink=0.6, label=r"$\rho_{nn'}$")
-    fig.suptitle(r"cross-sample correlation over weights, $\rho^{k}_{nn'}$ (shown: the first training)", fontsize=10, y=1.0)
-    _caption(fig, "a,b = n;  c = k;  m fixed;  d = k;  e = f = k (raw), pre-standardised rows as in set 4.",
+    if avg:
+        fig.suptitle(r"cross-sample correlation over weights, $\rho^{k}_{nn'}$, averaged over the trainings "
+                     "(entry by entry)", fontsize=10, y=1.0)
+        notation = ("a,b = n;  c = k;  one correlation per training, then averaged over m (the weights are not averaged);  "
+                    "d = k;  e = f = k (raw), pre-standardised rows as in set 4.  Sample labels are arbitrary: only the "
+                    "level of the off-diagonal entries is meaningful, not their pattern.")
+    else:
+        fig.suptitle(r"cross-sample correlation over weights of the first training, $\rho^{k}_{nn'}$", fontsize=10, y=1.0)
+        notation = "a,b = n;  c = k;  m fixed (the first training);  d = k;  e = f = k (raw), pre-standardised rows as in set 4."
+    p_w = next(iter(items.values()))["set"].get("p_within", 0)
+    _caption(fig, notation,
              "whether the posterior draws of one model are independent of each other (e'=n), or how much they share "
              "the training's offset (e'=r)",
              "e'=n: -1/(K-1) (K residuals around their own mean sum to 0) plus noise of size sqrt(2/(pi p)) "
-             f"(= {_null(next(iter(items.values()))['set'].get('p_within', 0)):.3f} here); e'=r: ~1 when the modes are far apart",
+             f"(= {_null(p_w):.3f} here{', / sqrt(N_t) after averaging' if avg else ''}); e'=r: ~1 when the modes are far apart",
              y=-0.01)
     fig.savefig(out, dpi=130, bbox_inches="tight")
     plt.close(fig)
 
 
-def fig_set6(data, out):
-    items = {n: d for n, d in data.items() if "set6" in d["set"]}
+def fig_set6(data, out, key="set6"):
+    """set 6 from the training means (key 'set6') or from one sample per training ('set6_sample'); all
+    fits, undefined ones say why"""
+    one = key.endswith("_sample")
+    items = {n: d for n, d in data.items() if key in d["set"]}
     if not items:
         print(f"{os.path.basename(out)}: no fit with >= 2 trainings; skipped")
         return
-    variants = max((list(d["set"]["set6"]) for d in items.values()), key=len)
+    variants = max((list(d["set"][key]) for d in items.values()), key=len)
     fig, axs = _grid(len(variants), len(items), 4.8, 4.4)
     for j, (name, d) in enumerate(items.items()):
         st = d["set"]
         for i, v in enumerate(variants):
             ax = axs[i, j]
-            if v not in st["set6"]:
-                ax.set_axis_off()
+            if key not in st or v not in st[key]:
+                reason = _why(st, key) if key not in st else "not defined:\none network per training (K = 1)"
+                _undefined(ax, f"{name}  [{v}]", reason)
                 continue
-            M = st["set6"][v].copy()
+            M = st[key][v].copy()
             np.fill_diagonal(M, np.nan)
             im = ax.imshow(M, cmap=CMAP, vmin=-1, vmax=1, interpolation="nearest")
-            ax.set_title(f"{name}  [{v}]\n{st['n_t']} trainings: mean off-diag {np.nanmean(M):.3f} "
-                         f"(independent {-1 / (st['n_t'] - 1):.3f})", fontsize=8.5)
+            ref = f" (independent {-1 / (st['n_t'] - 1):.3f})" if v.startswith("pre") else ""
+            ax.set_title(f"{name}  [{v}]\n{st['n_t']} trainings: mean off-diag {np.nanmean(M):.3f}{ref}", fontsize=8.5)
             ax.set_xlabel("training m'")
             ax.set_ylabel("training m")
     fig.colorbar(im, ax=list(axs.ravel()), shrink=0.6, label=r"$\rho_{mm'}$ (diagonal not shown)")
-    fig.suptitle(r"cross-training correlation over weights, $\rho^{k}_{mm'}$ (training means)", fontsize=10, y=1.0)
-    _caption(fig, "a,b = m;  c = k;  n averaged first;  d = k;  e = f = k (raw).  Pre-std: u_k^m = (m_k^m - mu_k)/s_k^m "
+    what = "one sample per training ($w_k^{m,n=0}$)" if one else "training means ($n$ averaged)"
+    fig.suptitle(r"cross-training correlation over weights, $\rho^{k}_{mm'}$, " + what, fontsize=10, y=1.0)
+    x = "w_k^{m,n=0} (one sample, no averaging over n)" if one else "m_k^m = <w_k^{m,n}>_n (n averaged first)"
+    _caption(fig, f"a,b = m;  c = k;  x_k^m = {x};  d = k;  e = f = k (raw).  Pre-std: u_k^m = (x_k^m - <x_k>_m)/s_k^m "
              "(consensus over trainings, own width), then normalised over k.",
-             "whether different trainings land in related modes (deviate from the consensus in the same direction)",
-             "about -1/(N_t - 1) -> 0 for independent trainings (the offsets sum to 0)", y=-0.01)
+             "whether different trainings land in related modes (deviate from the consensus in the same direction)"
+             + ("; with the posterior sampling noise kept" if one else ""),
+             "pre-std: about -1/(N_t - 1) -> 0 for independent trainings (the offsets sum to 0)", y=-0.01)
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
@@ -852,6 +939,98 @@ def fig_correlation_notation(out):
     plt.close(fig)
 
 
+def _pair_matrices(st, key_a, key_b, variant):
+    a, b = st.get(key_a), st.get(key_b)
+    if a is None or b is None:
+        return None, None
+    if variant is not None:
+        if variant not in a or variant not in b:
+            return None, None
+        a, b = a[variant], b[variant]
+    return a, b
+
+
+def fig_variant_difference(data, rows, out, title, notation):
+    """difference a - b of two variants of a correlation (e.g. training means - one extraction), per fit,
+    on its own colour scale. rows: [(key_a, key_b, variant or None, label)]"""
+    diffs = {}
+    for name, d in data.items():
+        for i, (ka, kb, v, _) in enumerate(rows):
+            A, B = _pair_matrices(d["set"], ka, kb, v)
+            if A is not None:
+                D = A - B
+                np.fill_diagonal(D, np.nan)
+                diffs[(i, name)] = (D, A, B)
+    if not diffs:
+        print(f"{os.path.basename(out)}: nothing to compare; skipped")
+        return
+    vmax = {}
+    for i in range(len(rows)):  # own colour scale per row
+        vals = [D[np.isfinite(D)] for (r, _), (D, _, _) in diffs.items() if r == i and np.nanmax(np.abs(D)) > 0]
+        vals = np.abs(np.concatenate(vals)) if vals else np.array([0.0])
+        vmax[i] = np.percentile(vals, 99) if vals.max() > 0 else 1.0
+    names = [n for n in data if any((i, n) in diffs and np.nanmax(np.abs(diffs[(i, n)][0])) > 0 for i in range(len(rows)))]
+    if not names:
+        print(f"{os.path.basename(out)}: no fit with a difference; skipped")
+        return
+    fig, axs = _grid(len(rows), len(names), 4.8, 4.4)
+    ims = {}
+    for j, name in enumerate(names):
+        d = data[name]
+        st = d["set"]
+        for i, (ka, kb, v, label) in enumerate(rows):
+            ax = axs[i, j]
+            if (i, name) not in diffs:
+                reason = _why(st, ka) if ka not in st else "not defined:\none network per training (K = 1)"
+                _undefined(ax, f"{name}\n{label}", reason)
+                continue
+            D, A, B = diffs[(i, name)]
+            ok = np.isfinite(D)
+            if not ok.any() or np.nanmax(np.abs(D)) == 0:
+                _undefined(ax, f"{name}\n{label}", "identical by construction\n(K = 1: one extraction = the mean)")
+                continue
+            ims[i] = ax.imshow(D, cmap=CMAP, vmin=-vmax[i], vmax=vmax[i], interpolation="nearest")
+            a, b = A[ok], B[ok]
+            ax.set_title(f"{name}\n{label}\nmean |a-b| {np.abs(D[ok]).mean():.3f}, max {np.abs(D[ok]).max():.2f}, "
+                         f"corr(a,b) {np.corrcoef(a, b)[0, 1]:.3f}", fontsize=8)
+            ax.set_xticks([])
+            ax.set_yticks([])
+    for i, im in ims.items():
+        fig.colorbar(im, ax=list(axs[i]), shrink=0.8, label="a - b (diagonal not shown)")
+    fig.suptitle(title, fontsize=10, y=1.0)
+    fig.text(0.5, -0.01, notation, ha="center", va="top", fontsize=8, wrap=True)
+    fig.savefig(out, dpi=140, bbox_inches="tight")
+    plt.close(fig)
+
+
+def fig_relative_to_standard(data, key, out, title):
+    """relative difference (rho_BNN - rho_std) / rho_std of a weight-weight correlation, for every BNN fit
+    against the standard fit(s) (K = 1) with the same weights"""
+    refs = {n: d for n, d in data.items() if d["set"].get("K") == 1 and key in d["set"]}
+    bnns = {n: d for n, d in data.items() if d["set"].get("K", 1) > 1 and key in d["set"]}
+    pairs = [(b, r) for r in refs for b in bnns if bnns[b]["set"][key].shape == refs[r]["set"][key].shape]
+    if not pairs:
+        print(f"{os.path.basename(out)}: no BNN / standard pair; skipped")
+        return
+    from matplotlib.colors import SymLogNorm
+    fig, axs = _grid(1, len(pairs), 5.0, 4.8)
+    for ax, (b, r) in zip(axs[0], pairs):
+        A, B = bnns[b]["set"][key], refs[r]["set"][key]
+        rel = (A - B) / B
+        np.fill_diagonal(rel, np.nan)
+        ok = np.isfinite(rel)
+        small = np.mean(np.abs(B[ok]) < refs[r]["set"][key + "_null"])
+        im = ax.imshow(rel, cmap=CMAP, norm=SymLogNorm(linthresh=1, vmin=-100, vmax=100), interpolation="nearest")
+        ax.set_title(f"({b} - {r}) / {r}\nmedian |rel| {np.median(np.abs(rel[ok])):.2f};  "
+                     f"|rho_std| < its null in {100 * small:.0f}% of the entries", fontsize=8)
+        ax.set_xticks([])
+        ax.set_yticks([])
+    fig.colorbar(im, ax=list(axs[0]), shrink=0.8, label="relative difference (symmetric log scale)")
+    fig.suptitle(title, fontsize=10, y=1.03)
+    fig.savefig(out, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+
 def correlation_set_figures(data, out_dir):
     fig_correlation_notation(os.path.join(out_dir, "fig_correlation_notation.png"))
     fig_weight_set(
@@ -861,18 +1040,47 @@ def correlation_set_figures(data, out_dir):
         "when the modes are far apart", r"cross-weight correlation over replicas, $\rho^{r}_{kk'}$")
     fig_weight_set(
         data, "set2", os.path.join(out_dir, "fig_cross_weight_over_samples.png"),
-        "a,b = k;  c = n (m fixed, then averaged over m);  d = n;  e = f = n", "the correlation inside one model's "
-        "posterior (weights varying within the trainings only)", "~0 (null shown) in a mean-field Bayesian layer: the "
-        "weights are independent in q by construction", r"cross-weight correlation over samples (within a training), $\rho^{n}_{kk'}$")
+        "a,b = k;  c = n, m fixed (the first training);  d = n;  e = f = n", "the correlation inside one model's "
+        "posterior (weights varying within the training only)", "~0 (null shown) in a mean-field Bayesian layer: the "
+        "weights are independent in q by construction", r"cross-weight correlation over samples of the first training, $\rho^{n}_{kk'}$")
+    fig_weight_set(
+        data, "set2_avg", os.path.join(out_dir, "fig_cross_weight_over_samples_avg_trainings.png"),
+        "a,b = k;  c = n, one correlation per training, then averaged over m (the weights are not averaged);  d = n;  "
+        "e = f = n", "the correlation inside the posteriors, with the noise reduced by averaging over the trainings",
+        "~0 (null sqrt(2/(pi N_t (K-1))) shown) in a mean-field Bayesian layer",
+        r"cross-weight correlation over samples, averaged over the trainings, $\langle\rho^{n}_{kk'}\rangle_m$")
     fig_weight_set(
         data, "set3", os.path.join(out_dir, "fig_cross_weight_over_trainings.png"),
         "a,b = k;  c = m (n averaged first: training means);  d = m;  e = f = m", "how the mode locations of different "
         "weights move together across trainings (degenerate directions, hidden-unit symmetries)",
         "no fixed expectation; compare with the null 1/sqrt(N_t)", r"cross-weight correlation over trainings, $\rho^{m}_{kk'}$")
+    fig_weight_set(
+        data, "set3_sample", os.path.join(out_dir, "fig_cross_weight_over_trainings_one_sample.png"),
+        "a,b = k;  c = m (one sample per training, n = 0: no averaging over n);  d = m;  e = f = m", "set 3 with "
+        "the posterior sampling noise kept: mode locations plus each training's within-posterior fluctuation",
+        "the set-3 value, diluted by the share of the spread that is posterior noise, var_within / (var_within + var_between)",
+        r"cross-weight correlation over trainings, one sample per training, $\rho^{m}_{kk'}$ ($w_k^{m,n=0}$)")
     fig_set4(data, os.path.join(out_dir, "fig_cross_replica_over_weights.png"))
+    fig_set4(data, os.path.join(out_dir, "fig_cross_replica_over_weights_shuffled.png"), shuffle_seed=0)
     fig_set5(data, os.path.join(out_dir, "fig_cross_sample_over_weights.png"))
+    fig_set5(data, os.path.join(out_dir, "fig_cross_sample_over_weights_avg_trainings.png"), key="set5_avg")
     fig_set6(data, os.path.join(out_dir, "fig_cross_training_over_weights.png"))
+    fig_set6(data, os.path.join(out_dir, "fig_cross_training_over_weights_one_sample.png"), key="set6_sample")
     fig_ratio(data, os.path.join(out_dir, "fig_mode_separation.png"))
+    fig_relative_to_standard(
+        data, "set3_sample", os.path.join(out_dir, "fig_cross_weight_over_trainings_one_sample_rel_nnpdf.png"),
+        r"relative difference of $\rho^{m}_{kk'}$ (one extraction per training) to the standard fit")
+    fig_variant_difference(
+        data, [("set3", "set3_sample", None, "set 3: means - one extraction")],
+        os.path.join(out_dir, "fig_diff_set3_means_minus_one_sample.png"),
+        r"$\rho^{m}_{kk'}$: training means (3a) minus one extraction (3b)",
+        "a = correlation from the training means, b = from one extraction (n = 1) per training; own colour scale")
+    fig_variant_difference(
+        data, [("set6", "set6_sample", "raw (e=f=k)", "set 6 raw: means - one extraction"),
+               ("set6", "set6_sample", "pre-std e'=m, f'=n", "set 6 pre-std: means - one extraction")],
+        os.path.join(out_dir, "fig_diff_set6_means_minus_one_sample.png"),
+        r"$\rho^{k}_{mm'}$: training means (6a) minus one extraction (6b)",
+        "a = correlation from the training means, b = from one extraction (n = 1) per training; own colour scale")
 
 
 # ------------------------------------------------------------------------------ main
