@@ -145,3 +145,44 @@ def test_zq2map_missing_variable():
     process = _process(zq2map_function=_zq2)
     with pytest.raises(NotImplementedError, match="Error trying to compute zq2map"):
         process.zq2map(KIN_DF, _metadata(["x", "Q2", "extra_0"]))
+
+
+def test_sidis_has_both_maps():
+    assert PROCESSES["SIDIS"].kinematic_maps == ("xq2", "zq2")
+
+
+@pytest.mark.parametrize("scale", ["Q2", "Q"])
+def test_sidis_maps(scale):
+    """Both the maps can be computed from x, z and the scale (either Q or Q2)"""
+    sidis = PROCESSES["SIDIS"]
+    q2 = KIN_DF["c"]
+    kin_df = KIN_DF.assign(c=q2 if scale == "Q2" else np.sqrt(q2))
+    metadata = _metadata(["x", "z", scale])
+    x, q2_x = sidis.xq2map(kin_df, metadata)
+    z, q2_z = sidis.zq2map(kin_df, metadata)
+    np.testing.assert_allclose(x, KIN_DF["a"])
+    np.testing.assert_allclose(z, KIN_DF["b"])
+    np.testing.assert_allclose(q2_x, q2)
+    np.testing.assert_allclose(q2_z, q2)
+
+
+def test_sidis_xq2map_is_the_dis_one():
+    x_sidis, q2_sidis = PROCESSES["SIDIS"].xq2map(KIN_DF, _metadata(["x", "z", "Q2"]))
+    x_dis, q2_dis = DIS.xq2map(KIN_DF, _metadata(["x", "y", "Q2"]))
+    np.testing.assert_allclose(x_sidis, x_dis)
+    np.testing.assert_allclose(q2_sidis, q2_dis)
+
+
+def test_sidis_maps_are_independent():
+    """Each map only needs the variables it uses, the other one fails if they are missing"""
+    sidis = PROCESSES["SIDIS"]
+    # No z: only the x-Q2 map can be computed
+    metadata = _metadata(["x", "y", "Q2"])
+    sidis.xq2map(KIN_DF, metadata)
+    with pytest.raises(NotImplementedError, match="Error trying to compute zq2map"):
+        sidis.zq2map(KIN_DF, metadata)
+    # No x: only the z-Q2 map can be computed
+    metadata = _metadata(["z", "y", "Q2"])
+    sidis.zq2map(KIN_DF, metadata)
+    with pytest.raises(NotImplementedError, match="Error trying to compute xq2map"):
+        sidis.xq2map(KIN_DF, metadata)
