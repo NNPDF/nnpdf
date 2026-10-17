@@ -95,6 +95,7 @@ class _Process:
     description: str
     accepted_variables: tuple[str]
     xq2map_function: Optional[Callable] = None
+    zq2map_function: Optional[Callable] = None
 
     def __hash__(self):
         return hash(self.name)
@@ -148,6 +149,13 @@ class _Process:
         metadata of the commondata
         """
         return self._apply_map(kin_df, metadata, self.xq2map_function, "xq2map")
+
+    def zq2map(self, kin_df, metadata):
+        """Transform the kinematics dataframe into a z q dataframe
+        This is the equivalent of ``xq2map`` for processes involving a fragmentation function,
+        where z is the momentum fraction of the observed hadron.
+        """
+        return self._apply_map(kin_df, metadata, self.zq2map_function, "zq2map")
 
     def __str__(self):
         return self.name
