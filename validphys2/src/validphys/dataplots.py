@@ -1405,6 +1405,9 @@ def plot_xq2(
     - If cuts are enabled and `display_cuts` is True, the filtered points
       will be displaed and marked.
 
+    The datasets whose process has no (x,Q²) map (e.g., a process defined
+    only through (z,Q²)) are not included in the plot.
+
     The points are grouped according to the `marker_by` option. The possible
     values are: "process type", "experiment", "group" or "dataset" for discrete
     colors, or "kinematics" for coloring by 1/(Q2(1-x))
@@ -1558,7 +1561,10 @@ def plot_xq2(
     next_opts = next_options()
     key_options = {}
 
-    for experiment, commondata, fitted, masked, group in dataset_inputs_by_groups_xq2map:
+    for xq2map in dataset_inputs_by_groups_xq2map:
+        if xq2map is None:
+            continue
+        experiment, commondata, fitted, masked, group = xq2map
         info = get_info(commondata)
         if marker_by == 'process type':
             key = info.process_description

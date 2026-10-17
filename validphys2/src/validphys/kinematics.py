@@ -177,7 +177,13 @@ def _kinematic_map_with_cuts(commondata, cuts, kinematic_mapper):
 def xq2map_with_cuts(commondata, cuts, group_name=None):
     """Return two (x,Q²) tuples: one for the fitted data and one for the
     cut data. If `display_cuts` is false or all data passes the cuts, the second
-    tuple will be empty."""
+    tuple will be empty.
+
+    Return ``None`` if the process of the commondata is defined with kinematic maps that
+    don't include the (x,Q²) one (e.g., a process defined only through (z,Q²))."""
+    kinematic_maps = getattr(commondata.process_type, "kinematic_maps", None)
+    if kinematic_maps and "xq2" not in kinematic_maps:
+        return None
     info, xq2fitted, xq2masked = _kinematic_map_with_cuts(
         commondata, cuts, commondata.process_type.xq2map
     )
