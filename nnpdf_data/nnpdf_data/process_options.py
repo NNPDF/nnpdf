@@ -111,11 +111,11 @@ class _Process:
         accepted = set(self.accepted_variables).union({_Vars.sqrts})
         return accepted.union(set(kin_cov)) == accepted
 
-    def xq2map(self, kin_df, metadata):
-        """Transform the kinematics dataframe into a x q dataframe
-        For double hadronic processes the number of output point will be 2x ninput
-        These functions should have access to both the kinematic dataframe and the
-        metadata of the commondata
+    def _apply_map(self, kin_df, metadata, map_function, map_name):
+        """Validate the kinematics and apply ``map_function`` to them.
+
+        Shared by all the kinematic maps (e.g., ``xq2map``). ``map_name`` is only used
+        to build the error messages.
         """
         # Remove ``extra labels`` from kin_df
         if metadata.plotting.extra_labels is not None:
@@ -129,17 +129,25 @@ class _Process:
                 f"kinematic variables are not supported for process {self.name}. You are using {metadata.kinematic_coverage}, please use {self.accepted_variables} ({metadata.name})"
             )
 
-        if self.xq2map_function is None:
-            raise NotImplementedError(f"xq2map is not implemented for {self.name}")
+        if map_function is None:
+            raise NotImplementedError(f"{map_name} is not implemented for {self.name}")
 
         # check that all variables in the dataframe are accepted by this process
         kininfo = _KinematicsInformation(kin_df, metadata)
         try:
-            return self.xq2map_function(kininfo)
+            return map_function(kininfo)
         except KeyError as e:
             raise NotImplementedError(
-                f"Error trying to compute xq2map for process {self.name} ({metadata.name})"
+                f"Error trying to compute {map_name} for process {self.name} ({metadata.name})"
             ) from e
+
+    def xq2map(self, kin_df, metadata):
+        """Transform the kinematics dataframe into a x q dataframe
+        For double hadronic processes the number of output point will be 2x ninput
+        These functions should have access to both the kinematic dataframe and the
+        metadata of the commondata
+        """
+        return self._apply_map(kin_df, metadata, self.xq2map_function, "xq2map")
 
     def __str__(self):
         return self.name
