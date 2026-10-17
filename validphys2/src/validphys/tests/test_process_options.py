@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from nnpdf_data.process_options import DIS, PROCESSES, _Process, _Vars
+from nnpdf_data.process_options import _HADRON_MASSES, DIS, PROCESSES, _Process, _Vars
 
 
 def _xq2(kin_info):
@@ -20,14 +20,14 @@ def _zq2(kin_info):
     return kin_info[_Vars.z], kin_info[_Vars.Q2]
 
 
-def _metadata(kinematic_coverage):
+def _metadata(kinematic_coverage, process="FAKE-PROCESS", cm_energy=100.0):
     """Minimal stand-in for the metadata of an observable"""
     return SimpleNamespace(
         name="FAKE_DATASET",
-        process="FAKE-PROCESS",
+        process=process,
         plotting=SimpleNamespace(extra_labels=None),
         kinematic_coverage=kinematic_coverage,
-        cm_energy=100.0,
+        cm_energy=cm_energy,
     )
 
 
@@ -187,3 +187,67 @@ def test_sidis_maps_are_independent():
     sidis.zq2map(KIN_DF, metadata)
     with pytest.raises(NotImplementedError, match="Error trying to compute xq2map"):
         sidis.xq2map(KIN_DF, metadata)
+
+
+SIA_PROCESSES = ("SIA_Z", "SIA_XP", "SIA_PH", "SIA_XI")
+# The SIA processes for which z is computed from a momentum, and so depend on the hadron mass
+SIA_MOMENTUM_PROCESSES = (("SIA_XP", "xp"), ("SIA_PH", "ph"), ("SIA_XI", "xi"))
+
+
+def _sia_zq2map(process, variable, values, hadron="PI", cm_energy=10.0):
+    """Apply the z-Q2 map of an SIA process to the given values of its variable"""
+    kin_df = pd.DataFrame({variable: values, "pad_1": 0.0, "pad_2": 0.0})
+    metadata = _metadata([variable, "extra_0", "extra_1"], f"SIA-{hadron}", cm_energy)
+    return PROCESSES[process].zq2map(kin_df, metadata)
+
+
+@pytest.mark.parametrize("process", SIA_PROCESSES)
+def test_sia_has_only_zq2_map(process):
+    assert PROCESSES[process].kinematic_maps == ("zq2",)
+
+
+def test_sia_z_map():
+    """When measured as a function of z the map is the identity, at Q2 = sqrts^2"""
+    z_values = np.array([0.1, 0.5, 0.9])
+    # The hadron is not needed in this case
+    z, q2 = _sia_zq2map("SIA_Z", "z", z_values, hadron="UNKNOWN")
+    np.testing.assert_allclose(z, z_values)
+    np.testing.assert_allclose(q2, 10.0**2)
+    assert q2.shape == z.shape
+
+
+@pytest.mark.parametrize("hadron", list(_HADRON_MASSES))
+def test_sia_momentum_maps(hadron):
+    """z follows from the momentum of the hadron, which can be given as xp, ph or xi.
+    The three processes must agree with the same closed form for the same points."""
+    mass, sqrts = _HADRON_MASSES[hadron], 10.0
+    xp = np.array([0.05, 0.3, 0.9])
+    expected_z = np.sqrt(xp**2 + 4 * mass**2 / sqrts**2)
+    variables = {"xp": xp, "ph": xp * sqrts / 2, "xi": np.log(1 / xp)}
+    for process, variable in SIA_MOMENTUM_PROCESSES:
+        z, q2 = _sia_zq2map(process, variable, variables[variable], hadron, sqrts)
+        np.testing.assert_allclose(z, expected_z, err_msg=process)
+        np.testing.assert_allclose(q2, sqrts**2, err_msg=process)
+        assert q2.shape == z.shape
+
+
+def test_sia_sqrts_as_a_variable():
+    """The scale is taken from sqrts when it is one of the kinematic variables"""
+    kin_df = pd.DataFrame({"z": [0.1, 0.4], "sqrts": [10.0, 20.0], "pad": 0.0})
+    metadata = _metadata(["z", "sqrts", "extra_0"], "SIA-PI", cm_energy=None)
+    _, q2 = PROCESSES["SIA_Z"].zq2map(kin_df, metadata)
+    np.testing.assert_allclose(q2, [100.0, 400.0])
+
+
+@pytest.mark.parametrize("process, variable", SIA_MOMENTUM_PROCESSES)
+def test_sia_unknown_hadron(process, variable):
+    with pytest.raises(NotImplementedError, match="Error trying to compute zq2map") as error:
+        _sia_zq2map(process, variable, [0.1], hadron="UNKNOWN")
+    assert "Unknown hadron" in str(error.value.__cause__)
+
+
+@pytest.mark.parametrize("process, variable", [("SIA_Z", "z"), *SIA_MOMENTUM_PROCESSES])
+def test_sia_needs_the_center_of_mass_energy(process, variable):
+    with pytest.raises(NotImplementedError, match="Error trying to compute zq2map") as error:
+        _sia_zq2map(process, variable, [0.1], cm_energy=None)
+    assert "center of mass energy" in str(error.value.__cause__)
