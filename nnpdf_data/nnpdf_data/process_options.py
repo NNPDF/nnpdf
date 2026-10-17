@@ -604,6 +604,11 @@ SINGLETOP = _Process(
     xq2map_function=_singletop_xq2map,
 )
 
+# TODO (open question): SIDIS is a single process here, with no split by current or by hadron.
+# DIS is split into NC/CC variants in ``PROCESSES`` and the SIA datasets are deliberately
+# separated by hadron type, since the hadron mass enters their z-Q2 map. Nothing needs that
+# for SIDIS yet (the maps only use x, z and Q). When SIDIS datasets are implemented, revisit
+# whether SIDIS should also be split into NC and CC, and by hadron type.
 SIDIS = _Process(
     "SIDIS",
     "Semi-Inclusive Deep Inelastic Scattering",
