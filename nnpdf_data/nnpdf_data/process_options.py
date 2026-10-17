@@ -48,6 +48,11 @@ class _Vars:
     m_ll = "m_ll"
     m_ll2 = "m_ll2"
     abs_y = "abs_y"
+    # Variables used by fragmentation processes (SIA, SIDIS)
+    z = "z"
+    xp = "xp"
+    ph = "ph"
+    xi = "xi"
 
 
 class _KinematicsInformation:
