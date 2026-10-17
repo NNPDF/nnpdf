@@ -201,7 +201,11 @@ ZQ2Map = namedtuple('ZQ2Map', ('experiment', 'commondata', 'fitted', 'masked', "
 def zq2map_with_cuts(commondata, cuts, group_name=None):
     """Return two (z,Q²) tuples: one for the fitted data and one for the
     cut data. If `display_cuts` is false or all data passes the cuts, the second
-    tuple will be empty."""
+    tuple will be empty.
+
+    Return ``None`` if the process of the commondata has no (z,Q²) map."""
+    if "zq2" not in getattr(commondata.process_type, "kinematic_maps", ()):
+        return None
     info, zq2fitted, zq2masked = _kinematic_map_with_cuts(
         commondata, cuts, commondata.process_type.zq2map
     )
