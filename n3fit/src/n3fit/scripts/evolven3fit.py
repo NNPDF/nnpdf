@@ -8,7 +8,7 @@ import logging
 import pathlib
 import sys
 
-from evolven3fit import cli, eko_utils, evolve, utils
+from evolven3fit import cli, eko_utils, evolve, hoppet_evolve, utils
 import numpy as np
 
 from eko.runner.managed import solve
@@ -103,6 +103,9 @@ def construct_evolven3fit_parser(subparsers):
         action="store_true",
         help="Force the evolution to be done even if it has already been done",
     )
+    parser.add_argument(
+        "--hoppet", action="store_true", help="Use Hoppet instead of EKO for the evolution"
+    )
     return parser
 
 
@@ -129,10 +132,12 @@ def main():
     if args.actions == "evolve":
 
         fit_folder = pathlib.Path(args.fit_folder)
+        # TODO for now we require the EKO to exist to be able to do hoppet later
+        # just because these are the only ones we can test
+        theoryID = utils.get_theoryID_from_runcard(fit_folder)
         if args.load is None:
             # no path provided to load the eko, get it from the theory
             utils.check_filter(fit_folder)
-            theoryID = utils.get_theoryID_from_runcard(fit_folder)
             _logger.info(f"Loading eko from theory {theoryID}")
             eko_path = loader.check_eko(theoryID)
         else:
@@ -140,7 +145,17 @@ def main():
             # to be used for the evolution will be loaded from that path.
             eko_path = args.load
 
-        cli.cli_evolven3fit(fit_folder, args.force, eko_path, args.hessian_fit)
+        utils.check_nnfit_folder(fit_folder)
+
+        evolve.evolve_fit(
+            fit_folder,
+            theoryID,
+            force=args.force,
+            hessian_fit=args.hessian_fit,
+            eko_path=eko_path,
+            hoppet=args.hoppet,
+        )
+
     else:
         # If we are in the business of producing an eko, do some checks before starting:
         # 1. load the nnpdf theory early to check for inconsistent options and theory problems
