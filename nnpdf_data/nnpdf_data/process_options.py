@@ -401,6 +401,19 @@ def _dymll_xq2map(kin_info):
     return x, m_ll2
 
 
+def _sidis_zq2map(kin_info):
+    """Computes z and q2 mapping for a SIDIS process.
+    z is the momentum fraction of the observed hadron and the scale is
+    taken from either Q or Q2 (as in DIS).
+    """
+    z = kin_info[_Vars.z]
+    if _Vars.Q in kin_info._kins:
+        q2 = kin_info[_Vars.Q] ** 2
+    else:
+        q2 = kin_info[_Vars.Q2]
+    return z, q2
+
+
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
@@ -586,6 +599,14 @@ SINGLETOP = _Process(
     xq2map_function=_singletop_xq2map,
 )
 
+SIDIS = _Process(
+    "SIDIS",
+    "Semi-Inclusive Deep Inelastic Scattering",
+    accepted_variables=(_Vars.x, _Vars.z, _Vars.Q2, _Vars.Q, _Vars.y),
+    xq2map_function=_dis_xq2map,
+    zq2map_function=_sidis_zq2map,
+)
+
 
 PROCESSES = {
     "DIS": DIS,
@@ -627,6 +648,7 @@ PROCESSES = {
     "INTEG": dataclasses.replace(POS_DIS, name="INTEG", description="Integrability dataset"),
     "PHT": PHT,
     "SINGLETOP": SINGLETOP,
+    "SIDIS": SIDIS,
 }
 
 

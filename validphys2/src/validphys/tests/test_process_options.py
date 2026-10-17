@@ -36,10 +36,15 @@ def _process(**kwargs):
 
 KIN_DF = pd.DataFrame({"a": [0.1, 0.2], "b": [0.3, 0.4], "c": [4.0, 9.0]})
 
+# Processes that were added together with the z-Q2 map
+FRAGMENTATION_PROCESSES = ("SIDIS", "SIA_Z", "SIA_XP", "SIA_PH", "SIA_XI")
+
 
 def test_existing_processes_are_xq2_only():
     """Processes defined before the z-Q2 map existed must keep behaving as before"""
     for name, process in PROCESSES.items():
+        if name in FRAGMENTATION_PROCESSES:
+            continue
         if process.xq2map_function is None:
             assert process.kinematic_maps == (), name
         else:
