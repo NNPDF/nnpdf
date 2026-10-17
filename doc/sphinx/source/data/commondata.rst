@@ -184,7 +184,7 @@ One of the processes defined in the ``process_options`` module at
 ``validphys/src/validphys2/process_options.py``.
 This is used internally by validphys to describe the combination of observable
 and process in various plots, to check that the kinematic variables utilized by the
-dataset are sensible and to generate derived plots such as the ``x-q2`` kinematic coverage plots.
+dataset are sensible and to generate derived plots such as the ``x-q2`` (or ``z-q2``) kinematic coverage plots.
 
 ``tables``
 ~~~~~~~~~~
