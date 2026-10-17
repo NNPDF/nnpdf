@@ -96,6 +96,31 @@ class _Process:
     accepted_variables: tuple[str]
     xq2map_function: Optional[Callable] = None
     zq2map_function: Optional[Callable] = None
+    # Kinematic maps this process can be mapped to: "xq2", "zq2" or both.
+    # If not given, it is inferred from the map functions that have been defined.
+    kinematic_maps: Optional[tuple[str, ...]] = None
+
+    def __post_init__(self):
+        map_functions = {"xq2": self.xq2map_function, "zq2": self.zq2map_function}
+        maps = self.kinematic_maps
+        if maps is None:
+            maps = tuple(name for name, function in map_functions.items() if function is not None)
+        maps = tuple(maps)
+
+        unknown = set(maps) - set(map_functions)
+        if unknown:
+            raise ValueError(
+                f"Unknown kinematic maps {sorted(unknown)} for process {self.name}, "
+                f"the options are {list(map_functions)}"
+            )
+        for name, function in map_functions.items():
+            if (name in maps) != (function is not None):
+                raise ValueError(
+                    f"The kinematic maps of process {self.name} are {maps} "
+                    f"which is inconsistent with the {name}map_function defined"
+                )
+        # the dataclass is frozen
+        object.__setattr__(self, "kinematic_maps", maps)
 
     def __hash__(self):
         return hash(self.name)
