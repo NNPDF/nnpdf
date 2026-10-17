@@ -24,6 +24,7 @@ def _metadata(kinematic_coverage):
     """Minimal stand-in for the metadata of an observable"""
     return SimpleNamespace(
         name="FAKE_DATASET",
+        process="FAKE-PROCESS",
         plotting=SimpleNamespace(extra_labels=None),
         kinematic_coverage=kinematic_coverage,
         cm_energy=100.0,

@@ -62,9 +62,14 @@ class _KinematicsInformation:
     Adds the special "sqrts" key unless it is already part of the kinematic coverage.
 
     Provides a ``.get_one_of`` method that accepts any number of variables
+
+    The process field of the dataset name is available as ``.dataset_process``, for the maps that
+    need more information than the kinematic variables (e.g., the identity of the observed hadron).
+    It is not a kinematic variable.
     """
 
     def __init__(self, kin_df, metadata):
+        self.dataset_process = metadata.process
         kin_cov = metadata.kinematic_coverage
         kins = {}
         for kin_lab, kin_values in zip(kin_cov, kin_df.values.T):
