@@ -419,6 +419,44 @@ def _sidis_zq2map(kin_info):
     return z, q2
 
 
+# SIA datasets are deliberately separated by hadron type: the mass of the observed hadron enters
+# the z-Q2 map when z is derived from a momentum. The hadron is read from the process field of the
+# dataset name, which is expected to be of the form ``SIA-<HADRON>``, with <HADRON> one of the
+# keys below. Masses in GeV, taken from the PDG.
+# TODO (open question): should the masses instead be read from the theory card used for the
+# fragmentation functions, so that the value used here is always the one used in the theory?
+_HADRON_MASSES = {"PI": 0.139570, "KA": 0.493677, "PRO": 0.938272}
+
+
+def _hadron_mass(kin_info):
+    """Mass of the observed hadron, from the process field of the dataset (``SIA-<HADRON>``)"""
+    hadron = kin_info.dataset_process.split("-")[-1]
+    if hadron not in _HADRON_MASSES:
+        raise KeyError(
+            f"Unknown hadron {hadron!r} in process {kin_info.dataset_process!r}, "
+            f"the options are {list(_HADRON_MASSES)}"
+        )
+    return _HADRON_MASSES[hadron]
+
+
+def _sia_sqrts(kin_info):
+    """Center of mass energy of an SIA observable, which sets the scale Q = sqrts"""
+    sqrts = kin_info[_Vars.sqrts]
+    if sqrts is None:
+        raise KeyError("The center of mass energy is needed but it is not fixed for this dataset")
+    return sqrts
+
+
+def _sia_z_from_momentum(momentum, mass, sqrts):
+    """z = 2 E_h / sqrts, with E_h the energy of a hadron of the given mass and momentum"""
+    return 2 * np.sqrt(momentum**2 + mass**2) / sqrts
+
+
+def _sia_zq2(z, sqrts):
+    """Return z together with the scale Q2 = sqrts^2 (one value per point, like z)"""
+    return z, sqrts**2 * np.ones_like(z)
+
+
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
