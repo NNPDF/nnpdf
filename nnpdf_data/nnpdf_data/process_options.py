@@ -464,6 +464,17 @@ def _sia_z_zq2map(kin_info):
     return _sia_zq2(kin_info[_Vars.z], _sia_sqrts(kin_info))
 
 
+def _sia_xp_zq2map(kin_info):
+    """Computes z and q2 mapping for an SIA process measured as a function of xp.
+    xp is the momentum of the hadron scaled to the beam momentum, p = xp * sqrts / 2.
+    The mass of the hadron is needed to obtain z.
+    """
+    sqrts = _sia_sqrts(kin_info)
+    momentum = kin_info[_Vars.xp] * sqrts / 2
+    z = _sia_z_from_momentum(momentum, _hadron_mass(kin_info), sqrts)
+    return _sia_zq2(z, sqrts)
+
+
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
@@ -669,6 +680,13 @@ SIA_Z = _Process(
     zq2map_function=_sia_z_zq2map,
 )
 
+SIA_XP = _Process(
+    "SIA_XP",
+    "Single-Inclusive Annihilation as a function of the scaled momentum xp",
+    accepted_variables=(_Vars.xp, _Vars.sqrts),
+    zq2map_function=_sia_xp_zq2map,
+)
+
 
 PROCESSES = {
     "DIS": DIS,
@@ -712,6 +730,7 @@ PROCESSES = {
     "SINGLETOP": SINGLETOP,
     "SIDIS": SIDIS,
     "SIA_Z": SIA_Z,
+    "SIA_XP": SIA_XP,
 }
 
 
