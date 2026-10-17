@@ -189,6 +189,24 @@ dataset_inputs_by_groups_xq2map = collect(
 )
 
 
+ZQ2Map = namedtuple('ZQ2Map', ('experiment', 'commondata', 'fitted', 'masked', "group"))
+
+
+def zq2map_with_cuts(commondata, cuts, group_name=None):
+    """Return two (z,Q²) tuples: one for the fitted data and one for the
+    cut data. If `display_cuts` is false or all data passes the cuts, the second
+    tuple will be empty."""
+    info, zq2fitted, zq2masked = _kinematic_map_with_cuts(
+        commondata, cuts, commondata.process_type.zq2map
+    )
+    return ZQ2Map(info.experiment, commondata, zq2fitted, zq2masked, group_name)
+
+
+dataset_inputs_by_groups_zq2map = collect(
+    zq2map_with_cuts, ('group_dataset_inputs_by_metadata', 'data_input')
+)
+
+
 def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
     """
     Table containing the kinematics of a commondata object,
