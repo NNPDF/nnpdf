@@ -1,0 +1,30 @@
+dependent_variables:
+- header: {name: (D(SIG)/D(X))/SIG(NAME=TOTAL)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '44.0'}
+  - {name: SQRT(S), units: GeV, value: '44.0'}
+  values:
+  - errors:
+    - {symerror: 1.2}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 8.8
+  - errors:
+    - {symerror: 5.3}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 19.8
+  - errors:
+    - {symerror: 2.6}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 21.3
+  - errors:
+    - {symerror: 3.1}
+    - {label: 'sys,Overall normalization error', symerror: 6.0%}
+    value: 23.3
+independent_variables:
+- header: {name: X(DEF=P(P=3)/P(P=1))}
+  values:
+  - {high: 0.0182, low: 0.0136}
+  - {high: 0.0227, low: 0.0182, value: 0.0205}
+  - {high: 0.0273, low: 0.0227}
+  - {high: 0.0318, low: 0.0273, value: 0.0295}

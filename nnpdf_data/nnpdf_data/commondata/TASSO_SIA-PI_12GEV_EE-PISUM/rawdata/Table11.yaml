@@ -1,0 +1,36 @@
+dependent_variables:
+- header: {name: (D(SIG(Q=PION))/DP)/(D(SIG(Q=CHGD))/DP)}
+  qualifiers:
+  - {name: RE(Q=CHGD), value: E+ E- --> CHGD-HADRON X}
+  - {name: RE(Q=PION), value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  - {name: SQRT(S), units: GeV, value: '30.0'}
+  values:
+  - errors:
+    - {symerror: 0.04}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.88
+  - errors:
+    - {symerror: 0.04}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.86
+  - errors:
+    - {symerror: 0.08}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.71
+  - errors:
+    - {symerror: 0.08}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.74
+  - errors:
+    - {symerror: 0.08}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.82
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {value: 0.45}
+  - {value: 0.55}
+  - {value: 0.6}
+  - {value: 0.8}
+  - {value: 1.0}
