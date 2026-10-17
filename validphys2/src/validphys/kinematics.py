@@ -151,13 +151,13 @@ def total_fitted_points(all_kinlimits_table) -> int:
 XQ2Map = namedtuple('XQ2Map', ('experiment', 'commondata', 'fitted', 'masked', "group"))
 
 
-def xq2map_with_cuts(commondata, cuts, group_name=None):
-    """Return two (x,Q²) tuples: one for the fitted data and one for the
-    cut data. If `display_cuts` is false or all data passes the cuts, the second
-    tuple will be empty."""
+def _kinematic_map_with_cuts(commondata, cuts, kinematic_mapper):
+    """Apply ``kinematic_mapper`` (e.g., the ``xq2map`` of the process of the commondata)
+    to the kinematics of the commondata, separating the points that pass the cuts from
+    those that are cut. Returns the info of the commondata and two tuples, the mapped
+    fitted data and the mapped cut data. If there are no cuts, the second tuple is empty."""
     info = plotoptions_core.get_info(commondata)
     kintable = plotoptions_core.kitable(commondata, info)
-    xq2mapper = commondata.process_type.xq2map
 
     if cuts:
         mask = cuts.load()
@@ -165,12 +165,22 @@ def xq2map_with_cuts(commondata, cuts, group_name=None):
         boolmask[mask] = True
         fitted_kintable = kintable.loc[boolmask]
         masked_kitable = kintable.loc[~boolmask]
-        xq2fitted = xq2mapper(fitted_kintable, commondata.metadata)
-        xq2masked = xq2mapper(masked_kitable, commondata.metadata)
+        fitted = kinematic_mapper(fitted_kintable, commondata.metadata)
+        masked = kinematic_mapper(masked_kitable, commondata.metadata)
     else:
-        xq2fitted = xq2mapper(kintable, commondata.metadata)
-        xq2masked = (np.array([]), np.array([]))
+        fitted = kinematic_mapper(kintable, commondata.metadata)
+        masked = (np.array([]), np.array([]))
 
+    return info, fitted, masked
+
+
+def xq2map_with_cuts(commondata, cuts, group_name=None):
+    """Return two (x,Q²) tuples: one for the fitted data and one for the
+    cut data. If `display_cuts` is false or all data passes the cuts, the second
+    tuple will be empty."""
+    info, xq2fitted, xq2masked = _kinematic_map_with_cuts(
+        commondata, cuts, commondata.process_type.xq2map
+    )
     return XQ2Map(info.experiment, commondata, xq2fitted, xq2masked, group_name)
 
 
