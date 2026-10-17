@@ -457,6 +457,13 @@ def _sia_zq2(z, sqrts):
     return z, sqrts**2 * np.ones_like(z)
 
 
+def _sia_z_zq2map(kin_info):
+    """Computes z and q2 mapping for an SIA process measured as a function of z.
+    The scale is the center of mass energy, Q2 = sqrts^2.
+    """
+    return _sia_zq2(kin_info[_Vars.z], _sia_sqrts(kin_info))
+
+
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
@@ -655,6 +662,13 @@ SIDIS = _Process(
     zq2map_function=_sidis_zq2map,
 )
 
+SIA_Z = _Process(
+    "SIA_Z",
+    "Single-Inclusive Annihilation as a function of z",
+    accepted_variables=(_Vars.z, _Vars.sqrts),
+    zq2map_function=_sia_z_zq2map,
+)
+
 
 PROCESSES = {
     "DIS": DIS,
@@ -697,6 +711,7 @@ PROCESSES = {
     "PHT": PHT,
     "SINGLETOP": SINGLETOP,
     "SIDIS": SIDIS,
+    "SIA_Z": SIA_Z,
 }
 
 
