@@ -1,0 +1,16 @@
+dependent_variables:
+- header: {name: 'Fiducial cross section ratio $\sigma^{\mathrm{fid.}}_{W^{+} Z} /
+      \sigma^{\mathrm{fid.}}_{W^{-} Z}$'}
+  qualifiers:
+  - {name: ., value: Fiducial phase space}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: '0.05'}
+    - {label: sys, symerror: '0.02'}
+    value: '1.47'
+independent_variables:
+- header: {name: '$\sqrt{s}$ [GeV]'}
+  values:
+  - {value: '13000.0'}
