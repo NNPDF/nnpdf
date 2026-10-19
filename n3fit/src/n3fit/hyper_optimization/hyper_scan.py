@@ -1,26 +1,40 @@
 """
 The HyperScanner class is basically a dictionary containing all parameters,
-the functions defined as hp_ (from hyperspace)
+the functions defined as ``hp_`` (from hyperspace)
 
-The goal of this module is to read all parameters in the `hyperopt` section of the runcard
-and modify the parameter dictionary so that now it is filled with the `hyperop` sampler objects
+The goal of this module is to read all parameters in the ``hyperopt`` section of the runcard
+and modify the parameter dictionary so that now it is filled with the ``hyperopt`` sampler objects
 
 The idea behind the wrappers if that if you ever want to use
 another hyperoptimization library, assuming that it also takes just
-    - a function
-    - a dictionary of spaces of parameters
+
+- a function
+- a dictionary of spaces of parameters
+
 you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the minimization).
 """
 
+import contextlib
 import copy
 import logging
+import multiprocessing
 import os
+import traceback
 
-from hyperopt.pyll.base import scope
+try:
+    import hyperopt
+    from hyperopt.pyll.base import scope
+except ModuleNotFoundError:
+    # TODO a sentinel class that tells the user the hyperopt dependency is missing would be nice
+    # if you arrive here, yes, the hyperopt dependency is missing (or your setuptools is too new)
+    from . import HyperoptDependencyMissing as hyperopt
+
+    scope = object()
+
+
 import numpy as np
 
-import hyperopt
 from n3fit.backends import MetaLayer, MetaModel
 from n3fit.hyper_optimization.filetrials import FileTrials
 
@@ -36,9 +50,56 @@ log = logging.getLogger(__name__)
 # Hyperopt uses these strings for a passed and failed run
 # it also has statuses "new", "running" and "suspended", but we don't use them
 HYPEROPT_STATUSES = {True: "ok", False: "fail"}
+HYPEROPT_SEED = int(os.environ.get("HYPEROPT_SEED", 42))
 
 
-HYPEROPT_SEED = 42
+def _run_trial_in_subprocess(objective, params):
+    """Running a hyperparameter scan leaks memory trial by trial.
+    In order to ensure that the memory associated to one trial is eliminated once it has finished,
+    run it as a separate (forked) process that will die at the end and its memories gone.
+    It should only be used in Linux and sequential runs.
+    """
+    # Note: this strategy seems to work, but I haven't found the actual source of the leak
+    if not hasattr(os, "fork") or os.uname().sysname == "Darwin":
+        return objective(params)
+
+    context = multiprocessing.get_context("fork")
+    receiver, sender = context.Pipe(duplex=False)
+
+    def _run_objective():
+        # The child will ever send info, close the receiver
+        receiver.close()
+        try:
+            sender.send((True, objective(params)))
+        except Exception:
+            # On any failure, propagate it back to the parent process
+            sender.send((False, traceback.format_exc()))
+        finally:
+            sender.close()
+
+    process = context.Process(target=_run_objective)
+    process.start()
+    # The parent only receives, close its sender
+    sender.close()
+    try:
+        # Wait for the child to finish running
+        success, ret = receiver.recv()
+    except EOFError as error:
+        process.join()
+        exitcode = process.exitcode
+        process.close()
+        raise RuntimeError(f"Hyperopt subprocess failed with error= {exitcode}") from error
+    finally:
+        receiver.close()
+    process.join()
+    exitcode = process.exitcode
+    log.debug(f"Hyperopt subprocess finished with {exitcode=}")
+    process.close()
+
+    if not success:
+        raise RuntimeError(f"Hyperopt trial subprocess failed:\n{ret}")
+
+    return ret
 
 
 # These are just wrapper around some hyperopt's sampling expresions defined in here
@@ -101,6 +162,8 @@ def optimizer_arg_wrapper(hp_key, option_dict):
             choice = hp_uniform(hp_key, min_lr, max_lr)
         elif sampling == "log":
             choice = hp_loguniform(hp_key, min_lr, max_lr)
+        else:
+            raise ValueError(f"Sampling {sampling} not understood")
     return choice
 
 
@@ -129,60 +192,87 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     # Tell the trainer we are doing hpyeropt
     model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
 
-    if hyperscanner.restart_hyperopt:
-        # For parallel hyperopt restarts, extract the database tar file
+    # Prepare the context manager in the parallel case (and an empty one otherwise)
+    if hyperscanner.parallel_hyperopt:
+        runner_ctx = hyperscanner.mongod_runner
+        # Upon entering the context it will check whether the database is up
+        # and, if not, it will start it
+    else:
+        runner_ctx = contextlib.nullcontext()
+
+    with runner_ctx:
+        # Generate the trials object, as a MongoFileTrial or a simple sequential FileTrial
         if hyperscanner.parallel_hyperopt:
-            tar_file_to_extract = f"{replica_path_set}/{hyperscanner.db_name}.tar.gz"
-            log.info("Restarting hyperopt run using the MongoDB database %s", tar_file_to_extract)
-            MongoFileTrials.extract_mongodb_database(tar_file_to_extract, path=os.getcwd())
+            # Instantiate `MongoFileTrials` as trials to give to the worker later
+            trials = MongoFileTrials(
+                replica_path_set,
+                hyperscanner.mongod_runner,
+                num_workers=1,  # Only one worker per n3fit job will run
+                parameters=hyperscanner.as_dict(),
+            )
         else:
+            # If we are not running in parallel, check whether there's a pickle to load and restart
             # For sequential hyperopt restarts, reset the state of `FileTrials` saved in the pickle file
-            pickle_file_to_load = f"{replica_path_set}/tries.pkl"
-            log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
-            trials = FileTrials.from_pkl(pickle_file_to_load)
+            pickle_file_to_load = replica_path_set / "tries.pkl"
+            if pickle_file_to_load.exists():
+                log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
+                trials = FileTrials.from_pkl(pickle_file_to_load)
+            else:
+                # Instantiate `FileTrials`
+                trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
 
-    if hyperscanner.parallel_hyperopt:
-        # start MongoDB database by launching `mongod`
-        hyperscanner.mongod_runner.ensure_database_dir_exists()
-        mongod = hyperscanner.mongod_runner.start()
+        # Initialize seed for hyperopt
+        trials.rstate = np.random.default_rng(HYPEROPT_SEED)
+        # And prepare the generic arguments to fmin
+        objective = model_trainer.hyperparametrizable
+        if not hyperscanner.parallel_hyperopt and hasattr(os, "fork"):
+            objective = lambda params: _run_trial_in_subprocess(
+                model_trainer.hyperparametrizable, params
+            )
 
-    # Generate the trials object
-    if hyperscanner.parallel_hyperopt:
-        # Instantiate `MongoFileTrials`
-        # Mongo database should have already been initiated at this point
-        trials = MongoFileTrials(
-            replica_path_set,
-            db_host=hyperscanner.db_host,
-            db_port=hyperscanner.db_port,
-            db_name=hyperscanner.db_name,
-            num_workers=hyperscanner.num_mongo_workers,
-            parameters=hyperscanner.as_dict(),
-        )
-    else:
-        # Instantiate `FileTrials`
-        trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+        fmin_args = {
+            "fn": objective,
+            "space": hyperscanner.as_dict(),
+            "algo": hyperopt.tpe.suggest,
+            "max_evals": max_evals,
+            "trials": trials,
+            "rstate": trials.rstate,
+        }
 
-    # Initialize seed for hyperopt
-    trials.rstate = np.random.default_rng(HYPEROPT_SEED)
+        if hyperscanner.parallel_hyperopt:
+            trials.start_mongo_workers()
+            # TODO benchmark how the behaviour depends on max_queue_len (if it does)
+            hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=12)
+            trials.stop_mongo_workers()
+        else:
+            hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
 
-    # Call to hyperopt.fmin
-    fmin_args = dict(
-        fn=model_trainer.hyperparametrizable,
-        space=hyperscanner.as_dict(),
-        algo=hyperopt.tpe.suggest,
-        max_evals=max_evals,
-        trials=trials,
-        rstate=trials.rstate,
-    )
-    if hyperscanner.parallel_hyperopt:
-        trials.start_mongo_workers()
-        hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=trials.num_workers)
-        trials.stop_mongo_workers()
-        # stop mongod command and compress database
-        hyperscanner.mongod_runner.stop(mongod)
-        trials.compress_mongodb_database()
-    else:
-        hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
+
+def get_scan_wrapper(backend):
+    """
+    Returns the callable to be used to drive the hyperparameter scan for the
+    requested `backend`. The returned callable must accept the same signature
+    as :func:`hyper_scan_wrapper`.
+
+    Parameters
+    ----------
+        `backend`: str
+            name of the backend, as set in ``hyperscan_config.backend`` in the runcard.
+    """
+    if backend == "hyperopt":
+        return hyper_scan_wrapper
+    if backend == "ray":
+        try:
+            from itwinai.plugins.nnpdf.ray_scan import ray_hyper_scan_wrapper
+        except ModuleNotFoundError as err:
+            raise ModuleNotFoundError(
+                "The 'ray' hyperopt backend was requested but the nnpdf itwinai "
+                "plugin is not installed. Install it "
+                "(https://github.com/interTwin-eu/nnpdf-plugin) or set 'backend: "
+                "hyperopt' (the default) in the runcard's hyperscan_config."
+            ) from err
+        return ray_hyper_scan_wrapper
+    raise ValueError(f"Unknown hyperopt backend '{backend}'.")
 
 
 class ActivationStr:
@@ -212,56 +302,59 @@ class HyperScanner:
     It takes cares of known correlation between parameters by tying them together
     It also provides methods for updating the parameter dictionaries after using hyperopt
 
-    It takes as inpujt the dictionaries defining the NN/fit and the hyperparameter scan
+    It takes as input the dictionaries defining the NN/fit and the hyperparameter scan
     from the NNPDF runcard and substitutes in `parameters` samplers according to the
     `hyper_scan` dictionary.
 
+    In the sampling dict,
 
-    # Arguments:
-        - `parameters`: the `fitting[parameters]` dictionary of the NNPDF runcard
-        - `sampling_dict`: the `hyperscan` dictionary of the NNPDF runcard defining
-                           the search space of the scan
-        - `steps`: when taking discrete steps between two parameters, number of steps
-                   to take
 
-    # Parameters accepted by `sampling_dict`:
-        - `stopping`:
-                - min_epochs, max_epochs
-                - min_patience, max_patience
+    Parameters
+    ----------
+        `parameters`: dict
+            the `fitting[parameters]` dictionary of the NNPDF runcard
+        `sampling_dict`: dict
+            the `hyperscan` dictionary of the NNPDF runcard defining the search space of the scan
+        `steps`: int
+            when taking discrete steps between two parameters, number of steps to take
+        `backend`: str
+            name of the hyperoptimization backend to use, see :func:`get_scan_wrapper`.
+            Defaults to ``"hyperopt"``, which preserves the historical behaviour.
+
     """
 
-    def __init__(self, parameters, sampling_dict, steps=5):
+    def __init__(
+        self,
+        parameters,
+        sampling_dict,
+        steps=5,
+        db_host=None,
+        db_port=None,
+        db_path=None,
+        backend="hyperopt",
+    ):
         self._original_parameters = parameters
         self.parameter_keys = parameters.keys()
         self.parameters = copy.deepcopy(parameters)
         self.steps = steps
-
-        # adding extra options for restarting
-        restart_config = sampling_dict.get("restart")
-        self.restart_hyperopt = True if restart_config else False
+        self.backend = backend
+        self.sampling_dict = sampling_dict
 
         # adding extra options for parallel execution
-        parallel_config = sampling_dict.get("parallel")
-        if parallel_config is None:
-            self.parallel_hyperopt = False
-        elif _has_pymongo:
+        self._db_path = db_path
+        self._db_host = db_host
+        self._db_port = db_port
+        self.mongod_runner = None
+        self.parallel_hyperopt = False
+
+        if db_path is not None:
+            # If we get a db_path, assume we want to run in parallel, therefore check whether we can
+            if not _has_pymongo:
+                raise ModuleNotFoundError(
+                    "Could not import pymongo modules, please install with `.[parallelhyperopt]`"
+                )
             self.parallel_hyperopt = True
-        else:
-            raise ModuleNotFoundError(
-                "Could not import pymongo modules, please install with `.[parallelhyperopt]`"
-            )
-
-        self.parallel_hyperopt = True if parallel_config else False
-
-        # setting up MondoDB options
-        if self.parallel_hyperopt:
-            # add output_path to db name to avoid conflicts
-            db_name = f'{sampling_dict.get("db_name")}-{sampling_dict.get("output_path")}'
-            self.db_host = sampling_dict.get("db_host")
-            self.db_port = sampling_dict.get("db_port")
-            self.db_name = db_name
-            self.num_mongo_workers = sampling_dict.get("num_mongo_workers")
-            self.mongod_runner = MongodRunner(self.db_name, self.db_port)
+            self.mongod_runner = MongodRunner(self._db_path, self._db_host, self._db_port)
 
         self.hyper_keys = set([])
 
@@ -323,14 +416,11 @@ class HyperScanner:
 
         if key not in self.parameter_keys and key != "parameters":
             raise ValueError(
-                "Trying to update a parameter not declared in the `parameters` dictionary: {0} @ HyperScanner._update_param".format(
-                    key
-                )
+                f"Trying to update a parameter not declared in the `parameters` dictionary: {key} @ HyperScanner._update_param"
             )
 
         self.hyper_keys.add(key)
-        log.info("Adding key {0} with value {1}".format(key, sampler))
-
+        log.info(f"Adding key {key} with value {sampler}")
         self.parameters[key] = sampler
 
     def stopping(self, min_epochs=None, max_epochs=None, min_patience=None, max_patience=None):
@@ -368,16 +458,20 @@ class HyperScanner:
         implemented in `n3fit`) and the options to modify.
 
         The accepted options are:
-            - learning_rate
-            - clipnorm
-        but for hyperopt it will look as a list of dictionaries
+
+        - learning_rate
+        - clipnorm
+
+        but for hyperopt it will look as a list of dictionaries::
+
             [ { optimizer_name: optimizer_name, learning_rate: sampler },
               { optimizer_name: optimizer_name, learning_rate: sampler }, ...
             ]
-        and will sample one from this list.
 
-        Note that the keys within the dictionary (`optimizer_name` and `learning_rate`) should be named
-        as the keys used by the compiler of the model as they are used as they come.
+        and it will sample one from this list.
+
+        Note that the keys within the dictionary (`optimizer_name` and `learning_rate`)
+        should be named as the keys used by the compiler of the model.
         """
         # Get all accepted optimizer to check against
         all_optimizers = MetaModel.accepted_optimizers
@@ -393,7 +487,7 @@ class HyperScanner:
             name = optimizer[optname_key]
             optimizer_dictionary = {optname_key: name}
 
-            if name not in all_optimizers.keys():
+            if name not in all_optimizers:
                 raise NotImplementedError(
                     f"HyperScanner: Optimizer {name} not implemented in MetaModel.py"
                 )
@@ -425,8 +519,10 @@ class HyperScanner:
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
-            - pos_multiplier
-            - pos_initial
+
+        - pos_multiplier
+        - pos_initial
+
         Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
         mul_key = "multiplier"
@@ -476,8 +572,8 @@ class HyperScanner:
         else:
             if min_units is None or max_units is None:
                 raise ValueError(
-                    "A max/min number of units must always be defined if the number of layers is to be sampled"
-                    "i.e., make sure you add the keywords 'min_units' and 'max_units' to the 'architecutre' dict"
+                    "A max/min number of units must always be defined when the number of layers"
+                    "is to be sampled, i.e., add 'min_units' and 'max_units' to 'architecture' dict"
                 )
 
         activation_key = "activation_per_layer"
@@ -497,7 +593,7 @@ class HyperScanner:
         for n in n_layers:
             units = []
             for i in range(n):
-                units_label = "nl{0}:-{1}/{0}".format(n, i)
+                units_label = f"nl{n}:-{i}/{n}"
                 units_sampler = hp_quniform(
                     units_label, min_units, max_units, step_size=1, make_int=True
                 )
@@ -516,7 +612,7 @@ class HyperScanner:
         for ini_name in initializers:
             if ini_name not in imp_init_names:
                 raise NotImplementedError(
-                    "HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name)
+                    f"HyperScanner: Initializer {ini_name} not implemented in MetaLayer.py"
                 )
             # For now we are going to use always all initializers and with default values
             ini_choices.append(ini_name)

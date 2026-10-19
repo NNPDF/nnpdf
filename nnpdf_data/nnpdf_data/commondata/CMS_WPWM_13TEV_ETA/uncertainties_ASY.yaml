@@ -1,0 +1,24 @@
+definitions:
+  Measurement uncertainty:
+    description: Measurement uncertainty
+    treatment: ADD
+    type: UNCORR
+bins:
+- Measurement uncertainty: 0.0012
+- Measurement uncertainty: 0.0012
+- Measurement uncertainty: 0.0014
+- Measurement uncertainty: 0.0011
+- Measurement uncertainty: 0.0011
+- Measurement uncertainty: 0.0012
+- Measurement uncertainty: 0.0011
+- Measurement uncertainty: 0.0012
+- Measurement uncertainty: 0.0013
+- Measurement uncertainty: 0.0011
+- Measurement uncertainty: 0.0011
+- Measurement uncertainty: 0.0013
+- Measurement uncertainty: 0.0013
+- Measurement uncertainty: 0.0012
+- Measurement uncertainty: 0.0013
+- Measurement uncertainty: 0.0016
+- Measurement uncertainty: 0.0015
+- Measurement uncertainty: 0.0016

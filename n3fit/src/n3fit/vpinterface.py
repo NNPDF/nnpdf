@@ -4,20 +4,38 @@ n3fit interface to validphys
 Example
 -------
 
->>> import numpy as np
->>> from n3fit.vpinterface import N3PDF
->>> from n3fit.model_gen import generate_pdf_model, ReplicaSettings
->>> from validphys.pdfgrids import xplotting_grid
->>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 's', 'sbar', 'g']]
->>> fake_x = np.linspace(1e-3,0.8,3)
->>> rps = [ReplicaSettings(nodes=[8], activations=["linear"], seed=4)]*4
->>> pdf_model = generate_pdf_model(rps, flav_info=fake_fl, fitbasis='FLAVOUR')
->>> n3pdf = N3PDF(pdf_model.split_replicas())
->>> res = xplotting_grid(n3pdf, 1.6, fake_x)
->>> res.grid_values.error_members().shape
-(4, 8, 3)
-# (nreplicas, flavours, x-grid)
+.. code-block:: python
 
+    import numpy as np
+
+    from n3fit.vpinterface import N3PDF
+    from n3fit.model_gen import generate_pdf_model, ReplicaSettings
+    from validphys.pdfgrids import xplotting_grid
+
+    fake_fl = [
+        {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
+        for i in ["u", "ubar", "d", "dbar", "c", "s", "sbar", "g"]
+    ]
+
+    fake_x = np.linspace(1e-3, 0.8, 3)
+
+    rps = [
+        ReplicaSettings(nodes=[8], activations=["linear"], seed=4)
+    ] * 4
+
+    pdf_model = generate_pdf_model(
+        rps,
+        flav_info=fake_fl,
+        fitbasis="FLAVOUR",
+    )
+
+    n3pdf = N3PDF(pdf_model.split_replicas())
+
+    res = xplotting_grid(n3pdf, 1.6, fake_x)
+
+    res.grid_values.error_members().shape
+    # (4, 8, 3)
+    # (nreplicas, flavours, x-grid)
 """
 
 from collections.abc import Iterable
@@ -62,6 +80,7 @@ class HyperoptMetrics:
     chi2: float
     phi2: float
     logp: float
+    chi2exp: float
 
 
 class N3Stats(MCStats):
@@ -150,7 +169,7 @@ class N3LHAPDFSet(LHAPDFSet):
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)
-            result[:, :, ii] = result
+            result = result[:, :, np.argsort(ii)]
         return result
 
     def grid_values(self, flavours, xarr, qmat=None):
@@ -260,6 +279,7 @@ class N3PDF(PDF):
 
         # Keep the import here to avoid loading the backend when it is not necessary
         from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
+        from n3fit.backends import operations as op
 
         preprocessing_layer = self._models[replica - 1].get_layer(PREPROCESSING_LAYER_ALL_REPLICAS)
 
@@ -271,9 +291,9 @@ class N3PDF(PDF):
                 alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
                 beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
                 if alpha is not None:
-                    alpha = float(alpha.numpy())
+                    alpha = float(op.variable_to_numpy(alpha).squeeze())
                 if beta is not None:
-                    beta = float(beta.numpy())
+                    beta = float(op.variable_to_numpy(beta).squeeze())
                 output_dictionaries.append(
                     {
                         "fl": flavour,
@@ -326,12 +346,29 @@ def integrability_numbers(n3pdf, q0=1.65, flavours=None):
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF, integrability_numbers
-    >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
-    >>> n3pdf = N3PDF(pdf_model)
-    >>> res = integrability_numbers(n3pdf)
+    .. code-block:: python
+
+        from n3fit.vpinterface import N3PDF, integrability_numbers
+        from n3fit.model_gen import generate_pdf_model, ReplicaSettings
+
+        fake_fl = [
+            {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
+            for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
+        ]
+
+        settings = [
+            ReplicaSettings(nodes=[8], activations=["linear"], seed=0)
+        ]
+
+        pdf_model = generate_pdf_model(
+            settings,
+            flav_info=fake_fl,
+            fitbasis="FLAVOUR",
+        ).split_replicas()
+
+        n3pdf = N3PDF(pdf_model)
+
+        res = integrability_numbers(n3pdf)
     """
     if flavours is None:
         flavours = ["V", "T3", "V3", "T8", "V8"]
@@ -354,12 +391,32 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
             output flavours
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF, compute_arclength
-    >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
-    >>> n3pdf = N3PDF(pdf_model)
-    >>> res = compute_arclength(n3pdf)
+    .. code-block:: python
+
+        from contextlib import redirect_stdout
+
+        from n3fit.vpinterface import N3PDF, compute_arclength
+        from n3fit.model_gen import generate_pdf_model, ReplicaSettings
+
+        fake_fl = [
+            {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
+            for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
+        ]
+
+        settings = [
+            ReplicaSettings(nodes=[8], activations=["linear"], seed=0)
+        ]
+
+        pdf_model = generate_pdf_model(
+            settings,
+            flav_info=fake_fl,
+            fitbasis="FLAVOUR",
+        ).split_replicas()
+
+        n3pdf = N3PDF(pdf_model)
+
+        res = compute_arclength(n3pdf)
+
     """
     if flavours is None:
         flavours = ["sigma", "gluon", "V", "V3", "V8"]
@@ -385,16 +442,46 @@ def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
-    >>> from n3fit.model_gen import generate_pdf_model, ReplicaSettings
-    >>> from validphys.loader import Loader
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
-    >>> rps = [ReplicaSettings(nodes=[8], activations=["linear"], seed=i) for i in [0,1]]
-    >>> pdf_model = generate_pdf_model(rps, flav_info=fake_fl, fitbasis="FLAVOUR")
-    >>> n3pdf = N3PDF(pdf_model.split_replicas())
-    >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=40_000_000, cuts="internal", variant="legacy")
-    >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
-    >>> hyperopt_losses = compute_hyperopt_metrics(n3pdf, [data_group_spec])
+    .. code-block:: python
+
+        from n3fit.vpinterface import N3PDF, compute_hyperopt_metrics
+        from n3fit.model_gen import generate_pdf_model, ReplicaSettings
+        from validphys.loader import Loader
+
+        fake_fl = [
+            {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
+            for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
+        ]
+
+        rps = [
+            ReplicaSettings(nodes=[8], activations=["linear"], seed=i)
+            for i in [0, 1]
+        ]
+
+        pdf_model = generate_pdf_model(
+            rps,
+            flav_info=fake_fl,
+            fitbasis="FLAVOUR",
+        )
+
+        n3pdf = N3PDF(pdf_model.split_replicas())
+
+        ds = Loader().check_dataset(
+            "NMC_NC_NOTFIXED_P_EM-SIGMARED",
+            theoryid=40_000_000,
+            cuts="internal",
+            variant="legacy",
+        )
+
+        data_group_spec = Loader().check_experiment(
+            "My DataGroupSpec",
+            [ds],
+        )
+
+        hyperopt_losses = compute_hyperopt_metrics(
+            n3pdf,
+            [data_group_spec],
+        )
     """
     exp_cv = []
     th_cvs = []
@@ -444,10 +531,14 @@ def compute_hyperopt_metrics(n3pdf, experimental_data) -> HyperoptMetrics:
     total_covmat_chol = la.cholesky(total_covmat, lower=True)
     chi2 = calc_chi2(sqrtcov=total_covmat_chol, diffs=diffs)
 
+    # Compute the experimental chi2
+    exp_covmat_chol = la.cholesky(exp_cov, lower=True)
+    chi2exp = calc_chi2(sqrtcov=exp_covmat_chol, diffs=diffs)
+
     # Compute phi2
     phi2 = calc_phi(sqrtcov=exp_covmat_col, diffs=diffs_reps)
 
     ndat = len(diffs)
     logp = -0.5 * (len(diffs) * np.log(2 * np.pi) + log_det_total_cov + chi2)
 
-    return HyperoptMetrics(chi2=chi2 / ndat, phi2=phi2, logp=-logp / ndat)
+    return HyperoptMetrics(chi2=chi2 / ndat, phi2=phi2, logp=-logp / ndat, chi2exp=chi2exp / ndat)

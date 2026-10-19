@@ -276,7 +276,7 @@ implemented_observables:
   process_type: POS_XPDF
   tables: []
   npoints: []
-  ndata: 20
+  ndata: 25
   plotting:
     dataset_label: 'positivity dataset: $xg$ PDF $Q^2=10000$ GeV$^2$'
     plot_x: x
@@ -295,8 +295,8 @@ implemented_observables:
         units: ''
     file: kinematics_XGL.yaml
   theory:
-    conversion_factor: 1.0
     operation: 'null'
+    conversion_factor: 1.0
     FK_tables:
-    - - NNPDF_POS_GLUON_Q2_10000
+    - - NNPDF_POS_GLUON_Q2_VARIABLE
   data_uncertainties: []

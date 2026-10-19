@@ -15,7 +15,6 @@ standard data format has been iteratively developed, now denoted ``CommonData``.
 This documentation describes the ``CommonData`` format
 used in NNPDF starting from code version 4.0.10 and compatible with releases beyond 4.0.
 
-
 Naming convention and organization of the datasets
 --------------------------------------------------
 
@@ -27,7 +26,7 @@ where the setname is defined by::
 
     <experiment>_<process>_<energy>{_<extras>}
 
-The naming convention for the set names is defined in the :ref:`naming convention documentation<dataset-naming-convention>`.
+The naming convention for the set names is defined in the :ref:`naming convention documentation <dataset-naming-convention>`.
 
 Each ``<setname>`` defines a folder in which the data is contained.
 While the separation of data in different folders can be arbitrary,
@@ -56,6 +55,8 @@ The format of this mapping is as follow:
         dataset: new_name_1
         variant: legacy
 
+
+.. _metadata-spec:
 
 CommonData Metadata specification
 ---------------------------------

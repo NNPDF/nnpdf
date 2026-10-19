@@ -3,7 +3,7 @@ from collections import defaultdict, namedtuple
 import numpy as np
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -47,40 +47,6 @@ for observable in metadata['implemented_observables']:
 
 # Utility functions
 # ________________________________________________________
-def OuterDecomposition(matrix):
-    r"""Compute the single value decomposition of the matrix A.
-
-    Returns the set of vector \sigma_{i}^{(k)} defined as
-
-        \sigma_{i}^{(k)} = v_{i}^{(k)} * \lambda^{(k)},
-
-    where v_{i}^{(k)} is the k-th eigenvector of the matrix A
-    associated to the k-th eigenvalue \lambda^{(k)}. The vectors
-    \sigma_{i}^{(k)} are defined such that
-
-        A_{ij} = \sum_{k=1}^{dim(A)} \sigma_{i}^{(k)} \sigma_{j}^{(k)}.
-
-    If A is a correlation matrix, for each data point i there will be
-    an associated vector \sigma_{i} = (sigma_{i}^{(1)}, ... , sigma_{i}^{(dim(A))}).
-
-    Parameters
-    ----------
-    A: the matrix to be decomposed.
-
-    Returns
-    -------
-    sigma: A matrix containing the set of vectors whose outer product reconstruct the original matrix.
-            The matrix has two indices sigma[i,k] - the first one refers to the component of the k-th
-            eigenvector, whereas the other one selects the eigenvalue.
-    """
-    eigenvalues, eigenvectors = np.linalg.eig(matrix)
-    sigma = np.zeros_like(matrix, dtype=float)
-    for i in range(np.size(eigenvalues)):
-        for j in range(np.size(eigenvalues)):
-            sigma[i][j] = eigenvectors[i][j] * np.sqrt(eigenvalues[j])
-    return sigma
-
-
 def ExtractCorrelation(yaml_file, N):
     """Convert a list of values into a matrix
 
@@ -235,10 +201,8 @@ def processData():
                 kin1_max = data[obs]['independent_variables'][0]['values'][j]['high']
 
                 # Store value of Vs from LHCb tables
-                sqrt_s_index = return_index(data_kin2['qualifiers'], "SQRT(S)")
 
                 # From TeV to GeV
-                sqrt_s = data_kin2['qualifiers'][sqrt_s_index]['value'] * 1e3
 
                 # Check if single or double distribution.
                 # For single distributions, the table is made of
@@ -269,7 +233,6 @@ def processData():
                             'mid': 0.5 * (kin2_min + kin2_max),
                             'max': kin2_max,
                         },
-                        'sqrts': {'min': None, 'mid': sqrt_s, 'max': None},
                         'm_Z2': {'min': None, 'mid': 8317.44, 'max': None},
                     }
 
@@ -280,7 +243,6 @@ def processData():
                             'mid': 0.5 * (kin1_min + kin1_max),
                             'max': kin1_max,
                         },
-                        'sqrts': {'min': None, 'mid': sqrt_s, 'max': None},
                         'm_Z2': {'min': None, 'mid': 8317.44, 'max': None},
                     }
                 kin.append(kin_value)
@@ -386,7 +348,7 @@ def processData():
                 cov = ComputeCovariance(cormat, v)
 
                 # Single value decomposition
-                sigma = OuterDecomposition(cov)
+                sigma = decompose_covmat(cov, full_precision=True)
 
                 # Loop over the bins
                 for k in range(len(error_diag)):

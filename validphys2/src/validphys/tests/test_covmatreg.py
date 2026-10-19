@@ -23,13 +23,13 @@ def test_withidentity():
 @make_table_comp(parse_exp_mat)
 def test_regularize_expcov(data_config):
     """Test if the higher level covmat is regularized by procedure"""
-    inp = dict(**data_config, norm_threshol=3)
-    df1 = API.groups_covmat(**inp)
-    df2 = API.groups_covmat(**data_config)
+    inp = dict(**data_config, norm_threshold=3)
+    df1 = API.groups_covmat(**inp, diagonal_basis=False)
+    df2 = API.groups_covmat(**data_config, diagonal_basis=False)
     # check here that regularization occured
     assert ~np.allclose(df1.values, df2.values)
     # check that square of sqrt matches
-    sqrt_df1 = API.groups_sqrtcovmat(**inp)
+    sqrt_df1 = API.groups_sqrtcovmat(**inp, diagonal_basis=False)
     np.testing.assert_allclose(df1.values, sqrt_df1.values @ sqrt_df1.values.T)
     # check that same result obtained
     return df1

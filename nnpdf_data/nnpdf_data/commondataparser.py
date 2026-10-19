@@ -78,6 +78,7 @@ log = logging.getLogger(__name__)
 
 KINLABEL_LATEX = {
     "DIJET": ("\\eta", "$\\m_{1,2} (GeV)", "$\\sqrt{s} (GeV)"),
+    "DIJET_3D": ("$y_b$", "$y^*$", "\\m_{1,2} (GeV)"),
     "DIS": ("$x$", "$Q^2 (GeV^2)$", "$y$"),
     "DYP": ("$y$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "EWJ_JPT": ("$p_T (GeV)$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
@@ -131,6 +132,7 @@ PROCESS_DESCRIPTION_LABEL = {
     "EWJ_MLL": "Jet Mass Distribution",
     "EWK_MLL": "Drell-Yan Mass Distribution",
     "DIJET": "Dijets Invariant Mass and Rapidity Distribution",
+    "DIJET_3D": "Dijet triple-differential Invariant Mass and Rapidities Distribution",
     "DYP": "Fixed-Target Drell-Yan",
     "JET_POL": "Inclusive Jet longitudinal double-spin asymmetry",
     "DIJET_POL": "Dijets longitudinal double-spin asymmetry",
@@ -220,27 +222,28 @@ class TheoryMeta:
     in order to match the experimental data.
 
     In addition there are other flags that can affect how the fktables are read or used:
+    
     - operation: defines the operation to apply to the outer list
     - shifts: mapping with the single fktables and their respective shifts
-              useful to create "gaps" so that the fktables and the respective experimental data
-              are ordered in the same way (for instance, when some points are missing from a grid)
+        useful to create "gaps" so that the fktables and the respective experimental data
+        are ordered in the same way (for instance, when some points are missing from a grid)
 
     This class is inmutable, what is read from the commondata metadata should be considered final
 
     Example
     -------
     >>> from nnpdf_data.commondataparser import TheoryMeta
-    ... from validobj import parse_input
-    ... from ruamel.yaml import YAML
-    ... theory_raw = '''
+    >>> from validobj import parse_input
+    >>> from ruamel.yaml import YAML
+    >>> theory_raw = '''
     ... FK_tables:
     ...   - - fk1
     ...   - - fk2
     ...     - fk3
     ... operation: ratio
     ... '''
-    ... theory = YAML(typ='safe').load(theory_raw)
-    ... parse_input(theory, TheoryMeta)
+    >>> theory = YAML(typ='safe').load(theory_raw)
+    >>> parse_input(theory, TheoryMeta)
     TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, normalization=None))
     """
 
@@ -294,9 +297,10 @@ class TheoryMeta:
 class Variant:
     """The new commondata format allow the usage of variants
     A variant can overwrite a number of keys, as defined by this dataclass:
-        data_uncertainties
-        theory
-        data_central
+    
+    - data_uncertainties
+    - theory
+    - data_central
 
     This class may overwrite *some* other keys for the benefit of reproducibility
     of old NNPDF fits, but the usage of these features is undocumented and discouraged.
@@ -625,7 +629,7 @@ class ObservableMetaData:
                 for i in range(3 - ncol):
                     dbin[f"extra_{i}"] = d
 
-            kin_dict[bin_index] = pd.DataFrame(dbin).stack()
+            kin_dict[bin_index] = pd.DataFrame(dbin).stack().dropna()
 
         if len(kin_dict) != self.ndata:
             raise ValueError(
@@ -895,6 +899,18 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
     return metadata
 
 
+def _check_if_statistical(col):
+    """Receives the header of a column of the uncertainties dataframe which includes:
+    (name of the uncertainty, treatment, type)
+    Returns true if and only if the column name stats with "stat",
+    its treatment is additive and it is not correlated (type == UNCORR)
+    """
+    if col[0].lower() == "stat":
+        assert col[1] == "ADD" and col[2] == "UNCORR"
+        return True
+    return False
+
+
 def load_commondata(metadata):
     """
 
@@ -905,22 +921,24 @@ def load_commondata(metadata):
     (i.e., an observable from a data publication) correspond to one single observable
     inside a folder which is named as "<experiment>_<process>_<energy>_<extra>"
     The observable is defined by a last suffix of the form "_<obs>" so that the full name
-    of the dataset is always:
+    of the dataset is always::
 
         "<experiment>_<process>_<energy>{_<extra>}_<obs>"
 
     where <extra> is optional.
 
     This function right now works under the assumotion that the folder/observable
-    is separated in the last _ so that:
+    is separated in the last _ so that::
+
         folder_name = <experiment>_<process>_<energy>{_<extra>}
+
     but note that this convention is still not fully defined.
 
     This function returns a commondata object constructed by parsing the metadata.
 
     Once a variant is selected, it can no longer be changed
 
-    Note that this function reproduces `parse_commondata` below, which parses the
+    Note that this function reproduces ``parse_commondata`` below, which parses the
     _old_ file format
     """
     # Before loading, apply the checks
@@ -934,9 +952,7 @@ def load_commondata(metadata):
     kin_df = metadata.load_kinematics()
 
     # Once we have loaded all uncertainty files, let's check how many sys we have
-    nsys = len(
-        [i for i in uncertainties_df.columns.get_level_values(0) if not i.startswith("stat")]
-    )
+    nsys = len([i for i in uncertainties_df.columns if not _check_if_statistical(i)])
 
     # Backwards-compatibility
     # Finally, create the commondata by merging the dataframes in the old commondata_table
@@ -953,7 +969,7 @@ def load_commondata(metadata):
     new_columns = []
     systypes = {"treatment": [], "name": []}
     for col in uncertainties_df.columns:
-        if col[0].startswith("stat"):
+        if _check_if_statistical(col):
             new_columns.append("stat")
         else:
             # if it is syst add the ADD/MULT information

@@ -1,9 +1,9 @@
  .. _vptheorycov-index:
- 
+
 The `theorycovariance` module
 ===============================
 
-The ``theorycovariance`` module deals with constructing, testing and 
+The ``theorycovariance`` module deals with constructing, testing and
 outputting theory covariance matrices (covmats). Primarily, it is concerned
 with scale variation covariance matrices used to model missing higher order
 uncertainties. See the `short
@@ -27,10 +27,10 @@ Summary
       the NNLO-NLO shift
 
 -  Theoretical covariance matrices are built according to the various prescriptions
-   in :ref:`prescrips`. 
- 
--  The prescription must be one of 3(f, r) point, 5(bar) point, 7(original) point or 9 point, see  :ref:`definitions <prescrips>`. 
-   You can specify this using ``point_prescription: "x point"`` in the runcard. The translation of this flag 
+   in :ref:`prescrips`.
+
+-  The prescription must be one of 3(f, r) point, 5(bar) point, 7(original) point or 9 point, see  :ref:`definitions <prescrips>`.
+   You can specify this using ``point_prescription: "x point"`` in the runcard. The translation of this flag
    into the relevant ``theoryids`` is handled by the ``scalevariations`` module in ``validphys``.
 
 -  As input you need theories for the relevant scale combinations which
@@ -45,16 +45,16 @@ Summary
 
 -  Renormalisation scales should be correlated within each
    process type. These process types are categorised as {DIS CC, DIS NC,
-   Drell-Yan, Jets, Top}. 
+   Drell-Yan, Jets, Top}.
 
 -  :ref:`Outputs <thcov_outputs>` includes tables and heat plots of theoretical and combined
    (theoretical + experimental) covariance matrices, comparisons of
    theoretical and experimental errors, and plots and tables of
    :math:`\chi^2` values.
 
--  Various :ref:`testing <vptheorycov-tests>` outputs also exist, including tables of eigenvalues, 
+-  Various :ref:`testing <vptheorycov-tests>` outputs also exist, including tables of eigenvalues,
    plots of eigenvectors and shift vs theory comparisons.
-   
+
 
 More information
 -----------------
@@ -64,5 +64,6 @@ More information
    ./runcard_layout.rst
    ./outputs.rst
    ./point_prescrip.rst
+   ./power_corrections.rst
    ./tests.rst
    ./examples.rst

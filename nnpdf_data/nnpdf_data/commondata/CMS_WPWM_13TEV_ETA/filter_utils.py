@@ -2,7 +2,7 @@ import numpy as np
 import uproot
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, decompose_covmat
 
 yaml.add_representer(float, prettify_float)
 
@@ -38,7 +38,6 @@ def get_kinematics(version, figure):
         kin_value = {
             'eta': {'min': eta['low'], 'mid': 0.5 * (eta['low'] + eta['high']), 'max': eta['high']},
             'm_W2': {'min': None, 'mid': 6460.5, 'max': None},
-            'sqrts': {'min': None, 'mid': 13000.0, 'max': None},
         }
 
         kin.append(kin_value)
@@ -81,16 +80,6 @@ def get_data_values(version, figure):
         data_central.append(value['value'])
 
     return data_central
-
-
-def decompose_covmat(covmat):
-    """Given a covmat it return an array sys with shape (ndat,ndat)
-    giving ndat correlated systematics for each of the ndat point.
-    The original covmat is obtained by doing sys@sys.T"""
-
-    lamb, mat = np.linalg.eig(covmat)
-    sys = np.multiply(np.sqrt(lamb), mat)
-    return sys
 
 
 def get_systematics(observable, version, figure):
@@ -168,5 +157,5 @@ def get_systematics(observable, version, figure):
     return uncertainties
 
 
-if __name__ == "__main__":
-    get_systematics(observable="W+", version=1, figure='17a')
+# if __name__ == "__main__":
+#     get_systematics(observable="W+", version=1, figure='17a')

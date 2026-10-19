@@ -4,28 +4,28 @@ Module containing the classes related to the stopping alogirthm
 In this module there are four Classes:
 
 - FitState: this class contains the information of the fit
-        for a given point in history
+  for a given point in history
 - FitHistory: this class contains the information necessary
-        in order to reset the state of the fit to the point
-        in which the history was saved.
-        i.e., a list of FitStates
+  in order to reset the state of the fit to the point
+  in which the history was saved.
+  i.e., a list of FitStates
 - Stopping: this class monitors the chi2 of the validation
-        and training sets and decides when to stop
+  and training sets and decides when to stop
 - Positivity: Decides whether a given point fullfills the positivity conditions
 - Validation: Controls the NNPDF cross-validation algorithm
 
 Note:
     There are situations in which the validation set is empty, in those cases
-the training set is used as validation set.
-This implies several changes in the behaviour of this class as the training chi2 will
-now be monitored for stability.
+    the training set is used as validation set.
+    This implies several changes in the behaviour of this class as the training chi2 will
+    now be monitored for stability.
     In order to parse the set of loss functions coming from the backend::MetaModel,
-the function `parse_losses` relies on the fact that they are all suffixed with `_loss`
-the validation case, instead, is suffixed with `val_loss`. In the particular casse in
-which both training and validation model correspond to the same backend::MetaModel only
-the `_loss` suffix can be found. This is taken into account by the class `Stopping`
-which will tell `Validation` that no validation set was found and that the training is to
-be used instead.
+    the function `parse_losses` relies on the fact that they are all suffixed with `_loss`
+    the validation case, instead, is suffixed with `val_loss`. In the particular casse in
+    which both training and validation model correspond to the same backend::MetaModel only
+    the `_loss` suffix can be found. This is taken into account by the class `Stopping`
+    which will tell `Validation` that no validation set was found and that the training is to
+    be used instead.
 """
 
 import logging
@@ -306,6 +306,8 @@ class Stopping:
            total number of epochs
         stopping_patience: int
            how many epochs to wait for the validation loss to improve
+        stopping_delta: float
+           minium improvement of the validation loss to be considered an improvement
         threshold_chi2: float
             maximum value allowed for chi2
         dont_stop: bool
@@ -320,6 +322,7 @@ class Stopping:
         threshold_positivity=THRESHOLD_POS,
         total_epochs=0,
         stopping_patience=7000,
+        stopping_delta=0.0,
         threshold_chi2=10.0,
         dont_stop=False,
     ):
@@ -346,6 +349,7 @@ class Stopping:
         self._dont_stop = dont_stop
         self._stop_now = False
         self.stopping_patience = stopping_patience
+        self._stopping_delta = stopping_delta
         self.total_epochs = total_epochs
 
         self._stop_epochs = [total_epochs - 1] * self._n_replicas
@@ -446,6 +450,7 @@ class Stopping:
         # once we start counting, don't bother anymore
         passes = self._counts | (fitstate.vl_chi2 < self._threshold_chi2)
         passes &= fitstate.vl_loss < self._best_val_chi2s
+        passes &= fitstate.vl_loss < (np.asarray(self._best_val_chi2s) - self._stopping_delta)
         # And the ones that pass positivity
         passes &= self._positivity(fitstate)
         # Stop replicas that are ok being stopped (because they are finished or otherwise)
@@ -574,18 +579,18 @@ class Positivity:
 
     def check_positivity(self, history_object):
         """
-                This function receives a history objects and loops over the
-                positivity_sets to check the value of the positivity loss.
+        This function receives a history objects and loops over the
+        positivity_sets to check the value of the positivity loss.
 
-                If the positivity loss is above the threshold, the positivity fails
-                otherwise, it passes.
-                It returns an array booleans which are True if positivity passed
+        If the positivity loss is above the threshold, the positivity fails
+        otherwise, it passes.
+        It returns an array booleans which are True if positivity passed
         story_object[key_loss] < self.threshold
 
-                Parameters
-                ----------
-                    history_object: dict
-                        dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
+        Parameters
+        ----------
+        history_object: dict
+            dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
         """
         positivity_pass = True
         for key in self.positivity_sets:

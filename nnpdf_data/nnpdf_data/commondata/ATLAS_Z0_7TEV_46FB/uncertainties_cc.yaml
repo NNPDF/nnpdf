@@ -587,7 +587,7 @@ bins:
   sys_corr_48: -5.99080000e-01
   sys_corr_49: 1.05720000e-01
   sys_corr_50: -0.31716
-  sys_corr_51: -0.0
+  sys_corr_51: 0.0
   sys_corr_52: 0.63432
   sys_corr_53: 0.38764
   sys_corr_54: 2.92139600e+01
@@ -629,20 +629,20 @@ bins:
   sys_corr_90: -0.56384
   sys_corr_91: -2.46680000e-01
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
   sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: 0.0
   sys_corr_101: 0.56384
   sys_corr_102: -3.52400000e-01
   sys_corr_103: 0.07048
-  sys_corr_104: -0.0
+  sys_corr_104: 0.0
   sys_corr_105: -2.46680000e-01
-  sys_corr_106: -0.0
+  sys_corr_106: 0.0
   sys_corr_107: 1.76200000e-01
   sys_corr_108: -2.46680000e-01
   sys_corr_109: 1.05720000e-01
@@ -703,7 +703,7 @@ bins:
   sys_corr_30: -1.06470000e-01
   sys_corr_31: -0.07098
   sys_corr_32: -0.03549
-  sys_corr_33: -0.0
+  sys_corr_33: 0.0
   sys_corr_34: -1.06470000e-01
   sys_corr_35: 0.07098
   sys_corr_36: -0.07098
@@ -722,7 +722,7 @@ bins:
   sys_corr_49: 1.06470000e-01
   sys_corr_50: -3.90390000e-01
   sys_corr_51: 0.0
-  sys_corr_52: -0.0
+  sys_corr_52: 0.0
   sys_corr_53: 0.56784
   sys_corr_54: 2.72563200e+01
   sys_corr_55: -2.20038
@@ -763,13 +763,13 @@ bins:
   sys_corr_90: 0.03549
   sys_corr_91: -0.53235
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
   sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: 0.0
   sys_corr_101: 0.53235
   sys_corr_102: -0.14196
@@ -831,12 +831,12 @@ bins:
   sys_corr_24: -0.10233
   sys_corr_25: -0.03411
   sys_corr_26: -0.13644
-  sys_corr_27: -0.0
+  sys_corr_27: 0.0
   sys_corr_28: -2.38770000e-01
   sys_corr_29: 0.17055
   sys_corr_30: -0.10233
   sys_corr_31: -2.38770000e-01
-  sys_corr_32: -0.0
+  sys_corr_32: 0.0
   sys_corr_33: -0.17055
   sys_corr_34: -0.20466
   sys_corr_35: 0.06822
@@ -897,13 +897,13 @@ bins:
   sys_corr_90: 0.06822
   sys_corr_91: -0.30699
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
   sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: 0.13644
   sys_corr_101: 5.11650000e-01
   sys_corr_102: 0.10233
@@ -923,7 +923,7 @@ bins:
   sys_corr_116: 0.10233
   sys_corr_117: 0.03411
   sys_corr_118: 2.38770000e-01
-  sys_corr_119: -0.0
+  sys_corr_119: 0.0
   sys_corr_120: 1.22796
   sys_corr_121: 1.39851
   sys_corr_122: 0.57987
@@ -1031,13 +1031,13 @@ bins:
   sys_corr_90: -0.37653
   sys_corr_91: -0.20538
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
   sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -5.47680000e-01
   sys_corr_101: 0.51345
   sys_corr_102: 3.42300000e-01
@@ -1119,7 +1119,7 @@ bins:
   sys_corr_44: 0.08826
   sys_corr_45: -0.1471
   sys_corr_46: -0.70608
-  sys_corr_47: -0.0
+  sys_corr_47: 0.0
   sys_corr_48: -0.82376
   sys_corr_49: 0.23536
   sys_corr_50: -0.70608
@@ -1165,13 +1165,13 @@ bins:
   sys_corr_90: -0.23536
   sys_corr_91: -5.58980000e-01
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
   sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -3.23620000e-01
   sys_corr_101: 4.41300000e-01
   sys_corr_102: 0.47072
@@ -1299,13 +1299,13 @@ bins:
   sys_corr_90: -2.00330000e-01
   sys_corr_91: -3.54430000e-01
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
   sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -0.29279
   sys_corr_101: 0.18492
   sys_corr_102: 3.54430000e-01
@@ -1346,7 +1346,7 @@ bins:
   sys_corr_3: 63.5534
   sys_corr_4: 27.044
   sys_corr_5: 5.4088
-  sys_corr_6: -0.0
+  sys_corr_6: 0.0
   sys_corr_7: -39.2138
   sys_corr_8: 4.0566
   sys_corr_9: -13.522
@@ -1354,7 +1354,7 @@ bins:
   sys_corr_11: -1.33867800e+02
   sys_corr_12: -5.4088
   sys_corr_13: 1.75786000e+01
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 6.761
   sys_corr_16: 4.0566
   sys_corr_17: 13.522
@@ -1367,10 +1367,10 @@ bins:
   sys_corr_24: -5.4088
   sys_corr_25: -1.3522
   sys_corr_26: 4.0566
-  sys_corr_27: -0.0
+  sys_corr_27: 0.0
   sys_corr_28: 5.4088
   sys_corr_29: -2.7044
-  sys_corr_30: -0.0
+  sys_corr_30: 0.0
   sys_corr_31: 1.3522
   sys_corr_32: -4.0566
   sys_corr_33: 4.0566
@@ -1433,20 +1433,20 @@ bins:
   sys_corr_90: 12.1698
   sys_corr_91: -12.1698
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
-  sys_corr_95: -0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: 8.1132
   sys_corr_101: 1.48742000e+01
   sys_corr_102: -2.7044
   sys_corr_103: 0.0
   sys_corr_104: -1.3522
   sys_corr_105: -8.1132
-  sys_corr_106: -0.0
+  sys_corr_106: 0.0
   sys_corr_107: 5.4088
   sys_corr_108: 0.0
   sys_corr_109: 1.3522
@@ -1463,7 +1463,7 @@ bins:
   sys_corr_120: 43.2704
   sys_corr_121: 5.94968000e+01
   sys_corr_122: 40.566
-  sys_corr_123: -0.0
+  sys_corr_123: 0.0
   sys_corr_124: -10.8176
   sys_corr_125: -22.9874
   sys_corr_126: -36.5094
@@ -1488,7 +1488,7 @@ bins:
   sys_corr_11: -1.37434800e+02
   sys_corr_12: -1.07792000e+01
   sys_corr_13: 16.1688
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 6.737
   sys_corr_16: 4.0422
   sys_corr_17: 13.474
@@ -1567,13 +1567,13 @@ bins:
   sys_corr_90: 6.737
   sys_corr_91: -5.38960000e+00
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: 5.38960000e+00
   sys_corr_101: 1.48214000e+01
   sys_corr_102: -1.34740000e+00
@@ -1597,14 +1597,14 @@ bins:
   sys_corr_120: 44.4642
   sys_corr_121: 60.633
   sys_corr_122: 40.422
-  sys_corr_123: -0.0
+  sys_corr_123: 0.0
   sys_corr_124: -9.4318
   sys_corr_125: -20.211
   sys_corr_126: -3.90746000e+01
   sys_corr_127: -1.21266000e+01
   sys_corr_128: -66.0226
   sys_corr_129: -33.685
-  sys_corr_130: -0.0
+  sys_corr_130: 0.0
   sys_corr_131: 51.2012
   sys_corr_132: 2425.32
   sys_corr_133: 79.4966
@@ -1616,26 +1616,26 @@ bins:
   sys_corr_5: 5.3696
   sys_corr_6: 5.3696
   sys_corr_7: -36.2448
-  sys_corr_8: -0.0
+  sys_corr_8: 0.0
   sys_corr_9: -6.71200000e+00
   sys_corr_10: 115.4464
   sys_corr_11: -1.36924800e+02
   sys_corr_12: -10.7392
   sys_corr_13: 1.61088000e+01
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 6.71200000e+00
   sys_corr_16: 4.02720000e+00
   sys_corr_17: 1.34240000e+01
   sys_corr_18: 2.6848
   sys_corr_19: -1.3424
   sys_corr_20: 8.05440000e+00
-  sys_corr_21: -0.0
+  sys_corr_21: 0.0
   sys_corr_22: 5.3696
   sys_corr_23: 5.3696
   sys_corr_24: -2.6848
   sys_corr_25: -1.3424
   sys_corr_26: 4.02720000e+00
-  sys_corr_27: -0.0
+  sys_corr_27: 0.0
   sys_corr_28: 2.6848
   sys_corr_29: -1.3424
   sys_corr_30: 1.3424
@@ -1644,7 +1644,7 @@ bins:
   sys_corr_33: 2.6848
   sys_corr_34: -1.3424
   sys_corr_35: -1.3424
-  sys_corr_36: -0.0
+  sys_corr_36: 0.0
   sys_corr_37: 10.7392
   sys_corr_38: -6.71200000e+00
   sys_corr_39: -4.02720000e+00
@@ -1658,7 +1658,7 @@ bins:
   sys_corr_47: 1.3424
   sys_corr_48: -1.20816000e+01
   sys_corr_49: 4.02720000e+00
-  sys_corr_50: -0.0
+  sys_corr_50: 0.0
   sys_corr_51: 2.6848
   sys_corr_52: 42.9568
   sys_corr_53: -5.3696
@@ -1701,20 +1701,20 @@ bins:
   sys_corr_90: -2.6848
   sys_corr_91: 4.02720000e+00
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
-  sys_corr_95: -0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: 6.71200000e+00
   sys_corr_101: 1.47664000e+01
   sys_corr_102: -1.3424
   sys_corr_103: 1.3424
   sys_corr_104: -1.3424
   sys_corr_105: -5.3696
-  sys_corr_106: -0.0
+  sys_corr_106: 0.0
   sys_corr_107: 5.3696
   sys_corr_108: 2.6848
   sys_corr_109: 1.3424
@@ -1738,7 +1738,7 @@ bins:
   sys_corr_127: -1.20816000e+01
   sys_corr_128: -63.0928
   sys_corr_129: -33.56
-  sys_corr_130: -0.0
+  sys_corr_130: 0.0
   sys_corr_131: 4.96688000e+01
   sys_corr_132: 2416.32
   sys_corr_133: 80.544
@@ -1756,7 +1756,7 @@ bins:
   sys_corr_11: -1.38403200e+02
   sys_corr_12: -18.6312
   sys_corr_13: 1.46388000e+01
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 6.654
   sys_corr_16: 3.9924
   sys_corr_17: 13.308
@@ -1767,26 +1767,26 @@ bins:
   sys_corr_22: 3.9924
   sys_corr_23: 6.654
   sys_corr_24: -2.66160000e+00
-  sys_corr_25: -0.0
+  sys_corr_25: 0.0
   sys_corr_26: 3.9924
   sys_corr_27: -1.33080000e+00
   sys_corr_28: 2.66160000e+00
-  sys_corr_29: -0.0
-  sys_corr_30: -0.0
+  sys_corr_29: 0.0
+  sys_corr_30: 0.0
   sys_corr_31: 0.0
   sys_corr_32: -1.33080000e+00
   sys_corr_33: 1.33080000e+00
   sys_corr_34: -1.33080000e+00
-  sys_corr_35: -0.0
+  sys_corr_35: 0.0
   sys_corr_36: 1.33080000e+00
   sys_corr_37: 1.06464000e+01
   sys_corr_38: -7.9848
   sys_corr_39: -5.32320000e+00
   sys_corr_40: -5.32320000e+00
-  sys_corr_41: -0.0
+  sys_corr_41: 0.0
   sys_corr_42: 3.9924
   sys_corr_43: -5.32320000e+00
-  sys_corr_44: -0.0
+  sys_corr_44: 0.0
   sys_corr_45: 2.66160000e+00
   sys_corr_46: -3.9924
   sys_corr_47: -1.33080000e+00
@@ -1835,20 +1835,20 @@ bins:
   sys_corr_90: -13.308
   sys_corr_91: 7.9848
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: 1.33080000e+00
   sys_corr_101: 1.46388000e+01
   sys_corr_102: -2.66160000e+00
   sys_corr_103: 0.0
   sys_corr_104: -1.33080000e+00
   sys_corr_105: -5.32320000e+00
-  sys_corr_106: -0.0
+  sys_corr_106: 0.0
   sys_corr_107: 1.33080000e+00
   sys_corr_108: 2.66160000e+00
   sys_corr_109: 0.0
@@ -1890,7 +1890,7 @@ bins:
   sys_corr_11: -1.43078400e+02
   sys_corr_12: -23.8464
   sys_corr_13: 13.248
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 5.2992
   sys_corr_16: 2.6496
   sys_corr_17: 13.248
@@ -1907,12 +1907,12 @@ bins:
   sys_corr_28: -1.3248
   sys_corr_29: 1.3248
   sys_corr_30: 2.6496
-  sys_corr_31: -0.0
+  sys_corr_31: 0.0
   sys_corr_32: -2.6496
   sys_corr_33: 1.3248
   sys_corr_34: -2.6496
   sys_corr_35: 1.3248
-  sys_corr_36: -0.0
+  sys_corr_36: 0.0
   sys_corr_37: 11.9232
   sys_corr_38: -3.9744
   sys_corr_39: -2.6496
@@ -1959,7 +1959,7 @@ bins:
   sys_corr_80: 164.2752
   sys_corr_81: -46.368
   sys_corr_82: -5.2992
-  sys_corr_83: -0.0
+  sys_corr_83: 0.0
   sys_corr_84: 15.8976
   sys_corr_85: 5.2992
   sys_corr_86: -1.45728000e+01
@@ -1967,22 +1967,22 @@ bins:
   sys_corr_88: 41.0688
   sys_corr_89: 2.6496
   sys_corr_90: -15.8976
-  sys_corr_91: -0.0
+  sys_corr_91: 0.0
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
-  sys_corr_95: -0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -3.9744
   sys_corr_101: 13.248
   sys_corr_102: -1.3248
   sys_corr_103: -1.3248
-  sys_corr_104: -0.0
+  sys_corr_104: 0.0
   sys_corr_105: -2.6496
-  sys_corr_106: -0.0
+  sys_corr_106: 0.0
   sys_corr_107: -2.6496
   sys_corr_108: 2.6496
   sys_corr_109: -2.6496
@@ -1999,7 +1999,7 @@ bins:
   sys_corr_120: 42.3936
   sys_corr_121: 5.69664000e+01
   sys_corr_122: 35.7696
-  sys_corr_123: -0.0
+  sys_corr_123: 0.0
   sys_corr_124: -7.9488
   sys_corr_125: -15.8976
   sys_corr_126: -35.7696
@@ -2024,7 +2024,7 @@ bins:
   sys_corr_11: -1.40675400e+02
   sys_corr_12: -30.9744
   sys_corr_13: 10.3248
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 5.1624
   sys_corr_16: 2.5812
   sys_corr_17: 11.6154
@@ -2038,7 +2038,7 @@ bins:
   sys_corr_25: 1.2906
   sys_corr_26: 1.2906
   sys_corr_27: -1.2906
-  sys_corr_28: -0.0
+  sys_corr_28: 0.0
   sys_corr_29: 2.5812
   sys_corr_30: 0.0
   sys_corr_31: -2.5812
@@ -2046,7 +2046,7 @@ bins:
   sys_corr_33: 0.0
   sys_corr_34: -3.8718
   sys_corr_35: 1.2906
-  sys_corr_36: -0.0
+  sys_corr_36: 0.0
   sys_corr_37: 9.0342
   sys_corr_38: -3.8718
   sys_corr_39: -1.2906
@@ -2057,7 +2057,7 @@ bins:
   sys_corr_44: -2.5812
   sys_corr_45: -1.2906
   sys_corr_46: -9.0342
-  sys_corr_47: -0.0
+  sys_corr_47: 0.0
   sys_corr_48: -12.906
   sys_corr_49: 3.8718
   sys_corr_50: -6.453
@@ -2103,20 +2103,20 @@ bins:
   sys_corr_90: -6.453
   sys_corr_91: -1.41966000e+01
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
-  sys_corr_95: -0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -5.1624
   sys_corr_101: 12.906
-  sys_corr_102: -0.0
+  sys_corr_102: 0.0
   sys_corr_103: -2.5812
-  sys_corr_104: -0.0
+  sys_corr_104: 0.0
   sys_corr_105: -2.5812
-  sys_corr_106: -0.0
+  sys_corr_106: 0.0
   sys_corr_107: -3.8718
   sys_corr_108: 2.5812
   sys_corr_109: -3.8718
@@ -2158,7 +2158,7 @@ bins:
   sys_corr_11: -131.912
   sys_corr_12: -38.3744
   sys_corr_13: 8.39440000e+00
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 5.996
   sys_corr_16: 3.5976
   sys_corr_17: 10.7928
@@ -2170,7 +2170,7 @@ bins:
   sys_corr_23: 9.5936
   sys_corr_24: -3.5976
   sys_corr_25: 2.3984
-  sys_corr_26: -0.0
+  sys_corr_26: 0.0
   sys_corr_27: -2.3984
   sys_corr_28: 1.1992
   sys_corr_29: 3.5976
@@ -2189,7 +2189,7 @@ bins:
   sys_corr_42: 0.0
   sys_corr_43: -3.5976
   sys_corr_44: -3.5976
-  sys_corr_45: -0.0
+  sys_corr_45: 0.0
   sys_corr_46: -9.5936
   sys_corr_47: 1.1992
   sys_corr_48: -10.7928
@@ -2238,12 +2238,12 @@ bins:
   sys_corr_91: -9.5936
   sys_corr_92: 0.0
   sys_corr_93: 0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -4.7968
   sys_corr_101: 1.31912000e+01
   sys_corr_102: 1.1992
@@ -2292,7 +2292,7 @@ bins:
   sys_corr_11: -1.19125200e+02
   sys_corr_12: -40.7816
   sys_corr_13: 6.4392
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 4.29280000e+00
   sys_corr_16: 3.2196
   sys_corr_17: 9.6588
@@ -2308,7 +2308,7 @@ bins:
   sys_corr_27: -3.2196
   sys_corr_28: -2.14640000e+00
   sys_corr_29: 4.29280000e+00
-  sys_corr_30: -0.0
+  sys_corr_30: 0.0
   sys_corr_31: -3.2196
   sys_corr_32: -1.07320000e+00
   sys_corr_33: -2.14640000e+00
@@ -2343,7 +2343,7 @@ bins:
   sys_corr_62: 1.71712000e+01
   sys_corr_63: -4.29280000e+00
   sys_corr_64: 2.14640000e+00
-  sys_corr_65: -0.0
+  sys_corr_65: 0.0
   sys_corr_66: -1.07320000e+01
   sys_corr_67: 2.14640000e+00
   sys_corr_68: -7.5124
@@ -2371,13 +2371,13 @@ bins:
   sys_corr_90: 15.0248
   sys_corr_91: 2.14640000e+00
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -4.29280000e+00
   sys_corr_101: 1.07320000e+01
   sys_corr_102: 1.07320000e+00
@@ -2389,7 +2389,7 @@ bins:
   sys_corr_108: 5.36600000e+00
   sys_corr_109: -2.14640000e+00
   sys_corr_110: -7.5124
-  sys_corr_111: -0.0
+  sys_corr_111: 0.0
   sys_corr_112: -4.29280000e+00
   sys_corr_113: -63.3188
   sys_corr_114: -2.89764000e+01
@@ -2414,7 +2414,7 @@ bins:
   sys_corr_133: 79.4168
 - stat: 2.23048353e+02
   sys_corr_1: 1.01651957e+02
-  sys_corr_2: -0.0
+  sys_corr_2: 0.0
   sys_corr_3: 80.883
   sys_corr_4: -3.14545000e+01
   sys_corr_5: -2.6961
@@ -2426,7 +2426,7 @@ bins:
   sys_corr_11: -1.05147900e+02
   sys_corr_12: -4.40363000e+01
   sys_corr_13: 4.4935
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 3.5948
   sys_corr_16: 2.6961
   sys_corr_17: 8.08830000e+00
@@ -2459,7 +2459,7 @@ bins:
   sys_corr_44: -1.7974
   sys_corr_45: -0.8987
   sys_corr_46: -4.4935
-  sys_corr_47: -0.0
+  sys_corr_47: 0.0
   sys_corr_48: -8.987
   sys_corr_49: 1.7974
   sys_corr_50: -4.4935
@@ -2506,12 +2506,12 @@ bins:
   sys_corr_91: 3.5948
   sys_corr_92: 0.0
   sys_corr_93: 0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -1.7974
   sys_corr_101: 9.8857
   sys_corr_102: 3.5948
@@ -2521,7 +2521,7 @@ bins:
   sys_corr_106: 1.7974
   sys_corr_107: -4.4935
   sys_corr_108: 1.25818000e+01
-  sys_corr_109: -0.0
+  sys_corr_109: 0.0
   sys_corr_110: -5.3922
   sys_corr_111: 0.8987
   sys_corr_112: -2.6961
@@ -2560,7 +2560,7 @@ bins:
   sys_corr_11: -79.808
   sys_corr_12: -38.528
   sys_corr_13: 3.44
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 3.44
   sys_corr_16: 2.752
   sys_corr_17: 6.19200000e+00
@@ -2586,14 +2586,14 @@ bins:
   sys_corr_37: 2.752
   sys_corr_38: -4.128
   sys_corr_39: -1.376
-  sys_corr_40: -0.0
+  sys_corr_40: 0.0
   sys_corr_41: -2.752
   sys_corr_42: -0.688
-  sys_corr_43: -0.0
+  sys_corr_43: 0.0
   sys_corr_44: -1.376
   sys_corr_45: 0.0
   sys_corr_46: -3.44
-  sys_corr_47: -0.0
+  sys_corr_47: 0.0
   sys_corr_48: -6.88
   sys_corr_49: 1.376
   sys_corr_50: -3.44
@@ -2616,7 +2616,7 @@ bins:
   sys_corr_67: 4.128
   sys_corr_68: -6.19200000e+00
   sys_corr_69: -0.688
-  sys_corr_70: -0.0
+  sys_corr_70: 0.0
   sys_corr_71: 0.0
   sys_corr_72: 8.66880000e+01
   sys_corr_73: 6.19200000e+00
@@ -2640,24 +2640,24 @@ bins:
   sys_corr_91: 2.064
   sys_corr_92: 0.0
   sys_corr_93: 0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: -1.376
   sys_corr_101: 7.568
   sys_corr_102: 2.752
   sys_corr_103: -0.688
   sys_corr_104: -1.376
-  sys_corr_105: -0.0
+  sys_corr_105: 0.0
   sys_corr_106: 0.688
   sys_corr_107: -2.064
   sys_corr_108: 7.568
   sys_corr_109: -2.064
   sys_corr_110: -4.816
-  sys_corr_111: -0.0
+  sys_corr_111: 0.0
   sys_corr_112: -2.064
   sys_corr_113: -39.904
   sys_corr_114: -1.78880000e+01
@@ -2694,7 +2694,7 @@ bins:
   sys_corr_11: -49.7258
   sys_corr_12: -2.50910000e+01
   sys_corr_13: 1.3686
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 2.281
   sys_corr_16: 1.8248
   sys_corr_17: 3.6496
@@ -2711,7 +2711,7 @@ bins:
   sys_corr_28: -3.19340000e+00
   sys_corr_29: 4.10580000e+00
   sys_corr_30: -1.8248
-  sys_corr_31: -0.0
+  sys_corr_31: 0.0
   sys_corr_32: 0.0
   sys_corr_33: 1.3686
   sys_corr_34: -2.281
@@ -2772,20 +2772,20 @@ bins:
   sys_corr_89: 8.21160000e+00
   sys_corr_90: -3.19340000e+00
   sys_corr_91: -1.8248
-  sys_corr_92: -0.0
-  sys_corr_93: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
-  sys_corr_95: -0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
-  sys_corr_97: -0.0
-  sys_corr_98: -0.0
-  sys_corr_99: -0.0
+  sys_corr_97: 0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
   sys_corr_100: 1.8248
   sys_corr_101: 5.0182
   sys_corr_102: 2.281
   sys_corr_103: -0.4562
   sys_corr_104: -0.4562
-  sys_corr_105: -0.0
+  sys_corr_105: 0.0
   sys_corr_106: 0.4562
   sys_corr_107: 0.9124
   sys_corr_108: 5.4744
@@ -2805,7 +2805,7 @@ bins:
   sys_corr_122: 11.405
   sys_corr_123: -0.4562
   sys_corr_124: -4.562
-  sys_corr_125: -0.0
+  sys_corr_125: 0.0
   sys_corr_126: -1.64232000e+01
   sys_corr_127: -4.10580000e+00
   sys_corr_128: -24.6348
@@ -2816,7 +2816,7 @@ bins:
   sys_corr_133: 58.8498
 - stat: 1.32232932e+02
   sys_corr_1: 8.19642330e+01
-  sys_corr_2: -0.0
+  sys_corr_2: 0.0
   sys_corr_3: 21.7854
   sys_corr_4: -13.338
   sys_corr_5: 0.4446
@@ -2828,7 +2828,7 @@ bins:
   sys_corr_11: -25.1199
   sys_corr_12: -11.7819
   sys_corr_13: 0.4446
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: 1.11150000e+00
   sys_corr_16: 0.8892
   sys_corr_17: 1.7784
@@ -2877,7 +2877,7 @@ bins:
   sys_corr_60: 7.5582
   sys_corr_61: 0.4446
   sys_corr_62: 1.5561
-  sys_corr_63: -0.0
+  sys_corr_63: 0.0
   sys_corr_64: 2.22300000e+00
   sys_corr_65: 0.4446
   sys_corr_66: -1.7784
@@ -2906,14 +2906,14 @@ bins:
   sys_corr_89: 12.4488
   sys_corr_90: -10.4481
   sys_corr_91: -8.4474
-  sys_corr_92: -0.0
-  sys_corr_93: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
-  sys_corr_95: -0.0
-  sys_corr_96: -0.0
-  sys_corr_97: -0.0
+  sys_corr_95: 0.0
+  sys_corr_96: 0.0
+  sys_corr_97: 0.0
   sys_corr_98: 0.0
-  sys_corr_99: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: 0.2223
   sys_corr_101: 2.22300000e+00
   sys_corr_102: 1.5561
@@ -3014,7 +3014,7 @@ bins:
   sys_corr_63: 0.0151
   sys_corr_64: -0.4228
   sys_corr_65: -5.28500000e-01
-  sys_corr_66: -0.0
+  sys_corr_66: 0.0
   sys_corr_67: 0.3322
   sys_corr_68: 4.98300000e-01
   sys_corr_69: 0.4228
@@ -3040,14 +3040,14 @@ bins:
   sys_corr_89: 2.56700000e-01
   sys_corr_90: 0.0151
   sys_corr_91: -0.0906
-  sys_corr_92: -0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
   sys_corr_98: 0.0
-  sys_corr_99: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: -0.8003
   sys_corr_101: -0.5587
   sys_corr_102: 0.1963
@@ -3112,7 +3112,7 @@ bins:
   sys_corr_27: 8.74800000e-02
   sys_corr_28: -4.37400000e-02
   sys_corr_29: 0.05832
-  sys_corr_30: -0.0
+  sys_corr_30: 0.0
   sys_corr_31: 0.02916
   sys_corr_32: 4.37400000e-02
   sys_corr_33: -0.0729
@@ -3141,7 +3141,7 @@ bins:
   sys_corr_56: 2.42028
   sys_corr_57: 6.99840000e-01
   sys_corr_58: -3.64500000e-01
-  sys_corr_59: -0.0
+  sys_corr_59: 0.0
   sys_corr_60: 0.55404
   sys_corr_61: 0.81648
   sys_corr_62: 6.26940000e-01
@@ -3174,14 +3174,14 @@ bins:
   sys_corr_89: 0.1458
   sys_corr_90: 0.01458
   sys_corr_91: -0.11664
-  sys_corr_92: -0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
   sys_corr_98: 0.0
-  sys_corr_99: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: -1.1664
   sys_corr_101: -0.52488
   sys_corr_102: 1.74960000e-01
@@ -3191,7 +3191,7 @@ bins:
   sys_corr_106: -0.11664
   sys_corr_107: -6.70680000e-01
   sys_corr_108: -0.26244
-  sys_corr_109: -0.0
+  sys_corr_109: 0.0
   sys_corr_110: -0.10206
   sys_corr_111: 0.11664
   sys_corr_112: 3.49920000e-01
@@ -3241,7 +3241,7 @@ bins:
   sys_corr_22: -0.0405
   sys_corr_23: -1.35000000e-02
   sys_corr_24: -2.70000000e-02
-  sys_corr_25: -0.0
+  sys_corr_25: 0.0
   sys_corr_26: -9.45000000e-02
   sys_corr_27: 9.45000000e-02
   sys_corr_28: -9.45000000e-02
@@ -3252,7 +3252,7 @@ bins:
   sys_corr_33: -2.70000000e-02
   sys_corr_34: -0.0405
   sys_corr_35: -2.70000000e-02
-  sys_corr_36: -0.0
+  sys_corr_36: 0.0
   sys_corr_37: -2.16000000e-01
   sys_corr_38: -0.2565
   sys_corr_39: 3.91500000e-01
@@ -3308,14 +3308,14 @@ bins:
   sys_corr_89: 0.135
   sys_corr_90: -0.0675
   sys_corr_91: 0.0675
-  sys_corr_92: -0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
-  sys_corr_96: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
+  sys_corr_96: 0.0
   sys_corr_97: 0.0
   sys_corr_98: 0.0
-  sys_corr_99: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: -9.58500000e-01
   sys_corr_101: -4.86000000e-01
   sys_corr_102: 0.2025
@@ -3332,7 +3332,7 @@ bins:
   sys_corr_113: 3.22650000e+00
   sys_corr_114: 8.64000000e-01
   sys_corr_115: 1.7955
-  sys_corr_116: -0.0
+  sys_corr_116: 0.0
   sys_corr_117: 0.2565
   sys_corr_118: 5.40000000e-02
   sys_corr_119: -4.99500000e-01
@@ -3442,14 +3442,14 @@ bins:
   sys_corr_89: 0.05915
   sys_corr_90: -0.04732
   sys_corr_91: 0.03549
-  sys_corr_92: -0.0
-  sys_corr_93: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
-  sys_corr_95: -0.0
-  sys_corr_96: -0.0
+  sys_corr_95: 0.0
+  sys_corr_96: 0.0
   sys_corr_97: 0.0
   sys_corr_98: 0.0
-  sys_corr_99: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: -0.89908
   sys_corr_101: -0.44954
   sys_corr_102: 1.53790000e-01
@@ -3527,7 +3527,7 @@ bins:
   sys_corr_40: -1.00165000e-01
   sys_corr_41: -3.46725000e-01
   sys_corr_42: -0.27738
-  sys_corr_43: -0.0
+  sys_corr_43: 0.0
   sys_corr_44: 0.13869
   sys_corr_45: -5.39350000e-02
   sys_corr_46: -1.15575000e-01
@@ -3577,13 +3577,13 @@ bins:
   sys_corr_90: -1.46395000e-01
   sys_corr_91: -6.93450000e-02
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
-  sys_corr_94: -0.0
-  sys_corr_95: -0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: 0.0
   sys_corr_96: 0.0
   sys_corr_97: 0.0
   sys_corr_98: 0.0
-  sys_corr_99: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: -6.39515000e-01
   sys_corr_101: -0.27738
   sys_corr_102: 0.146395
@@ -3632,7 +3632,7 @@ bins:
   sys_corr_11: -3.08978000e-01
   sys_corr_12: -1.24906000e-01
   sys_corr_13: 0.128193
-  sys_corr_14: -0.0
+  sys_corr_14: 0.0
   sys_corr_15: -7.23140000e-02
   sys_corr_16: 1.64350000e-02
   sys_corr_17: 0.052592
@@ -3711,13 +3711,13 @@ bins:
   sys_corr_90: -2.07081000e-01
   sys_corr_91: -6.57400000e-02
   sys_corr_92: 0.0
-  sys_corr_93: -0.0
+  sys_corr_93: 0.0
   sys_corr_94: 0.0
-  sys_corr_95: -0.0
-  sys_corr_96: -0.0
+  sys_corr_95: 0.0
+  sys_corr_96: 0.0
   sys_corr_97: 0.0
   sys_corr_98: 0.0
-  sys_corr_99: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: -0.3287
   sys_corr_101: -1.15045000e-01
   sys_corr_102: 5.91660000e-02

@@ -10,7 +10,6 @@ yaml.add_representer(float, prettify_float)
 
 MZ_VALUE = 91.1876  # GeV
 MW_VALUE = 80.398  # GeV
-SQRT_S = 8_000.0  # GeV
 NORM_FACTOR = 1_000.0  # from pb -> fb
 
 # Correct tables to read values [[Z], [W+, W-]]
@@ -86,7 +85,6 @@ def get_kinematics(hepdata: dict, bin_index: list, boson: str = "Z") -> list:
         kin_value = {
             "y": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
             "m_V2": {"min": None, "mid": MAP_BOSON[boson] ** 2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 
@@ -206,7 +204,7 @@ def generate_artificial_unc(**kwargs) -> np.ndarray:
     np.ndarray:
         a squared matrix with artificial uncertainties
     """
-    artunc = covmat_to_artunc(**kwargs)
+    artunc = covmat_to_artunc(**kwargs, full_precision=True)
     return np.array(artunc)
 
 

@@ -13,7 +13,7 @@ build:
 
 requirements:
     host:
-        - python >=3.9,<3.13
+        - python >=3.10,<3.14
         - poetry-core >=1.0.0
         - poetry-dynamic-versioning >=1.2.0
         - pip
@@ -23,6 +23,7 @@ requirements:
         - keras >=3.1
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
+        - setuptools <82 # to provide pkg_resources for hyperopt
         - mongodb
         - pymongo <4
         - pyopenssl >=23.2

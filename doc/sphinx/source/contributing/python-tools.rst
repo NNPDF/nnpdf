@@ -31,7 +31,7 @@ Python code can be evaluated interactively, which can speed up the development.
     environment running on the browser. Useful for bigger experiments.
 
 .. note::
-    When developing :ref:`validphys <validphys>` related code interactively, be
+    When developing :ref:`validphys <vp-index>` related code interactively, be
     sure to read about the :ref:`API functionality <vpapi>`.
 
 Testing
@@ -153,7 +153,7 @@ Before beginning you will need to ensure that you have the tests dependencies,
 which can be checked in :code:`nnpdf/conda-recipe/meta.yml`.
 
 The next step is to write the test function. It is highly recommended to use the
-:ref:`validphys API <api>` for this, both to simplify the code and to make it agnostic to the
+:ref:`validphys API <vpapi>` for this, both to simplify the code and to make it agnostic to the
 structure of backend providers - provided that they produce the same results. See
 for example a function which tests the ``plot_pdfs`` provider:
 

@@ -6,7 +6,7 @@ Continuous integration and deployment
 The NNPDF code base makes use of externally hosted services, to aid development
 and testing. These are typically called *Continuous integration (CI)* or
 *Continuous deployment* services. Their main task is to execute automated tests
-on the code and produce :ref:`binary builds <conda>` which allow it to be
+on the code and produce :ref:`binary builds <conda-packages>` which allow it to be
 automatically deployed. The tests automatically run upon ``git push`` to any branch
 in the GitHub server (see :ref:`git <gitsection>`).
 
@@ -30,7 +30,7 @@ Our CI service works roughly as follows:
 
       - Compiling the code.
       - Running the tests.
-      - Possibly, uploading the compiled binaries and documentation to the :ref:`NNPDF server <server>`.
+      - For release tags, uploading the documentation to the :ref:`NNPDF server <server>`.
         We use `Conda-build <https://docs.conda.io/projects/conda-build/en/latest/>`_ to do much of the heavy lifting for these actions.
  3. The CI service reports whether it has *succeeded* or *failed* to the GitHub,
     server, which displays that information next to the relevant pull request or
@@ -61,9 +61,6 @@ them, do something like::
 
 The secrets are:
 
-  - ``NETRC_FILE`` a base64 encoded string containing a ``~/.netrc`` file with
-	  the :ref:`credentials <server-access>` to the private conda repository
-	  https://packages.nnpdf.science/conda-private/
   - ``NNPDF_SSH_KEY`` a base64 string containing a private SSH key which is
 	  authorized to access the :ref:`upload account of the NNPDF server <server-access>`.
 
@@ -107,5 +104,5 @@ Our GitHub Action service implements:
     commit. Some logs are generated, which can aid in determining the cause of errors.
  4. If the workflow succeeds, a comment to the initial pull request will appear with link references to the generated report and fit.
 
-The progress reports of the various jobs at `GitHub Actions <https://github.com/NNPDF/actions>`_, upon logging in
+The progress reports of the various jobs can be seen at the `NNPDF Github Actions <https://github.com/NNPDF/nnpdf/actions>`_, upon logging in
 with an authorized GitHub account.

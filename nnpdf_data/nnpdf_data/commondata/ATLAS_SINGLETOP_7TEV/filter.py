@@ -10,7 +10,6 @@ yaml.add_representer(float, prettify_float)
 
 NB_POINTS = 4
 MT_VALUE = 172.5
-SQRT_S = 7_000.0
 
 from nnpdf_data.filter_utils.utils import cormat_to_covmat, covmat_to_artunc
 from nnpdf_data.filter_utils.utils import symmetrize_errors as se
@@ -63,14 +62,12 @@ def get_kinematics(hepdata: dict, bin_index: list = [], indx: int = 0) -> list:
             kin_value = {
                 "y_t": {"min": ymin, "mid": (ymin + ymax) / 2, "max": ymax},
                 "m_t2": {"min": None, "mid": MT_VALUE**2, "max": None},
-                "sqrts": {"min": None, "mid": SQRT_S, "max": None},
             }
             kinematics.append(kin_value)
     else:  # inclusive case
         kin_value = {
             "zero": {"min": 0, "mid": 0, "max": 0},
             "m_t2": {"min": None, "mid": MT_VALUE**2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 
@@ -130,7 +127,7 @@ def get_errors(hepdata: dict, data_central: list, bin_index: list) -> dict:
                 error_sources.append(None)
             elif "symerror" in source["errors"][0]:
                 # convert to absolute uncertainties
-                abs_sym = source["errors"][0]["symerror"] * data_central[i]
+                abs_sym = source["errors"][0]["symerror"] * data_central[i] * 1e-2
                 error_sources.append(abs_sym)
             elif "asymerror" in source["errors"][0]:
                 delta_min = source["errors"][0]["asymerror"]["minus"]
@@ -139,14 +136,16 @@ def get_errors(hepdata: dict, data_central: list, bin_index: list) -> dict:
                 # convert to absolute uncertainties
                 delta_min_abs = delta_min * data_central[i] * 1e-2
                 delta_plus_abs = delta_plus * data_central[i] * 1e-2
-
+                
                 # symmeterise uncertainties and shift central value
                 se_delta, se_sigma = se(delta_plus_abs, delta_min_abs)
                 shift_cv += se_delta
 
                 error_sources.append(se_sigma)
+                
         shifts_cv.append(shift_cv)
         errors.append(error_sources)
+        
     errors = np.array(errors)
 
     # get the description of the uncertainty from hepdata

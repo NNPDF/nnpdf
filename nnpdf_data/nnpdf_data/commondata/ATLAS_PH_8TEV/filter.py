@@ -9,7 +9,6 @@ from nnpdf_data.filter_utils.utils import prettify_float
 yaml.add_representer(float, prettify_float)
 
 MT_VALUE = 172.5
-SQRT_S = 8_000.0
 
 from nnpdf_data.filter_utils.utils import symmetrize_errors as se
 
@@ -61,7 +60,6 @@ def get_kinematics(hepdata: dict, bin_index: list = [], indx: int = 0, mid_rap=N
         kin_value = {
             "eta": {"min": None, "mid": mid_rap, "max": None},
             "ET": {"min": None, "mid": ((min_et + max_et) / 2), "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 

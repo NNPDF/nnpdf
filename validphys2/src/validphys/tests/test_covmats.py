@@ -9,7 +9,15 @@ import pytest
 
 from nnpdf_data.commondataparser import load_commondata
 from validphys.api import API
-from validphys.covmats import dataset_t0_predictions, reorder_thcovmat_as_expcovmat, sqrt_covmat
+from validphys.covmats import (
+    dataset_inputs_t0_total_covmat,
+    dataset_inputs_t0_total_covmat_separate,
+    dataset_inputs_total_covmat,
+    dataset_inputs_total_covmat_separate,
+    dataset_t0_predictions,
+    reorder_thcovmat_as_expcovmat,
+    sqrt_covmat,
+)
 from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, THEORYID
 
 # Experiments which have non trivial correlations between their datasets
@@ -153,3 +161,24 @@ def test_single_datapoint(single_data_single_point_internal_cuts_config):
     # Ensure the dataset is only a single datapoint
     assert ld.ndata == 1
     ld.systematic_errors(t0_predictions)
+
+
+@pytest.mark.parametrize(
+    "combine_fn",
+    [
+        dataset_inputs_t0_total_covmat_separate,
+        dataset_inputs_total_covmat_separate,
+        dataset_inputs_t0_total_covmat,
+        dataset_inputs_total_covmat,
+    ],
+)
+def test_covmat_summing_helpers_do_not_mutate_inputs(combine_fn):
+    exp = np.array([[1.0, 0.2], [0.2, 2.0]])
+    th = np.array([[0.5, 0.1], [0.1, 0.3]])
+    exp_before = exp.copy()
+
+    result = combine_fn(exp, th)
+
+    np.testing.assert_allclose(exp, exp_before)
+    np.testing.assert_allclose(result, exp_before + th)
+    assert result is not exp

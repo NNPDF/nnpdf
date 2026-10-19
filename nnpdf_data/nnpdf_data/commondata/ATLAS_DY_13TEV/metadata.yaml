@@ -36,16 +36,11 @@ implemented_observables:
     plot_x: ' '
   kinematic_coverage:
   - m_ll
-  - sqrts
   kinematics:
     variables:
       m_ll:
         description: Variable m_ll
         label: m_ll
-        units: ''
-      sqrts:
-        description: Variable sqrts
-        label: sqrts
         units: ''
     file: kinematics_TOT.yaml
   theory:

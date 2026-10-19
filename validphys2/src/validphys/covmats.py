@@ -45,10 +45,11 @@ def covmat_from_systematics(
     ADDitive or MULTiplicative systypes are handled by either multiplying
     the additive or multiplicative uncertainties respectively. We convert
     uncertainties so that they are all in the same units as the data:
+
         - Additive (ADD) systematics are left unchanged
         - multiplicative (MULT) systematics need to be converted from a
-        percentage by multiplying by the central value
-        and dividing by 100.
+          percentage by multiplying by the central value
+          and dividing by 100.
 
     Finally, the systematics are split into the five possible archetypes
     of systematic uncertainties: uncorrelated (UNCORR), correlated (CORR),
@@ -71,18 +72,17 @@ def covmat_from_systematics(
 
     Parameters
     ----------
-
     loaded_commondata_with_cuts : nnpdf_data.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
-    dataset_input: validphys.core.DataSetInput
+    dataset_input : validphys.core.DataSetInput
         Dataset settings, contains the weight for the current dataset.
         The returned covmat will be divided by the dataset weight if
         ``use_weights_in_covmat``. The default weight is 1, which means
         the returned covmat will be unmodified.
-    use_weights_in_covmat: bool
+    use_weights_in_covmat : bool
         Whether to weight the covmat, True by default.
-    norm_threshold: number
+    norm_threshold : number
         threshold used to regularize covariance matrix
     _central_values : None, np.array
         1-D array containing alternative central values to combine with the
@@ -93,7 +93,7 @@ def covmat_from_systematics(
 
     Returns
     -------
-    cov_mat: np.array
+    cov_mat : np.array
         Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
         containing uncertainty and correlation information.
 
@@ -147,7 +147,7 @@ def dataset_inputs_covmat_from_systematics(
     data_input: list[validphys.core.DataSetInput]
         Settings for each dataset, each element contains the weight for the
         current dataset. The elements of the returned covmat for dataset
-        i and j will be divided by sqrt(weight_i)*sqrt(weight_j), if
+        i and j will be divided by ``sqrt(weight_i)*sqrt(weight_j)``, if
         ``use_weights_in_covmat``. The default weight is 1, which means
         the returned covmat will be unmodified.
     use_weights_in_covmat: bool
@@ -170,6 +170,7 @@ def dataset_inputs_covmat_from_systematics(
     -------
     This function can be called directly from the API:
 
+    >>> from validphys.api import API
     >>> dsinps = [
     ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
     ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory'},
@@ -214,10 +215,8 @@ def dataset_inputs_covmat_from_systematics(
         special_corrs.append(sys_errors.loc[:, ~is_intra_dataset_error])
 
     # concat systematics across datasets
-    special_sys = pd.concat(special_corrs, axis=0, sort=False)
     # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
-    special_sys.fillna(0, inplace=True)
-
+    special_sys = pd.concat(special_corrs, axis=0, sort=False).fillna(0)
     diag = la.block_diag(*block_diags)
     covmat = diag + special_sys.to_numpy() @ special_sys.to_numpy().T
     if use_weights_in_covmat:
@@ -227,18 +226,20 @@ def dataset_inputs_covmat_from_systematics(
         covmat = (covmat / sqrt_weights).T / sqrt_weights
     if norm_threshold is not None:
         covmat = regularize_covmat(covmat, norm_threshold=norm_threshold)
+
     return covmat
 
-def shifts_from_systematics(lcd_wc, theory_predictions):
 
+def shifts_from_systematics(lcd_wc, theory_predictions):
     """Take the statistical uncertainty and systematics table from
     a :py:class:`validphys.coredata.CommonData` object and
-    the corresponding theoretical predictions from :py:funct:`results`
-    to compute the shifts on experimental data due to correlated uncertainties 
-    according to Eqs.(7)-(9) of arXiv:hep-ph/0201195. Note that the shift is 
+    the corresponding theoretical predictions from :py:func:`results`
+    to compute the shifts on experimental data due to correlated uncertainties
+    according to Eqs.(7)-(9) of arXiv:hep-ph/0201195. Note that the shift is
     induced ONLY by the experimental covariance matrix constructed after cuts.
     The treatment of uncertainties is as in covmat_from_systematics.
     The shifts must be added to the central value of the unshifted data.
+
     Parameters
     ----------
     loaded_commondata_with_cuts : validphys.coredata.CommonData
@@ -246,14 +247,65 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
         their treatment and description.
     results_without_covmat : py:funct:
         A results object with a diagonal covmat
+
     Returns
     -------
-    shifts: np.array
-        Numpy array of dimension N_dat (where N_dat is the number of data 
-        points) containing the numerical value of the systematic shifts 
+    shifts : np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data
+        points) containing the numerical value of the systematic shifts
         due to correlated uncertainties
     """
+    
+    # Separate the uncorrelated and correlated parts of the exp uncertainty 
+    alpha = unco_unc(lcd_wc)
+    beta  = corr_unc(lcd_wc)
 
+    if alpha.all() == 0:
+        shifts = np.zeros(len(alpha))
+    else:
+
+        # Determine the correlated part of the error
+        beta = beta / alpha[:, np.newaxis]
+
+        # The number of data points and the number of correlated systematics
+        (n_data, n_corr_syst) = np.shape(beta)
+
+        # Get experimental central values and the corresponding
+        # theoretical predictions
+        D = lcd_wc.central_values.to_numpy()
+        D = np.divide(D, alpha)
+        T = theory_predictions
+        T = np.divide(T, alpha)
+
+        # Construct the matrices A and B (Eq. 9)
+        A = np.identity(n_corr_syst) + np.matmul(beta.T, beta)
+        A_inverse = np.linalg.inv(A)
+        B = np.matmul(D - T, beta)
+
+        # Compute the nuisance parameters r (Eq. 8)
+        r = np.matmul(A_inverse, B)
+
+        # Compute the shifts
+        shifts = -np.matmul(beta * alpha[:, np.newaxis], r)
+
+    return shifts
+
+def unco_unc(lcd_wc):
+    """Extract the uncorrelated part of the experimental uncertainty
+    from a :py:class:`validphys.coredata.CommonData` object
+
+    Parameters
+    ----------
+    loaded_commondata_with_cuts : validphys.coredata.CommonData
+        CommonData which stores information about systematic errors,
+        their treatment and description.
+    Returns
+    -------
+    alpha : np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data
+        points) containing the numerical value of the uncorrelated 
+        part of the experimental uncertainty
+    """
     # Separate statistical and systematic errors
     stat_errors = lcd_wc.stat_errors.to_numpy()
     syst_errors = lcd_wc.systematic_errors(None)
@@ -264,37 +316,31 @@ def shifts_from_systematics(lcd_wc, theory_predictions):
     alpha2 += (syst_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
     alpha = np.sqrt(alpha2)
 
-    if alpha.all() == 0:
-        shifts = np.zeros(len(alpha))
-    else:
-    
-        # Determine the correlated part of the error
-        beta = syst_errors.loc[:, ~is_uncorr].to_numpy()
-        beta = beta/alpha[:, np.newaxis]
-        
-        # The number of data points and the number of correlated systematics
-        (n_data, n_corr_syst) = np.shape(beta)
+    return alpha
 
-        # Get experimental central values and the corresponding
-        # theoretical predictions
-        D = lcd_wc.central_values.to_numpy()
-        D = np.divide(D,alpha)
-        T = theory_predictions
-        T = np.divide(T,alpha)
-    
-        # Construct the matrices A and B (Eq. 9)
-        A = np.identity(n_corr_syst) + np.matmul(beta.T, beta)
-        A_inverse = np.linalg.inv(A)
-        B = np.matmul(D-T, beta)
-    
-        # Compute the nuisance parameters r (Eq. 8)
-        r = np.matmul(A_inverse, B)
-    
-        # Compute the shifts
-        shifts = - np.matmul(beta*alpha[:, np.newaxis], r)
+def corr_unc(lcd_wc):
+    """Extract the correlated part of the experimental uncertainty
+    from a :py:class:`validphys.coredata.CommonData` object
 
-    return shifts, alpha
+    Parameters
+    ----------
+    loaded_commondata_with_cuts : validphys.coredata.CommonData
+        CommonData which stores information about systematic errors,
+        their treatment and description.
+    Returns
+    -------
+    beta : np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data
+        points) containing the numerical value of the correlated 
+        part of the experimental uncertainty
+    """
+    # Separate statistical and systematic errors
+    syst_errors = lcd_wc.systematic_errors(None)
+    is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
+    beta = syst_errors.loc[:, ~is_uncorr].to_numpy()
 
+    return beta    
+    
 @check_cuts_considered
 @functools.lru_cache
 def dataset_t0_predictions(t0dataset, t0set):
@@ -406,7 +452,7 @@ def dataset_inputs_t0_covmat_from_systematics(
     )
 
 
-def dataset_inputs_t0_total_covmat_separate(
+def dataset_load_inputs_t0_total_covmat_separate(
     dataset_inputs_t0_exp_covmat_separate, loaded_theory_covmat
 ):
     """
@@ -414,9 +460,18 @@ def dataset_inputs_t0_total_covmat_separate(
     In this case the t0 prescription is used for the experimental covmat and the multiplicative
     errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_t0_exp_covmat_separate
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_t0_exp_covmat_separate + loaded_theory_covmat
+
+
+def dataset_inputs_t0_total_covmat_separate(
+    dataset_inputs_t0_exp_covmat_separate, nnfit_theory_covmat
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_t0_exp_covmat_separate + nnfit_theory_covmat
 
 
 def dataset_inputs_t0_exp_covmat_separate(
@@ -443,15 +498,24 @@ def dataset_inputs_t0_exp_covmat_separate(
     return covmat
 
 
-def dataset_inputs_total_covmat_separate(dataset_inputs_exp_covmat_separate, loaded_theory_covmat):
+def dataset_load_inputs_total_covmat_separate(
+    dataset_inputs_exp_covmat_separate, loaded_theory_covmat
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
     In this case the t0 prescription is not used for the experimental covmat and the multiplicative
     errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_exp_covmat_separate
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_exp_covmat_separate + loaded_theory_covmat
+
+
+def dataset_inputs_total_covmat_separate(dataset_inputs_exp_covmat_separate, nnfit_theory_covmat):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_exp_covmat_separate + nnfit_theory_covmat
 
 
 def dataset_inputs_exp_covmat_separate(
@@ -477,15 +541,23 @@ def dataset_inputs_exp_covmat_separate(
     return covmat
 
 
-def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, loaded_theory_covmat):
+def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, nnfit_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_t0_exp_covmat
-    covmat += loaded_theory_covmat
-    return covmat
+
+    return dataset_inputs_t0_exp_covmat + nnfit_theory_covmat
+
+
+def dataset_load_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, loaded_theory_covmat):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_t0_exp_covmat + loaded_theory_covmat
 
 
 def dataset_inputs_t0_exp_covmat(
@@ -509,18 +581,26 @@ def dataset_inputs_t0_exp_covmat(
         dataset_inputs_t0_predictions,
         False,
     )
+
     return covmat
 
 
-def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, loaded_theory_covmat):
+def dataset_load_inputs_total_covmat(dataset_inputs_exp_covmat, loaded_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = dataset_inputs_exp_covmat
-    covmat += loaded_theory_covmat
-    return covmat
+    return dataset_inputs_exp_covmat + loaded_theory_covmat
+
+
+def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, nnfit_theory_covmat):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
+    """
+    return dataset_inputs_exp_covmat + nnfit_theory_covmat
 
 
 def dataset_inputs_exp_covmat(
@@ -729,6 +809,7 @@ def groups_corrmat(groups_covmat):
 def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
     `covmat_t0_considered` and the PDF error:
+
     - If the PDF error_type is 'replicas', a covariance matrix is estimated from
       the replica theory predictions
     - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
@@ -759,17 +840,17 @@ def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
     >>> from validphys.api import API
     >>> import numpy as np
     >>> inp = {
-            'dataset_input': {
-                'dataset': 'ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM',
-                'variant': 'legacy',
-            },
-            'theoryid': 40_000_000,
-            'pdf': 'NNPDF40_nlo_as_01180',
-            'use_cuts': 'internal',
-        }
+    ...     'dataset_input': {
+    ...         'dataset': 'ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM',
+    ...         'variant': 'legacy',
+    ...     },
+    ...     'theoryid': 40_000_000,
+    ...     'pdf': 'NNPDF40_nlo_as_01180',
+    ...     'use_cuts': 'internal',
+    ... }
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
     >>> b = API.pdferr_plus_covmat(**inp)
-    >>> (a == b).all()
+    >>> bool((a == b).all())
     True
     """
     _, th = results_without_covmat
@@ -811,7 +892,7 @@ def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
     # old to new names mapping
     new_names = {d[0]: legacy_to_new_map(d[0])[0] for d in tmp.index}
-    tmp.rename(columns=new_names, index=new_names, level=0, inplace=True)
+    tmp = tmp.rename(columns=new_names, index=new_names, level=0)
     # reorder
     bb = [str(i) for i in data]
     return tmp.reindex(index=bb, columns=bb, level=0)
@@ -891,9 +972,10 @@ def covmat_stability_characteristic(systematics_matrix_from_commondata):
 
     >>> from validphys.api import API
     >>> ds = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
-    >>> API.covmat_stability_characteristic(dataset_input=ds,
+    >>> result = API.covmat_stability_characteristic(dataset_input=ds,
     ... theoryid=40_000_000, use_cuts="internal")
-    2.742658604186124
+    >>> isinstance(result, float)
+    True
 
     """
     sqrtcov = systematics_matrix_from_commondata

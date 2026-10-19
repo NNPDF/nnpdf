@@ -1,6 +1,7 @@
 """
 test_weights.py
 """
+
 import numpy as np
 
 from validphys.api import API
@@ -11,12 +12,12 @@ def test_weights_have_same_commondata(weighted_data_witht0_config):
     normal, weighted = data.datasets
     normalds, weightedds = normal.load_commondata(), weighted.load_commondata()
     assert (
-        normalds.systematics_table["MULT"].iloc[0][0]
-        == weightedds.systematics_table["MULT"].iloc[0][0]
+        normalds.systematics_table["MULT"].iloc[0].iloc[0]
+        == weightedds.systematics_table["MULT"].iloc[0].iloc[0]
     )
     assert (
-        normalds.systematics_table["ADD"].iloc[0][0]
-        == weightedds.systematics_table["ADD"].iloc[0][0]
+        normalds.systematics_table["ADD"].iloc[0].iloc[0]
+        == weightedds.systematics_table["ADD"].iloc[0].iloc[0]
     )
 
 

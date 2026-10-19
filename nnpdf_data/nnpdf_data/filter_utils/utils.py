@@ -17,9 +17,36 @@ from math import sqrt
 import os
 import shutil
 
+import mpmath as mp
 import numpy as np
 from numpy.linalg import eig
 import yaml
+
+# Arbitrary precision used by mpmath for certain operations
+ARBITRARY_PRECISION = 50
+
+
+def _matrix_to_eigenstuff(covmat, full_precision=False):
+    """Given a covmat, return eigenvalues and eigenvectors.
+    By default it uses numpy. The flag ``full_precision`` can be used to
+    use mpmath for arbitrary precision and stable results.
+
+    Eigenvalues and eigenvectors are then sorted to avoid unnecessary file changes.
+    """
+    if full_precision:
+        with mp.workdps(ARBITRARY_PRECISION):
+            covariance = mp.matrix([[mp.mpf(str(value)) for value in row] for row in covmat])
+            # We use str(value) to truncate the floats, in exchange we end up
+            # with something non-symmetrical that we need to correct for
+            covariance = (covariance + covariance.T) / 2
+            eigval, eigvec = mp.eigsy(covariance)
+            # And back to numpy
+            eigval = np.array(eigval.tolist(), dtype=float).reshape(-1)
+            eigvec = np.array(eigvec.tolist(), dtype=float)
+    else:
+        eigval, eigvec = eig(covmat)
+    eigval, eigvec = sort_eigenvalues(eigval, eigvec)
+    return eigval, eigvec
 
 
 def symmetrize_errors(delta_plus, delta_minus):
@@ -107,7 +134,33 @@ def cormat_to_covmat(err_list, cormat_list):
     return covmat_list
 
 
-def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
+def sort_eigenvalues(evals, evecs):
+    r"""Defines ordering of the eigenvalues and eigenvectors such
+    that eigenvalues are given in decreasing order and the first
+    non-zero entry of each eigenvector is positive.
+    Parameters
+    ----------
+    evals, evecs : output of np.linalg.eig
+
+    Returns
+    -------
+    evacs_sorted, evecs_sorted : ordered eigen- values and vectors,
+    as defined above
+
+    """
+    idx = evals.argsort()[::-1]
+    evals_sorted = evals[idx]
+    evecs_sorted = evecs[:, idx]
+    for i in range(len(evecs_sorted)):
+        j = 0
+        while evecs_sorted[j, i] == 0:
+            j += 1
+        if evecs_sorted[j, i] < 0:
+            evecs_sorted[:, i] *= -1
+    return evals_sorted, evecs_sorted
+
+
+def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0, full_precision=False):
     r"""Convert the covariance matrix to a matrix of
     artificial uncertainties.
 
@@ -132,6 +185,9 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
         distributions), the input would be 3. The default value is
         0 for when the covariance matrix pertains to an absolute
         distribution.
+    full_precision : bool
+        Use mpm to keep a larger number of decimals for numerical stability
+        when computing the eigenvalues/eigenvectors
 
     Returns
     -------
@@ -151,7 +207,9 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
         a = i // ndata
         b = i % ndata
         covmat[a][b] = covmat_list[i]
-    eigval, eigvec = eig(covmat)
+
+    eigval, eigvec = _matrix_to_eigenstuff(covmat, full_precision=full_precision)
+
     for j in range(len(eigval)):
         if eigval[j] < epsilon:
             psd_check = False
@@ -314,17 +372,21 @@ def trimat_to_fullmat(mode, tri_mat_list):
     mode : bool
         Enter 0 or 1 based on the following scenarios:
         Use mode 0 if matrix entries are given row by
-        row such as:
-        0 1 2 3
-          4 5 6
-            7 8
-              9
+        row such as::
+
+            0 1 2 3
+              4 5 6
+                7 8
+                  9
+
         Use mode 1 if the matrix entries are given column
-        by column such as:
-        0 1 3 6
-          2 4 7
-            5 8
-              9
+        by column such as::
+
+            0 1 3 6
+              2 4 7
+                5 8
+                  9
+
         Please note that the numbers above (0-9) are not
         entries of the matrix but rather the index of the
         entries of the list which contains the elements of
@@ -392,12 +454,11 @@ def correlation_to_covariance(correlation, uncertainties):
     return covariance
 
 
-def decompose_covmat(covmat):
+def decompose_covmat(covmat, full_precision=False):
     """Given a covmat it return an array sys with shape (ndat,ndat)
     giving ndat correlated systematics for each of the ndat point.
     The original covmat is obtained by doing sys@sys.T"""
-
-    lamb, mat = np.linalg.eig(covmat)
+    lamb, mat = _matrix_to_eigenstuff(covmat, full_precision=full_precision)
     sys = np.multiply(np.sqrt(lamb), mat)
     return sys
 
@@ -418,6 +479,9 @@ def prettify_float(dumper, value):
 
     must be called to use this function.
     """
+    # Ensure that both -0 and 0 are represented as just 0
+    if value == 0.0:
+        value = 0.0
 
     ret = dumper.represent_float(value)
     if len(ret.value) > 8:
@@ -437,6 +501,7 @@ def check_xq2_degenearcy(Q2, x):
             f"""(x,Q2) kinematic is degenerate need to store 3rd kinematic variable as well.
             unique kinematics are: {unique_pairs.shape[1]}, original size: {size}"""
         ) from exc
+
 
 def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove_source=True):
     r"""
@@ -469,7 +534,9 @@ def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove
     content_uncert = {}
 
     if 'definitions' in content and uncert_name in content['definitions']:
-        content_uncert['definitions'] = {uncert_name: copy.deepcopy(content['definitions'][uncert_name])}
+        content_uncert['definitions'] = {
+            uncert_name: copy.deepcopy(content['definitions'][uncert_name])
+        }
         content_uncert['bins'] = {}
         bins = []
         for i in range(len(content['bins'])):

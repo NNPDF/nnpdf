@@ -10,7 +10,6 @@ yaml.add_representer(float, prettify_float)
 
 NB_POINTS = 4
 MT_VALUE = 172.5
-SQRT_S = 13_000.0
 
 from nnpdf_data.filter_utils.utils import cormat_to_covmat, covmat_to_artunc
 from nnpdf_data.filter_utils.utils import symmetrize_errors as se
@@ -68,7 +67,6 @@ def get_kinematics(hepdata: dict, bin_index: list = [], indx: int = 0) -> list:
             kin_value = {
                 "y_t": {"min": ymin, "mid": (ymin + ymax) / 2, "max": ymax},
                 "m_t2": {"min": None, "mid": MT_VALUE**2, "max": None},
-                "sqrts": {"min": None, "mid": SQRT_S, "max": None},
             }
             kinematics.append(kin_value)
     else:  # inclusive case

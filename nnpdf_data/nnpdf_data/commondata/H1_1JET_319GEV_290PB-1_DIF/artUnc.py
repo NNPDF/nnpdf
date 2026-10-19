@@ -46,7 +46,7 @@ def artunc():
     for i in range(96):
         for j in range(96):
             covMatList.append(covMat[i][j])
-    artUnc = cta(96, covMatList, 0)
+    artUnc = cta(96, covMatList, 0, full_precision=True)
 
     return artUnc
 
@@ -92,6 +92,6 @@ def artunc_norm():
     for i in range(96):
         for j in range(96):
             covMatList.append(covMat[i][j])
-    artUnc = cta(96, covMatList, 1)
+    artUnc = cta(96, covMatList, 1, full_precision=True)
 
     return artUnc

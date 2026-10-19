@@ -1,10 +1,9 @@
-"""
-    Module for LHAPDF compatibility backends
+"""Module for LHAPDF compatibility backends
 
-    If LHAPDF is installed, the module will transparently hand over everything to LHAPDF
-    if LHAPDF is not available, it will try to use a combination of the packages
-        `lhapdf-management` and `pdfflow`
-    which cover all the features of LHAPDF used during the fit (and likely most of validphys)
+If LHAPDF is installed, the module will transparently hand over everything to LHAPDF
+if LHAPDF is not available, it will try to use a combination of the packages
+`lhapdf-management` and `pdfflow`
+which cover all the features of LHAPDF used during the fit (and likely most of validphys)
 """
 
 from functools import cached_property
@@ -105,14 +104,14 @@ def make_pdf(pdf_name, member=None):
     for lhapdf functions for the selected backend
 
     Parameters:
-    ----------
+    -----------
         pdf_name: str
             name of the PDF to load
         member: int
             index of the member of the PDF to load
 
     Returns:
-    -------
+    --------
         list(pdf_sets)
     """
     if USING_LHAPDF:

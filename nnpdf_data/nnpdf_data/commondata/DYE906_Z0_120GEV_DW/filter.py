@@ -5,9 +5,8 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.correlations import covmat_to_artunc
 from nnpdf_data.filter_utils.hera_utils import commondata
-from nnpdf_data.filter_utils.utils import prettify_float
+from nnpdf_data.filter_utils.utils import prettify_float, covmat_to_artunc
 
 yaml.add_representer(float, prettify_float)
 

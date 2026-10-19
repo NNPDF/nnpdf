@@ -326,12 +326,13 @@ def _prepare_string(datalist, sort: bool = True):
 
 
 def print_dataset_differences(fits, match_datasets_by_name, print_common: bool = True):
-    """Given exactly two fits, print the datasets that are included in one "
-    "but not in the other. If `print_common` is True, also print the datasets
+    """Given exactly two fits, print the datasets that are included in one
+    but not in the other. If `print_common` is True, also print the datasets
     that are common.
 
     For the purposes of visual aid, everything is ordered by the dataset name,
     in terms of the the convention for the commondata means that everything is order by:
+
         1. Experiment name
         2. Process
         3. Energy
@@ -509,8 +510,7 @@ def datasets_properties_table(data_input):
         dataset_property_dict["Other fields"].append(
             ", ".join([f"{k}: {v}" for k, v in ds_input_dict.items()]) if ds_input_dict else "-"
         )
-    df = pd.DataFrame(dataset_property_dict)
-    df.set_index("Dataset", inplace=True)
+    df = pd.DataFrame(dataset_property_dict).set_index("Dataset")
     df = df[["Training fraction", "Weight", "C-factors", "Other fields"]]
     return df
 
@@ -583,7 +583,5 @@ fits_fit_code_version = collect("fit_code_version", ("fits",))
 @table
 def fits_version_table(fits_fit_code_version):
     """Produces a table of version information for multiple fits."""
-    vtable = pd.concat(fits_fit_code_version, axis=1)
     # Fill NaNs with "unavailable"
-    vtable.fillna("unavailable", inplace=True)
-    return vtable
+    return pd.concat(fits_fit_code_version, axis=1).fillna("unavailable")

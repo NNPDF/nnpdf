@@ -44,7 +44,9 @@ def filter_CMS_1JET_8TEV_data_kinetic():
     data_central = get_data_values_CMS_1JET_8TEV(tables, version)
 
     data_central_yaml = {'data_central': data_central}
-    kinematics_yaml = {'bins': kin}
+    kinematics_yaml = {
+        'bins': [{key: value for key, value in bin.items() if key != 'sqrts'} for bin in kin]
+    }
 
     # write central values and kinematics to yaml file
     with open('data.yaml', 'w') as file:
@@ -74,7 +76,7 @@ def filter_CMS_1JET_8TEV_uncertainties():
     # bd_stat_cov = np.diag(stat_unc**2)
 
     # generate artificial systematics by decomposing statistical covariance matrix
-    A_art_stat = decompose_covmat(bd_stat_cov)
+    A_art_stat = decompose_covmat(bd_stat_cov, full_precision=True)
     A_art_stat = np.nan_to_num(A_art_stat)  # set nan to zero
 
     # Luminosity uncertainty

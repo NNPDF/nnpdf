@@ -1,6 +1,5 @@
 .. _tut_closure:
 
-
 How to run a closure test
 =========================
 
@@ -46,6 +45,7 @@ The main obvious disadvantage is that a pre-existing PDF may not be a suitable
 proxy for the underlying law.
 
 .. _prep_ct_runcard:
+
 Preparing the closure test runcard
 ----------------------------------
 
@@ -159,11 +159,11 @@ Running a closure test with ``n3fit``
 
 Running a closure test with ``n3fit`` will require a valid ``n3fit`` runcard, with
 the closure test settings modified as shown
-:ref:`above <prep_ct_runcard>`. The difference
-between running a closure fit in ``n3fit`` and a standard fit is that the user is
-required to run ``vp-setupfit`` on the runcard before running ``n3fit``. This is
-because the filtering of the data is required to generate the pseudodata central
-values. The workflow is as follows:
+:ref:`above <prep_ct_runcard>`. As with any standard fit, the user is required
+to run ``vp-setupfit`` on the runcard before running ``n3fit`` (see
+:ref:`run-n3fit-fit`); for a closure test this step is additionally responsible
+for filtering the data and generating the pseudodata central values. The
+workflow is as follows:
 
 .. code:: bash
 

@@ -1,8 +1,8 @@
 setname: "ATLAS_Z0J_13TEV_PT"
 
-version: 1
+version: 2
 
-version_comment: "Initial implementation, central values taken from table 26, systematics from table 5."
+version_comment: "This version fixes a bug and extends the implementation version 1. The bug is as follows: In the previous version two HepData tables were used, separately for the central value and for the uncertainties (Tables 26 and 5, respectively). However, it was not realised that the two differ for the bin normalisation, which is, on average, of 2 GeV. Uncertainties were therefore, on average, a factor of 2 smaller than what they should be. The extension is as follows: in the previous version only a subset of pT bins were implemented. The full pT spectrum is now implemented. The bugged version, used for the pheno paper, is removed, but can be retrieved from the github history."
 
 # References
 arXiv:
@@ -24,7 +24,7 @@ implemented_observables:
     label: r"$1/\sigma_{fid}d\\sigma/dp_{T}^{\\l\\l}$"
     units: "[1/GeV]"
 
-  ndata: 38
+  ndata: 41
 
   tables: [5]
   process_type: DY_NC_PT
@@ -34,26 +34,26 @@ implemented_observables:
     x_scale: log
     plot_x: pT
 
-  kinematic_coverage: [pT, m_Z2, sqrts]
+  kinematic_coverage: [pT, m_ll]
 
   kinematics:
     variables:
       pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
-      m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
-      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+      m_ll: {description: "lepton pair invariant mass", label: '$m_{\ell\ell}$', units: "GeV"}
 
     file: kinematics.yaml
 
-    # Data
   data_central: data.yaml
   data_uncertainties:
   - uncertainties.yaml
 
-    # Theory
+  # Theory
   theory:
-    shifts:
-      ATLAS_Z0J_13TEV_PT_LL: 9
+    #shifts:
+    #  ATLAS_Z0J_13TEV_PT_LL: 9
     FK_tables:
     - - ATLAS_Z0J_13TEV_PT_LL
     - - ATLAS_Z0_13TEV_TOT
     operation: 'ratio'
+
+      

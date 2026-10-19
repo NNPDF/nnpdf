@@ -45,7 +45,6 @@ implemented_observables:
   kinematic_coverage:
   - abs_eta
   - m_Z2
-  - sqrts
   kinematics:
     variables:
       abs_eta:
@@ -56,10 +55,6 @@ implemented_observables:
         description: Squared invariant mass of the Z boson
         label: '$m_Z^2$'
         units: 'GeV^2'
-      sqrts:
-        description: Square root of the center of mass energy
-        label: r"\sqrt{s}"
-        units: 'GeV'
     file: kinematics.yaml
   theory:
     conversion_factor: 1.0

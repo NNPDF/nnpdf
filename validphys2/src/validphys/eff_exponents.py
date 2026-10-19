@@ -331,8 +331,11 @@ def previous_effective_exponents_table(fit: FitSpec):
     )
     basis = checked["basis"]
     flavours = checked["flavours"]
-    prev_a_bounds = [runcard_fl['smallx'] for runcard_fl in fitting["basis"]]
-    prev_b_bounds = [runcard_fl['largex'] for runcard_fl in fitting["basis"]]
+    prev_a_bounds = []
+    prev_b_bounds = []
+    for runcard_fl in fitting["basis"]:
+        prev_a_bounds.append(runcard_fl.get("smallx", (0.0, 0.0)))
+        prev_b_bounds.append(runcard_fl.get("largex", (0.0, 0.0)))
     # make single list alternating alpha and beta bounds
     data = [vals for pair in zip(prev_a_bounds, prev_b_bounds) for vals in pair]
     flavours_label = [f"${basis.elementlabel(fl)}$" for fl in flavours]
@@ -356,23 +359,24 @@ def next_effective_exponents_table(
 ):
     """Given a PDF, calculate the next effective exponents
 
-    By default `x1_alpha = 1e-6`, `x2_alpha = 1e-3`, `x1_beta = 0.65`, and
-    `x2_beta = 0.95`, but different values can be specified in the runcard. The
+    By default ``x1_alpha = 1e-6``, ``x2_alpha = 1e-3``, ``x1_beta = 0.65``, and
+    ``x2_beta = 0.95``, but different values can be specified in the runcard. The
     values control where the bounds of alpha and beta are evaluated:
 
-    alpha_min:
-        singlet/gluon: the 2x68% c.l. lower value evaluated at x=`x1_alpha`
-        others  : min(2x68% c.l. lower value evaluated at x=`x1_alpha` and x=`x2_alpha`)
+    - alpha_min:
+      singlet/gluon: the 2x68% c.l. lower value evaluated at x=``x1_alpha``
+      others: min(2x68% c.l. lower value evaluated at x=``x1_alpha`` and x=``x2_alpha``)
 
-    alpha_max:
-        singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=`x1_alpha`)
-        others    : min(2 and max(2x68% c.l. upper value evaluated at x=`x1_alpha`
-                    and x=`x2_alpha`))
+    - alpha_max:
+      singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=``x1_alpha``)
+      others: min(2 and max(2x68% c.l. upper value evaluated at x=``x1_alpha``
+      and x=``x2_alpha``))
 
-    beta_min:
-        max(0 and min(2x68% c.l. lower value evaluated at x=`x1_beta` and x=`x2_beta`))
-    beta_max:
-        max(2x68% c.l. upper value evaluated at x=`x1_beta` and x=`x2_beta`)
+    - beta_min:
+      max(0 and min(2x68% c.l. lower value evaluated at x=``x1_beta`` and x=``x2_beta``))
+
+    - beta_max:
+      max(2x68% c.l. upper value evaluated at x=``x1_beta`` and x=``x2_beta``)
 
     """
     if fitq0fromfit is None:
@@ -449,6 +453,10 @@ def effective_exponents_table_internal(next_effective_exponents_table, *, fit=No
         # have to call action here in case fit is None
         previous_table = previous_effective_exponents_table(fit)
         df = pd.concat((previous_table, next_effective_exponents_table), axis=1)
+
+        if "feature_scaling_points" in fit.as_input()["parameters"]:
+            # Drop the beta if feature scaling points is enabled
+            df.loc[df.index.get_level_values(1) == r'$\beta$', :] = None
     else:
         df = next_effective_exponents_table
     return df
@@ -477,10 +485,13 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
     Alternatively, using the API, the yaml dump returned by this function can
     be written to a file e.g
 
-    >>> from validphys.api import API
-    >>> yaml_output = API.iterate_preprocessing_yaml(fit=<fit name>)
-    >>> with open("output.yml", "w+") as f:
-    ...     f.write(yaml_output)
+    .. code-block:: python
+
+        from validphys.api import API
+
+        yaml_output = API.iterate_preprocessing_yaml(fit=<fit name>)
+        with open("output.yml", "w+") as f:
+            f.write(yaml_output)
 
     Parameters
     ----------
@@ -509,6 +520,12 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
     checked = check_basis(basis, None)
     basis = checked["basis"]
 
+    # If the runcard still has the old option `interpolation_points` change it to `feature_scaling_points`:
+    if "interpolation_points" in filtermap["parameters"]:
+        filtermap["parameters"]["feature_scaling_points"] = filtermap["parameters"].pop(
+            "interpolation_points"
+        )
+
     # use order defined in runcard.
     runcard_flavours = [f"{basis.elementlabel(ref_fl['fl'])}" for ref_fl in previous_exponents]
     for i, fl in enumerate(runcard_flavours):
@@ -523,7 +540,13 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
             if largex_args is not None:
                 betas = np.clip(betas, **largex_args)
         previous_exponents[i]["smallx"] = [fmt(alpha) for alpha in alphas]
-        previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
+        # Regardless of whether there was a large x in the original runcard
+        # drop it if feature scaling is set, to avoid future mistakes
+        if filtermap["parameters"].get("feature_scaling_points") is None:
+            previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
+        else:
+            # NB previous exponents is = filtermap (see above), if it dies here it dies in real life
+            previous_exponents[i].pop("largex", None)
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
         yaml_rt.dump(filtermap, path)
@@ -578,14 +601,17 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
     alternatively, using the API, the yaml dump returned by this function can
     be written to a file e.g
 
-    >>> from validphys.api import API
-    >>> yaml_output = API.iterated_runcard_yaml(
-    ...     fit=<fit name>,
-    ...     _updated_description="My iterated fit"
-    ... )
-    >>> with open("output.yml", "w+") as f:
-    ...     f.write(yaml_output)
+    .. code-block:: python
 
+        from validphys.api import API
+
+        yaml_output = API.iterated_runcard_yaml(
+            fit=<fit name>,
+            _updated_description="My iterated fit",
+        )
+
+        with open("output.yml", "w+") as f:
+            f.write(yaml_output)
     """
     filtermap = yaml_rt.load(update_runcard_description_yaml)
     # iterate t0

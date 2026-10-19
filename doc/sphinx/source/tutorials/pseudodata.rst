@@ -1,4 +1,5 @@
 .. _pseudodata:
+
 Obtaining the pseudodata used by an ``n3fit`` fit
 =================================================
 

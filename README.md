@@ -79,4 +79,4 @@ When developing locally you can test your changes with pytest, running from the 
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
 
-© Copyright 2021-2025, the NNPDF collaboration
+© Copyright 2021-2026, the NNPDF collaboration

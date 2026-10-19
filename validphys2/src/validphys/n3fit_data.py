@@ -110,6 +110,35 @@ def replica_luxseed(replica, luxseed):
     return replica_nnseed(replica, luxseed)
 
 
+def group_replica_mcseed(replica_mcseed, groups_dataset_inputs_loaded_cd_with_cuts, genrep=True):
+    """Generates the ``mcseed`` for a group of datasets. This is done by hashing the names
+    of the datasets in the group and adding it to the ``replica_mcseed``
+
+    Parameters
+    ----------
+    groups_dataset_inputs_loaded_cd_with_cuts : list[:py:class:`nnpdf_data.coredata.CommonData`]
+        List of CommonData objects which stores information about systematic errors,
+        their treatment and description, for each dataset.
+    replica_mcseed : int
+    """
+    if not genrep:
+        return None
+    names_for_salt = []
+    # Try to use the new dataset name, but make older runs reproducible by keeping the old names.
+    # WARNING: don't rely on this behaviour, this might be removed in future releases
+
+    for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        if loaded_cd.legacy_names is None:
+            names_for_salt.append(loaded_cd.setname)
+        else:
+            names_for_salt.append(loaded_cd.legacy_names[0])
+    name_salt = "-".join(names_for_salt)
+
+    name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
+    res = name_seed + replica_mcseed
+    return res
+
+
 class _Masks(TupleComp):
     """Class holding the training validation mask for a group of datasets
     If the same group of dataset receives the same trvlseed then the mask
@@ -121,16 +150,7 @@ class _Masks(TupleComp):
     eigenvectors of the fitting covariance matrix.
     """
 
-    def __init__(
-        self,
-        group_name,
-        seed,
-        tr_masks,
-        vl_masks,
-        diagonal_basis=False,
-        eig_vals=None,
-        diagonal_rotation=None,
-    ):
+    def __init__(self, group_name, seed, tr_masks, vl_masks):
         """
         Initialize the _Masks object.
 
@@ -144,55 +164,31 @@ class _Masks(TupleComp):
             List of boolean arrays representing the training masks.
         vl_masks : list[np.array]
             List of boolean arrays representing the validation masks.
-        diagonal_basis : bool, optional
-            Whether the masks are in the diagonal basis. Default is False.
-        eig_vals : np.array, optional
-            Eigenvalues of the covariance matrix, required if diagonal_basis is True.
-        diagonal_rotation : np.array, optional
-            Eigenvectors of the correlation matrix, required if diagonal_basis is True.
         """
 
         self.tr_masks = tr_masks
         self.vl_masks = vl_masks
-        if diagonal_basis:
-            self.eig_vals = eig_vals
-            self.diagonal_rotation = diagonal_rotation
 
         super().__init__(group_name, seed)
 
 
-def diagonal_masks(
-    data, replica_trvlseed, dataset_inputs_fitting_covmat, diagonal_frac=1.0, threshold_eigvals=0
-):
+def diagonal_masks(data, replica_trvlseed, dataset_inputs_covmat_t0_considered, diagonal_frac=0.75):
 
-    # diagonalise the covariance matrix, eigenvalues appear in ascending order
-    covmat = dataset_inputs_fitting_covmat
-
-    # convert covmat to correlation
-    diag_inv_sqrt = 1 / np.sqrt(np.diag(covmat))
-    cormat = np.einsum("i, ij, j -> ij", diag_inv_sqrt, covmat, diag_inv_sqrt)
-
-    # diagonalise the correlation matrix
-    eig_vals, u_trans = np.linalg.eigh(cormat)
-    u_trans = np.einsum("i, ik -> ik", diag_inv_sqrt, u_trans)
-    ndata = len(eig_vals)
+    nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
+    nameseed += replica_trvlseed
+    rng = np.random.Generator(np.random.PCG64(nameseed))
+    ndata = len(dataset_inputs_covmat_t0_considered)
 
     # construct training mask by selecting a fraction of the eigenvalues
-    tr_mask = np.random.random(ndata) < diagonal_frac
+    trmax = int(ndata * diagonal_frac)
+    tr_mask = np.concatenate([np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)])
+    rng.shuffle(tr_mask)
     vl_mask = ~tr_mask
 
-    # discard the eigenvalues below the set threshold
-    tr_mask[eig_vals < threshold_eigvals] = False
-    vl_mask[eig_vals < threshold_eigvals] = False
-    return _Masks(
-        str(data),
-        replica_trvlseed,
-        [tr_mask],
-        [vl_mask],
-        diagonal_basis=True,
-        eig_vals=eig_vals,
-        diagonal_rotation=u_trans.T,
-    )
+    # alternative implementation, but n_tr is not the same for all replicas this way
+    # tr_mask = np.random.random(ndata) < diagonal_frac
+
+    return _Masks(str(data), replica_trvlseed, [tr_mask], [vl_mask])
 
 
 def standard_masks(data, replica_trvlseed):
@@ -270,21 +266,43 @@ def kfold_masks(kpartitions, data):
     Examples
     --------
     >>> from validphys.api import API
-    >>> partitions=[
-    ...     {"datasets": ["HERACOMBCCEM", "HERACOMBNCEP460", "NMC", "NTVNBDMNFe"]},
-    ...     {"datasets": ["HERACOMBCCEP", "HERACOMBNCEP575", "NMCPD", "NTVNUDMNFe"]}
+    >>> partitions = [
+    ... {"datasets": [
+    ...    "HERA_CC_318GEV_EM-SIGMARED",
+    ...    "HERA_NC_225GEV_EP-SIGMARED",
+    ...    "NMC_NC_NOTFIXED_P_EM-SIGMARED",
+    ...    "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED",
+    ... ]},
+    ... {"datasets": [
+    ...    "HERA_CC_318GEV_EP-SIGMARED",
+    ...    "HERA_NC_251GEV_EP-SIGMARED",
+    ...    "NMC_NC_NOTFIXED_EM-F2",
+    ...    "NUTEV_CC_NOTFIXED_FE_NU-SIGMARED",
+    ... ]},
     ... ]
-    >>> ds_inputs = [{"dataset": ds} for part in partitions for ds in part["datasets"]]
-    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=53, use_cuts="nocuts")
+    >>> ds_inputs = [
+    ...    {"dataset": "HERA_CC_318GEV_EM-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "HERA_NC_225GEV_EP-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "NUTEV_CC_NOTFIXED_FE_NB-SIGMARED", "variant": "legacy_dw"},
+    ...    {"dataset": "HERA_CC_318GEV_EP-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "HERA_NC_251GEV_EP-SIGMARED", "variant": "legacy"},
+    ...    {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy"},
+    ...    {"dataset": "NUTEV_CC_NOTFIXED_FE_NU-SIGMARED", "variant": "legacy_dw"},]
+    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=40000000, use_cuts="nocuts")
     >>> len(kfold_masks) # one element for each partition
     2
-    >>> kfold_masks[0] # mask which splits data into first partition
-    array([False, False, False, ...,  True,  True,  True])
-    >>> data = API.data(dataset_inputs=ds_inputs, theoryid=53, use_cuts="nocuts")
-    >>> fold_data = data.load().get_cv()[kfold_masks[0]]
+    >>> kfold_masks[0].shape # mask which splits data into first partition
+    (1192,)
+    >>> kfold_masks[0].dtype
+    dtype('bool')
+    >>> data = API.data(dataset_inputs=ds_inputs, theoryid=40000000, use_cuts="nocuts")
+    >>> import numpy as np
+    >>> central_values = np.concatenate([cd.get_cv() for cd in data.load_commondata()])
+    >>> fold_data = central_values[kfold_masks[0]]
     >>> len(fold_data)
     604
-    >>> kfold_masks[0].sum()
+    >>> int(kfold_masks[0].sum())
     604
 
     """
@@ -324,40 +342,190 @@ def _hashed_dataset_inputs_fitting_covmat(dataset_inputs_fitting_covmat) -> Hash
 
 
 @functools.lru_cache
-def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_basis=False):
-    """Returns the inverse covmats for training, validation and total
-    attending to the right masks and whether it is diagonal or not.
+def _inv_covmat_prepared(
+    _hashed_dataset_inputs_fitting_covmat,
+    fitting_covmat_name,
+    output_path,
+    use_thcovmat_in_fitting=False,
+    diagonal_basis=True,
+):
+    """Prepare the covariance matrix and its inverse, optionally transforming to diagonal basis.
 
-    Since the masks and number of datapoints need to be treated for 1-point datasets
-    it also returns the right ndata and masks for training and validation:
+    Parameters
+    ----------
+    _hashed_dataset_inputs_fitting_covmat : Hashrray
+        Wrapped covariance matrix for caching purposes.
+    output_path : Path
+        Path to output directory containing diagonal basis data if needed.
+    diagonal_basis : bool, optional
+        If True, load pre-computed diagonal basis from tables. If False, use the
+        covariance matrix directly and compute the inverse via correlation matrix
+        inversion. Default is True.
 
-    inv_total, inv_training, inv_validation, ndata_tr, ndata_vl, mask_tr, mask_vl, diagonal_rotation
+    Returns
+    -------
+    covmat : np.ndarray
+        The covariance matrix (diagonal if diagonal_basis=True, full otherwise).
+    inv_total : np.ndarray
+        The inverse of the covariance matrix.
+    diag_rot : np.ndarray or None
+        The rotation matrix (eigenvectors transposed) for diagonal basis transformation.
+        Only returned when diagonal_basis=True, otherwise None.
+    eig_vals : np.ndarray or None
+        The eigenvalues of the correlation matrix. Only returned when
+        diagonal_basis=True, otherwise None.
     """
-    covmat = _hashed_dataset_inputs_fitting_covmat.array
-    inv_total = np.linalg.inv(covmat)
+    log.info(
+        f"_inv_covmat_prepared called with covmat hash={hash(_hashed_dataset_inputs_fitting_covmat)}"
+    )
+
+    diag_rot = None
+    eig_vals = None
+
+    if diagonal_basis:
+        eigensystem = pd.read_csv(
+            fitting_covmat_name, index_col=[0], header=[0], sep="\t|,", engine="python"
+        )
+        diag_rot = eigensystem.iloc[:, 1:].values
+        eig_vals = eigensystem["eig_val"].values
+        covmat = np.diag(eig_vals)
+        inv_total = np.diag(1 / eig_vals)
+    else:
+        covmat = _hashed_dataset_inputs_fitting_covmat.array
+        diag_inv_sqrt_total = 1 / np.sqrt(np.diag(covmat))
+        cormat_total = np.einsum("i, ij, j -> ij", diag_inv_sqrt_total, covmat, diag_inv_sqrt_total)
+        inv_total = (
+            np.diag(diag_inv_sqrt_total)
+            @ np.linalg.inv(cormat_total)
+            @ np.diag(diag_inv_sqrt_total)
+        )
+
+    return covmat, inv_total, diag_rot, eig_vals
+
+
+def setupfit_fitting_covmat(dataset_inputs_fitting_covmat, diagonal_basis=True):
+    """Prepare the fitting covariance matrix in setupfit and store it for later use
+    in the fit. Theory contributions and diagonal basis transformation are specified
+    in the input configuration.
+
+    Parameters
+    ----------
+    dataset_inputs_fitting_covmat : np.ndarray
+        The experimental covariance matrix from the datasets.
+    diagonal_basis : bool, optional
+        If True, transform the covariance matrix to diagonal basis by extracting
+        eigenvalues and eigenvectors of the correlation matrix. Default is True.
+
+    Returns
+    -------
+    covmat : np.ndarray
+        The prepared covariance matrix (sum of experimental and theory covmats).
+    diagonal_rotation : np.ndarray or None
+        The rotation matrix (transposed eigenvectors) to transform data to diagonal basis.
+        Only returned if diagonal_basis=True, otherwise None.
+    eig_vals : np.ndarray or None
+        The eigenvalues of the correlation matrix in diagonal basis.
+        Only returned if diagonal_basis=True, otherwise None.
+    """
+    covmat = dataset_inputs_fitting_covmat
     diagonal_rotation = None
+    eig_vals = None
 
     if diagonal_basis:
         log.info("working in diagonal basis.")
 
-        # get the eigenvalues of the fit cormat (in ascending order)
-        eig_vals = masks.eig_vals
+        # convert covmat to correlation
+        sigma = np.sqrt(np.diag(covmat))
+        sigma_inv = 1 / sigma
+        cormat = np.einsum("i, ij, j -> ij", sigma_inv, covmat, sigma_inv)
 
-        # rotate the experimental data to the diagonal basis of the cormat and obtain training/validation masks
-        diagonal_rotation = masks.diagonal_rotation
-        tr_mask = masks.tr_masks[0]
-        vl_mask = masks.vl_masks[0]
+        # diagonalise the correlation matrix
+        eig_vals, v = np.linalg.eigh(cormat)  # cormat = V @ diag(eig_vals) @ V.T
+        u = np.einsum("i, ij -> ij", sigma, v)
+        rec_covmat = u @ np.diag(eig_vals) @ u.T
+        np.testing.assert_allclose(
+            covmat,
+            rec_covmat,
+            rtol=1e-4,
+            atol=1e-5,
+            err_msg="Diagonalisation failed to reproduce original covmat",
+        )
 
-        # apply the training/validation masks to the eigenvalues and take the inverse
-        # this does not give the inverse of the covmat as the variable name might suggest,
-        # but we call it this way anyway as this needs to be returned at the end
-        invcovmat_tr = np.diag(1 / eig_vals[tr_mask])
-        invcovmat_vl = np.diag(1 / eig_vals[vl_mask])
+        diagonal_rotation = np.einsum("ij, j -> ij", v.T, sigma_inv)
 
-        # obtain the number of data points in the training/validation sets
-        ndata_tr = invcovmat_tr.shape[0]
-        ndata_vl = invcovmat_vl.shape[0]
+    return covmat, diagonal_rotation, eig_vals
 
+
+def fitting_data_dict(
+    data,
+    make_replica,
+    dataset_inputs_loaded_cd_with_cuts,
+    masks,
+    _inv_covmat_prepared,
+    kfold_masks,
+    fittable_datasets_masked,
+    threshold=0.0,
+):
+    """
+    Provider which takes  the information from validphys ``data``.
+
+    Returns
+    -------
+    all_dict_out: dict
+        Containing all the information of the experiment/dataset
+        for training, validation and experimental With the following keys:
+
+        'datasets'
+            list of dictionaries for each of the datasets contained in ``data``
+        'name'
+            name of the ``data`` - typically experiment/group name
+        'expdata_true'
+            non-replica data
+        'covmat'
+            full covmat
+        'invcovmat_true'
+            inverse of the covmat (non-replica)
+        'trmask'
+            mask for the training data
+        'invcovmat'
+            inverse of the covmat for the training data
+        'ndata'
+            number of datapoints for the training data
+        'expdata'
+            experimental data (replica'd) for training
+        'vlmask'
+            (same as above for validation)
+        'invcovmat_vl'
+            (same as above for validation)
+        'ndata_vl'
+            (same as above for validation)
+        'expdata_vl'
+            (same as above for validation)
+        'positivity'
+            bool - is this a positivity set?
+        'count_chi2'
+            should this be counted towards the chi2
+    """
+
+    # TODO: Plug in the python data loading when available. Including but not
+    # limited to: central values, ndata, replica generation, covmat construction
+    expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
+    expdata = make_replica
+    fittable_datasets = fittable_datasets_masked
+
+    # load covmat stored at the time of vp-setupfit
+    covmat, inv_true, diag_rot, eig_vals = _inv_covmat_prepared
+
+    # get the masks - different for each replica so fine to call here
+    tr_mask, vl_mask = masks.tr_masks[0], masks.vl_masks[0]
+    ndata_tr = np.sum(tr_mask)
+    ndata_vl = np.sum(vl_mask)
+    if diag_rot is not None:
+        # discard the eigenvalues below the set threshold
+        tr_mask[eig_vals < threshold] = False
+        vl_mask[eig_vals < threshold] = False
+        invcovmat_tr = inv_true[:, tr_mask][tr_mask, :]
+        invcovmat_vl = inv_true[:, vl_mask][vl_mask, :]
     else:
         # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
         # Here we want to have the data both in training and validation,
@@ -427,79 +595,9 @@ def _inv_covmat_prepared(masks, _hashed_dataset_inputs_fitting_covmat, diagonal_
         ndata_tr -= len(data_zero_tr)
         ndata_vl -= len(data_zero_vl)
 
-    return (
-        inv_total,
-        invcovmat_tr,
-        invcovmat_vl,
-        ndata_tr,
-        ndata_vl,
-        tr_mask,
-        vl_mask,
-        diagonal_rotation,
-    )
-
-
-def fitting_data_dict(
-    data,
-    make_replica,
-    dataset_inputs_loaded_cd_with_cuts,
-    dataset_inputs_fitting_covmat,
-    _inv_covmat_prepared,
-    kfold_masks,
-    fittable_datasets_masked,
-):
-    """
-    Provider which takes  the information from validphys ``data``.
-
-    Returns
-    -------
-    all_dict_out: dict
-        Containing all the information of the experiment/dataset
-        for training, validation and experimental With the following keys:
-
-        'datasets'
-            list of dictionaries for each of the datasets contained in ``data``
-        'name'
-            name of the ``data`` - typically experiment/group name
-        'expdata_true'
-            non-replica data
-        'covmat'
-            full covmat
-        'invcovmat_true'
-            inverse of the covmat (non-replica)
-        'trmask'
-            mask for the training data
-        'invcovmat'
-            inverse of the covmat for the training data
-        'ndata'
-            number of datapoints for the training data
-        'expdata'
-            experimental data (replica'd) for training
-        'vlmask'
-            (same as above for validation)
-        'invcovmat_vl'
-            (same as above for validation)
-        'ndata_vl'
-            (same as above for validation)
-        'expdata_vl'
-            (same as above for validation)
-        'positivity'
-            bool - is this a positivity set?
-        'count_chi2'
-            should this be counted towards the chi2
-    """
-    # TODO: Plug in the python data loading when available. Including but not
-    # limited to: central values, ndata, replica generation, covmat construction
-    expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
-    expdata = make_replica
-    fittable_datasets = fittable_datasets_masked
-
-    inv_true, invcovmat_tr, invcovmat_vl, ndata_tr, ndata_vl, tr_mask, vl_mask, diag_rot = (
-        _inv_covmat_prepared
-    )
-
     if diag_rot is not None:
         expdata = diag_rot @ expdata
+        expdata_true = diag_rot @ expdata_true
 
     expdata_tr = expdata[tr_mask].reshape(1, -1)
     expdata_vl = expdata[vl_mask].reshape(1, -1)
@@ -523,7 +621,7 @@ def fitting_data_dict(
         "name": str(data),
         "expdata_true": expdata_true.reshape(1, -1),
         "invcovmat_true": inv_true,
-        "covmat": dataset_inputs_fitting_covmat,
+        "covmat": covmat,
         "trmask": tr_mask,
         "invcovmat": invcovmat_tr,
         "ndata": ndata_tr,
@@ -541,6 +639,27 @@ def fitting_data_dict(
 
 
 exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
+
+
+@table
+def fitting_covmat_table(output_path, setupfit_fitting_covmat, data_index, diagonal_basis=True):
+    """
+    Stores the fitting covariance matrix if diagonal_basis is False, else store the rotation matrix and eigenvalues
+    """
+    covmat, diagonal_rotation, eig_vals = setupfit_fitting_covmat
+
+    if not diagonal_basis:
+        log.info("Saving fitting covmat")
+        if not hasattr(covmat, "index"):
+            return pd.DataFrame(covmat, index=data_index, columns=data_index)
+        else:
+            return covmat
+
+    df_rotation = pd.DataFrame(diagonal_rotation)
+    df_rotation.insert(0, "eig_val", eig_vals)
+    df_rotation.index = pd.Index([f"eigenmode {i}" for i in range(len(eig_vals))])
+    log.info("Saving diagonal-basis rotation table")
+    return df_rotation
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
@@ -570,7 +689,17 @@ experiment_indexed_make_replica = collect(
 )
 
 
-def replica_pseudodata(experiment_indexed_make_replica, replica):
+def diagonal_indexed_make_replica(indexed_make_replica, fitting_data_dict):
+    """Rotate one group pseudodata block to the diagonal basis."""
+    values = indexed_make_replica.iloc[:, 0].to_numpy()
+    diag_rot = fitting_data_dict.get("data_transformation")
+    rotated_values = values if diag_rot is None else diag_rot @ values
+    return pd.DataFrame(rotated_values, columns=["data"])
+
+
+def replica_pseudodata(
+    experiment_indexed_make_replica, diagonal_indexed_make_replica, replica, diagonal_basis=True
+):
     """Creates a pandas DataFrame containing the generated pseudodata.
     The index is :py:func:`validphys.results.experiments_index` and the columns
     is the replica numbers.
@@ -581,8 +710,16 @@ def replica_pseudodata(experiment_indexed_make_replica, replica):
     `fitting::savepseudodata` is `true` (as per the default setting)
     The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
     """
-    df = pd.concat(experiment_indexed_make_replica)
-    df.columns = [f"replica {replica}"]
+    replica_column = f"replica {replica}"
+
+    if not diagonal_basis:
+        df = pd.concat(experiment_indexed_make_replica)
+        df.columns = [replica_column]
+        return df
+
+    df = diagonal_indexed_make_replica.copy()
+    df.columns = [replica_column]
+    df.index = pd.Index([f"eigenmode {i}" for i in range(len(df))])
     return df
 
 
@@ -634,7 +771,7 @@ def replica_mask_table(replica_mask):
     return replica_mask
 
 
-def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
+def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=True):
     """Save the boolean mask used to split data into training and validation
     for a given replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
@@ -660,25 +797,23 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
     >>> from validphys.api import API
     >>> ds_inp = [
     ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.75},
-    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory', 'frac': 0.75},
+    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'frac': 0.75},
     ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',), 'frac': 0.75},
     ... ]
-    >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=40_000_000, use_cuts="nocuts", mcseed=None, genrep=False)
-                                        replica 1
-    group dataset                       id
-    NMC   NMC_NC_NOTFIXED_P_EM-SIGMARED 0        True
-                                        1        True
-                                        2        True
-                                        3        True
-                                        4       False
-    ...                                           ...
-    CMS   CMS_Z0J_8TEV_PT-Y             45       True
-                                        46       True
-                                        47       True
-                                        48       True
-                                        49       True
-
-    [343 rows x 1 columns]
+    >>> training_mask, validation_mask = API.replica_mask(
+    ...     dataset_inputs=ds_inp,
+    ...     replica=1,
+    ...     trvlseed=123,
+    ...     theoryid=40_000_000,
+    ...     use_cuts="nocuts",
+    ...     mcseed=None,
+    ...     genrep=False,
+    ...     diagonal_basis=False,
+    ... )
+    >>> training_mask.shape
+    (343, 1)
+    >>> validation_mask.shape
+    (343, 1)
     """
 
     all_tr_masks = np.concatenate(
@@ -700,117 +835,6 @@ def replica_mask(exps_masks, replica, experiments_index, diagonal_basis=False):
     return df_tr, df_vl
 
 
-def replica_validation_mask(exps_tr_masks, replica, experiments_index, diagonal_basis=False):
-    """Save the boolean mask used to split data into training and validation
-    for a given replica as a pandas DataFrame, indexed by
-    :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
-    the training and validation data used in a fit.
-
-    Parameters
-    ----------
-    exps_tr_masks: list[list[np.array]]
-        Result of :py:func:`tr_masks` collected over experiments, which creates
-        the nested structure. The outer list is
-        len(group_dataset_inputs_by_experiment) and the inner-most list has an
-        array for each dataset in that particular experiment - as defined by the
-        metadata. The arrays should be 1-D boolean arrays which can be used as
-        masks.
-    replica: int
-        The index of the replica.
-    experiments_index: pd.MultiIndex
-        Index returned by :py:func:`validphys.results.experiments_index`.
-
-
-    Example
-    -------
-    >>> from validphys.api import API
-    >>> ds_inp = [
-    ...     {'dataset': 'NMC', 'frac': 0.75},
-    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
-    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
-    ... ]
-    >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
-                         replica 1
-    group dataset    id
-    NMC   NMC        0        True
-                    1        True
-                    2       False
-                    3        True
-                    4        True
-    ...                        ...
-    CMS   CMSZDIFF12 45       True
-                    46       True
-                    47       True
-                    48      False
-                    49       True
-
-    [345 rows x 1 columns]
-    """
-
-    all_masks = np.concatenate(
-        [ds_mask for exp_masks in exps_masks for ds_mask.vl_masks in exp_masks]
-    )
-    if diagonal_basis:
-        return pd.DataFrame(
-            all_masks,
-            columns=[f"replica {replica}"],
-            index=[f"eigenmode {i}" for i in range(len(all_masks))],
-        )
-    else:
-        return pd.DataFrame(all_masks, columns=[f"replica {replica}"], index=experiments_index)
-
-
-replicas_mask = collect("replica_mask", ("replicas",))
-
-
-@table
-def training_mask_table(training_mask):
-    """Same as ``training_mask`` but with a table decorator"""
-    return training_mask
-
-
-def training_mask(replicas_mask):
-    """Save the boolean mask used to split data into training and validation
-    for each replica as a pandas DataFrame, indexed by
-    :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
-    the training and validation data used in a fit.
-
-    Parameters
-    ----------
-    replicas_exps_tr_masks: list[list[list[np.array]]]
-        Result of :py:func:`replica_tr_masks` collected over replicas
-
-    Example
-    -------
-    >>> from validphys.api import API
-    >>> from reportengine.namespaces import NSList
-    >>> # create namespace list for collects over replicas.
-    >>> reps = NSList(list(range(1, 4)), nskey="replica")
-    >>> ds_inp = [
-    ...     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'frac': 0.75},
-    ...     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy_theory', 'frac': 0.75},
-    ...     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac':('NRM',), 'frac': 0.75},
-    ... ]
-    >>> API.training_mask(dataset_inputs=ds_inp, nreplica=3, trvlseed=123, theoryid=40_000_000, use_cuts="nocuts", mcseed=None, genrep=False)
-                                                    replica 1  replica 2  replica 3
-        group dataset                       id
-        NMC   NMC_NC_NOTFIXED_P_EM-SIGMARED 0        True      False      False
-                                            1        True       True       True
-                                            2        True      False       True
-                                            3        True       True      False
-                                            4       False       True       True
-        ...                                           ...        ...        ...
-        CMS   CMS_Z0J_8TEV_PT-Y             45       True      False       True
-                                            46       True       True       True
-                                            47       True      False       True
-                                            48       True       True       True
-                                            49       True      False       True
-        [343 rows x 3 columns]
-
-    """
-    return pd.concat(replicas_training_mask, axis=1)
-
-
 def _fitting_lagrange_dict(lambdadataset):
     """Loads a generic lambda dataset, often used for positivity and integrability datasets
     For more information see :py:func:`validphys.n3fit_data_utils.positivity_reader`.
@@ -823,10 +847,19 @@ def _fitting_lagrange_dict(lambdadataset):
     Examples
     --------
     >>> from validphys.api import API
-    >>> posdataset = {"dataset": "NNPDF_POS_2P24GEV_F2U", "maxlambda": 1e6}
-    >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=40_000_000)
+    >>> positivity = {
+    ...  "posdatasets": [
+    ...      {"dataset": "NNPDF_POS_2P24GEV_F2U", "maxlambda": 1e6},
+    ...     {"dataset": "NNPDF_POS_2P24GEV_FLL", "maxlambda": 1e6},
+    ... ]
+    ... }
+    >>> pos = API.posdatasets_fitting_pos_dict(
+    ...  positivity=positivity,
+    ... theoryid=40_000_000,
+    ...  use_cuts="internal"
+    ... )
     >>> len(pos)
-    9
+    2
     """
     integrability = isinstance(lambdadataset, IntegrabilitySetSpec)
     mode = "integrability" if integrability else "positivity"
@@ -878,13 +911,12 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     Examples
     --------
     >>> from validphys.api import API
-    >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
-    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
+    >>> integdatasets = [{"dataset": "NNPDF_INTEG_3GEV_XT3", "maxlambda": 1e2}]
+    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets,
+    ...   theoryid=40_000_000,
+    ...   use_cuts="internal")
     >>> len(res), len(res[0])
     (1, 9)
-    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=None)
-    >>> print(res)
-    None
 
     """
     if integdatasets is not None:

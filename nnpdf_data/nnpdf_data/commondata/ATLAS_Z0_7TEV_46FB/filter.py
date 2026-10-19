@@ -23,8 +23,12 @@ def filter_ATLAS_Z0_7TEV_46FB_data_kinematic():
     data_central_yaml_cc = {"data_central": central_values_cc}
     data_central_yaml_cf = {"data_central": central_values_cf}
 
-    kinematics_yaml_cc = {"bins": kin_cc}
-    kinematics_yaml_cf = {"bins": kin_cf}
+    kinematics_yaml_cc = {
+        "bins": [{key: value for key, value in bin.items() if key != "sqrts"} for bin in kin_cc]
+    }
+    kinematics_yaml_cf = {
+        "bins": [{key: value for key, value in bin.items() if key != "sqrts"} for bin in kin_cf]
+    }
 
     # write central values and kinematics to yaml file
     with open("data_cc.yaml", "w") as file:

@@ -1,10 +1,10 @@
 """
-    Module containg the losses to be apply to the models as layers
+Module containg the losses to be apply to the models as layers
 
-    The layer take the input from the model and acts on it producing a score function.
-    For instance, in the case of the chi2 (``LossInvcovmat``) the function takes only
-    the prediction of the model and, during instantiation, took the real data to compare with
-    and the covmat.
+The layer take the input from the model and acts on it producing a score function.
+For instance, in the case of the chi2 (``LossInvcovmat``) the function takes only
+the prediction of the model and, during instantiation, took the real data to compare with
+and the covmat.
 
 """
 
@@ -135,8 +135,10 @@ class LossPositivity(LossLagrange):
 
     The positivity loss is computed by inverting the sign of the
     datapoints and then applying the elu function, this function is
+
         f(x) = x if x > 0
         f(x) = alpha * (e^{x} - 1) if x < 0
+        
     This is done to avoid a big discontinuity in the derivative at 0 when
     the lagrange multiplier is very big.
     In practice this function can produce results in the range (-alpha, inf)
@@ -145,13 +147,13 @@ class LossPositivity(LossLagrange):
     -------
     >>> import numpy as np
     >>> from n3fit.layers import losses
-    >>> pred = np.random.rand(1, 1, 5)
+    >>> pred = np.full((1, 1, 5), 0.5)
     >>> alpha = 1e-7
     >>> c = 1e8
     >>> loss_f = losses.LossPositivity(c=c, alpha=alpha)
-    >>> loss_f(pred) == -5*alpha
+    >>> bool(np.isclose(loss_f(pred).numpy()[0], -5 * alpha))
     True
-    >>> loss_f(-pred) > c
+    >>> bool(loss_f(-pred).numpy()[0] > c)
     True
     """
 
@@ -175,7 +177,7 @@ class LossIntegrability(LossLagrange):
     >>> from n3fit.layers import losses
     >>> pred = np.random.rand(1, 1, 5)
     >>> loss_f = losses.LossIntegrability(c=1e2)
-    >>> loss_f(pred) > 0
+    >>> bool(loss_f(pred).numpy()[0] > 0)
     True
     """
 
@@ -183,3 +185,41 @@ class LossIntegrability(LossLagrange):
         y = y_pred * y_pred
         # Sum over the batch and the datapoints
         return op.sum(y, axis=[0, -1])
+
+
+class LossHyperopt:
+    """
+    Returns L = \\lambda*elu(chi2-chi2ref)
+
+    The hyperopt loss is computed by taking the difference
+    between the input experimental chi2 and a chi2 reference value chi2ref,
+    and then applying the elu function, defined by::
+
+        f(x) = x if x > 0
+        f(x) = alpha * (e^{x} - 1) if x < 0
+
+    This is done to avoid a big discontinuity in the derivative at 0 when
+    the lagrange multiplier is very big.
+    In practice this function can produce results in the range (-alpha, inf)
+
+    Example
+    -------
+    >>> import numpy as np
+    >>> from n3fit.layers import losses
+    >>> chi2 = np.asarray(2)
+    >>> alpha = 1e-7
+    >>> c = 1e2
+    >>> chi2ref = np.asarray(1.25)
+    >>> loss_h = losses.LossHyperopt(c=c, alpha=alpha, chi2ref=chi2ref)
+    >>> bool(loss_h(chi2) == np.asarray(c * (chi2-chi2ref)))
+    True
+    """
+
+    def __init__(self, c=1e2, alpha=1e-10, chi2ref=1.2):
+        self.c = c
+        self.alpha = alpha
+        self.chi2ref = chi2ref
+
+    def __call__(self, chi2):
+        loss = op.elu(chi2 - self.chi2ref, alpha=self.alpha)
+        return self.c * op.tensor_to_numpy_or_python(loss)

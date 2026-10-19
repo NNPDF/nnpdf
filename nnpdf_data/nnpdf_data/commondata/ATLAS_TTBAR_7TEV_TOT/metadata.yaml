@@ -30,10 +30,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
@@ -41,10 +37,9 @@ implemented_observables:
   kinematic_coverage:
   - zero
   - m_t2
-  - sqrts
   plotting:
     dataset_label: ATLAS 7 TeV $\sigma_{t\bar{t}}$
-    plot_x: sqrts
+    plot_x: m_t2
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:

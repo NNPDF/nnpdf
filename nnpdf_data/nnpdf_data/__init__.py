@@ -7,6 +7,7 @@ from .validphys_compatibility import legacy_to_new_map
 
 # path_commondata = path_vpdata / "commondata"
 THEORY_CARDS_PATH = pathlib.Path(__file__).parent / "theory_cards"
+CFACTOR_PATH = pathlib.Path(__file__).parent / "cfactors"
 
 
 def load_dataset_metadata(dataset_name, variant=None):
@@ -21,7 +22,7 @@ def load_dataset_metadata(dataset_name, variant=None):
     profile_data_paths = get_nnpdf_profile()["data_path"]
 
     for data_path in profile_data_paths:
-        metadata_file = data_path / "commondata" / setname / "metadata.yaml"
+        metadata_file = data_path / setname / "metadata.yaml"
         if metadata_file.exists():
             break
     else:

@@ -90,6 +90,7 @@ nnseed: 1865683875
 mcseed: 746898422
 save: false
 genrep: true
+diagonal_basis: false
 
 parameters:
   nodes_per_layer: [25, 20, 6]

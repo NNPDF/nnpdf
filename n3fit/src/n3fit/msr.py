@@ -31,9 +31,11 @@ def generate_msr_model_and_grid(
         Number of flavours of the output PDF
     mode: str
         Mode of sum rules to apply. It can be:
+
             - "ALL": applies both the momentum and valence sum rules
             - "MSR": applies only the momentum sum rule
             - "VSR": applies only the valence sum rule
+
     nx: int
         Number of points of the integration grid
     scaler: Scaler
@@ -44,13 +46,17 @@ def generate_msr_model_and_grid(
     model: MetaModel
         Model that applies the sum rules to the PDF
         It takes as inputs:
+
             - pdf_x: the PDF output of the model
             - pdf_xgrid_integration: the PDF output of the model evaluated at the integration grid
             - xgrid_integration: the integration grid
             - photon_integral: the integrated photon contribution
+
         It returns the PDF with the sum rules applied
+
     xgrid_integration: dict
         Dictionary with the integration grid, with:
+        
             - values: the integration grid
             - input: the input layer of the integration grid
     """

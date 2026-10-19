@@ -125,7 +125,6 @@ class FilterDefaults:
 class FilterRule:
     """
     Dataclass which carries the filter rule information.
-
     """
 
     dataset: str = None
@@ -172,6 +171,9 @@ def default_filter_rules_input():
     are unique, i.d. if there are no multiple rules for the same dataset of
     process with the same rule (`reason` and `local_variables` are not hashed).
     """
+    # TODO: This should be done using a more sophisticated comparison
+    # that checks if two rules are actually the same, regardless of the
+    # order in which the cuts are defined.
     list_rules = yaml_safe.load(read_text(validphys.cuts, "filters.yaml"))
     unique_rules = set(FilterRule(**rule) for rule in list_rules)
     if len(unique_rules) != len(list_rules):
@@ -477,6 +479,14 @@ def check_luxset(luxset):
     """Lux pdf check"""
     luxset.load()
     log.info(f'{luxset} Lux pdf checked.')
+
+
+def check_luxset_exists(fiatlux):
+    """Check that the Photon QED set for this theoryid and luxset exists"""
+    if fiatlux is not None:
+        luxset = fiatlux['luxset']
+        luxset.load()
+        log.info(f'{luxset} Lux pdf checked.')
 
 
 def check_unpolarized_bc(unpolarized_bc):
@@ -830,16 +840,16 @@ def get_cuts_for_dataset(commondata, rules) -> list:
     Example
     -------
     >>> from validphys.filters import (get_cuts_for_dataset, Rule,
-    ...     default_filter_settings, default_filter_rules_input)
+    ...     default_filter_settings_input, default_filter_rules_input)
     >>> from validphys.loader import Loader
     >>> l = Loader()
-    >>> cd = l.check_commondata("NMC")
-    >>> theory = l.check_theoryID(53)
-    >>> filter_defaults = default_filter_settings()
+    >>> cd = l.check_commondata("NMC_NC_NOTFIXED_P_EM-SIGMARED", variant='legacy')
+    >>> theory = l.check_theoryID(40000000)
+    >>> filter_defaults = default_filter_settings_input()
     >>> params = theory.get_description()
     >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params)
     ...     for i in default_filter_rules_input()]
-    >>> get_cuts_for_dataset(cd, rules=rule_list)
+    >>> cuts = get_cuts_for_dataset(cd, rules=tuple(rule_list))
     """
     dataset = commondata.load()
 

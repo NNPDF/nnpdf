@@ -221,7 +221,7 @@ def scalar_log_formatter():
     >>> from matplotlib.figure import Figure
     >>> fig = Figure()
     >>> ax = fig.subplots()
-    >>> ax.plot([0.01, 0.1, 1, 10, 100])
+    >>> line, = ax.plot([0.01, 0.1, 1, 10, 100])
     >>> ax.set_yscale("log")
     >>> ax.yaxis.set_major_formatter(scalar_log_formatter())
     """
@@ -351,7 +351,6 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     >>> vals = np.random.rand(2,5)
     >>> collabels = ["A", "B", "C", "D", "e"]
     >>> fig, ax = barplot(vals, collabels, ['First try', 'Second try'])
-    >>> ax.legend()
     """
     values = np.atleast_2d(values)
     ntypes, l = values.shape

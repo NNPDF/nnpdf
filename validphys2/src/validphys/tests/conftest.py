@@ -69,11 +69,13 @@ PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 40_000_000
 THEORY_QED = 40_000_100
-FIT_3REPLICAS = "FIT_3REPLICAS_250616"
-FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_250616_diffcuts"
+FIT_3REPLICAS = "FIT_3REPLICAS_260519"
+FIT_3REPLICAS_DIAG = "FIT_3REPLICAS_DIAG_260519"
+FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_260519_diffcuts"
 FIT = "NNPDF40_nnlo_like_CI_testing_250616"
 FIT_ITERATED = "NNPDF40_nnlo_like_CI_testing_250616_iterated"
-PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_250616"
+PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_260518"
+PSEUDODATA_FIT_DIAG = "pseudodata_test_fit_diag_n3fit_260518"
 # These fits contain _only_ data
 MULTICLOSURE_FITS = ["250618-test-multiclosure-001", "250618-test-multiclosure-002"]
 
@@ -105,15 +107,16 @@ def data_internal_cuts_config(data_config):
 
 
 @pytest.fixture(scope='module')
-def data_internal_cuts_new_theory_config(data_internal_cuts_config):
+def data_internal_cuts_closure_config(data_internal_cuts_config):
+    # Filterseed is not added so that it is changed by the tests
     config = dict(data_internal_cuts_config)
-    config["theoryid"] = THEORYID
+    config["fakepdf"] = PDF
     return config
 
 
 @pytest.fixture(scope='module')
-def data_fromfit_cuts_config(data_internal_cuts_new_theory_config):
-    config = dict(data_internal_cuts_new_theory_config)
+def data_fromfit_cuts_config(data_internal_cuts_config):
+    config = dict(data_internal_cuts_config)
     config.update(use_cuts="fromfit")
     return config
 
