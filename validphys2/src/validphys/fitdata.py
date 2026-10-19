@@ -452,10 +452,14 @@ def print_different_variants(fits, test_for_same_variants):
     """Print a summary of the datasets that are included in both fits but have 
     different variants."""
     res = StringIO()
-    res.write("The following table summarises datasets that are included in both fits but use different variants.")
     first_fit, second_fit = fits
-    variant_table = pd.DataFrame(test_for_same_variants, index=(first_fit, second_fit)).T
-    return variant_table
+    if not test_for_same_variants:
+        res.write("Datasets used in both fits have the same variants.")
+    else:
+        res.write("The following table summarises datasets that are included in both fits but use different variants.")
+        variant_table = pd.DataFrame(test_for_same_variants, index=(first_fit, second_fit)).T
+        res.write(variant_table)
+    return res.getvalue()
 
 def fit_theory_covmat_summary(fit, fitthcovmat):
     """returns a table with a single column for the `fit`, with three rows
