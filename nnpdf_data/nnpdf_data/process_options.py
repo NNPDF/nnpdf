@@ -457,41 +457,36 @@ def _sia_zq2(z, sqrts):
     return z, sqrts**2 * np.ones_like(z)
 
 
-def _sia_z_zq2map(kin_info):
-    """Computes z and q2 mapping for an SIA process measured as a function of z.
+# The different ways in which the momentum (or energy) fraction of the observed hadron can be given
+_SIA_VARIABLES = (_Vars.z, _Vars.xp, _Vars.ph, _Vars.xi)
+
+
+def _sia_zq2map(kin_info):
+    """Computes z and q2 mapping for an SIA process.
+    The observable is measured as a function of one (and only one) of the following variables:
+
+    - z, the energy of the hadron scaled to the beam energy, z = 2 E_h / sqrts
+    - xp, the momentum of the hadron scaled to the beam momentum, p = xp * sqrts / 2
+    - ph, the momentum of the hadron (in GeV)
+    - xi = ln(1/xp)
+
+    The mass of the hadron is needed to obtain z from a momentum, i.e., in all but the first case.
     The scale is the center of mass energy, Q2 = sqrts^2.
     """
-    return _sia_zq2(kin_info[_Vars.z], _sia_sqrts(kin_info))
+    given = [variable for variable in _SIA_VARIABLES if variable in kin_info._kins]
+    if len(given) != 1:
+        raise KeyError(f"Exactly one of {list(_SIA_VARIABLES)} is needed, the dataset has {given}")
+    (variable,) = given
 
-
-def _sia_xp_zq2map(kin_info):
-    """Computes z and q2 mapping for an SIA process measured as a function of xp.
-    xp is the momentum of the hadron scaled to the beam momentum, p = xp * sqrts / 2.
-    The mass of the hadron is needed to obtain z.
-    """
     sqrts = _sia_sqrts(kin_info)
-    momentum = kin_info[_Vars.xp] * sqrts / 2
-    z = _sia_z_from_momentum(momentum, _hadron_mass(kin_info), sqrts)
-    return _sia_zq2(z, sqrts)
-
-
-def _sia_ph_zq2map(kin_info):
-    """Computes z and q2 mapping for an SIA process measured as a function of ph,
-    the momentum of the hadron (in GeV).
-    The mass of the hadron is needed to obtain z.
-    """
-    sqrts = _sia_sqrts(kin_info)
-    z = _sia_z_from_momentum(kin_info[_Vars.ph], _hadron_mass(kin_info), sqrts)
-    return _sia_zq2(z, sqrts)
-
-
-def _sia_xi_zq2map(kin_info):
-    """Computes z and q2 mapping for an SIA process measured as a function of xi = ln(1/xp),
-    where xp is the momentum of the hadron scaled to the beam momentum, p = xp * sqrts / 2.
-    The mass of the hadron is needed to obtain z.
-    """
-    sqrts = _sia_sqrts(kin_info)
-    momentum = np.exp(-kin_info[_Vars.xi]) * sqrts / 2
+    if variable == _Vars.z:
+        return _sia_zq2(kin_info[_Vars.z], sqrts)
+    if variable == _Vars.xp:
+        momentum = kin_info[_Vars.xp] * sqrts / 2
+    elif variable == _Vars.ph:
+        momentum = kin_info[_Vars.ph]
+    else:
+        momentum = np.exp(-kin_info[_Vars.xi]) * sqrts / 2
     z = _sia_z_from_momentum(momentum, _hadron_mass(kin_info), sqrts)
     return _sia_zq2(z, sqrts)
 
@@ -694,32 +689,11 @@ SIDIS = _Process(
     zq2map_function=_sidis_zq2map,
 )
 
-SIA_Z = _Process(
-    "SIA_Z",
-    "Single-Inclusive Annihilation as a function of z",
-    accepted_variables=(_Vars.z, _Vars.sqrts),
-    zq2map_function=_sia_z_zq2map,
-)
-
-SIA_XP = _Process(
-    "SIA_XP",
-    "Single-Inclusive Annihilation as a function of the scaled momentum xp",
-    accepted_variables=(_Vars.xp, _Vars.sqrts),
-    zq2map_function=_sia_xp_zq2map,
-)
-
-SIA_PH = _Process(
-    "SIA_PH",
-    "Single-Inclusive Annihilation as a function of the hadron momentum ph",
-    accepted_variables=(_Vars.ph, _Vars.sqrts),
-    zq2map_function=_sia_ph_zq2map,
-)
-
-SIA_XI = _Process(
-    "SIA_XI",
-    "Single-Inclusive Annihilation as a function of xi = ln(1/xp)",
-    accepted_variables=(_Vars.xi, _Vars.sqrts),
-    zq2map_function=_sia_xi_zq2map,
+SIA = _Process(
+    "SIA",
+    "Single-Inclusive Annihilation",
+    accepted_variables=(_Vars.z, _Vars.xp, _Vars.ph, _Vars.xi, _Vars.sqrts),
+    zq2map_function=_sia_zq2map,
 )
 
 
@@ -764,10 +738,7 @@ PROCESSES = {
     "PHT": PHT,
     "SINGLETOP": SINGLETOP,
     "SIDIS": SIDIS,
-    "SIA_Z": SIA_Z,
-    "SIA_XP": SIA_XP,
-    "SIA_PH": SIA_PH,
-    "SIA_XI": SIA_XI,
+    "SIA": SIA,
 }
 
 
