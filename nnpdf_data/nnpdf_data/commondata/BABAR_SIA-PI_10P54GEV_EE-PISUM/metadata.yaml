@@ -19,7 +19,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $p_h$ (prompt)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: ''}
   observable_name: PH-PROMPT
-  process_type: SIA_PH
+  process_type: SIA
   ndata: 45
   tables: [1]
   kinematics:
@@ -42,7 +42,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $p_h$ (conventional)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: ''}
   observable_name: PH-CONVENTIONAL
-  process_type: SIA_PH
+  process_type: SIA
   ndata: 45
   tables: [2]
   kinematics:

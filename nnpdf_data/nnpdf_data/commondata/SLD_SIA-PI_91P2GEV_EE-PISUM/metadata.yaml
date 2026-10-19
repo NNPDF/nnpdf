@@ -19,7 +19,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $x_p", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}$', units: '$$'}
   observable_name: XP-INC
-  process_type: SIA_XP
+  process_type: SIA
   ndata: 40
   tables: [2]
   kinematics:
@@ -42,7 +42,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $x_p (UDS tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{uds}$', units: '$$'}
   observable_name: XP-UDS
-  process_type: SIA_XP
+  process_type: SIA
   ndata: 40
   tables: [5]
   kinematics:
@@ -65,7 +65,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $x_p (C tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{c}$', units: '$$'}
   observable_name: XP-C
-  process_type: SIA_XP
+  process_type: SIA
   ndata: 40
   tables: [5]
   kinematics:
@@ -88,7 +88,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $x_p (B tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dx_p}\Big|_{b}$', units: '$$'}
   observable_name: XP-B
-  process_type: SIA_XP
+  process_type: SIA
   ndata: 40
   tables: [5]
   kinematics:

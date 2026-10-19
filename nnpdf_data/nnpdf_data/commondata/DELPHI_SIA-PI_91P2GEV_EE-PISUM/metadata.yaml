@@ -19,7 +19,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $p_h$", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}$', units: '$$'}
   observable_name: PH-INC
-  process_type: SIA_PH
+  process_type: SIA
   ndata: 23
   tables: [18]
   kinematics:
@@ -42,7 +42,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $p_h$ (UDS tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}\Big|_{uds}$', units: '$$'}
   observable_name: PH-UDS
-  process_type: SIA_PH
+  process_type: SIA
   ndata: 23
   tables: [34]
   kinematics:
@@ -65,7 +65,7 @@ implemented_observables:
 
 - observable: {description: "normalized x-sec differential wrt $p_h$ (B tagged)", label: '$\frac{1}{\sigma_{tot}}\frac{d\sigma^h}{dp_h}\Big|_{b}$', units: '$$'}
   observable_name: PH-B
-  process_type: SIA_PH
+  process_type: SIA
   ndata: 23
   tables: [26]
   kinematics:
