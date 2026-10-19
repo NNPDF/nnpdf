@@ -424,15 +424,6 @@ def print_different_cuts(fits, test_for_same_cuts):
 
     return res.getvalue()
 
-def find_the_variant(dataset, sys=None, variant=None):
-    """Given the (legacy) dataset input, find the new name and the right variant.
-    """
-    new_name, new_variant = legacy_to_new_map(dataset_name=dataset, sys=sys)
-    if variant is None:
-        return new_name, new_variant
-    else:
-        return new_name, variant
-
 @_assert_two_fits
 def test_for_same_variants(fits, match_datasets_by_name):
     """Given two fits, return a dictionary of where keys are names of datatets with
@@ -446,7 +437,10 @@ def test_for_same_variants(fits, match_datasets_by_name):
     for f in fits:
         variants[f.name] = dict()
         for ds in f.as_input()["dataset_inputs"]:
-            name, variant = find_the_variant(ds['dataset'], sys=ds.get("sys"), variant=ds.get("variant"))
+            name, map_variant = legacy_to_new_map(ds["dataset"], ds.get("sys"))
+            variant = ds.get("variant")
+            if variant is None or map_variant == "legacy_dw":
+                variant = map_variant
             variants[f.name][name] = variant
     for ds in c:
         if variants[first.name][ds] != variants[second.name][ds]:
@@ -461,14 +455,6 @@ def print_different_variants(fits, test_for_same_variants):
     res.write("The following table summarises datasets that are included in both fits but use different variants.")
     first_fit, second_fit = fits
     variant_table = pd.DataFrame(test_for_same_variants, index=(first_fit, second_fit)).T
-    # if test_for_same_variants:
-    #     res.write(
-    #         "The following datasets are included in both fits but use different variants:\n\n"
-    #     )
-    #     for ds, (first, second) in test_for_same_variants.items():
-    #         res.write(f" - {ds}: {first_fit} uses variant {first}, while {second_fit} uses variant {second}.\n")
-    #     res.write('\n')
-
     return variant_table
 
 def fit_theory_covmat_summary(fit, fitthcovmat):
@@ -547,6 +533,7 @@ def datasets_properties_table(data_input):
     """Return dataset properties for each dataset in ``data_input``"""
     dataset_property_dict = defaultdict(list)
     for dataset in data_input:
+        import pdb; pdb.set_trace()
         # only add elements if they don't evaluate to false
         ds_input_dict = {k: v for (k, v) in zip(dataset.argnames(), dataset.comp_tuple) if v}
         dataset_property_dict["Dataset"].append(ds_input_dict.pop("name"))
