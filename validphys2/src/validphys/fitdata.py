@@ -427,15 +427,6 @@ def print_different_cuts(fits, test_for_same_cuts):
 
     return res.getvalue()
 
-def find_the_variant(dataset, sys=None, variant=None):
-    """Given the (legacy) dataset input, find the new name and the right variant.
-    """
-    new_name, new_variant = legacy_to_new_map(dataset_name=dataset, sys=sys)
-    if variant is None:
-        return new_name, new_variant
-    else:
-        return new_name, variant
-
 @_assert_two_fits
 def test_for_same_variants(fits, match_datasets_by_name):
     """Given two fits, return a dictionary of where keys are names of datatets with
@@ -549,6 +540,7 @@ def datasets_properties_table(data_input):
     """Return dataset properties for each dataset in ``data_input``"""
     dataset_property_dict = defaultdict(list)
     for dataset in data_input:
+        import pdb; pdb.set_trace()
         # only add elements if they don't evaluate to false
         ds_input_dict = {k: v for (k, v) in zip(dataset.argnames(), dataset.comp_tuple) if v}
         dataset_property_dict["Dataset"].append(ds_input_dict.pop("name"))
