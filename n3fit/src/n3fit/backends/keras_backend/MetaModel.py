@@ -182,10 +182,12 @@ class MetaModel(Model):
         loss_dict = history.history
         return loss_dict
 
-    def predict(self, x=None, **kwargs):
-        """Call super().predict with the right input arguments"""
+    def predict(self, x=None, verbose=0, **kwargs):
+        """Call super().predict with the right input arguments
+        The per-batch progress bar is disabled by default (``verbose=0``).
+        """
         x = self._parse_input(x)
-        result = super().predict(x=x, **kwargs)
+        result = super().predict(x=x, verbose=verbose, **kwargs)
         return result
 
     def compute_losses(self):

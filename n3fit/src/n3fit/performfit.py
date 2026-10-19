@@ -41,6 +41,7 @@ def performfit(
     kfold_parameters,
     tensorboard=None,
     debug=False,
+    debug_options=None,
     maxcores=None,
     double_precision=False,
     parallel_models=True,
@@ -74,69 +75,72 @@ def performfit(
 
     Parameters
     ----------
-    genrep: bool
-        Whether or not to generate MC replicas. (Only used for checks)
-    data: validphys.core.DataGroupSpec
-        containing the datasets to be included in the fit. (Only used
-        for checks)
-    experiments_data: list[validphys.core.DataGroupSpec]
-        similar to `data` but now passed as argument to `ModelTrainer`
-    replicas_nnseed_fitting_data_dict: list[tuple]
-        list with element for each replica (typically just one) to be
-        fitted. Each element
-        is a tuple containing the replica number, nnseed and
-        ``fitted_data_dict`` containing all of the data, metadata
-        for each group of datasets which is to be fitted.
-    posdatasets_fitting_pos_dict: list[dict]
-        list of dictionaries containing all data and metadata for each
-        positivity dataset
-    integdatasets_fitting_integ_dict: list[dict]
-        list of dictionaries containing all data and metadata for each
-        integrability dataset
-    theoryid: validphys.core.TheoryIDSpec
-        Theory which is used to generate theory predictions from model
-        during fit. Object also contains some metadata on the theory
-        settings.
-    fiatlux: dict
-        dictionary containing the params needed from LuxQED
-    basis: list[dict]
-        preprocessing information for each flavour to be fitted.
-    fitbasis: str
-        Valid basis which the fit is to be ran in. Available bases can
-        be found in :py:mod:`validphys.pdfbases`.
-    sum_rules: str
-        Whether to impose sum rules in fit. By default set to True="ALL"
-    parameters: dict
-        Mapping containing parameters which define the network
-        architecture/fitting methodology.
-    replica_path: pathlib.Path
-        path to the output of this run
-    output_path: str
-        name of the fit
-    save: None, str
-        model file where weights will be saved, used in conjunction with
-        ``load``.
-    load: None, str
-        model file from which to load weights from.
-    hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
-        dictionary containing the details of the hyperscanner
-    hyperopt: int
-        if given, number of hyperopt iterations to run
-    trials: dict
-        dictionary containing trials defining the methodology
-    kfold_parameters: None, dict
-        dictionary with kfold settings used in hyperopt.
-    tensorboard: None, dict
-        mapping containing tensorboard settings if it is to be used. By
-        default it is None and tensorboard is not enabled.
-    debug: bool
-        activate some debug options
-    maxcores: int
-        maximum number of (logical) cores that the backend should be aware of
-    double_precision: bool
-        whether to use double precision
-    parallel_models: bool
-        whether to run models in parallel
+        genrep: bool
+            Whether or not to generate MC replicas. (Only used for checks)
+        data: validphys.core.DataGroupSpec
+            containing the datasets to be included in the fit. (Only used
+            for checks)
+        experiments_data: list[validphys.core.DataGroupSpec]
+            similar to `data` but now passed as argument to `ModelTrainer`
+        replicas_nnseed_fitting_data_dict: list[tuple]
+            list with element for each replica (typically just one) to be
+            fitted. Each element
+            is a tuple containing the replica number, nnseed and
+            ``fitted_data_dict`` containing all of the data, metadata
+            for each group of datasets which is to be fitted.
+        posdatasets_fitting_pos_dict: list[dict]
+            list of dictionaries containing all data and metadata for each
+            positivity dataset
+        integdatasets_fitting_integ_dict: list[dict]
+            list of dictionaries containing all data and metadata for each
+            integrability dataset
+        theoryid: validphys.core.TheoryIDSpec
+            Theory which is used to generate theory predictions from model
+            during fit. Object also contains some metadata on the theory
+            settings.
+        fiatlux: dict
+            dictionary containing the params needed from LuxQED
+        basis: list[dict]
+            preprocessing information for each flavour to be fitted.
+        fitbasis: str
+            Valid basis which the fit is to be ran in. Available bases can
+            be found in :py:mod:`validphys.pdfbases`.
+        sum_rules: str
+            Whether to impose sum rules in fit. By default set to True="ALL"
+        parameters: dict
+            Mapping containing parameters which define the network
+            architecture/fitting methodology.
+        replica_path: pathlib.Path
+            path to the output of this run
+        output_path: str
+            name of the fit
+        save: None, str
+            model file where weights will be saved, used in conjunction with
+            ``load``.
+        load: None, str
+            model file from which to load weights from.
+        hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
+            dictionary containing the details of the hyperscanner
+        hyperopt: int
+            if given, number of hyperopt iterations to run
+        trials: dict
+            dictionary containing trials defining the methodology
+        kfold_parameters: None, dict
+            dictionary with kfold settings used in hyperopt.
+        tensorboard: None, dict
+            mapping containing tensorboard settings if it is to be used. By
+            default it is None and tensorboard is not enabled.
+        debug: bool
+            activate some debug options
+        debug_options: DebugOptions
+            the parsed ``debug_options`` namespace of the runcard, as a DebugOptions
+            object (see there for the meaning of each field)
+        maxcores: int
+            maximum number of (logical) cores that the backend should be aware of
+        double_precision: bool
+            whether to use double precision
+        parallel_models: bool
+            whether to run models in parallel
     """
     from n3fit.backends import set_initial_state
 
@@ -208,6 +212,7 @@ def performfit(
             replicas=replica_idxs,
             trials=trials,
             load_weights_dict=load_weights_dict,
+            debug_options=debug_options,
         )
 
         # This is just to give a descriptive name to the fit function
