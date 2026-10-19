@@ -533,7 +533,6 @@ def datasets_properties_table(data_input):
     """Return dataset properties for each dataset in ``data_input``"""
     dataset_property_dict = defaultdict(list)
     for dataset in data_input:
-        import pdb; pdb.set_trace()
         # only add elements if they don't evaluate to false
         ds_input_dict = {k: v for (k, v) in zip(dataset.argnames(), dataset.comp_tuple) if v}
         dataset_property_dict["Dataset"].append(ds_input_dict.pop("name"))
