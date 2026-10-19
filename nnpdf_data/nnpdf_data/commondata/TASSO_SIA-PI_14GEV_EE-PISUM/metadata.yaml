@@ -19,7 +19,7 @@ implemented_observables:
 
 - observable: {description: "x-sec differential wrt z times s/beta", label: '$\frac{s}{\beta}\frac{d\sigma}{dz}$', units: '$$'}
   observable_name: Z
-  process_type: SIA_Z
+  process_type: SIA
   ndata: 11
   tables: [20]
   kinematics:

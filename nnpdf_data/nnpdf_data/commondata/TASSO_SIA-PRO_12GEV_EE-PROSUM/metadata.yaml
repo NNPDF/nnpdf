@@ -19,7 +19,7 @@ implemented_observables:
 
 - observable: {description: "x-sec differential wrt $p_h$", label: '$\frac{d\sigma^h}{dp_h}$', units: '$$'}
   observable_name: PH
-  process_type: SIA_PH
+  process_type: SIA
   ndata: 3
   tables: [4]
   kinematics:
