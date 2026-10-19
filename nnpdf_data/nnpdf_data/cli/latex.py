@@ -108,9 +108,8 @@ def build_latex_rows(datasets, group_by=None) -> dict:
 
 
 def generate_table(rows, group_by=None, group="unsorted"):
-    """Given a list of rows, generate a LaTeX table.
-    Generates a table with 3 columns:
-        Dataset & Observable & Reference
+    """Given a list of rows, generate a LaTeX table with 3 columns:
+    Dataset & Observable & Reference
     """
     if group_by is None:
         caption = "List of all datasets present in the runcard."
