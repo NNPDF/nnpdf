@@ -455,7 +455,6 @@ def print_different_variants(fits, test_for_same_variants):
     """Print a summary of the datasets that are included in both fits but have 
     different variants."""
     res = StringIO()
-    res.write("The following table summarises datasets that are included in both fits but use different variants.")
     first_fit, second_fit = fits
     if not test_for_same_variants:
         res.write("Datasets used in both fits have the same variants.")
