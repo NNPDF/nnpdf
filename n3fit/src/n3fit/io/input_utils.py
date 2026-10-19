@@ -1,7 +1,7 @@
 """
 Input validation and classes for the n3fit runcard
 
-The parsers (declared at the end of the file as parse_) should be used.
+The parsers (declared at the end of the file as `parse_`) should be used.
 """
 
 from dataclasses import dataclass
