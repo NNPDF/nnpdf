@@ -17,7 +17,7 @@ nnpdf_metadata:
   experiment: "LHCb"
 
 implemented_observables:
-- observable_name: "DIF_WP"
+- observable_name: "WP-PT"
   process_type: "DY_CC_PT"
   tables: ["+"] 
   ndata: 12 
@@ -35,18 +35,16 @@ implemented_observables:
   data_central: data_wp.yaml
   data_uncertainties:
     - uncertainties_wp.yaml
-
   theory:
     FK_tables: 
-    - - LHCB_WPWM_5P02TEV_WP # placeholder names
-      - LHCB_WPWM_5P02TEV_WM
-
+    - - LHCB_WP_5P02TEV_MUON_PT
+    conversion_factor: 0.001
   plotting:
     dataset_label: r"LHCb $W^+ \to \mu^+\nu$ 5.02 TeV"
     plot_x: pT
     y_label: r'$d\sigma/dp_T$ (pb/GeV)'
 
-- observable_name: "DIF_WM" 
+- observable_name: "WM-PT" 
   process_type: "DY_CC_PT" 
   tables: ["-"] 
   ndata: 12 
@@ -64,12 +62,10 @@ implemented_observables:
   data_central: data_wm.yaml
   data_uncertainties:
     - uncertainties_wm.yaml
-  
   theory:
     FK_tables: 
-    - - LHCB_WPWM_5P02TEV_WP # placeholder names
-      - LHCB_WPWM_5P02TEV_WM
-
+    - - LHCB_WM_5P02TEV_MUON_PT
+    conversion_factor: 0.001
   plotting:
     dataset_label: r"LHCb $W^- \to \mu^-\nu$ 5.02 TeV"
     plot_x: pT
