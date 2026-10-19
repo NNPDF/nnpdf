@@ -326,12 +326,13 @@ def _prepare_string(datalist, sort: bool = True):
 
 
 def print_dataset_differences(fits, match_datasets_by_name, print_common: bool = True):
-    """Given exactly two fits, print the datasets that are included in one "
-    "but not in the other. If `print_common` is True, also print the datasets
+    """Given exactly two fits, print the datasets that are included in one
+    but not in the other. If `print_common` is True, also print the datasets
     that are common.
 
     For the purposes of visual aid, everything is ordered by the dataset name,
     in terms of the the convention for the commondata means that everything is order by:
+
         1. Experiment name
         2. Process
         3. Energy

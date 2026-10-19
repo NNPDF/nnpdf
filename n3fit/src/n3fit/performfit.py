@@ -54,18 +54,23 @@ def performfit(
     and/or defined in the runcards or commandline arguments.
 
     This controller is provided with:
+
     1. Seeds generated using the replica number and the seeds defined in the runcard.
     2. Loaded datasets with replicas generated.
-        2.1 Loaded positivity/integrability sets.
+
+       1. Loaded positivity/integrability sets.
 
     The workflow of this controller is as follows:
+
     1. Generate a ModelTrainer object holding information to create the NN and perform a fit
-        (at this point no NN object has been generated)
-        1.1 (if hyperopt) generates the hyperopt scanning dictionary
-                taking as a base the fitting dictionary and the runcard's hyperscanner dictionary
+       (at this point no NN object has been generated)
+
+       1. (if hyperopt) generates the hyperopt scanning dictionary
+          taking as a base the fitting dictionary and the runcard's hyperscanner dictionary
     2. Pass the dictionary of parameters to ModelTrainer
-                                    for the NN to be generated and the fit performed
-        2.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
+       for the NN to be generated and the fit performed
+
+       1. (if hyperopt) Loop over point 4 for `hyperopt` number of times
     3. Once the fit is finished, output the PDF grid and accompanying files
 
     Parameters
