@@ -43,6 +43,9 @@ openpyxl = {version = "*", optional = true}
 scipy = {version = "*", optional = true}
 uproot = {version = "*", optional = true}
 
+[tool.poetry.scripts]
+nnpdf-data = "nnpdf_data.cli.script:main"
+
 [tool.poetry.extras]
 filter = ["mpmath", "openpyxl", "scipy", "uproot"]
 
