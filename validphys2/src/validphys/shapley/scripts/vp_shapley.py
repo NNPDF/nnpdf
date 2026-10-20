@@ -1461,6 +1461,11 @@ def run_analysis(cfg, output_dir, setup_context, n_jobs_override=None,
     cache_calibration, parallel_backend = _resolve_performance_cfg(
         cfg, cache_calibration, parallel_backend
     )
+    if mode == "calibrated" and not cache_calibration:
+        # The local band is a percentile over members at every grid node; without
+        # the memo it is recomputed per coalition (~20x slower). Results are identical.
+        print(f"  Note: forcing cache_calibration ON for mode '{mode}'.")
+        cache_calibration = True
     print(
         f"Performance       : cache_calibration={cache_calibration}, "
         f"parallel_backend={parallel_backend}"

@@ -35,7 +35,7 @@ from .setup import (
 from .perturbation import (
     apply_gaussian_perturbation,
     apply_multi_gaussian_perturbation,
-    CALIBRATED_MODES,
+    CENTRE_CALIBRATED_MODES,
     PERTURBATION_MODES,
     PERTURBATION_XSPACES,
 )
@@ -383,8 +383,11 @@ class NNPDFShapleyAnalyzer:
         }
 
     def _centre_calibration(self, mode, mu, Q0, flavor_indices=None):
-        """Centre calibration for ``mode``, or None outside the calibrated modes."""
-        if mode not in CALIBRATED_MODES:
+        """Centre calibration for ``mode``, or None outside the centre-calibrated modes.
+
+        The default 'calibrated' mode uses the local band on each grid instead.
+        """
+        if mode not in CENTRE_CALIBRATED_MODES:
             return None
         return self._get_calibration_at_mu(mu, Q0, flavor_indices)
 
@@ -1952,7 +1955,7 @@ class NNPDFShapleyAnalyzer:
                     f"PDF Flavour Importance ({basis_name})  "
                     f"mode={mode}, xspace={xspace}"
                 )
-            elif mode in CALIBRATED_MODES:
+            elif mode == 'calibrated' or mode in CENTRE_CALIBRATED_MODES:
                 bar_title = (
                     f"PDF Flavour Importance ({basis_name})  "
                     f"mu={mu}, sigma={sigma}, A={amplitude}\u03c3_rep, "
@@ -2192,7 +2195,8 @@ class NNPDFShapleyAnalyzerMultiPlayer(NNPDFShapleyAnalyzer):
     sigma, amplitude : float
         Gaussian width and peak multiplier, shared by every player.
     mode : str
-        'additive', 'multiplicative' or 'calibrated'. 'ablation' is rejected
+        'additive', 'multiplicative', 'calibrated' (local band; same-flavour
+        bumps superpose) or a centre-calibrated legacy mode. 'ablation' is rejected
         because it ignores x, which would make same-flavour players identical.
     xspace : str
         'logx' or 'linear'.
@@ -2334,7 +2338,7 @@ class NNPDFShapleyAnalyzerMultiPlayer(NNPDFShapleyAnalyzer):
             amplitude_cache=self._amp_cache(cache_key),
             calibration_at_mu=(
                 self._get_calibration_for_specs(specs, Q0, flavor_indices)
-                if self._mp_mode in CALIBRATED_MODES else None
+                if self._mp_mode in CENTRE_CALIBRATED_MODES else None
             ),
         )
 

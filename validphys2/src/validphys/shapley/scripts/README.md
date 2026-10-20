@@ -41,7 +41,10 @@ Cluster run with parallelization:
         mu           Perturbation centre in x
         sigma        Gaussian width
         amplitude    Perturbation amplitude
-        mode         additive (default) | multiplicative
+        mode         additive (default) | multiplicative |
+                     calibrated (bump = local 68% band x Gaussian) |
+                     calibrated_centre (legacy: band at mu only) |
+                     calibrated_symmetric (legacy: std at mu) | ablation
         xspace       linear (default) | logx
     theory_id        NNPDF theory ID                       [default: 708]
     basis            evolution (default) | flavor | list of both

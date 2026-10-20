@@ -19,7 +19,7 @@ class SyntheticStatsStd(SyntheticStats):
 
 
 FLAVOR_INFO = dict(names=['valence', 'test'], indices=[[3, 6], 9], n_flavors=2)
-MODES = ('calibrated', 'calibrated_symmetric')
+MODES = ('calibrated_centre', 'calibrated_symmetric')
 
 
 def observables(hadronic=False):

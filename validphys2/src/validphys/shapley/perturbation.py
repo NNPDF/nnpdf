@@ -1,28 +1,42 @@
 """Gaussian perturbation of PDF grid values.
 
 Provides tools for perturbing selected flavour channels with a Gaussian bump. Two independent parameters control the perturbation:
-  - mode: 'additive', 'multiplicative', 'calibrated', 'calibrated_symmetric',
-    or 'ablation'
+  - mode: 'additive', 'multiplicative', 'calibrated', 'calibrated_centre',
+    'calibrated_symmetric', or 'ablation'
   - xspace: 'linear' or 'logx'
 
-Calibrated mode
----------------
-In 'calibrated' mode the Gaussian amplitude is not a global constant but is
-scaled per-flavor from calibrated +1sigma/-1sigma envelopes evaluated at
-x ~ mu. The up/down shifts are built independently and can be asymmetric:
+Calibrated mode (default)
+-------------------------
+In 'calibrated' mode the Gaussian is scaled by the LOCAL 68% band of the
+calibration set at every x:
+
+    delta_j^(+)(x) = alpha * G(x) * (q84_j(x) - c_j(x))
+    delta_j^(-)(x) = alpha * G(x) * (c_j(x) - q16_j(x))
+
+where c_j is the central member and q16/q84 the 68% band (validphys Stats:
+replica percentiles for Monte-Carlo sets, rescaled quadrature for Hessian
+sets). Since G <= 1 the bump never leaves alpha times the local band, and it
+equals that band at x = mu. In units of the local band the bump is exactly
+G(x) centred at mu; in absolute terms its weight sits below mu where the band
+falls steeply (high x). The band is taken on the grid nodes of
+``calibration_gv`` (or ``gv``). Up and down shifts are built independently.
+
+Calibrated-centre mode (legacy)
+-------------------------------
+'calibrated_centre' is the definition used until October 2026: the band is
+taken once, at the centre, and copied over the whole Gaussian,
 
     amplitude_j_plus  = alpha * (q84_j(x_mu) - c_j(x_mu))
     amplitude_j_minus = alpha * (c_j(x_mu) - q16_j(x_mu))
 
-where c_j is the central calibrated reference (replica mean), and q84/q16 are
-the 84th/16th percentiles over replicas. The Gaussian shape is preserved; only
-its peak height varies by flavor and by sign. This avoids assuming a symmetric
-down-shift equal to the negative of the up-shift.
+Where the PDF falls steeply (high x) the tails of this bump exceed the local
+band by orders of magnitude, so it overstates large-x sensitivity. Kept to
+reproduce earlier results.
 
-Calibrated-symmetric mode
--------------------------
+Calibrated-symmetric mode (legacy)
+----------------------------------
 'calibrated_symmetric' restores the pre-March-2026 definition: one amplitude
-per flavour, used for both signs,
+per flavour, at the centre, used for both signs,
 
     amplitude_j_plus = amplitude_j_minus = alpha * std_j(x_mu)
 
@@ -43,9 +57,11 @@ import numpy as np
 
 # Valid perturbation parameter choices
 PERTURBATION_MODES = (
-    'additive', 'multiplicative', 'calibrated', 'calibrated_symmetric', 'ablation'
+    'additive', 'multiplicative', 'calibrated', 'calibrated_centre',
+    'calibrated_symmetric', 'ablation'
 )
-CALIBRATED_MODES = ('calibrated', 'calibrated_symmetric')
+# Modes whose amplitude is the band at the centre, copied over the Gaussian.
+CENTRE_CALIBRATED_MODES = ('calibrated_centre', 'calibrated_symmetric')
 PERTURBATION_XSPACES = ('linear', 'logx')
 
 
@@ -118,6 +134,33 @@ def _calibrated_amplitudes(calib_vals, amplitude, calibration_stats=None,
     return amp_plus, amp_minus
 
 
+def _local_band(gv_sigma, fi, calibration_stats=None, amplitude_cache=None):
+    """Up/down 1-sigma band of flavour ``fi`` at every grid node: ``(b_plus, b_minus)``.
+
+    ``gv_sigma`` has shape (ncalib, nfl, nx); with ``calibration_stats`` the
+    central member is row 0 and the band comes from the Stats class, otherwise
+    mean and 16/84 percentiles. Cached in ``amplitude_cache`` (tied to one grid).
+    """
+    key = ('local_band', int(fi))
+    if amplitude_cache is not None and key in amplitude_cache:
+        return amplitude_cache[key]
+    vals = np.asarray(gv_sigma[:, fi, :], dtype=float)
+    if calibration_stats is not None:
+        stats = calibration_stats(vals)
+        central = np.asarray(stats.central_value(), dtype=float).ravel()
+        lo, hi = stats.errorbar68()
+        lo = np.asarray(lo, dtype=float).ravel()
+        hi = np.asarray(hi, dtype=float).ravel()
+    else:
+        central = vals.mean(axis=0)
+        lo = np.percentile(vals, 16.0, axis=0)
+        hi = np.percentile(vals, 84.0, axis=0)
+    band = (np.clip(hi - central, 0.0, None), np.clip(central - lo, 0.0, None))
+    if amplitude_cache is not None:
+        amplitude_cache[key] = band
+    return band
+
+
 def _cached_calibrated_amplitudes(gv_sigma, fi, idx_mu, amplitude,
                                   calibration_stats, amplitude_cache,
                                   symmetric=False, calibration_at_mu=None, mu=None):
@@ -174,13 +217,17 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
     mode : str
         'additive':      f_j -> f_j + A * G(x)
         'multiplicative': f_j -> f_j * (1 + A * G(x))
-        'calibrated':    f_j -> f_j + delta_j^(sign) * G(x)
+        'calibrated':    f_j -> f_j + sign * A * G(x) * band_j^(sign)(x)
+            with band_j^(+)(x) = q84_j(x) - c_j(x) and
+            band_j^(-)(x) = c_j(x) - q16_j(x), the local 68% band at every
+            grid node. The bump never leaves A times the local band.
+        'calibrated_centre': f_j -> f_j + delta_j^(sign) * G(x)
             where delta_j^(+)  = A * (q84_j - c_j),
                   delta_j^(-)  = A * (c_j - q16_j),
             at mu when calibration_at_mu is supplied, otherwise at the
-            closest grid point, with c_j the calibrated central value.
-            This builds distinct calibrated up/down templates and does not
-            assume delta_j^- = -delta_j^+.
+            closest grid point (legacy; tails can exceed the local band).
+        'calibrated_symmetric': as 'calibrated_centre' with A * std_j(mu)
+            for both signs.
         'ablation':      f_j -> 0 for all x.
             mu, sigma, amplitude are ignored.
     xspace : str
@@ -213,7 +260,8 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
         Optional memo for calibrated amplitudes, owned by the caller and tied
         to this ``calibration_gv`` (or ``gv``). None recomputes every call.
     calibration_at_mu : np.ndarray or None, shape (ncalib, nfl)
-        Calibration members evaluated at the actual bump centre. Overrides
+        Centre-calibrated modes only. Calibration members evaluated at the
+        actual bump centre. Overrides
         calibration_gv for the amplitude calculation, so the same bump can
         be evaluated on different FK and sum-rule grids. The flavour axis
         must match gv; member conventions are those of calibration_stats.
@@ -269,7 +317,7 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
     else:
         sign_matrix = np.ones((nrep, len(local_flavor_idx)), dtype=float)
 
-    if mode in CALIBRATED_MODES:
+    if mode in CENTRE_CALIBRATED_MODES:
         # Per-flavor amplitudes from calibrated +1sigma / -1sigma envelopes
         # at the supplied centre (or legacy nearest grid point).
         xgrid_arr = np.asarray(xgrid)
@@ -289,6 +337,16 @@ def apply_gaussian_perturbation(gv, local_flavor_idx, mu, sigma, amplitude,
             # Build replica-wise signed perturbations using fixed up/down
             # templates for this flavor.
             delta = np.where(signs >= 0.0, gauss_plus[np.newaxis, :], -gauss_minus[np.newaxis, :])
+            gv_pert[:, fi, :] += delta
+    elif mode == 'calibrated':
+        # Gaussian shape times the local up/down band at every grid node.
+        gv_sigma = gv if calibration_gv is None else np.asarray(calibration_gv, dtype=float)
+        gauss = gaussian_profile(xgrid, mu, sigma, amplitude, xspace)
+        for col, fi in enumerate(local_flavor_idx):
+            signs = sign_matrix[:, col][:, np.newaxis]
+            band_plus, band_minus = _local_band(gv_sigma, fi, calibration_stats, amplitude_cache)
+            delta = np.where(signs >= 0.0, (gauss * band_plus)[np.newaxis, :],
+                             -(gauss * band_minus)[np.newaxis, :])
             gv_pert[:, fi, :] += delta
     elif mode == 'additive':
         gauss = gaussian_profile(xgrid, mu, sigma, amplitude, xspace)
@@ -335,7 +393,9 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
     xgrid : array-like
         x values corresponding to the last axis of *gv*.
     mode : str
-        'additive', 'multiplicative', 'calibrated', or 'ablation'.
+        As in apply_gaussian_perturbation. In 'calibrated' mode bumps of one
+        flavour superpose as band(x) * sum_k sign_k G_k(x), with the up band
+        for positive and the down band for negative signs.
     xspace : str
         'linear' or 'logx'.
     flavor_signs : np.ndarray or None
@@ -350,7 +410,7 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
     amplitude_cache : dict or None
         Optional calibrated-amplitude memo; see apply_gaussian_perturbation.
     calibration_at_mu : mapping or None
-        Maps each bump centre to a (ncalib, nfl) member array evaluated at
+        Centre-calibrated modes only. Maps each bump centre to a (ncalib, nfl) member array evaluated at
         that centre, with the same flavour ordering as gv. Overrides the
         nearest-grid-point calibration for every spec when supplied.
 
@@ -400,7 +460,17 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
                 else np.ones((nrep, 1), dtype=float)
             )
 
-            if mode in CALIBRATED_MODES:
+            if mode == 'calibrated':
+                band_plus, band_minus = _local_band(
+                    gv_sigma, fi, calibration_stats, amplitude_cache
+                )
+                gauss = gaussian_profile(xgrid_arr, mu_k, sigma, amplitude, xspace)
+                d = np.where(
+                    signs >= 0.0,
+                    (gauss * band_plus)[np.newaxis, :],
+                    -(gauss * band_minus)[np.newaxis, :],
+                )
+            elif mode in CENTRE_CALIBRATED_MODES:
                 idx_mu = int(np.argmin(np.abs(xgrid_arr - mu_k)))
                 amp_plus, amp_minus = _cached_calibrated_amplitudes(
                     gv_sigma, fi, idx_mu, amplitude, calibration_stats, amplitude_cache,
@@ -426,7 +496,7 @@ def apply_multi_gaussian_perturbation(gv, specs, sigma, amplitude,
 
             delta += d
 
-        if mode in ('additive',) + CALIBRATED_MODES:
+        if mode in ('additive', 'calibrated') + CENTRE_CALIBRATED_MODES:
             gv_pert[:, fi, :] += delta
         else:  # multiplicative: apply compound factor (1 + sum_k G_k)
             gv_pert[:, fi, :] *= (1.0 + delta)

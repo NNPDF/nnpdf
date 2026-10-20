@@ -126,7 +126,7 @@ def make_analyzer(basis='evolution', enforce=True, vector=False, hadronic=False)
     kwargs = dict(basis=basis, enforce_sumrules=enforce, member_mode='central')
     if vector:
         kwargs.update(x_values=[.15], vec_sigma=.1, vec_amplitude=.2,
-                      vec_mode='calibrated', vec_xspace='linear')
+                      vec_mode='calibrated_centre', vec_xspace='linear')
     return cls(pdf, observables,
                dict(names=['valence', 'test'], indices=[[3, 6], 9], n_flavors=2),
                **kwargs)
@@ -163,7 +163,7 @@ class PerturbationTests(unittest.TestCase):
             for x in (np.array([.1, .3]), np.array([.2, .3])):
                 outputs.append(perturbation.apply_gaussian_perturbation(
                     np.full((1, 1, 2), 10.), [0], .15, .1, 1, x,
-                    mode='calibrated', flavor_signs=np.array([[sign]]),
+                    mode='calibrated_centre', flavor_signs=np.array([[sign]]),
                     calibration_at_mu=centre, calibration_stats=SyntheticStats,
                 )[0, 0, -1])
             assert_allclose(outputs[0], outputs[1], rtol=0, atol=1e-14)
@@ -189,7 +189,7 @@ class AnalyzerTests(unittest.TestCase):
                 for hadronic in (False, True):
                     with self.subTest(basis=basis, enforce=enforce, hadronic=hadronic):
                         analyzer = make_analyzer(basis, enforce, hadronic=hadronic)
-                        analyzer._evaluate_chi2([0, 1], .15, .1, .2, mode='calibrated')
+                        analyzer._evaluate_chi2([0, 1], .15, .1, .2, mode='calibrated_centre')
                         a, b = analyzer.observables
                         assert_allclose(a.last_grid[:, :, -1], b.last_grid[:, :, -1],
                                         rtol=0, atol=1e-14)
@@ -197,11 +197,11 @@ class AnalyzerTests(unittest.TestCase):
     def test_zero_amplitude_has_one_baseline(self):
         for basis in ('flavor', 'evolution'):
             analyzer = make_analyzer(basis)
-            baseline = analyzer._evaluate_chi2([], .15, .1, 0, mode='calibrated')
+            baseline = analyzer._evaluate_chi2([], .15, .1, 0, mode='calibrated_centre')
             for coalition in ([0], [1], [0, 1]):
                 for sign in (1., -1.):
                     value = analyzer._evaluate_chi2(
-                        coalition, .15, .1, 0, mode='calibrated',
+                        coalition, .15, .1, 0, mode='calibrated_centre',
                         random_sign_matrix=np.full((1, 2), sign),
                     )
                     assert_allclose(value, baseline, rtol=0, atol=1e-12)
@@ -214,7 +214,7 @@ class AnalyzerTests(unittest.TestCase):
                 for coalition in ([1], [0], [0, 1]):
                     for signs in (np.array([[1., -1.]]), np.array([[-1., 1.]])):
                         with self.subTest(basis=basis, enforce=enforce, coalition=coalition):
-                            kwargs = dict(mode='calibrated', random_sign_matrix=signs)
+                            kwargs = dict(mode='calibrated_centre', random_sign_matrix=signs)
                             expected = scalar._evaluate_chi2(coalition, .15, .1, .2, **kwargs)
                             actual = vector._evaluate_chi2(coalition, .15, .1, .2, **kwargs)
                             assert_allclose(actual, expected, rtol=0, atol=1e-12)
