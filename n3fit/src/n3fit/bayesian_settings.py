@@ -160,7 +160,11 @@ def check_bayesian_parameters(parameters):
 
 def is_bnn(parameters):
     """True if the architecture has a Bayesian layer"""
-    return any(layer in BAYESIAN_LAYER_TYPES for layer in parameters.get("layer_type") or [])
+    # layer_type can arrive as a numpy array (standard fits), whose truth value is ambiguous
+    layer_type = parameters.get("layer_type")
+    if layer_type is None:
+        return False
+    return any(str(layer) in BAYESIAN_LAYER_TYPES for layer in layer_type)
 
 
 def bayesian_parameters(parameters):
