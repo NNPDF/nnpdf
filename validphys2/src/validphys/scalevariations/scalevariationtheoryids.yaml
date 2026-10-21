@@ -20,6 +20,17 @@ nnlo_41: &nnlo_41
   (2, 1)     : 41_000_014
   (2, 2)     : 41_000_015
 
+# NNLO EXA (4.1 settings, Q0 = 1 GeV, as = 0.118)
+nnlo_41_q0_1gev: &nnlo_41_q0_1gev
+  # Only 7-points available
+  (0.5, 0.5) : 41_002_012
+  (0.5, 1)   : 41_002_011
+  (1, 0.5)   : 41_002_010
+  (1, 1)     : 41_002_000
+  (1, 2)     : 41_002_013
+  (2, 1)     : 41_002_014
+  (2, 2)     : 41_002_015
+
 nnlo_qed: &nnlo_qed
   # alphas variations
   (0.106): 40_003_000
@@ -428,6 +439,10 @@ scale_variations_for:
   # NNLO EXA alphas=0.118
   - theoryid: 41_000_000
     variations: *nnlo_41
+
+  # NNLO EXA alphas=0.118, Q0 = 1 GeV
+  - theoryid: 41_002_000
+    variations: *nnlo_41_q0_1gev
 
   # 4.0 series:
   # NLO alphas=0.117
