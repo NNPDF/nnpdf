@@ -48,4 +48,4 @@ mc: 1.51
 mt: 172.5
 nfref: 5
 nf0: 3
-n3lo_cf_variation: 0
+n3lo_cf_variation: [0, 0, 0, 0]

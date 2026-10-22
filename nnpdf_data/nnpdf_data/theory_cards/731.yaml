@@ -55,6 +55,6 @@ n3lo_ad_variation:
 - 0
 - 0
 - 0
-n3lo_cf_variation: 0
+n3lo_cf_variation: [0, 0, 0, 0]
 nf0: 4
 nfref: 5
