@@ -68,10 +68,12 @@ Positivity
 {@plot_dataspecs_positivity@}
 {@endwith@}
 
-Dataset differences and cuts
-----------------------------
+Dataset differences, cuts, variants
+-----------------------------------
 {@print_dataset_differences@}
+### Differences in cuts
 {@print_different_cuts@}
+### Variant differences
 {@print_different_variants@}
 
 Code versions
