@@ -455,11 +455,10 @@ def print_different_variants(fits, test_for_same_variants):
     first_fit, second_fit = fits
     if not test_for_same_variants:
         res.write("Datasets used in both fits have the same variants.")
+        return res.getvalue()
     else:
-        res.write("The following table summarises datasets that are included in both fits but use different variants.\n")
         variant_table = pd.DataFrame(test_for_same_variants, index=(first_fit, second_fit)).T
-        res.write(variant_table.to_string())
-    return res.getvalue()
+        return variant_table
 
 def fit_theory_covmat_summary(fit, fitthcovmat):
     """returns a table with a single column for the `fit`, with three rows
