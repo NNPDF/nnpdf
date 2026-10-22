@@ -421,6 +421,8 @@ def print_different_cuts(fits, test_for_same_cuts):
                 "    * %s includes %d out of %d points.\n" % (second_fit, second_len, total_points)
             )
         res.write('\n')
+    else:
+        res.write("Datasets included in both fits have the same kinematical cuts.")
 
     return res.getvalue()
 
