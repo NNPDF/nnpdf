@@ -1,0 +1,56 @@
+---
+comment: |
+  ALEPH Collaboration. Study of inclusive pi+-, K+- and p pbar differential cross sections in hadronic decays of the Z as a function of the scaled momentum. The results are based on approximately 520 000 events measured by the ALEPH detector at LEP during 1992.
+dateupdated: 23/02/1995 00:00:00
+modifications:
+- {action: Encoded, date: 23 FEB 1995, who: Mike Whalley.}
+record_ids:
+- {id: 382179, type: inspire}
+- {id: 1742, type: red}
+
+---
+data_file: Table1.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> HADRONS, E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DZ]
+- name: phrases
+  values: [Exclusive, Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [0.216]
+location: Data from T 1
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> HADRONS, E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DZ]
+- name: phrases
+  values: [Exclusive, Inclusive, Single Differential Cross Section, E+ E- Scattering,
+    Strange production]
+- name: cmenergies
+  values: [0.216]
+location: Data from T 2
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> HADRONS, E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DZ]
+- name: phrases
+  values: [Exclusive, Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [0.216]
+location: Data from T 3
+name: Table 3
+

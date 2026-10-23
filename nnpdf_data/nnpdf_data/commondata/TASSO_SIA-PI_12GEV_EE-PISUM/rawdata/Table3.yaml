@@ -1,0 +1,61 @@
+dependent_variables:
+- header: {name: D(SIG)/DP(P=3), units: NB/GEV}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '12.0'}
+  - {name: SQRT(S), units: GeV, value: '12.0'}
+  values:
+  - errors:
+    - {symerror: 0.81}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 2.2
+  - errors:
+    - {symerror: 1.3}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 3.9
+  - errors:
+    - {symerror: 1.7}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 3.8
+- header: {name: (S/BETA)*D(SIG)/DX, units: MUB/GEV**2}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '12.0'}
+  - {name: SQRT(S), units: GeV, value: '12.0'}
+  values:
+  - errors:
+    - {symerror: 1.6}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 4.2
+  - errors:
+    - {symerror: 2.1}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 6.2
+  - errors:
+    - {symerror: 2.0}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 4.56
+- header: {name: (E(P=3)/(4*PI*P(P=3)**2))*D(SIG)/DP(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '12.0'}
+  - {name: SQRT(S), units: GeV, value: '12.0'}
+  values:
+  - errors:
+    - {symerror: 0.21}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.58
+  - errors:
+    - {symerror: 0.25}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.76
+  - errors:
+    - {symerror: 0.2}
+    - {label: 'sys,OVERALL NORMALIZATION UNCERTAINTY AT EACH ENERGY', symerror: 20.0%}
+    value: 0.45
+independent_variables:
+- header: {name: P(P=3), units: GEV}
+  values:
+  - {value: 0.45}
+  - {value: 0.55}
+  - {value: 0.8}
