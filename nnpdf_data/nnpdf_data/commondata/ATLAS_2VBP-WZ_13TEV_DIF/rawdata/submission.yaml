@@ -1,0 +1,531 @@
+additional_resources:
+- {description: web page with auxiliary material, location: 'https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/STDM-2018-03'}
+comment: "CERN-LHC. This paper presents measurements of $W^{\\pm}Z$ production in
+  $pp$ collisions at a center-of-mass energy of $13$ TeV. The data were collected
+  in 2015 and 2016 by the ATLAS experiment  at the Large Hadron Collider, and correspond
+  to an integrated luminosity of 36.1 fb$^{-1}$. The $W^{\\pm}Z$ candidate events
+  are reconstructed using leptonic decay modes into  electrons and muons of the gauge
+  bosons. The measured inclusive cross section in the detector fiducial region for
+  leptonic decay modes is\n$\\sigma_{W^\\pm Z \\rightarrow \\ell^{'} \\nu \\ell \\ell}^{\\textrm{fid.}}
+  =  63.7  \\, \\pm~1.0~\\textrm{(stat.)} \\, \\pm~2.3~\\textrm{(sys.)} \\, \\pm~0.3~\\textrm{(mod.)}
+  \\, \\pm~1.5~\\textrm{(lumi.)}$ fb, in agreement with the next-to-next-to-leading-order
+  Standard Model prediction of $61.5^{+1.4}_{-1.3}$ fb. Cross sections for $W^+Z$
+  and $W^-Z$ production and their ratio are presented as well as differential cross
+  sections for several kinematic observables. An analysis of angular distributions
+  of lepton decays of $W$ and $Z$ bosons is performed and integrated helicity fractions
+  in the detector fiducial region are measured for each of the $W$ and $Z$ bosons.
+  The longitudinal polarisation of  pair-produced vector bosons is measured for the
+  first time in  $pp$ collisions.\n\nThe cross sections are measured in a fiducial
+  phase space reflecting the detector acceptance, defined by:\n- $p_{\\mathrm{T}}$
+  of electrons and muons from Z0 decays > 15 GeV\n- $p_{\\mathrm{T}}$ of electrons
+  and muons from the $W^{\\pm}$ decays > 20 GeV\n- $|\\eta|$ of muons and electrons
+  < 2.5\n- Leptons from the Z0 boson are separated by $\\Delta R(\\ell,\\ell) > 0.2$
+  from each other\n- Leptons from the Z0 and W bosons are separated by $\\Delta R(\\ell,\\ell)
+  > 0.3$ from each other\n- |dilepton mass - Z0 mass| < 10 GeV\n- $m_{\\mathrm{T}}$
+  of $W^{\\pm}$ > 30 GeV.\n\n\nAt particle level, the kinematics of final-state prompt
+  electrons and muons is computed including the contributions from \nfinal-state radiated
+  photons within a distance in the ($\\eta,\\phi$) plane of \n$\\Delta R = \\sqrt{(\\Delta\\eta)^2
+  + (\\Delta\\phi)^2} = 0.1$ around the direction of the charged lepton. \nThese dressed
+  leptons and the final-state neutrinos that do not originate from hadron or $\\tau$
+  decays  are \nassociated with the $W$ and $Z$ boson decay products with an algorithmic
+  approach, called ``resonant shape''. \nThis algorithm is  based on the value of
+  an estimator expressing the product of the nominal line shapes of \nthe $W$ and
+  $Z$ resonances\n\n   $P = \\left| \\frac{1}{ m^2_{(\\ell^+,\\ell^-)} - \\left(m_Z^{\\textrm{PDG}}\\right)^2
+  + i \\; \\Gamma_Z^{\\textrm{PDG}} \\; m_Z^{\\textrm{PDG}} } \\right|^2  \\times
+  \\; \\left| \\frac {1} { m^2_{(\\ell',\\nu_{\\ell'})} - \\left(m_W^{\\textrm{PDG}}\\right)^2
+  + i \\; \\Gamma_W^{\\textrm{PDG}} \\; m_W^{\\textrm{PDG}} } \\right|^2$\n\nwhere
+  $m_Z^{\\textrm{PDG}}$ ($m_W^{\\textrm{PDG}}$) and $\\Gamma_Z^{\\textrm{PDG}}$ ($\\Gamma_W^{\\textrm{PDG}}$)
+  are the \nworld average mass and total width of the $Z$ ($W$) boson, respectively,
+  as reported by the Particle Data Group. \nThe input to the estimator is the invariant
+  mass $m$ of all possible pairs ($\\ell^+,\\ell^-$) and\n($\\ell',\\nu_{\\ell'}$)
+  satisfying the fiducial selection requirements. \nThe final choice of which leptons
+  are assigned to the $W$ or $Z$ bosons corresponds to the configuration \nexhibiting
+  the highest value of the estimator."
+hepdata_doi: 10.17182/hepdata.83701.v1
+record_ids:
+- {id: 1720438, type: inspire}
+- {id: 2658356, type: cds}
+---
+additional_resources: []
+data_file: data1.yaml
+data_license: {description: null, name: null, url: null}
+description: "The measured $W^{\\pm}Z$ fiducial cross section in the four channels
+  and their combination.  \nThe first systematic uncertainty is the combined systematic
+  uncertainty excluding luminosity uncertainty, the second is the modelling uncertainty,
+  the third is luminosity uncertainty."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Table 4 of the paper
+name: Table 1
+table_doi: 10.17182/hepdata.83701.v1/t1
+---
+additional_resources: []
+data_file: data2.yaml
+data_license: {description: null, name: null, url: null}
+description: "The measured $W^{+}Z$ fiducial cross section in the four channels and
+  their combination.  \nThe first systematic uncertainty is the combined systematic
+  uncertainty excluding luminosity uncertainty, the second is the modelling uncertainty,
+  the third is luminosity uncertainty."
+keywords:
+- name: reactions
+  values: [P P --> W+ Z0 X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Table 4 of the paper
+name: Table 2
+table_doi: 10.17182/hepdata.83701.v1/t2
+---
+additional_resources: []
+data_file: data3.yaml
+data_license: {description: null, name: null, url: null}
+description: "The measured $W^{-}Z$ fiducial cross section in the four channels and
+  their combination.  \nThe first systematic uncertainty is the combined systematic
+  uncertainty excluding luminosity uncertainty, the second is the modelling uncertainty,
+  the third is luminosity uncertainty."
+keywords:
+- name: reactions
+  values: [P P --> W- Z0 X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Table 4 of the paper
+name: Table 3
+table_doi: 10.17182/hepdata.83701.v1/t3
+---
+additional_resources: []
+data_file: data4.yaml
+data_license: {description: null, name: null, url: null}
+description: The measured fiducial cross sections are corrected to the dressed level.
+  The ratio of $C_{WZ}^{\textrm{dressed}}/C_{WZ}^{\textrm{Born}}$ factors presented
+  in this table can be used to correct fiducial integrated cross sections from dressed
+  to Born level.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: []
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxilliary table 1
+name: Table 4
+table_doi: 10.17182/hepdata.83701.v1/t4
+---
+additional_resources: []
+data_file: data5.yaml
+data_license: {description: null, name: null, url: null}
+description: Ratio of fiducial cross sections measured for $W^{+} Z$ and $W^{-} Z$
+  production.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Page 16 of the paper
+name: Table 5
+table_doi: 10.17182/hepdata.83701.v1/t5
+---
+additional_resources: []
+data_file: data6.yaml
+data_license: {description: null, name: null, url: null}
+description: |-
+  Cross section extrapolated to total phase space and all W and Z boson decays.
+  The first systematic uncertainty is the combined systematic uncertainty excluding theory and luminosity uncertainties,
+  the second is the theory uncertainty and the third is the luminosity uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Page 16 of the paper
+name: Table 6
+table_doi: 10.17182/hepdata.83701.v1/t6
+---
+additional_resources: []
+data_file: data7.yaml
+data_license: {description: null, name: null, url: null}
+description: The total cross section is measured at dressed level and can also be
+  corrected to Born level use this acceptance correction factor.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxillary material
+name: Table 7
+table_doi: 10.17182/hepdata.83701.v1/t7
+---
+additional_resources:
+- {description: Figure 4a, location: fig_04a.png}
+- {description: Thumbnail for Figure 4a, location: thumb_fig_04a.png}
+data_file: data8.yaml
+data_license: {description: null, name: null, url: null}
+description: "Measured fiducial cross section for a single leptonic decay channel
+  $\\ell'^\\pm \\nu \\ell^+ \\ell'^-$ of the $W\nThe relative uncertainties are reported
+  as percentages. \nThe systematic uncertainties are in order of appearance: total
+  uncorrelated systematic and correlated systematics related respectively to \nunfolding,
+  electrons, muons, jets, reducible and irreducible backgrounds and pileup. \nthe
+  last bin is a cross section for all events above the lower end of the bin."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DPTZ]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Figure 4 of the paper, Auxiliary Table 6
+name: Table 8
+table_doi: 10.17182/hepdata.83701.v1/t8
+
+---
+additional_resources: []
+data_file: data9.yaml
+data_license: {description: null, name: null, url: null}
+description: Correlation matrix for the unfolded cross section.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DPTZ]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxiliary Table 7
+name: Table 9
+table_doi: 10.17182/hepdata.83701.v1/t9
+---
+additional_resources: 
+- {description: Figure 4b, location: fig_04b.png}
+- {description: Thumbnail for Figure 4b, location: thumb_fig_04b.png}
+data_file: data10.yaml
+data_license: {description: null, name: null, url: null}
+description: "Measured fiducial cross section for a single leptonic decay channel
+  $\\ell'^\\pm \\nu \\ell^+ \\ell'^-$ of the $W\nThe relative uncertainties are reported
+  as percentages. \nThe systematic uncertainties are in order of appearance: total
+  uncorrelated systematic and correlated systematics related respectively to \nunfolding,
+  electrons, muons, jets, reducible and irreducible backgrounds and pileup. \nthe
+  last bin is a cross section for all events above the lower end of the bin."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DPTW]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Figure 4 of the paper, Auxiliary Table 2
+name: Table 10
+table_doi: 10.17182/hepdata.83701.v1/t10
+---
+additional_resources: []
+data_file: data11.yaml
+data_license: {description: null, name: null, url: null}
+description: Correlation matrix for the unfolded cross section.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DPTW]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxiliary Table 3
+name: Table 11
+table_doi: 10.17182/hepdata.83701.v1/t11
+---
+additional_resources: 
+- {description: Figure 4c, location: fig_04c.png}
+- {description: Thumbnail for Figure 4c, location: thumb_fig_04c.png}
+data_file: data12.yaml
+data_license: {description: null, name: null, url: null}
+description: "Measured fiducial cross section for a single leptonic decay channel
+  $\\ell'^\\pm \\nu \\ell^+ \\ell'^-$ of the $W\nThe relative uncertainties are reported
+  as percentages. \nThe systematic uncertainties are in order of appearance: total
+  uncorrelated systematic and correlated systematics related respectively to \nunfolding,
+  electrons, muons, jets, reducible and irreducible backgrounds and pileup. \nthe
+  last bin is a cross section for all events above the lower end of the bin."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DMTWZ]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Figure 4 of the paper, Auxiliary Table 4
+name: Table 12
+table_doi: 10.17182/hepdata.83701.v1/t12
+---
+additional_resources: []
+data_file: data13.yaml
+data_license: {description: null, name: null, url: null}
+description: Correlation matrix for the unfolded cross section.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DMTWZ]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxiliary Table 5
+name: Table 13
+table_doi: 10.17182/hepdata.83701.v1/t13
+---
+additional_resources:
+- {description: Figure 4d, location: fig_04d.png}
+- {description: Thumbnail for Figure 4d, location: thumb_fig_04d.png}
+data_file: data14.yaml
+data_license: {description: null, name: null, url: null}
+description: "Measured fiducial cross section for a single leptonic decay channel
+  $\\ell'^\\pm \\nu \\ell^+ \\ell'^-$ of the $W\nThe relative uncertainties are reported
+  as percentages. \nThe systematic uncertainties are in order of appearance: total
+  uncorrelated systematic and correlated systematics related respectively to \nunfolding,
+  electrons, muons, jets, reducible and irreducible backgrounds and pileup. \nthe
+  last bin is a cross section for all events above the lower end of the bin."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DELTAPHIWZ]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Figure 4 of the paper, Auxiliary Table 10
+name: Table 14
+table_doi: 10.17182/hepdata.83701.v1/t14
+---
+additional_resources: []
+data_file: data15.yaml
+data_license: {description: null, name: null, url: null}
+description: Correlation matrix for the unfolded cross section.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DELTAPHIWZ]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxiliary Table 11
+name: Table 15
+table_doi: 10.17182/hepdata.83701.v1/t15
+---
+additional_resources:
+- {description: Figure 5a, location: fig_05a.png}
+- {description: Thumbnail for Figure 5a, location: thumb_fig_05a.png}
+data_file: data16.yaml
+data_license: {description: null, name: null, url: null}
+description: "Measured fiducial cross section for a single leptonic decay channel
+  $\\ell'^\\pm \\nu \\ell^+ \\ell'^-$ of the $W\nThe relative uncertainties are reported
+  as percentages. \nThe systematic uncertainties are in order of appearance: total
+  uncorrelated systematic and correlated systematics related respectively to \nunfolding,
+  electrons, muons, jets, reducible and irreducible backgrounds and pileup. \nthe
+  last bin is a cross section for all events above the lower end of the bin."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DPTNEUTRINO]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Figure 5 of the paper, Auxiliary Table 8
+name: Table 16
+table_doi: 10.17182/hepdata.83701.v1/t16
+---
+additional_resources: []
+data_file: data17.yaml
+data_license: {description: null, name: null, url: null}
+description: Correlation matrix for the unfolded cross section.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DPTNEUTRINO]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxiliary Table 9
+name: Table 17
+table_doi: 10.17182/hepdata.83701.v1/t17
+---
+additional_resources:
+- {description: Figure 5b, location: fig_05b.png}
+- {description: Thumbnail for Figure 5b, location: thumb_fig_05b.png}
+data_file: data18.yaml
+data_license: {description: null, name: null, url: null}
+description: "Measured fiducial cross section for a single leptonic decay channel
+  $\\ell'^\\pm \\nu \\ell^+ \\ell'^-$ of the $W\nThe relative uncertainties are reported
+  as percentages. \nThe systematic uncertainties are in order of appearance: total
+  uncorrelated systematic and correlated systematics related respectively to \nunfolding,
+  electrons, muons, jets, reducible and irreducible backgrounds and pileup. \nthe
+  last bin is a cross section for all events above the lower end of the bin."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG//DELTAYZYWLEPTON]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Figure 5 of the paper, Auxiliary Table 12
+name: Table 18
+table_doi: 10.17182/hepdata.83701.v1/t18
+---
+additional_resources: []
+data_file: data19.yaml
+data_license: {description: null, name: null, url: null}
+description: Correlation matrix for the unfolded cross section.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG//DELTAYZYWLEPTON]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxiliary Table 13
+name: Table 19
+table_doi: 10.17182/hepdata.83701.v1/t19
+---
+additional_resources:
+- {description: Figure 6a, location: fig_06a.png}
+- {description: Thumbnail for Figure 6a, location: thumb_fig_06a.png}
+data_file: data20.yaml
+data_license: {description: null, name: null, url: null}
+description: "Measured fiducial cross section for a single leptonic decay channel
+  $\\ell'^\\pm \\nu \\ell^+ \\ell'^-$ of the $W\nThe relative uncertainties are reported
+  as percentages. \nThe systematic uncertainties are in order of appearance: total
+  uncorrelated systematic and correlated systematics related respectively to \nunfolding,
+  electrons, muons, jets, reducible and irreducible backgrounds and pileup. \nthe
+  last bin is a cross section for all events above the lower end of the bin."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DNJETS]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Figure 6 of the paper, Auxiliary Table 14
+name: Table 20
+table_doi: 10.17182/hepdata.83701.v1/t20
+---
+additional_resources: []
+data_file: data21.yaml
+data_license: {description: null, name: null, url: null}
+description: Correlation matrix for the unfolded cross section.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DNJETS]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxiliary Table 15
+name: Table 21
+table_doi: 10.17182/hepdata.83701.v1/t21
+---
+additional_resources:
+- {description: Figure 6b, location: fig_06b.png}
+- {description: Thumbnail for Figure 6b, location: thumb_fig_06b.png}
+data_file: data22.yaml
+data_license: {description: null, name: null, url: null}
+description: "Measured fiducial cross section for a single leptonic decay channel
+  $\\ell'^\\pm \\nu \\ell^+ \\ell'^-$ of the $W\nThe relative uncertainties are reported
+  as percentages. \nThe systematic uncertainties are in order of appearance: total
+  uncorrelated systematic and correlated systematics related respectively to \nunfolding,
+  electrons, muons, jets, reducible and irreducible backgrounds and pileup. \nthe
+  last bin is a cross section for all events above the lower end of the bin."
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DMJJ]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Figure 6 of the paper, Auxiliary Table 16
+name: Table 22
+table_doi: 10.17182/hepdata.83701.v1/t22
+---
+additional_resources: []
+data_file: data23.yaml
+data_license: {description: null, name: null, url: null}
+description: Correlation matrix for the unfolded cross section.
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: [DSIG/DMJJ]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Auxiliary Table 17
+name: Table 23
+table_doi: 10.17182/hepdata.83701.v1/t23
+---
+additional_resources: []
+data_file: data24.yaml
+data_license: {description: null, name: null, url: null}
+description: '5: Measured helicity fractions in the fiducial phase space with Born
+  level leptons, for $W^-$, $W^+Z$ and $W^{\pm}Z$ events. The total uncertainties
+  on the measurements are reported.'
+keywords:
+- name: reactions
+  values: [P P --> (W+ + W-) Z0 X]
+- name: observables
+  values: []
+- name: phrases
+  values: []
+- name: cmenergies
+  values: [13000.0]
+location: Data from Table 5 of the paper
+name: Table 24
+table_doi: 10.17182/hepdata.83701.v1/t24

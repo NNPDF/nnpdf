@@ -1,0 +1,18 @@
+dependent_variables:
+- header: {name: 'Total cross section $\sigma^{\mathrm{total}}_{W^\pm Z}$ [pb]'}
+  qualifiers:
+  - {name: ., value: Total phase space}
+  - {name: M(Z0), value: 66 TO 116 GEV}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: '0.8'}
+    - {label: sys, symerror: '1.8'}
+    - {label: 'sys,theory', symerror: '0.9'}
+    - {label: 'sys,lumi', symerror: '1.1'}
+    value: '51.0'
+independent_variables:
+- header: {name: '$\sqrt{s}$ [GeV]'}
+  values:
+  - {value: '13000.0'}

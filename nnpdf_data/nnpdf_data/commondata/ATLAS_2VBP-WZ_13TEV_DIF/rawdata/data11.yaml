@@ -1,0 +1,156 @@
+dependent_variables:
+- header: {name: ''}
+  qualifiers:
+  - {name: ., value: Correlation matrix}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.71'
+  - errors: []
+    value: '0.52'
+  - errors: []
+    value: '0.39'
+  - errors: []
+    value: '0.30'
+  - errors: []
+    value: '0.28'
+  - errors: []
+    value: '0.71'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.62'
+  - errors: []
+    value: '0.41'
+  - errors: []
+    value: '0.35'
+  - errors: []
+    value: '0.33'
+  - errors: []
+    value: '0.52'
+  - errors: []
+    value: '0.62'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.47'
+  - errors: []
+    value: '0.34'
+  - errors: []
+    value: '0.35'
+  - errors: []
+    value: '0.39'
+  - errors: []
+    value: '0.41'
+  - errors: []
+    value: '0.47'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.33'
+  - errors: []
+    value: '0.32'
+  - errors: []
+    value: '0.30'
+  - errors: []
+    value: '0.35'
+  - errors: []
+    value: '0.34'
+  - errors: []
+    value: '0.33'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.21'
+  - errors: []
+    value: '0.28'
+  - errors: []
+    value: '0.33'
+  - errors: []
+    value: '0.35'
+  - errors: []
+    value: '0.32'
+  - errors: []
+    value: '0.21'
+  - errors: []
+    value: '1.00'
+independent_variables:
+- header: {name: '$p_{\mathrm{T}}^{W}$ [GeV]'}
+  values:
+  - {high: 30.0, low: 0.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 1000.0, low: 220.0}
+- header: {name: '$p_{\mathrm{T}}^{W}$ [GeV]'}
+  values:
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 60.0, low: 30.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 220.0, low: 150.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 1000.0, low: 220.0}
+  - {high: 1000.0, low: 220.0}
