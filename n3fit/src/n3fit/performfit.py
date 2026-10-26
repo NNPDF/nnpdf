@@ -41,6 +41,7 @@ def performfit(
     kfold_parameters,
     tensorboard=None,
     debug=False,
+    debug_options=None,
     maxcores=None,
     double_precision=False,
     parallel_models=True,
@@ -53,18 +54,23 @@ def performfit(
     and/or defined in the runcards or commandline arguments.
 
     This controller is provided with:
+
     1. Seeds generated using the replica number and the seeds defined in the runcard.
     2. Loaded datasets with replicas generated.
-        2.1 Loaded positivity/integrability sets.
+
+       1. Loaded positivity/integrability sets.
 
     The workflow of this controller is as follows:
+
     1. Generate a ModelTrainer object holding information to create the NN and perform a fit
-        (at this point no NN object has been generated)
-        1.1 (if hyperopt) generates the hyperopt scanning dictionary
-                taking as a base the fitting dictionary and the runcard's hyperscanner dictionary
+       (at this point no NN object has been generated)
+
+       1. (if hyperopt) generates the hyperopt scanning dictionary
+          taking as a base the fitting dictionary and the runcard's hyperscanner dictionary
     2. Pass the dictionary of parameters to ModelTrainer
-                                    for the NN to be generated and the fit performed
-        2.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
+       for the NN to be generated and the fit performed
+
+       1. (if hyperopt) Loop over point 4 for `hyperopt` number of times
     3. Once the fit is finished, output the PDF grid and accompanying files
 
     Parameters
@@ -126,6 +132,9 @@ def performfit(
             default it is None and tensorboard is not enabled.
         debug: bool
             activate some debug options
+        debug_options: DebugOptions
+            the parsed ``debug_options`` namespace of the runcard, as a DebugOptions
+            object (see there for the meaning of each field)
         maxcores: int
             maximum number of (logical) cores that the backend should be aware of
         double_precision: bool
@@ -203,6 +212,7 @@ def performfit(
             replicas=replica_idxs,
             trials=trials,
             load_weights_dict=load_weights_dict,
+            debug_options=debug_options,
         )
 
         # This is just to give a descriptive name to the fit function
@@ -219,14 +229,14 @@ def performfit(
         # this block                                                           #
         ########################################################################
         if hyperopt:
-            from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
+            from n3fit.hyper_optimization.hyper_scan import get_scan_wrapper
+
+            scan_wrapper = get_scan_wrapper(hyperscanner.backend)
 
             # TODO: save everything to a hyperopt folder instead
             # Save everything to replica_1 regardless of which replicas are we running
             replica_path_set = replica_path / "replica_1"
-            hyper_scan_wrapper(
-                replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
-            )
+            scan_wrapper(replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt)
             log.info("The hyperparameter scan is successfully finished.")
             # In general after we do the hyperoptimization we do not care about the fit
             # so just let this die here
