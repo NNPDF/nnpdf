@@ -29,9 +29,54 @@ Summary
 -  Theoretical covariance matrices are built according to the various prescriptions
    in :ref:`prescrips`.
 
--  The prescription must be one of 3(f, r) point, 5(bar) point, 7(original) point or 9 point, see  :ref:`definitions <prescrips>`.
-   You can specify this using ``point_prescription: "x point"`` in the runcard. The translation of this flag
-   into the relevant ``theoryids`` is handled by the ``scalevariations`` module in ``validphys``.
+-  The prescription for scale variations must be one of ``3(f, r) point``,
+   ``5(bar) point``, ``7(original) point`` or ``9 point``, see
+   :ref:`definitions <prescrips>`. Beside this, the following prescriptions
+   are available for IHOU variations and for alphas variations. You can
+   specify them using ``point_prescription: "x point"`` in the runcard. The
+   translation of this flag into the relevant ``theoryids`` is handled by the
+   ``scalevariations`` module in ``validphys``.
+
+   IHOU variations
+      ``ad ihou``
+         Varies the IHOU Anomalous Dimensions in EKO.
+
+      ``dis ihou``
+         Varies the IHOU Coefficient Functions in YADISM.
+
+      ``3pt missing``
+         3 point renormalisation scale variations for a subset of data.
+
+      ``3pt hadronic``
+         3 point renormalisation scale variations for hadronic datasets.
+
+      ``fhmruvv ihou``
+         Varies the FHMRUVV splitting functions in EKO.
+
+   Alphas variations
+      ``alphas 0117 0119 0115``
+         Varies \alpha_s central at 0.117 from 0.115 to 0.115.
+
+      ``alphas 0118 0120 0116``
+         Varies \alpha_s central at 0.118 from 0.120 to 0.116.
+
+      ``alphas 0119 0121 0117``
+         Varies \alpha_s central at 0.119 from 0.121 to 0.117.
+
+      ``alphas 0119 0122 0116``
+         Varies \alpha_s central at 0.119 from 0.121 to 0.116.
+
+      ``alphas 0119 0123 0115``
+         Varies \alpha_s central at 0.119 from 0.123 to 0.115.
+
+      ``alphas 0120 0122 0118``
+         Varies \alpha_s central at 0.120 from 0.122 to 0.118.
+
+      ``alphas 0121 0123 0119``
+         Varies \alpha_s central at 0.121 from 0.123 to 0.119.
+
+-  You may use multiple prescriptions in the theory covariance matrix, by specifying multiple prescriptions at once. 
+   E.g. ``point_prescriptions: ["fhmruvv ihou", "dis ihou", "7 point"]`` will vary the weights using  three prescriptions.
 
 -  As input you need theories for the relevant scale combinations which
    correspond to the prescription. This information is taken from the
