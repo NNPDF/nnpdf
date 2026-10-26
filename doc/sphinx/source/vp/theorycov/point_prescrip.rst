@@ -184,7 +184,7 @@ In contrast to the scale variation prescriptions, each variation is treated as a
 so the expressions for :math:`s_{11}` and :math:`s_{12}` have the same form.
 
 ad ihou
-^^^^^^^
+=======
 
 Variations of the singlet splitting functions. For each splitting function
 :math:`F \in \{gg, gq, qg, qq\}` there are :math:`n_F` variations
@@ -207,7 +207,7 @@ These are in the outdated prescription, and superceded by ``fhmruvv ihou``.
    s_{12} = \sum_{F} \frac{1}{n_F} \sum_{i=1}^{n_F} \Delta_1^{F,i}\,\Delta_2^{F,i}
 
 dis ihou
-^^^^^^^^
+========
 
 Variations of the DIS coefficient functions. There are 4 coefficient
 function variations, ordered as ``C2q, C2g, CLq, CLg``, and have two shifts each:
@@ -224,7 +224,7 @@ function variations, ordered as ``C2q, C2g, CLq, CLg``, and have two shifts each
    s_{12} = \sum_{c=1}^{4} \frac{1}{2}\bigg\{ \Delta_1^{c,(1)}\Delta_2^{c,(1)} + \Delta_1^{c,(-1)}\Delta_2^{c,(-1)} \bigg\}
 
 fhmruvv ihou
-^^^^^^^^^^^^
+============
 
 Prescription using the FHMRUVV approximations of the
 7 splitting function variations, each with 2 possible shifts.
@@ -240,7 +240,7 @@ Prescription using the FHMRUVV approximations of the
    s_{12} = \sum_{k=1}^{7} \frac{1}{2}\bigg\{ \Delta_1^{k,(1)}\Delta_2^{k,(1)} + \Delta_1^{k,(2)}\Delta_2^{k,(2)} \bigg\}
 
 3pt missing
-^^^^^^^^^^^
+===========
 
 3pt renormalisation scale variations applied to a subset of the
 data.
@@ -256,7 +256,7 @@ data.
 .. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+,+) + \Delta_1(-,-) \bigg) \bigg(\Delta_2(+,+) + \Delta_2(-,-) \bigg) \bigg\}
 
 3pt hadronic
-^^^^^^^^^^^^
+============
 
 N3LO 3pt scale variations for hadronic datasets.
 
