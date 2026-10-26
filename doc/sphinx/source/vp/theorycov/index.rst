@@ -78,8 +78,8 @@ Summary
 -  You may use multiple prescriptions in the theory covariance matrix, by specifying multiple prescriptions at once. 
    E.g. ``point_prescriptions: ["fhmruvv ihou", "dis ihou", "7 point"]`` will vary the weights using  three prescriptions.
 
--  As input you need theories for the relevant scale combinations which
-   correspond to the prescription. This information is taken from the
+-  As input you need theories for which the relevant scale combinations that
+   correspond to the prescription actually exist. This information is taken from the
    ``scalevariations`` module, which consists of two files:
 
    #. ``pointprescriptions.yaml``: correspondence between each point prescription
