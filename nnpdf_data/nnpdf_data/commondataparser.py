@@ -109,6 +109,8 @@ KINLABEL_LATEX = {
     "SINGLETOP": ("$y$", "$m_t^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_MLL": ("$M_{ll} (GeV)$", "$M_{ll}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_W_ETA": ("$abs_\\eta$", "$M_W^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
+    "DY_W_MT": ("$M_T (GeV)$", "$M_W^2 (GeV^2)$", ""),
+    "DY_W_MT_ETA": ("$abs_\\eta$", "$M_T (GeV)$",  ""),
 }
 
 PROCESS_DESCRIPTION_LABEL = {
@@ -139,6 +141,8 @@ PROCESS_DESCRIPTION_LABEL = {
     "SHP_ASY": "double spin asymmetry in single hadron production",
     "DY_MLL": "Drell-Yan Mass Distribution of Lepton Pairs",
     "DY_W_ETA": "Drell-Yan W boson rapidity distribution",
+    "DY_W_MT": "Drell-Yan W boson transverse mass distribution",
+    "DY_W_MT_ETA": "Drell-Yan W boson double-differential transverse mass and rapidity distribution",
 }
 
 
@@ -383,6 +387,14 @@ class ValidKinematics:
 ### Observable and dataset definitions
 @dataclasses.dataclass(frozen=True, eq=True)
 class ObservableMetaData:
+    """Class holding all the information at the level of the final observables.
+    This is the object referenced by the NNPDF names usually seen in a runcard.
+
+    Note that this class depends on having been instantiated out of a set of data
+    (i.e., using the SetMetaData.select_observable("<OBS>") method) since a lot
+    of the metadata can be applicable to more than one dataset.
+    """
+
     observable_name: str
     observable: dict
     ndata: int
@@ -644,6 +656,10 @@ class ObservableMetaData:
         return self._parent.nnpdf_metadata
 
     @property
+    def nnpdf31_process(self):
+        return self.nnpdf_metadata.get("nnpdf31_process")
+
+    @property
     def setname(self):
         return self._parent.setname
 
@@ -662,6 +678,17 @@ class ObservableMetaData:
     @property
     def name(self):
         return f"{self.setname}_{self.observable_name}"
+
+    @property
+    def description(self):
+        return self.observable.get("description", self.name)
+
+    @property
+    def inspire_url(self):
+        """Return the iNSPIRE URL for this dataset, or None if not available."""
+        if self._parent.iNSPIRE is None:
+            return None
+        return self._parent.iNSPIRE.url or None
 
     @property
     def is_ported_dataset(self):
