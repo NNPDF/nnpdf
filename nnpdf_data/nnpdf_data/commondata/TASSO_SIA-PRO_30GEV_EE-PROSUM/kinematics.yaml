@@ -1,0 +1,13 @@
+bins:
+- ph:
+    min: null
+    mid: 0.6
+    max: null
+- ph:
+    min: null
+    mid: 0.8
+    max: null
+- ph:
+    min: null
+    mid: 1.665
+    max: null

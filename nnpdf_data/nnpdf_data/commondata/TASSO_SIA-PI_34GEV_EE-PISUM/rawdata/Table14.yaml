@@ -1,0 +1,56 @@
+dependent_variables:
+- header: {name: MULT(Q=PI)}
+  qualifiers:
+  - {name: RE(Q=K), value: E+ E- --> (K+ + K-) X}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: RE(Q=PI), value: E+ E- --> (PI+ + PI-) X}
+  - {name: RE(Q=PI0), value: E+ E- --> PI0 X}
+  - {name: SQRT(S), units: GeV, value: 34.0-44.0}
+  values:
+  - errors:
+    - {symerror: 0.5}
+    value: 10.9
+  - errors:
+    - {symerror: 0.5}
+    value: 11.1
+- header: {name: MULT(Q=K)}
+  qualifiers:
+  - {name: RE(Q=K), value: E+ E- --> (K+ + K-) X}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: RE(Q=PI), value: E+ E- --> (PI+ + PI-) X}
+  - {name: RE(Q=PI0), value: E+ E- --> PI0 X}
+  - {name: SQRT(S), units: GeV, value: 34.0-44.0}
+  values:
+  - errors:
+    - {symerror: 0.2}
+    value: 1.76
+  - {value: '-'}
+- header: {name: MULT(Q=P)}
+  qualifiers:
+  - {name: RE(Q=K), value: E+ E- --> (K+ + K-) X}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: RE(Q=PI), value: E+ E- --> (PI+ + PI-) X}
+  - {name: RE(Q=PI0), value: E+ E- --> PI0 X}
+  - {name: SQRT(S), units: GeV, value: 34.0-44.0}
+  values:
+  - errors:
+    - {symerror: 0.06}
+    value: 0.67
+  - {value: '-'}
+- header: {name: MULT(Q=PI0)}
+  qualifiers:
+  - {name: RE(Q=K), value: E+ E- --> (K+ + K-) X}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: RE(Q=PI), value: E+ E- --> (PI+ + PI-) X}
+  - {name: RE(Q=PI0), value: E+ E- --> PI0 X}
+  - {name: SQRT(S), units: GeV, value: 34.0-44.0}
+  values:
+  - {value: '-'}
+  - errors:
+    - {symerror: 1.0}
+    value: 5.4
+independent_variables:
+- header: {name: SQRT(S), units: GEV}
+  values:
+  - {value: 34.0}
+  - {value: 44.0}
