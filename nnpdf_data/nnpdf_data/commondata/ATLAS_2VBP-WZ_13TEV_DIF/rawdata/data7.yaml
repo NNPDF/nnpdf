@@ -1,0 +1,13 @@
+dependent_variables:
+- header: {name: dressed to Born correction factor}
+  qualifiers:
+  - {name: ., value: Total phase space}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '0.972'
+independent_variables:
+- header: {name: ''}
+  values:
+  - {value: '$A_{W Z}^{\textrm{dressed}}/A_{WZ}^{\textrm{Born}}$'}

@@ -1,0 +1,79 @@
+definitions:
+  ArtUnc_1:
+    definition: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_2:
+    definition: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_3:
+    definition: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_4:
+    definition: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_5:
+    definition: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+  ArtUnc_6:
+    definition: artificial uncertainty 6
+    treatment: ADD
+    type: CORR
+  ArtUnc_7:
+    definition: artificial uncertainty 7
+    treatment: ADD
+    type: CORR
+bins:
+- ArtUnc_1: 7.28337920e-01
+  ArtUnc_2: 3.80729936e-01
+  ArtUnc_3: 3.69563831e-01
+  ArtUnc_4: -1.90855303e-02
+  ArtUnc_5: -3.97004255e-03
+  ArtUnc_6: 1.27044825e-02
+  ArtUnc_7: -7.89831222e-03
+- ArtUnc_1: 1.26399886e+00
+  ArtUnc_2: -3.98553064e-01
+  ArtUnc_3: 5.38362425e-02
+  ArtUnc_4: -6.88530484e-02
+  ArtUnc_5: -3.34363412e-03
+  ArtUnc_6: 9.27632573e-03
+  ArtUnc_7: -6.00091183e-03
+- ArtUnc_1: 7.51146960e-01
+  ArtUnc_2: 2.86819185e-01
+  ArtUnc_3: -4.09469913e-01
+  ArtUnc_4: -8.84004667e-02
+  ArtUnc_5: 1.01573247e-03
+  ArtUnc_6: 1.58147564e-02
+  ArtUnc_7: -3.17136652e-02
+- ArtUnc_1: 3.47999068e-01
+  ArtUnc_2: 2.68157534e-03
+  ArtUnc_3: -4.68276362e-02
+  ArtUnc_4: 3.80125310e-01
+  ArtUnc_5: 1.65783221e-02
+  ArtUnc_6: -1.57424071e-02
+  ArtUnc_7: -1.25783191e-01
+- ArtUnc_1: 1.85324031e-01
+  ArtUnc_2: 2.91082839e-02
+  ArtUnc_3: -1.85700719e-02
+  ArtUnc_4: 2.66978934e-02
+  ArtUnc_5: 7.17525594e-02
+  ArtUnc_6: -2.57856147e-01
+  ArtUnc_7: 1.32399389e-01
+- ArtUnc_1: 1.69975967e-01
+  ArtUnc_2: 1.71115331e-02
+  ArtUnc_3: -3.75019403e-02
+  ArtUnc_4: 1.24754854e-01
+  ArtUnc_5: 6.84144295e-02
+  ArtUnc_6: 1.47096026e-01
+  ArtUnc_7: 2.55035943e-01
+- ArtUnc_1: 1.12965468e-01
+  ArtUnc_2: 1.58544940e-02
+  ArtUnc_3: -3.12691798e-02
+  ArtUnc_4: 7.87522974e-02
+  ArtUnc_5: -2.15469431e-01
+  ArtUnc_6: -4.06773288e-02
+  ArtUnc_7: 1.15478414e-01
