@@ -1,0 +1,100 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: sys,Statistical uncertainty on lepton efficiency
+    treatment: MULT
+    type: UNCORR
+  sys_corr_2:
+    description: sys,Statistical uncertainty in simulation
+    treatment: MULT
+    type: UNCORR
+  sys_corr_3:
+    description: sys,QCD background
+    treatment: MULT
+    type: CORR
+  sys_corr_4:
+    description: sys,QCD factorization and normalization scales
+    treatment: MULT
+    type: CORR
+  sys_corr_5:
+    description: sys,PDFs and alpha_S
+    treatment: MULT
+    type: CORR
+  sys_corr_6:
+    description: sys,Luminosity
+    treatment: MULT
+    type: CMSLUMI13
+bins:
+- stat: 2.72320000e+00
+  sys_corr_1: 1.42489600e+01
+  sys_corr_2: 34.7392
+  sys_corr_3: 14.69056
+  sys_corr_4: 28.32128
+  sys_corr_5: 1.58092800e+01
+  sys_corr_6: 58.88
+- stat: 4.5229
+  sys_corr_1: 1.47650800e+01
+  sys_corr_2: 36.1832
+  sys_corr_3: 14.38574
+  sys_corr_4: 29.00492
+  sys_corr_5: 15.69884
+  sys_corr_6: 58.36
+- stat: 4.92356
+  sys_corr_1: 1.49486400e+01
+  sys_corr_2: 37.3716
+  sys_corr_3: 14.50374
+  sys_corr_4: 2.99566000e+01
+  sys_corr_5: 1.55418400e+01
+  sys_corr_6: 59.32
+- stat: 5.16556000e+00
+  sys_corr_1: 1.54676600e+01
+  sys_corr_2: 36.5652
+  sys_corr_3: 14.30686
+  sys_corr_4: 28.93294
+  sys_corr_5: 14.6551
+  sys_corr_6: 57.7498
+- stat: 5.43422
+  sys_corr_1: 14.21034
+  sys_corr_2: 36.6156
+  sys_corr_3: 14.90778
+  sys_corr_4: 2.86531600e+01
+  sys_corr_5: 14.44282
+  sys_corr_6: 57.8294
+- stat: 6.22836
+  sys_corr_1: 1.55282400e+01
+  sys_corr_2: 37.5408
+  sys_corr_3: 14.5044
+  sys_corr_4: 28.7244
+  sys_corr_5: 13.19616
+  sys_corr_6: 5.65956000e+01
+- stat: 8.9497
+  sys_corr_1: 15.73415
+  sys_corr_2: 41.2841
+  sys_corr_3: 15.07014
+  sys_corr_4: 30.3135
+  sys_corr_5: 13.02037
+  sys_corr_6: 58.3174
+- stat: 15.61962
+  sys_corr_1: 1.78585200e+01
+  sys_corr_2: 53.4702
+  sys_corr_3: 1.60410600e+01
+  sys_corr_4: 27.657
+  sys_corr_5: 11.82666
+  sys_corr_6: 5.29434000e+01
+- stat: 26.288
+  sys_corr_1: 35.96
+  sys_corr_2: 9.67200000e+01
+  sys_corr_3: 2.24750000e+01
+  sys_corr_4: 38.75
+  sys_corr_5: 1.50660000e+01
+  sys_corr_6: 6.47900000e+01
+- stat: 28.035
+  sys_corr_1: 53.934
+  sys_corr_2: 122.82
+  sys_corr_3: 23.6562
+  sys_corr_4: 48.594
+  sys_corr_5: 1.44447000e+01
+  sys_corr_6: 51.798
