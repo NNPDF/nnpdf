@@ -499,12 +499,20 @@ scale_variations_for:
   - theoryid: 41_000_000
     variations: *nnlo_41
 
+  # NNLO EXA + QED, alphas=0.118 (scale variations from NNLO QCD)
+  - theoryid: 41_041_001
+    variations: *nnlo_41
+
   # NNLO EXA alphas=0.118, Q0 = 1 GeV
   - theoryid: 41_002_000
     variations: *nnlo_41_q0_1gev
 
   # N3LO EXA alphas=0.118
   - theoryid: 41_042_000
+    variations: *n3lo41
+
+  # N3LO EXA + QED, alphas=0.118 (scale variations from NNLO QCD)
+  - theoryid: 41_041_000
     variations: *n3lo41
 
   # 4.0 series:
