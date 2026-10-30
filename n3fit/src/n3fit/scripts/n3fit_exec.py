@@ -13,6 +13,7 @@ import sys
 import pandas as pd
 from ruamel.yaml import error
 
+from n3fit.io.input_utils import parse_debug_options
 from n3fit.scripts.vp_setupfit import MD5_FILENAME, SetupFitError, _compute_fit_md5
 from reportengine import colors
 from reportengine.namespaces import NSList
@@ -25,6 +26,8 @@ from validphys.loader import FallbackLoader, HyperscanNotFound
 from validphys.utils import yaml_safe
 
 loader = FallbackLoader()
+
+log = logging.getLogger(__name__)
 
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[], allow_legacy_names=False)
 
@@ -41,7 +44,6 @@ N3FIT_PROVIDERS = [
     "validphys.commondata",
 ]
 
-log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
 INPUT_FOLDER = "input"
@@ -233,6 +235,31 @@ class N3FitConfig(Config):
         """
         return fakedata
 
+    def parse_debug_options(self, debug_options=None):
+        """Parses the ``debug_options`` dictionary in the runcard, and applies the logging level.
+
+        Note that any logging that occurs before reportengine uses the n3fit
+        parser will by necessity ignore these settings.
+        It is understood that, when ``debug_options`` is present, the user wants those options
+        to override any other options (including reportengine CLI options)
+
+        Parameters
+        ----------
+            debug_options: None, dict
+                the raw ``debug_options`` dictionary from the runcard
+
+        Returns
+        -------
+            debug_options: :class:`n3fit.io.input_utils.DebugOptions`
+                parsed options with the ``log_level``, ``printeach``, ``timer``
+                and ``print_logs`` fields filled with defaults
+        """
+        doptions = parse_debug_options(debug_options)
+        if "log_level" in debug_options:
+            # If log level is not explicitly found in the dictionary, keep whatever status we have
+            logging.getLogger().setLevel(doptions.logger_level)
+        return doptions
+
     def produce_kfold_parameters(self, kfold=None, hyperopt=None):
         """Return None even if there are kfolds in the runcard if the hyperopt flag is not active"""
         if hyperopt is not None:
@@ -255,10 +282,10 @@ class N3FitConfig(Config):
         # This needs to be imported here because it needs Tensorflow and n3fit
         from n3fit.hyper_optimization.hyper_scan import HyperScanner
 
-        extra_args = {}
-
         if hyperscan_config is None or hyperopt is None:
             return None
+
+        extra_args = {"backend": hyperscan_config.pop("backend", "hyperopt")}
 
         if self.environment.parallel_hyperopt:
             hyperscan_config.update({'parallel': 'true'})
@@ -266,11 +293,13 @@ class N3FitConfig(Config):
             db_path = (
                 self.environment.output_path / "nnfit" / "replica_1" / self.environment.db_name
             )
-            extra_args = {
-                "db_host": self.environment.db_host,
-                "db_port": self.environment.db_port,
-                "db_path": db_path,
-            }
+            extra_args.update(
+                {
+                    "db_host": self.environment.db_host,
+                    "db_port": self.environment.db_port,
+                    "db_path": db_path,
+                }
+            )
         return HyperScanner(parameters, hyperscan_config, **extra_args)
 
     def parse_trial_specs(self, trial_specs):
@@ -280,8 +309,10 @@ class N3FitConfig(Config):
         """Read the input hyperscan and produce a dictionary containing
         the settings of the best trials.
 
-        The trial specs can include overrides as a dict, e.g.,
+        The trial specs can include overrides as a dict, e.g.::
+
             epochs: 500
+
         such that the value for the number of epochs will be 500 for all trials.
         """
 

@@ -1,14 +1,16 @@
 """
 The HyperScanner class is basically a dictionary containing all parameters,
-the functions defined as hp_ (from hyperspace)
+the functions defined as ``hp_`` (from hyperspace)
 
-The goal of this module is to read all parameters in the `hyperopt` section of the runcard
-and modify the parameter dictionary so that now it is filled with the `hyperop` sampler objects
+The goal of this module is to read all parameters in the ``hyperopt`` section of the runcard
+and modify the parameter dictionary so that now it is filled with the ``hyperopt`` sampler objects
 
 The idea behind the wrappers if that if you ever want to use
 another hyperoptimization library, assuming that it also takes just
-    - a function
-    - a dictionary of spaces of parameters
+
+- a function
+- a dictionary of spaces of parameters
+
 you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the minimization).
 """
@@ -49,6 +51,7 @@ log = logging.getLogger(__name__)
 # it also has statuses "new", "running" and "suspended", but we don't use them
 HYPEROPT_STATUSES = {True: "ok", False: "fail"}
 HYPEROPT_SEED = int(os.environ.get("HYPEROPT_SEED", 42))
+
 
 def _run_trial_in_subprocess(objective, params):
     """Running a hyperparameter scan leaks memory trial by trial.
@@ -245,6 +248,33 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
             hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
 
 
+def get_scan_wrapper(backend):
+    """
+    Returns the callable to be used to drive the hyperparameter scan for the
+    requested `backend`. The returned callable must accept the same signature
+    as :func:`hyper_scan_wrapper`.
+
+    Parameters
+    ----------
+        `backend`: str
+            name of the backend, as set in ``hyperscan_config.backend`` in the runcard.
+    """
+    if backend == "hyperopt":
+        return hyper_scan_wrapper
+    if backend == "ray":
+        try:
+            from itwinai.plugins.nnpdf.ray_scan import ray_hyper_scan_wrapper
+        except ModuleNotFoundError as err:
+            raise ModuleNotFoundError(
+                "The 'ray' hyperopt backend was requested but the nnpdf itwinai "
+                "plugin is not installed. Install it "
+                "(https://github.com/interTwin-eu/nnpdf-plugin) or set 'backend: "
+                "hyperopt' (the default) in the runcard's hyperscan_config."
+            ) from err
+        return ray_hyper_scan_wrapper
+    raise ValueError(f"Unknown hyperopt backend '{backend}'.")
+
+
 class ActivationStr:
     """
     Upon call this class returns an array where the activation function
@@ -287,16 +317,28 @@ class HyperScanner:
             the `hyperscan` dictionary of the NNPDF runcard defining the search space of the scan
         `steps`: int
             when taking discrete steps between two parameters, number of steps to take
+        `backend`: str
+            name of the hyperoptimization backend to use, see :func:`get_scan_wrapper`.
+            Defaults to ``"hyperopt"``, which preserves the historical behaviour.
 
     """
 
     def __init__(
-        self, parameters, sampling_dict, steps=5, db_host=None, db_port=None, db_path=None
+        self,
+        parameters,
+        sampling_dict,
+        steps=5,
+        db_host=None,
+        db_port=None,
+        db_path=None,
+        backend="hyperopt",
     ):
         self._original_parameters = parameters
         self.parameter_keys = parameters.keys()
         self.parameters = copy.deepcopy(parameters)
         self.steps = steps
+        self.backend = backend
+        self.sampling_dict = sampling_dict
 
         # adding extra options for parallel execution
         self._db_path = db_path
@@ -416,13 +458,17 @@ class HyperScanner:
         implemented in `n3fit`) and the options to modify.
 
         The accepted options are:
-            - learning_rate
-            - clipnorm
-        but for hyperopt it will look as a list of dictionaries
+
+        - learning_rate
+        - clipnorm
+
+        but for hyperopt it will look as a list of dictionaries::
+
             [ { optimizer_name: optimizer_name, learning_rate: sampler },
               { optimizer_name: optimizer_name, learning_rate: sampler }, ...
             ]
-        and will sample one from this list.
+
+        and it will sample one from this list.
 
         Note that the keys within the dictionary (`optimizer_name` and `learning_rate`)
         should be named as the keys used by the compiler of the model.
@@ -473,8 +519,10 @@ class HyperScanner:
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
-            - pos_multiplier
-            - pos_initial
+
+        - pos_multiplier
+        - pos_initial
+
         Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
         mul_key = "multiplier"

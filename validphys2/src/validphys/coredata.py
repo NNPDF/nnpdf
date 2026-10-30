@@ -159,9 +159,11 @@ class FKTableData:
         """Returns the fktable as a dense numpy array that can be directly
         manipulated with numpy
 
-        The return shape is:
+        The return shape is::
+
             (ndata, nx, nbasis) for DIS
             (ndata, nx, nx, nbasis) for hadronic
+
         where nx is the length of the xgrid
         and nbasis the number of flavour contributions that contribute
         """

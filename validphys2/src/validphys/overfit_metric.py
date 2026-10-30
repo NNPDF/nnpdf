@@ -114,10 +114,11 @@ def array_expected_overfitting(
     calculate_chi2s_per_replica, replica_data, number_of_resamples=1000, resampling_fraction=0.95
 ):
     """Calculates the expected difference in chi2 between:
+
     1. The chi2 of a PDF replica calculated using the corresponding pseudodata
-        replica used during the fit
+       replica used during the fit
     2. The chi2 of a PDF replica calculated using an alternative i.i.d random
-        pseudododata replicas
+       pseudododata replicas
 
     The expected difference along with an error estimate is obtained through a
     bootstrapping consisting of ``number_of_resamples`` resamples per pdf replica

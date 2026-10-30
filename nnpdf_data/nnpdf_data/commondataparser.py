@@ -109,6 +109,8 @@ KINLABEL_LATEX = {
     "SINGLETOP": ("$y$", "$m_t^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_MLL": ("$M_{ll} (GeV)$", "$M_{ll}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_W_ETA": ("$abs_\\eta$", "$M_W^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
+    "DY_W_MT": ("$M_T (GeV)$", "$M_W^2 (GeV^2)$", ""),
+    "DY_W_MT_ETA": ("$abs_\\eta$", "$M_T (GeV)$",  ""),
 }
 
 PROCESS_DESCRIPTION_LABEL = {
@@ -139,6 +141,8 @@ PROCESS_DESCRIPTION_LABEL = {
     "SHP_ASY": "double spin asymmetry in single hadron production",
     "DY_MLL": "Drell-Yan Mass Distribution of Lepton Pairs",
     "DY_W_ETA": "Drell-Yan W boson rapidity distribution",
+    "DY_W_MT": "Drell-Yan W boson transverse mass distribution",
+    "DY_W_MT_ETA": "Drell-Yan W boson double-differential transverse mass and rapidity distribution",
 }
 
 
@@ -222,27 +226,28 @@ class TheoryMeta:
     in order to match the experimental data.
 
     In addition there are other flags that can affect how the fktables are read or used:
+    
     - operation: defines the operation to apply to the outer list
     - shifts: mapping with the single fktables and their respective shifts
-              useful to create "gaps" so that the fktables and the respective experimental data
-              are ordered in the same way (for instance, when some points are missing from a grid)
+        useful to create "gaps" so that the fktables and the respective experimental data
+        are ordered in the same way (for instance, when some points are missing from a grid)
 
     This class is inmutable, what is read from the commondata metadata should be considered final
 
     Example
     -------
     >>> from nnpdf_data.commondataparser import TheoryMeta
-    ... from validobj import parse_input
-    ... from ruamel.yaml import YAML
-    ... theory_raw = '''
+    >>> from validobj import parse_input
+    >>> from ruamel.yaml import YAML
+    >>> theory_raw = '''
     ... FK_tables:
     ...   - - fk1
     ...   - - fk2
     ...     - fk3
     ... operation: ratio
     ... '''
-    ... theory = YAML(typ='safe').load(theory_raw)
-    ... parse_input(theory, TheoryMeta)
+    >>> theory = YAML(typ='safe').load(theory_raw)
+    >>> parse_input(theory, TheoryMeta)
     TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, normalization=None))
     """
 
@@ -296,9 +301,10 @@ class TheoryMeta:
 class Variant:
     """The new commondata format allow the usage of variants
     A variant can overwrite a number of keys, as defined by this dataclass:
-        data_uncertainties
-        theory
-        data_central
+    
+    - data_uncertainties
+    - theory
+    - data_central
 
     This class may overwrite *some* other keys for the benefit of reproducibility
     of old NNPDF fits, but the usage of these features is undocumented and discouraged.
@@ -381,6 +387,14 @@ class ValidKinematics:
 ### Observable and dataset definitions
 @dataclasses.dataclass(frozen=True, eq=True)
 class ObservableMetaData:
+    """Class holding all the information at the level of the final observables.
+    This is the object referenced by the NNPDF names usually seen in a runcard.
+
+    Note that this class depends on having been instantiated out of a set of data
+    (i.e., using the SetMetaData.select_observable("<OBS>") method) since a lot
+    of the metadata can be applicable to more than one dataset.
+    """
+
     observable_name: str
     observable: dict
     ndata: int
@@ -642,6 +656,10 @@ class ObservableMetaData:
         return self._parent.nnpdf_metadata
 
     @property
+    def nnpdf31_process(self):
+        return self.nnpdf_metadata.get("nnpdf31_process")
+
+    @property
     def setname(self):
         return self._parent.setname
 
@@ -660,6 +678,17 @@ class ObservableMetaData:
     @property
     def name(self):
         return f"{self.setname}_{self.observable_name}"
+
+    @property
+    def description(self):
+        return self.observable.get("description", self.name)
+
+    @property
+    def inspire_url(self):
+        """Return the iNSPIRE URL for this dataset, or None if not available."""
+        if self._parent.iNSPIRE is None:
+            return None
+        return self._parent.iNSPIRE.url or None
 
     @property
     def is_ported_dataset(self):
@@ -919,22 +948,24 @@ def load_commondata(metadata):
     (i.e., an observable from a data publication) correspond to one single observable
     inside a folder which is named as "<experiment>_<process>_<energy>_<extra>"
     The observable is defined by a last suffix of the form "_<obs>" so that the full name
-    of the dataset is always:
+    of the dataset is always::
 
         "<experiment>_<process>_<energy>{_<extra>}_<obs>"
 
     where <extra> is optional.
 
     This function right now works under the assumotion that the folder/observable
-    is separated in the last _ so that:
+    is separated in the last _ so that::
+
         folder_name = <experiment>_<process>_<energy>{_<extra>}
+
     but note that this convention is still not fully defined.
 
     This function returns a commondata object constructed by parsing the metadata.
 
     Once a variant is selected, it can no longer be changed
 
-    Note that this function reproduces `parse_commondata` below, which parses the
+    Note that this function reproduces ``parse_commondata`` below, which parses the
     _old_ file format
     """
     # Before loading, apply the checks

@@ -116,29 +116,33 @@ def get_combinations(key_info, ncomb):
     return a list of the product of all possible mappings of a subset of `ncomb`
     keys to single values out of the corresponding possible values, for all such subsets.
 
-    For instance,
-    key_info = {
-        'key1' : [val1-1, val1-2, ...],
-        'key2' : [val2-1, val2-2, ...],
-        }
-    ncomb = 2
+    For instance::
 
-    will return a list of dictionaries:
-    [
-    {'key1' : val1-1, 'key2', val2-1 ... },
-    {'key1' : val1-1, 'key2', val2-2 ... },
-    {'key1' : val1-2, 'key2', val2-1 ... },
-    {'key1' : val1-2, 'key2', val2-2 ... },
-    ]
+        key_info = {
+            'key1' : [val1-1, val1-2, ...],
+            'key2' : [val2-1, val2-2, ...],
+        }
+        ncomb = 2
+
+    will return a list of dictionaries::
+
+        [
+        {'key1' : val1-1, 'key2', val2-1 ... },
+        {'key1' : val1-1, 'key2', val2-2 ... },
+        {'key1' : val1-2, 'key2', val2-1 ... },
+        {'key1' : val1-2, 'key2', val2-2 ... },
+        ]
 
     Get all combinations of ncomb elements for the keys and values given in the dictionary key_info:
 
     # Arguments:
-        - `key_info`: dictionary with the possible values for each key
-        - `ncomb`: elements to combine
+
+    - `key_info`: dictionary with the possible values for each key
+    - `ncomb`: elements to combine
 
     # Returns:
-        - `all_combinations`: A list of dictionaries of parameters
+
+    - `all_combinations`: A list of dictionaries of parameters
     """
     # If we don't have enough keys to produce n combinations, return empty
     if len(key_info) < ncomb:
@@ -162,12 +166,13 @@ def get_combinations(key_info, ncomb):
 
 
 def get_slice(dataframe, query_dict):
-    """
-    Returns a slice of the dataframe where some keys match some values
+    """Returns a slice of the dataframe where some keys match some values
     keys_info must be a dictionary {key1 : value1, key2, value2 ...}
+
     # Arguments:
-        - `dataframe`: a pandas dataframe
-        - `query_dict`: a dictionary of combination as given by `get_combinations`
+
+    - `dataframe`: a pandas dataframe
+    - `query_dict`: a dictionary of combination as given by `get_combinations`
     """
     df_slice = dataframe
     for key, value in query_dict.items():

@@ -1,5 +1,4 @@
-"""
-Module for LHAPDF compatibility backends
+"""Module for LHAPDF compatibility backends
 
 If LHAPDF is installed and no alternative backend is specified, the module will
 transparently hand over everything to LHAPDF. Instead, if LHAPDF is not available

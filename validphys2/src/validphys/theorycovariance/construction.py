@@ -185,6 +185,15 @@ def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
         cnt += n_var
     return s_singlet_ad
 
+def covmat_n3lo_cf(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for all the
+    coefficient function variations.
+    """
+    s_cf = 0
+    # loop over the 4 coefficient function variations
+    for cf in range(4):
+        s_cf += covmat_n3lo_ad(name1, name2, [deltas1[cf], deltas1[cf + 4]], [deltas2[cf], deltas2[cf+4]])
+    return s_cf
 
 def covmat_n3lo_fhmruvv(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for all the
@@ -225,14 +234,17 @@ def covmat_power_corrections(deltas1, deltas2):
     corrections. The two arguments ``deltas1`` and ``deltas2`` contain the
     shifts for the first and second experiment, respectively.
 
-    The shifts are given in this form: ``` deltas1 = [array1_of_shifts1,
-               array1_of_shifts2, array1_of_shifts3, ...]
-    deltas2 = [array2_of_shifts1,
-               array2_of_shifts2, array2_of_shifts3, ...]
-    ``` The sub-matrix is computed as
+    The shifts are given in this form::
 
-      s = array1_of_shifts1 X array2_of_shifts1 + array1_of_shifts2 X
-      array2_of_shifts2 + ...
+        deltas1 = [array1_of_shifts1,
+                   array1_of_shifts2, array1_of_shifts3, ...]
+        deltas2 = [array2_of_shifts1,
+                   array2_of_shifts2, array2_of_shifts3, ...]
+
+    The sub-matrix is computed as::
+
+        s = array1_of_shifts1 X array2_of_shifts1 + array1_of_shifts2 X
+        array2_of_shifts2 + ...
 
     where ``X`` is the outer product. This is equivalent to a generalised 5
     point prescription. Since corrections are linearised, plus and minus
@@ -305,7 +317,7 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
         s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
     elif point_prescription == "dis ihou":
         # n3lo ihou prescriprion
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
+        s = covmat_n3lo_cf(name1, name2, deltas1, deltas2)
     elif point_prescription == "3pt missing":
         # 3 point renormalization scale variations for subset of data
         s = covmat_3pt(name1, name2, deltas1, deltas2)
@@ -431,9 +443,11 @@ def theory_covmat_custom_per_prescription(covs_pt_prescrip, procs_index, combine
 @table
 def fromfile_covmat(covmatpath, groups_data_by_process, procs_index):
     """Reads a general theory covariance matrix from file. Then
-    1: Applies cuts to match experiment covariance matrix
-    2: Expands dimensions to match experiment covariance matrix
-       by filling additional entries with 0."""
+
+    1. Applies cuts to match experiment covariance matrix
+    2. Expands dimensions to match experiment covariance matrix
+       by filling additional entries with 0.
+    """
     # Load covmat as pandas DataFrame
     filecovmat = pd.read_csv(
         covmatpath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python"

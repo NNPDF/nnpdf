@@ -28,8 +28,8 @@ packages = [
 ]
 # Data files
 include = [
-    # The default profile is included together with the validphys package
-    { path ="validphys2/src/validphys/nnprofile_default.yaml",format = ["sdist", "wheel"] },
+    # The default profile is included together with the nnpdf_data package
+    { path = "nnpdf_data/nnpdf_data/nnprofile_default.yaml", format = ["sdist", "wheel"] },
     # The version file is ignored by git so it needs to be explicitly included
     { path ="validphys2/src/validphys/_version.py", format = ["sdist", "wheel"] },
     { path ="nnpdf_data/nnpdf_data/_version.py", format = ["sdist", "wheel"] }
@@ -38,6 +38,7 @@ include = [
 [tool.poetry.scripts]
 n3fit = "n3fit.scripts.n3fit_exec:main"
 validphys = "validphys.scripts.main:main"
+nnpdf-data = "nnpdf_data.cli.script:main"
 # Fitting scripts
 evolven3fit = "n3fit.scripts.evolven3fit:main"
 vp-setupfit = "n3fit.scripts.vp_setupfit:main"
