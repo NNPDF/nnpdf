@@ -12,6 +12,7 @@ import pathlib
 import numpy as np
 import pandas as pd
 
+from nnpdf_data import legacy_to_new_map
 from reportengine import collect
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.floatformatting import ValueErrorTuple
@@ -421,9 +422,46 @@ def print_different_cuts(fits, test_for_same_cuts):
                 "    * %s includes %d out of %d points.\n" % (second_fit, second_len, total_points)
             )
         res.write('\n')
+    else:
+        res.write("Datasets included in both fits have the same kinematical cuts.")
 
     return res.getvalue()
 
+@_assert_two_fits
+def test_for_same_variants(fits, match_datasets_by_name):
+    """Given two fits, return a dictionary of where keys are names of datatets with
+    different variants and keys are tuples (var_1, var_2) where var_i is the variant
+    of the dataset used in fit i.
+    """
+    c = match_datasets_by_name.common
+    first, second = fits
+    variants = dict()
+    different_variants = {}
+    for f in fits:
+        variants[f.name] = dict()
+        for ds in f.as_input()["dataset_inputs"]:
+            name, map_variant = legacy_to_new_map(ds["dataset"], ds.get("sys"))
+            variant = ds.get("variant")
+            if variant is None or map_variant == "legacy_dw":
+                variant = map_variant
+            variants[f.name][name] = variant
+    for ds in c:
+        if variants[first.name][ds] != variants[second.name][ds]:
+            different_variants[ds] = (variants[first.name][ds], variants[second.name][ds])
+    return different_variants
+
+@table
+def print_different_variants(fits, test_for_same_variants):
+    """Print a summary of the datasets that are included in both fits but have 
+    different variants."""
+    res = StringIO()
+    first_fit, second_fit = fits
+    if not test_for_same_variants:
+        res.write("Datasets used in both fits have the same variants.")
+        return res.getvalue()
+    else:
+        variant_table = pd.DataFrame(test_for_same_variants, index=(first_fit, second_fit)).T
+        return variant_table
 
 def fit_theory_covmat_summary(fit, fitthcovmat):
     """returns a table with a single column for the `fit`, with three rows
