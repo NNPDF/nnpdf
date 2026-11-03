@@ -36,6 +36,10 @@ parameterization scale :math:`Q_0^2` into the hard-scattering scale :math:`Q^2`,
 The sum over flavors :math:`i,j` runs over the :math:`n_f` active quarks and antiquarks flavors at a given
 scale :math:`Q`, as well as over the gluon.
 
+For a detailed discussion of DGLAP evolution and its formulation in terms of
+evolution operators, see `Solving DGLAP in the EKO documentation
+<https://eko.readthedocs.io/en/latest/theory/DGLAP.html>`_.
+
 The direct calculation of the above equation during the PDF fit is not practical
 since it requires first solving the DGLAP evolution equation for each new boundary
 condition at :math:`Q_0` and then convoluting with the coefficient
@@ -46,10 +50,17 @@ to precompute all the perturbative information, i.e. the coefficient functions :
 and the evolution operators :math:`\Gamma_{ij}`, with a suitable
 interpolation basis.
 
-Several of these approaches have been made available in the context of
-PDF fits.
-Here we use the `APFELgrid` to precompute the perturbative
-information of the DIS structure functions provided by the `APFEL`.
+The EKO documentation on `interpolation
+<https://eko.readthedocs.io/en/latest/theory/Interpolation.html>`_
+provides further details on constructing an interpolation basis.
+
+For DIS, Yadism computes the coefficient functions and exports interpolation
+grids in `PineAPPL <https://pineappl.readthedocs.io/en/latest/>`_ format.
+See `Dumping predictions into fast-interpolation grids
+<https://yadism.readthedocs.io/en/v0.13.8/overview/tutorials/getting_started.html#dumping-predictions-into-fast-interpolation-grids>`_
+in the Yadism documentation for a worked example. `Pineko
+<https://github.com/NNPDF/pineko>`_ combines these grids with EKO evolution
+operators to produce FK tables.
 
 Within this approach, we can factorize the dependence on the PDFs at the input scale :math:`Q_0` as follows.
 
@@ -94,10 +105,9 @@ This can be rearranged to give
 where all of the information about the partonic cross-sections and the DGLAP
 evolution operators is now encoded into the so-called FK table, :math:`FK_{i,\alpha}`.
 
-Therefore, with the `APFELgrid` method we are able to
-express the series of convolutions by a matrix
-multiplication, increasing the numerical 
-calculation speed of the DIS structure functions by up to several orders
-of magnitude.
+The convolutions are thus reduced to a matrix multiplication of the precomputed FK table
+with the PDFs evaluated at the input scale. This avoids repeating the
+perturbative calculation for each trial PDF during the fit, increasing the numerical calculation speed of the 
+DIS structure functions by up to several orders of magnitude.
 
 **Note: The hadronic processes (proton-proton collision) like Drell-Yan for example follows the same logic, only with slighly more complicated structure of FK tables to take into account the evolution of two PDFs instead of one**
