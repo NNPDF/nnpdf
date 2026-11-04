@@ -15,11 +15,11 @@ Fast Kernel (FK) tables
 Here we discuss the numerical implementation of the calculations of the DIS structure functions.
 
 In the framework of collinear QCD factorization, the :math:`F_2` structure function
-can be decomposed in terms of hard-scattering coefficient functions and PDFs as,
+can be decomposed in terms of hard-scattering coefficient functions and PDFs as
 
 .. math::
 
-    F_2(x,Q^2) = \sum_i^{n_f} C_i(x,Q^2) \otimes f_i(x,Q^2).
+    F_2(x,Q^2) = \sum_i^{n_f} C_i(x,Q^2) \otimes f_i(x,Q^2),
 
 where :math:`C_i(x,Q^2)` are the process-dependent coefficient functions which
 can be computed perturbatively as an expansion in the QCD and QED
@@ -38,6 +38,9 @@ The direct calculation of the above equation during the PDF fit is not practical
 since it requires first solving the DGLAP evolution equation for each new boundary
 condition at :math:`Q_0` and then convoluting with the coefficient
 functions.
+
+Constructing FK tables
+----------------------
 
 To evaluate the observable efficiently, we precompute the perturbative
 coefficient functions :math:`C_i`, using `Yadism
@@ -71,4 +74,8 @@ with the PDFs evaluated at the input scale. This avoids repeating the
 perturbative calculation for each trial PDF during the fit, increasing the numerical calculation speed of the 
 DIS structure functions by up to several orders of magnitude.
 
-**Note: The hadronic processes (proton-proton collision) like Drell-Yan for example follows the same logic, only with slighly more complicated structure of FK tables to take into account the evolution of two PDFs instead of one**
+.. note::
+
+   Hadronic processes (proton-proton collisions), such as Drell-Yan production,
+   follow the same logic. Their FK tables have a slightly more complicated
+   structure to account for the evolution of two PDFs instead of one.
