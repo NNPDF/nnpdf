@@ -19,14 +19,14 @@ can be decomposed in terms of hard-scattering coefficient functions and PDFs as,
 
 .. math::
 
-    F_2(x,Q^2) = \sum_i C_i(x,Q^2) \otimes f_i(x,Q^2).
+    F_2(x,Q^2) = \sum_i^{n_f} C_i(x,Q^2) \otimes f_i(x,Q^2).
 
 where :math:`C_i(x,Q^2)` are the process-dependent coefficient functions which
 can be computed perturbatively as an expansion in the QCD and QED
-couplings, :math:`f_i(x,Q^2)` are the PDFs at the hard-scattering scale :math:`Q^2`,
+couplings, :math:`f_i(x,Q^2)` are the PDFs at the scale :math:`Q^2`,
 and :math:`\otimes` denotes the Mellin convolution.
-The flavour index :math:`i` runs over the active partons, including quarks,
-antiquarks and the gluon; flavour sums are written explicitly throughout.
+The sum over flavours runs over the :math:`n_f` active quark flavours and
+their antiquarks at the relevant scale, as well as over the gluon.
 
 The PDFs at :math:`Q^2` are obtained from those at the initial parameterization
 scale :math:`Q_0^2` using the evolution operator
@@ -56,9 +56,9 @@ PDFs at the input scale to be supplied during the fit:
 
     \begin{aligned}
     F_2(x,Q^2)
-    &= \sum_{i,j} C_i(x,Q^2) \otimes E_{ij}(Q^2 \leftarrow Q_0^2)
+    &= \sum_{i,j}^{n_f} C_i(x,Q^2) \otimes E_{ij}(Q^2 \leftarrow Q_0^2)
        \otimes f_j(x,Q_0^2) \\
-    &= \sum_j \sum_{\alpha=1}^{n_x}
+    &= \sum_j^{n_f} \sum_{\alpha=1}^{n_x}
        FK_{j,\alpha}(x,x_{\alpha},Q^2,Q_0^2)\,
        f_j(x_{\alpha},Q_0^2).
     \end{aligned}
