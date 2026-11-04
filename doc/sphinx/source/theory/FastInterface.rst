@@ -1,7 +1,7 @@
 .. _fktables:
 
 ============================================================
-Fast Interface (FK tables)
+Fast Kernel (FK) tables
 ============================================================
 
 .. raw:: latex
@@ -19,25 +19,19 @@ can be decomposed in terms of hard-scattering coefficient functions and PDFs as,
 
 .. math::
 
-    \begin{align} 
-    \label{eq:ev} 
-    F_2(x,Q^2) &= \sum_i^{n_f} C_i(x,Q^2) \otimes f_i(x,Q^2) \nonumber \\
-    &= \sum_{i,j}^{n_f} C_i(x,Q^2) \otimes \Gamma_{ij}(Q^2,Q_0^2) \otimes f_j(x,Q_0^2),
-    \end{align}
+    F_2(x,Q^2) = \sum_i C_i(x,Q^2) \otimes f_i(x,Q^2).
 
 where :math:`C_i(x,Q^2)` are the process-dependent coefficient functions which
 can be computed perturbatively as an expansion in the QCD and QED
-couplings;  :math:`\Gamma_{ij}(Q^2,Q_0^2)` is an evolution operator, determined by the
-solutions of the DGLAP equations, which evolves the PDF from the initial
-parameterization scale :math:`Q_0^2` into the hard-scattering scale :math:`Q^2`,
-:math:`f_i(x,Q^2_0)` are the PDFs at the parameterization scale, and
-:math:`\otimes` denotes the Mellin convolution.
+couplings, :math:`f_i(x,Q^2)` are the PDFs at the hard-scattering scale :math:`Q^2`,
+and :math:`\otimes` denotes the Mellin convolution.
+The flavour index :math:`i` runs over the active partons, including quarks,
+antiquarks and the gluon; flavour sums are written explicitly throughout.
 
-The sum over flavors :math:`i,j` runs over the :math:`n_f` active quarks and antiquarks flavors at a given
-scale :math:`Q`, as well as over the gluon.
-
-For a detailed discussion of DGLAP evolution and its formulation in terms of
-evolution operators, see `Solving DGLAP in the EKO documentation
+The PDFs at :math:`Q^2` are obtained from those at the initial parameterization
+scale :math:`Q_0^2` using the evolution operator
+:math:`E_{ij}(Q^2 \leftarrow Q_0^2)`, determined by the DGLAP equations.
+For a detailed discussion, see `Solving DGLAP in the EKO documentation
 <https://eko.readthedocs.io/en/latest/theory/DGLAP.html>`_.
 
 The direct calculation of the above equation during the PDF fit is not practical
@@ -45,65 +39,32 @@ since it requires first solving the DGLAP evolution equation for each new bounda
 condition at :math:`Q_0` and then convoluting with the coefficient
 functions.
 
-To evaluate the observable in a more computationally efficient way, it is better 
-to precompute all the perturbative information, i.e. the coefficient functions :math:`C_i`
-and the evolution operators :math:`\Gamma_{ij}`, with a suitable
-interpolation basis.
-
-The EKO documentation on `interpolation
-<https://eko.readthedocs.io/en/latest/theory/Interpolation.html>`_
-provides further details on constructing an interpolation basis.
-
-For DIS, Yadism computes the coefficient functions and exports interpolation
-grids in `PineAPPL <https://pineappl.readthedocs.io/en/latest/>`_ format.
-See `Dumping predictions into fast-interpolation grids
+To evaluate the observable efficiently, we precompute the perturbative
+coefficient functions :math:`C_i`, using `Yadism
 <https://yadism.readthedocs.io/en/v0.13.8/overview/tutorials/getting_started.html#dumping-predictions-into-fast-interpolation-grids>`_
-in the Yadism documentation for a worked example. `Pineko
-<https://github.com/NNPDF/pineko>`_ combines these grids with EKO evolution
-operators to produce FK tables.
+for DIS, and the evolution operators :math:`E_{ij}`, using EKO.
+We choose a suitable interpolation basis as discussed in the `EKO documentation
+<https://eko.readthedocs.io/en/latest/theory/Interpolation.html>`_.
 
-Within this approach, we can factorize the dependence on the PDFs at the input scale :math:`Q_0` as follows.
-
-First, we introduce an expansion over a set of interpolating functions :math:`\{ I_{\beta}\}` spanning both :math:`Q^2` and :math:`x` such that
-
-.. math::
-
-    \begin{equation}
-    f_i(x,Q^2) = \sum_{\beta} \sum_{\tau} f_{i,\beta \tau} I_{\beta}(x) I_{\tau}(Q^2) \, ,
-    \end{equation}
-
-where the PDFs are now tabulated
-in a grid in the :math:`(x,Q^2)` plane, :math:`f_{i,\beta \tau}\equiv f_i(x_\beta,Q^2_{\tau})`.
-
-We can express this result in terms of the PDFs at the input evolution scale
-using the (interpolated) DGLAP evolution operators,
+`Pineko <https://github.com/NNPDF/pineko>`_ combines the coefficient-function
+grids in `PineAPPL <https://pineappl.readthedocs.io/en/latest/>`_ format with
+the EKO evolution operators to produce Fast Kernel (FK) tables.
+These encode the perturbative coefficients and PDF evolution, leaving only the
+PDFs at the input scale to be supplied during the fit:
 
 .. math::
 
-    \begin{equation}
-    f_{i,\beta \tau} = \sum_j \sum_{\alpha} \Gamma^{\tau}_{ij,\alpha \beta}\,f_j(x_{\alpha},Q_0^2) \, ,
-    \end{equation}
+    \begin{aligned}
+    F_2(x,Q^2)
+    &= \sum_{i,j} C_i(x,Q^2) \otimes E_{ij}(Q^2 \leftarrow Q_0^2)
+       \otimes f_j(x,Q_0^2) \\
+    &= \sum_j \sum_{\alpha=1}^{n_x}
+       FK_{j,\alpha}(x,x_{\alpha},Q^2,Q_0^2)\,
+       f_j(x_{\alpha},Q_0^2).
+    \end{aligned}
 
-so that the nuclear DIS structure function can be evaluated as
-
-.. math::
-
-    \begin{equation}
-    F_2(x,Q^2) = \sum_i^{n_f} C_i(x,Q^2) \otimes \left[
-    \sum_{\alpha,\beta,\tau} \sum_j \Gamma^{\tau}_{ij,\alpha \beta}\,f_j(x_{\alpha},Q_0^2) I_{\beta}(x) I_{\tau}(Q^2)\right]\, .
-    \end{equation}
-
-This can be rearranged to give
-
-.. math::
-
-    \begin{align}
-    \label{eq:ev_interp}
-    F_2(x,Q^2) &= \sum_i^{n_f} \sum_{\alpha}^{n_x} FK_{i,\alpha}(x,x_{\alpha},Q^2,Q^2_0) \, f_i(x_{\alpha},Q_0^2) 
-    \end{align}
-
-where all of the information about the partonic cross-sections and the DGLAP
-evolution operators is now encoded into the so-called FK table, :math:`FK_{i,\alpha}`.
+Here :math:`j` runs over the input parton flavours and :math:`\alpha` labels
+the :math:`n_x` momentum-fraction grid points at the input scale.
 
 The convolutions are thus reduced to a matrix multiplication of the precomputed FK table
 with the PDFs evaluated at the input scale. This avoids repeating the
