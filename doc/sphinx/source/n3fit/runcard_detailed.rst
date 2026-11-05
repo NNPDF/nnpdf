@@ -356,6 +356,17 @@ replica range to be parallelized (in this case from replica 1 to replica 4).
 
    n3fit runcard.yml 1 -r 4
 
+.. note::
+
+   When running in parallel, all replicas are trained with the same hyperparameters,
+   since they are fitted together as a single model.
+   This matters for runcards that use ``trial_specs`` to take the methodology from a
+   hyperparameter scan: only the network architecture follows each replica's own trial,
+   while the number of epochs, stopping patience, initial positivity multiplier and
+   optimizer settings are those of the first replica of the range.
+   To give every replica the full methodology of its own trial, run one replica per
+   ``n3fit`` process instead. See :ref:`trial-specs-label` for details.
+
 
 In machines with more than one GPU you can select the GPU in which the code
 should run by setting the environment variable ``CUDA_VISIBLE_DEVICES``
