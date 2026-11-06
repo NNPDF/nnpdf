@@ -310,7 +310,9 @@ class LossRepulsion(MetaLayer):
         kmat = Kops.exp(-dnorm2 / (2.0 * sigma))
         rowsum = op.sum(kmat, axis=1)
 
-        rep = op.sum(rowsum / Kops.stop_gradient(rowsum) - 1.0)
+        # One term per replica, shape (R,) like every other training loss: the training loss sums
+        # them, and MetaModel.compute_losses stacks the per-replica losses (a (1,) output breaks it)
+        rep = rowsum / Kops.stop_gradient(rowsum) - 1.0
         # chi2 = 2 * NLL: with the same factor, beta = 1 is the SVGD particle
         # approximation of D'Angelo & Fortuin.
         result = Kops.cast(2.0 * self.beta, rep.dtype) * rep
@@ -324,4 +326,4 @@ class LossRepulsion(MetaLayer):
             factor = sigma / Kops.sqrt(med)
             result = result * Kops.stop_gradient(Kops.cast(factor, result.dtype))
 
-        return op.reshape(result, (1,))
+        return result

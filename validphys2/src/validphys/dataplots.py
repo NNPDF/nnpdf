@@ -1284,7 +1284,22 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
         cv = pred.central_value
         lower, upper = pred.stats.errorbar68()
 
-        try:
+        transform = next(offsets)
+        if np.any(lower > cv) or np.any(upper < cv):
+            # A skewed ensemble (a few replicas far out) can put the mean outside the 68% band,
+            # which errorbar cannot draw: plot the mean and the band separately
+            log.warning(f"The central value of {pdf} for {posdataset} is outside of the 68% band")
+            (line,) = ax.plot(
+                xvals,
+                cv,
+                linestyle='--',
+                marker='s',
+                label=str(pdf),
+                lw=0.5,
+                transform=transform,
+            )
+            ax.vlines(xvals, lower, upper, color=line.get_color(), lw=0.5, transform=transform)
+        else:
             ax.errorbar(
                 xvals,
                 cv,
@@ -1293,14 +1308,8 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
                 marker='s',
                 label=str(pdf),
                 lw=0.5,
-                transform=next(offsets),
+                transform=transform,
             )
-        except ValueError as e:
-            if any(lower > cv) or any(upper < cv):
-                raise ValueError(
-                    f"The central value of {pdf} for {posdataset} is outside of the error bands. This is not supported"
-                ) from e
-            raise e
         minscale = min(minscale, np.abs(np.min(cv)))
     ax.legend()
     ax.set_title(str(posdataset))

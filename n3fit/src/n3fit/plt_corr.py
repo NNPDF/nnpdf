@@ -11,7 +11,8 @@ Outputs (in --out-dir):
     fig_spectrum.png      eigenvalue spectrum + cumulative variance, Marchenko-Pastur edge marked
     fig_layer_blocks.png  mean |rho| per (layer, layer) block
     fig_diff_<a>_vs_<b>.png  rho_a - rho_b (only when the parameter layouts match)
-    (--per-chain: correlations within BNN chains only; --last-layer: last layer only)
+    (--per-chain: correlations within BNN chains only; --last-layer: last layer only;
+     --postfit-only: only the replicas postfit kept, the same number per training)
     fig_correlation_notation.png    notation, rules and the admissible weight correlations
     fig_cross_weight_over_replicas.png  rho^r_kk'  (pairs of weights, summed over replicas)
     fig_cross_weight_over_samples.png   rho^n_kk'  (pairs of weights, over the samples of a training)
@@ -20,7 +21,7 @@ Outputs (in --out-dir):
     fig_cross_sample_over_weights.png   rho^k_nn'  (pairs of samples of a training, over weights)
     fig_cross_training_over_weights.png rho^k_mm'  (pairs of trainings, over weights)
     fig_mode_separation.png             T_k, distance of the training modes in their own widths
-                          (see plt_corr_weight_correlations.tex for the notation and the rules)
+                          (notation and rules: the 'full set of weight correlations' comment block below)
     scalar_table.csv/.md  single-number summaries (also printed)
     <runcard>_W.npy       cached (N, p) weight matrix
 
@@ -169,24 +170,56 @@ def _natural(s):
     return [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", s)]
 
 
-def load_runcard(name, results, n_replicas, seed, which, include_preproc, out_dir, reload):
-    """Return (W (N,p), blocks, biases) or None if the runcard has no saved weights."""
+def postfit_selection(name, results, files):
+    """Only the replicas postfit kept (``<fit>/postfit/replica_*`` link to ``nnfit/replica_<i>``), with the
+    same number per training so that the training-based sets stay defined: every training keeps its first
+    K' kept samples, K' = the smallest number kept in a training that kept any (trainings with none are
+    dropped). Returns (files, K'); K' = 1 for a standard fit."""
+    kept = {os.path.basename(os.path.realpath(p))
+            for p in glob.glob(os.path.join(results, name, "postfit", "replica_*"))}
+    if not kept:  # e.g. nnpdf40-like_weights, which was never postfitted
+        print(f"[{name}] --postfit-only: no postfit replicas under {results}/{name}/postfit/, using all {len(files)}")
+        return files, chain_size(name, results)
+    files = [f for f in files if os.path.basename(os.path.dirname(f)) in kept]
+    K = chain_size(name, results)
+    if K == 1:
+        print(f"[{name}] --postfit-only: {len(files)} postfit replicas")
+        return files, 1
+    by_training = {}
+    for f in files:  # BNN pseudo-replicas are 0-indexed: replica i belongs to training i // K
+        by_training.setdefault(int(os.path.basename(os.path.dirname(f)).split("_")[1]) // K, []).append(f)
+    counts = [len(v) for v in by_training.values()]
+    k_kept = min(counts)
+    n_trainings = len(by_training)
+    files = [f for t in sorted(by_training) for f in by_training[t][:k_kept]]
+    print(f"[{name}] --postfit-only: {sum(counts)} postfit replicas in {n_trainings} of the "
+          f"{len(glob.glob(os.path.join(results, name, 'nnfit', 'replica_*'))) // K} trainings "
+          f"({min(counts)}..{max(counts)} per training); keeping {k_kept} per training -> {len(files)} replicas")
+    return files, k_kept
+
+
+def load_runcard(name, results, n_replicas, seed, which, include_preproc, out_dir, reload, postfit_only=False):
+    """Return (W (N,p), blocks, biases, K) or None if the runcard has no saved weights. K = samples per
+    training (n_bnn_samples, or the balanced number kept with postfit_only)."""
     files = glob.glob(os.path.join(results, name, "nnfit", "replica_*", "weights.weights.h5"))
     if not files:
         print(f"[{name}] no weights.weights.h5 found under {results}/{name}/nnfit/replica_*/ -- "
               "skipping (was the fit run with `save: weights.weights.h5`?)")
         return None
     files.sort(key=_natural)
+    K = chain_size(name, results)
+    if postfit_only:
+        files, K = postfit_selection(name, results, files)
     if n_replicas and n_replicas < len(files):
         rng = np.random.default_rng(seed)
         files = [files[i] for i in sorted(rng.choice(len(files), n_replicas, replace=False))]
-    tag = f"{name}_{which}{'_pre' if include_preproc else ''}_n{len(files)}_s{seed}"
+    tag = f"{name}_{which}{'_pre' if include_preproc else ''}{f'_pfK{K}' if postfit_only else ''}_n{len(files)}_s{seed}"
     cache = os.path.join(out_dir, f"{tag}_W.npy")
     if os.path.exists(cache) and not reload:
         d = np.load(cache, allow_pickle=True).item()
         if "biases" in d:  # older caches lack the bias sizes: re-read them
             print(f"[{name}] loaded cached matrix {d['W'].shape} from {cache}")
-            return d["W"], d["blocks"], d["biases"]
+            return d["W"], d["blocks"], d["biases"], K
     print(f"[{name}] reading {len(files)} replicas ...")
     rows, blocks, biases = [], None, None
     for f in files:
@@ -197,8 +230,8 @@ def load_runcard(name, results, n_replicas, seed, which, include_preproc, out_di
             raise ValueError(f"{f}: layout {b} differs from first replica {blocks}")
         rows.append(v)
     W = np.stack(rows)
-    np.save(cache, {"W": W, "blocks": blocks, "biases": biases}, allow_pickle=True)
-    return W, blocks, biases
+    np.save(cache, {"W": W, "blocks": blocks, "biases": biases, "K": K}, allow_pickle=True)
+    return W, blocks, biases, K
 
 
 # ------------------------------------------------------------------- single replica
@@ -449,7 +482,7 @@ def fig_diff(a, b, da, db, out):
 
 
 # ------------------------------------------------------- the full set of weight correlations
-# Notation (details in plt_corr_weight_correlations.tex): rho^c_ab = sum_c (w_a^d - mu_a^e)(w_b^d - mu_b^e) /
+# Notation: rho^c_ab = sum_c (w_a^d - mu_a^e)(w_b^d - mu_b^e) /
 # (sigma_a^f sigma_b^f), labels m (training), n (sample), k (weight), r = (m, n) (replica); named
 # 'cross-<a> correlation over <c>'. Admissible: R1 c disjoint from a, R2 d = c, R3 no n across m,
 # R4 e = c, R5 f = e (1024 -> 6 combinations), plus the mode separation T_k.
@@ -1112,6 +1145,10 @@ def main(argv=None):
                          "skipped. Needs all replicas (no --n-replicas)")
     ap.add_argument("--reference", default=None, help="runcard to subtract in the difference heatmaps")
     ap.add_argument("--reload", action="store_true", help="ignore cached weight matrices")
+    ap.add_argument("--postfit-only", action="store_true",
+                    help="use only the replicas postfit kept (<fit>/postfit/replica_*), the same number per "
+                         "training (the smallest kept in a training; trainings with none are dropped), instead "
+                         "of every nnfit replica")
     ap.add_argument("--ncols", type=int, default=None,
                     help="panels per row in the per-fit figures (heatmaps, blocks, single replica); "
                          "default: all in one row. E.g. 6 fits with --ncols 3 give two rows of three")
@@ -1121,21 +1158,19 @@ def main(argv=None):
     data = {}
     for name in args.runcards:
         loaded = load_runcard(name, args.results_dir, args.n_replicas, args.seed, args.which,
-                              args.include_preproc, args.out_dir, args.reload)
+                              args.include_preproc, args.out_dir, args.reload, args.postfit_only)
         if loaded is None:
             continue
-        W, blocks, biases = loaded
+        W, blocks, biases, K = loaded
         if args.last_layer:
             lo = W.shape[1] - blocks[-1][1]
             W = W[:, lo:]
             nb = biases[-1]
             blocks = [(f"{blocks[-1][0]} kernel", W.shape[1] - nb), (f"{blocks[-1][0]} bias", nb)]
         # the full set of weight correlations, on the weights as loaded (before --per-chain)
-        K = chain_size(name, args.results_dir)
         corr_set = correlation_set(W, K, trainings_ok=not args.n_replicas)
         n_chains = 0
         if args.per_chain:
-            K = chain_size(name, args.results_dir)
             if K < 2:
                 print(f"[{name}] --per-chain: no BNN chains (chain size 1); a standard fit has one network per "
                       "replica, so within-chain weight correlation is undefined -- skipping")
