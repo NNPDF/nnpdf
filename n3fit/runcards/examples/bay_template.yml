@@ -3,7 +3,7 @@
 # Built on the BNN template runcards/examples/OTHERS/Basic_runcard_bayesian.yml (2026-10-16):
 # comments '<value> original value in this runcard' give this runcard's setting before the update.
 #
-description: "BNN template (1 model x 1200 samples): positivity::initial 4e5, coherent weight sampling, std_init -7, linear KL warm-up of 3000 epochs, per-sample chi2/positivity checks, NNPDF4.0 dataset"
+description: "BNN template (1 model x 1200 samples): positivity::initial 4e5, coherent weight sampling, std_init -7, linear KL warm-up of 3000 epochs, per-sample chi2, no positivity veto: xf < 0 -> 0 for u, ubar, d, dbar, s, sbar, g (clip_negative), NNPDF4.0 dataset"
 
 ######################################################################################
 dataset_inputs:
@@ -143,9 +143,10 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     kl_warmup_epochs: 3000      # warm-up length (default 3000, at most epochs // 4); no best epoch before its end
     per_replica:                # per-sample quantities instead of copies of the trained model's
       chi2: true                # chi2, erf_tr, erf_vl of each sample
-      positivity: true          # pos_state of each sample (n3fit's stopping positivity check)
-      postfit_veto: true        # postfit: per-sample positivity veto, and filling up to the requested
-                                #   number with replicas of chi2 <= 2x the passing mean
+      positivity:   false       # pos_state per sample: not needed with clip_negative
+      postfit_veto: false       # no per-sample positivity veto (clip_negative replaces it)
+      clip_negative: true       # postfit: xf < 0 -> 0 for u, ubar, d, dbar, s, sbar, g at every Q in the
+                                #   LHAPDF members (Q0 included, so predictions see it); charm as fitted
       posterior_stopping_samples: 0   # > 0: stopping also needs positivity at the posterior mean and
                                       #   at this many fixed draws
       rejection_sampling: false       # keep only posterior draws passing positivity
