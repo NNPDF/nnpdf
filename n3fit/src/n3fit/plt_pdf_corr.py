@@ -20,6 +20,13 @@ Outputs (in --out-dir):
     fig_pdf_spectrum.png        cumulative variance of the PDF-ensemble eigenmodes per flavour
     pdf_scalar_table.csv/.md    single numbers, mean +- std over random equal-size subsamples
 
+Every fit's own LHAPDF setting ForcePositive (``nnfit/<fit>.info``) is applied: with ForcePositive 1
+each flavour's xf < 0 is set to 0 before the combinations are built (what LHAPDF returns at Q0), with
+2 to 1e-10. Likewise a fit whose runcard sets ``parameters::bayesian::per_replica::clip_negative``
+(postfit writes its LHAPDF members with xf < 0 -> 0 for u, ubar, d, dbar, s, sbar, g) gets the same
+clipping of those flavours in its exportgrids. --postfit-only uses only the replicas postfit kept
+(``<fit>/postfit/replica_*``).
+
 Single-number comparison (all computed from replica subsets of the SAME size n, so that every fit
 has the same sampling noise; `n` defaults to half the reference fit's replicas so two disjoint
 subsets of the reference can measure the noise floor):
@@ -74,14 +81,51 @@ def _combos(grid, labels):
     }
 
 
-def load_fit(name, results, out_dir, reload):
-    """-> (x (nx,), {flavour: (N, nx)}). Cached as npz in out_dir."""
+def force_positive(name, results):
+    """The fit's LHAPDF ForcePositive setting (0: none, 1: xf < 0 -> 0, 2: xf < 1e-10 -> 1e-10)"""
+    info = os.path.join(results, name, "nnfit", f"{name}.info")
+    if not os.path.exists(info):
+        return 0
+    with open(info) as fh:
+        m = re.search(r"^ForcePositive:\s*(\d)", fh.read(), flags=re.M)
+    return int(m.group(1)) if m else 0
+
+
+# exportgrid labels of the flavours postfit's clip_negative sets to 0 where negative
+# (validphys.replica_checks.CLIP_NEGATIVE_PDG: sbar, ubar, dbar, g, d, u, s)
+CLIP_NEGATIVE_LABELS = ("SBAR", "UBAR", "DBAR", "GLUON", "D", "U", "S")
+
+
+def clip_negative(name, results):
+    """True if the fit runcard (``<fit>/filter.yml``) sets parameters::bayesian::per_replica::clip_negative"""
+    runcard = os.path.join(results, name, "filter.yml")
+    if not os.path.exists(runcard):
+        return False
+    with open(runcard) as fh:
+        params = (yaml.load(fh, Loader=LOADER) or {}).get("parameters") or {}
+    return bool(((params.get("bayesian") or {}).get("per_replica") or {}).get("clip_negative", False))
+
+
+def load_fit(name, results, out_dir, reload, postfit_only=False):
+    """-> (x (nx,), {flavour: (N, nx)}), with the fit's ForcePositive applied. Cached as npz in out_dir."""
     files = glob.glob(os.path.join(results, name, "nnfit", "replica_*", f"{name}.exportgrid"))
     if not files:
         print(f"[{name}] no exportgrid files under {results}/{name}/nnfit/replica_*/ -- skipping")
         return None
     files.sort(key=_natural)
-    cache = os.path.join(out_dir, f"{name}_pdfs_n{len(files)}.npz")
+    if postfit_only:
+        kept = {os.path.basename(os.path.realpath(p)) for p in glob.glob(os.path.join(results, name, "postfit", "replica_*"))}
+        if not kept:
+            sys.exit(f"[{name}] --postfit-only: no postfit replicas under {results}/{name}/postfit/")
+        files = [f for f in files if os.path.basename(os.path.dirname(f)) in kept]
+        print(f"[{name}] --postfit-only: {len(files)} postfit replicas")
+    fpos = force_positive(name, results)
+    if fpos:
+        print(f"[{name}] ForcePositive {fpos}: xf < {0 if fpos == 1 else 1e-10:g} set to {0 if fpos == 1 else 1e-10:g} per flavour")
+    clip = clip_negative(name, results)
+    if clip:
+        print(f"[{name}] clip_negative: xf < 0 set to 0 for {', '.join(CLIP_NEGATIVE_LABELS)}")
+    cache = os.path.join(out_dir, f"{name}_pdfs{'_pf' if postfit_only else ''}{f'_fp{fpos}' if fpos else ''}{'_cn' if clip else ''}_n{len(files)}.npz")
     if os.path.exists(cache) and not reload:
         z = np.load(cache)
         print(f"[{name}] loaded cached PDFs from {cache}")
@@ -94,6 +138,11 @@ def load_fit(name, results, out_dir, reload):
             d = yaml.load(fh, Loader=LOADER)
         x = np.array([float(v) for v in d["xgrid"]])  # yaml parses '1e-09' as a string
         grid = np.array(d["pdfgrid"], dtype=float)
+        if fpos:
+            grid = np.maximum(grid, 0.0 if fpos == 1 else 1e-10)
+        if clip:
+            cols = [d["labels"].index(label) for label in CLIP_NEGATIVE_LABELS]
+            grid[:, cols] = np.maximum(grid[:, cols], 0.0)
         for f, v in _combos(grid, d["labels"]).items():
             rows[f].append(v)
     pdfs = {f: np.stack(v) for f, v in rows.items()}
@@ -144,12 +193,13 @@ def main(argv=None):
                          "(MAD) sigmas at any x-point in any flavour. Use K=50: ordinary replicas of multi-chain fits reach 12-15 sigma, a failed chain sits at ~100. These are failed replicas/chains "
                          "that a postfit-style filter would remove; one such chain can inflate sigma by 4x")
     ap.add_argument("--reload", action="store_true")
+    ap.add_argument("--postfit-only", action="store_true", help="only the replicas postfit kept, not every nnfit replica")
     args = ap.parse_args(argv)
 
     os.makedirs(args.out_dir, exist_ok=True)
     fits, x = {}, None
     for name in dict.fromkeys(args.runcards + [args.reference]):
-        got = load_fit(name, args.results_dir, args.out_dir, args.reload)
+        got = load_fit(name, args.results_dir, args.out_dir, args.reload, args.postfit_only)
         if got is None:
             if name == args.reference:
                 sys.exit("reference fit unavailable")

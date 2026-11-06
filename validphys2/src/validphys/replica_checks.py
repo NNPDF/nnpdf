@@ -30,6 +30,14 @@ convergence veto then acts per sample); ``postfit_veto: true`` makes postfit add
 per-replica positivity veto, using n3fit's per-sample result where available and
 recomputing positivity here from the ``.exportgrid`` otherwise. ``postfit --per-replica-checks``
 does the latter for fits run without the switch.
+
+The alternative to the veto, ``clip_negative: true`` (with ``postfit_veto: false``): postfit vetoes
+nothing on positivity and writes each selected replica's LHAPDF grid with xf < 0 set to 0 for the
+flavours whose MSbar positivity NNPDF4.0 imposes (u, ubar, d, dbar, s, sbar, g:
+``NNPDF_POS_2P24GEV_X*``) at every (x, Q) knot of the grid, Q0 included, so that every prediction
+sees it (:py:func:`clip_negative_grid`). Charm (only F2C is constrained) and the photon are left as
+fitted, and ``nnfit/replica_*`` keeps the fitted grids. ``postfit --clip-negative`` does this for
+fits run without the switch.
 """
 
 import logging
@@ -65,6 +73,46 @@ def postfit_veto_requested(runcard):
     bnn = any(layer in ("VBDense", "VBDense_correlated") for layer in params.get("layer_type") or [])
     per_replica = (params.get("bayesian") or {}).get("per_replica") or {}
     return bool(per_replica.get("postfit_veto", bnn))
+
+
+# PDG ids clipped by clip_negative: the flavours with an MSbar positivity set in NNPDF4.0
+CLIP_NEGATIVE_PDG = (-3, -2, -1, 21, 1, 2, 3)
+
+
+def clip_negative_requested(runcard):
+    """True if the fit runcard sets parameters::bayesian::per_replica::clip_negative (default false)"""
+    params = runcard.get("parameters") or {}
+    per_replica = (params.get("bayesian") or {}).get("per_replica") or {}
+    return bool(per_replica.get("clip_negative", False))
+
+
+def clip_negative_grid(source, target):
+    """Write the LHAPDF grid (lhagrid1) ``source`` to ``target`` with xf < 0 set to 0 for
+    ``CLIP_NEGATIVE_PDG`` at every (x, Q) knot. Each subgrid (between ``---`` lines) has a line of
+    x knots, one of Q knots, one of PDG ids, then one line per (x, Q) with Q running fastest;
+    subgrids with values to clip are written back in the grid's own %.8e format, everything else is
+    copied as is. Returns {pdg id: number of values set to 0}. LHAPDF interpolates between the
+    knots, so tiny negative values can remain between a clipped knot and its neighbours."""
+    lines = pathlib.Path(source).read_text().split("\n")
+    seps = [i for i, line in enumerate(lines) if line.strip() == "---"]
+    counts = dict.fromkeys(CLIP_NEGATIVE_PDG, 0)
+    for a, b in zip(seps[:-1], seps[1:]):
+        nx, nq = len(lines[a + 1].split()), len(lines[a + 2].split())
+        pids = [int(v) for v in lines[a + 3].split()]
+        rows = lines[a + 4 : b]
+        if len(rows) != nx * nq:
+            raise ValueError(f"{source}: subgrid with {len(rows)} lines, expected {nx} x {nq}")
+        grid = np.array([row.split() for row in rows], dtype=float)
+        cols = [pids.index(pid) for pid in CLIP_NEGATIVE_PDG]
+        negative = grid[:, cols] < 0
+        if not negative.any():
+            continue
+        for pid, n in zip(CLIP_NEGATIVE_PDG, negative.sum(axis=0)):
+            counts[pid] += int(n)
+        grid[:, cols] = np.where(negative, 0.0, grid[:, cols])
+        lines[a + 4 : b] = [" ".join(f"{v:.8e}" for v in row) for row in grid]
+    pathlib.Path(target).write_text("\n".join(lines))
+    return counts
 
 EXPORTGRID_PDG = {
     "TBAR": -6,

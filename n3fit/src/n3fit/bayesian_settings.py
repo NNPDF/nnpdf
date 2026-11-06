@@ -28,6 +28,8 @@ All options of a Bayesian-NN fit live in one block of the runcard, ``parameters:
           postfit_veto: true        # postfit: explicit per-replica positivity veto (recomputed from the
                                     #   exportgrid for replicas that were not checked by n3fit); also
                                     #   enables postfit's filling (chi2 <= 2x the passing mean)
+          clip_negative: false      # postfit: xf < 0 -> 0 for u, ubar, d, dbar, s, sbar, g at every Q in
+                                    #   the LHAPDF members, and no positivity veto (needs postfit_veto: false)
           posterior_stopping_samples: 0   # > 0: stopping requires positivity at the posterior mean
                                           #   and at this many fixed posterior draws
           rejection_sampling: false       # keep only posterior draws that pass positivity
@@ -95,6 +97,7 @@ PER_REPLICA_DEFAULTS = {
     "chi2": True,
     "positivity": True,
     "postfit_veto": True,
+    "clip_negative": False,
     "posterior_stopping_samples": 0,
     "rejection_sampling": False,
     "rejection_max_draws": None,
@@ -147,9 +150,13 @@ def check_bayesian_parameters(parameters):
             f"Unknown key(s) in parameters::bayesian::per_replica: {sorted(unknown)}. "
             f"Allowed: {list(PER_REPLICA_DEFAULTS)}"
         )
-    for key in ("chi2", "positivity", "postfit_veto", "rejection_sampling"):
+    for key in ("chi2", "positivity", "postfit_veto", "clip_negative", "rejection_sampling"):
         if key in per_replica and not isinstance(per_replica[key], bool):
             raise BayesianSettingsError(f"per_replica::{key} must be true or false")
+    if per_replica.get("clip_negative", False) and per_replica.get("postfit_veto", PER_REPLICA_DEFAULTS["postfit_veto"]):
+        raise BayesianSettingsError(
+            "per_replica::clip_negative replaces the positivity veto: set per_replica::postfit_veto: false"
+        )
     samples = per_replica.get("posterior_stopping_samples", 0)
     if not isinstance(samples, int) or samples < 0:
         raise BayesianSettingsError("per_replica::posterior_stopping_samples must be an integer >= 0")

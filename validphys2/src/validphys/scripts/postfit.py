@@ -13,6 +13,7 @@ layout.
 __authors__ = 'Nathan Hartland, Zahari Kassabov'
 
 import argparse
+import dataclasses
 from glob import glob
 import itertools
 import json
@@ -171,10 +172,13 @@ def filter_replicas(
     integ_threshold,
     per_replica_checks=False,
     runcard=None,
+    ignore_positivity_flag=False,
 ):
     """Find the paths of all replicas passing the standard NNPDF fit vetoes
     as defined in fitveto.py. Returns a list of the replica directories that pass.
-    If ``per_replica_checks`` is True, a per-replica positivity veto is added."""
+    If ``per_replica_checks`` is True, a per-replica positivity veto is added.
+    If ``ignore_positivity_flag`` is True (clip_negative), the replicas' positivity flag
+    (``pos_state``, the "Convergence check") vetoes nothing."""
     # This glob defines what is considered a valid replica
     # all the following code uses paths from this glob
     # We sort the paths so that the selection of replicas is deterministic
@@ -196,6 +200,10 @@ def filter_replicas(
                 f"Corrupted replica replica at {path}. "
                 f"Error when loading replica information:\n {e}"
             ) from e
+    if ignore_positivity_flag:
+        n_veto = sum(not info.pos_flag for info in fitinfo)
+        log.info(f"clip_negative: the positivity flag is ignored ({n_veto} replicas have POS_VETO)")
+        fitinfo = [dataclasses.replace(info, pos_flag=True) for info in fitinfo]
     positivity_mask = None
     if per_replica_checks:
         positivity_mask = per_replica_positivity(valid_paths, fitname, runcard, postfit_path)
@@ -250,14 +258,27 @@ def _postfit(
     arclength_threshold: float,
     integ_threshold: float,
     per_replica_checks: bool = False,
+    clip_negative: bool = False,
 ):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
 
-    # Per-replica checks: on if requested on the command line or in the fit runcard
+    # Per-replica checks and clip_negative: on if requested on the command line or in the fit
+    # runcard. They exclude each other; --clip-negative on a fit whose runcard asks for the veto
+    # replaces the veto.
     runcard_path = result_path / "filter.yml"
     runcard = yaml_safe.load(runcard_path.read_text(encoding="utf-8")) if runcard_path.exists() else {}
-    if replica_checks.postfit_veto_requested(runcard):
+    runcard_veto = bool(runcard) and replica_checks.postfit_veto_requested(runcard)
+    runcard_clip = bool(runcard) and replica_checks.clip_negative_requested(runcard)
+    if runcard_veto and runcard_clip:
+        raise PostfitError("The fit runcard sets both per_replica::postfit_veto and clip_negative")
+    clip_negative = clip_negative or runcard_clip
+    if clip_negative:
+        if per_replica_checks:
+            raise PostfitError("--per-replica-checks and clip_negative exclude each other")
+        if runcard_veto:
+            log.warning("--clip-negative: the per-replica positivity veto of the fit runcard is not applied")
+    elif runcard_veto:
         per_replica_checks = True
     if per_replica_checks and not runcard:
         raise PostfitError(f"Per-replica checks need the fit runcard, not found at {runcard_path}")
@@ -302,6 +323,11 @@ def _postfit(
         # Perform postfit selection
         if per_replica_checks:
             log.warning("Per-replica positivity checks are on")
+        if clip_negative:
+            log.warning(
+                "clip_negative: no positivity veto; xf < 0 -> 0 for u, ubar, d, dbar, s, sbar, g at "
+                "every (x, Q) knot of the selected replicas' LHAPDF grids"
+            )
         passing_paths, fill_paths = filter_replicas(
             postfit_path,
             nnfit_path,
@@ -311,6 +337,7 @@ def _postfit(
             integ_threshold,
             per_replica_checks=per_replica_checks,
             runcard=runcard,
+            ignore_positivity_flag=clip_negative,
         )
         if len(passing_paths) >= nrep:
             # Select nrep passing replicas: the first ones, or for a BNN fit with several
@@ -348,7 +375,9 @@ def _postfit(
         shutil.copy2(info_source_path, info_target_path)
         set_lhapdf_info(info_target_path, len(selected_paths))
 
-        # Generate symlinks
+        # Generate symlinks (with clip_negative: clipped copies of the LHAPDF grids)
+        clipped = dict.fromkeys(replica_checks.CLIP_NEGATIVE_PDG, 0)
+        n_clipped_replicas = 0
         for drep, source_path in enumerate(selected_paths, 1):
             # Symlink results to postfit directory
             source_dir = pathlib.Path(source_path).resolve()
@@ -358,9 +387,27 @@ def _postfit(
             source_grid = source_dir.joinpath(fitname + '.dat')
             target_file = f'{fitname}_{drep:04d}.dat'
             target_grid = LHAPDF_path.joinpath(target_file)
-            relative_symlink(source_grid, target_grid)
+            if clip_negative:
+                counts = replica_checks.clip_negative_grid(source_grid, target_grid)
+                n_clipped_replicas += any(counts.values())
+                for pid, n in counts.items():
+                    clipped[pid] += n
+            else:
+                relative_symlink(source_grid, target_grid)
 
         log.info(f"{len(selected_paths)} replicas written to the postfit folder")
+        if clip_negative:
+            summary = {
+                "flavours": list(replica_checks.CLIP_NEGATIVE_PDG),
+                "clipped_values": clipped,
+                "replicas_with_clipped_values": n_clipped_replicas,
+                "replicas": len(selected_paths),
+            }
+            (postfit_path / "clip_negative.json").write_text(json.dumps(summary, indent=2))
+            log.info(
+                f"clip_negative: {sum(clipped.values())} grid values set to 0 in {n_clipped_replicas} of "
+                f"{len(selected_paths)} replicas (per PDG id: {clipped})"
+            )
 
         # Generate final PDF with replica 0
         log.info("Beginning construction of replica 0")
@@ -439,6 +486,14 @@ def main():
         f"the set is completed with other valid replicas of chi2 <= {FILL_CHI2_FACTOR:g} x the "
         "passing mean; if there are not enough, postfit continues with all of those.",
     )
+    parser.add_argument(
+        '--clip-negative',
+        action='store_true',
+        help="No positivity veto; write the selected replicas' LHAPDF grids with xf < 0 set to 0 for "
+        "u, ubar, d, dbar, s, sbar, g at every (x, Q) knot (see validphys.replica_checks). Switched "
+        "on automatically if the fit runcard sets parameters::bayesian::per_replica::clip_negative; "
+        "replaces the per-replica veto of a fit whose runcard asks for it.",
+    )
     parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
     args = parser.parse_args()
     if args.debug:
@@ -453,6 +508,7 @@ def main():
             args.arclength_threshold,
             args.integrability_threshold,
             args.per_replica_checks,
+            args.clip_negative,
         )
     except PostfitError as e:
         log.error(f"Error in postfit:\n{e}")
