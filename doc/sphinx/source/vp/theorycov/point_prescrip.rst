@@ -190,7 +190,7 @@ Variations of the singlet splitting functions. For each splitting function
 :math:`F \in \{gg, gq, qg, qq\}` there are :math:`n_F` variations
 (:math:`n_{gg}=19`, :math:`n_{gq}=21`, :math:`n_{qg}=15`, :math:`n_{qq}=6`),
 and the contributions of the four functions are summed.
-These are in the outdated prescription, and superceded by ``fhmruvv ihou``.
+These are a legacy prescription, and superceded by ``fhmruvv ihou``.
 
 .. warning::
 
@@ -222,6 +222,26 @@ function variations, ordered as ``C2q, C2g, CLq, CLg``, and have two shifts each
 .. math::
 
    s_{12} = \sum_{c=1}^{4} \frac{1}{2}\bigg\{ \Delta_1^{c,(1)}\Delta_2^{c,(1)} + \Delta_1^{c,(-1)}\Delta_2^{c,(-1)} \bigg\}
+
+dis ihou legacy
+===============
+
+Legacy implementation of the DIS coefficient function variations, where all were
+varied at once. They are varied according to the ``3 points`` prescription.
+
+.. warning::
+
+        **Deprecated prescription!**
+
+.. note::
+   
+   ``theoryids``: Older theories, e.g. ``10{23,24}``
+
+   ``point_prescription: 'dis ihou'``.
+
+.. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
+
+.. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+,+) + \Delta_1(-,-) \bigg) \bigg(\Delta_2(+,+) + \Delta_2(-,-) \bigg) \bigg\}
 
 fhmruvv ihou
 ============
@@ -289,20 +309,8 @@ as long as three variations are chosen.
 
    * - ``point_prescription``
      - Description
-   * - ``alphas 0117 0119 0115``
-     - Varies \alpha_s central at 0.117 from 0.115 to 0.115.
-   * - ``alphas 0118 0120 0116``
-     - Varies \alpha_s central at 0.118 from 0.120 to 0.116.
-   * - ``alphas 0119 0121 0117``
-     - Varies \alpha_s central at 0.119 from 0.121 to 0.117.
-   * - ``alphas 0119 0122 0116``
-     - Varies \alpha_s central at 0.119 from 0.121 to 0.116.
-   * - ``alphas 0119 0123 0115``
-     - Varies \alpha_s central at 0.119 from 0.123 to 0.115.
-   * - ``alphas 0120 0122 0118``
-     - Varies \alpha_s central at 0.120 from 0.122 to 0.118.
-   * - ``alphas 0121 0123 0119``
-     - Varies \alpha_s central at 0.121 from 0.123 to 0.119.
+   * - ``alphas 0116 0118 0120``
+     - Varies :math:`\alpha_s` central at 0.118 from 0.116 to 0.120.
 
 .. math:: s_{12} = \frac{1}{2}\bigg\{ \Delta_1(+)\Delta_2(+) + \Delta_1(-)\Delta_2(-) \bigg\}
 
