@@ -38,9 +38,6 @@ Summary
    ``scalevariations`` module in ``validphys``.
 
    IHOU variations
-      ``ad ihou``
-         Varies the IHOU Anomalous Dimensions in EKO.
-
       ``dis ihou``
          Varies the IHOU Coefficient Functions in YADISM.
 
@@ -53,27 +50,15 @@ Summary
       ``fhmruvv ihou``
          Varies the FHMRUVV splitting functions in EKO.
 
+      ``ad ihou``
+         Varies the IHOU Anomalous Dimensions in EKO (legacy).
+
+      ``dis ihou legacy``
+         Varies the IHOU Coefficient Functions in YADISM (legacy).
+
    Alphas variations
-      ``alphas 0117 0119 0115``
-         Varies \alpha_s central at 0.117 from 0.115 to 0.115.
-
-      ``alphas 0118 0120 0116``
-         Varies \alpha_s central at 0.118 from 0.120 to 0.116.
-
-      ``alphas 0119 0121 0117``
-         Varies \alpha_s central at 0.119 from 0.121 to 0.117.
-
-      ``alphas 0119 0122 0116``
-         Varies \alpha_s central at 0.119 from 0.121 to 0.116.
-
-      ``alphas 0119 0123 0115``
-         Varies \alpha_s central at 0.119 from 0.123 to 0.115.
-
-      ``alphas 0120 0122 0118``
-         Varies \alpha_s central at 0.120 from 0.122 to 0.118.
-
-      ``alphas 0121 0123 0119``
-         Varies \alpha_s central at 0.121 from 0.123 to 0.119.
+      ``alphas 0116 0118 0120``
+         Varies :math:``\alpha_s`` central at 0.118 from 0.116 to 0.120.
 
 -  You may use multiple prescriptions in the theory covariance matrix, by specifying multiple prescriptions at once. 
    E.g. ``point_prescriptions: ["fhmruvv ihou", "dis ihou", "7 point"]`` will vary the weights using  three prescriptions.
