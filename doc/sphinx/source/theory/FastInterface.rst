@@ -19,7 +19,12 @@ can be decomposed in terms of hard-scattering coefficient functions and PDFs as
 
 .. math::
 
-    F_2(x,Q^2) = \sum_i^{n_f} C_i(x,Q^2) \otimes f_i(x,Q^2),
+    \begin{aligned}
+    F_2(x,Q^2)
+    &= \sum_i^{n_f} C_i(x,Q^2) \otimes f_i(x,Q^2) \\
+    &= \sum_{i,j}^{n_f} C_i(x,Q^2) \otimes E_{ij}(Q^2 \leftarrow Q_0^2)
+       \otimes f_j(x,Q_0^2),
+    \end{aligned}
 
 where :math:`C_i(x,Q^2)` are the process-dependent coefficient functions which
 can be computed perturbatively as an expansion in the QCD and QED
