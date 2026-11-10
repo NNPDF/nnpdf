@@ -4,14 +4,6 @@
 Fast Kernel (FK) tables
 ============================================================
 
-.. raw:: latex
-
-   \maketitle
-
-.. raw:: latex
-
-   \tableofcontents
-
 Here we discuss the numerical implementation of the calculations of the DIS structure functions.
 
 In the framework of collinear QCD factorization, the :math:`F_2` structure function
