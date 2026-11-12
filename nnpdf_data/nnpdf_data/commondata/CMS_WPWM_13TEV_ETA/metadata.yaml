@@ -56,6 +56,35 @@ implemented_observables:
     FK_tables:
     - - CMS_WPWM_13TEV_ETA_WP
     operation: 'null'
+  
+  variants: 
+    boson-rap:
+      observable:
+        description: "CMS 13 TeV, differential cross section in W+ > l- vb boson rapidity."
+        label: r"$d\\sigma/d|\y|$"
+        units: "[pb]"
+      
+      ndata: 10
+
+      process_type: DY_W_Y
+
+      plotting:
+        dataset_label: 'CMS 13 TeV $W^+ \to l^+ \nu$, $l^+$ rapidity'
+        x_scale: log
+        plot_x: y
+      
+      kinematic_coverage: [y, m_W2]
+
+      kinematics:
+        variables:
+          y: {description: "W+ > l+ v rapidity", label: '$y$', units: ""}
+          m_W2: {description: "W+ boson mass squared", label: '$M_W^2$', units: "GeV"}
+        file: kinematics_WP_y.yaml
+      
+      # Data
+      data_central: data_WP_y.yaml
+      data_uncertainties:
+      - uncertainties_WP_y.yaml
 
 - observable_name: "WM"
   observable:
@@ -93,6 +122,35 @@ implemented_observables:
     - - CMS_WPWM_13TEV_ETA_WM
     operation: 'null'
 
+  variants: 
+    boson-rap:
+      observable:
+        description: "CMS 13 TeV, differential cross section in W- > l- vb boson rapidity."
+        label: r"$d\\sigma/d|\y|$"
+        units: "[pb]"
+      
+      ndata: 10
+
+      process_type: DY_W_Y
+
+      plotting:
+        dataset_label: 'CMS 13 TeV $W^- \to l^+ \nu$, $l^+$ rapidity'
+        x_scale: log
+        plot_x: y
+      
+      kinematic_coverage: [y, m_W2]
+
+      kinematics:
+        variables:
+          y: {description: "W- > l+ v rapidity", label: '$y$', units: ""}
+          m_W2: {description: "W- boson mass squared", label: '$M_W^2$', units: "GeV"}
+        file: kinematics_WP_y.yaml
+      
+      # Data
+      data_central: data_WM_y.yaml
+      data_uncertainties:
+      - uncertainties_WM_y.yaml
+
 - observable_name: "ASY"
   observable:
     description: "CMS 13 TeV, charge asymmetry. Combination of muon and electron channel"
@@ -128,3 +186,32 @@ implemented_observables:
     - - CMS_WPWM_13TEV_ETA_WP
     - - CMS_WPWM_13TEV_ETA_WM
     operation: ASY
+
+  variants: 
+    boson-rap:
+      observable:
+        description: "CMS 13 TeV, charge asymmetry. Combination of muon and electron channel"
+        label: r"$d\\sigma/d|\y|$"
+        units: "[pb]"
+      
+      ndata: 10
+
+      process_type: DY_W_Y
+
+      plotting:
+        dataset_label: 'CMS 13 TeV $W$ charge asymmetry'
+        x_scale: log
+        plot_x: y
+      
+      kinematic_coverage: [y, m_W2]
+
+      kinematics:
+        variables:
+          y: {description: "W > l v pseudorapidity", label: '$y$', units: ""}
+          m_W2: {description: "W+ boson mass squared", label: '$M_W^2$', units: "GeV"}
+        file: kinematics_ASY_y.yaml
+      
+      # Data
+      data_central: data_ASY_y.yaml
+      data_uncertainties:
+      - uncertainties_ASY_y.yaml

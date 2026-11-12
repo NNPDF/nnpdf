@@ -1,0 +1,295 @@
+dependent_variables:
+- header:
+    name: 'Measured differential cross section: combination of both channels'
+    units: pb
+  values:
+  - errors:
+    - asymerror:
+        minus: -58.0
+        plus: 58.0
+      label: Measurment uncertainty
+    value: 2639.0
+  - errors:
+    - asymerror:
+        minus: -58.0
+        plus: 58.0
+      label: Measurment uncertainty
+    value: 2621.0
+  - errors:
+    - asymerror:
+        minus: -58.0
+        plus: 58.0
+      label: Measurment uncertainty
+    value: 2646.0
+  - errors:
+    - asymerror:
+        minus: -55.0
+        plus: 55.0
+      label: Measurment uncertainty
+    value: 2534.0
+  - errors:
+    - asymerror:
+        minus: -56.0
+        plus: 56.0
+      label: Measurment uncertainty
+    value: 2554.0
+  - errors:
+    - asymerror:
+        minus: -54.0
+        plus: 54.0
+      label: Measurment uncertainty
+    value: 2429.0
+  - errors:
+    - asymerror:
+        minus: -54.0
+        plus: 54.0
+      label: Measurment uncertainty
+    value: 2334.0
+  - errors:
+    - asymerror:
+        minus: -60.0
+        plus: 60.0
+      label: Measurment uncertainty
+    value: 2256.0
+  - errors:
+    - asymerror:
+        minus: -84.0
+        plus: 84.0
+      label: Measurment uncertainty
+    value: 1982.0
+  - errors:
+    - asymerror:
+        minus: -120.0
+        plus: 120.0
+      label: Measurment uncertainty
+    value: 2150.0
+- header:
+    name: 'Measured differential cross section: muon channel'
+    units: pb
+  values:
+  - errors:
+    - asymerror:
+        minus: -60.0
+        plus: 60.0
+      label: Measurment uncertainty
+    value: 2598.0
+  - errors:
+    - asymerror:
+        minus: -60.0
+        plus: 60.0
+      label: Measurment uncertainty
+    value: 2591.0
+  - errors:
+    - asymerror:
+        minus: -60.0
+        plus: 60.0
+      label: Measurment uncertainty
+    value: 2599.0
+  - errors:
+    - asymerror:
+        minus: -58.0
+        plus: 58.0
+      label: Measurment uncertainty
+    value: 2494.0
+  - errors:
+    - asymerror:
+        minus: -58.0
+        plus: 58.0
+      label: Measurment uncertainty
+    value: 2514.0
+  - errors:
+    - asymerror:
+        minus: -56.0
+        plus: 56.0
+      label: Measurment uncertainty
+    value: 2391.0
+  - errors:
+    - asymerror:
+        minus: -57.0
+        plus: 57.0
+      label: Measurment uncertainty
+    value: 2309.0
+  - errors:
+    - asymerror:
+        minus: -64.0
+        plus: 64.0
+      label: Measurment uncertainty
+    value: 2220.0
+  - errors:
+    - asymerror:
+        minus: -93.0
+        plus: 93.0
+      label: Measurment uncertainty
+    value: 1914.0
+  - errors:
+    - asymerror:
+        minus: -120.0
+        plus: 120.0
+      label: Measurment uncertainty
+    value: 2100.0
+- header:
+    name: 'Measured differential cross section: electron channel'
+    units: pb
+  values:
+  - errors:
+    - asymerror:
+        minus: -73.0
+        plus: 73.0
+      label: Measurment uncertainty
+    value: 2718.0
+  - errors:
+    - asymerror:
+        minus: -78.0
+        plus: 78.0
+      label: Measurment uncertainty
+    value: 2655.0
+  - errors:
+    - asymerror:
+        minus: -82.0
+        plus: 82.0
+      label: Measurment uncertainty
+    value: 2711.0
+  - errors:
+    - asymerror:
+        minus: -82.0
+        plus: 82.0
+      label: Measurment uncertainty
+    value: 2591.0
+  - errors:
+    - asymerror:
+        minus: -84.0
+        plus: 84.0
+      label: Measurment uncertainty
+    value: 2536.0
+  - errors:
+    - asymerror:
+        minus: -85.0
+        plus: 85.0
+      label: Measurment uncertainty
+    value: 2555.0
+  - errors:
+    - asymerror:
+        minus: -87.0
+        plus: 87.0
+      label: Measurment uncertainty
+    value: 2370.0
+  - errors:
+    - asymerror:
+        minus: -110.0
+        plus: 110.0
+      label: Measurment uncertainty
+    value: 2450.0
+  - errors:
+    - asymerror:
+        minus: -160.0
+        plus: 160.0
+      label: Measurment uncertainty
+    value: 1770.0
+  - errors:
+    - asymerror:
+        minus: -220.0
+        plus: 220.0
+      label: Measurment uncertainty
+    value: 2310.0
+- header:
+    name: 'Expected differential cross section: combination of both channels'
+    units: pb
+  values:
+  - errors:
+    - asymerror:
+        minus: -150.0
+        plus: 90.0
+      label: Expected uncertainty
+    value: 2680.0
+  - errors:
+    - asymerror:
+        minus: -150.0
+        plus: 90.0
+      label: Expected uncertainty
+    value: 2670.0
+  - errors:
+    - asymerror:
+        minus: -140.0
+        plus: 90.0
+      label: Expected uncertainty
+    value: 2650.0
+  - errors:
+    - asymerror:
+        minus: -140.0
+        plus: 90.0
+      label: Expected uncertainty
+    value: 2600.0
+  - errors:
+    - asymerror:
+        minus: -140.0
+        plus: 90.0
+      label: Expected uncertainty
+    value: 2560.0
+  - errors:
+    - asymerror:
+        minus: -130.0
+        plus: 90.0
+      label: Expected uncertainty
+    value: 2500.0
+  - errors:
+    - asymerror:
+        minus: -130.0
+        plus: 80.0
+      label: Expected uncertainty
+    value: 2420.0
+  - errors:
+    - asymerror:
+        minus: -120.0
+        plus: 80.0
+      label: Expected uncertainty
+    value: 2340.0
+  - errors:
+    - asymerror:
+        minus: -120.0
+        plus: 80.0
+      label: Expected uncertainty
+    value: 2240.0
+  - errors:
+    - asymerror:
+        minus: -110.0
+        plus: 80.0
+      label: Expected uncertainty
+    value: 2130.0
+- header:
+    name: 'Expected differential cross section: combination (with $p_T^{W}$ reweighting)'
+    units: pb
+  values:
+  - value: 2640.0
+  - value: 2630.0
+  - value: 2610.0
+  - value: 2570.0
+  - value: 2520.0
+  - value: 2460.0
+  - value: 2390.0
+  - value: 2310.0
+  - value: 2210.0
+  - value: 2100.0
+independent_variables:
+- header:
+    name: $|y_{W}|$
+  values:
+  - high: 0.25
+    low: 0.0
+  - high: 0.5
+    low: 0.25
+  - high: 0.75
+    low: 0.5
+  - high: 1.0
+    low: 0.75
+  - high: 1.25
+    low: 1.0
+  - high: 1.5
+    low: 1.25
+  - high: 1.75
+    low: 1.5
+  - high: 2.0
+    low: 1.75
+  - high: 2.25
+    low: 2.0
+  - high: 2.5
+    low: 2.25

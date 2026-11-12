@@ -1,0 +1,290 @@
+dependent_variables:
+- header:
+    name: Measured charge asymmetry
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.0048
+        plus: 0.0048
+      label: Measurement uncertainty
+    value: 0.0547
+  - errors:
+    - asymerror:
+        minus: -0.0056
+        plus: 0.0056
+      label: Measurement uncertainty
+    value: 0.0536
+  - errors:
+    - asymerror:
+        minus: -0.0057
+        plus: 0.0057
+      label: Measurement uncertainty
+    value: 0.0571
+  - errors:
+    - asymerror:
+        minus: -0.0056
+        plus: 0.0056
+      label: Measurement uncertainty
+    value: 0.0677
+  - errors:
+    - asymerror:
+        minus: -0.0056
+        plus: 0.0056
+      label: Measurement uncertainty
+    value: 0.0644
+  - errors:
+    - asymerror:
+        minus: -0.0062
+        plus: 0.0062
+      label: Measurement uncertainty
+    value: 0.0787
+  - errors:
+    - asymerror:
+        minus: -0.0073
+        plus: 0.0073
+      label: Measurement uncertainty
+    value: 0.1059
+  - errors:
+    - asymerror:
+        minus: -0.013
+        plus: 0.013
+      label: Measurement uncertainty
+    value: 0.077
+  - errors:
+    - asymerror:
+        minus: -0.023
+        plus: 0.023
+      label: Measurement uncertainty
+    value: 0.22
+  - errors:
+    - asymerror:
+        minus: -0.035
+        plus: 0.035
+      label: Measurement uncertainty
+    value: 0.108
+- header:
+    name: Expected charge asymmetry
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.0033
+        plus: 0.0033
+      label: PDF uncertainty
+    value: 0.0463
+  - errors:
+    - asymerror:
+        minus: -0.0031
+        plus: 0.0031
+      label: PDF uncertainty
+    value: 0.0481
+  - errors:
+    - asymerror:
+        minus: -0.0028
+        plus: 0.0028
+      label: PDF uncertainty
+    value: 0.0514
+  - errors:
+    - asymerror:
+        minus: -0.0026
+        plus: 0.0026
+      label: PDF uncertainty
+    value: 0.0575
+  - errors:
+    - asymerror:
+        minus: -0.0024
+        plus: 0.0024
+      label: PDF uncertainty
+    value: 0.0659
+  - errors:
+    - asymerror:
+        minus: -0.0023
+        plus: 0.0023
+      label: PDF uncertainty
+    value: 0.0759
+  - errors:
+    - asymerror:
+        minus: -0.0025
+        plus: 0.0025
+      label: PDF uncertainty
+    value: 0.0899
+  - errors:
+    - asymerror:
+        minus: -0.0027
+        plus: 0.0027
+      label: PDF uncertainty
+    value: 0.1062
+  - errors:
+    - asymerror:
+        minus: -0.0028
+        plus: 0.0028
+      label: PDF uncertainty
+    value: 0.1266
+  - errors:
+    - asymerror:
+        minus: -0.0033
+        plus: 0.0033
+      label: PDF uncertainty
+    value: 0.15
+- header:
+    name: Expected charge asymmetry (with $p_T^{W}$ reweighting)
+  values:
+  - value: 0.046154
+  - value: 0.048632
+  - value: 0.051433
+  - value: 0.057337
+  - value: 0.066115
+  - value: 0.076845
+  - value: 0.089326
+  - value: 0.10597
+  - value: 0.12665
+  - value: 0.14896
+- header:
+    name: Expected charge asymmetry (FEWZ with NNPDF3.1)
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.0045
+        plus: 0.0045
+      label: PDF uncertainty
+    value: 0.0396
+  - errors:
+    - asymerror:
+        minus: -0.0039
+        plus: 0.0039
+      label: PDF uncertainty
+    value: 0.0407
+  - errors:
+    - asymerror:
+        minus: -0.0033
+        plus: 0.0033
+      label: PDF uncertainty
+    value: 0.0453
+  - errors:
+    - asymerror:
+        minus: -0.003
+        plus: 0.003
+      label: PDF uncertainty
+    value: 0.0537
+  - errors:
+    - asymerror:
+        minus: -0.0029
+        plus: 0.0029
+      label: PDF uncertainty
+    value: 0.0611
+  - errors:
+    - asymerror:
+        minus: -0.0029
+        plus: 0.0029
+      label: PDF uncertainty
+    value: 0.075
+  - errors:
+    - asymerror:
+        minus: -0.0032
+        plus: 0.0032
+      label: PDF uncertainty
+    value: 0.0898
+  - errors:
+    - asymerror:
+        minus: -0.0035
+        plus: 0.0035
+      label: PDF uncertainty
+    value: 0.1054
+  - errors:
+    - asymerror:
+        minus: -0.0037
+        plus: 0.0037
+      label: PDF uncertainty
+    value: 0.1292
+  - errors:
+    - asymerror:
+        minus: -0.0039
+        plus: 0.0039
+      label: PDF uncertainty
+    value: 0.1566
+- header:
+    name: Expected charge asymmetry (FEWZ with CT18)
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.0069
+        plus: 0.0062
+      label: PDF uncertainty
+    value: 0.0404
+  - errors:
+    - asymerror:
+        minus: -0.0068
+        plus: 0.006
+      label: PDF uncertainty
+    value: 0.0425
+  - errors:
+    - asymerror:
+        minus: -0.0066
+        plus: 0.0057
+      label: PDF uncertainty
+    value: 0.0455
+  - errors:
+    - asymerror:
+        minus: -0.0062
+        plus: 0.0052
+      label: PDF uncertainty
+    value: 0.052
+  - errors:
+    - asymerror:
+        minus: -0.0058
+        plus: 0.0046
+      label: PDF uncertainty
+    value: 0.0583
+  - errors:
+    - asymerror:
+        minus: -0.0055
+        plus: 0.0045
+      label: PDF uncertainty
+    value: 0.07
+  - errors:
+    - asymerror:
+        minus: -0.0052
+        plus: 0.0053
+      label: PDF uncertainty
+    value: 0.0822
+  - errors:
+    - asymerror:
+        minus: -0.0061
+        plus: 0.0065
+      label: PDF uncertainty
+    value: 0.1001
+  - errors:
+    - asymerror:
+        minus: -0.008
+        plus: 0.0077
+      label: PDF uncertainty
+    value: 0.1218
+  - errors:
+    - asymerror:
+        minus: -0.0096
+        plus: 0.0089
+      label: PDF uncertainty
+    value: 0.1487
+independent_variables:
+- header:
+    name: $|y_{W}|$
+  values:
+  - high: 0.25
+    low: 0.0
+  - high: 0.5
+    low: 0.25
+  - high: 0.75
+    low: 0.5
+  - high: 1.0
+    low: 0.75
+  - high: 1.25
+    low: 1.0
+  - high: 1.5
+    low: 1.25
+  - high: 1.75
+    low: 1.5
+  - high: 2.0
+    low: 1.75
+  - high: 2.25
+    low: 2.0
+  - high: 2.5
+    low: 2.25
