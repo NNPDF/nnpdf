@@ -75,6 +75,12 @@ the code. These should be specified in YAML format.
 ``theory_index``
     The name of the remote theory index. Shouldn't be changed.
 
+``pdf_backend``
+    The library used to interpolate PDF grids. Options are ``lhapdf`` (default),
+    ``neopdf`` and ``pdfflow``. The non-default backends allow using the code
+    without an installation of LHAPDF, but the corresponding package needs to
+    be installed.
+
 ``lhapdf_urls``
     A list of URLs of LHAPDF repositories from where to download PDF sets.
 

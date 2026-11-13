@@ -59,6 +59,32 @@ While the fitting code is currently not available, it can be installed directly 
    When you install using pip, non-python codes such as LHAPDF and pandoc won't be installed automatically and neeed to be manually installed in the environment. If using python 3.9, make sure it is newer than ``3.9.2`` (see issue `here <https://github.com/NNPDF/reportengine/pull/69>`_)
 
 
+.. _neopdf-backend:
+
+Using NeoPDF instead of LHAPDF
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For a pure python installation, the `NeoPDF <https://github.com/QCDLab/neopdf>`_ interpolation
+library can be used as an alternative backend instead of LHAPDF. It can be installed together
+with the code with the ``neopdf`` extra:
+
+::
+
+  # for a local development
+  python -m pip install -e ."[neopdf]"
+  # or using a release
+  python -m pip install "nnpdf[neopdf] @ git+https://github.com/NNPDF/nnpdf.git@4.1"
+
+Then select it as the PDF backend by adding the following line to your :ref:`nnprofile <nnprofile>`
+(e.g. ``~/.config/NNPDF/nnprofile.yaml``): ::
+
+::
+
+  pdf_backend: neopdf
+
+or, alternatively, by setting the environment variable ``NNPDF_PDF_BACKEND=neopdf``.
+
+
 Shared data
 -----------
 

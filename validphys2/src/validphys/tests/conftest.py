@@ -19,8 +19,11 @@ try:
     import lhapdf
 
     lhapdf.setVerbosity(0)
+    HAS_LHAPDF = True
 except ModuleNotFoundError:
-    pass
+    HAS_LHAPDF = False
+
+requires_lhapdf = pytest.mark.skipif(not HAS_LHAPDF, reason="lhapdf not installed")
 
 
 # Fortunately py.test works much like reportengine and providers are
