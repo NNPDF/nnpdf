@@ -14,6 +14,9 @@ Under the hood this command will take the PDF at the fitting scale and the theor
 used to run the fit, it will download the corresponding Evolution Kernel Operator and will produce
 a series of LHAPDF ``.dat`` files which can be used to prepare the grid.
 
+While the default underlying evolution code is ``EKO``, it is possible to also evolve the PDF using
+``HOPPET`` by adding the flag ``--hoppet``.
+
 It is also possible to evolve any other PDF or fit by directly accessing the evolution functions.
 In the following example, we use the function :py:func:`evolven3fit.evolve.evolve_exportgrids_into_lhapdf`
 to evolve the hessian version of ``PDF4LHC21`` using the settings of the NNPDF4.0 with MHOU fit.
