@@ -1,0 +1,218 @@
+dependent_variables:
+- header: {name: SIG(Q=K)/SIG(Q=PI)}
+  qualifiers:
+  - {name: RE(Q=K), value: E+ E- --> (K+ + K-) X}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: RE(Q=PI), value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  values:
+  - errors:
+    - {symerror: 0.0035}
+    value: 0.0386
+  - errors:
+    - {symerror: 0.0043}
+    value: 0.0551
+  - errors:
+    - {symerror: 0.0053}
+    value: 0.0673
+  - errors:
+    - {symerror: 0.012}
+    value: 0.089
+  - errors:
+    - {symerror: 0.01}
+    value: 0.091
+  - errors:
+    - {symerror: 0.008}
+    value: 0.1042
+  - errors:
+    - {symerror: 0.01}
+    value: 0.112
+  - errors:
+    - {symerror: 0.022}
+    value: 0.135
+  - errors:
+    - {symerror: 0.042}
+    value: 0.145
+  - {value: '-'}
+  - {value: '-'}
+  - {value: '-'}
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.047}
+    value: 0.154
+  - errors:
+    - {symerror: 0.038}
+    value: 0.211
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.027}
+    value: 0.424
+  - errors:
+    - {symerror: 0.03}
+    value: 0.446
+  - errors:
+    - {symerror: 0.04}
+    value: 0.532
+  - errors:
+    - {symerror: 0.039}
+    value: 0.537
+  - errors:
+    - {symerror: 0.067}
+    value: 0.673
+  - errors:
+    - {symerror: 0.075}
+    value: 0.477
+- header: {name: SIG(Q=P)/SIG(Q=PI)}
+  qualifiers:
+  - {name: RE(Q=K), value: E+ E- --> (K+ + K-) X}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: RE(Q=PI), value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  values:
+  - {value: '-'}
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.0058}
+    value: 0.0322
+  - errors:
+    - {symerror: 0.0044}
+    value: 0.0331
+  - errors:
+    - {symerror: 0.0049}
+    value: 0.0426
+  - errors:
+    - {symerror: 0.005}
+    value: 0.0434
+  - errors:
+    - {symerror: 0.0052}
+    value: 0.0441
+  - errors:
+    - {symerror: 0.0059}
+    value: 0.0486
+  - errors:
+    - {symerror: 0.0056}
+    value: 0.0453
+  - errors:
+    - {symerror: 0.0074}
+    value: 0.0612
+  - errors:
+    - {symerror: 0.01}
+    value: 0.053
+  - errors:
+    - {symerror: 0.024}
+    value: 0.079
+  - errors:
+    - {symerror: 0.012}
+    value: 0.075
+  - errors:
+    - {symerror: 0.011}
+    value: 0.085
+  - errors:
+    - {symerror: 0.023}
+    value: 0.09
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.025}
+    value: 0.104
+  - errors:
+    - {symerror: 0.024}
+    value: 0.12
+  - errors:
+    - {symerror: 0.03}
+    value: 0.14
+  - errors:
+    - {symerror: 0.026}
+    value: 0.137
+  - errors:
+    - {symerror: 0.033}
+    value: 0.12
+  - errors:
+    - {symerror: 0.044}
+    value: 0.161
+- header: {name: SIG(Q=P)/SIG(Q=PI + K)}
+  qualifiers:
+  - {name: RE(Q=K), value: E+ E- --> (K+ + K-) X}
+  - {name: RE(Q=P), value: E+ E- --> (P + PBAR) X}
+  - {name: RE(Q=PI), value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  values:
+  - {value: '-'}
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.0054}
+    value: 0.0302
+  - errors:
+    - {symerror: 0.004}
+    value: 0.0304
+  - errors:
+    - {symerror: 0.0044}
+    value: 0.039
+  - errors:
+    - {symerror: 0.0045}
+    value: 0.0393
+  - errors:
+    - {symerror: 0.0046}
+    value: 0.0397
+  - errors:
+    - {symerror: 0.0051}
+    value: 0.0429
+  - errors:
+    - {symerror: 0.0047}
+    value: 0.0396
+  - {value: '-'}
+  - {value: '-'}
+  - {value: '-'}
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.0081}
+    value: 0.0736
+  - errors:
+    - {symerror: 0.018}
+    value: 0.074
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.018}
+    value: 0.073
+  - errors:
+    - {symerror: 0.018}
+    value: 0.083
+  - errors:
+    - {symerror: 0.02}
+    value: 0.092
+  - errors:
+    - {symerror: 0.018}
+    value: 0.089
+  - errors:
+    - {symerror: 0.02}
+    value: 0.072
+  - errors:
+    - {symerror: 0.031}
+    value: 0.109
+independent_variables:
+- header: {name: Z(DEF=P(P=1)/P(P=3))}
+  values:
+  - {high: 0.03, low: 0.025}
+  - {high: 0.035, low: 0.03}
+  - {high: 0.04, low: 0.035}
+  - {high: 0.045, low: 0.04}
+  - {high: 0.05, low: 0.045}
+  - {high: 0.055, low: 0.05}
+  - {high: 0.06, low: 0.055}
+  - {high: 0.065, low: 0.06}
+  - {high: 0.07, low: 0.065}
+  - {high: 0.075, low: 0.07}
+  - {high: 0.08, low: 0.075}
+  - {high: 0.085, low: 0.08}
+  - {high: 0.09, low: 0.085}
+  - {high: 0.1, low: 0.09}
+  - {high: 0.11, low: 0.1}
+  - {value: '-'}
+  - {high: 0.3, low: 0.25}
+  - {high: 0.35, low: 0.3}
+  - {high: 0.4, low: 0.35}
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+  - {high: 0.7, low: 0.6}

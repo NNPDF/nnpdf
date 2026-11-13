@@ -1,0 +1,65 @@
+bins:
+- xp:
+    min: 0.0171
+    mid: 0.02
+    max: 0.0229
+- xp:
+    min: 0.0229
+    mid: 0.0257
+    max: 0.0286
+- xp:
+    min: 0.0286
+    mid: 0.0314
+    max: 0.0343
+- xp:
+    min: 0.0343
+    mid: 0.0371
+    max: 0.04
+- xp:
+    min: 0.04
+    mid: 0.0429
+    max: 0.0457
+- xp:
+    min: 0.0457
+    mid: 0.0514
+    max: 0.0571
+- xp:
+    min: 0.0571
+    mid: 0.0629
+    max: 0.0686
+- xp:
+    min: 0.0686
+    mid: 0.0789
+    max: 0.0914
+- xp:
+    min: 0.0914
+    mid: 0.102
+    max: 0.114
+- xp:
+    min: 0.114
+    mid: 0.13
+    max: 0.146
+- xp:
+    min: 0.171
+    mid: 0.182
+    max: 0.194
+- xp:
+    min: 0.194
+    mid: 0.204
+    max: 0.217
+- xp:
+    min: 0.217
+    mid: 0.237
+    max: 0.263
+- xp:
+    min: 0.263
+    mid: 0.297
+    max: 0.343
+- xp:
+    min: 0.343
+    mid: 0.434
+    max: 0.571
+- xp:
+    min: 0.571
+    mid: 0.73
+    max: 0.971

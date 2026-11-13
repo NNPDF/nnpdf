@@ -1352,6 +1352,14 @@ def _check_marker_by(marker_by):
         raise CheckError("Unknown marker_by value", marker_by, markers)
 
 
+@make_argcheck
+def _check_zq2_marker_by(marker_by):
+    # The "kinematics" option of the (x,Q²) plot is defined in terms of x
+    markers = ('process type', 'experiment', 'dataset', 'group')
+    if marker_by not in markers:
+        raise CheckError("Unknown marker_by value", marker_by, markers)
+
+
 # TODO: Right now this is hackish Could we turn it into a permanent interface?
 @make_argcheck
 def _check_highlights(data_input, highlight_datasets):
@@ -1404,6 +1412,9 @@ def plot_xq2(
 
     - If cuts are enabled and `display_cuts` is True, the filtered points
       will be displaed and marked.
+
+    The datasets whose process has no (x,Q²) map (e.g., a process defined
+    only through (z,Q²)) are not included in the plot.
 
     The points are grouped according to the `marker_by` option. The possible
     values are: "process type", "experiment", "group" or "dataset" for discrete
@@ -1558,7 +1569,10 @@ def plot_xq2(
     next_opts = next_options()
     key_options = {}
 
-    for experiment, commondata, fitted, masked, group in dataset_inputs_by_groups_xq2map:
+    for xq2map in dataset_inputs_by_groups_xq2map:
+        if xq2map is None:
+            continue
+        experiment, commondata, fitted, masked, group = xq2map
         info = get_info(commondata)
         if marker_by == 'process type':
             key = info.process_description
@@ -1647,6 +1661,164 @@ def plot_xq2(
     ax.set_title("Kinematic coverage")
     ax.legend()
     ax.set_xlabel('$x$')
+    ax.set_ylabel(r'$Q^2$ (GeV$^2$)')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    return fig
+
+
+@figure
+@_check_display_cuts_requires_use_cuts
+@_check_zq2_marker_by
+@_check_highlights
+@_check_aspect
+def plot_zq2(
+    dataset_inputs_by_groups_zq2map,
+    use_cuts,
+    data_input,
+    display_cuts: bool = True,
+    marker_by: str = 'process type',
+    highlight_label: str = 'highlight',
+    highlight_datasets: (Sequence, type(None)) = None,
+    aspect: str = 'landscape',
+):
+    """Plot the (z,Q²) coverage of the data, for the datasets whose process has a
+    (z,Q²) map (e.g., those involving a fragmentation function). The rest of the
+    datasets are not included in the plot.
+
+    The representation of the filtered data depends on the `display_cuts` and
+    `use_cuts` options, in the same way as in ``plot_xq2``.
+
+    The points are grouped according to the `marker_by` option. The possible
+    values are: "process type", "experiment", "group" or "dataset".
+
+    Some datasets can be made to appear highlighted in the figure: Define a key
+    called ``highlight_datasets`` containing the names of the datasets to be
+    highlighted and a key `highlight_label` with a string containing the label
+    of the highlight, which will appear in the legend.
+    """
+
+    w, h = mpl.rcParams["figure.figsize"]
+    rescaling_factor = 1.6
+    w *= rescaling_factor
+    h *= rescaling_factor
+    if aspect == 'landscape':
+        figsize = w, h
+    elif aspect == 'portrait':
+        figsize = h, w
+    elif aspect == 'square':
+        figsize = h, h
+    else:
+        raise ValueError(f"Unknown aspect {aspect}")
+    fig, ax = plotutils.subplots(figsize=figsize)
+
+    filteredz = []
+    filteredq2 = []
+
+    z = defaultdict(list)
+    q2 = defaultdict(list)
+
+    zh = defaultdict(list)
+    q2h = defaultdict(list)
+
+    if not highlight_datasets:
+        highlight_datasets = set()
+
+    def next_options():
+        # Get the colors
+        prop_settings = mpl.rcParams['axes.prop_cycle']
+        # Apparently calling the object gives us an infinite cycler
+        settings_cycler = prop_settings()
+        for markeropts, settings in zip(plotutils.marker_iter_plot(), settings_cycler):
+            # Override last with first
+            options = {'linestyle': 'none', **markeropts, **settings}
+            yield options
+
+    next_opts = next_options()
+    key_options = {}
+
+    for zq2map in dataset_inputs_by_groups_zq2map:
+        if zq2map is None:
+            continue
+        experiment, commondata, fitted, masked, group = zq2map
+        info = get_info(commondata)
+        if marker_by == 'process type':
+            key = info.process_description
+        elif marker_by == 'experiment':
+            key = str(experiment)
+        elif marker_by == 'dataset':
+            key = info.dataset_label
+        elif marker_by == "group":
+            # if group is None then make sure that shows on legend.
+            key = str(group)
+        else:
+            raise ValueError('Unknown marker_by value')
+
+        if key not in key_options:
+            key_options[key] = next(next_opts)
+
+        if commondata.name in highlight_datasets:
+            zdict = zh
+            q2dict = q2h
+        else:
+            zdict = z
+            q2dict = q2
+
+        zdict[key].append(fitted[0])
+        q2dict[key].append(fitted[1])
+        if display_cuts:
+            zdict[key].append(masked[0])
+            q2dict[key].append(masked[1])
+            filteredz.append(masked[0])
+            filteredq2.append(masked[1])
+
+    for key in key_options:
+        if key in z:
+            coords = np.concatenate(z[key]), np.concatenate(q2[key])
+        else:
+            # This is to get the label key
+            coords = [], []
+        ax.plot(*coords, label=key, markeredgewidth=1, markeredgecolor=None, **key_options[key])
+
+    # Iterate again so highlights are printed on top.
+    for key in zh:
+        ax.plot(
+            np.concatenate(zh[key]),
+            np.concatenate(q2h[key]),
+            markeredgewidth=0.6,
+            markeredgecolor="black",
+            **key_options[key],
+        )
+    if zh:
+        # Get legend key
+        ax.plot(
+            [],
+            [],
+            marker='s',
+            markeredgewidth=0.6,
+            color='none',
+            markersize=5,
+            markeredgecolor="black",
+            label=f'Black edge: {highlight_label}',
+        )
+
+    # There might be no dataset with a (z,Q²) map
+    if display_cuts and filteredz:
+        ax.scatter(
+            np.concatenate(filteredz),
+            np.concatenate(filteredq2),
+            marker='o',
+            facecolors='none',
+            edgecolor='red',
+            s=40,
+            lw=0.8,
+            label="Cut",
+        )
+
+    ax.set_title("Kinematic coverage")
+    if key_options:
+        ax.legend()
+    ax.set_xlabel('$z$')
     ax.set_ylabel(r'$Q^2$ (GeV$^2$)')
     ax.set_xscale('log')
     ax.set_yscale('log')

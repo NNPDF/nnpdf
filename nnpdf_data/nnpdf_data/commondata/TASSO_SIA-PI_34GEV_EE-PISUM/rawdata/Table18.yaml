@@ -1,0 +1,13 @@
+dependent_variables:
+- header: {name: MULT(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> PI0 X}
+  - {name: SQRT(S), units: GeV, value: '44.0'}
+  values:
+  - errors:
+    - {symerror: 1.0}
+    value: 5.4
+independent_variables:
+- header: {name: SQRT(S), units: GEV}
+  values:
+  - {value: 44.0}

@@ -1,0 +1,55 @@
+dependent_variables:
+- header: {name: MULT(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> CHARGED X}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.09}
+    - {label: sys, symerror: 0.19}
+    - {label: sys, symerror: 0.29}
+    value: 20.81
+- header: {name: MULT(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (PI+ + PI-) X}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: sys, symerror: 0.17}
+    - {label: sys, symerror: 0.86}
+    value: 17.26
+- header: {name: MULT(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.05}
+    - {label: sys, symerror: 0.03}
+    - {label: sys, symerror: 0.04}
+    value: 2.21
+- header: {name: MULT(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.04}
+    - {label: sys, symerror: 0.02}
+    - {label: sys, symerror: 0.02}
+    value: 1.08
+- header: {name: MULT(P=3)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (P + PBAR + K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '91.2'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.05}
+    - {label: sys, symerror: 0.04}
+    - {label: sys, symerror: 0.05}
+    value: 3.3
+independent_variables:
+- header: {name: SQRT(S), units: GEV}
+  values:
+  - {value: 91.2}

@@ -1,0 +1,434 @@
+---
+comment: |
+  DESY-PETRA. TASSO COLLABORATION. THE PRESENT DATA IS AN EXTENSION OF THAT PRESENTED IN BRANDELIK ET AL., PL 113B, 98 (1982). AT W=14 AND 22 GEV, DATA SAMPLES IDENTICAL TO THOSE IN THE ABOVE REFERENCE ARE USED TO DETERMINE THE K+, K- AND P, AP YIELDS. AT W=34 GEV, IN ADDITION TO MEASURING THE K+, K- AND P, AP YIELDS, THE ANALYSIS FOR PI+, PI- HAS BEEN REPEATED WITH A DATA SAMPLE OF APPROX. TWICE THE SIZE USED IN THE ABOVE REFERENCE. THE SCALING VARIABLE IS X(P=3,DEF=2*E(P=3)/SQRT(X)) AND BETA IS P(P=3)/E(P=3).
+dateupdated: 27/06/1988 00:00:00
+modifications:
+- {action: Encoded, date: 27 JUN 1988, who: Mike Whalley}
+- {action: Modified, date: 27 JUN 1988, who: NRV}
+record_ids:
+- {id: 181470, type: inspire}
+- {id: 1241, type: red}
+
+---
+data_file: Table1.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [14.0]
+location: Data from T 2A
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [14.0]
+location: Data from T 2B
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [14.0]
+location: Data from T 2C
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [22.0]
+location: Data from T 3A
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [22.0]
+location: Data from T 3B
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [22.0]
+location: Data from T 3C
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4A
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4B
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: No description provided.
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4C
+name: Table 9
+
+---
+data_file: Table10.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [22.0]
+location: Data from T 3
+name: Table 10
+
+---
+data_file: Table11.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [22.0]
+location: Data from T 3
+name: Table 11
+
+---
+data_file: Table12.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [22.0]
+location: Data from T 3
+name: Table 12
+
+---
+data_file: Table13.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4
+name: Table 13
+
+---
+data_file: Table14.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4
+name: Table 14
+
+---
+data_file: Table15.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4
+name: Table 15
+
+---
+data_file: Table16.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4
+name: Table 16
+
+---
+data_file: Table17.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4
+name: Table 17
+
+---
+data_file: Table18.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [34.0]
+location: Data from T 4
+name: Table 18
+
+---
+data_file: Table19.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [14.0]
+name: Table 19
+
+---
+data_file: Table20.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [14.0]
+name: Table 20
+
+---
+data_file: Table21.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [14.0]
+name: Table 21
+
+---
+data_file: Table22.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [14.0]
+name: Table 22
+
+---
+data_file: Table23.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [14.0]
+name: Table 23
+
+---
+data_file: Table24.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PBAR X, E+ E- --> P X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [14.0]
+name: Table 24
+
+---
+data_file: Table25.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [22.0]
+name: Table 25
+
+---
+data_file: Table26.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> PI- X, E+ E- --> PI+ X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering]
+- name: cmenergies
+  values: [22.0]
+name: Table 26
+
+---
+data_file: Table27.yaml
+description: |
+  Axis error includes +- 0.0/0.0 contribution (?////EXCEPT OVERALL NORMALIZATION).
+keywords:
+- name: reactions
+  values: [E+ E- --> K- X, E+ E- --> K+ X]
+- name: observables
+  values: [DSIG/DP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, E+ E- Scattering, Strange
+      production]
+- name: cmenergies
+  values: [22.0]
+name: Table 27
+
