@@ -1,0 +1,175 @@
+setname: "ATLAS_ZJ_13TEV_HQ"
+
+version: 1
+
+version_comment: "First implementation of differential fiducial cross-sections of events with Z + 1 flavor Jet (c-jet or c-jet)."
+
+# References
+arXiv:
+  url: "https://arxiv.org/pdf/2403.15093"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/2771257"
+hepdata:
+  url: "https://www.hepdata.net/record/ins2771257"
+  version: 2
+
+nnpdf_metadata:
+ nnpdf31_process: "DY NC" 
+ experiment: "ATLAS"
+
+implemented_observables:
+- observable_name: "BJET-PTZ"
+  observable:
+    description: "ATLAS 13 TeV, Differential fiducial cross-section of the Z boson transverse momentum in events with  Z + (>=) 1 b-jet."
+    label: r"$d\\sigma/{dp_{T}(Z)}$"
+    units: "[PB/GeV]"
+
+  ndata: 14
+  tables: [4]
+  process_type: DY_NC_PT
+
+  plotting:
+    dataset_label: 'ATLAS 13 TeV differential fiducial cross section in $p_T^{Z}$'
+    x_scale: log
+    plot_x: pT
+
+  kinematic_coverage: [pT, m_Z2, sqrts]
+
+  kinematics:
+    variables:
+      pT: {description: "Z transverse momentum", label: '$p_T$', units: ""}
+      m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
+      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+
+    file: kinematics_ATLAS_ZJ_13TEV_HQ_BJET-PTZ.yaml
+
+    # Data
+  data_central: data_ATLAS_ZJ_13TEV_HQ_BJET-PTZ.yaml
+  data_uncertainties:
+  - uncertainties_ATLAS_ZJ_13TEV_HQ_BJET-PTZ.yaml
+
+    # Theory
+  theory:
+    shifts:
+      ATLAS_Z0J_13TEV_PT_LL: 9
+    FK_tables:
+    - - ATLAS_Z0J_13TEV_PT_LL #TO UPDATE
+    - - ATLAS_Z0_13TEV_TOT    #TO UPDATE
+    operation: 'ratio'
+
+- observable_name: "BJET-PT"
+  observable:
+    description: "ATLAS 13 TeV, Differential fiducial cross-section of the leading b-jet p_T in events with Z + (>+1) b-jet"
+    label: r"$d\\sigma/{dp_{T}^{b-jet}}$"
+    units: "[PB/GeV]"
+
+  ndata: 14
+
+  tables: [5]
+  process_type: DY_NC_PT
+
+  plotting:
+    dataset_label: 'ATLAS 13 TeV differential fiducial cross section in $p_T^{b-jet}$'
+    x_scale: log
+    plot_x: pT
+
+  kinematic_coverage: [pT, m_Z2, sqrts]
+
+  kinematics:
+    variables:
+      pT: {description: "leading b-jet transverse momentum", label: '$p_T$', units: "GeV"}
+      m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
+      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+
+    file: kinematics_ATLAS_ZJ_13TEV_HQ_BJET-PT.yaml 
+
+    # Data
+  data_central: data_ATLAS_ZJ_13TEV_HQ_BJET-PT.yaml
+  data_uncertainties:
+  - uncertainties_ATLAS_ZJ_13TEV_HQ_BJET-PT.yaml
+    # Theory
+  theory:
+    shifts:
+      ATLAS_Z0J_13TEV_PT_LL: 9
+    FK_tables:
+    - - ATLAS_Z0J_13TEV_PT_LL #TO UPDATE
+    - - ATLAS_Z0_13TEV_TOT #TO UPDATE
+    operation: 'ratio'
+
+- observable_name: "CJET-PTZ"
+  observable:
+    description: "ATLAS 13 TeV, Differential fiducial cross-section of the Z boson transverse momentum in events with Z + (>=) 1 c-jet."
+    label: r"$d\\sigma/{dp_{T}^Z}$"
+    units: "[PB/GeV]"
+
+  ndata: 14
+  tables: [9]
+  process_type: DY_NC_PT
+
+  plotting:
+    dataset_label: 'ATLAS 13 TeV differential cross section in $p_T^{Z}$'
+    x_scale: log
+    plot_x: pT
+
+  kinematic_coverage: [pT, m_Z2, sqrts]
+
+  kinematics:
+    variables:
+      pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
+      m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
+      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+
+    file: kinematics_ATLAS_ZJ_13TEV_HQ_CJET-PTZ.yaml
+
+    # Data
+  data_central: data_ATLAS_ZJ_13TEV_HQ_CJET-PTZ.yaml
+  data_uncertainties:
+  - uncertainties_ATLAS_ZJ_13TEV_HQ_CJET-PTZ.yaml
+
+    # Theory
+  theory:
+    shifts:
+      ATLAS_Z0J_13TEV_PT_LL: 9
+    FK_tables:
+    - - ATLAS_Z0J_13TEV_PT_LL #TO UPDATE
+    - - ATLAS_Z0_13TEV_TOT    #TO UPDATE
+    operation: 'ratio'
+
+- observable_name: "CJET-PT"
+  observable:
+    description: "ATLAS 13 TeV, Differential fiducial cross-section of the leading c-jet transverse momentum in events with Z + (>=) 1 c-jet."
+    label: r"$d\\sigma/{dp_{T}^{c-jet}}$"
+    units: "[PB/GeV]"
+
+  ndata: 14
+  tables: [10]
+  process_type: DY_NC_PT
+
+  plotting:
+    dataset_label: 'ATLAS 13 TeV differential cross section in $p_T^{c-jet}$'
+    x_scale: log
+    plot_x: pT
+
+  kinematic_coverage: [pT, m_Z2, sqrts]
+
+  kinematics:
+    variables:
+      pT: {description: "leading c-jet transverse momentum", label: '$p_T$', units: ""}
+      m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
+      sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+
+    file: kinematics_ATLAS_ZJ_13TEV_HQ_CJET-PT.yaml
+
+    # Data
+  data_central: data_ATLAS_ZJ_13TEV_HQ_CJET-PT.yaml
+  data_uncertainties:
+  - uncertainties_ATLAS_ZJ_13TEV_HQ_CJET-PT.yaml
+
+    # Theory
+  theory:
+    shifts:
+      ATLAS_Z0J_13TEV_PT_LL: 9
+    FK_tables:
+    - - ATLAS_Z0J_13TEV_PT_LL #TO UPDATE
+    - - ATLAS_Z0_13TEV_TOT    #TO UPDATE
+    operation: 'ratio'
