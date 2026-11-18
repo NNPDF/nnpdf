@@ -272,6 +272,9 @@ def plot_xq2_data_prcs_maps(xq2_data_map, each_dataset):
     """
     keys = ["R_b", "xi"]
     for j, elem in enumerate(xq2_data_map):
+        # Datasets whose process has no (x,Q²) map are not included
+        if elem is None:
+            continue
 
         for k in keys:
             if k == "R_b":

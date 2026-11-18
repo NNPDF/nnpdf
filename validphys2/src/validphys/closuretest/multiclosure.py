@@ -595,7 +595,11 @@ def xq2_dataset_map(
         - Ratio bias-variance
         - xi
 
+        or ``None`` if the process of the dataset has no (x,Q²) map.
+
     """
+    if xq2map_with_cuts is None:
+        return None
 
     commondata = xq2map_with_cuts.commondata
     coords = xq2map_with_cuts[2]

@@ -1,0 +1,115 @@
+dependent_variables:
+- header: {name: 1/(BETA*SIG(C=TOTAL))*D(SIG)/D(X)}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (K+ + K-) X}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  - {name: SQRT(S), units: GeV, value: '29.0'}
+  - {name: SYS, value: Errors contain systematic errors added in quadrature. Statistical
+      errors dominate above Z}
+  values:
+  - errors:
+    - {symerror: 1.2}
+    value: 14.1
+  - errors:
+    - {symerror: 1.2}
+    value: 15.2
+  - errors:
+    - {symerror: 1.1}
+    value: 13.9
+  - errors:
+    - {symerror: 2.0}
+    value: 15.2
+  - errors:
+    - {symerror: 1.5}
+    value: 13.0
+  - errors:
+    - {symerror: 0.9}
+    value: 12.4
+  - errors:
+    - {symerror: 1.0}
+    value: 11.5
+  - errors:
+    - {symerror: 1.7}
+    value: 11.9
+  - errors:
+    - {symerror: 2.8}
+    value: 11.1
+  - {value: '-'}
+  - errors:
+    - {symerror: 1.7}
+    value: 6.3
+  - errors:
+    - {symerror: 1.0}
+    value: 7.0
+  - errors:
+    - {symerror: 0.67}
+    value: 5.58
+  - errors:
+    - {symerror: 0.52}
+    value: 5.51
+  - errors:
+    - {symerror: 0.41}
+    value: 5.32
+  - {value: '-'}
+  - errors:
+    - {symerror: 0.11}
+    value: 1.76
+  - errors:
+    - {symerror: 0.074}
+    value: 1.174
+  - errors:
+    - {symerror: 0.055}
+    value: 0.849
+  - errors:
+    - {symerror: 0.03}
+    value: 0.472
+  - errors:
+    - {symerror: 0.02}
+    value: 0.25
+independent_variables:
+- header: {name: Z(DEF=P(P=3)/P(P=1))}
+  values:
+  - {high: 0.03, low: 0.025}
+  - {high: 0.035, low: 0.03}
+  - {high: 0.04, low: 0.035}
+  - {high: 0.045, low: 0.04}
+  - {high: 0.05, low: 0.045}
+  - {high: 0.055, low: 0.05}
+  - {high: 0.06, low: 0.055}
+  - {high: 0.065, low: 0.06}
+  - {high: 0.07, low: 0.065}
+  - {value: '-'}
+  - {high: 0.1, low: 0.09}
+  - {high: 0.11, low: 0.1}
+  - {high: 0.12, low: 0.11}
+  - {high: 0.13, low: 0.12}
+  - {high: 0.14, low: 0.13}
+  - {value: '-'}
+  - {high: 0.3, low: 0.25}
+  - {high: 0.35, low: 0.3}
+  - {high: 0.4, low: 0.35}
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+- header: {name: X(DEF=2E(P=3)/SQRT(S))}
+  values:
+  - {value: 0.044}
+  - {value: 0.047}
+  - {value: 0.051}
+  - {value: 0.054}
+  - {value: 0.058}
+  - {value: 0.063}
+  - {value: 0.067}
+  - {value: 0.071}
+  - {value: 0.076}
+  - {value: '-'}
+  - {value: 0.101}
+  - {value: 0.11}
+  - {value: 0.12}
+  - {value: 0.13}
+  - {value: 0.139}
+  - {value: '-'}
+  - {value: 0.277}
+  - {value: 0.327}
+  - {value: 0.377}
+  - {value: 0.451}
+  - {value: 0.551}

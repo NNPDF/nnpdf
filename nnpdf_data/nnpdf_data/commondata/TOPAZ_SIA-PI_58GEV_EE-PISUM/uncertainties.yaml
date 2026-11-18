@@ -1,0 +1,23 @@
+definitions:
+  error:
+    definition: all uncertainties added in quadrature
+    treatment: ADD
+    type: UNCORR
+bins:
+- error: 0.12
+- error: 0.14
+- error: 0.21
+- error: 0.23
+- error: 0.27
+- error: 0.42
+- error: 0.64
+- error: 0.8
+- error: 0.5
+- error: 0.46
+- error: 0.37
+- error: 0.37
+- error: 0.34
+- error: 0.36
+- error: 0.28
+- error: 0.18
+- error: 0.36
