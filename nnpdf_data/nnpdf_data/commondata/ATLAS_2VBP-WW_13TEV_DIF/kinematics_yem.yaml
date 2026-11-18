@@ -1,0 +1,45 @@
+bins:
+- y_em:
+    min: 0.0
+    mid: null
+    max: 0.2
+- y_em:
+    min: 0.2
+    mid: null
+    max: 0.4
+- y_em:
+    min: 0.4
+    mid: null
+    max: 0.6
+- y_em:
+    min: 0.6
+    mid: null
+    max: 0.8
+- y_em:
+    min: 0.8
+    mid: null
+    max: 1.0
+- y_em:
+    min: 1.0
+    mid: null
+    max: 1.2
+- y_em:
+    min: 1.2
+    mid: null
+    max: 1.4
+- y_em:
+    min: 1.4
+    mid: null
+    max: 1.6
+- y_em:
+    min: 1.6
+    mid: null
+    max: 1.8
+- y_em:
+    min: 1.8
+    mid: null
+    max: 2.0
+- y_em:
+    min: 2.0
+    mid: null
+    max: 2.5

@@ -1,0 +1,263 @@
+dependent_variables:
+- header: {name: '$\rho(|cos(\theta^*)|)$'}
+  qualifiers:
+  - {name: 'Statistical correlation for cross section', value: 'WW production'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 27'}
+  - {name: 'M(ELECTRON,MUON)', units: 'GEV', value: '> 55'}
+  - {name: 'PT(ELECTRON,MUON)', units: 'GEV', value: '> 30'}
+  - {name: 'ETMISS', units: 'GEV', value: '> 20'}
+  - {name: 'ABS(ETARAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 35'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - {value: 1.0}
+  - {value: -0.1103}
+  - {value: -0.103}
+  - {value: -0.1314}
+  - {value: -0.1112}
+  - {value: -0.1023}
+  - {value: -0.1212}
+  - {value: -0.1423}
+  - {value: -0.1412}
+  - {value: -0.1103}
+  - {value: 1.0}
+  - {value: -0.1172}
+  - {value: -0.1127}
+  - {value: -0.1218}
+  - {value: -0.1335}
+  - {value: -0.0766}
+  - {value: -0.1358}
+  - {value: -0.1394}
+  - {value: -0.103}
+  - {value: -0.1172}
+  - {value: 1.0}
+  - {value: -0.1307}
+  - {value: -0.1234}
+  - {value: -0.1081}
+  - {value: -0.1138}
+  - {value: -0.1262}
+  - {value: -0.1222}
+  - {value: -0.1314}
+  - {value: -0.1127}
+  - {value: -0.1307}
+  - {value: 1.0}
+  - {value: -0.1239}
+  - {value: -0.1112}
+  - {value: -0.1171}
+  - {value: -0.0771}
+  - {value: -0.1543}
+  - {value: -0.1112}
+  - {value: -0.1218}
+  - {value: -0.1234}
+  - {value: -0.1239}
+  - {value: 1.0}
+  - {value: -0.0923}
+  - {value: -0.1475}
+  - {value: -0.0867}
+  - {value: -0.1432}
+  - {value: -0.1023}
+  - {value: -0.1335}
+  - {value: -0.1081}
+  - {value: -0.1112}
+  - {value: -0.0923}
+  - {value: 1.0}
+  - {value: -0.1587}
+  - {value: -0.1177}
+  - {value: -0.1417}
+  - {value: -0.1212}
+  - {value: -0.0766}
+  - {value: -0.1138}
+  - {value: -0.1171}
+  - {value: -0.1475}
+  - {value: -0.1587}
+  - {value: 1.0}
+  - {value: -0.1306}
+  - {value: -0.1812}
+  - {value: -0.1423}
+  - {value: -0.1358}
+  - {value: -0.1262}
+  - {value: -0.0771}
+  - {value: -0.0867}
+  - {value: -0.1177}
+  - {value: -0.1306}
+  - {value: 1.0}
+  - {value: -0.1696}
+  - {value: -0.1412}
+  - {value: -0.1394}
+  - {value: -0.1222}
+  - {value: -0.1543}
+  - {value: -0.1432}
+  - {value: -0.1417}
+  - {value: -0.1812}
+  - {value: -0.1696}
+  - {value: 1.0}
+independent_variables:
+- header: {name: '$|cos(\theta^*)|$'}
+  values:
+  - {low: 0.0, high: 0.1}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.8, high: 1.0}
+- header: {name: '$|cos(\theta^*)|$'}
+  values:
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
+  - {low: 0.0, high: 0.1}
+  - {low: 0.1, high: 0.2}
+  - {low: 0.2, high: 0.3}
+  - {low: 0.3, high: 0.4}
+  - {low: 0.4, high: 0.5}
+  - {low: 0.5, high: 0.6}
+  - {low: 0.6, high: 0.7}
+  - {low: 0.7, high: 0.8}
+  - {low: 0.8, high: 1.0}
