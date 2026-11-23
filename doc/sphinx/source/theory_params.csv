@@ -43,6 +43,7 @@ n3lo_ad_variation, List, IHOU variation of the N3LO anomalous dimensions, Order 
  with values 0 or 1 for FHMRUVV
 n3lo_cf_variation, List, IHOU variations of the N3LO massive DIS coefficient functions, Values are -1, 0, 1
 use_fhmruvv, Integer, use N3LO anomalous dimensions by FHMRUVV group, Boolean
+alpha_qed_running_mz, Real, Running QED coupling :math:`\alpha(M_Z)`, Used instead of alphaqed by QED evolution and photon; optional; requires Qref = MZ
 MaxNfAs, Integer, :math:`n^{(\alpha_s)}_{f \textrm{max}}`, Max active flavours in :math:`\alpha_s`
 SxRes, Integer, small-:math:`x` resummation switch, Boolean
 SxOrd, Text, small-:math:`x` pt switch, "('LL', 'NLL', 'NLL')"

@@ -5,6 +5,7 @@ from scipy.integrate import solve_ivp
 
 from eko import beta
 from n3fit.io.writer import XGRID
+from nnpdf_data.theory import qed_running_alpha
 
 from .constants import ME, MMU, MQL, MTAU
 
@@ -14,7 +15,9 @@ class Alpha:
 
     def __init__(self, theory, q2max):
         self.theory = theory
-        self.alpha_em_ref = theory["alphaqed"]
+        # running QED coupling at Qref: alpha_qed_running_mz if set, else alphaqed
+        # Note that alpha_em_ref should be the running QED coupling, not the fixed EW coupling
+        self.alpha_em_ref = qed_running_alpha(theory)
         self.qref = theory["Qref"]
         self.qed_order = theory['QED']
 

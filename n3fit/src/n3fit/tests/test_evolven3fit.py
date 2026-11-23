@@ -189,3 +189,30 @@ def test_perform_evolution(tmp_path, fitname):
     info = check_lhapdf_info(tmp_info)
     for datpath in tmp_nnfit.glob("replica_*/*.dat"):
         check_lhapdf_dat(datpath, info)
+
+
+def test_eko_utils_alpha_qed_running_mz(nnpdf_theory_card):
+    """EKO must receive the running QED coupling ``alpha_qed_running_mz`` (when given) as
+    alpha_em(Qref), not the electroweak-scheme coupling ``alphaqed``"""
+    x_grid = [1.0e-3, 0.1, 1.0]
+    qed_cards = {
+        "QED": 2,
+        "alphaqed": 1.0 / 132.1,
+        "alpha_qed_running_mz": 1.0 / 128.94,
+        "Qref": nnpdf_theory_card["MZ"],
+    }
+    t_card, _ = eko_utils.construct_eko_cards(nnpdf_theory_card, x_grid, theory_card_dict=qed_cards)
+    alpha_running = qed_cards["alpha_qed_running_mz"]
+    np.testing.assert_allclose(t_card.raw["couplings"]["alphaem"], alpha_running)
+    assert t_card.raw["couplings"]["em_running"]
+
+    t_card, _ = eko_utils.construct_eko_photon_cards(
+        nnpdf_theory_card, x_grid, 100.0, theory_card_dict=qed_cards
+    )
+    alpha_running = qed_cards["alpha_qed_running_mz"]
+    np.testing.assert_allclose(t_card.raw["couplings"]["alphaem"], alpha_running)
+
+    # Without alpha_qed_running_mz, alphaqed is used (as in NNPDF4.0)
+    qed_cards["alpha_qed_running_mz"] = None
+    t_card, _ = eko_utils.construct_eko_cards(nnpdf_theory_card, x_grid, theory_card_dict=qed_cards)
+    np.testing.assert_allclose(t_card.raw["couplings"]["alphaem"], qed_cards["alphaqed"])
