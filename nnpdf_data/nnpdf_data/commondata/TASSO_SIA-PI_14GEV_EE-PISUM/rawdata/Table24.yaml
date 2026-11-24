@@ -1,0 +1,55 @@
+dependent_variables:
+- header: {name: (S/BETA)*D(SIG)/DX, units: MUB*GEV**2}
+  qualifiers:
+  - {name: RE, value: E+ E- --> (P + PBAR) X}
+  - {name: SQRT(S), units: GeV, value: '14.0'}
+  - {name: SQRT(S), units: GeV, value: '14.0'}
+  values:
+  - errors:
+    - {symerror: 0.48}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 1.55
+  - errors:
+    - {symerror: 0.36}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 1.14
+  - errors:
+    - {symerror: 0.38}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 1.49
+  - errors:
+    - {symerror: 0.41}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 1.74
+  - errors:
+    - {symerror: 0.28}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 1.34
+  - errors:
+    - {symerror: 0.39}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 1.28
+  - errors:
+    - {symerror: 0.24}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.71
+  - errors:
+    - {symerror: 0.15}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.27
+  - errors:
+    - {symerror: 0.05}
+    - {label: 'sys,OVERALL NORMALIZATION', symerror: 8.5%}
+    value: 0.11
+independent_variables:
+- header: {name: X(P=3)}
+  values:
+  - {high: 0.151, low: 0.145}
+  - {high: 0.159, low: 0.151}
+  - {high: 0.167, low: 0.159}
+  - {high: 0.176, low: 0.167, value: 0.171}
+  - {high: 0.196, low: 0.176, value: 0.185}
+  - {high: 0.22, low: 0.196, value: 0.206}
+  - {high: 0.27, low: 0.22, value: 0.24}
+  - {high: 0.32, low: 0.27, value: 0.29}
+  - {high: 0.67, low: 0.45, value: 0.53}

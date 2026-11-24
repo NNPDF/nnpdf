@@ -8,7 +8,7 @@ failure per dataset in case of problems
 import pytest
 
 from validphys.covmats import INTRA_DATASET_SYS_NAME
-from validphys.kinematics import xq2map_with_cuts
+from validphys.kinematics import xq2map_with_cuts, zq2map_with_cuts
 from validphys.loader import FallbackLoader
 
 l = FallbackLoader()
@@ -39,7 +39,8 @@ def test_all_datasets(dataset_name):
         4. All variants can be loaded
         5. When legacy_data and legacy_theory are included, they "sum up" to legacy
         6. Uncertainties are either ADD or MULT
-        7. The kinematic coverage coverage can be generated
+        7. The kinematic coverage can be generated: the process defines at least one
+           kinematic map (x-Q2 or z-Q2) and all the maps it defines can be computed
     """
     # Load the data and all its variants
     cds = _load_main_and_variants(dataset_name)
@@ -132,5 +133,10 @@ def test_all_datasets(dataset_name):
 
     # Legacy datasets with no "new implementation" are skipped
     for cd in valid_cds:
-        # check without cuts
-        xq2map_with_cuts(cd, False)
+        kinematic_maps = process_type.kinematic_maps
+        assert kinematic_maps, f"No kinematic map (x-Q2 or z-Q2) is defined for {process_type}"
+        # check without cuts, for all the maps defined for the process
+        if "xq2" in kinematic_maps:
+            xq2map_with_cuts(cd, False)
+        if "zq2" in kinematic_maps:
+            zq2map_with_cuts(cd, False)
