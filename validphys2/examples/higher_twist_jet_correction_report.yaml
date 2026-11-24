@@ -1,0 +1,45 @@
+# Compare central jet corrections with relative experimental errors using these fits.
+# Each fit uses its own posterior, prior settings, dataset variants and fitted cuts.
+fits:
+  - 260710-ac-01-nnpdf41-pc
+  - 260710-ac-02-nnpdf41-pc
+  - 260710-ac-03-nnpdf41-pc
+  - 260710-ac-04-nnpdf41-pc
+  - 260710-ac-05-nnpdf41-pc
+
+meta:
+  title: Jet power corrections versus experimental errors
+  author: NNPDF
+  keywords: [power corrections, jets, kinematic cuts]
+
+template_text: |
+  # Where does the fitted correction exceed the experimental error?
+
+  The criterion is $|C_{\mathrm{PC},i}-1|>\sigma_{\mathrm{exp},i}/|D_i|$.
+  Markers show the central correction computed from each fit's posterior;
+  the experimental errors are normalised to the absolute measured values.
+  Bands show the posterior uncertainty in c-factor units, before any covariance
+  inflation. The criterion uses the central value, not the width of this band.
+  For factorised dijets, the central product includes its covariance contribution.
+
+  {@plot_pc_fits_jet_correction_comparison@}
+
+  [Download all per-point comparisons](tables/pc_fits_jet_correction_comparison.csv).
+
+  # Rapidity-bin exceedance summary
+
+  Each row reports the count of exceeding points and the highest fitted pT
+  or dijet-mass bin centre (GeV) where the criterion is met. NaN in the maximum means
+  no compared point exceeds its experimental error. The yb field is used
+  only for triple-differential dijets. Corrections in this table are fractions.
+
+  Only each fit's selected points are tested. This is a diagnostic for choosing
+  cuts, not an automatic cut rule: exceedance need not be monotonic in scale,
+  and this report does not extrapolate to points already excluded from the fit.
+  Zero measured values have an undefined comparison and are counted separately
+  through n_compared. No installed PC c-factor files are used.
+
+  {@pc_fits_jet_correction_exceedance@}
+
+actions_:
+  - report(main=true)

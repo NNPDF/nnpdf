@@ -1,0 +1,12 @@
+# Replace this with your completed, postprocessed PC-prior fit.
+fit: 260710-ac-01-nnpdf41-pc
+
+pc_cfactor_label: PC
+
+actions_:
+  - pc_fit_context pc_posterior_table
+  - pc_fit_context pc_posterior_covmat
+  - pc_fit_context pc_posterior_corrmat
+  - pc_fit_context plot_pc_posterior
+  - pc_fit_context plot_pc_posterior_corrmat
+  - pc_fit_context pc_posterior_cfactors
