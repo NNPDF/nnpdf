@@ -1,0 +1,67 @@
+dependent_variables:
+- header: {name: dressed to Born correction factors}
+  qualifiers:
+  - {name: ., value: $e^- e^+ e^-$ channel}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.038'
+  - errors: []
+    value: '1.037'
+  - errors: []
+    value: '1.037'
+- header: {name: dressed to Born correction factors}
+  qualifiers:
+  - {name: ., value: $\mu^- e^+ e^-$ channel}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.041'
+  - errors: []
+    value: '1.044'
+  - errors: []
+    value: '1.042'
+- header: {name: dressed to Born correction factors}
+  qualifiers:
+  - {name: ., value: $e^- \mu^+ \mu^-$ channel}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.043'
+  - errors: []
+    value: '1.041'
+  - errors: []
+    value: '1.042'
+- header: {name: dressed to Born correction factors}
+  qualifiers:
+  - {name: ., value: $\mu^- \mu^+ \mu^-$ channel}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.038'
+  - errors: []
+    value: '1.036'
+  - errors: []
+    value: '1.037'
+- header: {name: dressed to Born correction factors}
+  qualifiers:
+  - {name: ., value: All channels}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.041'
+  - errors: []
+    value: '1.042'
+  - errors: []
+    value: '1.041'
+independent_variables:
+- header: {name: RE}
+  values:
+  - {value: '$C_{W^-Z}^{\textrm{dressed}}/C_{W^-Z}^{\textrm{Born}}$'}
+  - {value: '$C_{W^{+}Z}^{\textrm{dressed}}/C_{W^{+}Z}^{\textrm{Born}}$'}
+  - {value: '$C_{W^\pm Z}^{\textrm{dressed}}/C_{W^\pm Z}^{\textrm{Born}}$'}

@@ -1,0 +1,86 @@
+dependent_variables:
+- header: {name: '$d\sigma/dp_{T}^{lead\,l}\text{ [fb/GeV]}$'}
+  qualifiers:
+  - {name: 'Cross section', value: 'WW production'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 25'}
+  - {name: 'ETMISS', units: 'GEV', value: '> 20'}
+  - {name: 'ABS(ETARAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 30'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - errors:
+    - {label: 'stat', symerror: 0.376}
+    - {label: 'syst', symerror: 0.615}
+    value: 9.903
+  - errors:
+    - {label: 'stat', symerror: 0.38}
+    - {label: 'syst', symerror: 0.78}
+    value: 14.29
+  - errors:
+    - {label: 'stat', symerror: 0.29}
+    - {label: 'syst', symerror: 0.65}
+    value: 11.25
+  - errors:
+    - {label: 'stat', symerror: 0.210}
+    - {label: 'syst', symerror: 0.505}
+    value: 7.431
+  - errors:
+    - {label: 'stat', symerror: 0.162}
+    - {label: 'syst', symerror: 0.367}
+    value: 4.778
+  - errors:
+    - {label: 'stat', symerror: 0.122}
+    - {label: 'syst', symerror: 0.285}
+    value: 3.022
+  - errors:
+    - {label: 'stat', symerror: 0.103}
+    - {label: 'syst', symerror: 0.220}
+    value: 1.967
+  - errors:
+    - {label: 'stat', symerror: 0.081}
+    - {label: 'syst', symerror: 0.156}
+    value: 1.273
+  - errors:
+    - {label: 'stat', symerror: 0.0499}
+    - {label: 'syst', symerror: 0.1047}
+    value: 0.7469
+  - errors:
+    - {label: 'stat', symerror: 0.0321}
+    - {label: 'syst', symerror: 0.0533}
+    value: 0.3747
+  - errors:
+    - {label: 'stat', symerror: 0.0210}
+    - {label: 'syst', symerror: 0.0285}
+    value: 0.1966
+  - errors:
+    - {label: 'stat', symerror: 0.00973}
+    - {label: 'syst', symerror: 0.01095}
+    value: 0.07758
+  - errors:
+    - {label: 'stat', symerror: 0.00381}
+    - {label: 'syst', symerror: 0.00314}
+    value: 0.02593
+  - errors:
+    - {label: 'stat', symerror: 0.000296}
+    - {label: 'syst', symerror: 0.000200}
+    value: 0.00138
+independent_variables:
+- header: {name: '$p_{T}^{lead\,l}\text{ [GeV]}$'}
+  values:
+  - {low: 27.0, high: 40.0}
+  - {low: 40.0, high: 50.0}
+  - {low: 50.0, high: 60.0}
+  - {low: 60.0, high: 70.0}
+  - {low: 70.0, high: 80.0}
+  - {low: 80.0, high: 90.0}
+  - {low: 90.0, high: 100.0}
+  - {low: 100.0, high: 110.0}
+  - {low: 110.0, high: 130.0}
+  - {low: 130.0, high: 150.0}
+  - {low: 150.0, high: 175.0}
+  - {low: 175.0, high: 220.0}
+  - {low: 220.0, high: 300.0}
+  - {low: 300.0, high: 999.0}

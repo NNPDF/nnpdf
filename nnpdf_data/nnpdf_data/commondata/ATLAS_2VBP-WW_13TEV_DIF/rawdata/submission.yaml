@@ -1,0 +1,502 @@
+additional_resources: 
+- {description: web page with auxiliary material, location: "https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/STDM-2017-24/"}
+comment: "CERN-LHC.
+
+A measurement of fiducial and differential cross-sections for W+W- production in proton-proton collisions at sqrt(s)=13 TeV with the ATLAS experiment at the Large Hadron Collider using an integrated luminosity of 36.1fb-1 is presented. Events with one electron and one muon are selected, corresponding to the decay of the diboson system as WW->e nu mu nu. To suppress top-quark background, events containing jets with a transverse momentum exceeding 35 GeV are not included in the measurement phase space. The fiducial cross-section, six differential distributions and the cross-section as a function of the jet-veto transverse momentum threshold are measured and compared with several theoretical predictions. Constraints on anomalous weak boson self-interactions are also presented in the framework of a dimension-six effective field theory."
+hepdata_doi: XXX
+record_ids:
+- {id: XXX, type: inspire}
+---
+data_file: data1.yaml
+description: |
+  Measured fiducial cross-section as a function of the jet-veto $p_{T}$ threshold. The value at the jet-veto $p_{T}$ threshold of 35GeV corresponds to the nominal fiducial cross section measured in this publication.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [SIG]}
+- {name: phrases, values: [Integrated Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 06a
+name: Table 1
+additional_resources:
+- {description: Image file, location: fig_06a.png}
+- {description: Thumbnail image file, location: thumb_fig_06a.png}
+---
+data_file: data2.yaml
+description: |
+  Statistical correlation between bins in data for the measured fiducial cross-section as a function of the jet-veto $p_{T}$ threshold. The value at the jet-veto $p_{T}$ threshold of 35GeV corresponds to the nominal fiducial cross section measured in this publication.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 2
+---
+data_file: data3.yaml
+description: |
+  Total correlation between bins in data for the measured fiducial cross-section as a function of the jet-veto $p_{T}$ threshold. The value at the jet-veto $p_{T}$ threshold of 35GeV corresponds to the nominal fiducial cross section measured in this publication.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 3
+---
+data_file: data4.yaml
+description: |
+  Measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 07a
+name: Table 4
+additional_resources:
+- {description: Image file, location: fig_07a.png}
+- {description: Thumbnail image file, location: thumb_fig_07a.png}
+---
+data_file: data5.yaml
+description: |
+  Statistical correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 5
+---
+data_file: data6.yaml
+description: |
+  Total correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 6
+---
+data_file: data7.yaml
+description: |
+  Measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $m_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 07b
+name: Table 7
+additional_resources:
+- {description: Image file, location: fig_07b.png}
+- {description: Thumbnail image file, location: thumb_fig_07b.png}
+---
+data_file: data8.yaml
+description: |
+  Statistical correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $m_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 8
+---
+data_file: data9.yaml
+description: |
+  Total correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $m_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 9
+---
+data_file: data10.yaml
+description: |
+  Measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_{T}^{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 07c
+name: Table 10
+additional_resources:
+- {description: Image file, location: fig_07c.png}
+- {description: Thumbnail image file, location: thumb_fig_07c.png}
+---
+data_file: data11.yaml
+description: |
+  Statistical correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_{T}^{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 11
+---
+data_file: data12.yaml
+description: |
+  Total correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_{T}^{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 12
+---
+data_file: data13.yaml
+description: |
+  Measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|y_{e\mu}|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 07d
+name: Table 13
+additional_resources:
+- {description: Image file, location: fig_07d.png}
+- {description: Thumbnail image file, location: thumb_fig_07d.png}
+---
+data_file: data14.yaml
+description: |
+  Statistical correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|y_{e\mu}|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 14
+---
+data_file: data15.yaml
+description: |
+  Total correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|y_{e\mu}|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 15
+---
+data_file: data16.yaml
+description: |
+  Measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $\Delta\phi_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 08a
+name: Table 16
+additional_resources:
+- {description: Image file, location: fig_08a.png}
+- {description: Thumbnail image file, location: thumb_fig_08a.png}
+---
+data_file: data17.yaml
+description: |
+  Statistical correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $\Delta\phi_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 17
+---
+data_file: data18.yaml
+description: |
+  Total correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $\Delta\phi_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 18
+---
+data_file: data19.yaml
+description: |
+  Measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|cos(\theta^*)|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 08b
+name: Table 19
+additional_resources:
+- {description: Image file, location: fig_08b.png}
+- {description: Thumbnail image file, location: thumb_fig_08b.png}
+---
+data_file: data20.yaml
+description: |
+  Statistical correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|cos(\theta^*)|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 20
+---
+data_file: data21.yaml
+description: |
+  Total correlation between bins in data for the measured fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|cos(\theta^*)|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 21
+---
+data_file: data22.yaml
+description: |
+  Measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 03a in Auxiliary Material
+name: Table 22
+additional_resources:
+- {description: Image file, location: figaux_03a.png}
+- {description: Thumbnail image file, location: thumb_figaux_03a.png}
+---
+data_file: data23.yaml
+description: |
+  Statistical correlation between bins in data for the measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 23
+---
+data_file: data24.yaml
+description: |
+  Total correlation between bins in data for the measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 24
+---
+data_file: data25.yaml
+description: |
+  Measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $m_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 03b in Auxiliary Material
+name: Table 25
+additional_resources:
+- {description: Image file, location: figaux_03b.png}
+- {description: Thumbnail image file, location: thumb_figaux_03b.png}
+---
+data_file: data26.yaml
+description: |
+  Statistical correlation between bins in data for the measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $m_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 26
+---
+data_file: data27.yaml
+description: |
+  Total correlation between bins in data for the measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $m_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 27
+---
+data_file: data28.yaml
+description: |
+  Measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_{T}^{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 03c in Auxiliary Material
+name: Table 28
+additional_resources:
+- {description: Image file, location: figaux_03c.png}
+- {description: Thumbnail image file, location: thumb_figaux_03c.png}
+---
+data_file: data29.yaml
+description: |
+  Statistical correlation between bins in data for the measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_{T}^{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 29
+---
+data_file: data30.yaml
+description: |
+  Total correlation between bins in data for the measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $p_{T}^{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 30
+---
+data_file: data31.yaml
+description: |
+  Measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|y_{e\mu}|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 03d in Auxiliary Material
+name: Table 31
+additional_resources:
+- {description: Image file, location: figaux_03d.png}
+- {description: Thumbnail image file, location: thumb_figaux_03d.png}
+---
+data_file: data32.yaml
+description: |
+  Statistical correlation between bins in data for the measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|y_{e\mu}|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 32
+---
+data_file: data33.yaml
+description: |
+  Total correlation between bins in data for the measured normalized fiducial cross-section of $WW\rightarrow e\mu$ production for the observable $|y_{e\mu}|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 33
+---
+data_file: data34.yaml
+description: |
+  Measured normalized fiducial cross section of $WW\rightarrow e\mu$ production for the observable $\Delta\phi_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 04a in Auxiliary Material
+name: Table 34
+additional_resources:
+- {description: Image file, location: figaux_04a.png}
+- {description: Thumbnail image file, location: thumb_figaux_04a.png}
+---
+data_file: data35.yaml
+description: |
+  Statistical correlation between bins in data for the measured normalized fiducial cross section of $WW\rightarrow e\mu$ production for the observable $\Delta\phi_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 35
+---
+data_file: data36.yaml
+description: |
+  Total correlation between bins in data for the measured normalized fiducial cross section of $WW\rightarrow e\mu$ production for the observable $\Delta\phi_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 36
+---
+data_file: data37.yaml
+description: |
+  Measured normalized fiducial cross section of $WW\rightarrow e\mu$ production for the observable $|cos(\theta^*)|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 04b in Auxiliary Material
+name: Table 37
+additional_resources:
+- {description: Image file, location: figaux_04b.png}
+- {description: Thumbnail image file, location: thumb_figaux_04b.png}
+---
+data_file: data38.yaml
+description: |
+  Statistical correlation between bins in data for the measured normalized fiducial cross section of $WW\rightarrow e\mu$ production for the observable $|cos(\theta^*)|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 38
+---
+data_file: data39.yaml
+description: |
+  Total correlation between bins in data for the measured normalized fiducial cross section of $WW\rightarrow e\mu$ production for the observable $|cos(\theta^*)|$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [CORR]}
+- {name: phrases, values: [Correlation, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 39
+---
+data_file: data40.yaml
+description: |
+  List of experimentally considered systematic uncertainties for the WW cross section measurement.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [SIG]}
+- {name: phrases, values: [Systematics List, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+name: Table 40
+---
+data_file: data41.yaml
+description: |
+  Extrapolated unfolded fiducial cross-section of $WW\rightarrow e\mu$ production as a function of $p_\text{T}^{\text{lead }\ell}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 07a in Auxiliary Material
+name: Table 41
+additional_resources:
+- {description: Image file, location: figaux_07a.png}
+- {description: Thumbnail image file, location: thumb_figaux_07a.png}
+---
+data_file: data42.yaml
+description: |
+  Extrapolated unfolded fiducial cross-section of $WW\rightarrow e\mu$ production as a function of $m_{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 07b in Auxiliary Material
+name: Table 42
+additional_resources:
+- {description: Image file, location: figaux_07b.png}
+- {description: Thumbnail image file, location: thumb_figaux_07b.png}
+---
+data_file: data43.yaml
+description: |
+  Extrapolated unfolded fiducial cross-section of $WW\rightarrow e\mu$ production as a function of $p_{T}^{e\mu}$.
+keywords:
+- {name: reactions, values: ['P P --> W+ W-']}
+- {name: observables, values: [DSIG/DX]}
+- {name: phrases, values: [Differential Cross Section, Proton-Proton Scattering, W pair Production]}
+- {name: cmenergies, values: [13000.0]}
+location: Data from Figure(s) 07c in Auxiliary Material
+name: Table 43
+additional_resources:
+- {description: Image file, location: figaux_07c.png}
+- {description: Thumbnail image file, location: thumb_figaux_07c.png}

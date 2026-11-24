@@ -1,0 +1,695 @@
+dependent_variables:
+- header: {name: '$\rho(\Delta\phi_{e\mu})$'}
+  qualifiers:
+  - {name: 'Statistical correlation for cross section', value: 'WW production'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 27'}
+  - {name: 'M(ELECTRON,MUON)', units: 'GEV', value: '> 55'}
+  - {name: 'PT(ELECTRON,MUON)', units: 'GEV', value: '> 30'}
+  - {name: 'ETMISS', units: 'GEV', value: '> 20'}
+  - {name: 'ABS(ETARAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 35'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - {value: 1.0}
+  - {value: 0.0379}
+  - {value: 0.0311}
+  - {value: 0.0061}
+  - {value: -0.0054}
+  - {value: -0.0033}
+  - {value: -0.0276}
+  - {value: 0.0094}
+  - {value: -0.0095}
+  - {value: -0.0057}
+  - {value: -0.0069}
+  - {value: 0.016}
+  - {value: 0.0161}
+  - {value: 0.0004}
+  - {value: -0.001}
+  - {value: 0.0379}
+  - {value: 1.0}
+  - {value: -0.0087}
+  - {value: -0.0699}
+  - {value: 0.0017}
+  - {value: -0.0202}
+  - {value: -0.0153}
+  - {value: 0.0053}
+  - {value: 0.0043}
+  - {value: -0.0017}
+  - {value: -0.0077}
+  - {value: 0.036}
+  - {value: -0.0383}
+  - {value: -0.0298}
+  - {value: -0.0277}
+  - {value: 0.0311}
+  - {value: -0.0087}
+  - {value: 1.0}
+  - {value: 0.0038}
+  - {value: 0.0038}
+  - {value: -0.0225}
+  - {value: 0.0093}
+  - {value: -0.0199}
+  - {value: -0.0167}
+  - {value: 0.0068}
+  - {value: -0.0032}
+  - {value: -0.0125}
+  - {value: 0.0279}
+  - {value: -0.0125}
+  - {value: 0.0077}
+  - {value: 0.0061}
+  - {value: -0.0699}
+  - {value: 0.0038}
+  - {value: 1.0}
+  - {value: -0.0035}
+  - {value: 0.0089}
+  - {value: -0.0027}
+  - {value: -0.0047}
+  - {value: -0.0203}
+  - {value: -0.0053}
+  - {value: -0.0142}
+  - {value: -0.0039}
+  - {value: -0.0064}
+  - {value: 0.0212}
+  - {value: 0.0097}
+  - {value: -0.0054}
+  - {value: 0.0017}
+  - {value: 0.0038}
+  - {value: -0.0035}
+  - {value: 1.0}
+  - {value: 0.0521}
+  - {value: -0.0032}
+  - {value: 0.0353}
+  - {value: 0.0034}
+  - {value: -0.037}
+  - {value: -0.0105}
+  - {value: -0.0049}
+  - {value: 0.0332}
+  - {value: -0.0149}
+  - {value: -0.0034}
+  - {value: -0.0033}
+  - {value: -0.0202}
+  - {value: -0.0225}
+  - {value: 0.0089}
+  - {value: 0.0521}
+  - {value: 1.0}
+  - {value: 0.0066}
+  - {value: 0.0109}
+  - {value: 0.0056}
+  - {value: -0.0235}
+  - {value: -0.0324}
+  - {value: -0.0163}
+  - {value: -0.0114}
+  - {value: -0.0268}
+  - {value: -0.001}
+  - {value: -0.0276}
+  - {value: -0.0153}
+  - {value: 0.0093}
+  - {value: -0.0027}
+  - {value: -0.0032}
+  - {value: 0.0066}
+  - {value: 1.0}
+  - {value: -0.0011}
+  - {value: -0.0039}
+  - {value: -0.0282}
+  - {value: -0.0024}
+  - {value: -0.015}
+  - {value: -0.0019}
+  - {value: 0.0304}
+  - {value: 0.0257}
+  - {value: 0.0094}
+  - {value: 0.0053}
+  - {value: -0.0199}
+  - {value: -0.0047}
+  - {value: 0.0353}
+  - {value: 0.0109}
+  - {value: -0.0011}
+  - {value: 1.0}
+  - {value: -0.0069}
+  - {value: -0.0061}
+  - {value: 0.0407}
+  - {value: -0.0269}
+  - {value: 0.0376}
+  - {value: 0.0011}
+  - {value: 0.0135}
+  - {value: -0.0095}
+  - {value: 0.0043}
+  - {value: -0.0167}
+  - {value: -0.0203}
+  - {value: 0.0034}
+  - {value: 0.0056}
+  - {value: -0.0039}
+  - {value: -0.0069}
+  - {value: 1.0}
+  - {value: -0.025}
+  - {value: -0.0206}
+  - {value: 0.0163}
+  - {value: 0.0041}
+  - {value: -0.0445}
+  - {value: -0.0044}
+  - {value: -0.0057}
+  - {value: -0.0017}
+  - {value: 0.0068}
+  - {value: -0.0053}
+  - {value: -0.037}
+  - {value: -0.0235}
+  - {value: -0.0282}
+  - {value: -0.0061}
+  - {value: -0.025}
+  - {value: 1.0}
+  - {value: -0.0501}
+  - {value: -0.0094}
+  - {value: -0.0062}
+  - {value: -0.0257}
+  - {value: 0.0124}
+  - {value: -0.0069}
+  - {value: -0.0077}
+  - {value: -0.0032}
+  - {value: -0.0142}
+  - {value: -0.0105}
+  - {value: -0.0324}
+  - {value: -0.0024}
+  - {value: 0.0407}
+  - {value: -0.0206}
+  - {value: -0.0501}
+  - {value: 1.0}
+  - {value: -0.0034}
+  - {value: 0.0064}
+  - {value: 0.0254}
+  - {value: -0.0135}
+  - {value: 0.016}
+  - {value: 0.036}
+  - {value: -0.0125}
+  - {value: -0.0039}
+  - {value: -0.0049}
+  - {value: -0.0163}
+  - {value: -0.015}
+  - {value: -0.0269}
+  - {value: 0.0163}
+  - {value: -0.0094}
+  - {value: -0.0034}
+  - {value: 1.0}
+  - {value: -0.0119}
+  - {value: -0.0138}
+  - {value: 0.0027}
+  - {value: 0.0161}
+  - {value: -0.0383}
+  - {value: 0.0279}
+  - {value: -0.0064}
+  - {value: 0.0332}
+  - {value: -0.0114}
+  - {value: -0.0019}
+  - {value: 0.0376}
+  - {value: 0.0041}
+  - {value: -0.0062}
+  - {value: 0.0064}
+  - {value: -0.0119}
+  - {value: 1.0}
+  - {value: -0.0}
+  - {value: 0.0233}
+  - {value: 0.0004}
+  - {value: -0.0298}
+  - {value: -0.0125}
+  - {value: 0.0212}
+  - {value: -0.0149}
+  - {value: -0.0268}
+  - {value: 0.0304}
+  - {value: 0.0011}
+  - {value: -0.0445}
+  - {value: -0.0257}
+  - {value: 0.0254}
+  - {value: -0.0138}
+  - {value: -0.0}
+  - {value: 1.0}
+  - {value: 0.0388}
+  - {value: -0.001}
+  - {value: -0.0277}
+  - {value: 0.0077}
+  - {value: 0.0097}
+  - {value: -0.0034}
+  - {value: -0.001}
+  - {value: 0.0257}
+  - {value: 0.0135}
+  - {value: -0.0044}
+  - {value: 0.0124}
+  - {value: -0.0135}
+  - {value: 0.0027}
+  - {value: 0.0233}
+  - {value: 0.0388}
+  - {value: 1.0}
+independent_variables:
+- header: {name: '$\Delta\phi_{e\mu}$'}
+  values:
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+  - {low: 3.0, high: 3.1}
+- header: {name: '$\Delta\phi_{e\mu}$'}
+  values:
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 1.4}
+  - {low: 1.4, high: 1.6}
+  - {low: 1.6, high: 1.8}
+  - {low: 1.8, high: 1.9}
+  - {low: 1.9, high: 2.1}
+  - {low: 2.1, high: 2.2}
+  - {low: 2.2, high: 2.3}
+  - {low: 2.3, high: 2.4}
+  - {low: 2.4, high: 2.5}
+  - {low: 2.5, high: 2.6}
+  - {low: 2.6, high: 2.7}
+  - {low: 2.7, high: 2.8}
+  - {low: 2.8, high: 3.0}
+  - {low: 3.0, high: 3.1}

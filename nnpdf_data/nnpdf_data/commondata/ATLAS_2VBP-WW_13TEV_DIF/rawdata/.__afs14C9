@@ -1,0 +1,50 @@
+dependent_variables:
+- header: {name: '$\sigma_{fiducial}$'}
+  qualifiers:
+  - {name: 'Cross section', value: 'WW production'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 27'}
+  - {name: 'ABS(YRAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 35'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - errors:
+    - {label: 'stat', symerror: 4.8}
+    - {label: 'syst', symerror: 24.5}
+    value: 351.3
+  - errors:
+    - {label: 'stat', symerror: 5.0}
+    - {label: 'syst', symerror: 26.6}
+    value: 379.1
+  - errors:
+    - {label: 'stat', symerror: 5.3}
+    - {label: 'syst', symerror: 30.3}
+    value: 400.5
+  - errors:
+    - {label: 'stat', symerror: 5.5}
+    - {label: 'syst', symerror: 35.5}
+    value: 421.9
+  - errors:
+    - {label: 'stat', symerror: 5.7}
+    - {label: 'syst', symerror: 41.6}
+    value: 436.6
+  - errors:
+    - {label: 'stat', symerror: 5.9}
+    - {label: 'syst', symerror: 47.8}
+    value: 451.6
+  - errors:
+    - {label: 'stat', symerror: 6.1}
+    - {label: 'syst', symerror: 55.4}
+    value: 468.2
+independent_variables:
+- header: {name: '$Jet-veto p_{T} threshold\text{ [GeV]}$'}
+  values:
+  - {value: 30.0}
+  - {value: 35.0}
+  - {value: 40.0}
+  - {value: 45.0}
+  - {value: 50.0}
+  - {value: 55.0}
+  - {value: 60.0}
