@@ -218,7 +218,7 @@ def plot_pdfreplicas(
     plot_pdfs.
 
     - xscale sets the scale of the plot. E.g. 'linear' or 'log'. Default is
-    deduced from the xplotting_grid, which in turn is 'log' by default.
+      deduced from the xplotting_grid, which in turn is 'log' by default.
 
     - normalize_to should be, a pdf id or an index of the pdf (starting from one).
     """

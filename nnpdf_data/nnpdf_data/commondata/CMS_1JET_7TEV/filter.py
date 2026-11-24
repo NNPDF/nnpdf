@@ -36,16 +36,14 @@ def read_table(table_no: int):
         temp_dict = yaml.safe_load(file)
 
     # sort out kinematic bins:
-    sqrts_val = float(temp_dict['dependent_variables'][0]['qualifiers'][1]['value'])
     ybin = temp_dict['dependent_variables'][0]['qualifiers'][0]['value']
     ymin, ymax = float(ybin[:3]), float(ybin[4:7])
     ymid = (ymin+ymax)/2
     bins_in_table = list()
     for ptbin in temp_dict['independent_variables'][0]['values']:
         y_dict = {'y': {'min': ymin, 'mid': ymid, 'max': ymax}}
-        sqrts_dict = {'sqrts': {'min': None, 'mid': sqrts_val, 'max': None}}
         pT_dict = {'pT': {'min': ptbin['low'], 'mid': (ptbin['low']+ptbin['high'])/2, 'max': ptbin['high']}}
-        bins_in_table.append(y_dict | pT_dict | sqrts_dict)
+        bins_in_table.append(y_dict | pT_dict)
     
     # read the central values and the uncertainties
     central_values = list()

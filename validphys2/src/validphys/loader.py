@@ -357,7 +357,7 @@ class Loader(LoaderBase):
         the theory ID and the corresponding cfactors.
         The cfactors should correspond directly to the fktables, the "compound folder"
         is not supported for pineappl theories. As such, the name of the cfactor is expected to be
-            CF_{cfactor_name}_{fktable_name}
+        ``CF_{cfactor_name}_{fktable_name}``.
         """
         theory = self.check_theoryID(theoryID)
         fklist = theory_metadata.fktables_to_paths(theory.path / "fastkernel")

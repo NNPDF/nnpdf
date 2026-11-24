@@ -560,12 +560,14 @@ def xq2_dataset_map(
 ):
     """
     For a single dataset and a set of fits define a dictionary which contains for each datapoint of the dataset the following information:
+
     - x coordinate
     - Q**2 coordinate
     - value of Ratio bias-variance at that point for the given fits
     - value of xi at that point for the given fits
 
     for double
+
     Parameters
     ----------
     xq2map_with_cuts: validphys.kinematics.XQ2Map
@@ -577,16 +579,17 @@ def xq2_dataset_map(
         covariance matrix,
         sqrt covariance matrix
 
-   _internal_max_reps: int
+    _internal_max_reps: int
         maximum number of replicas to use for each fit
-    
-   _internal_min_reps: int
+
+    _internal_min_reps: int
         minimum number of replicas to use for each fit
 
     Returns
     -------
     xq2map: dictionary
         dictionary containing:
+
         - x coordinate
         - Q**2 coordinate
         - Ratio bias-variance

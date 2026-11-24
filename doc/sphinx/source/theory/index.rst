@@ -17,4 +17,3 @@ this information using the NNPDF code itself is detailed.
    ./theoryparamsdefinitions
    ./theoryindex
    ./theoryparamsinfo
-   ./PTevol

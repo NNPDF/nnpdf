@@ -151,13 +151,14 @@ Contents
    :maxdepth: 2
 
    get-started/index
+   contributing/index
    tutorials/index
    n3fit/index
    vp/index
    data/index
    theory/index
    figuresofmerit/index
-   contributing/index
+   api/index
    releases
    ci/index
    serverconf/index

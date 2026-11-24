@@ -12,7 +12,6 @@ yaml.add_representer(float, prettify_float)
 NB_POINTS = 10
 MZ_VALUE = 91.1876  # GeV
 MW_VALUE = 80.398  # GeV
-SQRT_S = 1_960.0
 
 
 def load_yaml(table_id: int, version: int = 1) -> dict:
@@ -58,7 +57,6 @@ def get_kinematics(hepdata: dict) -> list:
         kin_value = {
             "abs_eta": {"min": ymin, "mid": (ymin + ymax) / 2, "max": ymax},
             "m_W2": {"min": None, "mid": MW_VALUE**2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 

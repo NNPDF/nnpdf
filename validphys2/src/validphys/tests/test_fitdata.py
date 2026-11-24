@@ -6,7 +6,7 @@ from validphys.tests.conftest import FIT_3REPLICAS, FIT_3REPLICAS_DCUTS
 def test_print_different_cuts():
     """Checks the print_different_cuts functions
     using two fits with a different choice of q2min and w2min in the runcard
-    One of the datasets (SLACP) gets 0 points in in the most restrictive case
+    One of the datasets (SLAC_NC_NOTFIXED_P_EM-F2) gets 0 points in the most restrictive case
     The different cuts are:
     q2min: 3.49 - 13.49
     w2min: 12.5 - 22.5

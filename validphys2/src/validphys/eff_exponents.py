@@ -359,23 +359,24 @@ def next_effective_exponents_table(
 ):
     """Given a PDF, calculate the next effective exponents
 
-    By default `x1_alpha = 1e-6`, `x2_alpha = 1e-3`, `x1_beta = 0.65`, and
-    `x2_beta = 0.95`, but different values can be specified in the runcard. The
+    By default ``x1_alpha = 1e-6``, ``x2_alpha = 1e-3``, ``x1_beta = 0.65``, and
+    ``x2_beta = 0.95``, but different values can be specified in the runcard. The
     values control where the bounds of alpha and beta are evaluated:
 
-    alpha_min:
-        singlet/gluon: the 2x68% c.l. lower value evaluated at x=`x1_alpha`
-        others  : min(2x68% c.l. lower value evaluated at x=`x1_alpha` and x=`x2_alpha`)
+    - alpha_min:
+      singlet/gluon: the 2x68% c.l. lower value evaluated at x=``x1_alpha``
+      others: min(2x68% c.l. lower value evaluated at x=``x1_alpha`` and x=``x2_alpha``)
 
-    alpha_max:
-        singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=`x1_alpha`)
-        others    : min(2 and max(2x68% c.l. upper value evaluated at x=`x1_alpha`
-                    and x=`x2_alpha`))
+    - alpha_max:
+      singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=``x1_alpha``)
+      others: min(2 and max(2x68% c.l. upper value evaluated at x=``x1_alpha``
+      and x=``x2_alpha``))
 
-    beta_min:
-        max(0 and min(2x68% c.l. lower value evaluated at x=`x1_beta` and x=`x2_beta`))
-    beta_max:
-        max(2x68% c.l. upper value evaluated at x=`x1_beta` and x=`x2_beta`)
+    - beta_min:
+      max(0 and min(2x68% c.l. lower value evaluated at x=``x1_beta`` and x=``x2_beta``))
+
+    - beta_max:
+      max(2x68% c.l. upper value evaluated at x=``x1_beta`` and x=``x2_beta``)
 
     """
     if fitq0fromfit is None:
@@ -484,10 +485,13 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
     Alternatively, using the API, the yaml dump returned by this function can
     be written to a file e.g
 
-    >>> from validphys.api import API
-    >>> yaml_output = API.iterate_preprocessing_yaml(fit=<fit name>)
-    >>> with open("output.yml", "w+") as f:
-    ...     f.write(yaml_output)
+    .. code-block:: python
+
+        from validphys.api import API
+
+        yaml_output = API.iterate_preprocessing_yaml(fit=<fit name>)
+        with open("output.yml", "w+") as f:
+            f.write(yaml_output)
 
     Parameters
     ----------
@@ -597,14 +601,17 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
     alternatively, using the API, the yaml dump returned by this function can
     be written to a file e.g
 
-    >>> from validphys.api import API
-    >>> yaml_output = API.iterated_runcard_yaml(
-    ...     fit=<fit name>,
-    ...     _updated_description="My iterated fit"
-    ... )
-    >>> with open("output.yml", "w+") as f:
-    ...     f.write(yaml_output)
+    .. code-block:: python
 
+        from validphys.api import API
+
+        yaml_output = API.iterated_runcard_yaml(
+            fit=<fit name>,
+            _updated_description="My iterated fit",
+        )
+
+        with open("output.yml", "w+") as f:
+            f.write(yaml_output)
     """
     filtermap = yaml_rt.load(update_runcard_description_yaml)
     # iterate t0

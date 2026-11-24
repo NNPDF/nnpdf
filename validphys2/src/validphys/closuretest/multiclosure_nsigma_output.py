@@ -72,9 +72,8 @@ def plot_probability_inconsistent(probability_inconsistent, set_1, weighted_data
 
     3. C_3 = S_1 union (~S_1 intersect S_3)
 
-    The probability of a dataset being inconsistent is defined as:
-            P(inconsistent) = |I_alpha| / N
-    where N is the total number of fits.
+    The probability of a dataset being inconsistent is defined as
+    ``P(inconsistent) = |I_alpha| / N``, where N is the total number of fits.
 
     """
     c_3_rates, c_2_rates = probability_inconsistent

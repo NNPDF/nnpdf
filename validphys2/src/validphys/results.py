@@ -561,7 +561,7 @@ def results_central(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covm
 
 def results_without_covmat(dataset: DataSetSpec, pdf: PDF):
     """Return a results object with a diagonal covmat so that it can be used to generate
-    results-depending covmats elsewhere. Uses :py:funct:`results` under the hook"""
+    results-depending covmats elsewhere. Uses :py:func:`results` under the hook"""
     loaded_cd = dataset.load_commondata()
     if isinstance(loaded_cd, list):
         ndata = np.sum([cd.ndata for cd in loaded_cd])

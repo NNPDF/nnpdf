@@ -182,10 +182,12 @@ class MetaModel(Model):
         loss_dict = history.history
         return loss_dict
 
-    def predict(self, x=None, **kwargs):
-        """Call super().predict with the right input arguments"""
+    def predict(self, x=None, verbose=0, **kwargs):
+        """Call super().predict with the right input arguments
+        The per-batch progress bar is disabled by default (``verbose=0``).
+        """
         x = self._parse_input(x)
-        result = super().predict(x=x, **kwargs)
+        result = super().predict(x=x, verbose=verbose, **kwargs)
         return result
 
     def compute_losses(self):
@@ -350,7 +352,10 @@ class MetaModel(Model):
 
     def get_layer_re(self, regex):
         """Get all layers matching the given regular expression"""
-        check = lambda x: re.match(regex, x.name)
+
+        def check(x):
+            return re.match(regex, x.name)
+
         return list(filter(check, self.layers))
 
     def get_replica_weights(self, i_replica):
@@ -359,7 +364,7 @@ class MetaModel(Model):
 
         This assumes that the only weights are in the
         layer types defined as the constants
-            NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
+        NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
 
         Parameters
         ----------
@@ -445,8 +450,10 @@ class MetaModel(Model):
     def save_weights(self, file):
         """
         Compatibility function for:
-            - tf < 2.16, keras < 3: argument save format needed for h5
-            - tf >= 2.16, keras >= 3: save format is deduced from the file extension
+
+        - tf < 2.16, keras < 3: argument save format needed for h5
+        - tf >= 2.16, keras >= 3: save format is deduced from the file extension
+        
         In both cases, the final weights are finally copied to the ``file`` path.
         """
         try:
@@ -534,7 +541,7 @@ def set_layer_replica_weights(layer, weights, i_replica: int):
         layer.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights)
         return
 
-    full_weights = [w.numpy() for w in layer.weights]
+    full_weights = [ops.variable_to_numpy(w) for w in layer.weights]
     for w_old, w_new in zip(full_weights, weights):
         w_old[i_replica : i_replica + 1] = w_new
 

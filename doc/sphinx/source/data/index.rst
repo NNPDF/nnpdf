@@ -13,6 +13,7 @@ namely data files and the corresponding files containing theoretical predictions
    ./commondata
    ./dataset-naming-convention
    ./process-options.rst
+   ./nnpdf-data
    ./th-data-files
    ./data-config
    ./example-cfactor-file

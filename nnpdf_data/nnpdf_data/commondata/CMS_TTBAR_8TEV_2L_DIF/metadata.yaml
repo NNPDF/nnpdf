@@ -35,10 +35,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_d2Sig_dyt_dpTt_norm.yaml
   data_central: data_d2Sig_dyt_dpTt_norm.yaml
   data_uncertainties:
@@ -86,10 +82,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_d2Sig_dyt_dmttBar_norm.yaml
   data_central: data_d2Sig_dyt_dmttBar_norm.yaml
   data_uncertainties:
@@ -153,10 +145,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_d2Sig_dmttBar_dyttBar_norm.yaml
   data_central: data_d2Sig_dmttBar_dyttBar_norm.yaml
   data_uncertainties:

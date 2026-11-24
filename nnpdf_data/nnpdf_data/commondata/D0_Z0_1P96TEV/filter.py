@@ -9,7 +9,6 @@ yaml.add_representer(float, prettify_float)
 NB_POINTS = 28
 MZ_VALUE = 91.1876  # GeV
 MW_VALUE = 80.398  # GeV
-SQRT_S = 1_960.0
 
 from nnpdf_data.filter_utils.utils import symmetrize_errors as se
 
@@ -57,7 +56,6 @@ def get_kinematics(hepdata: dict) -> list:
         kin_value = {
             "y": {"min": ymin, "mid": (ymin + ymax) / 2, "max": ymax},
             "m_Z2": {"min": None, "mid": MZ_VALUE**2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 

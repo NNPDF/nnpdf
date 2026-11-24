@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 
 
 def gridname(pdf, Neig, mc2hname: (str, type(None)) = None):
-    """If no custom `mc2hname' is specified, the name of the Hessian PDF is automatically generated."""
+    """If no custom ``mc2hname`` is specified, the name of the Hessian PDF is automatically generated."""
     if mc2hname is None:
         grid_name = f"{pdf.name}_hessian_{Neig}"
     else:

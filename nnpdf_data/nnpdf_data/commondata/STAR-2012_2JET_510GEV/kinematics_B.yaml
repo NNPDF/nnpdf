@@ -9,7 +9,7 @@ bins:
     min: 0.3
   m_jj:
     max: 19.61
-    mid: 18.8
+    mid: 1.88000000e+01
     min: 17.99
 - abs_eta_1:
     max: 0.3
@@ -21,7 +21,7 @@ bins:
     min: 0.3
   m_jj:
     max: 22.74
-    mid: 21.8
+    mid: 2.18000000e+01
     min: 20.86
 - abs_eta_1:
     max: 0.3

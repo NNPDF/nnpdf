@@ -31,10 +31,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dmttBar.yaml
   data_central: data_dSig_dmttBar.yaml
   data_uncertainties:
@@ -42,7 +38,6 @@ implemented_observables:
   kinematic_coverage:
   - m_ttBar
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair dilepton channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -82,10 +77,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dmttBar_norm.yaml
   data_central: data_dSig_dmttBar_norm.yaml
   data_uncertainties:
@@ -93,7 +84,6 @@ implemented_observables:
   kinematic_coverage:
   - m_ttBar
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair dilepton channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     x_scale: log
@@ -129,10 +119,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dyttBar.yaml
   data_central: data_dSig_dyttBar.yaml
   data_uncertainties:
@@ -140,7 +126,6 @@ implemented_observables:
   kinematic_coverage:
   - y_ttBar
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair dilepton channel: $d\sigma/d|y_{t\bar{t}}|$'
     x_scale: log
@@ -180,10 +165,6 @@ implemented_observables:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrts:
-        description: center of mass energy
-        label: $\sqrt{s}$
-        units: $GeV$
     file: kinematics_dSig_dyttBar_norm.yaml
   data_central: data_dSig_dyttBar_norm.yaml
   data_uncertainties:
@@ -191,7 +172,6 @@ implemented_observables:
   kinematic_coverage:
   - y_ttBar
   - m_t2
-  - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair dilepton channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     x_scale: log

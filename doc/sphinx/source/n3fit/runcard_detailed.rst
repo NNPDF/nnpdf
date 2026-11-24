@@ -356,6 +356,17 @@ replica range to be parallelized (in this case from replica 1 to replica 4).
 
    n3fit runcard.yml 1 -r 4
 
+.. note::
+
+   When running in parallel, all replicas are trained with the same hyperparameters,
+   since they are fitted together as a single model.
+   This matters for runcards that use ``trial_specs`` to take the methodology from a
+   hyperparameter scan: only the network architecture follows each replica's own trial,
+   while the number of epochs, stopping patience, initial positivity multiplier and
+   optimizer settings are those of the first replica of the range.
+   To give every replica the full methodology of its own trial, run one replica per
+   ``n3fit`` process instead. See :ref:`trial-specs-label` for details.
+
 
 In machines with more than one GPU you can select the GPU in which the code
 should run by setting the environment variable ``CUDA_VISIBLE_DEVICES``
@@ -473,3 +484,23 @@ It is however possible to disable them by setting to false the ``sum_rules`` fla
 
 It is also possible to impose just the valence or the momentum sum rules by using the
 ``VSR`` or ``MSR`` flags, respectively (``True`` is equal to ``All``).
+
+
+Debug options
+^^^^^^^^^^^^^
+
+All the debug-related options live in a single ``debug_options`` top-level
+namespace with the following defaults:
+
+.. code-block:: yaml
+
+    debug_options:
+        log_level: info
+        printeach: 100
+        timer: False
+        print_logs: False
+
+- ``log_level``: level of the (entire) logger when running ``n3fit``. One of ``debug``, ``info``, ``warning`` or ``error``.
+- ``printeach``: each how many epochs the training/validation stats are printed.
+- ``timer``: enable the per-epoch timing callback.
+- ``print_logs``: force the per-epoch stats to be printed irrespective of ``log_level``.

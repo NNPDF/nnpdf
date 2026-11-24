@@ -38,7 +38,6 @@ def get_kinematics(version, figure):
         kin_value = {
             'eta': {'min': eta['low'], 'mid': 0.5 * (eta['low'] + eta['high']), 'max': eta['high']},
             'm_W2': {'min': None, 'mid': 6460.5, 'max': None},
-            'sqrts': {'min': None, 'mid': 13000.0, 'max': None},
         }
 
         kin.append(kin_value)
@@ -158,5 +157,5 @@ def get_systematics(observable, version, figure):
     return uncertainties
 
 
-if __name__ == "__main__":
-    get_systematics(observable="W+", version=1, figure='17a')
+# if __name__ == "__main__":
+#     get_systematics(observable="W+", version=1, figure='17a')

@@ -16,14 +16,8 @@ release.
 PDF evolution
 -------------
 
-`APFEL <https://apfel.hepforge.org/>`_ ('A PDF Evolution Library') is the PDF evolution code currently
-used by the NNPDF Collaboration. In addition to its PDF evolution capabilities, it also produces
-predictions of deep-inelastic scattering structure functions. In recent years it has been developed
-alongside NNPDF, and so it therefore contains the features and settings required in an NNPDF fit.
-That is, it includes quark masses in the MSbar scheme, the various FONLL heavy quark schemes, scale
-variations up to NLO, etc. Note that at the time of writing, a more streamlined code is being
-written to replace APFEL, which is currently dubbed EKO ('Evolution Kernel Operator'). To find more
-general information about PDF evolution and the DGLAP equations, you can go to the :ref:`Theory section <theory>`.
+The evolution of PDFs is fully handled in the `EKO <https://github.com/nnpdf/eko>`_ code,
+and the way QCD evolution is calculated is described in great detail `here <https://eko.readthedocs.io/>`_.
 
 PDF compression
 ---------------
@@ -42,7 +36,11 @@ the subset that most truthfully reproduces the underlying probability distributi
 Other codes
 ~~~~~~~~~~~
 
-`Hoppet <https://hoppet.hepforge.org/>`_ ('Higher Order Perturbative Parton Evolution Toolkit') is an
-alternative PDF evolution code which is capable of evolving unpolarised PDFs to NNLO and linearly
-polarised PDFs to NLO. The unpolarised evolution includes heavy-quark thresholds in the MSbar
-scheme.
+`Hoppet <https://github.com/hoppet-code/hoppet>`_ ('Higher Order Perturbative Parton Evolution Toolkit') is an
+alternative PDF evolution code which is capable of evolving unpolarised PDFs.
+
+Pineline
+~~~~~~~~
+
+The full theory production pipeline used in the NNPDF framework is extensively described in the 
+`Pineline <https://nnpdf.github.io/pineline>`_ documentation.

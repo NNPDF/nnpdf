@@ -510,6 +510,8 @@ By default, the ``port`` and ``host`` arguments are set to ``27017`` and the hos
 The database is named ``hyperopt-db`` and store in the ``replica_1`` folder of the current run.
 Note that the database is not uploaded to the server when using ``vp-upload`` unless ``--upload-db`` is explicitly specified.
 
+.. _trial-specs-label:
+
 Using the results of a scan in an n3fit runcard
 -----------------------------------------------
 
@@ -530,3 +532,27 @@ It is necessary to add a ``trial_specs`` key to the runcard as follows:
 The fitting code will use the trials from ``260204-jcm-hyperopt``, ignore the ``thermalization`` first ones (in this example, the 400 first trials are thus ignored) and will only sample methodologies from the first ``number_of_trials`` best, in this case 10.
 When a ``hyperscan`` is provided, these parameters will define the run, however, it is possible to override any of the parameters with the ``override`` key.
 In this example, regardless of the values of ``epochs`` in the scan, a limit of 500 epochs will be applied.
+
+Each replica ``r`` takes the methodology of trial ``r % number_of_trials`` among the selected best trials,
+so replicas fitted one by one get different architectures, learning rates and training lengths.
+
+.. warning::
+
+   When a range of replicas is fitted in a single process (``n3fit runcard.yml 7 -r 10``, see
+   :ref:`parallel-label`), the replicas are trained together as one model, and only the network
+   architecture can differ from one replica to the next. The architecture of each replica is
+   taken from its own trial, but all the training settings are taken from the trial of the
+   *first* replica of the range and shared by the whole batch: the number of epochs, the stopping
+   patience, the initial positivity multiplier and the optimizer settings (optimizer, learning
+   rate and ``clipnorm``). See :meth:`n3fit.model_trainer.ModelTrainer.hyperparametrizable`,
+   where ``self.replicas[0]`` is used.
+
+   This is the intended behaviour. Batching by architecture is very useful during a hyperparameter
+   scan, but less so for a fit with ``trial_specs``. To fit each replica with the full methodology
+   of its own trial, run one replica per ``n3fit`` process (``n3fit runcard.yml 7``), and
+   parallelise with independent processes, for instance as a job array on a cluster.
+
+   A finished fit shows which way it was run in the ``stop_epoch`` stored in
+   ``nnfit/replica_*/<fit>.json``. Replicas fitted together with ``-r`` share the same maximum
+   number of epochs and patience, and often stop at the same epoch. Replicas fitted
+   individually stop at different epochs.

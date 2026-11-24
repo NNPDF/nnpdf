@@ -1027,16 +1027,17 @@ class CoreConfig(configparser.Config):
         Compute the intersection of the dataset names, and for each element in
         the intersection construct a mapping with the follwing keys:
 
-            - process : A string with the common process name.
-            - experiment_name : A string with the common experiment name.
-            - dataset_name : A string with the common dataset name.
-            - dataspecs : A list of mappinngs matching the original
-              "dataspecs". Each mapping contains:
-                * dataset: A dataset with the name data_set name and the
-                properties (cuts, theory, etc) corresponding to the original
-                dataspec.
-                * dataset_input: The input line used to build dataset.
-                * All the other keys in the original dataspec.
+        - process : A string with the common process name.
+        - experiment_name : A string with the common experiment name.
+        - dataset_name : A string with the common dataset name.
+        - dataspecs : A list of mappinngs matching the original
+          "dataspecs". Each mapping contains:
+
+          * dataset: A dataset with the name data_set name and the
+            properties (cuts, theory, etc) corresponding to the original
+            dataspec.
+          * dataset_input: The input line used to build dataset.
+          * All the other keys in the original dataspec.
         """
         self._check_dataspecs_type(dataspecs)
         all_names = []
@@ -1886,7 +1887,12 @@ class CoreConfig(configparser.Config):
     def produce_group_dataset_inputs_by_metadata(self, data_input, processed_metadata_group):
         """Take the data and the processed_metadata_group key and attempt
         to group the data, returns a list where each element specifies the data_input
-        for a single group and the group_name
+        for a single group and the group_name.
+
+        Ordering
+        --------
+        Not runcard order. Groups appear in order of first appearance of a member dataset.
+        Wihtin each group, datasets follow runcard order.
         """
         res = defaultdict(list)
         for dsinput in data_input:

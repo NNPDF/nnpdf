@@ -1,0 +1,825 @@
+dependent_variables:
+- header:
+    name: $\frac{\mathrm{d}^2\sigma}{\mathrm{d}m_T^W\mathrm{d}|\eta|}$
+    units: pb/GeV
+  values:
+  - errors:
+    - label: Stat. unc.
+      symerror: 1.5225e-07
+    - label: Uncor. syst. unc.
+      symerror: 0.0
+    - label: Alternative MC unf. unc.
+      symerror: -1.2335e-08
+    - label: Basic unf. unc.
+      symerror: -3.6278e-10
+    - label: $E_T^{miss}$ SoftTrk Scale
+      symerror: 1.6218e-09
+    - label: $E_T^{miss}$ SoftTrk ResoPara
+      symerror: 1.5792e-09
+    - label: $E_T^{miss}$ SoftTrk ResoPerp
+      symerror: 7.6824e-10
+    - label: Electron Scale Zee (syst.)
+      symerror: 2.7742e-09
+    - label: Electron Scale  S12
+      symerror: 2.7742e-09
+    - label: Electron Scale PS B12
+      symerror: 1.4084e-09
+    - label: Electron Scale MATID
+      symerror: 1.2164e-09
+    - label: Electron Scale MATCRYO
+      symerror: 1.0457e-09
+    - label: Electron Scale L1GAIN
+      symerror: 3.137e-09
+    - label: Electron Scale L2GAIN
+      symerror: -2.134e-10
+    - label: Electron Scale LARELECUNCOV
+      symerror: -3.2223e-09
+    - label: Electron Scale LARCALIB
+      symerror: 5.1216e-09
+    - label: Electron Scale PS
+      symerror: -1.0243e-09
+    - label: JER DataVsMC MC16
+      symerror: 1.7712e-09
+    - label: JER EffectiveNP 1
+      symerror: 6.2313e-09
+    - label: JER EffectiveNP 2
+      symerror: 5.335e-10
+    - label: JER EffectiveNP 3
+      symerror: -4.0546e-10
+    - label: JER EffectiveNP 4
+      symerror: 4.9082e-10
+    - label: JER EffectiveNP 5
+      symerror: 2.134e-10
+    - label: JER EffectiveNP 6
+      symerror: -2.9876e-10
+    - label: JER EffectiveNP 7rest
+      symerror: 4.268e-11
+    - label: JES EtaIntercalib Model
+      symerror: -9.603e-10
+    - label: JES Flavor Composition
+      symerror: 1.4511e-09
+    - label: JES Flavor Response
+      symerror: -3.7345e-09
+    - label: JES Pileup OffsetMu
+      symerror: -1.2804e-10
+    - label: JES Pileup OffsetNPV
+      symerror: -1.0883e-09
+    - label: JES Pileup RhoTopology
+      symerror: -2.134e-11
+    - label: Electron Eff. ChargeMisID (stat.)
+      symerror: 1.0563e-08
+    - label: Electron Eff. ChargeMisID (syst.)
+      symerror: 1.4853e-08
+    - label: Electron Eff. Isol
+      symerror: -4.396e-09
+    - label: Electron Eff. ID High-$p_T$ Eta1
+      symerror: -1.3231e-09
+    - label: Electron Eff. ID High-$p_T$ Eta2
+      symerror: -1.0883e-09
+    - label: Electron Eff. ID High-$p_T$ Eta3
+      symerror: -9.3896e-10
+    - label: Electron Eff. ID High-$p_T$ Eta4
+      symerror: 1.6218e-09
+    - label: Electron Eff. ID High-$p_T$ Eta5
+      symerror: 1.2804e-09
+    - label: Electron Eff. ID High-$p_T$ Eta6
+      symerror: 1.131e-09
+    - label: Electron Eff. ID High-$p_T$ Eta7
+      symerror: 8.536e-11
+    - label: Electron Eff. ID High-$p_T$ Eta9
+      symerror: 1.2164e-09
+    - label: Electron Eff. ID High-$p_T$ Eta10
+      symerror: 2.9876e-09
+    - label: Electron Eff. ID High-$p_T$ Eta11
+      symerror: 1.9419e-09
+    - label: Electron Eff. ID High-$p_T$ Eta12
+      symerror: 2.3474e-10
+    - label: Electron Eff. ID SIMP3
+      symerror: -5.5484e-09
+    - label: Electron Eff. ID SIMP4
+      symerror: 8.4933e-09
+    - label: Electron Eff. ID SIMP11
+      symerror: -3.329e-09
+    - label: Electron Eff. ID SIMP15
+      symerror: 7.4477e-09
+    - label: Pileup
+      symerror: -5.7618e-10
+    - label: $t\bar{t}$ FSR
+      symerror: 2.3474e-10
+    - label: $t\bar{t}$ $p_T$-hard
+      symerror: -4.204e-09
+    - label: $t\bar{t}$ hadronization
+      symerror: -4.268e-11
+    - label: $t\bar{t}$ hdamp
+      symerror: -2.4328e-09
+    - label: $t\bar{t}$ RW inverted setup 2D
+      symerror: -9.8164e-10
+    - label: $t\bar{t}$ RW Fixed order vs PS $p_T(t)$
+      symerror: 1.195e-09
+    - label: $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$
+      symerror: 1.0243e-09
+    - label: $t\bar{t}$ PDF
+      symerror: -6.4874e-09
+    - label: Multijet Electron $E_T^{miss}$
+      symerror: -7.405e-09
+    - label: Multijet Electron mix$E_T^{miss}$
+      symerror: 6.5514e-09
+    - label: Multijet Electron MC Shape
+      symerror: 4.1186e-09
+    - label: Multijet Electron MC Scaling
+      symerror: 3.4144e-09
+    - label: $tW$ Diagram Removal
+      symerror: -1.3444e-08
+    - label: $tW$ DS hdamp
+      symerror: 5.4844e-09
+    - label: Norm. $W\rightarrow\tau\nu$ by 5%
+      symerror: -2.134e-11
+    - label: Norm. $Z$ by 5%
+      symerror: -3.3504e-09
+    - label: Norm. Single top by 4%$
+      symerror: -2.2407e-09
+    - label: Norm. Diboson by 6%
+      symerror: -7.9598e-09
+    - label: Muon Resolution MS
+      symerror: -7.7678e-09
+    - label: Muon Scale
+      symerror: 4.8442e-09
+    - label: Muon Eff. Identification
+      symerror: -2.2172e-08
+    - label: Muon Eff. Isolation
+      symerror: -8.5787e-09
+    - label: Muon Eff. Trigger
+      symerror: 7.6184e-09
+    - label: Bad Muon Veto
+      symerror: -4.268e-11
+    - label: Muon Sagitta Global
+      symerror: -1.9547e-08
+    - label: Muon Sagitta $p_T$-extra
+      symerror: 9.9231e-09
+    - label: Muon Multijet $E_T^{miss}$
+      symerror: 3.8412e-10
+    - label: Muon Multijet $d_0^{sig}$
+      symerror: 5.1216e-10
+    - label: Muon Multijet MC Scaling
+      symerror: 1.5151e-09
+    - label: Muon Multijet Jet Multiplicity
+      symerror: -6.8288e-10
+    - label: Muon Multijet MC Shape
+      symerror: -5.1216e-10
+    - label: Muon Multijet $\Delta\phi(\mu,E_T^{miss})$
+      symerror: -1.5151e-09
+    value: 2.134e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 1.3399e-07
+    - label: Uncor. syst. unc.
+      symerror: 0.0
+    - label: Alternative MC unf. unc.
+      symerror: -8.3842e-09
+    - label: Basic unf. unc.
+      symerror: -1.249e-10
+    - label: $E_T^{miss}$ SoftTrk Scale
+      symerror: 1.5613e-10
+    - label: $E_T^{miss}$ SoftTrk ResoPara
+      symerror: 5.7768e-10
+    - label: $E_T^{miss}$ SoftTrk ResoPerp
+      symerror: -4.6839e-11
+    - label: Electron Scale Zee (syst.)
+      symerror: 1.9204e-09
+    - label: Electron Scale  S12
+      symerror: 2.3576e-09
+    - label: Electron Scale PS B12
+      symerror: 5.527e-09
+    - label: Electron Scale MATID
+      symerror: -7.0258e-10
+    - label: Electron Scale MATCRYO
+      symerror: 3.591e-10
+    - label: Electron Scale L1GAIN
+      symerror: 2.2639e-09
+    - label: Electron Scale L2GAIN
+      symerror: -6.8229e-09
+    - label: Electron Scale LARELECUNCOV
+      symerror: -2.6542e-10
+    - label: Electron Scale LARCALIB
+      symerror: -1.8736e-10
+    - label: Electron Scale PS
+      symerror: 9.6801e-10
+    - label: JER DataVsMC MC16
+      symerror: 3.1382e-09
+    - label: JER EffectiveNP 1
+      symerror: 5.9642e-09
+    - label: JER EffectiveNP 2
+      symerror: 1.7955e-09
+    - label: JER EffectiveNP 3
+      symerror: 1.7174e-10
+    - label: JER EffectiveNP 4
+      symerror: 4.5278e-10
+    - label: JER EffectiveNP 5
+      symerror: 1.5613e-09
+    - label: JER EffectiveNP 6
+      symerror: 3.4349e-10
+    - label: JER EffectiveNP 7rest
+      symerror: 4.5278e-10
+    - label: JES EtaIntercalib Model
+      symerror: -6.2452e-11
+    - label: JES Flavor Composition
+      symerror: 1.7799e-09
+    - label: JES Flavor Response
+      symerror: -1.3739e-09
+    - label: JES Pileup OffsetMu
+      symerror: 1.0148e-09
+    - label: JES Pileup OffsetNPV
+      symerror: -7.182e-10
+    - label: JES Pileup RhoTopology
+      symerror: -9.9923e-10
+    - label: Electron Eff. ChargeMisID (stat.)
+      symerror: 7.0259e-09
+    - label: Electron Eff. ChargeMisID (syst.)
+      symerror: 1.171e-08
+    - label: Electron Eff. Isol
+      symerror: -2.4981e-10
+    - label: Electron Eff. ID High-$p_T$ Eta1
+      symerror: 6.5575e-10
+    - label: Electron Eff. ID High-$p_T$ Eta2
+      symerror: 8.1188e-10
+    - label: Electron Eff. ID High-$p_T$ Eta3
+      symerror: 9.8362e-10
+    - label: Electron Eff. ID High-$p_T$ Eta4
+      symerror: -1.2647e-09
+    - label: Electron Eff. ID High-$p_T$ Eta5
+      symerror: 2.9665e-10
+    - label: Electron Eff. ID High-$p_T$ Eta6
+      symerror: 1.1397e-09
+    - label: Electron Eff. ID High-$p_T$ Eta7
+      symerror: 1.9829e-09
+    - label: Electron Eff. ID High-$p_T$ Eta9
+      symerror: 9.5239e-10
+    - label: Electron Eff. ID High-$p_T$ Eta10
+      symerror: 1.3427e-09
+    - label: Electron Eff. ID High-$p_T$ Eta11
+      symerror: 5.9329e-10
+    - label: Electron Eff. ID High-$p_T$ Eta12
+      symerror: -5.3084e-10
+    - label: Electron Eff. ID SIMP3
+      symerror: -3.5129e-09
+    - label: Electron Eff. ID SIMP4
+      symerror: 5.4177e-09
+    - label: Electron Eff. ID SIMP11
+      symerror: -4.84e-10
+    - label: Electron Eff. ID SIMP15
+      symerror: 4.2467e-09
+    - label: Pileup
+      symerror: 9.5239e-10
+    - label: $t\bar{t}$ FSR
+      symerror: -5.6207e-10
+    - label: $t\bar{t}$ $p_T$-hard
+      symerror: -2.7167e-09
+    - label: $t\bar{t}$ hadronization
+      symerror: -9.9923e-10
+    - label: $t\bar{t}$ hdamp
+      symerror: -2.0297e-09
+    - label: $t\bar{t}$ RW inverted setup 2D
+      symerror: -7.182e-10
+    - label: $t\bar{t}$ RW Fixed order vs PS $p_T(t)$
+      symerror: 7.0258e-10
+    - label: $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$
+      symerror: 4.84e-10
+    - label: $t\bar{t}$ PDF
+      symerror: -6.5418e-09
+    - label: Multijet Electron $E_T^{miss}$
+      symerror: -5.1523e-09
+    - label: Multijet Electron mix$E_T^{miss}$
+      symerror: 4.2936e-09
+    - label: Multijet Electron MC Shape
+      symerror: 3.5285e-09
+    - label: Multijet Electron MC Scaling
+      symerror: -1.2022e-09
+    - label: $tW$ Diagram Removal
+      symerror: -6.5575e-09
+    - label: $tW$ DS hdamp
+      symerror: 3.9969e-09
+    - label: Norm. $W\rightarrow\tau\nu$ by 5%
+      symerror: -5.3084e-10
+    - label: Norm. $Z$ by 5%
+      symerror: -3.6222e-09
+    - label: Norm. Single top by 4%$
+      symerror: -1.6081e-09
+    - label: Norm. Diboson by 6%
+      symerror: -3.31e-09
+    - label: Muon Resolution MS
+      symerror: -6.1984e-09
+    - label: Muon Scale
+      symerror: 6.0422e-09
+    - label: Muon Eff. Identification
+      symerror: -2.0531e-08
+    - label: Muon Eff. Isolation
+      symerror: -7.4318e-09
+    - label: Muon Eff. Trigger
+      symerror: 5.5426e-09
+    - label: Bad Muon Veto
+      symerror: -3.1226e-11
+    - label: Muon Sagitta Global
+      symerror: -1.2974e-08
+    - label: Muon Sagitta $p_T$-extra
+      symerror: 4.7307e-09
+    - label: Muon Multijet $E_T^{miss}$
+      symerror: -2.4981e-10
+    - label: Muon Multijet $d_0^{sig}$
+      symerror: 4.9962e-10
+    - label: Muon Multijet MC Scaling
+      symerror: 8.7433e-10
+    - label: Muon Multijet Jet Multiplicity
+      symerror: -4.84e-10
+    - label: Muon Multijet MC Shape
+      symerror: 5.1523e-10
+    - label: Muon Multijet $\Delta\phi(\mu,E_T^{miss})$
+      symerror: -1.0461e-09
+    value: 1.5613e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 9.5491e-08
+    - label: Uncor. syst. unc.
+      symerror: 0.0
+    - label: Alternative MC unf. unc.
+      symerror: -4.1863e-09
+    - label: Basic unf. unc.
+      symerror: -7.7931e-10
+    - label: $E_T^{miss}$ SoftTrk Scale
+      symerror: -5.4952e-10
+    - label: $E_T^{miss}$ SoftTrk ResoPara
+      symerror: 2.0982e-10
+    - label: $E_T^{miss}$ SoftTrk ResoPerp
+      symerror: -9.9912e-12
+    - label: Electron Scale Zee (syst.)
+      symerror: -1.2089e-09
+    - label: Electron Scale  S12
+      symerror: 4.3062e-09
+    - label: Electron Scale PS B12
+      symerror: 2.9974e-11
+    - label: Electron Scale MATID
+      symerror: -3.7967e-10
+    - label: Electron Scale MATCRYO
+      symerror: -1.4787e-09
+    - label: Electron Scale L1GAIN
+      symerror: -2.1381e-09
+    - label: Electron Scale L2GAIN
+      symerror: -1.5087e-09
+    - label: Electron Scale LARELECUNCOV
+      symerror: 2.9974e-09
+    - label: Electron Scale LARCALIB
+      symerror: 1.9083e-09
+    - label: Electron Scale PS
+      symerror: -2.9974e-11
+    - label: JER DataVsMC MC16
+      symerror: 2.6976e-09
+    - label: JER EffectiveNP 1
+      symerror: 4.3362e-09
+    - label: JER EffectiveNP 2
+      symerror: -1.7984e-10
+    - label: JER EffectiveNP 3
+      symerror: -1.0091e-09
+    - label: JER EffectiveNP 4
+      symerror: 1.8983e-10
+    - label: JER EffectiveNP 5
+      symerror: 6.6941e-10
+    - label: JER EffectiveNP 6
+      symerror: 1.1989e-10
+    - label: JER EffectiveNP 7rest
+      symerror: 5.9947e-11
+    - label: JES EtaIntercalib Model
+      symerror: 3.5968e-10
+    - label: JES Flavor Composition
+      symerror: 1.5586e-09
+    - label: JES Flavor Response
+      symerror: -1.2189e-09
+    - label: JES Pileup OffsetMu
+      symerror: 2.6976e-10
+    - label: JES Pileup OffsetNPV
+      symerror: -9.9912e-11
+    - label: JES Pileup RhoTopology
+      symerror: 2.298e-10
+    - label: Electron Eff. ChargeMisID (stat.)
+      symerror: 3.8466e-09
+    - label: Electron Eff. ChargeMisID (syst.)
+      symerror: 6.784e-09
+    - label: Electron Eff. Isol
+      symerror: -9.8913e-10
+    - label: Electron Eff. ID High-$p_T$ Eta1
+      symerror: 1.4987e-10
+    - label: Electron Eff. ID High-$p_T$ Eta2
+      symerror: 3.2971e-10
+    - label: Electron Eff. ID High-$p_T$ Eta3
+      symerror: 3.1972e-10
+    - label: Electron Eff. ID High-$p_T$ Eta4
+      symerror: -3.0973e-10
+    - label: Electron Eff. ID High-$p_T$ Eta5
+      symerror: -7.993e-11
+    - label: Electron Eff. ID High-$p_T$ Eta6
+      symerror: 2.8974e-10
+    - label: Electron Eff. ID High-$p_T$ Eta7
+      symerror: 3.9965e-10
+    - label: Electron Eff. ID High-$p_T$ Eta9
+      symerror: -1.1989e-10
+    - label: Electron Eff. ID High-$p_T$ Eta10
+      symerror: 7.993e-11
+    - label: Electron Eff. ID High-$p_T$ Eta11
+      symerror: 9.8913e-10
+    - label: Electron Eff. ID High-$p_T$ Eta12
+      symerror: 1.7884e-09
+    - label: Electron Eff. ID SIMP3
+      symerror: -2.5777e-09
+    - label: Electron Eff. ID SIMP4
+      symerror: 4.6759e-09
+    - label: Electron Eff. ID SIMP11
+      symerror: -1.2789e-09
+    - label: Electron Eff. ID SIMP15
+      symerror: 3.6368e-09
+    - label: Pileup
+      symerror: 8.4925e-10
+    - label: $t\bar{t}$ FSR
+      symerror: -8.9921e-10
+    - label: $t\bar{t}$ $p_T$-hard
+      symerror: -9.4916e-10
+    - label: $t\bar{t}$ hadronization
+      symerror: -7.993e-11
+    - label: $t\bar{t}$ hdamp
+      symerror: -8.7923e-10
+    - label: $t\bar{t}$ RW inverted setup 2D
+      symerror: 0.0
+    - label: $t\bar{t}$ RW Fixed order vs PS $p_T(t)$
+      symerror: -1.1989e-10
+    - label: $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$
+      symerror: 2.5977e-10
+    - label: $t\bar{t}$ PDF
+      symerror: -2.6776e-09
+    - label: Multijet Electron $E_T^{miss}$
+      symerror: -2.8175e-09
+    - label: Multijet Electron mix$E_T^{miss}$
+      symerror: 4.0364e-09
+    - label: Multijet Electron MC Shape
+      symerror: 7.6932e-10
+    - label: Multijet Electron MC Scaling
+      symerror: -1.5586e-09
+    - label: $tW$ Diagram Removal
+      symerror: -1.9783e-09
+    - label: $tW$ DS hdamp
+      symerror: 1.4787e-09
+    - label: Norm. $W\rightarrow\tau\nu$ by 5%
+      symerror: 2.9974e-11
+    - label: Norm. $Z$ by 5%
+      symerror: -4.6159e-09
+    - label: Norm. Single top by 4%$
+      symerror: -6.9938e-11
+    - label: Norm. Diboson by 6%
+      symerror: -2.5777e-09
+    - label: Muon Resolution MS
+      symerror: -6.1546e-09
+    - label: Muon Scale
+      symerror: 5.7449e-09
+    - label: Muon Eff. Identification
+      symerror: -2.3739e-08
+    - label: Muon Eff. Isolation
+      symerror: -3.6368e-09
+    - label: Muon Eff. Trigger
+      symerror: 1.6086e-09
+    - label: Bad Muon Veto
+      symerror: -1.7984e-09
+    - label: Muon Sagitta Global
+      symerror: -7.6732e-09
+    - label: Muon Sagitta $p_T$-extra
+      symerror: -7.3136e-09
+    - label: Muon Multijet $E_T^{miss}$
+      symerror: -5.8948e-10
+    - label: Muon Multijet $d_0^{sig}$
+      symerror: 4.496e-10
+    - label: Muon Multijet MC Scaling
+      symerror: -1.5986e-10
+    - label: Muon Multijet Jet Multiplicity
+      symerror: -4.9956e-11
+    - label: Muon Multijet MC Shape
+      symerror: 8.6923e-10
+    - label: Muon Multijet $\Delta\phi(\mu,E_T^{miss})$
+      symerror: -8.2927e-10
+    value: 9.9912e-07
+  - errors:
+    - label: Stat. unc.
+      symerror: 4.8977e-08
+    - label: Uncor. syst. unc.
+      symerror: 0.0
+    - label: Alternative MC unf. unc.
+      symerror: -1.1102e-09
+    - label: Basic unf. unc.
+      symerror: -4.8954e-10
+    - label: $E_T^{miss}$ SoftTrk Scale
+      symerror: 4.7205e-10
+    - label: $E_T^{miss}$ SoftTrk ResoPara
+      symerror: 3.7298e-10
+    - label: $E_T^{miss}$ SoftTrk ResoPerp
+      symerror: 2.6516e-10
+    - label: Electron Scale Zee (syst.)
+      symerror: -6.7894e-10
+    - label: Electron Scale  S12
+      symerror: 1.6464e-09
+    - label: Electron Scale PS B12
+      symerror: -9.9947e-10
+    - label: Electron Scale MATID
+      symerror: -1.7483e-10
+    - label: Electron Scale MATCRYO
+      symerror: -7.1973e-10
+    - label: Electron Scale L1GAIN
+      symerror: -1.4773e-09
+    - label: Electron Scale L2GAIN
+      symerror: 7.6927e-10
+    - label: Electron Scale LARELECUNCOV
+      symerror: 1.3433e-09
+    - label: Electron Scale LARCALIB
+      symerror: 6.4397e-10
+    - label: Electron Scale PS
+      symerror: -2.098e-10
+    - label: JER DataVsMC MC16
+      symerror: 1.218e-09
+    - label: JER EffectiveNP 1
+      symerror: 1.489e-09
+    - label: JER EffectiveNP 2
+      symerror: -8.5377e-10
+    - label: JER EffectiveNP 3
+      symerror: 3.2344e-10
+    - label: JER EffectiveNP 4
+      symerror: 2.1854e-10
+    - label: JER EffectiveNP 5
+      symerror: 7.6927e-10
+    - label: JER EffectiveNP 6
+      symerror: 8.5086e-10
+    - label: JER EffectiveNP 7rest
+      symerror: 5.6238e-10
+    - label: JES EtaIntercalib Model
+      symerror: 1.1656e-10
+    - label: JES Flavor Composition
+      symerror: 3.6424e-10
+    - label: JES Flavor Response
+      symerror: -4.6331e-10
+    - label: JES Pileup OffsetMu
+      symerror: -9.9073e-11
+    - label: JES Pileup OffsetNPV
+      symerror: 2.6225e-11
+    - label: JES Pileup RhoTopology
+      symerror: 1.3987e-10
+    - label: Electron Eff. ChargeMisID (stat.)
+      symerror: 5.9735e-10
+    - label: Electron Eff. ChargeMisID (syst.)
+      symerror: 1.4366e-09
+    - label: Electron Eff. Isol
+      symerror: -9.9073e-11
+    - label: Electron Eff. ID High-$p_T$ Eta1
+      symerror: -0.0
+    - label: Electron Eff. ID High-$p_T$ Eta2
+      symerror: 4.3708e-11
+    - label: Electron Eff. ID High-$p_T$ Eta3
+      symerror: -2.9139e-11
+    - label: Electron Eff. ID High-$p_T$ Eta4
+      symerror: 8.4503e-11
+    - label: Electron Eff. ID High-$p_T$ Eta5
+      symerror: -9.3245e-11
+    - label: Electron Eff. ID High-$p_T$ Eta6
+      symerror: 1.253e-10
+    - label: Electron Eff. ID High-$p_T$ Eta7
+      symerror: 8.7417e-12
+    - label: Electron Eff. ID High-$p_T$ Eta9
+      symerror: -8.4503e-11
+    - label: Electron Eff. ID High-$p_T$ Eta10
+      symerror: -2.3894e-10
+    - label: Electron Eff. ID High-$p_T$ Eta11
+      symerror: 3.1762e-10
+    - label: Electron Eff. ID High-$p_T$ Eta12
+      symerror: 1.0024e-09
+    - label: Electron Eff. ID SIMP3
+      symerror: -5.6238e-10
+    - label: Electron Eff. ID SIMP4
+      symerror: 1.218e-09
+    - label: Electron Eff. ID SIMP11
+      symerror: -5.8569e-10
+    - label: Electron Eff. ID SIMP15
+      symerror: 7.4304e-10
+    - label: Pileup
+      symerror: 4.2543e-10
+    - label: $t\bar{t}$ FSR
+      symerror: 1.7483e-11
+    - label: $t\bar{t}$ $p_T$-hard
+      symerror: -9.0331e-11
+    - label: $t\bar{t}$ hadronization
+      symerror: 3.0013e-10
+    - label: $t\bar{t}$ hdamp
+      symerror: -9.9073e-11
+    - label: $t\bar{t}$ RW inverted setup 2D
+      symerror: -0.0
+    - label: $t\bar{t}$ RW Fixed order vs PS $p_T(t)$
+      symerror: 4.9536e-11
+    - label: $t\bar{t}$ RW Fixed order vs PS $m(t\bar{t})$
+      symerror: 3.7881e-11
+    - label: $t\bar{t}$ PDF
+      symerror: -3.2053e-11
+    - label: Multijet Electron $E_T^{miss}$
+      symerror: -1.3695e-10
+    - label: Multijet Electron mix$E_T^{miss}$
+      symerror: 9.2371e-10
+    - label: Multijet Electron MC Shape
+      symerror: -1.1656e-11
+    - label: Multijet Electron MC Scaling
+      symerror: -2.7099e-10
+    - label: $tW$ Diagram Removal
+      symerror: 4.6622e-11
+    - label: $tW$ DS hdamp
+      symerror: 5.449e-10
+    - label: Norm. $W\rightarrow\tau\nu$ by 5%
+      symerror: 2.0397e-11
+    - label: Norm. $Z$ by 5%
+      symerror: -1.7687e-09
+    - label: Norm. Single top by 4%$
+      symerror: -2.6225e-11
+    - label: Norm. Diboson by 6%
+      symerror: -6.9059e-10
+    - label: Muon Resolution MS
+      symerror: -4.0212e-09
+    - label: Muon Scale
+      symerror: 1.9873e-09
+    - label: Muon Eff. Identification
+      symerror: -6.7923e-09
+    - label: Muon Eff. Isolation
+      symerror: -1.0286e-09
+    - label: Muon Eff. Trigger
+      symerror: 4.4874e-10
+    - label: Bad Muon Veto
+      symerror: -1.0548e-09
+    - label: Muon Sagitta Global
+      symerror: -3.3248e-09
+    - label: Muon Sagitta $p_T$-extra
+      symerror: -6.3086e-09
+    - label: Muon Multijet $E_T^{miss}$
+      symerror: 1.1364e-10
+    - label: Muon Multijet $d_0^{sig}$
+      symerror: -2.2146e-10
+    - label: Muon Multijet MC Scaling
+      symerror: -4.604e-10
+    - label: Muon Multijet Jet Multiplicity
+      symerror: 2.5642e-10
+    - label: Muon Multijet MC Shape
+      symerror: -9.6159e-11
+    - label: Muon Multijet $\Delta\phi(\mu,E_T^{miss})$
+      symerror: 2.8556e-10
+    value: 2.9139e-07
+- header:
+    name: DYTurbo - CT18NNLO
+    units: pb/GeV
+  values:
+  - errors:
+    - label: Stat. unc.
+      symerror: 7.8438e-09
+    - asymerror:
+        minus: -1.5808e-07
+        plus: 2.207e-07
+      label: PDF
+    - asymerror:
+        minus: 1.0779e-09
+        plus: -4.575e-09
+      label: $\alpha_s$
+    - asymerror:
+        minus: -1.5031e-08
+        plus: 1.2119e-08
+      label: Scale
+    - asymerror:
+        minus: 0.0
+        plus: -4.8494e-08
+      label: EW
+    value: 1.7648e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 7.0845e-09
+    - asymerror:
+        minus: -1.1514e-07
+        plus: 1.2682e-07
+      label: PDF
+    - asymerror:
+        minus: 2.6205e-10
+        plus: -7.603e-09
+      label: $\alpha_s$
+    - asymerror:
+        minus: -9.8642e-09
+        plus: 2.0846e-08
+      label: Scale
+    - asymerror:
+        minus: 0.0
+        plus: -4.4703e-08
+      label: EW
+    value: 1.5956e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 7.275e-09
+    - asymerror:
+        minus: -6.8993e-08
+        plus: 9.4344e-08
+      label: PDF
+    - asymerror:
+        minus: 7.4797e-09
+        plus: -1.0764e-08
+      label: $\alpha_s$
+    - asymerror:
+        minus: -5.6142e-09
+        plus: 9.9019e-09
+      label: Scale
+    - asymerror:
+        minus: 0.0
+        plus: -2.9299e-08
+      label: EW
+    value: 1.0212e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 6.2548e-09
+    - asymerror:
+        minus: -3.8377e-08
+        plus: 5.0036e-08
+      label: PDF
+    - asymerror:
+        minus: 8.9058e-09
+        plus: 4.8265e-09
+      label: $\alpha_s$
+    - asymerror:
+        minus: -8.0303e-10
+        plus: 7.3241e-09
+      label: Scale
+    - asymerror:
+        minus: 0.0
+        plus: -9.2171e-09
+      label: EW
+    value: 3.1055e-07
+- header:
+    name: DYTurbo - MSHT20nnlo
+    units: pb/GeV
+  values:
+  - errors:
+    - label: Stat. unc.
+      symerror: 6.8366e-09
+    value: 1.8139e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 7.2182e-09
+    value: 1.6528e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 7.4713e-09
+    value: 1.0579e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 5.0579e-09
+    value: 3.0316e-07
+- header:
+    name: DYTurbo - NNPDF40 nnlo
+    units: pb/GeV
+  values:
+  - errors:
+    - label: Stat. unc.
+      symerror: 6.4926e-09
+    value: 1.781e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 7.1714e-09
+    value: 1.6327e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 7.0979e-09
+    value: 1.0528e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 4.6996e-09
+    value: 2.9905e-07
+- header:
+    name: DYTurbo - ATLASpdf21 T3
+    units: pb/GeV
+  values:
+  - errors:
+    - label: Stat. unc.
+      symerror: 6.6604e-09
+    value: 1.8812e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 7.3882e-09
+    value: 1.7462e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 8.2974e-09
+    value: 1.2139e-06
+  - errors:
+    - label: Stat. unc.
+      symerror: 6.8243e-09
+    value: 4.3503e-07
+independent_variables:
+- header:
+    name: $|\eta|$
+  values:
+  - high: 0.6
+    low: 0.0
+  - high: 1.2
+    low: 0.6
+  - high: 1.8
+    low: 1.2
+  - high: 2.4
+    low: 1.8

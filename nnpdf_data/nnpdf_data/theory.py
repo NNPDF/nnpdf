@@ -77,7 +77,8 @@ class TheoryCard:
     # N3LO anomalous dimension variations
     n3lo_ad_variation: Optional[list] = dataclasses.field(default_factory=lambda: 7 * [0])
     # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
-    n3lo_cf_variation: Optional[int] = 0
+    # They are ordered as [C2g, C2q, CLg, CLq]
+    n3lo_cf_variation: Optional[list] = dataclasses.field(default_factory=lambda: 4 * [0])
     # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
     use_fhmruvv: Optional[bool] = True
     ###### Keys for compatibility with old NNPDF theories, their values will be dropped immediately after reading to avoid problems

@@ -151,7 +151,7 @@ def integrability_number(
     basis: (str, Basis) = "evolution",
     flavours: (list, tuple, type(None)) = None,
 ):
-    r"""Return \sum_i |x_i*f(x_i)|, x_i = {1e-9, 1e-8, 1e-7}
+    r"""Return :math:`\sum_i |x_i*f(x_i)|`, :math:`x_i = \{1e-9, 1e-8, 1e-7\}`
     for selected flavours
     """
     checked = check_basis(basis, flavours)

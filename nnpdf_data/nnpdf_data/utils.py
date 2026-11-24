@@ -38,7 +38,7 @@ def get_nnpdf_profile(profile_path=None):
     config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / NNPDF_DIR
 
     # Set all default values
-    profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
+    profile_content = pkgutil.get_data("nnpdf_data", "nnprofile_default.yaml")
     profile_dict = yaml_safe.load(profile_content)
 
     # Look at profile path

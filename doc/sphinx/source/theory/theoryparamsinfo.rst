@@ -92,4 +92,4 @@ table in your current working directory as ``theory_<id>_info.csv``::
 where ``FIT`` is a valid fit name. If the fit cannot be found locally, the script
 will attempt to download it.
 
-The parameters in the above are defined [here](./theoryparamsdefinitions).
+The parameters in the above are defined in :ref:`th_parameter_definitions`.

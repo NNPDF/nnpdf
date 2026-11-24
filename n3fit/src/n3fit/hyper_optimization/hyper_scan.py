@@ -1,14 +1,16 @@
 """
 The HyperScanner class is basically a dictionary containing all parameters,
-the functions defined as hp_ (from hyperspace)
+the functions defined as ``hp_`` (from hyperspace)
 
-The goal of this module is to read all parameters in the `hyperopt` section of the runcard
-and modify the parameter dictionary so that now it is filled with the `hyperop` sampler objects
+The goal of this module is to read all parameters in the ``hyperopt`` section of the runcard
+and modify the parameter dictionary so that now it is filled with the ``hyperopt`` sampler objects
 
 The idea behind the wrappers if that if you ever want to use
 another hyperoptimization library, assuming that it also takes just
-    - a function
-    - a dictionary of spaces of parameters
+
+- a function
+- a dictionary of spaces of parameters
+
 you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the minimization).
 """
@@ -16,6 +18,9 @@ you can do so by simply modifying the wrappers to point somewhere else
 import contextlib
 import copy
 import logging
+import multiprocessing
+import os
+import traceback
 
 try:
     import hyperopt
@@ -45,9 +50,56 @@ log = logging.getLogger(__name__)
 # Hyperopt uses these strings for a passed and failed run
 # it also has statuses "new", "running" and "suspended", but we don't use them
 HYPEROPT_STATUSES = {True: "ok", False: "fail"}
+HYPEROPT_SEED = int(os.environ.get("HYPEROPT_SEED", 42))
 
 
-HYPEROPT_SEED = 42
+def _run_trial_in_subprocess(objective, params):
+    """Running a hyperparameter scan leaks memory trial by trial.
+    In order to ensure that the memory associated to one trial is eliminated once it has finished,
+    run it as a separate (forked) process that will die at the end and its memories gone.
+    It should only be used in Linux and sequential runs.
+    """
+    # Note: this strategy seems to work, but I haven't found the actual source of the leak
+    if not hasattr(os, "fork") or os.uname().sysname == "Darwin":
+        return objective(params)
+
+    context = multiprocessing.get_context("fork")
+    receiver, sender = context.Pipe(duplex=False)
+
+    def _run_objective():
+        # The child will ever send info, close the receiver
+        receiver.close()
+        try:
+            sender.send((True, objective(params)))
+        except Exception:
+            # On any failure, propagate it back to the parent process
+            sender.send((False, traceback.format_exc()))
+        finally:
+            sender.close()
+
+    process = context.Process(target=_run_objective)
+    process.start()
+    # The parent only receives, close its sender
+    sender.close()
+    try:
+        # Wait for the child to finish running
+        success, ret = receiver.recv()
+    except EOFError as error:
+        process.join()
+        exitcode = process.exitcode
+        process.close()
+        raise RuntimeError(f"Hyperopt subprocess failed with error= {exitcode}") from error
+    finally:
+        receiver.close()
+    process.join()
+    exitcode = process.exitcode
+    log.debug(f"Hyperopt subprocess finished with {exitcode=}")
+    process.close()
+
+    if not success:
+        raise RuntimeError(f"Hyperopt trial subprocess failed:\n{ret}")
+
+    return ret
 
 
 # These are just wrapper around some hyperopt's sampling expresions defined in here
@@ -172,8 +224,14 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         # Initialize seed for hyperopt
         trials.rstate = np.random.default_rng(HYPEROPT_SEED)
         # And prepare the generic arguments to fmin
+        objective = model_trainer.hyperparametrizable
+        if not hyperscanner.parallel_hyperopt and hasattr(os, "fork"):
+            objective = lambda params: _run_trial_in_subprocess(
+                model_trainer.hyperparametrizable, params
+            )
+
         fmin_args = {
-            "fn": model_trainer.hyperparametrizable,
+            "fn": objective,
             "space": hyperscanner.as_dict(),
             "algo": hyperopt.tpe.suggest,
             "max_evals": max_evals,
@@ -188,6 +246,33 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
             trials.stop_mongo_workers()
         else:
             hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
+
+
+def get_scan_wrapper(backend):
+    """
+    Returns the callable to be used to drive the hyperparameter scan for the
+    requested `backend`. The returned callable must accept the same signature
+    as :func:`hyper_scan_wrapper`.
+
+    Parameters
+    ----------
+        `backend`: str
+            name of the backend, as set in ``hyperscan_config.backend`` in the runcard.
+    """
+    if backend == "hyperopt":
+        return hyper_scan_wrapper
+    if backend == "ray":
+        try:
+            from itwinai.plugins.nnpdf.ray_scan import ray_hyper_scan_wrapper
+        except ModuleNotFoundError as err:
+            raise ModuleNotFoundError(
+                "The 'ray' hyperopt backend was requested but the nnpdf itwinai "
+                "plugin is not installed. Install it "
+                "(https://github.com/interTwin-eu/nnpdf-plugin) or set 'backend: "
+                "hyperopt' (the default) in the runcard's hyperscan_config."
+            ) from err
+        return ray_hyper_scan_wrapper
+    raise ValueError(f"Unknown hyperopt backend '{backend}'.")
 
 
 class ActivationStr:
@@ -232,16 +317,28 @@ class HyperScanner:
             the `hyperscan` dictionary of the NNPDF runcard defining the search space of the scan
         `steps`: int
             when taking discrete steps between two parameters, number of steps to take
+        `backend`: str
+            name of the hyperoptimization backend to use, see :func:`get_scan_wrapper`.
+            Defaults to ``"hyperopt"``, which preserves the historical behaviour.
 
     """
 
     def __init__(
-        self, parameters, sampling_dict, steps=5, db_host=None, db_port=None, db_path=None
+        self,
+        parameters,
+        sampling_dict,
+        steps=5,
+        db_host=None,
+        db_port=None,
+        db_path=None,
+        backend="hyperopt",
     ):
         self._original_parameters = parameters
         self.parameter_keys = parameters.keys()
         self.parameters = copy.deepcopy(parameters)
         self.steps = steps
+        self.backend = backend
+        self.sampling_dict = sampling_dict
 
         # adding extra options for parallel execution
         self._db_path = db_path
@@ -361,13 +458,17 @@ class HyperScanner:
         implemented in `n3fit`) and the options to modify.
 
         The accepted options are:
-            - learning_rate
-            - clipnorm
-        but for hyperopt it will look as a list of dictionaries
+
+        - learning_rate
+        - clipnorm
+
+        but for hyperopt it will look as a list of dictionaries::
+
             [ { optimizer_name: optimizer_name, learning_rate: sampler },
               { optimizer_name: optimizer_name, learning_rate: sampler }, ...
             ]
-        and will sample one from this list.
+
+        and it will sample one from this list.
 
         Note that the keys within the dictionary (`optimizer_name` and `learning_rate`)
         should be named as the keys used by the compiler of the model.
@@ -418,8 +519,10 @@ class HyperScanner:
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
-            - pos_multiplier
-            - pos_initial
+
+        - pos_multiplier
+        - pos_initial
+
         Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
         mul_key = "multiplier"

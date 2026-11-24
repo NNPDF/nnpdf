@@ -1,0 +1,553 @@
+dependent_variables:
+- header:
+    name: $\frac{\mathrm{d}^2\sigma}{\mathrm{d}m_T^W\mathrm{d}|\eta|}$ (born)
+    units: pb/GeV
+  values:
+  - errors:
+    - label: Data stat. unc.
+      symerror: 3.5384e-07
+    - label: Sig. stat. unc.
+      symerror: 2.8186e-07
+    - label: Bkg. stat. unc.
+      symerror: 2.9702e-08
+    - asymerror:
+        minus: 7.1021e-08
+        plus: 0.0
+      label: Alternative MC unf. unc.
+    - asymerror:
+        minus: 7.1144e-08
+        plus: 0.0
+      label: Basic unf. unc.
+    - label: JES Flavor Composition
+      symerror: 8.8193e-09
+    - label: JES Pileup RhoTopology
+      symerror: 5.2765e-09
+    - label: JES Pileup OffsetMu
+      symerror: 5.103e-09
+    - label: JES Pileup OffsetNPV
+      symerror: 9.3419e-10
+    - label: JES EtaIntercalib Model
+      symerror: 5.317e-09
+    - label: JES Flavor Response
+      symerror: -2.7359e-09
+    - label: JER EffectiveNP 1
+      symerror: -5.6613e-09
+    - label: JER EffectiveNP 2
+      symerror: -1.5248e-08
+    - label: JER EffectiveNP 3
+      symerror: -9.3139e-09
+    - label: JER EffectiveNP 4
+      symerror: -8.3666e-09
+    - label: JER EffectiveNP 5
+      symerror: -3.9229e-09
+    - label: JER EffectiveNP 6
+      symerror: -8.1224e-09
+    - label: JER EffectiveNP 7rest
+      symerror: -8.6923e-09
+    - label: JER DataVsMC MC16
+      symerror: -2.3272e-09
+    - label: $E_T^{miss}$ SoftTrk Scale
+      symerror: -8.0586e-09
+    - asymerror:
+        minus: -9.1435e-09
+        plus: 0.0
+      label: $E_T^{miss}$ SoftTrk ResoPara
+    - asymerror:
+        minus: -5.6022e-09
+        plus: 0.0
+      label: $E_T^{miss}$ SoftTrk ResoPerp
+    - label: Muon Resolution MS
+      symerror: -1.2253e-08
+    - label: Muon Scale
+      symerror: 8.4772e-09
+    - label: Muon SF Identification Syst
+      symerror: -8.3049e-08
+    - label: Muon SF Isolation Syst
+      symerror: -2.7892e-08
+    - label: Muon SF Trigger Syst
+      symerror: 3.0971e-08
+    - label: Bad Muon Veto
+      symerror: 1.3243e-09
+    - label: Muon Sagitta Global
+      symerror: 1.8425e-07
+    - label: Muon Sagitta PTextra
+      symerror: -2.5736e-09
+    - label: Pileup
+      symerror: 3.6794e-09
+    - asymerror:
+        minus: 2.2283e-11
+        plus: -1.5461e-11
+      label: MJ MU $E_T^{miss}$
+    - asymerror:
+        minus: 2.5511e-10
+        plus: -1.5143e-09
+      label: MJ MU d0cut
+    - label: MJ MU MC Scaling
+      symerror: 1.352e-09
+    - asymerror:
+        minus: -5.0613e-10
+        plus: -8.3492e-10
+      label: MJ MU jet mult
+    - asymerror:
+        minus: -1.1983e-09
+        plus: 0.0
+      label: MJ MU Shape
+    - label: MJ MU dphi
+      symerror: -1.5884e-09
+    - asymerror:
+        minus: -3.0409e-09
+        plus: 0.0
+      label: $t\bar{t}$ $p_T$-hard
+    - label: $t\bar{t}$ FSR
+      symerror: 2.1332e-09
+    - asymerror:
+        minus: 2.8763e-09
+        plus: 0.0
+      label: $t\bar{t}$ hadronization
+    - label: $t\bar{t}$ hdamp
+      symerror: -5.5888e-09
+    - label: $t\bar{t}$ NNPDF
+      symerror: -8.5356e-10
+    - asymerror:
+        minus: 8.2828e-09
+        plus: 0.0
+      label: tW Diagram Removel
+    - label: tW DS hdamp
+      symerror: 2.7201e-08
+    - asymerror:
+        minus: -1.6562e-09
+        plus: 0.0
+      label: RW inverted setup 2D
+    - asymerror:
+        minus: -3.1696e-10
+        plus: 0.0
+      label: RW Fixed order vs PS $p_T(t)$
+    - asymerror:
+        minus: -4.6248e-10
+        plus: 0.0
+      label: RW Fixed order vs PS $m(t\bar{t})$
+    - label: Norm. $W\rightarrow\tau\nu$ by 5%
+      symerror: -2.9197e-09
+    - label: Norm. Single top by 4%
+      symerror: -1.2008e-09
+    - label: Norm. Diboson by 6%
+      symerror: -7.7177e-09
+    - label: Norm. Z by 5%
+      symerror: -6.5793e-09
+    value: 4.9252e-06
+  - errors:
+    - label: Data stat. unc.
+      symerror: 3.1409e-07
+    - label: Sig. stat. unc.
+      symerror: 2.0323e-08
+    - label: Bkg. stat. unc.
+      symerror: 2.563e-08
+    - asymerror:
+        minus: 2.4312e-09
+        plus: 0.0
+      label: Alternative MC unf. unc.
+    - asymerror:
+        minus: 1.0183e-07
+        plus: 0.0
+      label: Basic unf. unc.
+    - label: JES Flavor Composition
+      symerror: -2.5025e-10
+    - label: JES Pileup RhoTopology
+      symerror: 1.5067e-09
+    - label: JES Pileup OffsetMu
+      symerror: 4.78e-11
+    - label: JES Pileup OffsetNPV
+      symerror: 1.3741e-10
+    - label: JES EtaIntercalib Model
+      symerror: 4.6004e-10
+    - label: JES Flavor Response
+      symerror: -1.1581e-09
+    - label: JER EffectiveNP 1
+      symerror: 8.2581e-09
+    - label: JER EffectiveNP 2
+      symerror: 3.9926e-09
+    - label: JER EffectiveNP 3
+      symerror: 4.7766e-09
+    - label: JER EffectiveNP 4
+      symerror: 5.6102e-09
+    - label: JER EffectiveNP 5
+      symerror: 6.1577e-09
+    - label: JER EffectiveNP 6
+      symerror: 6.3686e-09
+    - label: JER EffectiveNP 7rest
+      symerror: 6.0524e-09
+    - label: JER DataVsMC MC16
+      symerror: 9.6478e-10
+    - label: $E_T^{miss}$ SoftTrk Scale
+      symerror: 3.6441e-09
+    - asymerror:
+        minus: 2.5975e-10
+        plus: 0.0
+      label: $E_T^{miss}$ SoftTrk ResoPara
+    - asymerror:
+        minus: -3.4383e-09
+        plus: 0.0
+      label: $E_T^{miss}$ SoftTrk ResoPerp
+    - label: Muon Resolution MS
+      symerror: -2.4306e-08
+    - label: Muon Scale
+      symerror: 1.3222e-08
+    - label: Muon SF Identification Syst
+      symerror: -5.5783e-08
+    - label: Muon SF Isolation Syst
+      symerror: -1.8428e-08
+    - label: Muon SF Trigger Syst
+      symerror: 2.0442e-08
+    - label: Bad Muon Veto
+      symerror: -8.8663e-10
+    - label: Muon Sagitta Global
+      symerror: 1.3114e-07
+    - label: Muon Sagitta PTextra
+      symerror: 2.5476e-08
+    - label: Pileup
+      symerror: 3.7342e-09
+    - asymerror:
+        minus: 1.296e-11
+        plus: 1.4711e-10
+      label: MJ MU $E_T^{miss}$
+    - asymerror:
+        minus: 1.243e-09
+        plus: -2.763e-09
+      label: MJ MU d0cut
+    - label: MJ MU MC Scaling
+      symerror: 3.3436e-09
+    - asymerror:
+        minus: -2.6148e-09
+        plus: 4.0245e-10
+      label: MJ MU jet mult
+    - asymerror:
+        minus: -1.0937e-09
+        plus: 0.0
+      label: MJ MU Shape
+    - label: MJ MU dphi
+      symerror: -3.1461e-09
+    - asymerror:
+        minus: -1.6937e-09
+        plus: 0.0
+      label: $t\bar{t}$ $p_T$-hard
+    - label: $t\bar{t}$ FSR
+      symerror: 1.784e-09
+    - asymerror:
+        minus: 2.0698e-09
+        plus: 0.0
+      label: $t\bar{t}$ hadronization
+    - label: $t\bar{t}$ hdamp
+      symerror: -3.9465e-09
+    - label: $t\bar{t}$ NNPDF
+      symerror: -1.6917e-09
+    - asymerror:
+        minus: 5.2023e-10
+        plus: 0.0
+      label: tW Diagram Removel
+    - label: tW DS hdamp
+      symerror: 1.7645e-08
+    - asymerror:
+        minus: -1.2803e-09
+        plus: 0.0
+      label: RW inverted setup 2D
+    - asymerror:
+        minus: 8.8676e-10
+        plus: 0.0
+      label: RW Fixed order vs PS $p_T(t)$
+    - asymerror:
+        minus: 1.59e-09
+        plus: 0.0
+      label: RW Fixed order vs PS $m(t\bar{t})$
+    - label: Norm. $W\rightarrow\tau\nu$ by 5%
+      symerror: -2.0386e-09
+    - label: Norm. Single top by 4%
+      symerror: -8.6084e-10
+    - label: Norm. Diboson by 6%
+      symerror: -4.3832e-09
+    - label: Norm. Z by 5%
+      symerror: -5.2311e-09
+    value: 3.3845e-06
+  - errors:
+    - label: Data stat. unc.
+      symerror: 1.421e-07
+    - label: Sig. stat. unc.
+      symerror: 1.264e-08
+    - label: Bkg. stat. unc.
+      symerror: 1.5454e-08
+    - asymerror:
+        minus: -1.3371e-08
+        plus: 0.0
+      label: Alternative MC unf. unc.
+    - asymerror:
+        minus: 6.3818e-08
+        plus: 0.0
+      label: Basic unf. unc.
+    - label: JES Flavor Composition
+      symerror: 3.2025e-10
+    - label: JES Pileup RhoTopology
+      symerror: -1.9166e-12
+    - label: JES Pileup OffsetMu
+      symerror: 3.6433e-10
+    - label: JES Pileup OffsetNPV
+      symerror: 3.1005e-10
+    - label: JES EtaIntercalib Model
+      symerror: 4.2744e-10
+    - label: JES Flavor Response
+      symerror: -5.8468e-10
+    - label: JER EffectiveNP 1
+      symerror: -1.329e-09
+    - label: JER EffectiveNP 2
+      symerror: -7.0399e-10
+    - label: JER EffectiveNP 3
+      symerror: -1.4834e-09
+    - label: JER EffectiveNP 4
+      symerror: -2.7139e-09
+    - label: JER EffectiveNP 5
+      symerror: -2.1234e-09
+    - label: JER EffectiveNP 6
+      symerror: -1.5725e-09
+    - label: JER EffectiveNP 7rest
+      symerror: -1.7198e-09
+    - label: JER DataVsMC MC16
+      symerror: -1.4204e-11
+    - label: $E_T^{miss}$ SoftTrk Scale
+      symerror: 1.2181e-10
+    - asymerror:
+        minus: 2.1153e-09
+        plus: 0.0
+      label: $E_T^{miss}$ SoftTrk ResoPara
+    - asymerror:
+        minus: 6.7459e-10
+        plus: 0.0
+      label: $E_T^{miss}$ SoftTrk ResoPerp
+    - label: Muon Resolution MS
+      symerror: -1.6741e-08
+    - label: Muon Scale
+      symerror: 1.0113e-08
+    - label: Muon SF Identification Syst
+      symerror: -4.6973e-08
+    - label: Muon SF Isolation Syst
+      symerror: -5.1233e-09
+    - label: Muon SF Trigger Syst
+      symerror: 4.3948e-09
+    - label: Bad Muon Veto
+      symerror: -5.9814e-09
+    - label: Muon Sagitta Global
+      symerror: 4.9344e-08
+    - label: Muon Sagitta PTextra
+      symerror: 1.5966e-07
+    - label: Pileup
+      symerror: -9.3949e-10
+    - asymerror:
+        minus: 1.9315e-10
+        plus: -1.2096e-10
+      label: MJ MU $E_T^{miss}$
+    - asymerror:
+        minus: -3.0184e-10
+        plus: 2.3931e-10
+      label: MJ MU d0cut
+    - label: MJ MU MC Scaling
+      symerror: -3.9608e-10
+    - asymerror:
+        minus: 2.6068e-10
+        plus: -2.6853e-10
+      label: MJ MU jet mult
+    - asymerror:
+        minus: -2.7444e-10
+        plus: 0.0
+      label: MJ MU Shape
+    - label: MJ MU dphi
+      symerror: 3.3413e-10
+    - asymerror:
+        minus: -8.2582e-10
+        plus: 0.0
+      label: $t\bar{t}$ $p_T$-hard
+    - label: $t\bar{t}$ FSR
+      symerror: 9.6639e-10
+    - asymerror:
+        minus: 1.4984e-09
+        plus: 0.0
+      label: $t\bar{t}$ hadronization
+    - label: $t\bar{t}$ hdamp
+      symerror: -1.9023e-09
+    - label: $t\bar{t}$ NNPDF
+      symerror: -2.7435e-09
+    - asymerror:
+        minus: 1.593e-08
+        plus: 0.0
+      label: tW Diagram Removel
+    - label: tW DS hdamp
+      symerror: 1.679e-08
+    - asymerror:
+        minus: -6.7939e-10
+        plus: 0.0
+      label: RW inverted setup 2D
+    - asymerror:
+        minus: 5.3035e-10
+        plus: 0.0
+      label: RW Fixed order vs PS $p_T(t)$
+    - asymerror:
+        minus: 9.3848e-10
+        plus: 0.0
+      label: RW Fixed order vs PS $m(t\bar{t})$
+    - label: Norm. $W\rightarrow\tau\nu$ by 5%
+      symerror: -6.0982e-10
+    - label: Norm. Single top by 4%
+      symerror: -1.034e-09
+    - label: Norm. Diboson by 6%
+      symerror: -3.3825e-09
+    - label: Norm. Z by 5%
+      symerror: -3.4894e-09
+    value: 9.5697e-07
+  - errors:
+    - label: Data stat. unc.
+      symerror: 6.3064e-08
+    - label: Sig. stat. unc.
+      symerror: 5.4382e-09
+    - label: Bkg. stat. unc.
+      symerror: 6.8086e-09
+    - asymerror:
+        minus: -5.9539e-09
+        plus: 0.0
+      label: Alternative MC unf. unc.
+    - asymerror:
+        minus: 1.7876e-08
+        plus: 0.0
+      label: Basic unf. unc.
+    - label: JES Flavor Composition
+      symerror: 2.2649e-10
+    - label: JES Pileup RhoTopology
+      symerror: 3.5884e-10
+    - label: JES Pileup OffsetMu
+      symerror: -3.0377e-10
+    - label: JES Pileup OffsetNPV
+      symerror: -1.0477e-10
+    - label: JES EtaIntercalib Model
+      symerror: 3.3441e-11
+    - label: JES Flavor Response
+      symerror: 2.6569e-10
+    - label: JER EffectiveNP 1
+      symerror: 1.3192e-09
+    - label: JER EffectiveNP 2
+      symerror: 2.5131e-09
+    - label: JER EffectiveNP 3
+      symerror: 9.857e-10
+    - label: JER EffectiveNP 4
+      symerror: 2.0506e-09
+    - label: JER EffectiveNP 5
+      symerror: 1.075e-09
+    - label: JER EffectiveNP 6
+      symerror: 1.2436e-09
+    - label: JER EffectiveNP 7rest
+      symerror: 2.1203e-09
+    - label: JER DataVsMC MC16
+      symerror: -5.2256e-10
+    - label: $E_T^{miss}$ SoftTrk Scale
+      symerror: 8.6192e-10
+    - asymerror:
+        minus: 2.6626e-10
+        plus: 0.0
+      label: $E_T^{miss}$ SoftTrk ResoPara
+    - asymerror:
+        minus: -8.2105e-11
+        plus: 0.0
+      label: $E_T^{miss}$ SoftTrk ResoPerp
+    - label: Muon Resolution MS
+      symerror: -2.825e-09
+    - label: Muon Scale
+      symerror: 2.1764e-09
+    - label: Muon SF Identification Syst
+      symerror: -8.3838e-09
+    - label: Muon SF Isolation Syst
+      symerror: -9.9498e-10
+    - label: Muon SF Trigger Syst
+      symerror: 8.5554e-10
+    - label: Bad Muon Veto
+      symerror: -1.4502e-09
+    - label: Muon Sagitta Global
+      symerror: 1.4032e-08
+    - label: Muon Sagitta PTextra
+      symerror: 5.2596e-08
+    - label: Pileup
+      symerror: 2.5493e-09
+    - asymerror:
+        minus: 6.969e-11
+        plus: -3.6721e-11
+      label: MJ MU $E_T^{miss}$
+    - asymerror:
+        minus: -6.1291e-11
+        plus: 3.5129e-11
+      label: MJ MU d0cut
+    - label: MJ MU MC Scaling
+      symerror: -5.8996e-11
+    - asymerror:
+        minus: 3.9094e-11
+        plus: -4.7521e-11
+      label: MJ MU jet mult
+    - asymerror:
+        minus: -9.9746e-11
+        plus: 0.0
+      label: MJ MU Shape
+    - label: MJ MU dphi
+      symerror: 6.0773e-11
+    - asymerror:
+        minus: -9.4971e-11
+        plus: 0.0
+      label: $t\bar{t}$ $p_T$-hard
+    - label: $t\bar{t}$ FSR
+      symerror: 6.8951e-11
+    - asymerror:
+        minus: 2.2516e-10
+        plus: 0.0
+      label: $t\bar{t}$ hadronization
+    - label: $t\bar{t}$ hdamp
+      symerror: -1.7705e-10
+    - label: $t\bar{t}$ NNPDF
+      symerror: -3.317e-10
+    - asymerror:
+        minus: 1.8588e-11
+        plus: 0.0
+      label: tW Diagram Removel
+    - label: tW DS hdamp
+      symerror: -8.2124e-11
+    - asymerror:
+        minus: -5.4541e-11
+        plus: 0.0
+      label: RW inverted setup 2D
+    - asymerror:
+        minus: 6.2528e-11
+        plus: 0.0
+      label: RW Fixed order vs PS $p_T(t)$
+    - asymerror:
+        minus: 1.1083e-10
+        plus: 0.0
+      label: RW Fixed order vs PS $m(t\bar{t})$
+    - label: Norm. $W\rightarrow\tau\nu$ by 5%
+      symerror: -5.6019e-11
+    - label: Norm. Single top by 4%
+      symerror: 1.5788e-11
+    - label: Norm. Diboson by 6%
+      symerror: -3.1665e-10
+    - label: Norm. Z by 5%
+      symerror: -6.7875e-10
+    value: 1.819e-07
+- header:
+    name: $\frac{\mathrm{d}^2\sigma}{\mathrm{d}m_T^W\mathrm{d}|\eta|}$ (dressed)
+    units: pb/GeV
+  values:
+  - value: 4.8612e-06
+  - value: 3.3304e-06
+  - value: 9.4261e-07
+  - value: 1.7881e-07
+independent_variables:
+- header:
+    name: $|\eta|$
+  values:
+  - high: 0.6
+    low: 0.0
+  - high: 1.2
+    low: 0.6
+  - high: 1.8
+    low: 1.2
+  - high: 2.4
+    low: 1.8
