@@ -29,7 +29,7 @@ import numpy as np
 import numpy.typing as npt
 
 from validphys.convolution import central_fk_predictions
-from validphys.core import PDF, DataSetSpec
+from validphys.core import PDF, DataSetSpec, cut_mask
 
 # ---------------------------------------------------------------------------
 # Dataset name constants
@@ -432,10 +432,10 @@ def mult_dis_pc(nodes, x, q2, dataset_sp, pdf, cfactors: bool = False) -> callab
     This function returns a function that computes the shift
     given the y-values of the nodes used to define the power corrections.
     """
-    cuts = dataset_sp.cuts
-    (fkspec,) = dataset_sp.fkspecs
-    fk = fkspec.load_with_cuts(cuts)
-    th_preds = central_fk_predictions(fk, pdf)
+    if not cfactors:
+        (fkspec,) = dataset_sp.fkspecs
+        fk = fkspec.load_with_cuts(dataset_sp.cuts)
+        th_preds = central_fk_predictions(fk, pdf)
 
     def func(y_values):
         result = dis_pc_func(y_values, nodes, x, q2)
@@ -485,16 +485,13 @@ def mult_dis_ratio_pc(p_nodes, d_nodes, x, q2, dataset_sp, pdf, cfactors: bool =
     The function the computes the shift for this observable. It depends on the
     y-values for the parameterization of P2_d and P2_p.
     """
-    cuts = dataset_sp.cuts
-    fkspec_F2D, fkspec_F2P = dataset_sp.fkspecs
-    fk_F2D = fkspec_F2D.load_with_cuts(cuts)
-    fk_F2P = fkspec_F2P.load_with_cuts(cuts)
-    F2D = central_fk_predictions(fk_F2D, pdf)
-    F2P = central_fk_predictions(fk_F2P, pdf)
-
-    F2D = np.concatenate(F2D.values)
-    F2P = np.concatenate(F2P.values)
-    F2_ratio = operator.truediv(F2D, F2P)
+    if not cfactors:
+        fkspec_F2D, fkspec_F2P = dataset_sp.fkspecs
+        fk_F2D = fkspec_F2D.load_with_cuts(dataset_sp.cuts)
+        fk_F2P = fkspec_F2P.load_with_cuts(dataset_sp.cuts)
+        F2D = central_fk_predictions(fk_F2D, pdf)
+        F2P = central_fk_predictions(fk_F2P, pdf)
+        F2_ratio = operator.truediv(np.concatenate(F2D.values), np.concatenate(F2P.values))
 
     def func(y_values_p, y_values_d):
         h2d = dis_pc_func(y_values_d, d_nodes, x, q2)
@@ -524,10 +521,10 @@ def mult_jet_pc(nodes, pT, rap, dataset_sp, pdf, cfactors: bool = False) -> call
 
     The power correction is a function of the rapidity.
     """
-    cuts = dataset_sp.cuts
-    (fkspec,) = dataset_sp.fkspecs
-    fk = fkspec.load_with_cuts(cuts)
-    xsec = central_fk_predictions(fk, pdf)
+    if not cfactors:
+        (fkspec,) = dataset_sp.fkspecs
+        fk = fkspec.load_with_cuts(dataset_sp.cuts)
+        xsec = central_fk_predictions(fk, pdf)
 
     def func(y_values):
         result = jets_pc_func(y_values, nodes, pT, rap)
@@ -550,10 +547,10 @@ def mult_dijet_pc(
     distrb: str = '3D',
     cfactors: bool = False,
 ) -> callable:
-    cuts = dataset_sp.cuts
-    (fkspec,) = dataset_sp.fkspecs
-    fk = fkspec.load_with_cuts(cuts)
-    th_preds = central_fk_predictions(fk, pdf)
+    if not cfactors:
+        (fkspec,) = dataset_sp.fkspecs
+        fk = fkspec.load_with_cuts(dataset_sp.cuts)
+        th_preds = central_fk_predictions(fk, pdf)
 
     if distrb == '3D':
         if len(ystar) == 0 or len(yb) == 0:
@@ -718,7 +715,7 @@ def compute_deltas_pc(
     exp_name = dataset_sp.name
     process_type = dataset_sp.commondata.metadata.process_type.name
     experiment = getattr(dataset_sp.commondata.metadata, 'experiment', None)
-    cuts = dataset_sp.cuts.load()
+    cuts = cut_mask(dataset_sp.cuts)
 
     deltas = defaultdict(list)
 

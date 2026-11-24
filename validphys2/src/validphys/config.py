@@ -8,6 +8,7 @@ import logging
 import numbers
 import pathlib
 
+import numpy as np
 import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
@@ -318,6 +319,54 @@ class CoreConfig(configparser.Config):
     def produce_fitcontext(self, fitinputcontext, fitpdf):
         """Set PDF, theory ID and data input from the fit config"""
         return dict(**fitinputcontext, **fitpdf)
+
+    def produce_pc_merge_api(self):
+        """Per-fit graph resolver sharing this run's loader and network policy."""
+        from reportengine.api import API
+        from validphys.app import providers
+
+        return API(providers, type(self), lambda: self.environment)
+
+    def produce_pc_fit_context(self, fit, fitcontextwithcuts, fitpdf):
+        """Fit inputs and prior settings for power-correction posterior actions."""
+        settings = fit.as_input().get("theorycovmatconfig", {})
+        if settings.get("point_prescriptions", []).count("power corrections") != 1:
+            raise ConfigError(
+                "PC posterior analysis requires one 'power corrections' prescription."
+            )
+        if not settings.get("use_thcovmat_in_fitting", False):
+            raise ConfigError("The fit must include the power-correction theory covariance.")
+        if fitpdf["pdf"].error_type != "replicas":
+            raise ConfigError("PC posterior analysis requires a Monte Carlo PDF set.")
+        parameters = settings.get("pc_parameters", {})
+        if not parameters or "pdf" not in settings:
+            raise ConfigError("The fit must specify theorycovmatconfig.pc_parameters and pdf.")
+        for name, par in parameters.items():
+            nodes, widths = np.asarray(par.get("nodes", [])), np.asarray(par.get("yshift", []))
+            if (
+                nodes.ndim != 1
+                or widths.shape != nodes.shape
+                or len(nodes) < 2
+                or not np.all(np.isfinite(nodes))
+                or not np.all(np.isfinite(widths))
+                or np.any(np.diff(nodes) <= 0)
+                or np.any(widths < 0)
+            ):
+                raise ConfigError(f"Invalid PC nodes or prior widths for {name}.")
+        return {
+            **fitcontextwithcuts,
+            **fitpdf,
+            "pc_parameters": parameters,
+            "pc_covmat_pdf": self.parse_pdf(settings["pdf"]),
+            "pc_included_procs": settings.get("pc_included_procs", []),
+            "pc_excluded_datasets": settings.get(
+                "pc_excluded_datasets", settings.get("pc_excluded_exps", [])
+            ),
+            "metadata_group": "nnpdf31_process",
+            "use_t0": False,
+            "use_pdferr": False,
+            "use_thcovmat_if_present": False,
+        }
 
     def produce_fitinputcontext(self, fit):
         """Like ``fitcontext`` but without setting the PDF"""

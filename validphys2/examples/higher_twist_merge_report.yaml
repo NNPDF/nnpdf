@@ -1,0 +1,79 @@
+# Completed, postprocessed fits with saved pseudodata and prior covariance tables.
+fits:
+  - 260710-ac-01-nnpdf41-pc
+  - 260710-ac-02-nnpdf41-pc
+  - 260710-ac-03-nnpdf41-pc
+  - 260710-ac-04-nnpdf41-pc
+  - 260710-ac-05-nnpdf41-pc
+
+pc_merge_method: independent  # or conditional
+pc_covariance_factor: 2.0     # Scales Cpost only, not the mean outer product.
+pc_merge_reference: 260710-ac-01-nnpdf41-pc
+
+# Optional ownership overrides and output subset, as in higher_twist_merge.yaml:
+# pc_dataset_owners: {DATASET_NAME: FIT_NAME}
+# pc_merge_datasets: [DATASET_NAME, ANOTHER_DATASET_NAME]
+
+meta:
+  title: Merged power-correction covariance
+  author: NNPDF
+  keywords: [power corrections, covariance, merging]
+
+template_text: |
+  # Merge settings
+
+  Method: **{@pc_merge_method@}**. Posterior covariance factor: **{@pc_covariance_factor@}**.
+  Reference fit: **{@pc_merge_reference@}**.
+
+  Input fits:
+  {@with fits@}
+  - {@fit@}
+  {@endwith@}
+
+  Each dataset is supplied by one owner. The independent method preserves each
+  owner's posterior block and mean, setting cross-owner posterior covariances
+  to zero. The conditional method shares the reference DIS posterior and keeps
+  each sector's conditional relation to DIS; non-reference means and variances
+  generally change. Both methods include the mean outer product across owners.
+
+  # Final merged covariance
+
+  The exported matrix is $C_{\mathrm{merged}}=f C_{\mathrm{post}}+\Delta T\Delta T^T$.
+  The heatmap shows its entries in products of prediction units, with a
+  symmetric logarithmic colour scale. Different observables have different
+  units; use the correlation plot below to compare their correlation patterns.
+  Axes show dataset names, with separators between datasets. Points follow
+  the exported matrix order. Zero-variance rows are
+  omitted from the plots (unless the entire matrix is zero), but kept in the tables.
+
+  {@plot_pc_merged_covmat@}
+
+  [Download the final merged covariance](tables/pc_merged_covmat.csv).
+  [Download the mean shifts and point owners](tables/pc_merged_mean_shift.csv).
+
+  # Correlations of the final error model
+
+  These correlations include both the inflated posterior covariance and the
+  mean outer product. In particular, the independent merge can have nonzero
+  cross-owner entries here even though its centred posterior is block diagonal.
+
+  {@plot_pc_merged_corrmat@}
+
+  # Input DIS determinations
+
+  Original DIS node means and uncertainties, before any conditional transport.
+  The normalised differences are descriptive, not independent-fit significance
+  tests, since all input fits share DIS measurements.
+
+  {@pc_merge_dis_comparison@}
+
+  [Download the input DIS covariances](tables/pc_merge_dis_covmats.csv).
+
+actions_:
+  - pc_merged_covmat
+  - pc_merged_mean_shift
+  - pc_merge_dis_covmats
+  - report(main=true)
+
+# Optional uninflated posterior covariance (another large matrix):
+#  - pc_merged_prediction_covmat

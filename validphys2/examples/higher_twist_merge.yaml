@@ -1,0 +1,31 @@
+# Each completed fit must have saved pseudodata and its prior covariance tables.
+# Order matters: the reference owns shared datasets; other ties use list order.
+fits:
+  - 260710-ac-01-nnpdf41-pc
+  - 260710-ac-02-nnpdf41-pc
+  - 260710-ac-03-nnpdf41-pc
+  - 260710-ac-04-nnpdf41-pc
+  - 260710-ac-05-nnpdf41-pc
+
+# independent: block_diag(factor * Cpost_k) + dT dT.T
+# conditional: transport each sector's conditional onto the reference DIS posterior.
+pc_merge_method: independent
+pc_covariance_factor: 2.0  # Scales Cpost only, not dT dT.T; must be >= 0.
+pc_merge_reference: 260710-ac-01-nnpdf41-pc  # Defaults to the first fit.
+
+# Optional ownership overrides, keyed by dataset name:
+# pc_dataset_owners:
+#   DATASET_NAME: 260710-ac-02-nnpdf41-pc
+# Conditional merges require every DIS dataset to belong to the reference.
+
+# Optional subset of datasets; default is the union of all fitted datasets.
+# Only the owner's fitted point IDs are exported, including zero-PC rows.
+# pc_merge_datasets: [DATASET_NAME, ANOTHER_DATASET_NAME]
+
+actions_:
+  - pc_merged_covmat
+  - pc_merged_mean_shift
+  - pc_merge_dis_comparison
+  - pc_merge_dis_covmats
+# Optional uninflated Cpost (another large matrix):
+#  - pc_merged_prediction_covmat

@@ -1,0 +1,89 @@
+# Set this to a completed, postprocessed fit with saved pseudodata.
+fit: 260710-ac-01-nnpdf41-pc
+
+meta:
+  title: Power-correction posterior analysis
+  author: NNPDF
+  keywords: [power corrections, posteriors, correlations]
+
+template_text: |
+  # Fit: {@fit@}
+
+  {@with pc_fit_context@}
+  ## Posterior functions
+
+  The bands propagate the full node covariance through the interpolation.
+  Factorised dijets are shown as rapidity-averaged corrections.
+
+  {@plot_pc_posterior@}
+
+  ## Node parameters and correlations
+
+  {@pc_posterior_table@}
+  {@plot_pc_posterior_corrmat@}
+
+  [Download the parameter covariance](tables/pc_fit_context_pc_posterior_covmat.csv).
+
+  ## PC uncertainty in prediction space
+
+  Prior and posterior uncertainties of the PC contribution at fitted points,
+  divided by the absolute mean PDF-replica prediction. The posterior includes
+  the PDF-uncertainty term in the extraction.
+
+  {@plot_pc_prediction_uncertainties@}
+
+  [Download the per-point uncertainties](tables/pc_fit_context_pc_prediction_uncertainties.csv).
+
+  ### Size of the jet correction versus experimental error
+
+  Where does the central PC correction exceed the experimental error?
+  The markers show the fitted c-factor minus one, not its uncertainty.
+  Compare its absolute value with the experimental error divided by the
+  absolute measured value. These c-factors are computed from this fit's
+  posterior, including the covariance term in factorised dijet means.
+
+  Bands propagate the posterior combination covariance directly in c-factor
+  units. Each dataset is resolved in rapidity and in pT or dijet mass.
+
+  {@plot_pc_jet_correction_comparison@}
+
+  [Download the correction comparison](tables/pc_fit_context_pc_jet_correction_comparison.csv).
+  [Download the rapidity-bin exceedance summary](tables/pc_fit_context_pc_jet_correction_exceedance.csv).
+
+  The summary gives the highest fitted bin-centre scale satisfying the criterion in
+  each rapidity bin; it does not assume a monotonic threshold or cover points
+  excluded by this fit's cuts. An empty maximum means no compared point exceeds.
+
+  ### Width of the posterior versus experimental uncertainty
+
+  Square roots of the posterior PC and experimental covariance diagonals,
+  both divided by the absolute measured central value. This compares the
+  uncertainty on the correction, not the size of its central value above.
+  These posterior errors are uninflated and exclude the mean-shift outer product.
+  Only points with a nonzero PC prior are plotted; zero data values have
+  undefined relative errors and are omitted. The table also gives the ratio
+  of the posterior PC standard deviation to the experimental standard deviation.
+
+  {@plot_pc_prediction_experimental_uncertainties@}
+
+  [Download the experimental comparison](tables/pc_fit_context_pc_prediction_experimental_uncertainties.csv).
+
+  ## Prediction-space correlations
+
+  Correlations of the PC shifts in the fitted combination model, including
+  correlations between different datasets. Only points with a nonzero PC
+  prior are displayed.
+
+  {@plot_pc_prediction_corrmat@}
+  {@endwith@}
+
+actions_:
+  - pc_fit_context pc_posterior_covmat
+  - pc_fit_context pc_jet_correction_exceedance
+  - report(main=true)
+
+# Optional full matrices (large for global fits):
+#  - pc_fit_context pc_prediction_covmat_table
+#  - pc_fit_context pc_prediction_corrmat_table
+# Optional central c-factor export:
+#  - pc_fit_context pc_posterior_cfactors
