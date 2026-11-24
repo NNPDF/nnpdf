@@ -2160,3 +2160,290 @@ scale_variations_for:
 
   - theoryid: 40_013_011 #26
     variations: *n3lo_fhmruvv
+
+  # NNLO mtop x alphas scan (exact NNLO TTBAR grids per mtop), ModEv=EXA.
+  # MHOU from scale variations at alphas=0.118, mt=172.5, NNLO QCD (TRN), around 708,
+  # used for every mtop/alphas and for both NNLO QCD and NNLO QCD x NLO QED.
+  # 40_037-40_040: NNLO QCD,              mt = 170.0, 171.25, 173.75, 175.0
+  # 40_041-40_044: NNLO QCD x NLO QED,    mt = 170.0, 171.25, 173.75, 175.0
+  # 40_045:        NNLO QCD,              mt = 172.5
+  # 40_046:        NNLO QCD x NLO QED,    mt = 172.5
+  # suffix _000.._008 -> alphas = 0.114 .. 0.122
+  - theoryid: 40_037_000 # NNLO QCD, mt=170.0, alphas=0.114
+    variations: &nnlo_sv_708
+      (0.5, 0.5): 704
+      (0.5, 1): 705
+      (0.5, 2): 706
+      (1, 0.5): 707
+      (1, 1): 708
+      (1, 2): 709
+      (2, 0.5): 710
+      (2, 1): 711
+      (2, 2): 712
+
+  - theoryid: 40_037_001 # NNLO QCD, mt=170.0, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_037_002 # NNLO QCD, mt=170.0, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_037_003 # NNLO QCD, mt=170.0, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_037_004 # NNLO QCD, mt=170.0, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_037_005 # NNLO QCD, mt=170.0, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_037_006 # NNLO QCD, mt=170.0, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_037_007 # NNLO QCD, mt=170.0, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_037_008 # NNLO QCD, mt=170.0, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_000 # NNLO QCD, mt=171.25, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_001 # NNLO QCD, mt=171.25, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_002 # NNLO QCD, mt=171.25, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_003 # NNLO QCD, mt=171.25, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_004 # NNLO QCD, mt=171.25, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_005 # NNLO QCD, mt=171.25, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_006 # NNLO QCD, mt=171.25, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_007 # NNLO QCD, mt=171.25, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_038_008 # NNLO QCD, mt=171.25, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_000 # NNLO QCD, mt=173.75, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_001 # NNLO QCD, mt=173.75, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_002 # NNLO QCD, mt=173.75, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_003 # NNLO QCD, mt=173.75, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_004 # NNLO QCD, mt=173.75, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_005 # NNLO QCD, mt=173.75, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_006 # NNLO QCD, mt=173.75, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_007 # NNLO QCD, mt=173.75, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_039_008 # NNLO QCD, mt=173.75, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_000 # NNLO QCD, mt=175.0, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_001 # NNLO QCD, mt=175.0, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_002 # NNLO QCD, mt=175.0, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_003 # NNLO QCD, mt=175.0, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_004 # NNLO QCD, mt=175.0, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_005 # NNLO QCD, mt=175.0, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_006 # NNLO QCD, mt=175.0, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_007 # NNLO QCD, mt=175.0, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_040_008 # NNLO QCD, mt=175.0, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_000 # NNLO QCD x NLO QED, mt=170.0, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_001 # NNLO QCD x NLO QED, mt=170.0, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_002 # NNLO QCD x NLO QED, mt=170.0, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_003 # NNLO QCD x NLO QED, mt=170.0, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_004 # NNLO QCD x NLO QED, mt=170.0, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_005 # NNLO QCD x NLO QED, mt=170.0, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_006 # NNLO QCD x NLO QED, mt=170.0, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_007 # NNLO QCD x NLO QED, mt=170.0, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_041_008 # NNLO QCD x NLO QED, mt=170.0, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_000 # NNLO QCD x NLO QED, mt=171.25, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_001 # NNLO QCD x NLO QED, mt=171.25, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_002 # NNLO QCD x NLO QED, mt=171.25, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_003 # NNLO QCD x NLO QED, mt=171.25, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_004 # NNLO QCD x NLO QED, mt=171.25, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_005 # NNLO QCD x NLO QED, mt=171.25, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_006 # NNLO QCD x NLO QED, mt=171.25, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_007 # NNLO QCD x NLO QED, mt=171.25, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_042_008 # NNLO QCD x NLO QED, mt=171.25, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_000 # NNLO QCD x NLO QED, mt=173.75, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_001 # NNLO QCD x NLO QED, mt=173.75, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_002 # NNLO QCD x NLO QED, mt=173.75, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_003 # NNLO QCD x NLO QED, mt=173.75, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_004 # NNLO QCD x NLO QED, mt=173.75, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_005 # NNLO QCD x NLO QED, mt=173.75, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_006 # NNLO QCD x NLO QED, mt=173.75, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_007 # NNLO QCD x NLO QED, mt=173.75, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_043_008 # NNLO QCD x NLO QED, mt=173.75, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_000 # NNLO QCD x NLO QED, mt=175.0, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_001 # NNLO QCD x NLO QED, mt=175.0, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_002 # NNLO QCD x NLO QED, mt=175.0, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_003 # NNLO QCD x NLO QED, mt=175.0, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_004 # NNLO QCD x NLO QED, mt=175.0, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_005 # NNLO QCD x NLO QED, mt=175.0, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_006 # NNLO QCD x NLO QED, mt=175.0, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_007 # NNLO QCD x NLO QED, mt=175.0, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_044_008 # NNLO QCD x NLO QED, mt=175.0, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_000 # NNLO QCD, mt=172.5, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_001 # NNLO QCD, mt=172.5, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_002 # NNLO QCD, mt=172.5, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_003 # NNLO QCD, mt=172.5, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_004 # NNLO QCD, mt=172.5, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_005 # NNLO QCD, mt=172.5, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_006 # NNLO QCD, mt=172.5, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_007 # NNLO QCD, mt=172.5, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_045_008 # NNLO QCD, mt=172.5, alphas=0.122
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_000 # NNLO QCD x NLO QED, mt=172.5, alphas=0.114
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_001 # NNLO QCD x NLO QED, mt=172.5, alphas=0.115
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_002 # NNLO QCD x NLO QED, mt=172.5, alphas=0.116
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_003 # NNLO QCD x NLO QED, mt=172.5, alphas=0.117
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_004 # NNLO QCD x NLO QED, mt=172.5, alphas=0.118
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_005 # NNLO QCD x NLO QED, mt=172.5, alphas=0.119
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_006 # NNLO QCD x NLO QED, mt=172.5, alphas=0.120
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_007 # NNLO QCD x NLO QED, mt=172.5, alphas=0.121
+    variations: *nnlo_sv_708
+
+  - theoryid: 40_046_008 # NNLO QCD x NLO QED, mt=172.5, alphas=0.122
+    variations: *nnlo_sv_708
