@@ -69,7 +69,6 @@ with one factor per path:
 The rescaled matrices are summed, i.e. they are treated as independent
 (uncorrelated) sources of uncertainty; they may cover different or overlapping
 sets of datasets.
-
     
 The flags ``use_thcovmat_in_fitting`` and ``use_thcovmat_in_sampling`` specify
 where to use the theory covmat in the code. There are two possible places:
