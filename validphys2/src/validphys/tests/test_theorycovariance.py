@@ -15,6 +15,8 @@ from validphys.api import API
 
 # Basename the fixture looks up when reading a user covmat from disk.
 USER_COVMAT_FILENAME = "test_user_covmat.csv"
+# A second copy, used to test that a list of user covmats is summed.
+USER_COVMAT_FILENAME_2 = "test_user_covmat_2.csv"
 POINT_PRESCRIPTION = "3 point"
 
 
@@ -39,6 +41,7 @@ def user_covmat_on_disk(tmp_path_factory, thcovmat_config):
     # Path must be relative to cwd because ``Loader.check_vp_output_file`` rejects absolute paths.
     path = tmp_path_factory.mktemp("user_covmat")
     savetable(covmat, path / USER_COVMAT_FILENAME)
+    savetable(covmat, path / USER_COVMAT_FILENAME_2)
     return path, covmat
 
 
@@ -56,8 +59,35 @@ def user_covmat_on_disk(tmp_path_factory, thcovmat_config):
         ({"user_covmat_path": USER_COVMAT_FILENAME}, 1.0),
         # User covmat only, rescaled by ``mult_factor``.
         ({"user_covmat_path": USER_COVMAT_FILENAME, "mult_factor": 2.5}, 2.5),
+        # A list of user covmats, summed.
+        ({"user_covmat_path": [USER_COVMAT_FILENAME, USER_COVMAT_FILENAME_2]}, 2.0),
+        # A list of user covmats, each with its own factor.
+        (
+            {
+                "user_covmat_path": [USER_COVMAT_FILENAME, USER_COVMAT_FILENAME_2],
+                "mult_factor": [1.0, 0.5],
+            },
+            1.5,
+        ),
+        # Scale variations and a list of user covmats sharing one factor.
+        (
+            {
+                "point_prescriptions": [POINT_PRESCRIPTION],
+                "user_covmat_path": [USER_COVMAT_FILENAME, USER_COVMAT_FILENAME_2],
+                "mult_factor": 2.0,
+            },
+            5.0,
+        ),
     ],
-    ids=["scalevar_and_user", "scalevar_only", "user_only", "user_only_rescaled"],
+    ids=[
+        "scalevar_and_user",
+        "scalevar_only",
+        "user_only",
+        "user_only_rescaled",
+        "user_list",
+        "user_list_rescaled",
+        "scalevar_and_user_list",
+    ],
 )
 def test_nnfit_theory_covmat(
     monkeypatch, thcovmat_config, user_covmat_on_disk, covmat_config, expected_factor

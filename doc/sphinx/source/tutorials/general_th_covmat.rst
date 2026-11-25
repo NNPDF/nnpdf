@@ -49,6 +49,27 @@ Instructions
       use_thcovmat_in_fitting: True
     ############################################################################
 
+Including more than one user covmat
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``user_covmat_path`` also accepts a list of paths. ``mult_factor`` can then be
+omitted (every factor is 1), a single number (applied to every matrix), or a list
+with one factor per path:
+
+.. code:: yaml
+
+    theorycovmatconfig:
+      user_covmat_path:
+        - "IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv"
+        - "AbCdEfGhIjKlMnOpQrStUv==/htcovmat.csv"
+      mult_factor: [1.0, 0.5]
+      use_thcovmat_in_sampling: True
+      use_thcovmat_in_fitting: True
+
+The rescaled matrices are summed, i.e. they are treated as independent
+(uncorrelated) sources of uncertainty; they may cover different or overlapping
+sets of datasets.
+    
 The flags ``use_thcovmat_in_fitting`` and ``use_thcovmat_in_sampling`` specify
 where to use the theory covmat in the code. There are two possible places:
 the fitting (i.e. \\(\\chi^2\\) minimiser) and the sampling (i.e. pseudodata
