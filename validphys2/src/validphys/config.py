@@ -1421,7 +1421,7 @@ class CoreConfig(configparser.Config):
         ``user_covmat_path``:
         - if ``mult_factor`` is not provided, every factor is 1;
         - if it is a single number, it is applied to every user covmat;
-        - if it is a list, it must have the same length as ``user_covmat_path
+        - if it is a list, it must have the same length as ``user_covmat_path``
         For use in theorycovariance.construction.user_covmat.
         """
         paths = self._user_covmat_paths_as_list(user_covmat_path)
