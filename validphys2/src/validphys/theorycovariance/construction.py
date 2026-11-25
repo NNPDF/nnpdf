@@ -551,11 +551,16 @@ def user_covmat(
     csv of pandas DataFrame, and uploaded to the validphys
     server. The server path is then provided via
     ``user_covmat_path`` in ``theorycovmatconfig`` in the
-    runcard. For more information see documentation.
+    runcard.  ``user_covmat_path`` can be a single path or a
+    list of paths; in the latter case every matrix is rescaled
+    by its own ``mult_factor`` and all of them are summed, i.e.
+    treated as independent sources of uncertainty.
+    For more information see documentation.
     """
-    return mult_factor_user_covmat * fromfile_covmat(
-        loaded_user_covmat_path, groups_data_by_process, procs_index
-    )
+    return sum(
+        factor * fromfile_covmat(path, groups_data_by_process, procs_index)
+        for path, factor in zip(loaded_user_covmat_path, mult_factor_user_covmat)
+     )
 
 
 @table
