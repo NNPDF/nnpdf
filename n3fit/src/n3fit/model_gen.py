@@ -954,7 +954,9 @@ def _generate_nn(
 
     # Generate different layer types 
     previous_layer = input_layer
-    nodes_in = 2
+    # input width of the first layer: 2 = (x, log x), or 1 with feature scaling (the scaled x only). Dense layers
+    # infer it, VBDense / VBDense_correlated need it explicitly (in_features)
+    nodes_in = int(input_layer.shape[-1])
     for layer_idx, (architecture_type, nodes_out, activation) in enumerate(zip(architecture, nodes, activations)):
         layer = layer_generator(architecture_type=architecture_type, i_layer=layer_idx, nodes_out=nodes_out, activation=activation, nodes_in=nodes_in)
 

@@ -19,7 +19,7 @@ Update existing sections in place rather than duplicating. Keep entries concise.
 - `bnn_inference.py`: standalone post-training BNN resampling script. Loads `weights.weights.h5` from an existing pseudo-replica, rebuilds the architecture from the runcard, and draws new weight-space samples without retraining.
 
 ## Model tensor shapes
-- Input: `(1, n_x, 2)` — batch=1, x-points, [x, log(x)]
+- Input: `(1, n_x, 2)` — batch=1, x-points, [x, log(x)]; with feature scaling `(1, n_x, 1)` (scaled x only). `_generate_nn` takes the first layer's `nodes_in` from `input_layer.shape[-1]` (was hard-coded 2 until 2026-11-25, which crashed VBDense / VBDense_correlated first layers with feature scaling; Dense layers infer it)
 - After NN hidden layers: `(1, n_x, n_hidden)`
 - NN output (per replica, pre-preprocessing): `(1, 1, n_x, n_flavours)` with replica axis added
 - After stacking all replicas: `(1, n_replicas, n_x, n_flavours)`
