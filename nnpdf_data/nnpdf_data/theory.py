@@ -51,18 +51,9 @@ class TheoryCard:
     MP: float  # [GeV] Mass of the proton
     Comments: str  # Comments on the theory
     # Definition of the reference scale for alpha_s and alpha_qed
-    Qref: float  # [GeV] Reference scale for alphas and alphaqed
     alphas: float  # Value of alpha_s at the scale Qref
-    # alpha_em of the EW scheme at Qref. If alpha_qed_running_mz is not set, alphaqed is also
-    # taken as the running QED coupling at Qref. Note: in EW schemes where alphaqed is fixed,
-    # such as the G_mu scheme, alpha_qed_running_mz must be set, otherwise the QED evolution
-    # and the photon are inconsistent.
-    alphaqed: float
-    # Running QED coupling alpha(M_Z) (Thomson limit alpha(0) plus vacuum polarisation, ~1/128.9),
-    # used instead of alphaqed by the QED evolution and the photon. Needed when alphaqed is an
-    # EW-scheme coupling such as alpha_Gmu (~1/132.1), which does not obey the QED RGE.
-    # Requires Qref = MZ.
-    alpha_qed_running_mz: Optional[float] = None
+    alphaqed: float  # Running (MSbar) alpha_em at the scale Qref, used by EKO and the photon
+    Qref: float  # [GeV] Reference scale for alphas and alphaqed
     XIA: float = 1.0  # Fragmentation scale over the hard scattering scale ratio
     NfFF: Optional[int] = None  # Number of active flavors, only for FFNS or FFN0 schemes
     nfref: Optional[int] = None  # nf at Qref (its default depend on Qref)
@@ -116,21 +107,15 @@ class TheoryCard:
                     f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!"
                 )
 
-        if self.alpha_qed_running_mz is not None:
-            # alpha_qed_running_mz is the coupling at M_Z, so the reference scale must be M_Z
-            if not math.isclose(self.MZ, self.Qref, rel_tol=1e-6):
+        if self.QED > 0:
+            # alphaqed is the starting value of the running of alpha_em, so it must not be
+            # the fixed coupling of the G_mu scheme, alpha_Gmu = sqrt(2) GF MW^2 (1 - MW^2/MZ^2) / pi
+            alpha_gmu = math.sqrt(2) * self.GF * self.MW**2 * (1 - self.MW**2 / self.MZ**2) / math.pi
+            if abs(self.alphaqed / alpha_gmu - 1) < 0.02:
                 raise TheoryCardError(
-                    f"Theory: {self.ID}, error: alpha_qed_running_mz requires Qref = MZ, "
-                    f"got Qref = {self.Qref}, MZ = {self.MZ}"
-                )
-            # alphaqed is then the G_mu-scheme coupling: check it follows from G_F, M_W, M_Z
-            # as dictated by the equations of the G_mu electroweak scheme
-            sin2tw = 1 - self.MW**2 / self.MZ**2
-            alpha_gmu = math.sqrt(2) * self.GF * self.MW**2 * sin2tw / math.pi
-            if not math.isclose(self.alphaqed, alpha_gmu, rel_tol=1e-4):
-                raise TheoryCardError(
-                    f"Theory: {self.ID}, error: alphaqed = {self.alphaqed} is not alpha_Gmu = "
-                    f"sqrt(2) GF MW^2 (1 - MW^2/MZ^2)/pi = {alpha_gmu:.7f}"
+                    f"Theory: {self.ID}, error: alphaqed = 1/{1 / self.alphaqed:.2f} is within 2% "
+                    f"of alpha_Gmu = 1/{1 / alpha_gmu:.2f} computed from GF, MW and MZ. "
+                    "alphaqed must be the running MSbar coupling alpha_em(Qref)."
                 )
 
         if self.XIF == 1 and self.ModSV is not None:
@@ -184,22 +169,3 @@ class TheoryCard:
 
     def asdict(self):
         return dataclasses.asdict(self)
-
-
-def qed_running_alpha(theory):
-    """Boundary value at Qref of the running QED coupling used by the QED evolution (EKO) and
-    the photon (FiatLux): ``alpha_qed_running_mz`` if given (requires Qref = MZ), otherwise
-    ``alphaqed`` (as in NNPDF4.0QED, where alphaqed = 1/128.94 at 91.2 GeV).
-    The LUXqed formalism (arXiv:1607.04266, 1708.01256) needs the physical running coupling,
-    normalised to alpha(0) in the Thomson limit; alpha_Gmu = alpha(0)/(1 - Delta r) contains the weak correction
-    Delta rho as well, so it is not a QED running coupling and must not be used for the photon.
-    """
-    alpha_qed_running_mz = theory.get("alpha_qed_running_mz")
-    if alpha_qed_running_mz is None:
-        return theory["alphaqed"]
-    if not math.isclose(theory["MZ"], theory["Qref"], rel_tol=1e-6):
-        raise TheoryCardError(
-            "alpha_qed_running_mz requires Qref = MZ, "
-            f"got Qref = {theory['Qref']}, MZ = {theory['MZ']}"
-        )
-    return alpha_qed_running_mz

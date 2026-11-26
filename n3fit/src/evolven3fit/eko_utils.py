@@ -6,7 +6,6 @@ import numpy as np
 from eko.io import runcards
 from eko.matchings import Atlas, nf_default
 from eko.quantities.heavy_quarks import MatchingScales
-from nnpdf_data.theory import qed_running_alpha
 
 from . import utils
 
@@ -151,8 +150,6 @@ def load_theory(nnpdf_theory, theory_card_dict):
     theory = dict(nnpdf_theory)
     theory.pop("FNS")
     theory.update(theory_card_dict)
-    # EKO runs alphaqed from Qref: give it the running QED coupling (alpha_qed_running_mz if set)
-    theory["alphaqed"] = qed_running_alpha(theory)
 
     if "nfref" not in theory:
         theory["nfref"] = NFREF_DEFAULT

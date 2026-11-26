@@ -1,11 +1,9 @@
 import numpy as np
-import pytest
 
 from eko import beta
 from eko.couplings import Couplings, expanded_qed
 from eko.quantities.couplings import CouplingEvolutionMethod, CouplingsInfo
 from eko.quantities.heavy_quarks import QuarkMassScheme
-from nnpdf_data.theory import TheoryCardError
 from validphys.api import API
 from validphys.photon import constants
 from validphys.photon.alpha import Alpha
@@ -241,27 +239,3 @@ def test_betas():
     for i, (nf, nl) in enumerate([(0, 0), (0, 1), (0, 2), (3, 2), (4, 2), (4, 3), (5, 3)]):
         np.testing.assert_allclose(alpha.betas_qed[(nf, nl)][0], vec_beta0[i], rtol=1e-7)
         np.testing.assert_allclose(alpha.betas_qed[(nf, nl)][1], vec_beta1[i], rtol=1e-7)
-
-
-def test_alpha_qed_running_mz():
-    """When ``alpha_qed_running_mz`` is given, it (and not ``alphaqed``) is the boundary value
-    of the running QED coupling fed to FiatLux"""
-    test_theory = API.theoryid(theoryid=THEORY_QED)
-    theory = dict(test_theory.get_description())  # do not modify the cached card
-    # G_mu-scheme coupling for the hard cross sections and running coupling for QED
-    theory["alphaqed"] = 1.0 / 132.1
-    theory["alpha_qed_running_mz"] = 1.0 / 128.94
-    theory["Qref"] = theory["MZ"]
-
-    for modev in ["EXA", "TRN"]:
-        theory["ModEv"] = modev
-        alpha = Alpha(theory, 1e8)
-        np.testing.assert_almost_equal(alpha.alpha_em_ref, theory["alpha_qed_running_mz"])
-        np.testing.assert_allclose(
-            alpha.alpha_em(theory["MZ"]), theory["alpha_qed_running_mz"], rtol=1e-6
-        )
-
-    # alpha_qed_running_mz is given at MZ: a different Qref is not supported
-    theory["Qref"] = theory["MZ"] + 1.0
-    with pytest.raises(TheoryCardError):
-        Alpha(theory, 1e8)
