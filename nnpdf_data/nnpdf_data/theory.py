@@ -5,6 +5,7 @@ that a theory card can contain.
 
 import dataclasses
 import logging
+import math
 from typing import Literal, Optional
 
 DEPRECATED_KEYS = ["MaxNfAs", "SxRes", "SxOrd" "EScaleVar", "Qedref", "global_nx"]
@@ -51,7 +52,7 @@ class TheoryCard:
     Comments: str  # Comments on the theory
     # Definition of the reference scale for alpha_s and alpha_qed
     alphas: float  # Value of alpha_s at the scale Qref
-    alphaqed: float  # Values of alpha QED at the scale Qref
+    alphaqed: float  # Running (MSbar) alpha_em at the scale Qref, used by EKO and the photon
     Qref: float  # [GeV] Reference scale for alphas and alphaqed
     XIA: float = 1.0  # Fragmentation scale over the hard scattering scale ratio
     NfFF: Optional[int] = None  # Number of active flavors, only for FFNS or FFN0 schemes
@@ -104,6 +105,17 @@ class TheoryCard:
             if self.Qedref != self.Qref:
                 self._raise_or_warn(
                     f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!"
+                )
+
+        if self.QED > 0:
+            # alphaqed is the starting value of the running of alpha_em, so it must not be
+            # the fixed coupling of the G_mu scheme, alpha_Gmu = sqrt(2) GF MW^2 (1 - MW^2/MZ^2) / pi
+            alpha_gmu = math.sqrt(2) * self.GF * self.MW**2 * (1 - self.MW**2 / self.MZ**2) / math.pi
+            if abs(self.alphaqed / alpha_gmu - 1) < 0.02:
+                raise TheoryCardError(
+                    f"Theory: {self.ID}, error: alphaqed = 1/{1 / self.alphaqed:.2f} is within 2% "
+                    f"of alpha_Gmu = 1/{1 / alpha_gmu:.2f} computed from GF, MW and MZ. "
+                    "alphaqed must be the running MSbar coupling alpha_em(Qref)."
                 )
 
         if self.XIF == 1 and self.ModSV is not None:

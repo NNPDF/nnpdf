@@ -26,7 +26,7 @@ TMC, Integer, Target mass corrections, Boolean
 MP, Real, :math:`M_P` Proton mass, Units: GeV
 Comments, Text, General comments
 alphas, Real, Strong coupling, Format: :math:`\alpha_s(Q_{\textrm{ref}})`
-alphaqed, Real, QED coupling, Format: :math:`\alpha_{QED}(Q_{\textrm{qedref}})`
+alphaqed, Real, Running QED coupling, ":math:`\overline{\rm MS}` coupling :math:`\alpha_{\rm em}(Q_{\textrm{ref}})`, e.g. 1/127.930 at :math:`M_Z`; not the :math:`G_\mu`-scheme coupling (see below)"
 Qref, Real, :math:`Q_{\textrm{ref}}`, Reference scale for :math:`\alpha_S` and :math:`\alpha_{\rm EW}` in GeV
 XIA, Real, :math:`\xi_A`, :math:`\mu_A/Q`
 NfFF, Integer, Number of flavours in the FFNS, 3/4/5/6
