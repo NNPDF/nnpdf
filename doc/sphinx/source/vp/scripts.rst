@@ -54,8 +54,10 @@ positivity is not. They work as follows:
 * Arclength: this works in the same way as the :math:`\chi^2` threshold. The default threshold is
   also 4.
 
-* Integrability: the distributions :math:`V`, :math:`V_3`, :math:`V_8`, :math:`T_3` and :math:`T_8`
-  have to be integrable in :math:`x = 0`. Denoting as :math:`q\left(x, Q_0^2\right)` a generic PDF
+* Integrability: the distributions :math:`V`, :math:`V_3`, :math:`V_8`, :math:`V_{15}`, :math:`T_3` and
+  :math:`T_8` have to be integrable in :math:`x = 0`. :math:`V_{15}` is checked because, when charm
+  and anticharm are fitted independently (fit basis ``CCBAR_ASYMM``), it is an independent output of
+  the network; in the other fit bases :math:`V_{15}=V` at the fitting scale. Denoting as :math:`q\left(x, Q_0^2\right)` a generic PDF
   at the fitting scale :math:`Q_0`, we define it to be integrable if, for a given set of points
   :math:`x^{(i)}_{\text{integ}}` in the small-:math:`x` region, the function
   :math:`x q\left(x, Q_0^2\right)` evaluated at these points is much smaller than its peak value

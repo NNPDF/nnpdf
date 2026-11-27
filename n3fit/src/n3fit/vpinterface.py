@@ -337,7 +337,11 @@ def integrability_numbers(n3pdf, q0=1.65, flavours=None):
         q0: float
             energy at which the integrability is computed
         flavours: list
-            flavours for which the integrability is computed
+            flavours for which the integrability is computed.
+            The default is V, T3, V3, T8, V8 and V15. V15 is an independent
+            output of the network only when charm and anticharm are fitted
+            separately (e.g. fitbasis CCBAR_ASYMM); in the other fit bases
+            V15 = V at the fitting scale and the extra check is redundant.
 
     Returns
     -------
@@ -371,7 +375,7 @@ def integrability_numbers(n3pdf, q0=1.65, flavours=None):
         res = integrability_numbers(n3pdf)
     """
     if flavours is None:
-        flavours = ["V", "T3", "V3", "T8", "V8"]
+        flavours = ["V", "T3", "V3", "T8", "V8", "V15"]
     return integrability_number(n3pdf, [q0], flavours=flavours)
 
 
